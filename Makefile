@@ -1,4 +1,9 @@
 # Works with GNU make on Linux and on Windows (Git Bash). Only POSIX sh features are used.
+# Load .env when present (CI has none and sets variables directly). Values are never echoed.
+# DEFAULT: plain `include` of KEY=value lines; do not quote values or add `export` inside .env.
+-include .env
+export
+
 .PHONY: setup up down check migrate schemas export-data import-data
 
 setup:

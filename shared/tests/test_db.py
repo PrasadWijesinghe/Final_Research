@@ -11,7 +11,8 @@ from pathlib import Path
 import pytest
 from alembic import command
 from alembic.config import Config
-from sqlalchemy import Engine, inspect, text
+from sqlalchemy import Engine, create_engine, inspect, text
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session
 
 from shared.db import models as m
@@ -37,12 +38,53 @@ def test_every_model_table_is_in_raw_or_platform() -> None:
     assert len(m.Base.metadata.sorted_tables) == 18
 
 
+@pytest.fixture(scope="session")
+def test_database_url() -> Iterator[str]:
+    """Create a throwaway `<dbname>_test` database, migrate it, and drop it at session end.
+
+    Integration tests only ever touch this database, never the one in DATABASE_URL.
+    """
+    # DEFAULT: the throwaway database is named `<main name>_test` and is created through the
+    # maintenance database `postgres`; the DATABASE_URL user needs the CREATEDB right.
+    main = make_url(get_database_url())
+    assert main.database, "DATABASE_URL has no database name"
+    test_name = f"{main.database}_test"
+    test_url = main.set(database=test_name)
+    admin = create_engine(main.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    quoted = admin.dialect.identifier_preparer.quote(test_name)
+    try:
+        with admin.connect() as conn:
+            conn.execute(text(f"DROP DATABASE IF EXISTS {quoted} WITH (FORCE)"))
+            conn.execute(text(f"CREATE DATABASE {quoted}"))
+        with pytest.MonkeyPatch.context() as patch:
+            patch.setenv("DATABASE_URL", test_url.render_as_string(hide_password=False))
+            command.upgrade(_config(), "head")
+        yield test_url.render_as_string(hide_password=False)
+    finally:
+        with admin.connect() as conn:
+            conn.execute(text(f"DROP DATABASE IF EXISTS {quoted} WITH (FORCE)"))
+        admin.dispose()
+
+
 @pytest.fixture
-def engine() -> Iterator[Engine]:
+def engine(test_database_url: str, monkeypatch: pytest.MonkeyPatch) -> Iterator[Engine]:
+    """Engine on the throwaway database, with DATABASE_URL pointing at it for Alembic."""
+    monkeypatch.setenv("DATABASE_URL", test_database_url)
     eng = get_engine()
     command.upgrade(_config(), "head")
     yield eng
     eng.dispose()
+
+
+@pytest.mark.integration
+def test_engine_fixture_never_points_at_main_database(engine: Engine) -> None:
+    assert engine.url.database is not None and engine.url.database.endswith("_test")
+
+
+@pytest.mark.integration
+def test_alembic_check_reports_no_drift(engine: Engine) -> None:
+    # Raises CommandError when the models and the migrations disagree.
+    command.check(_config())
 
 
 @pytest.mark.integration

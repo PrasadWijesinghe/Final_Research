@@ -226,9 +226,9 @@ class CommitContextRow(Base):
 
     context_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     repo: Mapped[str] = mapped_column(Text)  # "owner/name"
-    head_sha: Mapped[str] = mapped_column(Text)
-    event: Mapped[str] = mapped_column(Text)
-    history_cutoff: Mapped[datetime] = mapped_column(TZ)
+    head_sha: Mapped[str] = mapped_column(Text, index=True)
+    event: Mapped[str] = mapped_column(Text, index=True)
+    history_cutoff: Mapped[datetime] = mapped_column(TZ, index=True)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -240,10 +240,12 @@ class PredictionRow(Base):
 
     prediction_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     context_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    expert: Mapped[str] = mapped_column(Text)
-    probability: Mapped[float | None] = mapped_column(Float)
-    alert: Mapped[bool] = mapped_column(Boolean)
-    is_replay: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    expert: Mapped[str] = mapped_column(Text, index=True)
+    probability: Mapped[float | None] = mapped_column(Float, index=True)
+    alert: Mapped[bool] = mapped_column(Boolean, index=True)
+    is_replay: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false", index=True
+    )
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -258,9 +260,9 @@ class RoutedFailureRow(Base):
 
     failure_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     run_id: Mapped[int] = mapped_column(BigInteger)
-    attempt: Mapped[int] = mapped_column(Integer)
-    job_id: Mapped[int] = mapped_column(BigInteger)
-    replay: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    attempt: Mapped[int] = mapped_column(Integer, index=True)
+    job_id: Mapped[int] = mapped_column(BigInteger, index=True)
+    replay: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", index=True)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -272,8 +274,8 @@ class DiagnosisRow(Base):
 
     diagnosis_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     failure_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    expert: Mapped[str] = mapped_column(Text)
-    status: Mapped[str] = mapped_column(Text)
+    expert: Mapped[str] = mapped_column(Text, index=True)
+    status: Mapped[str] = mapped_column(Text, index=True)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -285,7 +287,7 @@ class ReviewRow(Base):
 
     decision_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     diagnosis_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
-    decision: Mapped[str] = mapped_column(Text)
+    decision: Mapped[str] = mapped_column(Text, index=True)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -301,12 +303,14 @@ class FailureLabelRow(Base):
     # DEFAULT: the contract has no id of its own, so labels get a surrogate bigint key.
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     run_id: Mapped[int] = mapped_column(BigInteger)
-    attempt: Mapped[int] = mapped_column(Integer)
-    job_id: Mapped[int] = mapped_column(BigInteger)
-    category: Mapped[str] = mapped_column(Text)
-    sub_label: Mapped[str | None] = mapped_column(Text)
-    labelled_by: Mapped[str] = mapped_column(Text)
-    is_final: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    attempt: Mapped[int] = mapped_column(Integer, index=True)
+    job_id: Mapped[int] = mapped_column(BigInteger, index=True)
+    category: Mapped[str] = mapped_column(Text, index=True)
+    sub_label: Mapped[str | None] = mapped_column(Text, index=True)
+    labelled_by: Mapped[str] = mapped_column(Text, index=True)
+    is_final: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false", index=True
+    )
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
@@ -317,10 +321,10 @@ class ApiKey(Base):
     __table_args__ = {"schema": "platform"}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_hash: Mapped[str] = mapped_column(Text)
+    user_hash: Mapped[str] = mapped_column(Text, index=True)
     key_hash: Mapped[str] = mapped_column(Text, unique=True)
-    created_at: Mapped[datetime] = mapped_column(TZ, server_default=func.now())
-    revoked_at: Mapped[datetime | None] = mapped_column(TZ)
+    created_at: Mapped[datetime] = mapped_column(TZ, server_default=func.now(), index=True)
+    revoked_at: Mapped[datetime | None] = mapped_column(TZ, index=True)
 
 
 class LlmCall(Base):
@@ -332,11 +336,13 @@ class LlmCall(Base):
     # DEFAULT: surrogate bigint key; llm_calls has no natural id
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(TZ, server_default=func.now())
-    expert: Mapped[str] = mapped_column(Text)
-    model: Mapped[str] = mapped_column(Text)
-    prompt_version: Mapped[str | None] = mapped_column(Text)
-    input_tokens: Mapped[int] = mapped_column(Integer)
-    output_tokens: Mapped[int] = mapped_column(Integer)
-    cost_usd: Mapped[Decimal] = mapped_column(Numeric(12, 6))
-    cache_hit: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
-    latency_ms: Mapped[int] = mapped_column(Integer)
+    expert: Mapped[str] = mapped_column(Text, index=True)
+    model: Mapped[str] = mapped_column(Text, index=True)
+    prompt_version: Mapped[str | None] = mapped_column(Text, index=True)
+    input_tokens: Mapped[int] = mapped_column(Integer, index=True)
+    output_tokens: Mapped[int] = mapped_column(Integer, index=True)
+    cost_usd: Mapped[Decimal] = mapped_column(Numeric(12, 6), index=True)
+    cache_hit: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false", index=True
+    )
+    latency_ms: Mapped[int] = mapped_column(Integer, index=True)

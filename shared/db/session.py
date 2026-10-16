@@ -12,7 +12,8 @@ def get_database_url() -> str:
     url = os.environ.get("DATABASE_URL", "").strip()
     if not url:
         raise RuntimeError(
-            "DATABASE_URL is not set. Copy .env.example to .env and export it "
+            "DATABASE_URL is not set. Copy .env.example to .env (make loads it) "
+            "or export DATABASE_URL "
             "(e.g. postgresql+psycopg://user:password@127.0.0.1:5432/pipelineiq)."
         )
     return url
