@@ -1,5 +1,5 @@
 # Works with GNU make on Linux and on Windows (Git Bash). Only POSIX sh features are used.
-.PHONY: setup up down check migrate export-data import-data
+.PHONY: setup up down check migrate schemas export-data import-data
 
 setup:
 	uv sync --all-packages
@@ -20,6 +20,10 @@ check:
 migrate:
 	@if [ -f alembic.ini ]; then uv run alembic upgrade head; \
 	else echo "No alembic.ini yet: the database layer arrives in P0.6."; exit 1; fi
+
+# DEFAULT: schemas are generated on demand and not committed (see .gitignore)
+schemas:
+	uv run python -m shared.contracts.export_schemas
 
 export-data:
 	@echo "export-data: not implemented until P1.7"
