@@ -18,6 +18,12 @@ Never end your turn until every task is committed or you've hit a stop condition
 If those agent types aren't available, use `general-purpose` with `model` set per role and paste
 the role's `.claude/agents/<role>.md` body into the prompt.
 
+## Resuming after an interruption
+Sessions sometimes restart and kill a running lead. Before starting, run `git status` and
+`git log --oneline -5`. Uncommitted changes belong to the first unticked task: give them to an
+implementer as "finish this partial work" (it inspects the diff, completes it, runs `make check`)
+instead of starting over. Never discard partial work.
+
 ## Per-task loop (strictly one task after another — PLAN.md and COMPONENTS.md are shared files)
 1. **Build:** `implementer` (or `scaffolder` for pure boilerplate).
 2. **Review:** a fresh `reviewer` with the task ID and the implementer's report summary; tell it

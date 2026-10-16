@@ -31,7 +31,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 ## Phase 1 — Data collection
 
-- [ ] **★ P1.1 GitHub client.** `shared/github`: httpx client with token auth, pagination, rate-limit handling (read headers, sleep below 200 remaining, honour `retry-after`), exponential backoff on 5xx, and date-window splitting for queries that hit the 1,000-result cap. Includes a `raw.githubusercontent.com` file fetcher.
+- [x] **★ P1.1 GitHub client.** `shared/github`: httpx client with token auth, pagination, rate-limit handling (read headers, sleep below 200 remaining, honour `retry-after`), exponential backoff on 5xx, and date-window splitting for queries that hit the 1,000-result cap. Includes a `raw.githubusercontent.com` file fetcher.
   *Accept:* unit tests with recorded responses (respx) cover pagination, rate-limit sleep, retry and window splitting.
 - [ ] **★ P1.2 Repo config.** Loader and schema validation for `config/repos/<member>.yaml`; workflow auto-detection rule from `docs/DATA.md` §2.
   *Accept:* invalid configs fail with clear messages; detection tested on sample workflow files.

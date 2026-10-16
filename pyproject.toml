@@ -37,6 +37,7 @@ dev = [
     "pre-commit>=3.8",
     "psycopg[binary]>=3.2",
     "redis>=5",
+    "respx>=0.23.1",
 ]
 
 [tool.ruff]
