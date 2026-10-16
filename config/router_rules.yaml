@@ -1,0 +1,39 @@
+# Router rules (DECISIONS D19). DRAFT patterns: each owner refines their own block.
+# Score per expert = sum of weights of matching rules. Highest score wins.
+# If the runner-up is within `two_expert_margin` of the winner, send to both.
+# If nothing scores, category = unknown and the failure is sent to no expert (shown on the dashboard).
+two_expert_margin: 0.25        # DEFAULT: relative margin; tune once labelled failures exist (O7)
+min_score: 1.0
+
+experts:
+  dependency:                  # Member 1
+    step_name: [{pattern: "(?i)\\b(npm|pnpm|yarn) (ci|install)\\b", weight: 2.0}, {pattern: "(?i)install dependencies", weight: 1.5}]
+    log:
+      - {pattern: "ERESOLVE", weight: 3.0}
+      - {pattern: "npm ERR!", weight: 2.0}
+      - {pattern: "(?i)peer dep", weight: 1.5}
+      - {pattern: "(?i)lockfile", weight: 1.5}
+      - {pattern: "(?i)unsupported engine|engine \"node\" is incompatible", weight: 2.5}
+  build:                       # Member 2
+    step_name: [{pattern: "(?i)\\b(build|compile|tsc|lint|typecheck)\\b", weight: 2.0}]
+    log:
+      - {pattern: "error TS\\d{4}", weight: 3.0}
+      - {pattern: "(?i)eslint", weight: 1.5}
+      - {pattern: "(?i)\\d+ problems? \\(\\d+ errors?", weight: 2.5}
+      - {pattern: "(?i)(webpack|vite|rollup|esbuild).*(error|failed)", weight: 2.0}
+  test:                        # Member 3
+    step_name: [{pattern: "(?i)\\btest", weight: 2.0}, {pattern: "(?i)\\b(jest|mocha|vitest)\\b", weight: 2.0}]
+    log:
+      - {pattern: "\\d+ failing", weight: 3.0}                 # Mocha
+      - {pattern: "Tests?:\\s+\\d+ failed", weight: 3.0}       # Jest
+      - {pattern: "(?i)Test Files\\s+\\d+ failed", weight: 3.0} # Vitest
+      - {pattern: "(?i)AssertionError|expect\\(.*\\)\\.", weight: 2.0}
+      - {pattern: "(?i)Timeout of \\d+ms exceeded|Exceeded timeout of \\d+ ms", weight: 2.0}
+  infra:                       # Member 4
+    step_name: [{pattern: "(?i)\\b(deploy|docker|release|publish)\\b", weight: 2.0}]
+    log:
+      - {pattern: "(?i)Resource not accessible by integration", weight: 3.0}
+      - {pattern: "(?i)permission denied", weight: 2.0}
+      - {pattern: "(?i)The runner has received a shutdown signal|lost communication with the server", weight: 3.0}
+      - {pattern: "(?i)docker: |failed to solve|pull access denied", weight: 2.5}
+      - {pattern: "(?i)No space left on device", weight: 2.5}
