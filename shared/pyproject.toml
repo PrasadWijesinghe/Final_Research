@@ -3,7 +3,12 @@ name = "pipelineiq-shared"
 version = "0.1.0"
 description = "Shared contracts and helpers (DB, GitHub client, sanitiser, embeddings)."
 requires-python = ">=3.12"
-dependencies = ["pydantic>=2.7"]
+dependencies = [
+    "alembic>=1.20.0",
+    "psycopg[binary]>=3.3.6",
+    "pydantic>=2.7",
+    "sqlalchemy>=2.1.4",
+]
 
 [build-system]
 requires = ["hatchling"]
