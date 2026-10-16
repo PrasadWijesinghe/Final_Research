@@ -34,6 +34,6 @@ docs/templates/COMPONENT_README.md, docs/COMPONENTS.md, docs/DECISIONS.md.
 - New service/expert packages: `<folder>/pyproject.toml` + `src/<package>/` + `tests/`. No `test_*` files or `Test*` classes under `src/`.
 - Docker Compose (`docker-compose.yml`): pgvector/pgvector:0.8.1-pg17 + redis:7.4.6, ports on 127.0.0.1, init script `docker/postgres/init/01-init.sql` creates the `vector` extension and schemas raw, platform, dependency, build, testing, infra. CI runs `make up` then `make check`.
 - Tests marked `@pytest.mark.integration` auto-skip when the DB in DATABASE_URL is unreachable (root conftest.py). To run them locally: `make up` and export
-  `DATABASE_URL=postgresql+psycopg://pipelineiq:change-me@localhost:5432/pipelineiq` and `REDIS_URL=redis://localhost:6379/0` (compose defaults).
+  `DATABASE_URL=postgresql+psycopg://pipelineiq:change-me@127.0.0.1:5432/pipelineiq` and `REDIS_URL=redis://127.0.0.1:6379/0` (compose defaults). Use 127.0.0.1, not localhost: on Windows localhost tries IPv6 first and each connection stalls ~2 s.
 - `.env.example` must list every env variable the code reads. Add new ones there (placeholders only).
 - Python style: type hints everywhere, one-line docstring on public functions, `logging` with `extra={...}`, no `print` in services, UTC-aware datetimes, config in `config/` or `.env` not constants.
