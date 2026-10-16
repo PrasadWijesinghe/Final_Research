@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        # Same pinned image as docker-compose (P0.4).
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: pipelineiq
+          POSTGRES_PASSWORD: ci-test-password # throwaway, service container only
+          POSTGRES_DB: pipelineiq
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pipelineiq -d pipelineiq"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://pipelineiq:ci-test-password@localhost:5432/pipelineiq
+      IDENTITY_SALT: ci-test-salt
+      LLM_PROVIDER: mock
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      # uv reads .python-version (3.12) and installs that interpreter.
+      - name: Install dependencies
+        run: uv sync --all-packages --locked
+
+      # Same command as local development, so CI and laptops never diverge:
+      # ruff check, ruff format --check, mypy, pytest.
+      - name: make check
+        run: make check
