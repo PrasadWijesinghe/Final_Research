@@ -17,9 +17,9 @@ check:
 	uv run mypy
 	uv run pytest
 
+# DEFAULT: alembic config lives with the migrations in shared/db; the URL is read from DATABASE_URL.
 migrate:
-	@if [ -f alembic.ini ]; then uv run alembic upgrade head; \
-	else echo "No alembic.ini yet: the database layer arrives in P0.6."; exit 1; fi
+	uv run alembic -c shared/db/alembic.ini upgrade head
 
 # DEFAULT: schemas are generated on demand and not committed (see .gitignore)
 schemas:

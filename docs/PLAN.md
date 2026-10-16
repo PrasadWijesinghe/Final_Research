@@ -24,7 +24,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* `make up` gives a healthy Postgres with the extension and schemas, plus Redis.
 - [x] **★ P0.5 Contracts in place.** Keep `shared/contracts/` exactly as provided (v1.1). Make it importable as a workspace package; ensure its tests run under `make check`.
   *Accept:* all contract tests pass; `export_schemas` writes JSON Schemas.
-- [ ] **★ P0.6 Database layer.** `shared/db`: SQLAlchemy 2 models and Alembic migrations for the `raw` and `platform` tables in `docs/DATA.md` §4.
+- [x] **★ P0.6 Database layer.** `shared/db`: SQLAlchemy 2 models and Alembic migrations for the `raw` and `platform` tables in `docs/DATA.md` §4.
   *Accept:* `make migrate` creates all tables; a round-trip test inserts and reads one row per table.
 - [ ] **★ P0.7 Team files.** `CODEOWNERS` (GitHub usernames as `TODO` placeholders), PR template (task ID, acceptance criteria checked, `make check` passed), `docs/ONBOARDING.md` (clone → `.env` → `make setup` → `make up` → `make migrate` → first collector run → start your expert from the template), and `docs/AI_LOG.md` with its first entry.
   *Accept:* a teammate can follow `ONBOARDING.md` without asking questions.
