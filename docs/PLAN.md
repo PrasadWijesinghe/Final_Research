@@ -18,7 +18,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* tree matches §8; `.env.example` lists every variable used anywhere.
 - [x] **★ P0.2 Tooling.** uv workspace (root `pyproject.toml` with members), ruff, mypy (Pydantic plugin), pytest config, `.pre-commit-config.yaml`, and a `Makefile` with `setup`, `up`, `down`, `check`, `migrate`, `export-data`, `import-data` (the last two can be stubs until P1.7).
   *Accept:* `make setup && make check` works on a clean clone.
-- [ ] **★ P0.3 CI.** `.github/workflows/ci.yml` runs ruff, mypy and pytest on PRs and on `main`.
+- [x] **★ P0.3 CI.** `.github/workflows/ci.yml` runs ruff, mypy and pytest on PRs and on `main`.
   *Accept:* passes on the scaffold.
 - [ ] **★ P0.4 Docker Compose.** `pgvector/pgvector:pg17` and `redis:7` (pinned tags), named volumes, healthchecks, ports from `.env`. Init script enables the `vector` extension and creates schemas `raw`, `platform`, `dependency`, `build`, `testing`, `infra`.
   *Accept:* `make up` gives a healthy Postgres with the extension and schemas, plus Redis.
