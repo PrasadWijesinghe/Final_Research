@@ -20,7 +20,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* `make setup && make check` works on a clean clone.
 - [x] **★ P0.3 CI.** `.github/workflows/ci.yml` runs ruff, mypy and pytest on PRs and on `main`.
   *Accept:* passes on the scaffold.
-- [ ] **★ P0.4 Docker Compose.** `pgvector/pgvector:pg17` and `redis:7` (pinned tags), named volumes, healthchecks, ports from `.env`. Init script enables the `vector` extension and creates schemas `raw`, `platform`, `dependency`, `build`, `testing`, `infra`.
+- [x] **★ P0.4 Docker Compose.** `pgvector/pgvector:pg17` and `redis:7` (pinned tags), named volumes, healthchecks, ports from `.env`. Init script enables the `vector` extension and creates schemas `raw`, `platform`, `dependency`, `build`, `testing`, `infra`.
   *Accept:* `make up` gives a healthy Postgres with the extension and schemas, plus Redis.
 - [ ] **★ P0.5 Contracts in place.** Keep `shared/contracts/` exactly as provided (v1.1). Make it importable as a workspace package; ensure its tests run under `make check`.
   *Accept:* all contract tests pass; `export_schemas` writes JSON Schemas.

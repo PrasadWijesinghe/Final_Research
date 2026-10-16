@@ -1,0 +1,43 @@
+# Local stack: Postgres (with pgvector) and Redis. Experts are added in P2.1.
+# Values come from .env; the defaults after ":-" match .env.example so `make up` also works
+# on a fresh clone with no .env. DEFAULT: defaults mirror .env.example (no .env needed to start).
+name: pipelineiq
+
+services:
+  postgres:
+    # DEFAULT: pgvector 0.8.1 on PG 17 (latest 0.8.x at the time of writing); pinned, not a moving tag.
+    image: pgvector/pgvector:0.8.1-pg17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pipelineiq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-pipelineiq}
+    ports:
+      # DEFAULT: bound to 127.0.0.1 so the database is not reachable from the LAN.
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    # DEFAULT: Redis 7.4.6 (latest 7.4.x patch); pinned, not a moving tag.
+    image: redis:7.4.6
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
