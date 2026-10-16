@@ -88,20 +88,12 @@ Leave the other lines as they are. `LLM_PROVIDER=mock` means no real AI model is
 
 - **Docker Compose (`make up`) reads `.env` by itself.** It uses the `POSTGRES_*` and `*_PORT`
   values.
-- **`make`, `uv`, `pytest` and `alembic` do not read `.env`.** They only see variables that are
-  exported in the current terminal. A new terminal starts empty.
-
-So, in each new terminal, before steps 6 to 8, export the two URLs:
-
-```bash
-export DATABASE_URL=postgresql+psycopg://pipelineiq:change-me@127.0.0.1:5432/pipelineiq
-export REDIS_URL=redis://127.0.0.1:6379/0
-```
-
-If you changed `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` or `POSTGRES_PORT`, put the same
-values into `DATABASE_URL`. Do the same for `REDIS_URL` and `REDIS_PORT`.
-
-You can also load every line of `.env` into the terminal at once:
+- **`make` reads `.env` by itself.** It skips the file when it does not exist, and never prints the
+  values. So `make migrate` and `make check` see `DATABASE_URL` and `REDIS_URL` without any
+  `export`. Keep `.env` lines in plain `KEY=value` form: no quotes, no `export`, and Unix line
+  endings (LF).
+- **`uv`, `pytest` and `alembic` run directly do not read `.env`.** They only see variables that are
+  exported in the current terminal. Use the `make` targets, or load the file first:
 
 ```bash
 set -a; . ./.env; set +a
@@ -110,7 +102,10 @@ set -a; . ./.env; set +a
 `set -a` marks every variable as exported, `. ./.env` reads the file, and `set +a` turns the
 marking off again. The command prints nothing. If `.env` was saved with Windows line endings
 (CRLF), each value ends with a hidden carriage return, and `DATABASE_URL` breaks with an
-unclear error. If that happens, use the two `export` lines above instead.
+unclear error. Save `.env` with LF line endings.
+
+If you changed `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` or `POSTGRES_PORT`, put the same
+values into `DATABASE_URL`. Do the same for `REDIS_URL` and `REDIS_PORT`.
 
 ## 4. Install the project: `make setup`
 
@@ -151,7 +146,7 @@ Stop the containers with `make down`. Your data stays in Docker volumes, so `mak
 
 ## 6. Create the tables: `make migrate`
 
-This step needs `DATABASE_URL` exported in the terminal (see step 3).
+This step reads `DATABASE_URL` from your `.env` file (see step 3).
 
 ```bash
 make migrate
@@ -166,9 +161,9 @@ the `raw` and `platform` schemas. When it works there is no error and no Alembic
 uv run alembic -c shared/db/alembic.ini current
 ```
 
-It prints `0001 (head)`.
+It prints `0002 (head)`. (Run directly, this command needs `DATABASE_URL` exported; see step 3.)
 
-If you see `DATABASE_URL is not set`, export it in this terminal (step 3).
+If you see `DATABASE_URL is not set`, check that `.env` exists and has a `DATABASE_URL` line (step 3).
 
 ## 7. Run the checks: `make check`
 
@@ -189,15 +184,10 @@ Some tests need the database. They are marked "integration". When `DATABASE_URL`
 the database is down, these tests are **skipped** and the skip reason is shown. A skip is not a
 failure.
 
-**Warning:** two integration tests in `shared/tests/test_db.py` drop and rebuild every `raw` and
-`platform` table. If `DATABASE_URL` points at a database that holds data, that data is lost.
-So run `make check` with `DATABASE_URL` exported only on the empty database, before step 8.
-After you have collected data, run the checks with the variable cleared:
-
-```bash
-unset DATABASE_URL
-make check
-```
+The database tests never touch your real database. They create a separate throwaway database named
+after yours with `_test` added (for example `pipelineiq_test`), run their migrations there, and
+drop it when the tests finish. It is safe to run `make check` at any time, also after you have
+collected data.
 
 ## 8. First collector run (available after P1.5)
 
@@ -205,8 +195,8 @@ The collector is not built yet. Its folder, `services/collector`, is still empty
 
 1. Fill in the repo list for your member, in `config/repos/<member>.yaml`. The format is in
    `docs/DATA.md`, section 2.
-2. Export `DATABASE_URL`, `GITHUB_TOKEN` and `IDENTITY_SALT` in this terminal. The collector
-   needs all three. Check this when P1.5 lands.
+2. Make sure `DATABASE_URL`, `GITHUB_TOKEN` and `IDENTITY_SALT` are set. The collector
+   needs all three. How the collector reads `.env` will be explained when P1.5 lands.
 3. Start the first pull:
 
    ```bash
@@ -260,7 +250,8 @@ follow the section "Starting your expert" in `docs/experts/README.md`. In short:
 - **`uv: command not found` or `make: command not found`.** Close Git Bash and open it again. If
   the command still is not found, uv usually installs to `~/.local/bin` in Git Bash. Check that
   folder exists. For make, check the winget install step ran without error.
-- **`DATABASE_URL is not set`.** Export it in this terminal. Each new terminal starts empty.
+- **`DATABASE_URL is not set`.** Check that `.env` exists and has the line. `make` reads it;
+  direct `uv`/`alembic` calls need it exported.
 - **`password authentication failed`.** `DATABASE_URL` does not match `POSTGRES_PASSWORD`, or you
   changed the password after the first `make up`. Postgres reads the password only when it
   creates its data volume. Before you collect any data, you can start over. Run
