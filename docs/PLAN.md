@@ -16,7 +16,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 - [x] **★ P0.1 Repo scaffold.** Create the folder structure from `docs/ARCHITECTURE.md` §8 (empty packages with `__init__.py` where needed), a short `README.md` (what it is, quick start, links to docs), `.gitignore` (`.env`, `data/`, `models/`, `mlruns/`, caches) and `.env.example` (`GITHUB_TOKEN`, `IDENTITY_SALT`, `DATABASE_URL`, `REDIS_URL`, `LLM_PROVIDER=mock`, `LLM_API_KEY`, `MEMBER`).
   *Accept:* tree matches §8; `.env.example` lists every variable used anywhere.
-- [ ] **★ P0.2 Tooling.** uv workspace (root `pyproject.toml` with members), ruff, mypy (Pydantic plugin), pytest config, `.pre-commit-config.yaml`, and a `Makefile` with `setup`, `up`, `down`, `check`, `migrate`, `export-data`, `import-data` (the last two can be stubs until P1.7).
+- [x] **★ P0.2 Tooling.** uv workspace (root `pyproject.toml` with members), ruff, mypy (Pydantic plugin), pytest config, `.pre-commit-config.yaml`, and a `Makefile` with `setup`, `up`, `down`, `check`, `migrate`, `export-data`, `import-data` (the last two can be stubs until P1.7).
   *Accept:* `make setup && make check` works on a clean clone.
 - [ ] **★ P0.3 CI.** `.github/workflows/ci.yml` runs ruff, mypy and pytest on PRs and on `main`.
   *Accept:* passes on the scaffold.

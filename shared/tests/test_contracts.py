@@ -59,7 +59,10 @@ def valid_context() -> CommitContext:
                 tags=[FileTag.TEST],
             ),
             ChangedFile(
-                path="lib/connection.js", status="modified", additions=4, deletions=1,
+                path="lib/connection.js",
+                status="modified",
+                additions=4,
+                deletions=1,
                 tags=[FileTag.SOURCE],
             ),
         ],
@@ -286,8 +289,12 @@ def test_details_must_match_expert():
 def test_rerun_only_suggested_for_flaky():
     with pytest.raises(ValidationError):
         BehaviourDetails(
-            verdict="genuine", verdict_confidence=0.9, framework="jest",
-            failing_tests=["t"], stack_touches_changed_code=True, suggest_rerun=True,
+            verdict="genuine",
+            verdict_confidence=0.9,
+            framework="jest",
+            failing_tests=["t"],
+            stack_touches_changed_code=True,
+            suggest_rerun=True,
         )
 
 
@@ -295,8 +302,11 @@ def test_misrouted_needs_suggested_category():
     with pytest.raises(ValidationError):
         Diagnosis(failure_id=uuid4(), expert=Expert.TEST, status="misrouted", latency_ms=5)
     ok = Diagnosis(
-        failure_id=uuid4(), expert=Expert.TEST, status="misrouted",
-        suggested_category=FailureCategory.INFRA, latency_ms=5,
+        failure_id=uuid4(),
+        expert=Expert.TEST,
+        status="misrouted",
+        suggested_category=FailureCategory.INFRA,
+        latency_ms=5,
     )
     assert ok.details is None
 
@@ -318,21 +328,39 @@ def test_reject_cannot_confirm_cause():
 def test_verified_case_needs_passing_run():
     with pytest.raises(ValidationError):
         VerifiedCase(
-            expert=Expert.TEST, origin="mined", repo=REPO, repo_licence="MIT",
-            failure_summary="s", log_signature="l", root_cause="r", fix_summary="f",
-            fix_commit_sha=SHA, verifying_run_id=1, verifying_run_passed=False,
+            expert=Expert.TEST,
+            origin="mined",
+            repo=REPO,
+            repo_licence="MIT",
+            failure_summary="s",
+            log_signature="l",
+            root_cause="r",
+            fix_summary="f",
+            fix_commit_sha=SHA,
+            verifying_run_id=1,
+            verifying_run_passed=False,
         )
 
 
 def test_rule_label_needs_rule_name():
     with pytest.raises(ValidationError):
         FailureLabel(
-            repo=REPO, run_id=1, run_attempt=1, job_id=2,
-            category=FailureCategory.TEST, labelled_by="rule",
+            repo=REPO,
+            run_id=1,
+            run_attempt=1,
+            job_id=2,
+            category=FailureCategory.TEST,
+            labelled_by="rule",
         )
     ok = FailureLabel(
-        repo=REPO, run_id=1, run_attempt=1, job_id=2, category=FailureCategory.TEST,
-        sub_label="flaky", labelled_by="rule", rule_name="rerun_pass_same_sha",
+        repo=REPO,
+        run_id=1,
+        run_attempt=1,
+        job_id=2,
+        category=FailureCategory.TEST,
+        sub_label="flaky",
+        labelled_by="rule",
+        rule_name="rerun_pass_same_sha",
     )
     assert ok.sub_label == "flaky"
 
