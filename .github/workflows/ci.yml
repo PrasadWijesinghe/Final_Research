@@ -16,23 +16,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    services:
-      postgres:
-        # Same pinned image as docker-compose (P0.4).
-        image: pgvector/pgvector:pg17
-        env:
-          POSTGRES_USER: pipelineiq
-          POSTGRES_PASSWORD: ci-test-password # throwaway, service container only
-          POSTGRES_DB: pipelineiq
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U pipelineiq -d pipelineiq"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
     env:
-      DATABASE_URL: postgresql+psycopg://pipelineiq:ci-test-password@localhost:5432/pipelineiq
+      # Throwaway password, read by docker compose and by the tests.
+      POSTGRES_PASSWORD: ci-test-password
+      DATABASE_URL: postgresql+psycopg://pipelineiq:ci-test-password@127.0.0.1:5432/pipelineiq
+      REDIS_URL: redis://127.0.0.1:6379/0
       IDENTITY_SALT: ci-test-salt
       LLM_PROVIDER: mock
     steps:
@@ -43,6 +31,10 @@ jobs:
         with:
           enable-cache: true
 
+      # Same stack as local development (`make up`), so the init script is tested too.
+      - name: Start Postgres and Redis
+        run: make up
+
       # uv reads .python-version (3.12) and installs that interpreter.
       - name: Install dependencies
         run: uv sync --all-packages --locked
@@ -51,3 +43,7 @@ jobs:
       # ruff check, ruff format --check, mypy, pytest.
       - name: make check
         run: make check
+
+      - name: Stack logs on failure
+        if: failure()
+        run: docker compose logs --no-color

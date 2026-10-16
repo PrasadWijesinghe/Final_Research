@@ -35,6 +35,8 @@ dev = [
     "mypy>=1.11",
     "pytest>=8",
     "pre-commit>=3.8",
+    "psycopg[binary]>=3.2",
+    "redis>=5",
 ]
 
 [tool.ruff]
