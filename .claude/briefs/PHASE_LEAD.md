@@ -11,7 +11,10 @@ Project agent types (defined in `.claude/agents/`, each carries its model and in
 `implementer` (Sonnet), `reviewer` (Sonnet, read-only), `doc-writer` (Haiku), `scaffolder` (Haiku).
 Every prompt you give them starts with: "First read `.claude/briefs/COMMON.md`." then the task ID,
 the task's PLAN text and any task-specific context (earlier tasks' outputs, file names, defaults),
-so they don't rediscover it. Run them in the foreground (`run_in_background: false`).
+so they don't rediscover it.
+**Always pass `run_in_background: false` explicitly** — the default is background, and if you
+end your turn while a nested agent is still running you are forced to hand back mid-phase.
+Never end your turn until every task is committed or you've hit a stop condition.
 If those agent types aren't available, use `general-purpose` with `model` set per role and paste
 the role's `.claude/agents/<role>.md` body into the prompt.
 

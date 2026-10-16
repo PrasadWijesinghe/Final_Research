@@ -22,7 +22,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* passes on the scaffold.
 - [x] **★ P0.4 Docker Compose.** `pgvector/pgvector:pg17` and `redis:7` (pinned tags), named volumes, healthchecks, ports from `.env`. Init script enables the `vector` extension and creates schemas `raw`, `platform`, `dependency`, `build`, `testing`, `infra`.
   *Accept:* `make up` gives a healthy Postgres with the extension and schemas, plus Redis.
-- [ ] **★ P0.5 Contracts in place.** Keep `shared/contracts/` exactly as provided (v1.1). Make it importable as a workspace package; ensure its tests run under `make check`.
+- [x] **★ P0.5 Contracts in place.** Keep `shared/contracts/` exactly as provided (v1.1). Make it importable as a workspace package; ensure its tests run under `make check`.
   *Accept:* all contract tests pass; `export_schemas` writes JSON Schemas.
 - [ ] **★ P0.6 Database layer.** `shared/db`: SQLAlchemy 2 models and Alembic migrations for the `raw` and `platform` tables in `docs/DATA.md` §4.
   *Accept:* `make migrate` creates all tables; a round-trip test inserts and reads one row per table.
