@@ -32,6 +32,7 @@ from collector.store import (
     SnapshotRecord,
     StepRecord,
     Store,
+    SyncStateRecord,
     WorkflowRecord,
 )
 from collector.workflow_detection import DetectionRules, detect_relevant_workflow
@@ -146,24 +147,7 @@ class Backfiller:
         """Backfill one repo; safe to call again after a crash or after completion."""
         fn = entry.full_name
         summary = RepoSummary()
-        info = self.client.get_json(f"/repos/{fn}")
-        repo_id = int(info["id"])
-        default_branch = info.get("default_branch")
-        with self.store.transaction():
-            self.store.upsert_repo(
-                RepoRecord(
-                    id=repo_id,
-                    full_name=fn,
-                    member=self.member,
-                    # DEFAULT: the licence recorded is the one in the member's config file;
-                    # scripts/rerun_check.py (P1.3) flags a mismatch with GitHub's spdx_id.
-                    licence=entry.licence,
-                    default_branch=default_branch,
-                    enabled=entry.enabled,
-                )
-            )
-            self.store.ensure_sync_state(repo_id)
-            state = self.store.get_sync_state(repo_id)
+        repo_id, default_branch, state = self._register_repo(entry)
         started_at, done = self._resume_point(state.backfill_cursor if state else None)
         relevant = self._sync_workflows(entry, repo_id, default_branch)
 
@@ -185,6 +169,28 @@ class Backfiller:
         with self.store.transaction():
             self.store.finish_backfill(repo_id, self._clock(), started_at)
         return summary
+
+    def _register_repo(self, entry: RepoEntry) -> tuple[int, str | None, SyncStateRecord | None]:
+        """Upsert the repo and its sync_state row; return (repo id, default branch, sync state)."""
+        info = self.client.get_json(f"/repos/{entry.full_name}")
+        repo_id = int(info["id"])
+        default_branch = info.get("default_branch")
+        with self.store.transaction():
+            self.store.upsert_repo(
+                RepoRecord(
+                    id=repo_id,
+                    full_name=entry.full_name,
+                    member=self.member,
+                    # DEFAULT: the licence recorded is the one in the member's config file;
+                    # scripts/rerun_check.py (P1.3) flags a mismatch with GitHub's spdx_id.
+                    licence=entry.licence,
+                    default_branch=default_branch,
+                    enabled=entry.enabled,
+                )
+            )
+            self.store.ensure_sync_state(repo_id)
+            state = self.store.get_sync_state(repo_id)
+        return repo_id, default_branch, state
 
     def _cursor(self, started_at: datetime, windows_done: int) -> str:
         return json.dumps(

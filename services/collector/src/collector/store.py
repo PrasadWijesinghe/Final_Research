@@ -10,10 +10,23 @@ from __future__ import annotations
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Protocol, cast
 
-from sqlalchemy import Connection, Engine, Table, null, select
+from sqlalchemy import (
+    Connection,
+    Date,
+    Engine,
+    Table,
+    and_,
+    func,
+    literal_column,
+    null,
+    select,
+)
+from sqlalchemy import (
+    cast as sa_cast,
+)
 from sqlalchemy.dialects.postgresql import JSONB, insert
 
 from shared.db import models as m
@@ -157,6 +170,17 @@ class LogRecord:
     fetched_at: datetime | None
 
 
+@dataclass(frozen=True)
+class RepoCounts:
+    """What is stored for one repo (used by `collector status`)."""
+
+    runs: int = 0  # distinct workflow runs
+    attempts: int = 0  # rows of raw.workflow_runs
+    jobs: int = 0
+    logs: dict[str, int] = field(default_factory=dict)  # status -> number of logs
+    commits: int = 0
+
+
 class Store(Protocol):
     """What the backfill needs from a database. All calls must run inside `transaction()`."""
 
@@ -182,6 +206,10 @@ class Store(Protocol):
     def upsert_snapshot(self, snapshot: SnapshotRecord) -> None: ...
     def has_log(self, job_id: int) -> bool: ...
     def upsert_log(self, log: LogRecord) -> None: ...
+    def set_last_daily_sync(self, repo_id: int, at: datetime) -> None: ...
+    def list_repos(self, member: str) -> list[RepoRecord]: ...
+    def repo_counts(self, repo_id: int) -> RepoCounts: ...
+    def run_days(self, repo_id: int) -> list[date]: ...
 
 
 def _table(model: type[m.Base]) -> Table:
@@ -354,3 +382,58 @@ class SqlStore:
     def upsert_log(self, log: LogRecord) -> None:
         """Insert or update a raw.logs row."""
         self._upsert(m.Log, asdict(log), ["job_id"], update=True)
+
+    def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
+        """Record when the last successful daily sync of the repo started."""
+        t = _table(m.SyncState)
+        self._c.execute(t.update().where(t.c.repo_id == repo_id).values(last_daily_sync_at=at))
+
+    def list_repos(self, member: str) -> list[RepoRecord]:
+        """Return the stored repos of a member, sorted by name."""
+        t = _table(m.Repo)
+        rows = (
+            self._c.execute(select(t).where(t.c.member == member).order_by(t.c.full_name))
+            .mappings()
+            .all()
+        )
+        return [RepoRecord(**dict(r)) for r in rows]
+
+    def repo_counts(self, repo_id: int) -> RepoCounts:
+        """Count runs, attempts, jobs, logs (by status) and commits of a repo."""
+        wr, jb = _table(m.WorkflowRun), _table(m.Job)
+        lg, cm = _table(m.Log), _table(m.Commit)
+        runs, attempts = self._c.execute(
+            select(func.count(wr.c.run_id.distinct()), func.count()).where(wr.c.repo_id == repo_id)
+        ).one()
+        job_on_run = and_(jb.c.run_id == wr.c.run_id, jb.c.attempt == wr.c.attempt)
+        jobs = self._c.execute(
+            select(func.count()).select_from(jb.join(wr, job_on_run)).where(wr.c.repo_id == repo_id)
+        ).scalar_one()
+        log_rows = self._c.execute(
+            select(lg.c.status, func.count())
+            .select_from(lg.join(jb, lg.c.job_id == jb.c.job_id).join(wr, job_on_run))
+            .where(wr.c.repo_id == repo_id)
+            .group_by(lg.c.status)
+        ).all()
+        commits = self._c.execute(
+            select(func.count()).select_from(cm).where(cm.c.repo_id == repo_id)
+        ).scalar_one()
+        return RepoCounts(
+            runs=int(runs),
+            attempts=int(attempts),
+            jobs=int(jobs),
+            logs={str(status): int(n) for status, n in log_rows},
+            commits=int(commits),
+        )
+
+    def run_days(self, repo_id: int) -> list[date]:
+        """Return the distinct UTC calendar days on which a run was created, oldest first."""
+        wr = _table(m.WorkflowRun)
+        day = sa_cast(func.timezone(literal_column("'UTC'"), wr.c.created_at), Date).label("day")
+        rows = self._c.execute(
+            select(day)
+            .where(wr.c.repo_id == repo_id, wr.c.created_at.is_not(None))
+            .distinct()
+            .order_by(day)
+        ).all()
+        return [r[0] for r in rows]

@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from collector.backfill import Backfiller
+from collector.daily import DailySyncer
 from collector.file_tags import load_file_tagger
 from collector.repo_config import RepoEntry
 from collector.store import Store
@@ -47,6 +49,24 @@ def make_backfiller(store: Store, data_dir: Path, client: GitHubClient | None = 
         tagger=load_file_tagger(),
         rules=load_detection_rules(),
         clock=lambda: NOW,
+    )
+
+
+def make_daily(
+    store: Store,
+    data_dir: Path,
+    now: datetime,
+    client: GitHubClient | None = None,
+) -> DailySyncer:
+    """A DailySyncer for the `test` member whose clock says `now`."""
+    return DailySyncer(
+        client or make_client(),
+        store,
+        member="test",
+        data_dir=data_dir,
+        tagger=load_file_tagger(),
+        rules=load_detection_rules(),
+        clock=lambda: now,
     )
 
 

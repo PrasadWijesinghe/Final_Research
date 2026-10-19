@@ -1,4 +1,4 @@
-"""Command line entry point (`uv run collector ...`): `backfill` now, daily and status later."""
+"""Command line entry point (`uv run collector ...`): `backfill`, `daily` and `status`."""
 
 from __future__ import annotations
 
@@ -7,11 +7,14 @@ import logging
 import os
 import sys
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from pathlib import Path
 
 from collector.backfill import DEFAULT_DAYS, DEFAULT_WINDOW_DAYS, Backfiller
+from collector.daily import DailySummary, DailySyncer, NotBackfilledError
 from collector.file_tags import load_file_tagger
 from collector.repo_config import DEFAULT_CONFIG_DIR, MEMBERS, ConfigError, load_member_config
+from collector.status import collect_status, fetch_rate_limit, render_status
 from collector.store import SqlStore
 from collector.workflow_detection import load_detection_rules
 from shared.db.session import get_engine
@@ -42,11 +45,22 @@ def _build_parser() -> argparse.ArgumentParser:
     bf.add_argument(
         "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
     )
+    daily = sub.add_parser(
+        "daily", help="top up: new runs since the last sync plus a 14-day re-scan"
+    )
+    daily.add_argument("--member", required=True, choices=MEMBERS)
+    daily.add_argument("--repo", help="only this owner/name (must be in the member's list)")
+    daily.add_argument(
+        "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
+    )
+    status = sub.add_parser("status", help="show what is collected, gaps and the rate limit")
+    status.add_argument("--member", required=True, choices=MEMBERS)
     return parser
 
 
-def _missing_env() -> list[str]:
-    needed = ("GITHUB_TOKEN", "IDENTITY_SALT", "DATABASE_URL")
+def _missing_env(
+    needed: Sequence[str] = ("GITHUB_TOKEN", "IDENTITY_SALT", "DATABASE_URL"),
+) -> list[str]:
     return [name for name in needed if not os.environ.get(name, "").strip()]
 
 
@@ -103,6 +117,104 @@ def run_backfill(args: argparse.Namespace) -> int:
     return EXIT_FAILED if failed else EXIT_OK
 
 
+def _daily_line(full_name: str, s: DailySummary) -> str:
+    window = f"{s.window_start:%Y-%m-%d %H:%M}..{s.window_end:%Y-%m-%d %H:%M} UTC"
+    line = (
+        f"{full_name}: window {window}; runs seen {s.runs_seen}, new or changed "
+        f"{s.runs_processed}, already stored {s.runs_already_done}, attempts {s.attempts}, "
+        f"jobs {s.jobs}, logs ok {s.logs_ok}"
+    )
+    if s.data_lost:
+        line += (
+            f"; WARNING: {s.gap_days} days since the last sync, runs older than 90 days are lost"
+        )
+    return line
+
+
+def run_daily(args: argparse.Namespace) -> int:
+    """Run `collector daily`; returns the process exit code."""
+    missing = _missing_env()
+    if missing:
+        _err(
+            f"{', '.join(missing)} not set. Put them in .env (see .env.example) and run with "
+            "`uv run --env-file .env collector daily ...`."
+        )
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+        tagger = load_file_tagger()
+        rules = load_detection_rules()
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    repos = config.enabled_repos()
+    if args.repo:
+        repos = [r for r in config.repos if r.full_name == args.repo]
+        if not repos:
+            _err(f"{args.repo} is not in config/repos/{args.member}.yaml")
+            return EXIT_USAGE
+    store = SqlStore(get_engine())
+    # Check every repo before any network call, so nothing is half done.
+    with store.transaction():
+        stored = {r.full_name: r for r in store.list_repos(args.member)}
+        waiting = []
+        for entry in repos:
+            repo = stored.get(entry.full_name)
+            state = store.get_sync_state(repo.id) if repo else None
+            if state is None or state.last_daily_sync_at is None:
+                waiting.append(entry.full_name)
+    if waiting:
+        _err(
+            f"backfill has not finished for {', '.join(waiting)}. Run "
+            f"`uv run --env-file .env collector backfill --member {args.member}` first."
+        )
+        return EXIT_USAGE
+    data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
+    failed = 0
+    with GitHubClient() as client:
+        syncer = DailySyncer(
+            client, store, member=args.member, data_dir=data_dir, tagger=tagger, rules=rules
+        )
+        for entry in repos:
+            try:
+                summary = syncer.daily_repo(entry)
+            except NotBackfilledError as exc:
+                _err(str(exc))
+                return EXIT_USAGE
+            except GitHubError as exc:
+                failed += 1
+                logger.error(
+                    "repo daily sync failed; last_daily_sync_at not advanced",
+                    extra={"repo": entry.full_name, "error": str(exc), "status": exc.status_code},
+                )
+                _err(f"{entry.full_name}: failed ({exc}); sync point not advanced, re-run later")
+                continue
+            sys.stdout.write(_daily_line(entry.full_name, summary) + "\n")
+    return EXIT_FAILED if failed else EXIT_OK
+
+
+def run_status(args: argparse.Namespace) -> int:
+    """Run `collector status`; works without GITHUB_TOKEN (the rate limit is then unavailable)."""
+    missing = _missing_env(("DATABASE_URL",))
+    if missing:
+        _err("DATABASE_URL not set. Put it in .env and run with `uv run --env-file .env ...`.")
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    now = datetime.now(UTC)
+    report = collect_status(SqlStore(get_engine()), args.member, config.repos, now.date())
+    if os.environ.get("GITHUB_TOKEN", "").strip():
+        with GitHubClient() as client:
+            rate = fetch_rate_limit(client)
+    else:
+        rate = fetch_rate_limit(None)
+    sys.stdout.write(render_status(args.member, report, rate, now))
+    return EXIT_OK
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the collector CLI."""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -110,5 +222,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "backfill":
         return run_backfill(args)
+    if args.command == "daily":
+        return run_daily(args)
+    if args.command == "status":
+        return run_status(args)
     parser.print_help()
     return EXIT_OK

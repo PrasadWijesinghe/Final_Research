@@ -57,6 +57,10 @@ class FakeGitHub:
         self.log_status: dict[int, int] = {}  # job id -> HTTP status to answer with
         self.hide_attempts = False  # answer 404 to /attempts/{n}
         self.crash_on_log: set[int] = set()  # raise SimulatedCrash once for these job ids
+        # run id -> newest attempt GitHub "has so far"; later attempts are hidden. Lets a test
+        # backfill first and then lift the cap, as if someone had re-run an old run meanwhile.
+        self.attempt_cap: dict[int, int] = {}
+        self.fail_runs_listing = False  # answer 500 to the runs listing (a failing repo)
         self._api = f"/repos/{REPO}"
 
     # ---- plumbing ---------------------------------------------------------------------------
@@ -114,6 +118,9 @@ class FakeGitHub:
         api = self._api
         if path == api:
             return self._json(load_json("repo.json"))
+        if path == "/rate_limit":
+            core = {"limit": 5000, "used": 100, "remaining": 4900, "reset": 1790000000}
+            return self._json({"resources": {"core": core}, "rate": core})
         if path == f"{api}/branches/main":
             return self._json(load_json("branch_main.json"))
         if path == f"{api}/actions/workflows":
@@ -126,7 +133,7 @@ class FakeGitHub:
             return self._fixture(f"attempts/{m.group(1)}_{m.group(2)}.json")
         if m := re.fullmatch(rf"{api}/actions/runs/(\d+)/jobs", path):
             assert params.get("filter") == "all", "jobs must be requested with filter=all"
-            return self._fixture(f"jobs/{m.group(1)}.json")
+            return self._jobs(int(m.group(1)))
         if m := re.fullmatch(rf"{api}/actions/jobs/(\d+)/logs", path):
             return self._job_log(int(m.group(1)))
         if m := re.fullmatch(rf"{api}/commits/([0-9a-f]{{40}})", path):
@@ -138,7 +145,20 @@ class FakeGitHub:
             return self._not_found()
         return self._json(load_json(rel))
 
+    def _jobs(self, run_id: int) -> httpx.Response:
+        rel = f"jobs/{run_id}.json"
+        if not (FIXTURES / rel).is_file():
+            return self._not_found()
+        body = load_json(rel)
+        cap = self.attempt_cap.get(run_id)
+        if cap is not None:
+            body["jobs"] = [j for j in body["jobs"] if int(j["run_attempt"]) <= cap]
+            body["total_count"] = len(body["jobs"])
+        return self._json(body)
+
     def _runs(self, params: dict[str, str]) -> httpx.Response:
+        if self.fail_runs_listing:
+            return self._json({"message": "Server Error"}, status=500)
         start_s, end_s = params["created"].split("..")
         start = datetime.fromisoformat(start_s)
         end = datetime.fromisoformat(end_s)
@@ -147,6 +167,10 @@ class FakeGitHub:
             for r in load_json("runs.json")["workflow_runs"]
             if start <= datetime.fromisoformat(r["created_at"]) <= end
         ]
+        for i, r in enumerate(runs):
+            cap = self.attempt_cap.get(r["id"])
+            if cap is not None and cap < int(r["run_attempt"]):
+                runs[i] = load_json(f"attempts/{r['id']}_{cap}.json")  # the older state of the run
         return self._json({"total_count": len(runs), "workflow_runs": runs})
 
     def _job_log(self, job_id: int) -> httpx.Response:
