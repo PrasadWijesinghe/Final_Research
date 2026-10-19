@@ -1,0 +1,22 @@
+{
+  "id": 424242,
+  "node_id": "R_kgDOAAZiYg",
+  "name": "widgets",
+  "full_name": "acme/widgets",
+  "private": false,
+  "owner": {
+    "login": "octo-owner",
+    "id": 1001,
+    "type": "Organization"
+  },
+  "default_branch": "main",
+  "archived": false,
+  "disabled": false,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT"
+  },
+  "visibility": "public",
+  "has_issues": true
+}

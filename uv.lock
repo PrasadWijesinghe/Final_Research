@@ -407,6 +407,7 @@ dependencies = [
     { name = "pipelineiq-shared" },
     { name = "pydantic" },
     { name = "pyyaml" },
+    { name = "sqlalchemy" },
 ]
 
 [package.metadata]
@@ -414,6 +415,7 @@ requires-dist = [
     { name = "pipelineiq-shared", editable = "shared" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pyyaml", specifier = ">=6" },
+    { name = "sqlalchemy", specifier = ">=2.1.4" },
 ]
 
 [[package]]

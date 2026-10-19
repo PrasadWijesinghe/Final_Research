@@ -39,7 +39,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* runs on `config/repos/test.yaml` and produces the report. **This is the first thing Member 3 will run.**
 - [x] **★ P1.4 Sanitiser.** `shared/sanitise`: detect-secrets plus the custom patterns in `docs/DATA.md` §8, `[REDACTED:<type>]` replacement with counts, and `hash_identity(login)` using `IDENTITY_SALT`.
   *Accept:* tests with fake secrets of every pattern; no false positives on 10 sample clean logs.
-- [ ] **★ P1.5 Collector backfill.** `services/collector`: the `backfill` command per `docs/DATA.md` §3 (runs in date windows, jobs with `filter=all`, steps, commit diffs, config file snapshots, logs per the log policy, sanitise then gzip). Idempotent upserts; resumable via `sync_state.backfill_cursor`.
+- [x] **★ P1.5 Collector backfill.** `services/collector`: the `backfill` command per `docs/DATA.md` §3 (runs in date windows, jobs with `filter=all`, steps, commit diffs, config file snapshots, logs per the log policy, sanitise then gzip). Idempotent upserts; resumable via `sync_state.backfill_cursor`.
   *Accept:* integration test against recorded responses for one repo; running twice changes nothing; interrupting and resuming completes correctly.
 - [ ] **★ P1.6 Collector daily and status.** `daily` (new runs since last sync, plus a 14-day re-scan for new attempts) and `status` (counts, gaps, rate limit). Doc section in `ONBOARDING.md` on scheduling with cron or Task Scheduler.
   *Accept:* a new attempt of an old run is picked up by the re-scan in tests.

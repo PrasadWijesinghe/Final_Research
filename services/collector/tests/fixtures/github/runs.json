@@ -1,0 +1,343 @@
+{
+  "total_count": 4,
+  "workflow_runs": [
+    {
+      "id": 9002,
+      "name": "Test",
+      "node_id": "WFR_9002",
+      "head_branch": "feature/lockfile",
+      "head_sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "path": ".github/workflows/test.yml",
+      "display_title": "Update lockfile and rename helpers",
+      "run_number": 102,
+      "event": "pull_request",
+      "status": "completed",
+      "conclusion": "failure",
+      "workflow_id": 101,
+      "check_suite_id": 90020,
+      "url": "https://api.github.com/repos/acme/widgets/actions/runs/9002",
+      "html_url": "https://github.com/acme/widgets/actions/runs/9002",
+      "pull_requests": [
+        {
+          "number": 57,
+          "id": 5700,
+          "url": "https://api.github.com/repos/acme/widgets/pulls/57"
+        }
+      ],
+      "created_at": "2026-10-15T09:00:00Z",
+      "updated_at": "2026-10-15T09:12:00Z",
+      "run_attempt": 1,
+      "run_started_at": "2026-10-15T09:00:05Z",
+      "actor": {
+        "login": "dana-dev",
+        "id": 2001,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+        "html_url": "https://github.com/dana-dev"
+      },
+      "triggering_actor": {
+        "login": "dana-dev",
+        "id": 2001,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+        "html_url": "https://github.com/dana-dev"
+      },
+      "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9002/jobs",
+      "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9002/logs",
+      "head_commit": {
+        "id": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "message": "Update lockfile and rename helpers",
+        "timestamp": "2026-10-15T09:00:00Z",
+        "author": {
+          "name": "Dana Dev",
+          "email": "dana@example.com"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com"
+        }
+      },
+      "repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      },
+      "head_repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      }
+    },
+    {
+      "id": 9001,
+      "name": "Test",
+      "node_id": "WFR_9001",
+      "head_branch": "main",
+      "head_sha": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "path": ".github/workflows/test.yml",
+      "display_title": "fix: parse empty config",
+      "run_number": 101,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 101,
+      "check_suite_id": 90010,
+      "url": "https://api.github.com/repos/acme/widgets/actions/runs/9001",
+      "html_url": "https://github.com/acme/widgets/actions/runs/9001",
+      "pull_requests": [],
+      "created_at": "2026-10-12T10:00:00Z",
+      "updated_at": "2026-10-12T10:40:00Z",
+      "run_attempt": 2,
+      "run_started_at": "2026-10-12T10:00:04Z",
+      "actor": {
+        "login": "lee-ci",
+        "id": 2002,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+        "html_url": "https://github.com/lee-ci"
+      },
+      "triggering_actor": {
+        "login": "lee-ci",
+        "id": 2002,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+        "html_url": "https://github.com/lee-ci"
+      },
+      "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9001/jobs",
+      "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9001/logs",
+      "head_commit": {
+        "id": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "message": "fix: parse empty config",
+        "timestamp": "2026-10-12T10:00:00Z",
+        "author": {
+          "name": "Dana Dev",
+          "email": "dana@example.com"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com"
+        }
+      },
+      "repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      },
+      "head_repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      }
+    },
+    {
+      "id": 9003,
+      "name": "Release",
+      "node_id": "WFR_9003",
+      "head_branch": "main",
+      "head_sha": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+      "path": ".github/workflows/release.yml",
+      "display_title": "release v2.4.0",
+      "run_number": 103,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 102,
+      "check_suite_id": 90030,
+      "url": "https://api.github.com/repos/acme/widgets/actions/runs/9003",
+      "html_url": "https://github.com/acme/widgets/actions/runs/9003",
+      "pull_requests": [],
+      "created_at": "2026-10-16T08:00:00Z",
+      "updated_at": "2026-10-16T08:05:00Z",
+      "run_attempt": 1,
+      "run_started_at": "2026-10-16T08:00:03Z",
+      "actor": {
+        "login": "lee-ci",
+        "id": 2002,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+        "html_url": "https://github.com/lee-ci"
+      },
+      "triggering_actor": {
+        "login": "lee-ci",
+        "id": 2002,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+        "html_url": "https://github.com/lee-ci"
+      },
+      "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9003/jobs",
+      "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9003/logs",
+      "head_commit": {
+        "id": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+        "message": "release v2.4.0",
+        "timestamp": "2026-10-16T08:00:00Z",
+        "author": {
+          "name": "Dana Dev",
+          "email": "dana@example.com"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com"
+        }
+      },
+      "repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      },
+      "head_repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      }
+    },
+    {
+      "id": 9004,
+      "name": "Test",
+      "node_id": "WFR_9004",
+      "head_branch": "main",
+      "head_sha": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+      "path": ".github/workflows/test.yml",
+      "display_title": "docs: readme",
+      "run_number": 104,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 101,
+      "check_suite_id": 90040,
+      "url": "https://api.github.com/repos/acme/widgets/actions/runs/9004",
+      "html_url": "https://github.com/acme/widgets/actions/runs/9004",
+      "pull_requests": [],
+      "created_at": "2026-08-01T07:30:00Z",
+      "updated_at": "2026-08-01T07:41:00Z",
+      "run_attempt": 1,
+      "run_started_at": "2026-08-01T07:30:02Z",
+      "actor": {
+        "login": "dana-dev",
+        "id": 2001,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+        "html_url": "https://github.com/dana-dev"
+      },
+      "triggering_actor": {
+        "login": "dana-dev",
+        "id": 2001,
+        "node_id": "MDQ6VXNlcjE=",
+        "type": "User",
+        "site_admin": false,
+        "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+        "html_url": "https://github.com/dana-dev"
+      },
+      "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9004/jobs",
+      "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9004/logs",
+      "head_commit": {
+        "id": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+        "message": "docs: readme",
+        "timestamp": "2026-08-01T07:30:00Z",
+        "author": {
+          "name": "Dana Dev",
+          "email": "dana@example.com"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com"
+        }
+      },
+      "repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      },
+      "head_repository": {
+        "id": 424242,
+        "node_id": "R_kgDOAAZiYg",
+        "name": "widgets",
+        "full_name": "acme/widgets",
+        "private": false,
+        "owner": {
+          "login": "octo-owner",
+          "id": 1001,
+          "type": "Organization"
+        },
+        "html_url": "https://github.com/acme/widgets",
+        "fork": false
+      }
+    }
+  ]
+}
