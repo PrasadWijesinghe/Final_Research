@@ -269,22 +269,31 @@ The same thing in the app: open **Task Scheduler**, then **Create Basic Task**. 
 **Start in** to your repo folder. Finish, open the task's **Properties**, and on **Settings** tick
 **Run task as soon as possible after a scheduled start is missed**.
 
-## 9. Start your expert (available after P2.1)
+## 9. Start your expert
 
-The template folder, `experts/_template`, is still empty. It arrives in P2.1. Once it exists,
-follow the section "Starting your expert" in `docs/experts/README.md`. In short:
+The four stub experts already exist. Each one is a copy of `experts/_template/` with the P2.1 stub
+behaviour. Your folder is already there, so edit it in place. Do not copy the template again.
+Read `experts/_template/README.md` first. It explains each file, the endpoints and the rules for
+replacing the stubs.
 
-1. Copy `experts/_template/` to your expert folder (`experts/dependency`, `experts/build`, `experts/testing` or `experts/infra`; note the test member's folder is `testing`) and rename the package inside it. Set your
-   port: dependency 8101, build 8102, test 8103, infra 8104.
-2. When your folder has a `pyproject.toml`, remove the folder from the `exclude` list in the root
-   `pyproject.toml`. Also add your package folder to the `files` list under `[tool.mypy]`.
-3. Write `docs/experts/<member>.md`. It covers labels, features, the model plan and the diagnosis
+In short:
+
+1. Find your folder. It is `experts/dependency` (member 1), `experts/build` (member 2),
+   `experts/testing` (member 3; the folder is `testing` and the package is `testing_expert`) or
+   `experts/infra` (member 4). Your port is dependency 8101, build 8102, test 8103, infra 8104.
+   Check the value in `src/<package>/config.py` and in the Dockerfile.
+2. Write `docs/experts/<member>.md`. It covers labels, features, the model plan and the diagnosis
    details. Use `docs/experts/test.md` as an example.
+3. The root `pyproject.toml` already lists the four stub folders under `files` and `mypy_path`, so
+   you do not need to change it for them. Only a new expert folder needs entries there. The
+   template README lists them.
 4. Fill in your repo list in `config/repos/<member>.yaml`, your rows in `config/file_tags.yaml`,
    and your patterns in `config/router_rules.yaml`.
 5. Run the collector backfill from step 8.
-6. Replace the stub functions one at a time, and run `make check` after each change. Never edit
-   `shared/contracts/`. If you need a change there, raise it with the team.
+6. Replace the stub functions one at a time, and run `make check` after each change. The
+   template README lists the stub functions, and the tests that check stub values. To try the
+   stubs in Docker, run `make up-experts`. Plain `make up` starts only Postgres and Redis. Never
+   edit `shared/contracts/`. If you need a change there, raise it with the team.
 
 ## If something goes wrong
 

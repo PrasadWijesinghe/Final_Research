@@ -1,7 +1,28 @@
-# Local stack: Postgres (with pgvector) and Redis. Experts are added in P2.1.
+# Local stack: Postgres (with pgvector) and Redis, plus the four experts (profile "experts").
 # Values come from .env; the defaults after ":-" match .env.example so `make up` also works
 # on a fresh clone with no .env. DEFAULT: defaults mirror .env.example (no .env needed to start).
 name: pipelineiq
+
+# Shared settings for the expert services (YAML anchors; Compose ignores "x-" keys).
+x-expert-env: &expert-env
+  # Inside the Compose network the services are reached by name, not 127.0.0.1.
+  REDIS_URL: redis://redis:6379/0
+  DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pipelineiq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-pipelineiq}
+  # DEFAULT: empty, so stub workers just return their diagnosis until the backend exists (P3).
+  BACKEND_URL: ""
+  BACKEND_TIMEOUT_SECONDS: "${BACKEND_TIMEOUT_SECONDS:-10}"
+
+x-expert-api: &expert-api
+  profiles: ["experts"]
+  depends_on:
+    redis: { condition: service_healthy }
+    postgres: { condition: service_healthy }
+  restart: unless-stopped
+
+x-expert-worker: &expert-worker
+  profiles: ["experts"]
+  environment: *expert-env
+  restart: unless-stopped
 
 services:
   postgres:
@@ -37,6 +58,61 @@ services:
       timeout: 3s
       retries: 10
     restart: unless-stopped
+
+  # --- Experts (P2.1): an API and a diagnose worker each, built from the repo root. -----------
+  # DEFAULT: all expert services are in the "experts" profile, so plain `make up` still starts
+  # only Postgres and Redis (light on laptops); `make up-experts` starts everything.
+  dependency-api:
+    <<: *expert-api
+    build: { context: ., dockerfile: experts/dependency/Dockerfile }
+    image: pipelineiq-expert-dependency
+    environment: { <<: *expert-env, EXPERT_PORT: "8101" }
+    ports: ["127.0.0.1:8101:8101"]
+
+  dependency-worker:
+    <<: *expert-worker
+    image: pipelineiq-expert-dependency
+    command: ["python", "-m", "dependency_expert.worker"]
+    depends_on: { redis: { condition: service_healthy }, dependency-api: { condition: service_started } }
+
+  build-api:
+    <<: *expert-api
+    build: { context: ., dockerfile: experts/build/Dockerfile }
+    image: pipelineiq-expert-build
+    environment: { <<: *expert-env, EXPERT_PORT: "8102" }
+    ports: ["127.0.0.1:8102:8102"]
+
+  build-worker:
+    <<: *expert-worker
+    image: pipelineiq-expert-build
+    command: ["python", "-m", "build_expert.worker"]
+    depends_on: { redis: { condition: service_healthy }, build-api: { condition: service_started } }
+
+  testing-api:
+    <<: *expert-api
+    build: { context: ., dockerfile: experts/testing/Dockerfile }
+    image: pipelineiq-expert-testing
+    environment: { <<: *expert-env, EXPERT_PORT: "8103" }
+    ports: ["127.0.0.1:8103:8103"]
+
+  testing-worker:
+    <<: *expert-worker
+    image: pipelineiq-expert-testing
+    command: ["python", "-m", "testing_expert.worker"]
+    depends_on: { redis: { condition: service_healthy }, testing-api: { condition: service_started } }
+
+  infra-api:
+    <<: *expert-api
+    build: { context: ., dockerfile: experts/infra/Dockerfile }
+    image: pipelineiq-expert-infra
+    environment: { <<: *expert-env, EXPERT_PORT: "8104" }
+    ports: ["127.0.0.1:8104:8104"]
+
+  infra-worker:
+    <<: *expert-worker
+    image: pipelineiq-expert-infra
+    command: ["python", "-m", "infra_expert.worker"]
+    depends_on: { redis: { condition: service_healthy }, infra-api: { condition: service_started } }
 
 volumes:
   pgdata:

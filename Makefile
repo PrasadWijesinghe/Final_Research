@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: setup up down check migrate schemas export-data import-data
+.PHONY: setup up up-experts down check migrate schemas export-data import-data
 
 setup:
 	uv sync --all-packages
@@ -13,8 +13,14 @@ setup:
 up:
 	docker compose up -d --wait
 
+# DEFAULT: `up` starts only Postgres + Redis; this also builds and starts the four experts
+# (the "experts" profile in docker-compose.yml).
+up-experts:
+	docker compose --profile experts up -d --build --wait
+
+# DEFAULT: --profile experts so profile services are stopped too (a plain `down` skips them).
 down:
-	docker compose down
+	docker compose --profile experts down
 
 check:
 	uv run ruff check .

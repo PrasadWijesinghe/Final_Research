@@ -50,7 +50,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 ## Phase 2 — Core services
 
-- [ ] **★ P2.1 Expert template and stubs.** `experts/_template` per `docs/experts/README.md`, then the four stub experts (`dependency`, `build`, `testing`, `infra`) with the stub behaviour described there, each with Dockerfile and tests. Add them to Docker Compose.
+- [x] **★ P2.1 Expert template and stubs.** `experts/_template` per `docs/experts/README.md`, then the four stub experts (`dependency`, `build`, `testing`, `infra`) with the stub behaviour described there, each with Dockerfile and tests. Add them to Docker Compose.
   *Accept:* each stub's `/predict` returns a valid list of `RiskOutput`s for a fixture `CommitContext`; each worker turns a fixture `RoutedFailure` into a valid `Diagnosis`.
 - [ ] **P2.2 File tagger.** `services/features` reads `config/file_tags.yaml` and tags files per `docs/DATA.md` §5, including size limits.
   *Accept:* table-driven tests for every tag, multi-tag files and truncation.
