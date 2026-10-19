@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
 import pytest
@@ -98,3 +99,92 @@ def test_bad_rules_files(tmp_path: Path) -> None:
         load_detection_rules(bad_shape)
     with pytest.raises(ConfigError, match="cannot load"):
         load_detection_rules(tmp_path / "missing.yaml")
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "npm install --save-dev jest",
+        "npm ci",
+        "yarn add vitest",
+        "echo running mocha later",
+        "pnpm add -D @types/jest",
+        "npm run lint",
+        "npm run build",
+    ],
+)
+def test_installs_and_mentions_are_not_tests(command: str) -> None:
+    text = f"on: push\njobs:\n  j:\n    steps:\n      - run: {command}\n"
+    assert detect_relevant_workflow(text, "test").relevant is False
+
+
+@pytest.mark.parametrize(
+    "command",
+    ["npm test", "npm run test:ci", "yarn test", "pnpm test", "npx mocha", "jest", "vitest run"],
+)
+def test_each_required_command_matches(command: str) -> None:
+    text = f"on: push\njobs:\n  j:\n    steps:\n      - run: {command}\n"
+    assert detect_relevant_workflow(text, "test").relevant is True
+
+
+def _one(command: str) -> bool:
+    text = f"on: push\njobs:\n  j:\n    steps:\n      - run: {command!r}\n"
+    return detect_relevant_workflow(text, "test").relevant
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "npm ci && npm test",
+        "pnpm install && pnpm test",
+        "npm install; npm test",
+        "echo hi; jest",
+        "npm ci || exit 1 && yarn test",
+        "cat x | npx vitest run",
+        "pnpm --filter x test",
+        "pnpm -F x test",
+        "pnpm -r run test",
+        "pnpm --filter x run test",
+        "npm --prefix x test",
+        "yarn --cwd x test",
+        "yarn workspaces run test",
+        "npm t",
+        "npm ci & npm test",
+        "yarn workspace my-pkg test",
+        "yarn workspace @scope/pkg run test",
+        "npm -a b test",
+        "npm --a=b test",
+        "npm run --a b test",
+        "npm run test:unit",
+        "npm run test-e2e",
+        "npm run test:ci",
+    ],
+)
+def test_chained_and_flagged_forms_match(command: str) -> None:
+    assert _one(command) is True
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "npm run testing",
+        "yarn tests",
+        "npm ci && npm run build",
+        "npm install; echo done",
+        "echo hi && echo jest",
+        "pnpm --filter x build",
+        "pnpm -r run build",
+    ],
+)
+def test_over_matches_and_install_only_chains_do_not_match(command: str) -> None:
+    assert _one(command) is False
+
+
+@pytest.mark.parametrize(
+    "command",
+    ["npm " + "--a " * 40 + "!", "npm " + "-a b " * 40 + "!", "npm run " + "--a=b " * 40 + "!"],
+)
+def test_repeated_flags_do_not_backtrack_catastrophically(command: str) -> None:
+    start = time.perf_counter()
+    assert _one(command) is False
+    assert time.perf_counter() - start < 0.5
