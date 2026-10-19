@@ -12,6 +12,7 @@ from pathlib import Path
 
 from collector.backfill import DEFAULT_DAYS, DEFAULT_WINDOW_DAYS, Backfiller
 from collector.daily import DailySummary, DailySyncer, NotBackfilledError
+from collector.export_import import TransferError, export_data, import_data, resolve_target
 from collector.file_tags import load_file_tagger
 from collector.repo_config import DEFAULT_CONFIG_DIR, MEMBERS, ConfigError, load_member_config
 from collector.status import collect_status, fetch_rate_limit, render_status
@@ -55,6 +56,16 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     status = sub.add_parser("status", help="show what is collected, gaps and the rate limit")
     status.add_argument("--member", required=True, choices=MEMBERS)
+    exp = sub.add_parser("export", help="bundle the database, logs and a manifest into a tar.gz")
+    exp.add_argument("--member", required=True, choices=MEMBERS)
+    exp.add_argument("--database", help="database name (default: the one in DATABASE_URL)")
+    exp.add_argument("--data-dir", type=Path, help="logs and snapshots folder (default: ./data)")
+    exp.add_argument("--out-dir", type=Path, help="where the archive goes (default: data/exports)")
+    imp = sub.add_parser("import", help="restore an export into the running stack and verify it")
+    imp.add_argument("file", type=Path, help="the .tar.gz made by `collector export`")
+    imp.add_argument("--force", action="store_true", help="overwrite a database that has rows")
+    imp.add_argument("--database", help="database name (default: the one in DATABASE_URL)")
+    imp.add_argument("--data-dir", type=Path, help="logs and snapshots folder (default: ./data)")
     return parser
 
 
@@ -215,6 +226,45 @@ def run_status(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def run_export(args: argparse.Namespace) -> int:
+    """Run `collector export`; returns the process exit code."""
+    data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
+    out_dir = args.out_dir or data_dir / "exports"
+    try:
+        result = export_data(
+            member=args.member,
+            data_dir=data_dir,
+            out_dir=out_dir,
+            target=resolve_target(args.database),
+        )
+    except TransferError as exc:
+        _err(f"export failed: {exc}")
+        return EXIT_FAILED
+    tables = sum(result.manifest["row_counts"].values())
+    sys.stdout.write(
+        f"wrote {result.archive} ({tables} rows in {len(result.manifest['row_counts'])} tables, "
+        f"{len(result.manifest['files'])} files)\n"
+    )
+    return EXIT_OK
+
+
+def run_import(args: argparse.Namespace) -> int:
+    """Run `collector import`; returns the process exit code."""
+    data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
+    try:
+        result = import_data(
+            args.file, data_dir=data_dir, target=resolve_target(args.database), force=args.force
+        )
+    except TransferError as exc:
+        _err(f"import failed: {exc}")
+        return EXIT_FAILED
+    sys.stdout.write(
+        f"imported {args.file}: {sum(result.row_counts.values())} rows in "
+        f"{len(result.row_counts)} tables and {result.files} files; checksums and counts match\n"
+    )
+    return EXIT_OK
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the collector CLI."""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -226,5 +276,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_daily(args)
     if args.command == "status":
         return run_status(args)
+    if args.command == "export":
+        return run_export(args)
+    if args.command == "import":
+        return run_import(args)
     parser.print_help()
     return EXIT_OK

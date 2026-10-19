@@ -30,10 +30,12 @@ migrate:
 schemas:
 	uv run python -m shared.contracts.export_schemas
 
+# DEFAULT: MEMBER comes from .env (loaded above) or `make export-data MEMBER=build`.
 export-data:
-	@echo "export-data: not implemented until P1.7"
-	@exit 1
+	@test -n "$(MEMBER)" || { echo "export-data: set MEMBER in .env or run: make export-data MEMBER=<member>"; exit 1; }
+	uv run collector export --member "$(MEMBER)"
 
+# usage: make import-data FILE=data/exports/build-2026-11-02.tar.gz [FORCE=1]
 import-data:
-	@echo "import-data: not implemented until P1.7 (usage: make import-data FILE=...)"
-	@exit 1
+	@test -n "$(FILE)" || { echo "import-data: usage: make import-data FILE=<archive.tar.gz> [FORCE=1]"; exit 1; }
+	uv run collector import "$(FILE)" $(if $(filter 1,$(FORCE)),--force)

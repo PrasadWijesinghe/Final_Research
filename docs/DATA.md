@@ -171,6 +171,8 @@ make export-data       # → data/exports/<member>-<date>.tar.gz : pg_dump (cust
 make import-data FILE=data/exports/build-2026-11-02.tar.gz
 ```
 
+What the archive holds, the import checks and the options: `services/collector/README.md`, "Export and import".
+
 Never copy Docker volume folders between machines: PostgreSQL data folders aren't portable
 across versions or machine types. The export archive doubles as the **weekly backup**
 (upload it to Google Drive or OneDrive).
