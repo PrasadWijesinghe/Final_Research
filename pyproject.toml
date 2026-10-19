@@ -21,11 +21,6 @@ exclude = [
     "services/api",
     "services/features",
     "services/llm_gateway",
-    "experts/_template",
-    "experts/build",
-    "experts/dependency",
-    "experts/infra",
-    "experts/testing",
 ]
 
 [dependency-groups]
@@ -66,11 +61,11 @@ warn_unused_configs = true
 warn_redundant_casts = true
 # DEFAULT: mypy errors on folders with no .py files, so only `shared` is listed for now;
 # the task that adds services/<name> or experts/<name> appends its src/ and tests/ folders here.
-files = ["shared", "services/collector/src", "services/collector/tests", "scripts"]
+files = ["shared", "services/collector/src", "services/collector/tests", "experts/_template/src", "experts/_template/tests", "experts/dependency/src", "experts/dependency/tests", "experts/build/src", "experts/build/tests", "experts/testing/src", "experts/testing/tests", "experts/infra/src", "experts/infra/tests", "scripts"]
 explicit_package_bases = true
 # DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
 # `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
-mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests"]
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests", "$MYPY_CONFIG_FILE_DIR/experts/_template/src", "$MYPY_CONFIG_FILE_DIR/experts/dependency/src", "$MYPY_CONFIG_FILE_DIR/experts/build/src", "$MYPY_CONFIG_FILE_DIR/experts/testing/src", "$MYPY_CONFIG_FILE_DIR/experts/infra/src"]
 
 # DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
 # spelled out for shared.* (this is what `--strict` enables).

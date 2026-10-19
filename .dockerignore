@@ -1,0 +1,15 @@
+# DEFAULT: keep the build context small; the expert Dockerfiles only need the sources and uv.lock.
+.git
+.venv
+.env
+data/
+models/
+mlruns/
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+**/node_modules
+services/dashboard
+docs
