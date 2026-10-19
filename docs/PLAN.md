@@ -43,7 +43,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* integration test against recorded responses for one repo; running twice changes nothing; interrupting and resuming completes correctly.
 - [x] **★ P1.6 Collector daily and status.** `daily` (new runs since last sync, plus a 14-day re-scan for new attempts) and `status` (counts, gaps, rate limit). Doc section in `ONBOARDING.md` on scheduling with cron or Task Scheduler.
   *Accept:* a new attempt of an old run is picked up by the re-scan in tests.
-- [ ] **★ P1.7 Export and import.** `make export-data` → `data/exports/<member>-<date>.tar.gz` (pg_dump custom format + logs + `manifest.json` with checksums); `make import-data FILE=…` restores into a running stack.
+- [x] **★ P1.7 Export and import.** `make export-data` → `data/exports/<member>-<date>.tar.gz` (pg_dump custom format + logs + `manifest.json` with checksums); `make import-data FILE=…` restores into a running stack.
   *Accept:* export on one database, import into a fresh one, row counts and log checksums match.
 - [ ] **P1.8 Data-quality report.** Per repo: runs, attempts, failed jobs, logs fetched / expired / missing, redaction counts.
   *Accept:* report generated from the test fixtures.

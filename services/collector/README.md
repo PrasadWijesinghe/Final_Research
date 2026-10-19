@@ -2,21 +2,20 @@
 
 **In one sentence:** The collector reads each team member's list of GitHub repositories and pulls the last 90 days of CI (continuous integration, automated build and test) runs, failure logs, commits and config files into the database, so the experts can learn from real failures.
 
-**Status:** partial (backfill, daily and status work; export and import not built) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status). Export and import come in P1.7.
+**Status:** working (backfill, daily, status, export and import) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import). The export and import tests that need a real database have not been run yet (see Limitations).
 
 ## What it does
 
 PipelineIQ learns from real CI failures on real GitHub repositories. Each of the four team members (dependency, build, test, infra) picks a set of repositories that fit their topic. Those lists live in `config/repos/<member>.yaml`.
 
-The collector is the part that reads those lists and collects the data. It has five jobs:
+The collector is the part that reads those lists and collects the data. It has six jobs:
 
 1. **Repo config loader (P1.2).** It opens a member's YAML file, checks every field, and turns it into clean Python objects. If the file has a mistake, it stops with a message that names the file, the repository and the field.
 2. **Workflow detection (P1.2).** A GitHub repository can have many workflows (automated job files under `.github/workflows/`). Most are not relevant to a member. For example, the Test member only cares about workflows that run tests. Detection looks inside a workflow file and says whether it is relevant, and why.
 3. **Backfill (P1.5).** The `backfill` command pulls the last 90 days of data for a member's repositories. It writes the data to Postgres tables and to files in the data folder. It is safe to run again: a second run adds nothing new. If it stops part way, the next run picks up where it left off.
 4. **Daily sync (P1.6).** The `daily` command keeps the data up to date after the backfill. It fetches the runs created since the last sync, and looks again at the last 14 days for new attempts of older runs.
 5. **Status (P1.6).** The `status` command prints what is stored for each repo, the days with no runs, the backfill state, the last daily sync and the GitHub rate limit. It changes nothing.
-
-Export and import come in P1.7.
+6. **Export and import (P1.7).** `export` packs the whole database and the collected files into one `.tar.gz` archive, for sharing between members or as a weekly backup. `import` checks an archive and restores it into a database. Both work through the Postgres container, so no local Postgres tools are needed.
 
 ## How it works
 
@@ -221,6 +220,114 @@ The report has these parts:
     2026-10-13 to 2026-10-14 (2 days)
 ```
 
+### Export and import (P1.7)
+
+Members share data by sending each other a file, not by copying Docker volume folders. Postgres data folders do not move safely between machines. The export archive is also the weekly backup.
+
+A few words first. A **dump** is a copy of the database in a format Postgres can read back. **pg_dump** and **pg_restore** are the Postgres tools that make and read dumps. A **checksum** is a fingerprint (a SHA-256 hash) of a file. If one byte changes, the checksum changes. A **manifest** is a small JSON file that lists what should be in the archive, with its checksums and row counts.
+
+**The archive.** One `.tar.gz` file (a compressed tar archive) holds:
+
+| Entry | What it is |
+|---|---|
+| `manifest.json` | Who made it, when, from which git commit, the database name, the dump's checksum and size, the row count of every `raw` table, and a checksum for every file |
+| `db.dump` | The whole database in pg_dump's custom format. That means every schema, the `alembic_version` table (which migration the database is at) and the `vector` extension |
+| `files/logs/...` | The gzipped job logs from `data/logs/` |
+| `files/snapshots/...` | The lockfile blobs from `data/snapshots/` that `raw.file_snapshots` points at |
+
+Nothing else under `data/` goes in. In particular `data/exports/` and any reports do not.
+
+The archive itself has no timestamps: its entries, order and gzip header are fixed. So two exports of the same data should give the same bytes. The offline test checks this with a fake dump. Whether a real pg_dump always gives the same bytes was not checked.
+
+**Where the database work runs.** The collector does not need a local Postgres client. It runs `docker compose exec -T postgres ...` and runs pg_dump, pg_restore and psql inside the `postgres` container. So **Docker must be running**. No password is passed. The commands rely on the container's local socket accepting connections without one, which was not checked here. The user and database name come from `DATABASE_URL`. The host and port in `DATABASE_URL` are ignored, because the commands always run in the compose container.
+
+The exact commands, with the user and database filled in:
+
+```bash
+pg_dump -U <user> -d <db> -Fc --no-owner                      # dump goes to db.dump
+pg_restore -U <user> -d <db> --no-owner --no-privileges --clean --if-exists \
+           --single-transaction --exit-on-error               # dump comes from stdin
+psql -U <user> -d <db> -X -v ON_ERROR_STOP=1 -A -t -c "<sql>" # counts and checks
+```
+
+**Export, step by step.**
+
+1. Read the database name and user from `DATABASE_URL`, or from `--database`.
+2. Count the rows of every table in the `raw` schema.
+3. Run pg_dump into a temporary file inside the output folder. An empty dump is an error.
+4. Count the `raw` rows again. If the count changed, stop. Someone wrote to the database during the dump, so the archive would not match itself. Stop the collector and export again.
+5. Take a checksum of every file under `data/logs/` and `data/snapshots/`.
+6. Write `manifest.json` (sorted, so equal data gives an equal manifest).
+7. Pack the manifest, the dump and the files into a temporary `.tar.gz`, then rename it to its final name. The rename replaces an archive with the same name from the same day.
+
+```mermaid
+flowchart TD
+    A["make export-data"] --> B["Count raw rows"]
+    B --> C["pg_dump in the container to a temp file"]
+    C --> D{"Count raw rows again: same?"}
+    D -- no --> X["Stop: database changed, export again"]
+    D -- yes --> E["Checksum logs and snapshots"]
+    E --> F["Write manifest.json"]
+    F --> G["Pack into a temp .tar.gz, then rename"]
+    G --> H[("data/exports/member-date.tar.gz")]
+```
+
+**Import, step by step.** The import checks everything before it changes anything. Steps 2 and 4 change the database. Step 5 changes `data/`.
+
+1. **Unpack into a temporary folder** inside `data/`, and check the archive (see the safety rules below). Check the dump's checksum and every file's checksum against the manifest. If anything fails, stop. The database and `data/logs` are not touched.
+2. **Create the database** if it does not exist yet.
+3. **Refuse if the database is not empty.** If the `raw` schema has any rows, stop, unless `--force` (or `FORCE=1`) is given. Only `raw` is counted (see Limitations).
+4. **Restore the dump.** pg_restore runs in one transaction. If it fails, the database is left as it was.
+5. **Move the files** into `data/logs/` and `data/snapshots/`. A file already at the same path is replaced. If a symbolic link is in the way, the import stops.
+6. **Verify.** Check every file's checksum in `data/` against the manifest. Count the `raw` rows again and compare them with the manifest.
+
+```mermaid
+flowchart TD
+    A["make import-data FILE=..."] --> B["Unpack to temp folder and check everything"]
+    B -- bad --> X["Stop: nothing changed"]
+    B -- ok --> C["Create database if missing"]
+    C --> D{"raw rows = 0, or FORCE?"}
+    D -- no --> Y["Stop: refuse to overwrite"]
+    D -- yes --> E["pg_restore in one transaction"]
+    E -- fails --> X2["Stop: database unchanged"]
+    E -- ok --> F["Move logs and snapshots into data/"]
+    F --> G{"Checksums and row counts match?"}
+    G -- no --> Z["Stop: database is already restored"]
+    G -- yes --> OK["Done"]
+```
+
+If step 6 fails, the database stays restored and the files stay where they were moved. Run the import again with `FORCE=1`, because the database now has rows.
+
+**Archive safety rules.** The import does not trust the archive's paths:
+
+- Only `manifest.json`, `db.dump`, and files under `files/logs/` or `files/snapshots/` are allowed. Every file must be listed in the manifest, and every listed file must be in the archive. Extra or missing files stop the import.
+- No absolute paths, no drive letters (`C:`), no backslashes, no `..`, no `.`, and no empty path parts.
+- Only regular files and folders. Symbolic links, hard links, devices and named pipes are refused.
+- No duplicate names.
+- The import writes files itself, from the archive stream, into the temporary folder. It never uses a general "extract everything" call.
+
+**Export and import options.** Some rows are for `make`, some for `uv run collector`.
+
+| Option | Command | Meaning |
+|---|---|---|
+| `MEMBER=<name>` | `make export-data` | Required. One of `dependency`, `build`, `test`, `infra`. Makes the file name and goes in the manifest. It does not select data |
+| `FILE=<path>` | `make import-data` | Required. The `.tar.gz` to import |
+| `FORCE=1` | `make import-data` | Same as `--force`. Any other value is ignored |
+| `--member` | `collector export` | Required, as above |
+| `--database NAME` | `export`, `import` | Database name. Default: the one in `DATABASE_URL`. The user still comes from `DATABASE_URL` |
+| `--data-dir PATH` | `export`, `import` | Folder with `logs/` and `snapshots/`. Default: `DATA_DIR`, else `<checkout>/data` |
+| `--out-dir PATH` | `export` | Where the archive goes. Default: `<data-dir>/exports`, so `data/exports` |
+| `--force` | `import` | Allow the import when `raw` already has rows. The restore then replaces every table in the dump |
+| `FILE` | `collector import` | The archive path (positional argument) |
+
+With `make`, the `MEMBER` and `FILE` values can come from `.env`. The Makefile loads `.env` first.
+
+**Exit codes.** `export` and `import` return 0 on success. A failure (a `TransferError`, such as a checksum mismatch, a refused import or a failed container command) prints `export failed: ...` or `import failed: ...` on stderr and returns 1. A wrong option or a missing file argument returns 2, from the option parser.
+
+**Example.** The offline tests (`test_export_import.py`) run an export with a fake Postgres. The file is named `test-2026-11-02.tar.gz`. The archive starts with `manifest.json` and `db.dump`, then `files/logs/...` and `files/snapshots/...`. The manifest says `"member": "test"`, `"date": "2026-11-02"` and the commit. The row counts are the `raw` tables only. The export command then prints `wrote <path> (<rows> rows in <tables> tables, <files> files)`. The import command prints `imported <file>: ... checksums and counts match` when everything passes.
+
+The integration test (`test_export_import_db.py`) is meant to do the same thing with real Docker. It has not been run yet. It backfills the recorded repo `acme/widgets`, exports the database, imports the archive into a fresh database called `<main db>_import_test`, and checks that the row counts and file checksums match. It then checks that a second import is refused, and that `--force` works.
+
 ## How to run it
 
 ```bash
@@ -239,11 +346,26 @@ uv run --env-file .env collector daily --member test --repo owner/name --data-di
 # what is stored, days with no runs, backfill state, last daily sync, rate limit
 uv run --env-file .env collector status --member test
 
+# bundle the database, logs and snapshots into data/exports/test-<date>.tar.gz
+# (needs Docker running; the Makefile reads MEMBER from .env if you leave it out)
+make export-data MEMBER=test
+
+# check and restore an archive; refuses if raw.* already has rows
+make import-data FILE=data/exports/test-2026-11-02.tar.gz
+# replace the rows that are already there
+make import-data FILE=data/exports/test-2026-11-02.tar.gz FORCE=1
+
+# the same, without make, with other options
+uv run --env-file .env collector export --member test --out-dir /path/to/out
+uv run --env-file .env collector import /path/to/test-2026-11-02.tar.gz --database other_db --force
+
 # the collector's tests (no database and no network needed)
 uv run pytest services/collector
 ```
 
-When `daily` works, it prints one line per repo: the repo name, the window, and the counts. When `status` works, it prints the report described above.
+When `daily` works, it prints one line per repo: the repo name, the window, and the counts. When `status` works, it prints the report described above. When `export` works, it prints `wrote <path> (<rows> rows in <tables> tables, <files> files)`. When `import` works, it prints the row and file counts and says that checksums and counts match.
+
+The Makefile passes `--force` only when `FORCE` is exactly `1`. The `collector` command takes `--force` directly. Export and import also use `DATABASE_URL` from `.env`. Make sure Docker Desktop is running first.
 
 `daily` has the same `--member`, `--repo` and `--data-dir` options as backfill. It has no `--days` option, because the look-back is fixed by the sync point and the 90-day retention. `--repo` takes repos from the full list, so a repo marked `enabled: false` still runs when named. This is checked in `cli.py`: `run_daily` builds the list from `config.repos`, not `enabled_repos()`.
 
@@ -258,6 +380,8 @@ uv run pytest services/collector -m integration
 ```
 
 They read `DATABASE_URL` from `.env`. Use `127.0.0.1`, not `localhost`, on Windows. The tests create and drop a throwaway database called `<name>_collector_test`, so the database user needs the right to create databases. If the database cannot be reached, the integration tests are skipped, not passed. **These integration tests had not been run when P1.5 was written, because Docker was not available.**
+
+The export and import integration test (`test_export_import_db.py`) also runs `docker compose exec` against the `postgres` service. It is skipped if that does not work. It creates and drops a database called `<main db>_import_test`. **It had not been run when P1.7 was written, because Docker was not available.** To run it: start Docker Desktop, run `make up`, export `DATABASE_URL` (see above), then run `uv run pytest services/collector -m integration`. A skipped test is not a passed test, so check the output says "passed" for the export and import test.
 
 The full check that must pass before a task is done is `make check`.
 
@@ -305,6 +429,10 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | Out | Database rows | `raw.repos`, `raw.sync_state`, `raw.workflows`, `raw.workflow_runs`, `raw.jobs`, `raw.steps`, `raw.commits`, `raw.commit_files`, `raw.file_snapshots`, `raw.logs` (Postgres) |
 | Out | Files | `logs/...log.gz` and `snapshots/blobs/...gz` under the data folder |
 | Out | Errors | `ConfigError` (a kind of `ValueError`) for config problems, with the file path, repo and field in the message |
+| In (export) | The whole database, and the logs and snapshots | Postgres, through `docker compose exec postgres` (pg_dump, psql); `data/logs/`, `data/snapshots/` |
+| Out (export) | One archive | `data/exports/<member>-<date>.tar.gz`: `manifest.json`, `db.dump`, `files/...` |
+| In (import) | One archive | The `.tar.gz` path given to `make import-data FILE=` or `collector import` |
+| Out (import) | Restored database and files | Postgres (pg_restore, through the container); `data/logs/`, `data/snapshots/` |
 
 ## Settings
 
@@ -313,7 +441,13 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | `GITHUB_TOKEN` | Environment (`.env`) | Required | The GitHub token for API calls. Never printed or logged |
 | `IDENTITY_SALT` | Environment (`.env`) | Required | The salt for hashing logins and author emails. Changing it changes every hash |
 | `DATABASE_URL` | Environment (`.env`) | Required | The Postgres connection |
-| `DATA_DIR` | Environment (`.env`) | `<checkout>/data` | Where logs and blobs are written. Empty means the default |
+| `DATA_DIR` | Environment (`.env`) | `<checkout>/data` | Where logs and blobs are written. Exports go to `DATA_DIR/exports` and imports read and write here too. Empty means the default |
+| `DATABASE_URL` (export and import) | Environment (`.env`) | Required for normal use | Only the user and database name are used by export and import. The host and port are ignored, because the commands run in the compose container. If it is empty, the defaults `pipelineiq` and `pipelineiq` are used |
+| `--database` (export and import) | Command line | The name in `DATABASE_URL` | Which database to dump or restore into |
+| `--out-dir` (export) | Command line | `<data-dir>/exports` | Where the archive is written |
+| `--force` (import) | Command line | Off | Lets the import replace a database that has rows in `raw` |
+| `FORCE=1` (import) | `make import-data` | Off | The same as `--force` |
+| `MEMBER` (export) | `.env` or `make export-data MEMBER=...` | Required | The member name in the archive file name and manifest. The collector CLI takes `--member` instead |
 | `GITHUB_RATE_LIMIT_THRESHOLD` | Environment (read by the GitHub client) | 200 | When to sleep until the rate limit resets |
 | `GITHUB_MIN_WINDOW_HOURS` | Environment (read by the GitHub client) | 1 | The smallest window the client splits down to |
 | `SANITISE_PATTERNS_FILE` | Environment (read by the sanitiser) | `config/sanitise_patterns.yaml` | Which secret patterns to remove |
@@ -328,7 +462,7 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | `lockfiles_inline` | `config/file_tags.yaml`, `limits` | `false` | Whether lockfiles are stored as text in the database |
 | Run and exclude patterns | `config/workflow_detection.yaml`, per member | Test member has rules; others have none | Which commands make a workflow relevant |
 
-`.env.example` also lists `MEMBER`. The collector does not read it. The member always comes from `--member`.
+`.env.example` also lists `MEMBER`. The collector CLI does not read it: `collector` always takes the member from `--member`. `make export-data` does read it, when `MEMBER` is not given on the command line.
 
 ## Example
 
@@ -371,9 +505,26 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 
 **Not built yet**
 
-- Export and import (`make export-data`, `make import-data`) come in P1.7.
 - There is no command to re-decide a workflow's relevance. The stored answer is kept once it is set (see below).
 
+**Export and import (P1.7)**
+
+- **The database tests have not been run.** `test_export_import_db.py` needs Docker, which was not available when P1.7 was written. The offline tests (`test_export_import.py`) use a fake Postgres and do run without Docker. Until the integration test has passed, the real `pg_dump`, `pg_restore` and `psql` calls are checked only by reading the code.
+- **Only `raw` is counted.** The row counts in the manifest, the "database changed during export" check and the "already holds rows" check all look only at tables in the `raw` schema. Platform tables are in the dump, but nothing counts them. Their restore relies on pg_restore's exit code.
+- **An import is not refused when `raw` is empty, even if platform tables already have rows.** Without `--force`, the import still restores the dump, and `--clean` replaces every table in the dump. So platform data in the target can be overwritten without a warning.
+- **`--clean` does not drop objects that are not in the dump.** Extra tables in the target are left alone. The restore fails, and rolls back, only if something left in the target depends on a table the dump replaces (for example a foreign key from a table that is not in the dump). I could not check this against a live Postgres.
+- **A failure after the restore leaves the database restored.** If the file checksums or row counts do not match after the restore, the import stops with an error. The restored data stays, and the files may already be moved. Run the import again with `FORCE=1`.
+- **The manifest catches accidents, not tampering.** Each checksum sits in the same archive as the file it checks. Someone who edits a file and its checksum in the manifest gets through. The archive is not signed and not encrypted.
+- **The archive holds personal data.** Logins are hashed, but commit messages keep `Co-authored-by:` names and emails, and the log text is only sanitised for secrets. Treat the archive as sensitive before you share it or upload it to a cloud drive.
+- **No size limit.** Neither export nor import caps the archive size. The temporary copy needs free disk space about equal to the uncompressed size: in `--out-dir` for export, and in `data/` for import.
+- **Exports can fail while the collector runs.** If a `raw` row count changes during the dump, the export stops. Stop the collector first. Platform changes are not checked this way.
+- **A same-day export replaces the earlier file.** The name is `<member>-<date>.tar.gz`, and the date is the UTC date. An export made twice on the same day overwrites the first.
+- **The host and port in `DATABASE_URL` are ignored.** Only the user and database name are used, because the commands run in the `postgres` container of this compose file. A database on another host is not reached.
+- **Missing `DATABASE_URL` falls back silently.** The user and database default to `pipelineiq`. A missing variable does not stop the command.
+- **The import does not check the migration version.** The `alembic_version` table comes from the archive. The import does not compare it with the migrations in this checkout.
+- **`git_commit` is the last commit, not the working tree.** Uncommitted changes are not recorded. The value is `unknown` outside a git checkout.
+- **Trusted local socket.** pg_dump and pg_restore run without a password, relying on the container's local socket being trusted. This is how the official image is set up. It was not checked here.
+- **Files are replaced.** An existing file at the same path in `data/` is overwritten by the import.
 **Rate-limit errors on logs**
 
 - A log that fails with a 429, or a limit-related 403 that never cleared after all retries, stops the repo like a 5xx. A re-run resumes. Only other 4xx answers (for example a plain 403) are stored as `missing`.
@@ -428,7 +579,11 @@ In `services/collector/src`:
 - `backfill.py`, line 424: a non-retryable 4xx (for example 403) on a log is recorded as `missing`, so one unreadable log does not stop the repo. Rate-limit failures are not treated this way; they stop the repo.
 - `backfill.py`, line 474: a commit that no longer exists (force-push) is skipped, not fatal.
 - `backfill.py`, line 484: if GitHub has no account for a commit's author, the commit's author email is hashed instead.
-- `cli.py`, line 26: logs and snapshots live in `<checkout>/data` unless `DATA_DIR` or `--data-dir` says otherwise.
+- `cli.py`, line 30: logs and snapshots live in `<checkout>/data` unless `DATA_DIR` or `--data-dir` says otherwise.
+- `export_import.py`, line 46: only `logs/` and `snapshots/` under `data/` travel with an export. Reports and exports do not.
+- `export_import.py`, line 48: names are limited to plain Postgres identifiers (letters, digits, underscores, at most 63), so they are safe in SQL and command arguments.
+- `export_import.py`, line 161: pg_restore runs with `--clean --if-exists --single-transaction`. This works into an empty database and over a migrated one, and a failure leaves the database unchanged.
+- `export_import.py`, line 531: a file already at the same path in `data/` is replaced by the import.
 - `file_tags.py`, line 18: tags whose files are worth a content snapshot are the ones that are not `test`, `source`, `docs` or `other`. That means configuration and manifests (and lockfiles). Test files, plain source and docs are already visible in the commit diff.
 - `policy.py`, line 8: "failed" means `failure`, `timed_out` or `startup_failure`. Cancelled and skipped jobs are not failures, and their logs carry no useful signal.
 - `policy.py`, line 13: gzip level 6, which is the zlib default. The level is fixed so the bytes are stable.
@@ -444,6 +599,10 @@ Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth 
 - `daily.py`: the sync point is cut to whole seconds (`started` is rounded down). The window then overlaps the previous one by a fraction of a second, which is harmless because every write is an upsert.
 - `daily.py`: the data-lost check uses the backfiller's `days` (90 by default), not a separate constant. `daily` has no `--days` option, so in practice it is always 90.
 - `cli.py`, `run_status`: with no `GITHUB_TOKEN`, `status` does not call `/rate_limit` at all. It only prints "unavailable". With a token, a failed request is also shown as "unavailable", with the error name and no details.
+- `export_import.py`, `_DEFAULT_USER` and `_DEFAULT_DB` (lines 51–52): the user and database fall back to `pipelineiq` when `DATABASE_URL` is not set. Not marked in the code.
+- `cli.py`, `run_export`: the archive goes to `<data-dir>/exports` (so `data/exports`) unless `--out-dir` is given. The help text says so, but there is no `# DEFAULT:` comment in the code.
+- `export_import.py`, `export_data`: the archive name uses the UTC date, and an archive with the same name is replaced. Not marked in the code.
+- `Makefile`, `export-data`: `MEMBER` comes from `.env` or the command line, and the target stops if it is empty. This choice is marked there.
 
 `config/workflow_detection.yaml` has no `# DEFAULT:` comments.
 
@@ -451,7 +610,9 @@ Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth 
 
 ## Related
 
-- Plan: `docs/PLAN.md`, tasks P1.2 (repo config and detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export).
+- Plan: `docs/PLAN.md`, tasks P1.2 (repo config and detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import).
+- Export and import code: `services/collector/src/collector/export_import.py` (archive, checks, pg commands) and the `export` and `import` commands in `cli.py`. Makefile targets `export-data` and `import-data`. Design: `docs/DATA.md` section 9.
+- Export and import tests: `services/collector/tests/test_export_import.py` (offline, fake Postgres) and `test_export_import_db.py` (integration, Docker, not yet run).
 - Design: `docs/DATA.md` section 2 (repo lists and auto-detection), section 3 (the collector), section 5 (file tags).
 - The GitHub client that the backfill uses: `shared/github/README.md`.
 - The sanitiser that cleans logs and text: `shared/sanitise/README.md`.
