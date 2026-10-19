@@ -6,7 +6,7 @@ import copy
 from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from dataclasses import asdict
-from datetime import datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 from collector.store import (
@@ -14,6 +14,7 @@ from collector.store import (
     CommitRecord,
     JobRecord,
     LogRecord,
+    RepoCounts,
     RepoRecord,
     RunRecord,
     SnapshotRecord,
@@ -146,3 +147,40 @@ class MemoryStore:
 
     def upsert_log(self, log: LogRecord) -> None:
         self._put("logs", log)
+
+    def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
+        state = self.tables["sync_state"][(repo_id,)]
+        self.tables["sync_state"][(repo_id,)] = SyncStateRecord(
+            repo_id, state.backfill_done_at, state.backfill_cursor, at
+        )
+
+    def list_repos(self, member: str) -> list[RepoRecord]:
+        repos: list[RepoRecord] = [r for r in self.tables["repos"].values() if r.member == member]
+        return sorted(repos, key=lambda r: r.full_name)
+
+    def repo_counts(self, repo_id: int) -> RepoCounts:
+        runs = [r for r in self.tables["workflow_runs"].values() if r.repo_id == repo_id]
+        keys = {(r.run_id, r.attempt) for r in runs}
+        jobs = [j for j in self.tables["jobs"].values() if (j.run_id, j.attempt) in keys]
+        job_ids = {j.job_id for j in jobs}
+        logs: dict[str, int] = {}
+        for log in self.tables["logs"].values():
+            if log.job_id in job_ids:
+                logs[log.status] = logs.get(log.status, 0) + 1
+        commits = [c for c in self.tables["commits"].values() if c.repo_id == repo_id]
+        return RepoCounts(
+            runs=len({r.run_id for r in runs}),
+            attempts=len(runs),
+            jobs=len(jobs),
+            logs=logs,
+            commits=len(commits),
+        )
+
+    def run_days(self, repo_id: int) -> list[date]:
+        return sorted(
+            {
+                r.created_at.astimezone(UTC).date()
+                for r in self.tables["workflow_runs"].values()
+                if r.repo_id == repo_id and r.created_at is not None
+            }
+        )

@@ -41,7 +41,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* tests with fake secrets of every pattern; no false positives on 10 sample clean logs.
 - [x] **★ P1.5 Collector backfill.** `services/collector`: the `backfill` command per `docs/DATA.md` §3 (runs in date windows, jobs with `filter=all`, steps, commit diffs, config file snapshots, logs per the log policy, sanitise then gzip). Idempotent upserts; resumable via `sync_state.backfill_cursor`.
   *Accept:* integration test against recorded responses for one repo; running twice changes nothing; interrupting and resuming completes correctly.
-- [ ] **★ P1.6 Collector daily and status.** `daily` (new runs since last sync, plus a 14-day re-scan for new attempts) and `status` (counts, gaps, rate limit). Doc section in `ONBOARDING.md` on scheduling with cron or Task Scheduler.
+- [x] **★ P1.6 Collector daily and status.** `daily` (new runs since last sync, plus a 14-day re-scan for new attempts) and `status` (counts, gaps, rate limit). Doc section in `ONBOARDING.md` on scheduling with cron or Task Scheduler.
   *Accept:* a new attempt of an old run is picked up by the re-scan in tests.
 - [ ] **★ P1.7 Export and import.** `make export-data` → `data/exports/<member>-<date>.tar.gz` (pg_dump custom format + logs + `manifest.json` with checksums); `make import-data FILE=…` restores into a running stack.
   *Accept:* export on one database, import into a fresh one, row counts and log checksums match.

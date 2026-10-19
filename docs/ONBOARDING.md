@@ -189,18 +189,20 @@ after yours with `_test` added (for example `pipelineiq_test`), run their migrat
 drop it when the tests finish. It is safe to run `make check` at any time, also after you have
 collected data.
 
-## 8. First collector run (available after P1.5)
+## 8. Collect data: backfill, status, daily
 
-The collector is not built yet. Its folder, `services/collector`, is still empty.
+Do steps 4 to 6 first. `make setup` installs the collector (it needs uv and Git), `make up` starts
+Postgres, and `make migrate` creates the tables. The collector writes to that database, so Docker
+Desktop must be running whenever you run it.
 
 1. Fill in the repo list for your member, in `config/repos/<member>.yaml`. The format is in
    `docs/DATA.md`, section 2.
-2. Make sure `DATABASE_URL`, `GITHUB_TOKEN` and `IDENTITY_SALT` are set. The collector
-   needs all three. How the collector reads `.env` will be explained when P1.5 lands.
-3. Start the first pull:
+2. Make sure `GITHUB_TOKEN`, `IDENTITY_SALT` and `DATABASE_URL` are in your `.env` file (step 3).
+   The collector needs all three. `uv run` does not read `.env` by itself, so add
+   `--env-file .env` to every collector command. Run them from the repo folder:
 
    ```bash
-   uv run collector backfill --member <member>
+   uv run --env-file .env collector backfill --member <member>
    ```
 
    This pulls the last 90 days of workflow runs, jobs, logs and commit diffs for the repos in
@@ -208,15 +210,64 @@ The collector is not built yet. Its folder, `services/collector`, is still empty
    hour per token, so a backfill can take hours. You can stop it with Ctrl+C at any time. Run the
    same command again to resume.
 
-4. Check what has been collected:
+3. Check what has been collected:
 
    ```bash
-   uv run collector status --member <member>
+   uv run --env-file .env collector status --member <member>
    ```
 
-5. After the first pull, keep the data up to date with `uv run collector daily --member <member>`.
-   Schedule it with cron on Linux or macOS, or Task Scheduler on Windows (P1.6). Run it at least
-   once a week.
+   It prints counts per repo, days with no runs, the backfill state, the last daily sync and your
+   remaining GitHub requests. A day with no runs can just be a quiet day. The rate limit line says
+   "unavailable" if `GITHUB_TOKEN` is not set.
+
+4. After the backfill has finished, keep the data up to date with:
+
+   ```bash
+   uv run --env-file .env collector daily --member <member>
+   ```
+
+   It fetches runs created since the last sync, and looks again at the last 14 days, because
+   re-runs of older runs show up later. If you run `daily` before the backfill has finished, it
+   tells you to run the backfill first. Running it twice is harmless.
+
+### Run `daily` on a schedule
+
+**Missed days are fine.** Run `daily` at least every week or two. The next run catches up on
+everything since the last successful one. If more than 90 days pass, GitHub has already deleted
+the older runs, and the collector warns you that data was lost.
+
+**Linux and macOS (cron).** Run `crontab -e` and add this line, with `<repo>` replaced by the full
+path of your checkout (escape spaces with a backslash). It runs every day at 03:15:
+
+```
+15 3 * * * cd <repo> && uv run --env-file .env collector daily --member test >> data/collector.log 2>&1
+```
+
+Use your own member name instead of `test`. Cron has a short PATH, so it may not find `uv`. If the
+log says `uv: not found`, put the full path from `which uv` in the line, or add a line
+`PATH=/home/<you>/.local/bin:/usr/local/bin:/usr/bin:/bin` at the top of the crontab. The `data`
+folder must exist (`mkdir -p data`). Docker must be running at that time.
+
+**Windows (Task Scheduler).** In **Command Prompt (cmd.exe)** (not PowerShell: it handles the quotes differently), run this once, with the path of your
+checkout in place of `C:\path\to\Final Research` (keep the `\"` around the path):
+
+```
+schtasks /Create /TN "PipelineIQ collector daily" /SC DAILY /ST 03:15 /TR "cmd /c cd /d \"C:\path\to\Final Research\" && uv run --env-file .env collector daily --member test >> data\collector.log 2>&1"
+```
+
+Create the `data` folder first (`mkdir data`) and check that `where uv` finds uv in a new Command Prompt. A repo that fails makes the command exit non-zero; the next run simply covers a longer window.
+
+The task runs only while you are logged in, and the computer must be on at 03:15 (Task Scheduler
+runs a missed task when you next log in only if you tick that option in the GUI). Check it with
+`schtasks /Query /TN "PipelineIQ collector daily"`, run it now with
+`schtasks /Run /TN "PipelineIQ collector daily"`, and remove it with
+`schtasks /Delete /TN "PipelineIQ collector daily" /F`.
+
+The same thing in the app: open **Task Scheduler**, then **Create Basic Task**. Name it, choose
+**Daily** and a time, then **Start a program**. Set **Program/script** to `cmd`, **Arguments** to
+`/c uv run --env-file .env collector daily --member test >> data\collector.log 2>&1`, and
+**Start in** to your repo folder. Finish, open the task's **Properties**, and on **Settings** tick
+**Run task as soon as possible after a scheduled start is missed**.
 
 ## 9. Start your expert (available after P2.1)
 

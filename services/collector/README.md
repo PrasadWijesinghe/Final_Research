@@ -2,19 +2,21 @@
 
 **In one sentence:** The collector reads each team member's list of GitHub repositories and pulls the last 90 days of CI (continuous integration, automated build and test) runs, failure logs, commits and config files into the database, so the experts can learn from real failures.
 
-**Status:** partial · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill). Daily sync and status come in P1.6, export and import in P1.7.
+**Status:** partial (backfill, daily and status work; export and import not built) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status). Export and import come in P1.7.
 
 ## What it does
 
 PipelineIQ learns from real CI failures on real GitHub repositories. Each of the four team members (dependency, build, test, infra) picks a set of repositories that fit their topic. Those lists live in `config/repos/<member>.yaml`.
 
-The collector is the part that reads those lists and collects the data. It has three jobs:
+The collector is the part that reads those lists and collects the data. It has five jobs:
 
 1. **Repo config loader (P1.2).** It opens a member's YAML file, checks every field, and turns it into clean Python objects. If the file has a mistake, it stops with a message that names the file, the repository and the field.
 2. **Workflow detection (P1.2).** A GitHub repository can have many workflows (automated job files under `.github/workflows/`). Most are not relevant to a member. For example, the Test member only cares about workflows that run tests. Detection looks inside a workflow file and says whether it is relevant, and why.
 3. **Backfill (P1.5).** The `backfill` command pulls the last 90 days of data for a member's repositories. It writes the data to Postgres tables and to files in the data folder. It is safe to run again: a second run adds nothing new. If it stops part way, the next run picks up where it left off.
+4. **Daily sync (P1.6).** The `daily` command keeps the data up to date after the backfill. It fetches the runs created since the last sync, and looks again at the last 14 days for new attempts of older runs.
+5. **Status (P1.6).** The `status` command prints what is stored for each repo, the days with no runs, the backfill state, the last daily sync and the GitHub rate limit. It changes nothing.
 
-The daily sync (new runs since the last pull) and the `status` command come in P1.6. Export and import come in P1.7.
+Export and import come in P1.7.
 
 ## How it works
 
@@ -163,6 +165,62 @@ The cursor is a small JSON value holding `started_at`, `days`, `window_days` and
 - **No per-run request cap.** The collector does not count requests per run. The shared GitHub client counts REST calls. When fewer than 200 calls remain in the token's hourly budget (`GITHUB_RATE_LIMIT_THRESHOLD`), it sleeps until the budget resets. A backfill can take hours.
 - **Calls per run.** One jobs listing per run, one commit call per new sha (with more pages if the commit has many files), one log call per fetched log, and one raw file call per snapshot.
 
+### Daily sync (P1.6)
+
+The backfill fills the database once. The daily sync keeps it current. It does not start from 90 days ago again. It only looks at the time since the last sync, plus a 14-day look-back.
+
+Each repo has a **sync point**: the time its last daily sync started. It is stored as `last_daily_sync_at` in `raw.sync_state`. The backfill sets it when the backfill finishes.
+
+```mermaid
+flowchart TD
+    A["collector daily"] --> B{"Backfill finished for every repo?"}
+    B -- no --> X["Exit 2: run backfill first, nothing fetched"]
+    B -- yes --> C["Work out the window start"]
+    C --> D["List runs created in the window"]
+    D --> E["Per-run work, same as backfill"]
+    E --> F{"Repo finished without a GitHub error?"}
+    F -- yes --> G["Move sync point to this run's start time"]
+    F -- no --> H["Keep old sync point, go on to next repo, exit 1 at end"]
+```
+
+1. **Check every repo first.** Each repo needs a sync point, which only a finished backfill sets. If one repo does not have it, the command stops with exit code 2 and makes no GitHub call. The message says to run the backfill first.
+2. **Work out the window start.** It is the earlier of two times: the last sync point, and 14 days before now. So the window is always at least 14 days long. Runs in that window are read again, which picks up new attempts of runs that were re-run. The 14 days is a default (see Limitations).
+3. **Catch up after a gap.** If the last sync is more than 90 days old, the window cannot start before 90 days ago, because GitHub keeps runs for about 90 days. The repo's line then says WARNING, and a log warning is written. Runs in the lost part are not in the database.
+4. **Process each run the way the backfill does.** The daily sync calls the backfill's own per-run code. A run whose latest attempt is stored and completed is skipped. Any other run is read again: older attempts, jobs, steps, and logs for jobs that have no log row yet. Logs already stored are not fetched again.
+5. **Move the sync point.** Only when the whole repo finishes without a GitHub error does `last_daily_sync_at` move. It moves to the time this run started, cut to whole seconds. Runs created while the sync was running are then inside the next window. If a GitHub error stops the repo, the old sync point stays, so the next run covers the same time again. The other repos still run, and the command exits with code 1 at the end.
+
+Running it twice in a row changes nothing. The second run processes no runs and makes no job, log, commit, or attempt calls. The test for this checks that.
+
+**Example.** The daily tests use the recorded fake repo `acme/widgets`. The backfill ran on 19 October 2026 at 12:00 UTC. On 20 October at 12:00 UTC, a re-run of run 9001 (created on 12 October) has a second attempt. The daily command prints a line like this:
+
+```
+acme/widgets: window 2026-10-06 12:00..2026-10-20 12:00 UTC; runs seen 3, new or changed 1, already stored 1, ...
+```
+
+The window starts 14 days back. "Runs seen 3" includes a release workflow run, which is not relevant. That run is counted in "runs seen" but in neither of the other two counts. The sync point then moves to 20 October at 12:00 UTC.
+
+### Status (P1.6)
+
+`status` reads the database and prints a report. It makes no changes. It needs only `DATABASE_URL`. A GitHub token is optional. Without one, the rate limit line says it is unavailable.
+
+The report has these parts:
+
+- **Rate limit.** GitHub's core REST quota: the limit, how many calls remain, and when it resets. It comes from GitHub's `/rate_limit` endpoint, which does not use up quota. If there is no token, or the request fails, the line says "unavailable" and gives the reason.
+- **A table, one row per repo** in the member's file. Disabled repos are marked "(disabled)". Columns: `runs` (distinct run ids), `attempts` (one per stored run attempt), `jobs`, `logs ok`, `expired`, `missing`, and `commits`.
+- **Backfill state:** not started, in progress (for example "4 of 13 windows done"), or done with the time.
+- **Last daily sync:** the sync point, or "never".
+- **First and last day** with a stored run.
+- **Days with zero runs.** These are days with no runs between the first and last stored day, within the last 90 days. They are shown as ranges. At most 8 ranges are listed, then "and N more". The report labels them "may just be quiet days". A gap is not proof of lost data, because a repo may simply have no CI runs on some days. A missed sync also looks like a gap.
+- **Repos not in the database yet** show "not collected yet: run `collector backfill` first".
+
+**Example.** The status test uses the recorded fake repo `acme/widgets` after a backfill. Its row reads `acme/widgets 3 4 8 5 1 1 3`: 3 runs, 4 attempts, 8 jobs, 5 logs ok, 1 expired, 1 missing, 3 commits. Runs were created on 1 August, 12 October and 15 October. The report then says:
+
+```
+  days with zero runs between first and last collected: 73 of 76 (may just be quiet days, not missing data):
+    2026-08-02 to 2026-10-11 (71 days)
+    2026-10-13 to 2026-10-14 (2 days)
+```
+
 ## How to run it
 
 ```bash
@@ -172,9 +230,24 @@ uv run --env-file .env collector backfill --member test
 # one repo only, and 30 days instead of 90
 uv run --env-file .env collector backfill --member test --repo owner/name --days 30
 
+# after the backfill has finished: fetch what is new since the last sync
+uv run --env-file .env collector daily --member test
+
+# one repo only (this also runs a repo marked enabled: false), or write logs elsewhere
+uv run --env-file .env collector daily --member test --repo owner/name --data-dir /path/to/data
+
+# what is stored, days with no runs, backfill state, last daily sync, rate limit
+uv run --env-file .env collector status --member test
+
 # the collector's tests (no database and no network needed)
 uv run pytest services/collector
 ```
+
+When `daily` works, it prints one line per repo: the repo name, the window, and the counts. When `status` works, it prints the report described above.
+
+`daily` has the same `--member`, `--repo` and `--data-dir` options as backfill. It has no `--days` option, because the look-back is fixed by the sync point and the 90-day retention. `--repo` takes repos from the full list, so a repo marked `enabled: false` still runs when named. This is checked in `cli.py`: `run_daily` builds the list from `config.repos`, not `enabled_repos()`.
+
+**Scheduling.** Nothing runs `daily` by itself. To run it every day, set up cron (Linux and macOS) or Task Scheduler (Windows). Step-by-step commands are in `docs/ONBOARDING.md`, section 8.
 
 When the backfill works, it prints one line per repo. The line starts with the repo name and then lists the counters (runs seen, runs processed, logs ok, logs missing, logs expired, windows done). Progress lines for each window go to the log on the console.
 
@@ -207,6 +280,16 @@ The full check that must pass before a task is done is `make check`.
 | 2 | Config or environment problem: a missing variable, a bad config file, an unknown `--repo`, or a bad option. Nothing was fetched |
 
 Exit code 2 is also used by argparse (the option parser) when `--member` is not one of the four names.
+
+`daily` uses the same codes, with these meanings:
+
+| Code | Meaning for `daily` |
+|---|---|
+| 0 | Every repo finished, and its sync point moved |
+| 1 | At least one repo hit a GitHub error. Its sync point did not move. Run `daily` again later |
+| 2 | Nothing fetched. `GITHUB_TOKEN`, `IDENTITY_SALT` or `DATABASE_URL` is missing, the config is bad, `--repo` is not in the list, or the backfill has not finished for one or more repos |
+
+`status` returns 0 when it prints the report, and 2 when `DATABASE_URL` is missing or the config is bad. It does not return 1. A missing GitHub token is not an error: the rate limit line says "unavailable".
 
 ## Inputs and outputs
 
@@ -288,7 +371,6 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 
 **Not built yet**
 
-- The `daily` command (new runs since the last sync, plus a 14-day re-scan for new attempts) and the `status` command come in P1.6.
 - Export and import (`make export-data`, `make import-data`) come in P1.7.
 - There is no command to re-decide a workflow's relevance. The stored answer is kept once it is set (see below).
 
@@ -318,12 +400,26 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 - **Dates round down.** The start is 00:00 UTC on the day 90 days ago, so the range can be a little longer than 90 days.
 - **Integration tests not run yet.** They were written for P1.5, but had not been executed when this was written, because Docker was not available.
 
+**Daily and status**
+
+- **The integration tests for daily and status have not been run.** The four tests in `tests/test_daily_db.py` need Postgres, and Docker was not available when they were written. They check the SQL that `daily` and `status` use against real tables. Until they run, the SQL is checked only by the offline tests (`test_status_sql_offline.py`, `test_sql_store_offline.py`). The other daily and status tests use an in-memory store and recorded GitHub responses. They need no database: `uv run pytest services/collector`.
+- **Nothing schedules `daily`.** Set up cron or Task Scheduler yourself (see `docs/ONBOARDING.md`, section 8). If the computer is off, the next run catches up, but only within the 90-day retention. Longer gaps lose runs, and the output warns about it.
+- **Re-runs of old runs can be missed.** The window always starts at least 14 days back. A re-run of a run created more than 14 days before the window start is not seen, unless the sync point is older than that.
+- **The "data lost" message is hard-coded to 90 days.** `_daily_line` in `cli.py` writes "older than 90 days" as text. The check itself uses the backfiller's `days`, which is 90 because `daily` has no `--days` option. If that default changes, the message will be wrong.
+- **"Runs seen" includes runs of workflows that are not relevant.** Those runs are not counted as processed or already stored, and the line does not show how many were skipped.
+- **A database error or bug stops the command with a Python traceback.** Only GitHub errors are turned into exit code 1. The same is true of backfill.
+- **A gap in `status` is not proof of a problem.** It cannot tell a quiet day from a missed sync. It also looks only at the last 90 days of stored runs.
+- **`status` does not check `IDENTITY_SALT`.** It does not need it.
+
 **Every `# DEFAULT:` in this component**
 
 In `services/collector/src`:
 
 - `repo_config.py`, line 15: `DEFAULT_CONFIG_DIR` is found from the location of the source file, four folders up to the repository root, then `config/`. A packaged install would point to the wrong place, so callers should pass `config_dir` explicitly outside a checkout.
 - `workflow_detection.py`, line 98: members with no detection rule (`dependency`, `build`, `infra`) keep every workflow until their owner adds a rule. Keeping a workflow is safer than dropping data that may matter.
+- `daily.py`, line 20: `RESCAN_DAYS = 14`. The daily window always starts at least this far back, so re-runs of recent runs are picked up. Taken from the design note in `docs/DATA.md` 3.3 (the code cites it; the design section was not re-checked here).
+- `status.py`, line 20: `GAP_DAYS_WINDOW = 90`. Gaps are looked for in the last 90 days, the length of GitHub's run retention.
+- `status.py`, line 22: `MAX_GAP_RANGES = 8`. At most 8 gap ranges are printed per repo, then "and N more".
 - `backfill.py`, line 43: 7-day windows (`DEFAULT_WINDOW_DAYS`). The client halves any window that hits the 1,000-result cap. The 90-day default is `DEFAULT_DAYS`.
 - `backfill.py`, line 47: personal data and bulky objects are dropped from the stored run JSON (`actor`, `triggering_actor`, `head_commit`, `repository`, `head_repository`). Logins and emails must only appear hashed, and the repository blobs repeat on every run.
 - `backfill.py`, line 82: the runner OS is guessed from the first job label naming Ubuntu or Linux, Windows, or macOS.
@@ -345,6 +441,9 @@ Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth 
 - NUL characters are stripped from all stored text.
 - Detection is stored once per workflow path, keyed by the commit it was decided at.
 - `file_tags.py` falls back to 1 MB for `max_patch_bytes` and to `false` for `lockfiles_inline` if `config/file_tags.yaml` leaves them out.
+- `daily.py`: the sync point is cut to whole seconds (`started` is rounded down). The window then overlaps the previous one by a fraction of a second, which is harmless because every write is an upsert.
+- `daily.py`: the data-lost check uses the backfiller's `days` (90 by default), not a separate constant. `daily` has no `--days` option, so in practice it is always 90.
+- `cli.py`, `run_status`: with no `GITHUB_TOKEN`, `status` does not call `/rate_limit` at all. It only prints "unavailable". With a token, a failed request is also shown as "unavailable", with the error name and no details.
 
 `config/workflow_detection.yaml` has no `# DEFAULT:` comments.
 
@@ -358,4 +457,6 @@ Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth 
 - The sanitiser that cleans logs and text: `shared/sanitise/README.md`.
 - The database tables: `shared/db/models.py` (the `raw` schema).
 - Config files: `config/repos/*.yaml`, `config/workflow_detection.yaml`, `config/file_tags.yaml`.
-- Tests: `services/collector/tests/test_repo_config.py`, `test_workflow_detection.py`, `test_cli.py`, `test_cli_backfill.py`, `test_backfill.py` (in-memory store and recorded GitHub), `test_backfill_db.py` (integration, Postgres), `test_sql_store_offline.py`, `test_units.py`.
+- Tests: `services/collector/tests/test_repo_config.py`, `test_workflow_detection.py`, `test_cli.py`, `test_cli_backfill.py`, `test_backfill.py` (in-memory store and recorded GitHub), `test_backfill_db.py` (integration, Postgres), `test_sql_store_offline.py`, `test_units.py`. Daily and status: `test_daily.py` (in-memory), `test_status.py` (report, gaps, rate limit, CLI), `test_status_sql_offline.py` (SQL text), `test_daily_db.py` (integration, Postgres, not yet run).
+- Scheduling the daily run: `docs/ONBOARDING.md`, section 8.
+- Status table for the collector: `docs/COMPONENTS.md`.
