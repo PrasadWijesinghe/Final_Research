@@ -1,0 +1,19 @@
+{
+  "total_count": 2,
+  "workflows": [
+    {
+      "id": 101,
+      "node_id": "W_1",
+      "name": "Test",
+      "path": ".github/workflows/test.yml",
+      "state": "active"
+    },
+    {
+      "id": 102,
+      "node_id": "W_2",
+      "name": "Release",
+      "path": ".github/workflows/release.yml",
+      "state": "active"
+    }
+  ]
+}

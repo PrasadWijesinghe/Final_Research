@@ -1,0 +1,89 @@
+{
+  "sha": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "node_id": "C_1",
+  "commit": {
+    "author": {
+      "name": "Dana Dev",
+      "email": "lee@example.com",
+      "date": "2026-10-12T09:58:00Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-10-12T09:58:00Z"
+    },
+    "message": "fix: parse empty config\n\nCloses #41",
+    "tree": {
+      "sha": "9999999999999999999999999999999999999999"
+    },
+    "comment_count": 0
+  },
+  "url": "https://api.github.com/repos/acme/widgets/commits/a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "author": {
+    "login": "lee-ci",
+    "id": 2001,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+    "html_url": "https://github.com/lee-ci"
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "html_url": "https://github.com/web-flow"
+  },
+  "parents": [
+    {
+      "sha": "0000000000000000000000000000000000000000",
+      "url": "https://api.github.com/repos/acme/widgets/commits/0000000000000000000000000000000000000000"
+    }
+  ],
+  "stats": {
+    "total": 10,
+    "additions": 7,
+    "deletions": 3
+  },
+  "files": [
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "src/a.js",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1,
+      "changes": 4,
+      "blob_url": "https://github.com/acme/widgets/blob/x/src/a.js",
+      "raw_url": "https://github.com/acme/widgets/raw/x/src/a.js",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/src/a.js?ref=x",
+      "patch": "@@ -1,4 +1,6 @@\n function parse(c) {\n-  return JSON.parse(c)\n+  if (!c) return {}\n+  return JSON.parse(c)\n }\n"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "test/a.test.js",
+      "status": "added",
+      "additions": 4,
+      "deletions": 0,
+      "changes": 4,
+      "blob_url": "https://github.com/acme/widgets/blob/x/test/a.test.js",
+      "raw_url": "https://github.com/acme/widgets/raw/x/test/a.test.js",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/test/a.test.js?ref=x",
+      "patch": "@@ -0,0 +1,4 @@\n+it('parses empty', () => {\n+  expect(parse('')).toEqual({})\n+})\n+\n"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "package.json",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/acme/widgets/blob/x/package.json",
+      "raw_url": "https://github.com/acme/widgets/raw/x/package.json",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/package.json?ref=x",
+      "patch": "@@ -8,3 +8,3 @@\n-    \"jest\": \"^29.6.0\"\n+    \"jest\": \"^29.7.0\"\n"
+    }
+  ]
+}

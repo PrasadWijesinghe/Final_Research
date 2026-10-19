@@ -1,0 +1,10 @@
+{
+  "name": "main",
+  "commit": {
+    "sha": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+    "commit": {
+      "message": "chore: bump deps"
+    }
+  },
+  "protected": true
+}

@@ -70,7 +70,7 @@ files = ["shared", "services/collector/src", "services/collector/tests", "script
 explicit_package_bases = true
 # DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
 # `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
-mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts"]
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests"]
 
 # DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
 # spelled out for shared.* (this is what `--strict` enables).
