@@ -1,0 +1,77 @@
+2026-03-11T08:00:01.9991975Z ##[group]Run actions/checkout@v4
+2026-03-11T08:00:02.1096090Z with:
+2026-03-11T08:00:02.0406959Z   repository: acme/mono
+2026-03-11T08:00:02.3923624Z   token: ***
+2026-03-11T08:00:02.1799547Z   ssh-strict: true
+2026-03-11T08:00:03.7972349Z ##[endgroup]
+2026-03-11T08:00:03.7813886Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-03-11T08:00:04.6484642Z HEAD is now at 555c3f9218ba41a596519c8f01708a0ec9ef821b Merge pull request #16 from acme/feature-6
+2026-03-11T08:00:05.4211866Z Cache restored from key: Linux-node-1d92ad4b6987fa0347cc5d2fb6cf9e47c83f4f6caeb3b5ef6f629730528921c3
+2026-03-11T08:00:05.7213164Z Cache key: npm-L12m6ZIbqnlHWe6fSzYlVbyzwWRutR9nElO119cQ-dd61a9b593df
+2026-03-11T08:00:06.8279117Z Run id 2ed51b12-7f1d-490e-ad97-ec7621f91a99 correlation bd0d8cfe-ee59-4397-8d75-1e08023a80a2
+2026-03-12T08:00:01.5088777Z Progress: resolved 10, reused 9, downloaded 0, added 9
+2026-03-12T08:00:02.2538648Z Progress: resolved 20, reused 18, downloaded 0, added 18
+2026-03-12T08:00:03.3961813Z Progress: resolved 30, reused 27, downloaded 0, added 27
+2026-03-12T08:00:04.5499568Z Progress: resolved 40, reused 36, downloaded 0, added 36
+2026-03-12T08:00:05.5361138Z Progress: resolved 50, reused 45, downloaded 0, added 45
+2026-03-12T08:00:06.7730625Z Progress: resolved 60, reused 54, downloaded 0, added 54
+2026-03-12T08:00:07.6070977Z Progress: resolved 70, reused 63, downloaded 0, added 63
+2026-03-12T08:00:08.9994472Z Progress: resolved 80, reused 72, downloaded 0, added 72
+2026-03-12T08:00:09.1325649Z Progress: resolved 90, reused 81, downloaded 0, added 81
+2026-03-12T08:00:10.8588001Z Progress: resolved 100, reused 90, downloaded 0, added 90
+2026-03-12T08:00:11.3310342Z Progress: resolved 110, reused 99, downloaded 0, added 99
+2026-03-12T08:00:12.6571390Z Progress: resolved 120, reused 108, downloaded 0, added 108
+2026-03-12T08:00:13.2683304Z Progress: resolved 130, reused 117, downloaded 0, added 117
+2026-03-12T08:00:14.4149131Z Progress: resolved 140, reused 126, downloaded 0, added 126
+2026-03-12T08:00:15.6841023Z Progress: resolved 150, reused 135, downloaded 0, added 135
+2026-03-12T08:00:16.1086039Z Progress: resolved 160, reused 144, downloaded 0, added 144
+2026-03-12T08:00:17.0568138Z Progress: resolved 170, reused 153, downloaded 0, added 153
+2026-03-12T08:00:18.8081415Z Progress: resolved 180, reused 162, downloaded 0, added 162
+2026-03-12T08:00:19.9270999Z Progress: resolved 190, reused 171, downloaded 0, added 171
+2026-03-12T08:00:20.9137150Z Progress: resolved 200, reused 180, downloaded 0, added 180
+2026-03-12T08:00:21.5465318Z Progress: resolved 210, reused 189, downloaded 0, added 189
+2026-03-12T08:00:22.2695970Z Progress: resolved 220, reused 198, downloaded 0, added 198
+2026-03-12T08:00:23.7156393Z Progress: resolved 230, reused 207, downloaded 0, added 207
+2026-03-12T08:00:24.1765322Z Progress: resolved 240, reused 216, downloaded 0, added 216
+2026-03-12T08:00:25.1210728Z Progress: resolved 250, reused 225, downloaded 0, added 225
+2026-03-12T08:00:26.4444138Z Progress: resolved 260, reused 234, downloaded 0, added 234
+2026-03-12T08:00:27.1410671Z Progress: resolved 270, reused 243, downloaded 0, added 243
+2026-03-12T08:00:28.3495382Z Progress: resolved 280, reused 252, downloaded 0, added 252
+2026-03-12T08:00:29.1617702Z Progress: resolved 290, reused 261, downloaded 0, added 261
+2026-03-12T08:00:30.7064219Z Progress: resolved 300, reused 270, downloaded 0, added 270
+2026-03-12T08:00:31.8363027Z Progress: resolved 310, reused 279, downloaded 0, added 279
+2026-03-12T08:00:32.7498796Z Progress: resolved 320, reused 288, downloaded 0, added 288
+2026-03-12T08:00:33.2905677Z Progress: resolved 330, reused 297, downloaded 0, added 297
+2026-03-12T08:00:34.3929161Z Progress: resolved 340, reused 306, downloaded 0, added 306
+2026-03-12T08:00:35.2230214Z Progress: resolved 350, reused 315, downloaded 0, added 315
+2026-03-12T08:00:36.6993425Z Progress: resolved 360, reused 324, downloaded 0, added 324
+2026-03-12T08:00:37.7733017Z Progress: resolved 370, reused 333, downloaded 0, added 333
+2026-03-12T08:00:38.3941526Z Progress: resolved 380, reused 342, downloaded 0, added 342
+2026-03-12T08:00:39.9035614Z Progress: resolved 390, reused 351, downloaded 0, added 351
+2026-03-15T08:00:01.2032806Z  RUN  v1.6.0 /home/runner/work/acme/acme
+
+2026-03-15T08:00:02.4931216Z  ✓ src/lodash.spec.ts  (3 tests) 152ms
+2026-03-15T08:00:02.4687502Z  ✓ src/express.spec.ts  (4 tests) 292ms
+2026-03-15T08:00:02.4490688Z  ✓ src/react.spec.ts  (5 tests) 192ms
+2026-03-15T08:00:02.4262360Z  ✓ src/jest.spec.ts  (6 tests) 135ms
+2026-03-15T08:00:02.3341855Z  ✓ src/mocha.spec.ts  (7 tests) 226ms
+2026-03-15T08:00:02.4151171Z  ✓ src/vitest.spec.ts  (8 tests) 97ms
+2026-03-15T08:00:02.4116127Z  ✓ src/axios.spec.ts  (9 tests) 122ms
+2026-03-15T08:00:02.2572319Z  ✓ src/chalk.spec.ts  (10 tests) 146ms
+2026-03-15T08:00:02.9701941Z  ✓ src/glob.spec.ts  (11 tests) 98ms
+2026-03-15T08:00:02.5475041Z  ✓ src/semver.spec.ts  (12 tests) 35ms
+2026-03-15T08:00:02.6644945Z  ✓ src/debug.spec.ts  (13 tests) 130ms
+2026-03-15T08:00:02.4126343Z  ✓ src/minimist.spec.ts  (14 tests) 261ms
+2026-03-15T08:00:02.8829995Z  ✓ src/lodash.spec.ts  (15 tests) 120ms
+2026-03-15T08:00:02.1686822Z  ✓ src/express.spec.ts  (16 tests) 239ms
+2026-03-15T08:00:02.0621145Z  ✓ src/react.spec.ts  (17 tests) 54ms
+2026-03-15T08:00:02.0075364Z  ✓ src/jest.spec.ts  (18 tests) 245ms
+2026-03-15T08:00:02.3877442Z  ✓ src/mocha.spec.ts  (19 tests) 231ms
+2026-03-15T08:00:02.6272603Z  ✓ src/vitest.spec.ts  (20 tests) 22ms
+2026-03-15T08:00:02.4927090Z  ✓ src/axios.spec.ts  (21 tests) 121ms
+2026-03-15T08:00:02.2000123Z  ✓ src/chalk.spec.ts  (22 tests) 27ms
+2026-03-15T08:00:20.3180510Z  Test Files  20 passed (20)
+2026-03-15T08:00:20.9784367Z       Tests  86 passed (86)
+2026-03-15T08:00:20.3257491Z    Start at  08:01:06
+2026-03-15T08:00:20.1260247Z    Duration  4.6s (transform 1.2s, setup 0ms)
+2026-03-15T08:00:21.6245099Z  Coverage report from v8  hash=1d92ad4b6987fa0347cc
