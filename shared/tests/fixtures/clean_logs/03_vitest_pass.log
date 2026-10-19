@@ -1,0 +1,106 @@
+2026-03-11T08:00:01.4288153Z ##[group]Run actions/checkout@v4
+2026-03-11T08:00:02.7226629Z with:
+2026-03-11T08:00:02.2738822Z   repository: acme/lib
+2026-03-11T08:00:02.0929476Z   token: ***
+2026-03-11T08:00:02.1417420Z   ssh-strict: true
+2026-03-11T08:00:03.6390135Z ##[endgroup]
+2026-03-11T08:00:03.8488313Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-03-11T08:00:04.4730055Z HEAD is now at a625406f6977d45c1391b078f4d3656e0b75bfcb Merge pull request #13 from acme/feature-3
+2026-03-11T08:00:05.4063658Z Cache restored from key: Linux-node-2f5052c9fd15b19a18c584d01363568198613f0c34e84409ef7938709a159ec2
+2026-03-11T08:00:05.4916705Z Cache key: npm-dqgnc0f1JTDhz5eRdaF4mAs6GA0XYWXJhdhffhQv-e4666a670f04
+2026-03-11T08:00:06.0758959Z Run id 44df96ff-2854-4424-af73-3b05759eb559 correlation 5d385e06-4363-45d9-80ed-6b0272218fdc
+2026-03-12T08:00:00.5518465Z npm WARN deprecated lodash@0.0.0: use a newer release
+2026-03-12T08:00:01.9178368Z npm WARN deprecated express@1.1.1: use a newer release
+2026-03-12T08:00:02.5427998Z npm WARN deprecated react@2.2.2: use a newer release
+2026-03-12T08:00:03.4101131Z npm WARN deprecated jest@3.3.0: use a newer release
+2026-03-12T08:00:04.0577920Z npm WARN deprecated mocha@4.4.1: use a newer release
+2026-03-12T08:00:10.5193352Z npm http fetch GET 200 https://registry.npmjs.org/lodash 243ms (cache miss)
+2026-03-12T08:00:11.5982485Z npm http fetch GET 200 https://registry.npmjs.org/express 207ms (cache hit)
+2026-03-12T08:00:12.0017933Z npm http fetch GET 200 https://registry.npmjs.org/react 363ms (cache miss)
+2026-03-12T08:00:13.6402632Z npm http fetch GET 200 https://registry.npmjs.org/jest 105ms (cache hit)
+2026-03-12T08:00:14.7963198Z npm http fetch GET 200 https://registry.npmjs.org/mocha 305ms (cache miss)
+2026-03-12T08:00:15.8434980Z npm http fetch GET 200 https://registry.npmjs.org/vitest 691ms (cache hit)
+2026-03-12T08:00:16.3371885Z npm http fetch GET 200 https://registry.npmjs.org/axios 274ms (cache miss)
+2026-03-12T08:00:17.8468058Z npm http fetch GET 200 https://registry.npmjs.org/chalk 814ms (cache hit)
+2026-03-12T08:00:18.0083056Z npm http fetch GET 200 https://registry.npmjs.org/glob 113ms (cache miss)
+2026-03-12T08:00:19.4432015Z npm http fetch GET 200 https://registry.npmjs.org/semver 856ms (cache hit)
+2026-03-12T08:00:20.1505812Z npm http fetch GET 200 https://registry.npmjs.org/debug 167ms (cache miss)
+2026-03-12T08:00:21.6702685Z npm http fetch GET 200 https://registry.npmjs.org/minimist 620ms (cache hit)
+2026-03-12T08:00:22.0699055Z npm http fetch GET 200 https://registry.npmjs.org/lodash 423ms (cache miss)
+2026-03-12T08:00:23.0377389Z npm http fetch GET 200 https://registry.npmjs.org/express 326ms (cache hit)
+2026-03-12T08:00:24.5104376Z npm http fetch GET 200 https://registry.npmjs.org/react 664ms (cache miss)
+2026-03-12T08:00:25.3905896Z npm http fetch GET 200 https://registry.npmjs.org/jest 106ms (cache hit)
+2026-03-12T08:00:26.9824457Z npm http fetch GET 200 https://registry.npmjs.org/mocha 561ms (cache miss)
+2026-03-12T08:00:27.2604698Z npm http fetch GET 200 https://registry.npmjs.org/vitest 693ms (cache hit)
+2026-03-12T08:00:28.6535001Z npm http fetch GET 200 https://registry.npmjs.org/axios 802ms (cache miss)
+2026-03-12T08:00:29.5471633Z npm http fetch GET 200 https://registry.npmjs.org/chalk 757ms (cache hit)
+2026-03-12T08:00:30.8291145Z npm http fetch GET 200 https://registry.npmjs.org/glob 173ms (cache miss)
+2026-03-12T08:00:31.4767691Z npm http fetch GET 200 https://registry.npmjs.org/semver 761ms (cache hit)
+2026-03-12T08:00:32.2428539Z npm http fetch GET 200 https://registry.npmjs.org/debug 64ms (cache miss)
+2026-03-12T08:00:33.8606396Z npm http fetch GET 200 https://registry.npmjs.org/minimist 662ms (cache hit)
+2026-03-12T08:00:34.7201531Z npm http fetch GET 200 https://registry.npmjs.org/lodash 771ms (cache miss)
+2026-03-12T08:00:35.8481571Z npm http fetch GET 200 https://registry.npmjs.org/express 162ms (cache hit)
+2026-03-12T08:00:36.8787189Z npm http fetch GET 200 https://registry.npmjs.org/react 790ms (cache miss)
+2026-03-12T08:00:37.8461942Z npm http fetch GET 200 https://registry.npmjs.org/jest 602ms (cache hit)
+2026-03-12T08:00:38.0269773Z npm http fetch GET 200 https://registry.npmjs.org/mocha 866ms (cache miss)
+2026-03-12T08:00:39.9798926Z npm http fetch GET 200 https://registry.npmjs.org/vitest 837ms (cache hit)
+2026-03-12T08:01:00.3857765Z npm info lock lodash@0.1.0 resolved https://registry.npmjs.org/lodash/-/lodash-0.1.0.tgz integrity sha512-/r98cZ+GgQ9sIboxHyt1CwP4pfyTqhXCaDH++rimGz6BZVji3Tm6DNZdzVyNHFhx5yKlkzUiGo7tFpkihrBGhA==
+2026-03-12T08:01:00.1427601Z npm info lock express@1.1.1 resolved https://registry.npmjs.org/express/-/express-1.1.1.tgz integrity sha512-JDmmS+kamRUfbPBlxCLTpCU92dNoSluvFVLTWrk+00i1CT31RyAhFzEDaYZ0dKe4qkRStv0njsNCIE6t3+AYiA==
+2026-03-12T08:01:00.0522786Z npm info lock react@2.1.2 resolved https://registry.npmjs.org/react/-/react-2.1.2.tgz integrity sha512-Y1Lx/MhhD94djrWj9G3Z2uooxdRrJosR0nJf+WXf23Ch1zfSG9YdH5PEyBGk/bV9YgjkoabHnphspUuF9WCHoA==
+2026-03-12T08:01:00.0702329Z npm info lock jest@3.1.3 resolved https://registry.npmjs.org/jest/-/jest-3.1.3.tgz integrity sha512-4Awksd5IiJAcsrEx0hc/k/kKN+xd/JEOIyLBiSGXm7zKG33yZEyS5RgYhVBNcEAttzlfoViBHfdGMuMwVXab1g==
+2026-03-12T08:01:00.2232933Z npm info lock mocha@4.1.4 resolved https://registry.npmjs.org/mocha/-/mocha-4.1.4.tgz integrity sha512-A1uSCL84Z9Ws10/BXcsknuHnv81NCioOOj3li9X0u3Y9pINibjH2DYGlVSjimQ3QX9AE2yhLx74X0M20dp40NA==
+2026-03-12T08:01:00.6051667Z npm info lock vitest@0.1.5 resolved https://registry.npmjs.org/vitest/-/vitest-0.1.5.tgz integrity sha512-fQW9EwSlbaifjURu84RqHxE0gudCzit/+zvN+cGCAeYXGAuFrfXXHtbUP61l/UR15cNAj6g5o4Rvvt6WUtkJpA==
+2026-03-12T08:01:00.1760206Z npm info lock axios@1.1.6 resolved https://registry.npmjs.org/axios/-/axios-1.1.6.tgz integrity sha512-J+iAsIaY//dC+w9SzDnXBxqaU1WP4mgmaw0tREAYay+dDvYPKxAFHYXVCvW5rGij+3alqu2G13r4mMolE0RKAw==
+2026-03-12T08:01:00.6318605Z npm info lock chalk@2.1.7 resolved https://registry.npmjs.org/chalk/-/chalk-2.1.7.tgz integrity sha512-OSqwZ+dkYrG7tPVrS4Tp8KGmW+mHTxqtm27kcOO6he4DGi6/P0BqdMjHrFf0nyAk9EmGymql4Bd8sPSmn1BLyw==
+2026-03-12T08:01:00.7573003Z npm info lock glob@3.1.8 resolved https://registry.npmjs.org/glob/-/glob-3.1.8.tgz integrity sha512-l3avgZcg6FM/4ZxWDGrJmI40YKy2WQy2kNHm3AvjcdvOwX6HQ4DQr2Ex5lTu3+TV1kcn3Bty02p4Y8LVymW75Q==
+2026-03-12T08:01:00.9370532Z npm info lock semver@4.1.9 resolved https://registry.npmjs.org/semver/-/semver-4.1.9.tgz integrity sha512-WLYb7P9EstdY193aSM/Q6f10ZosFAd/YeBgfNlqaHTcLhHhpeoFjmPHtOU1dv5d30ZQ/frhkCbd0xnNv/2Dinw==
+2026-03-12T08:01:00.0851952Z npm info lock debug@0.1.10 resolved https://registry.npmjs.org/debug/-/debug-0.1.10.tgz integrity sha512-iq95/xKbPTRHt6DFa579OudehHmxgvSDQ6u9IghIyBTy5oTkzesDcoVHBCIu4oNskzXVk0vA2yDNaP8pvwyD3Q==
+2026-03-12T08:01:00.0316094Z npm info lock minimist@1.1.11 resolved https://registry.npmjs.org/minimist/-/minimist-1.1.11.tgz integrity sha512-Z6Z/8t+fI5qiMdMlhunhJ+9P7i8fRKHZ6FvzXRhY9XNfhDz7IIVjOIFksEaxJ+9rSk8TKuKZMMoMa0iznYwBnA==
+2026-03-12T08:01:00.8916148Z npm info lock lodash@2.1.12 resolved https://registry.npmjs.org/lodash/-/lodash-2.1.12.tgz integrity sha512-+KS89dPdj1vG2dk9lZ6n52AqrdFaGz7dAyBmI8HWibdsWth5SCGP3PANi139wpn9Yib2bqmBNMY7hx4a8WZj9A==
+2026-03-12T08:01:00.4103030Z npm info lock express@3.1.13 resolved https://registry.npmjs.org/express/-/express-3.1.13.tgz integrity sha512-GwntaCh+6hF4pW6ec7e8ilkTqpP2ZPa6kuoAzLNBcN4OGW6NjtNoKUOYLY01wy4Li6Qnk82LBGwCfUccdCXKGQ==
+2026-03-12T08:01:00.8208996Z npm info lock react@4.1.14 resolved https://registry.npmjs.org/react/-/react-4.1.14.tgz integrity sha512-luyVnaxeVk4hMcQOS3w13yH5KxuF6wV/Pln/jFzEoIIXLiHVOU9ZsLxr53bdoh5pbb0gN15cl+Dm0c104vVyug==
+2026-03-12T08:01:00.4425710Z npm info lock jest@0.1.15 resolved https://registry.npmjs.org/jest/-/jest-0.1.15.tgz integrity sha512-1xB5tgb3pMqLbVS84IZLDcU+7qzHAKgWC2qOpeixPd09GZ32Om5uyegzgiYdioDGpHNq+TXzHaGbthrLuz9i7w==
+2026-03-12T08:01:00.0055605Z npm info lock mocha@1.1.16 resolved https://registry.npmjs.org/mocha/-/mocha-1.1.16.tgz integrity sha512-iWw4QTNZhMc4/6QiSkuiDDTC7jO3okcZE8FeZe85Tbv9LDVQ9E+ILBxiYob0bOoOUIMXiRIU6UyrygKuckJ5GA==
+2026-03-12T08:01:00.7666324Z npm info lock vitest@2.1.17 resolved https://registry.npmjs.org/vitest/-/vitest-2.1.17.tgz integrity sha512-au/84lRQswnAUPNE8UY1TjL9fN4E85zhtuXLpRGautiIM1B1p6WrkPFzWp2llpnpWbZv7Wy4SO9vqM/ck310zA==
+2026-03-12T08:01:00.1176276Z npm info lock axios@3.1.18 resolved https://registry.npmjs.org/axios/-/axios-3.1.18.tgz integrity sha512-3rriQt2C44DINFEiZlU9KDphs8dfgtQxZ2JVOtqiYJRQyvtlGU3oRXtE9WsA0V2Gy7k9/9T5QJV5uPkAHqQS4w==
+2026-03-12T08:01:00.8438453Z npm info lock chalk@4.1.19 resolved https://registry.npmjs.org/chalk/-/chalk-4.1.19.tgz integrity sha512-+cYyGJSr1cy2EYOZQmQxpned4vJ0t4uZukKgj8whHnWJJ1HZSK1VNieE3AfgyZ8GKpAYFHcCmZrdjfpryEXOvg==
+2026-03-12T08:01:00.8979162Z npm info lock glob@0.1.20 resolved https://registry.npmjs.org/glob/-/glob-0.1.20.tgz integrity sha512-HiBawbH3fAC/UHfEd5HsBAwbQoAFF35k+bfxjAfluBS/oJN3Qp+VnICxMYUdqfyP2xcoAfc68YPPvavCQG8hgw==
+2026-03-12T08:01:00.1542529Z npm info lock semver@1.1.21 resolved https://registry.npmjs.org/semver/-/semver-1.1.21.tgz integrity sha512-vLscq8IWwlBO7kJgP8T/B8MuMc98YAmIGo9v7njophCrFAeItqwjMSchS9jqz57bnQJtwJzZESbPHfqZtrlVIw==
+2026-03-12T08:01:00.8824650Z npm info lock debug@2.1.22 resolved https://registry.npmjs.org/debug/-/debug-2.1.22.tgz integrity sha512-zAEP1UPLwPxTrNu0+Mo9Xn/4VFd28Aub3kN4S2jXV93MECxv6vIILYe+D5bQ2xJHSHTYEOf4LxUgUk/FDTumkw==
+2026-03-12T08:01:00.1108141Z npm info lock minimist@3.1.23 resolved https://registry.npmjs.org/minimist/-/minimist-3.1.23.tgz integrity sha512-wb5TB46aaeJQNGe/fXRqBEXefCSW0ccnyI4IhsVbaI92ps0uwRvuxK5o22Z+1STny/t1D//4KbUGnn8YbLLcXA==
+2026-03-12T08:01:00.7950025Z npm info lock lodash@4.1.24 resolved https://registry.npmjs.org/lodash/-/lodash-4.1.24.tgz integrity sha512-DaF72Hthqg9cSalPKxo7IvqaVUSt6KFDy2x77XpI0GrHNpcGvC6XXbS2sIb+1TNgZZorJlGeNhXYFeIiZSd2HA==
+2026-03-12T08:01:00.4231105Z npm info lock express@0.1.25 resolved https://registry.npmjs.org/express/-/express-0.1.25.tgz integrity sha512-IEj+xVR+EHEMSsYr2cIpgniDSBFL+nl9G5pAjV0TnVRyrE1zZzLRswRPdkUghd1J8Ykkm3m9VhkzaaSlPV6cbg==
+2026-03-12T08:01:00.1249063Z npm info lock react@1.1.26 resolved https://registry.npmjs.org/react/-/react-1.1.26.tgz integrity sha512-0ITIIMHfoboRac1RhEpW0GBkvRcpxiT3m95KYS9N8P/McEmX5eEWBymBbHB89X/tiFEEg2FCD87IgbXT2mOiFw==
+2026-03-12T08:01:00.4455327Z npm info lock jest@2.1.27 resolved https://registry.npmjs.org/jest/-/jest-2.1.27.tgz integrity sha512-ZpKwKyXvge1+t7R4fCAU2CEhEJXdmmOd9pCDgb2g1fyBq18qgYu4wWtoV3Xd8VAPVM6nZDOvTxHPzqkD3S3V8A==
+2026-03-12T08:01:00.3939049Z npm info lock mocha@3.1.28 resolved https://registry.npmjs.org/mocha/-/mocha-3.1.28.tgz integrity sha512-ijOkkLU6HXbsyK/GcdOBsrpuHTAITFl3U8qY88OPBtHrKA57Cp2zQht1jUsFBWdeRRU4RGKWR3SEaOH6zZb/SA==
+2026-03-12T08:01:00.3442978Z npm info lock vitest@4.1.29 resolved https://registry.npmjs.org/vitest/-/vitest-4.1.29.tgz integrity sha512-jkmLfVG3l7/IaEaR4sj4ULHEeOy1ZFSE5/30NDM5d9gPrxuo/t4DyeoSwBZGlcdkvGya3ZoGL+apV4NVvG/2qw==
+2026-03-12T08:01:30.3871109Z added 210 packages, and audited 211 packages in 14s
+2026-03-12T08:01:30.7723224Z 31 packages are looking for funding
+2026-03-12T08:01:31.8287085Z found 0 vulnerabilities
+2026-03-15T08:00:01.6418299Z  RUN  v1.6.0 /home/runner/work/acme/acme
+
+2026-03-15T08:00:02.1287481Z  ✓ src/lodash.spec.ts  (3 tests) 247ms
+2026-03-15T08:00:02.4820415Z  ✓ src/express.spec.ts  (4 tests) 25ms
+2026-03-15T08:00:02.3326756Z  ✓ src/react.spec.ts  (5 tests) 41ms
+2026-03-15T08:00:02.2473382Z  ✓ src/jest.spec.ts  (6 tests) 171ms
+2026-03-15T08:00:02.4260410Z  ✓ src/mocha.spec.ts  (7 tests) 157ms
+2026-03-15T08:00:02.9525460Z  ✓ src/vitest.spec.ts  (8 tests) 70ms
+2026-03-15T08:00:02.0209198Z  ✓ src/axios.spec.ts  (9 tests) 248ms
+2026-03-15T08:00:02.1017722Z  ✓ src/chalk.spec.ts  (10 tests) 250ms
+2026-03-15T08:00:02.4509258Z  ✓ src/glob.spec.ts  (11 tests) 52ms
+2026-03-15T08:00:02.3652290Z  ✓ src/semver.spec.ts  (12 tests) 252ms
+2026-03-15T08:00:02.4879761Z  ✓ src/debug.spec.ts  (13 tests) 266ms
+2026-03-15T08:00:02.4790625Z  ✓ src/minimist.spec.ts  (14 tests) 239ms
+2026-03-15T08:00:02.7816464Z  ✓ src/lodash.spec.ts  (15 tests) 240ms
+2026-03-15T08:00:02.1988148Z  ✓ src/express.spec.ts  (16 tests) 283ms
+2026-03-15T08:00:02.3342860Z  ✓ src/react.spec.ts  (17 tests) 161ms
+2026-03-15T08:00:02.1440395Z  ✓ src/jest.spec.ts  (18 tests) 244ms
+2026-03-15T08:00:02.0293676Z  ✓ src/mocha.spec.ts  (19 tests) 150ms
+2026-03-15T08:00:02.7700252Z  ✓ src/vitest.spec.ts  (20 tests) 41ms
+2026-03-15T08:00:02.8499648Z  ✓ src/axios.spec.ts  (21 tests) 232ms
+2026-03-15T08:00:02.4507320Z  ✓ src/chalk.spec.ts  (22 tests) 200ms
+2026-03-15T08:00:20.3520484Z  Test Files  20 passed (20)
+2026-03-15T08:00:20.3535107Z       Tests  83 passed (83)
+2026-03-15T08:00:20.1251796Z    Start at  08:01:03
+2026-03-15T08:00:20.9755487Z    Duration  4.3s (transform 1.2s, setup 0ms)
+2026-03-15T08:00:21.1515034Z  Coverage report from v8  hash=2f5052c9fd15b19a18c5

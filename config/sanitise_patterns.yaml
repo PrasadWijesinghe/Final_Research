@@ -1,0 +1,28 @@
+# Custom secret patterns for shared/sanitise (DATA.md section 8). Applied in order, before detect-secrets.
+# Each entry: type (used in [REDACTED:<type>] and the counts), pattern (Python regex),
+# optional group (name of the capture group to redact; the rest of the match is kept),
+# optional flags (list of: ignorecase, dotall, multiline).
+# Keep patterns linear-time: no nested quantifiers, bounded gaps. Logs can be megabytes long.
+patterns:
+  - type: private_key
+    pattern: '-----BEGIN [A-Z ]{0,30}PRIVATE KEY(?: BLOCK)?-----.*?(?:-----END [A-Z ]{0,30}PRIVATE KEY(?: BLOCK)?-----|\Z)'
+    flags: [dotall]
+  - type: auth_header
+    pattern: 'authorization["'']?\s{0,3}[:=]\s{0,3}["'']?(?:(?:bearer|basic|token|digest)\s{1,5})?(?P<secret>(?![*\[])[^\s"''<>]{8,})'
+    group: secret
+    flags: [ignorecase]
+  - type: url_credentials
+    pattern: '(?<=://)(?P<secret>[^\s/:@"''<>]{1,100}:[^\s/@"''<>]{1,200})@'
+    group: secret
+  - type: github_token
+    pattern: '(?<![A-Za-z0-9])(?:gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{22,})(?![A-Za-z0-9])'
+  - type: npm_token
+    pattern: '(?<![A-Za-z0-9])npm_[A-Za-z0-9]{36,}(?![A-Za-z0-9])'
+  - type: aws_access_key
+    pattern: '(?<![A-Za-z0-9])(?:AKIA|ASIA)[A-Z0-9]{16}(?![A-Za-z0-9])'
+  - type: aws_secret_key
+    pattern: 'aws[^\n]{0,30}secret[^\n]{0,30}?[:=]\s{0,3}["'']?(?P<secret>[A-Za-z0-9/+=]{40})(?![A-Za-z0-9/+=])'
+    group: secret
+    flags: [ignorecase]
+  - type: jwt
+    pattern: '\beyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}'

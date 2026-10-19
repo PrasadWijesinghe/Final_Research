@@ -37,7 +37,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* invalid configs fail with clear messages; detection tested on sample workflow files.
 - [x] **★ P1.3 Re-run check script.** `scripts/rerun_check.py --member test`: for each repo, the number of runs in the last 90 days, failure rate, share of runs with `run_attempt > 1`, the oldest run still available (actual retention), detected test workflows, and the licence reported by GitHub (flag any mismatch with the config). Outputs a Markdown table and CSV under `data/reports/`. Uses at most ~5 API calls per repo.
   *Accept:* runs on `config/repos/test.yaml` and produces the report. **This is the first thing Member 3 will run.**
-- [ ] **★ P1.4 Sanitiser.** `shared/sanitise`: detect-secrets plus the custom patterns in `docs/DATA.md` §8, `[REDACTED:<type>]` replacement with counts, and `hash_identity(login)` using `IDENTITY_SALT`.
+- [x] **★ P1.4 Sanitiser.** `shared/sanitise`: detect-secrets plus the custom patterns in `docs/DATA.md` §8, `[REDACTED:<type>]` replacement with counts, and `hash_identity(login)` using `IDENTITY_SALT`.
   *Accept:* tests with fake secrets of every pattern; no false positives on 10 sample clean logs.
 - [ ] **★ P1.5 Collector backfill.** `services/collector`: the `backfill` command per `docs/DATA.md` §3 (runs in date windows, jobs with `filter=all`, steps, commit diffs, config file snapshots, logs per the log policy, sanitise then gzip). Idempotent upserts; resumable via `sync_state.backfill_cursor`.
   *Accept:* integration test against recorded responses for one repo; running twice changes nothing; interrupting and resuming completes correctly.
