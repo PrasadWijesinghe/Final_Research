@@ -66,11 +66,11 @@ warn_unused_configs = true
 warn_redundant_casts = true
 # DEFAULT: mypy errors on folders with no .py files, so only `shared` is listed for now;
 # the task that adds services/<name> or experts/<name> appends its src/ and tests/ folders here.
-files = ["shared", "services/collector/src", "services/collector/tests"]
+files = ["shared", "services/collector/src", "services/collector/tests", "scripts"]
 explicit_package_bases = true
 # DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
 # `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
-mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src"]
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts"]
 
 # DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
 # spelled out for shared.* (this is what `--strict` enables).
@@ -119,7 +119,9 @@ init_typed = true
 warn_required_dynamic_aliases = true
 
 [tool.pytest.ini_options]
-testpaths = ["shared/tests", "services/*/tests", "experts/*/tests"]
+testpaths = ["shared/tests", "services/*/tests", "experts/*/tests", "scripts/tests"]
+# DEFAULT: scripts/ is not a package; its folder is put on the path so tests can `import rerun_check`.
+pythonpath = ["scripts"]
 addopts = "-ra"
 markers = [
     "integration: needs a live Postgres (DATABASE_URL); skipped automatically when unreachable",

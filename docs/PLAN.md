@@ -35,7 +35,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* unit tests with recorded responses (respx) cover pagination, rate-limit sleep, retry and window splitting.
 - [x] **★ P1.2 Repo config.** Loader and schema validation for `config/repos/<member>.yaml`; workflow auto-detection rule from `docs/DATA.md` §2.
   *Accept:* invalid configs fail with clear messages; detection tested on sample workflow files.
-- [ ] **★ P1.3 Re-run check script.** `scripts/rerun_check.py --member test`: for each repo, the number of runs in the last 90 days, failure rate, share of runs with `run_attempt > 1`, the oldest run still available (actual retention), detected test workflows, and the licence reported by GitHub (flag any mismatch with the config). Outputs a Markdown table and CSV under `data/reports/`. Uses at most ~5 API calls per repo.
+- [x] **★ P1.3 Re-run check script.** `scripts/rerun_check.py --member test`: for each repo, the number of runs in the last 90 days, failure rate, share of runs with `run_attempt > 1`, the oldest run still available (actual retention), detected test workflows, and the licence reported by GitHub (flag any mismatch with the config). Outputs a Markdown table and CSV under `data/reports/`. Uses at most ~5 API calls per repo.
   *Accept:* runs on `config/repos/test.yaml` and produces the report. **This is the first thing Member 3 will run.**
 - [ ] **★ P1.4 Sanitiser.** `shared/sanitise`: detect-secrets plus the custom patterns in `docs/DATA.md` §8, `[REDACTED:<type>]` replacement with counts, and `hash_identity(login)` using `IDENTITY_SALT`.
   *Accept:* tests with fake secrets of every pattern; no false positives on 10 sample clean logs.
