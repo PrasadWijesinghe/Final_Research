@@ -33,7 +33,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 - [x] **★ P1.1 GitHub client.** `shared/github`: httpx client with token auth, pagination, rate-limit handling (read headers, sleep below 200 remaining, honour `retry-after`), exponential backoff on 5xx, and date-window splitting for queries that hit the 1,000-result cap. Includes a `raw.githubusercontent.com` file fetcher.
   *Accept:* unit tests with recorded responses (respx) cover pagination, rate-limit sleep, retry and window splitting.
-- [ ] **★ P1.2 Repo config.** Loader and schema validation for `config/repos/<member>.yaml`; workflow auto-detection rule from `docs/DATA.md` §2.
+- [x] **★ P1.2 Repo config.** Loader and schema validation for `config/repos/<member>.yaml`; workflow auto-detection rule from `docs/DATA.md` §2.
   *Accept:* invalid configs fail with clear messages; detection tested on sample workflow files.
 - [ ] **★ P1.3 Re-run check script.** `scripts/rerun_check.py --member test`: for each repo, the number of runs in the last 90 days, failure rate, share of runs with `run_attempt > 1`, the oldest run still available (actual retention), detected test workflows, and the licence reported by GitHub (flag any mismatch with the config). Outputs a Markdown table and CSV under `data/reports/`. Uses at most ~5 API calls per repo.
   *Accept:* runs on `config/repos/test.yaml` and produces the report. **This is the first thing Member 3 will run.**
