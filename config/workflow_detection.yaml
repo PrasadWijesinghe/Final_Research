@@ -1,12 +1,13 @@
 # Per-member rules for auto-detecting relevant workflows (docs/DATA.md section 2).
 # A workflow is kept if any job has a `run:` line that matches one of `run_patterns`
-# and does not match any of `exclude_patterns` (Python regular expressions, applied per line).
+# and does not match any of `exclude_patterns` (Python regular expressions). Lines are split on
+# `&&`, `||`, `;` and `|` first, so each command in a chain is judged on its own.
 # Members with no entry here treat every workflow as relevant (see collector.workflow_detection).
 members:
   test:
     run_patterns:
       # npm test, npm run test:unit, yarn test, pnpm run test, pnpm -r test, bun test
-      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:run(?:-script)?\s+)?(?:-\S+\s+)*test'
+      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:-{1,2}\w[\w-]*(?:[= ](?!(?:run|test|t)\b)[^-\s]\S*)?\s+)*(?:workspaces?\s+(?:foreach\s+|\S+\s+)?(?:-\S+\s+)*)?(?:run(?:-script)?\s+(?:-{1,2}\w[\w-]*(?:[= ](?!test\b)[^-\s]\S*)?\s+)*)?(?:test|t)(?!\w)'
       # turbo/nx/lerna running a test target
       - '(?<![\w./@-])(?:turbo|nx|lerna)\s+run\s+(?:-\S+\s+)*test'
       # the runners themselves: jest, npx jest, ./node_modules/.bin/mocha, vitest run

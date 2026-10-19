@@ -40,7 +40,7 @@ class DetectionResult:
 
     relevant: bool
     reason: str  # "matched", "no match", "no rule for member", "unparseable"
-    matches: tuple[tuple[str, str], ...] = field(default_factory=tuple)  # (job key, command line)
+    matches: tuple[tuple[str, str], ...] = field(default_factory=tuple)  # (job, command)
 
 
 def load_detection_rules(path: Path | str | None = None) -> DetectionRules:
@@ -80,6 +80,14 @@ def _run_lines(workflow: dict[Any, Any]) -> list[tuple[str, str]]:
     return out
 
 
+_CHAIN_SPLIT = re.compile(r"&&?|\|\||;|\|")
+
+
+def _segments(line: str) -> list[str]:
+    """Split a shell line into its chained commands (`a && b; c | d & e`)."""
+    return [s.strip() for s in _CHAIN_SPLIT.split(line) if s.strip()]
+
+
 def detect_relevant_workflow(
     workflow_yaml: str, member: str, rules: DetectionRules | None = None
 ) -> DetectionResult:
@@ -101,9 +109,10 @@ def detect_relevant_workflow(
     include = [re.compile(p) for p in member_rules.run_patterns]
     exclude = [re.compile(p) for p in member_rules.exclude_patterns]
     matches = tuple(
-        (job, line)
+        (job, seg)
         for job, line in _run_lines(workflow)
-        if any(p.search(line) for p in include) and not any(p.search(line) for p in exclude)
+        for seg in _segments(line)
+        if any(p.search(seg) for p in include) and not any(p.search(seg) for p in exclude)
     )
     if matches:
         return DetectionResult(True, "matched", matches)
