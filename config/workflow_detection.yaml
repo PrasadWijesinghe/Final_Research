@@ -1,0 +1,18 @@
+# Per-member rules for auto-detecting relevant workflows (docs/DATA.md section 2).
+# A workflow is kept if any job has a `run:` line that matches one of `run_patterns`
+# and does not match any of `exclude_patterns` (Python regular expressions, applied per line).
+# Members with no entry here treat every workflow as relevant (see collector.workflow_detection).
+members:
+  test:
+    run_patterns:
+      # npm test, npm run test:unit, yarn test, pnpm run test, pnpm -r test, bun test
+      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:run(?:-script)?\s+)?(?:-\S+\s+)*test'
+      # turbo/nx/lerna running a test target
+      - '(?<![\w./@-])(?:turbo|nx|lerna)\s+run\s+(?:-\S+\s+)*test'
+      # the runners themselves: jest, npx jest, ./node_modules/.bin/mocha, vitest run
+      - '(?<![\w@-])(?<!@types/)(?:jest|mocha|vitest)(?![\w-])'
+    exclude_patterns:
+      # installing or removing a runner is not running tests
+      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:i|install|add|remove|rm|uninstall|ci)\b'
+      # printing a message that mentions a runner
+      - '^(?:echo|printf)\b'

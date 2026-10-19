@@ -19,7 +19,6 @@ members = ["shared", "services/*", "experts/*"]
 exclude = [
     "services/dashboard",
     "services/api",
-    "services/collector",
     "services/features",
     "services/llm_gateway",
     "experts/_template",
@@ -38,6 +37,7 @@ dev = [
     "psycopg[binary]>=3.2",
     "redis>=5",
     "respx>=0.23.1",
+    "types-pyyaml>=6.0.12.20260906",
 ]
 
 [tool.ruff]
@@ -65,10 +65,12 @@ plugins = ["pydantic.mypy"]
 warn_unused_configs = true
 warn_redundant_casts = true
 # DEFAULT: mypy errors on folders with no .py files, so only `shared` is listed for now;
-# the task that adds services/<name> or experts/<name> appends its folder here.
-files = ["shared"]
+# the task that adds services/<name> or experts/<name> appends its src/ and tests/ folders here.
+files = ["shared", "services/collector/src", "services/collector/tests"]
 explicit_package_bases = true
-mypy_path = "$MYPY_CONFIG_FILE_DIR"
+# DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
+# `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src"]
 
 # DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
 # spelled out for shared.* (this is what `--strict` enables).
