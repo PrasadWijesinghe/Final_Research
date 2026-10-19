@@ -1,7 +1,7 @@
 # Per-member rules for auto-detecting relevant workflows (docs/DATA.md section 2).
 # A workflow is kept if any job has a `run:` line that matches one of `run_patterns`
 # and does not match any of `exclude_patterns` (Python regular expressions). Lines are split on
-# `&&`, `||`, `;` and `|` first, so each command in a chain is judged on its own.
+# `&&`, `&`, `||`, `;` and `|` first, so each command in a chain is judged on its own.
 # Members with no entry here treat every workflow as relevant (see collector.workflow_detection).
 members:
   test:
