@@ -19,3 +19,6 @@ PROMPT_FOR_CLAUDE_CODE.md
 
 # DEFAULT: generated JSON Schemas are build output, not committed (make schemas)
 shared/contracts/schemas/
+
+# Claude Code agent worktrees
+.claude/worktrees/
