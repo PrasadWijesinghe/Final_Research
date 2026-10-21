@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+from collections.abc import Sequence
 
 import httpx
 from pydantic import TypeAdapter, ValidationError
@@ -69,10 +70,13 @@ async def _predict_one(
 
 
 async def fan_out_predict(
-    settings: Settings, context: CommitContext, budget_ms: int
+    settings: Settings,
+    context: CommitContext,
+    budget_ms: int,
+    experts: Sequence[Expert] | None = None,
 ) -> list[ExpertResult]:
-    """Call all four experts in parallel within one shared budget; result order is stable."""
-    experts = list(Expert)
+    """Call the experts (default: all four) in parallel within one shared budget; stable order."""
+    experts = list(experts) if experts is not None else list(Expert)
     results = await asyncio.gather(
         *(_predict_one(settings, e, context, budget_ms) for e in experts)
     )

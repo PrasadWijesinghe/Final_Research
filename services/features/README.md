@@ -119,7 +119,17 @@ uv run pytest services/features     # run only this package's tests
 
 When it works, pytest ends with a summary line and no failures. The SQL replay test is marked `integration`. It is skipped unless the database in `DATABASE_URL` is reachable. To run it, start the database with `make up` and set `DATABASE_URL` as described in `docs/CONVENTIONS.md`. It creates a separate database called `<name>_features_test`, applies the migrations to it, loads the test scenario and drops the database at the end.
 
-There is no command-line entry point. The builders are library functions that other code imports.
+There is no command-line entry point in this folder. The builders are library functions that other code imports. The replay command is in `services/api` (see below).
+
+## Replay (P2.8)
+
+The replay command lives in `services/api/src/api/replay.py`, not here. Its guide is the "Replay CLI" section of `services/api/README.md`.
+
+Why: this folder is a library that the API imports. The replay command needs the API's expert calls, router and database store. If the command lived here, this folder would have to import the API, and the API imports this folder. That is a loop, so the command sits in the API.
+
+What stays here: `build_replay_context` in `replay.py`. The command calls it for each stored run. It rebuilds the `CommitContext` from the raw tables, with event `replay` and the run's `created_at` as the cut-off. It never calls GitHub.
+
+Note for the team: `docs/ARCHITECTURE.md` section 3.4 says the replay CLI is in `services/features`, and the table in section 2 says the same. The code puts the command in `services/api`. This was flagged, not changed. The architecture doc needs a decision (update the doc, or move the command).
 
 ## Inputs and outputs
 
@@ -190,7 +200,7 @@ When both builders are given the same `workflow_paths`, the two contexts are equ
   - The live builder uses the commit's first parent as the base when none is given.
   - A 404 on `.github/workflows` means there are no workflows. Other errors are raised.
   - A pull request without a base SHA is diffed as a single commit.
-  - Replay takes the first stored parent as the base, and the run's first PR number.
+  - Replay takes the first stored parent as the base.
   - Replay treats an empty workflow file as missing.
   - A GitHub file status that is unknown or missing becomes `modified` (`normalise_status`).
   - Duplicate workflow paths are parsed once. The first one in the list wins.
@@ -212,6 +222,7 @@ Every `# DEFAULT:` choice made in this component:
 12. `services/features/src/features/workflow_parser.py`: with no `setup-node` step, matrix keys named `node`, `node-version` or `node_version` still count as Node versions.
 13. `services/features/src/features/workflow_parser.py`: `read-all` and `write-all` permissions become one entry under the key `*`.
 14. `services/features/src/features/workflow_parser.py`: each non-blank line of a multi-line `run:` block is one command, with spaces trimmed.
+15. `services/features/src/features/replay.py`: the replay context takes the run's first PR number as its PR number (the run can have several).
 
 ## Related
 
