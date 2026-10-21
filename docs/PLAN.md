@@ -56,7 +56,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* table-driven tests for every tag, multi-tag files and truncation.
 - [x] **P2.3 CommitContext builders.** Three builders producing identical structures: **live** (GitHub API), **replay** (raw tables, `history_cutoff` = the run's `created_at`) and **pre-push** (a local diff payload from the hook). Includes the workflow YAML parser → `WorkflowJob` (job key, runs-on, Node versions, permissions, container, `run:` commands).
   *Accept:* the same commit built live and by replay gives equal contexts, apart from `event` and `history_cutoff`.
-- [ ] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
+- [x] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
   *Accept:* all behaviour tested with the mock; a call over the cap is refused.
 - [ ] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
   *Accept:* top-k results on a small fixture set; embedding dimension is checked against the table.
