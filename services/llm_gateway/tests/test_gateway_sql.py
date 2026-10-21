@@ -7,17 +7,16 @@ from decimal import Decimal
 from uuid import uuid4
 
 import pytest
+from gateway_db import engine  # noqa: F401
 from llm_gateway.stores import CallRecord, SqlCallLog
-from sqlalchemy import delete
+from sqlalchemy import Engine, delete
 
 from shared.db.models import LlmCall
-from shared.db.session import get_engine
 
 pytestmark = pytest.mark.integration
 
 
-def test_sql_call_log_records_and_sums_month_spend() -> None:
-    engine = get_engine()
+def test_sql_call_log_records_and_sums_month_spend(engine: Engine) -> None:
     expert = f"gw-test-{uuid4().hex[:8]}"  # unique so other rows do not interfere
     now = datetime.now(UTC)
     log = SqlCallLog(engine)

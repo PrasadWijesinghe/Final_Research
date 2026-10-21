@@ -51,6 +51,7 @@ select = ["E", "F", "I", "UP", "B"]
 "shared/tests/test_contracts.py" = ["UP017"]
 # DEFAULT: SQL tests import the `engine` fixture from api_db and take it as an argument (F811).
 "services/api/tests/test_*_sql.py" = ["F811"]
+"services/llm_gateway/tests/test_*_sql.py" = ["F811"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["shared"]
