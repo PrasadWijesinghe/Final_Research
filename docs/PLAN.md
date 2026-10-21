@@ -62,7 +62,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* top-k results on a small fixture set; embedding dimension is checked against the table.
 - [x] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
   *Accept:* `POST /predict` with a fixture pre-push payload returns four experts' results within budget, using the stubs.
-- [ ] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
+- [x] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
   *Accept:* routes 20 fixture failures (5 per category) correctly; close cases go to two experts.
 - [ ] **P2.8 Replay CLI.** `uv run replay --member test --from … --to …`: builds contexts from raw data, calls the experts, stores results flagged as replay, and never touches GitHub.
   *Accept:* a replay run produces stored predictions and diagnoses with replay flags set.
