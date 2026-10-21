@@ -6,6 +6,8 @@ requires-python = ">=3.12"
 dependencies = [
     "pipelineiq-shared",
     "pydantic>=2.7",
+    "pyyaml>=6",
+    "sqlalchemy>=2.1.4",
 ]
 
 [build-system]
