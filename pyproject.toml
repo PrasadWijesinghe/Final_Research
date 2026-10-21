@@ -108,6 +108,12 @@ disable_error_code = ["union-attr"]
 module = ["shared.contracts.export_schemas"]
 disable_error_code = ["attr-defined"]
 
+# DEFAULT: sentence-transformers is an optional extra (not installed by `make setup`), so mypy
+# must not fail when it is absent.
+[[tool.mypy.overrides]]
+module = ["sentence_transformers", "sentence_transformers.*"]
+ignore_missing_imports = true
+
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
