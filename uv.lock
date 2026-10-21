@@ -11,6 +11,7 @@ members = [
     "pipelineiq-expert-infra",
     "pipelineiq-expert-template",
     "pipelineiq-expert-testing",
+    "pipelineiq-features",
     "pipelineiq-shared",
 ]
 
@@ -615,6 +616,21 @@ requires-dist = [
     { name = "rq", specifier = ">=2.0" },
     { name = "sqlalchemy", specifier = ">=2.1.4" },
     { name = "uvicorn", specifier = ">=0.30" },
+]
+
+[[package]]
+name = "pipelineiq-features"
+version = "0.1.0"
+source = { editable = "services/features" }
+dependencies = [
+    { name = "pipelineiq-shared" },
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pipelineiq-shared", editable = "shared" },
+    { name = "pydantic", specifier = ">=2.7" },
 ]
 
 [[package]]
