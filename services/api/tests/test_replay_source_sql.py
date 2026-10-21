@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 from api.replay import SqlReplaySource
-from sqlalchemy import delete
+from api_db import engine  # noqa: F401
+from sqlalchemy import Engine, delete
 from sqlalchemy.orm import Session
 
 from shared.db import models as m
-from shared.db.session import get_engine
 
 pytestmark = pytest.mark.integration
 
@@ -21,8 +21,7 @@ RUN_ID = 987_002
 JOB_ID = 987_003
 
 
-def test_sql_source_lists_runs_and_failed_jobs(tmp_path: Path) -> None:
-    engine = get_engine()
+def test_sql_source_lists_runs_and_failed_jobs(engine: Engine, tmp_path: Path) -> None:
     created = datetime(2026, 3, 5, 10, tzinfo=UTC)
     (tmp_path / "logs").mkdir()
     (tmp_path / "logs" / "j.log.gz").write_bytes(gzip.compress(b"FAIL test/a.test.ts\n"))

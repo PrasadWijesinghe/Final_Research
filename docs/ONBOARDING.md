@@ -187,7 +187,10 @@ failure.
 The database tests never touch your real database. They create a separate throwaway database named
 after yours with `_test` added (for example `pipelineiq_test`), run their migrations there, and
 drop it when the tests finish. It is safe to run `make check` at any time, also after you have
-collected data.
+collected data. The API's SQL tests use `<yours>_api_test` instead (for example `pipelineiq_api_test`).
+
+The end-to-end test (`make e2e`) is different. It needs Docker, builds two images and writes rows to
+your main database. Run it only when you need it. See the "End-to-end test" section of `services/api/README.md`.
 
 ## 8. Collect data: backfill, status, daily
 

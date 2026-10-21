@@ -7,9 +7,10 @@ from uuid import uuid4
 import pytest
 from api.auth import hash_key
 from api.store import SqlStore
+from api_db import engine  # noqa: F401
 from api_helpers import USER_HASH, error_diagnosis, payload_json, risk_for, routed_failure
 from features.pre_push import PrePushPayload, build_pre_push_context
-from sqlalchemy import delete
+from sqlalchemy import Engine, delete
 
 from shared.contracts import Expert, ReviewDecision, RiskOutput
 from shared.db.models import (
@@ -20,13 +21,11 @@ from shared.db.models import (
     ReviewRow,
     RoutedFailureRow,
 )
-from shared.db.session import get_engine
 
 pytestmark = pytest.mark.integration
 
 
-def test_sql_store_round_trip() -> None:
-    engine = get_engine()
+def test_sql_store_round_trip(engine: Engine) -> None:
     store = SqlStore(engine)
     key_hash = hash_key("piq_fake-" + uuid4().hex)
     ctx = build_pre_push_context(
