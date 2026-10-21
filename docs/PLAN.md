@@ -60,7 +60,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* all behaviour tested with the mock; a call over the cap is refused.
 - [x] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
   *Accept:* top-k results on a small fixture set; embedding dimension is checked against the table.
-- [ ] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
+- [x] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
   *Accept:* `POST /predict` with a fixture pre-push payload returns four experts' results within budget, using the stubs.
 - [ ] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
   *Accept:* routes 20 fixture failures (5 per category) correctly; close cases go to two experts.

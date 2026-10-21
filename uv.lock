@@ -5,6 +5,7 @@ requires-python = "==3.12.*"
 [manifest]
 members = [
     "pipelineiq",
+    "pipelineiq-api",
     "pipelineiq-collector",
     "pipelineiq-expert-build",
     "pipelineiq-expert-dependency",
@@ -882,6 +883,31 @@ dev = [
     { name = "ruff", specifier = ">=0.6" },
     { name = "types-jsonschema", specifier = ">=4.26.0.20261006" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20260906" },
+]
+
+[[package]]
+name = "pipelineiq-api"
+version = "0.1.0"
+source = { editable = "services/api" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "pipelineiq-features" },
+    { name = "pipelineiq-shared" },
+    { name = "pydantic" },
+    { name = "sqlalchemy" },
+    { name = "uvicorn" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "pipelineiq-features", editable = "services/features" },
+    { name = "pipelineiq-shared", editable = "shared" },
+    { name = "pydantic", specifier = ">=2.7" },
+    { name = "sqlalchemy", specifier = ">=2.1.4" },
+    { name = "uvicorn", specifier = ">=0.30" },
 ]
 
 [[package]]
