@@ -54,7 +54,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* each stub's `/predict` returns a valid list of `RiskOutput`s for a fixture `CommitContext`; each worker turns a fixture `RoutedFailure` into a valid `Diagnosis`.
 - [x] **P2.2 File tagger.** `services/features` reads `config/file_tags.yaml` and tags files per `docs/DATA.md` §5, including size limits.
   *Accept:* table-driven tests for every tag, multi-tag files and truncation.
-- [ ] **P2.3 CommitContext builders.** Three builders producing identical structures: **live** (GitHub API), **replay** (raw tables, `history_cutoff` = the run's `created_at`) and **pre-push** (a local diff payload from the hook). Includes the workflow YAML parser → `WorkflowJob` (job key, runs-on, Node versions, permissions, container, `run:` commands).
+- [x] **P2.3 CommitContext builders.** Three builders producing identical structures: **live** (GitHub API), **replay** (raw tables, `history_cutoff` = the run's `created_at`) and **pre-push** (a local diff payload from the hook). Includes the workflow YAML parser → `WorkflowJob` (job key, runs-on, Node versions, permissions, container, `run:` commands).
   *Accept:* the same commit built live and by replay gives equal contexts, apart from `event` and `history_cutoff`.
 - [ ] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
   *Accept:* all behaviour tested with the mock; a call over the cap is refused.
