@@ -64,7 +64,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* `POST /predict` with a fixture pre-push payload returns four experts' results within budget, using the stubs.
 - [x] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
   *Accept:* routes 20 fixture failures (5 per category) correctly; close cases go to two experts.
-- [ ] **P2.8 Replay CLI.** `uv run replay --member test --from … --to …`: builds contexts from raw data, calls the experts, stores results flagged as replay, and never touches GitHub.
+- [x] **P2.8 Replay CLI.** `uv run replay --member test --from … --to …`: builds contexts from raw data, calls the experts, stores results flagged as replay, and never touches GitHub.
   *Accept:* a replay run produces stored predictions and diagnoses with replay flags set.
 - [ ] **P2.9 End-to-end test.** Fixture failure → router → queue → stub worker → `/diagnoses` → visible through `GET /failures/{id}`.
   *Accept:* runs in CI with Docker Compose.
