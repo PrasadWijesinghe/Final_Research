@@ -8,7 +8,7 @@ x-expert-env: &expert-env
   # Inside the Compose network the services are reached by name, not 127.0.0.1.
   REDIS_URL: redis://redis:6379/0
   DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pipelineiq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-pipelineiq}
-  # DEFAULT: empty, so stub workers just return their diagnosis until the backend exists (P3).
+  # DEFAULT: empty, so stub workers just return their diagnosis; `make e2e` sets EXPERT_BACKEND_URL.
   BACKEND_URL: ""
   BACKEND_TIMEOUT_SECONDS: "${BACKEND_TIMEOUT_SECONDS:-10}"
 
@@ -59,6 +59,32 @@ services:
       retries: 10
     restart: unless-stopped
 
+  # --- Backend API (P2.9): only in the "e2e" profile for now; `make e2e` builds and starts it. ---
+  api:
+    profiles: ["e2e"]
+    build: { context: ., dockerfile: services/api/Dockerfile }
+    image: pipelineiq-api
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pipelineiq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-pipelineiq}
+      REDIS_URL: redis://redis:6379/0
+      API_PORT: "8000"
+      # Experts are reached by service name inside the Compose network.
+      EXPERT_DEPENDENCY_URL: http://dependency-api:8101
+      EXPERT_BUILD_URL: http://build-api:8102
+      EXPERT_TEST_URL: http://testing-api:8103
+      EXPERT_INFRA_URL: http://infra-api:8104
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      # DEFAULT: python (always in the image) instead of curl; /health answers 200 even when experts are down.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4)"]
+      interval: 5s
+      timeout: 6s
+      retries: 12
+
   # --- Experts (P2.1): an API and a diagnose worker each, built from the repo root. -----------
   # DEFAULT: all expert services are in the "experts" profile, so plain `make up` still starts
   # only Postgres and Redis (light on laptops); `make up-experts` starts everything.
@@ -90,6 +116,9 @@ services:
 
   testing-api:
     <<: *expert-api
+    # DEFAULT: the Test expert (API + worker) also belongs to the "e2e" profile (P2.9), so the
+    # end-to-end stack is only postgres, redis, api, testing-api and testing-worker.
+    profiles: ["experts", "e2e"]
     build: { context: ., dockerfile: experts/testing/Dockerfile }
     image: pipelineiq-expert-testing
     environment: { <<: *expert-env, EXPERT_PORT: "8103" }
@@ -97,6 +126,10 @@ services:
 
   testing-worker:
     <<: *expert-worker
+    profiles: ["experts", "e2e"]
+    # DEFAULT: BACKEND_URL stays empty (stub behaviour) unless EXPERT_BACKEND_URL is set; `make e2e`
+    # sets it to http://api:8000 so the worker posts its diagnosis to the backend.
+    environment: { <<: *expert-env, BACKEND_URL: "${EXPERT_BACKEND_URL:-}" }
     image: pipelineiq-expert-testing
     command: ["python", "-m", "testing_expert.worker"]
     depends_on: { redis: { condition: service_healthy }, testing-api: { condition: service_started } }

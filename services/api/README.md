@@ -2,7 +2,7 @@
 
 **In one sentence:** The backend service (FastAPI, port 8000) that the pre-push hook, the workers and the dashboard talk to. It asks the four experts for predictions, stores what happens, keeps the history, and sorts failed CI jobs to the expert that should look at them (the router).
 
-**Status:** working for pre-push predictions, history, reviews and API keys (P2.6). The router (P2.7) has unit tests and is called by the replay CLI (P2.8). The replay CLI has unit tests but has not been run end to end · **Owner:** shared · **Plan tasks:** P2.6, P2.7, P2.8
+**Status:** working for pre-push predictions, history, reviews and API keys (P2.6). The router (P2.7) has unit tests and is called by the replay CLI (P2.8). The replay CLI has unit tests but has not been run end to end. The Dockerfile and the end-to-end test (P2.9) are written but have not been run · **Owner:** shared · **Plan tasks:** P2.6, P2.7, P2.8, P2.9
 
 ## What it does
 
@@ -63,6 +63,122 @@ The in-memory tests use fake expert servers (respx routes), so they make no netw
 ### Tests that skip on your machine
 
 `services/api/tests/test_backend_sql.py` has one test. It saves and reads every kind of row in real Postgres. It is marked `integration`. If the database in `DATABASE_URL` cannot be reached, pytest skips it and prints the reason `database in DATABASE_URL is unreachable (run make up)`. A skip is not a pass. Run `make up` and set `DATABASE_URL` to run it. This guide does not yet record a run of it.
+
+The API SQL tests (`test_backend_sql.py` and `test_replay_source_sql.py`) do not use your main database. The `engine` fixture in `services/api/tests/api_db.py` creates a throwaway database named `<db>_api_test` (for example `pipelineiq_api_test`), runs the migrations in it, and drops it when the module's tests finish. It drops any existing database with that name first, so do not keep other data under that name.
+
+## End-to-end test (P2.9)
+
+This test checks the failure path from start to finish, with real Postgres, real Redis and the Test expert running in a container. It does not use GitHub. The test plays the webhook itself.
+
+**Status:** written, not run. None of this section has been run on a machine yet.
+
+### Where it lives
+
+- The test is `services/api/tests/e2e/test_failure_flow_e2e.py`. Its guard, `services/api/tests/e2e/conftest.py`, decides whether to run it or skip it.
+- Both use the `e2e` marker, which is registered in the root `pyproject.toml`.
+- `services/api/Dockerfile` builds the API image. The Test expert image comes from `experts/testing/Dockerfile`.
+- The containers are in the `e2e` profile of `docker-compose.yml`. The `make e2e` target in `Makefile` runs the whole thing.
+
+### What it does
+
+1. The test takes the first fixture case that expects only the Test expert. At the time of writing that is `test-1-jest` in `services/api/tests/fixtures/router_failures.json`. Its failed step is "Run tests" and its log is a Jest failure.
+2. It builds a failed CI job with fresh ids and calls `route_failed_job`. This runs on the host.
+3. The router saves a `RoutedFailure` in Postgres. Then it puts one job on the Redis queue `diagnose:test`.
+4. The Test worker container takes the job. Its diagnosis is a stub. The worker posts the `Diagnosis` to `http://api:8000/diagnoses`, the API container, over the Compose network.
+5. The test polls `GET /failures/{id}` on the API once a second, for up to 60 seconds. It stops when a diagnosis appears.
+6. It checks that the failure was sent to `test` only, and that the diagnosis has the same failure id and comes from `test`.
+
+If no diagnosis appears in 60 seconds, the test fails. It prints the RQ job status. A status of `queued` means no worker took the job.
+
+```mermaid
+sequenceDiagram
+    participant T as Test (host, pytest)
+    participant DB as Postgres
+    participant R as Redis
+    participant W as Test worker (container)
+    participant A as API (container)
+    T->>DB: route_failed_job saves RoutedFailure
+    T->>R: one job on queue diagnose:test
+    R->>W: worker takes the job
+    W->>A: POST /diagnoses
+    A->>DB: saves Diagnosis
+    T->>A: GET /failures/id, every second for up to 60 s
+    A-->>T: failure with its diagnosis
+```
+
+The diagnosis is a stub, so the test checks the links between the records, not the quality of the answer.
+
+### How CI runs it
+
+In `.github/workflows/ci.yml`, in job `check` (30-minute job limit):
+
+1. `make check` runs first. The e2e test skips there (see the next part).
+2. The step "End-to-end test" runs `make e2e`. This step has a 15-minute limit.
+3. If that step fails, a last step prints the Compose logs.
+
+`make e2e` sets `E2E_REQUIRED=1`. With that set, a skip becomes a failure, so CI cannot pass without the test running.
+
+### Plain `make check` skips it
+
+`make check` runs everything under `services/api/tests`, so it also collects this test. The guard skips the test when nothing answers `/health` at `E2E_API_URL` (default `http://127.0.0.1:8000`). The skip reason says to run `make e2e`.
+
+Be careful: anything that answers on port 8000 counts as the API. A local uvicorn (from "How to run it") does. The test then runs, and it fails after 60 seconds if no Test worker posts a diagnosis. Stop the local server before you run `make check`.
+
+### Run it locally (only when Docker works)
+
+`make e2e` is heavy. It builds two images, `pipelineiq-api` and `pipelineiq-expert-testing`. The first build downloads base images and installs every package, so expect several minutes. The build time has not been measured.
+
+Before you start:
+
+- Start Docker Desktop. Run `make` from Git Bash, because the Makefile needs `sh`.
+- Stop anything on port 8000, such as a local uvicorn. Otherwise the `api` container cannot bind the port.
+- Check that `.env` has `DATABASE_URL`, `REDIS_URL` and `POSTGRES_PASSWORD`. The test and `make migrate` read the first two from your shell.
+
+```bash
+make e2e
+```
+
+It runs these steps in order:
+
+1. It starts Postgres, Redis, the API and the Test expert (its API and worker) in Docker.
+2. It runs `make migrate` against `DATABASE_URL`.
+3. It runs `pytest -m e2e services/api/tests/e2e` with `E2E_REQUIRED=1`.
+4. If anything failed, it prints the Compose logs.
+5. It stops and removes `api`, `testing-api` and `testing-worker`, then exits with the test's exit code.
+
+Postgres and Redis keep running. Stop them with `make down`.
+
+Expected when it works: pytest reports `1 passed` and nothing is skipped. This is what we expect, not something we have seen.
+
+Two side effects to know about:
+
+- If you ran `make up-experts` earlier, `make e2e` recreates `testing-api` and `testing-worker`, because their environment changes. At the end they are removed. Run `make up-experts` again to get the Test expert back.
+- The test writes its rows to your main database and does not delete them. It also puts a job on your real `diagnose:test` queue. See "Limitations" below.
+
+### The API image
+
+`services/api/Dockerfile` uses the repo root as its build context:
+
+```bash
+docker build -f services/api/Dockerfile .
+```
+
+1. **Builder stage.** It uses Python 3.12.8 (slim, Debian bookworm) and uv 0.13.1. It copies the `shared`, `services` and `experts` folders, because uv needs to see every workspace member to read the lockfile. It installs only `pipelineiq-api` into `/opt/venv`.
+2. **Runtime stage.** This is a fresh Python image. It copies only `/opt/venv`, not the source. It runs as a non-root user named `api` (uid 10001).
+3. **Config.** It copies `config/` twice. The API reads `/app/config` through `ROUTER_RULES_PATH` and `SANITISE_PATTERNS_FILE`. `shared/file_tags.py` has no environment override. It looks in `site-packages/config` next to the installed `shared` package, so the second copy goes there. The `python3.12` in that path is tied to the base image.
+4. **Start.** It runs `uvicorn api.app:app` on port `${API_PORT}` (8000), listening on all interfaces inside the container. Compose publishes the port only on `127.0.0.1:8000`.
+
+`.dockerignore` keeps `.env`, `data/`, `docs/` and the dashboard out of the build.
+
+### Environment variables
+
+| Variable | Read by | Default | What it changes |
+|---|---|---|---|
+| `E2E_API_URL` | `tests/e2e/conftest.py` (host) | `http://127.0.0.1:8000` | Where the test finds the API. A trailing slash is removed |
+| `E2E_REQUIRED` | `tests/e2e/conftest.py` | Unset (skip) | `1` turns every skip into a failure. `make e2e` sets it |
+| `EXPERT_BACKEND_URL` | `docker-compose.yml`, passed to the Test worker as `BACKEND_URL` | Empty (stub, no POST) | Where the Test worker posts diagnoses. `make e2e` sets it to `http://api:8000` |
+
+The host also needs `DATABASE_URL` and `REDIS_URL`. All three variables are listed, commented out, in `.env.example`.
 
 ## Endpoints
 
@@ -385,11 +501,40 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 - Its limits (duplicate rows on re-run, routing ignores `--member`, queued jobs reach real workers, and more) are in the "Replay CLI (P2.8)" section above.
 
+**End-to-end test (P2.9):**
+
+- **Nothing here has been run.** The Dockerfile, the `e2e` compose profile, `make e2e`, the CI step and the test were written without a run. The first CI run will be the first real one.
+- **The test writes to the main database.** It uses `DATABASE_URL` directly and does not delete its rows. Each run leaves one routed failure and one diagnosis behind. Unlike the SQL tests, it does not use a throwaway database.
+- **It uses the real queue.** It puts a job on the `diagnose:test` queue of the Redis in `REDIS_URL`. Any other Test worker on that Redis would take the job too.
+- **One path only.** It covers one Test-expert failure, with the stub worker. It does not cover the other three experts, the real webhook (P3.1), the LLM, or the quality of a diagnosis.
+- **Port 8000 is fixed.** The compose `api` service sets `API_PORT: "8000"` and publishes `127.0.0.1:8000`. The `API_PORT` value in `.env` does not change either one.
+- **Waits are fixed.** The 60-second wait and the 1-second poll are not settings.
+- **The CI logs step comes too late for the API.** It runs after `make e2e` has removed the API and Test containers, so it shows mostly Postgres and Redis. `make e2e` prints the full logs first, while the containers still exist.
+- **The CI step has its own limit.** The "End-to-end test" step fails after 15 minutes, even though the job allows 30.
+- **Choices with no `# DEFAULT:` marker yet:** the `<db>_api_test` name and the drop-first behaviour in `api_db.py`, the fixed `127.0.0.1:8000` port and the `api` uid 10001 and `API_PORT=8000` in the Dockerfile, and the 15-minute CI step limit.
+
+**Every `# DEFAULT:` added or changed for P2.9** (grep of `services/api/Dockerfile`, `Makefile`, `docker-compose.yml`, `tests/e2e`, `api_db.py` and `pyproject.toml`):
+
+| Where | Choice | Why |
+|---|---|---|
+| `services/api/Dockerfile` line 5 | Python 3.12.8 on Debian bookworm, pinned | No moving tag, so the image does not change under us |
+| `services/api/Dockerfile` line 8 | uv 0.13.1, pinned | The version the lockfile was written with |
+| `services/api/Dockerfile` line 34 | `config/` copied twice (see "The API image") | The code finds config in two ways. The second copy is for `shared/file_tags.py` |
+| `docker-compose.yml` line 82 | The API healthcheck uses `python`, not `curl` | `python` is always in the image. `/health` answers 200 even when experts are down |
+| `docker-compose.yml` line 119 | `testing-api` and `testing-worker` also belong to the `e2e` profile | So `make e2e` has a Test expert to diagnose the job |
+| `docker-compose.yml` line 130 | `BACKEND_URL` comes from `EXPERT_BACKEND_URL`, empty by default | Empty keeps the stub behaviour. `make e2e` sets it |
+| `Makefile` line 21 | The `e2e` target always stops its own containers, keeps the test's exit code, sets `E2E_REQUIRED=1`, and leaves Postgres and Redis up | Cleans up after a failure, and CI cannot pass by skipping |
+| `Makefile` line 38 | `down` also stops the `e2e` profile | A plain `down` skips profile services. The comment still mentions only `experts` |
+| `tests/e2e/conftest.py` line 10 | Default API URL `http://127.0.0.1:8000` | The compose `api` service publishes that port |
+| `tests/e2e/test_failure_flow_e2e.py` line 30 | 60 s wait, 1 s poll | The stub worker takes about 1 s |
+| `tests/e2e/test_failure_flow_e2e.py` line 41 | Ids come from the clock | Repeated runs on one database do not collide |
+| `pyproject.toml` line 52 | F811 is ignored for `test_*_sql.py` | Those tests import the `engine` fixture from `api_db.py` (new helper) |
+
 **Not built yet:**
 
 - The webhook and GitHub sign-in endpoints return 501.
 - `PREDICT_BUDGET_PR_MS` (2 minutes for PR notes) is used by the replay CLI only. The webhook task (P3.1) will use it for PR notes.
-- There is no Dockerfile and no entry in `docker-compose.yml` for the API. The brief places that in P2.9. Note that P2.9 in `docs/PLAN.md` is the end-to-end test, so the owner of the Dockerfile is not yet clear in the plan.
+- The API has a Dockerfile and a Compose service in the `e2e` profile (P2.9). Neither has been built or run yet. `make up-experts` does not start the API. Only `make e2e` does.
 
 **Behaviour to know about:**
 

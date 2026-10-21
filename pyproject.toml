@@ -49,6 +49,8 @@ select = ["E", "F", "I", "UP", "B"]
 # StrEnum), UP017 (`timezone.utc` instead of `datetime.UTC`). The contract tests use UP017 too.
 "shared/contracts/*.py" = ["E501", "UP042", "UP017"]
 "shared/tests/test_contracts.py" = ["UP017"]
+# DEFAULT: SQL tests import the `engine` fixture from api_db and take it as an argument (F811).
+"services/api/tests/test_*_sql.py" = ["F811"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["shared"]
@@ -125,4 +127,5 @@ pythonpath = ["scripts"]
 addopts = "-ra"
 markers = [
     "integration: needs a live Postgres (DATABASE_URL); skipped automatically when unreachable",
+    "e2e: needs the Compose e2e stack (`make e2e`); skipped when the backend API is unreachable",
 ]
