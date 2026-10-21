@@ -58,7 +58,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* the same commit built live and by replay gives equal contexts, apart from `event` and `history_cutoff`.
 - [x] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
   *Accept:* all behaviour tested with the mock; a call over the cap is refused.
-- [ ] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
+- [x] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
   *Accept:* top-k results on a small fixture set; embedding dimension is checked against the table.
 - [ ] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
   *Accept:* `POST /predict` with a fixture pre-push payload returns four experts' results within budget, using the stubs.
