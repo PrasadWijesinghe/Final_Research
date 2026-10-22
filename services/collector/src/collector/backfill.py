@@ -20,7 +20,7 @@ from typing import Any
 
 from collector.file_tags import FileTagger
 from collector.job_keys import map_job_key
-from collector.policy import date_windows, gzip_bytes, should_fetch_log
+from collector.policy import FAILED_CONCLUSIONS, date_windows, gzip_bytes, should_fetch_log
 from collector.repo_config import RepoEntry
 from collector.store import (
     CommitFileRecord,
@@ -44,6 +44,11 @@ logger = logging.getLogger(__name__)
 # DEFAULT: 7-day windows; the client halves any window that hits the 1,000-result cap.
 DEFAULT_WINDOW_DAYS = 7
 DEFAULT_DAYS = 90
+
+# `--logs all` fetches every log the policy asks for; `--logs failed` leaves logs of passing jobs
+# for a later `fill-logs` pass (collection order only; the end state is the same, D11 and D18).
+LOGS_ALL = "all"
+LOGS_FAILED = "failed"
 
 # DEFAULT: personal data and bulky objects are dropped from the stored `raw` run JSON: logins and
 # emails must only appear hashed (DATA 8), and the repository blobs repeat on every run.
@@ -107,6 +112,7 @@ class RepoSummary:
     logs_ok: int = 0
     logs_expired: int = 0
     logs_missing: int = 0
+    logs_deferred: int = 0  # passing-job logs left for `fill-logs` (--logs failed)
     windows_done: int = 0
     windows_total: int = 0
 
@@ -125,6 +131,7 @@ class Backfiller:
         rules: DetectionRules,
         days: int = DEFAULT_DAYS,
         window_days: int = DEFAULT_WINDOW_DAYS,
+        logs: str = LOGS_ALL,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         hash_fn: Callable[[str], str] = hash_identity,
         sanitise_fn: Callable[[str], SanitiseResult] = sanitise,
@@ -137,6 +144,9 @@ class Backfiller:
         self.rules = rules
         self.days = days
         self.window_days = window_days
+        if logs not in (LOGS_ALL, LOGS_FAILED):
+            raise ValueError(f"logs must be '{LOGS_ALL}' or '{LOGS_FAILED}', not {logs!r}")
+        self.logs = logs
         self._clock = clock
         self._hash = hash_fn
         self._sanitise = sanitise_fn
@@ -411,7 +421,30 @@ class Backfiller:
         # Every run reaching this point belongs to a relevant workflow (see _process_run).
         if should_fetch_log(job.get("status"), job.get("conclusion"), True):
             if not self.store.has_log(job_id):
+                if self.logs == LOGS_FAILED and job.get("conclusion") not in FAILED_CONCLUSIONS:
+                    # No logs row on purpose: `fill-logs` finds the job by the missing row.
+                    summary.logs_deferred += 1
+                    return
                 self._store_log(entry, run_id, attempt, job_id, summary)
+
+    def fill_logs_repo(self, entry: RepoEntry, limit: int | None = None) -> RepoSummary:
+        """Pass 2: fetch logs the policy wants but the database lacks, newest runs first.
+
+        Each log is committed on its own, so stopping at any point loses nothing, and a second
+        call only sees what is still missing. Expired or unreadable logs get a status row exactly
+        as in the backfill.
+        """
+        summary = RepoSummary()
+        with self.store.transaction():
+            repo = next(
+                (r for r in self.store.list_repos(self.member) if r.full_name == entry.full_name),
+                None,
+            )
+            pending = self.store.pending_logs(repo.id, limit) if repo else []
+        for job in pending:
+            with self.store.transaction():
+                self._store_log(entry, job.run_id, job.attempt, job.job_id, summary)
+        return summary
 
     def _store_log(
         self, entry: RepoEntry, run_id: int, attempt: int, job_id: int, summary: RepoSummary
@@ -468,7 +501,9 @@ class Backfiller:
         if target.is_file() and target.read_bytes() == data:
             return
         target.parent.mkdir(parents=True, exist_ok=True)
-        tmp = target.with_name(target.name + ".tmp")
+        # The temp name carries the process id: lanes running side by side may write the same
+        # content-addressed blob at the same moment.
+        tmp = target.with_name(f"{target.name}.{os.getpid()}.tmp")
         tmp.write_bytes(data)
         os.replace(tmp, target)
 

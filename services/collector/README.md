@@ -143,6 +143,32 @@ The database stores the path relative to the data folder (`storage_path`), so th
 | Other 4xx, for example 403 | Status `missing`, a warning is logged, and the repo carries on |
 | 5xx or a network error | The repo stops. Nothing is stored for that log. A re-run resumes |
 
+#### Two passes and parallel lanes (decision D38)
+
+Logs of passing test jobs are by far the biggest part of a backfill: one run can have 20 jobs, and each log download takes a couple of seconds. GitHub deletes a day of history every day, so a single slow pass can lose data it has not reached yet. The collector therefore lets you collect in two passes. The end state is the same as one pass (D11); only the order changes.
+
+1. **Pass 1: `collector backfill --member X --logs failed`.** Everything is collected as usual (runs, attempts, jobs, steps, commits, diffs, config snapshots) except the logs of passing jobs. Logs of failed jobs are fetched. A skipped passing log gets no row in `raw.logs`, not even a "missing" one, so pass 2 can find it. The summary line shows how many were deferred (`logs_deferred`).
+2. **Pass 2: `collector fill-logs --member X [--repo R] [--limit N]`.** It looks for jobs that the log policy wants a log for and that have no `raw.logs` row, then fetches them newest run first (so if you stop early, you have the newest logs). Each log goes through the same code as the backfill: clean, gzip, write the file, save the row. An expired log (HTTP 410) or an unreadable one gets a status row, exactly as in the backfill. Each log is saved on its own, so you can stop with Ctrl+C at any time and run it again. A second run only sees what is still missing, so it fetches nothing once everything is done. `--limit N` stops after N logs in total across the repos of that run. `fill-logs` does not list runs, commits or files: it only asks GitHub for the logs.
+3. **See progress:** `collector status` shows `logs pending: N` for each repo (jobs that need a log and have no row yet).
+
+`daily` is unchanged and always fetches all logs, because new runs are few. Running `backfill --logs all` again after a `--logs failed` pass does **not** fill the gaps (runs already stored as complete are skipped); use `fill-logs`.
+
+**Parallel lanes.** You can run several collector processes at the same time, one per repo, for the same member, against the same database and data folder:
+
+```bash
+uv run --env-file .env collector backfill --member test --repo owner/one --logs failed
+uv run --env-file .env collector backfill --member test --repo owner/two --logs failed
+```
+
+What was checked for conflicts:
+
+- `raw.sync_state`, the backfill cursor and the daily sync point are one row per repo, so lanes on different repos never touch the same row.
+- Runs, jobs, logs and commits are keyed by GitHub's own ids (commits by repo and sha); logs are written under `logs/<owner>/<repo>/...`. Different repos never write the same row or file.
+- The one shared path was `snapshots/blobs/<hash>.gz` (lockfiles are stored by content hash, so two repos can have the same file). Its temporary file name now includes the process id, so two lanes cannot overwrite each other's temp file. Both write identical bytes, so the result is the same.
+- Each process has its own database connection and its own GitHub client. The rate-limit pause is per process.
+
+What lanes **share**: the token's 5,000 requests per hour. Each process counts only its own calls, so several lanes can together pass the limit and get an HTTP 403 or 429 from GitHub; the client then waits for the reset and retries. Log downloads appeared not to count against this limit in the first real runs, but this has not been measured. Do not run two lanes on the same repo at the same time: they would share one cursor. (Running `fill-logs` for a repo while its pass 1 is still running is safe but wasteful: both may fetch the same log, and the second write changes nothing.)
+
 #### Errors and resuming
 
 1. A 5xx error or a network error stops the current repo. The transaction for the run that was being saved is rolled back, so no job is stored without its run.
@@ -337,6 +363,11 @@ uv run --env-file .env collector backfill --member test
 # one repo only, and 30 days instead of 90
 uv run --env-file .env collector backfill --member test --repo owner/name --days 30
 
+# two passes: failed-job logs first, then the logs of passing jobs (newest first)
+uv run --env-file .env collector backfill --member test --logs failed
+uv run --env-file .env collector fill-logs --member test
+# fill-logs options: --repo owner/name, --limit N (total for the run), --data-dir PATH
+
 # after the backfill has finished: fetch what is new since the last sync
 uv run --env-file .env collector daily --member test
 
@@ -392,6 +423,8 @@ The full check that must pass before a task is done is `make check`.
 | `--member` | Required. One of `dependency`, `build`, `test`, `infra` |
 | `--repo owner/name` | Only this repo. It must be in the member's list. The match is case-sensitive |
 | `--days N` | How far back to go. Default 90 |
+| `--logs all\|failed` | `backfill` only. `failed` skips logs of passing jobs for `fill-logs` to fetch later. Default `all` |
+| `--limit N` | `fill-logs` only. Stop after N logs in total |
 | `--data-dir PATH` | Where logs and blobs go. Overrides `DATA_DIR` |
 | `--window-days N` | Window size. Default 7. Hidden from `--help`, used by tests |
 

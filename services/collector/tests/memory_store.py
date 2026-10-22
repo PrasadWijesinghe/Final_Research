@@ -9,11 +9,13 @@ from dataclasses import asdict
 from datetime import UTC, date, datetime
 from typing import Any
 
+from collector.policy import LOG_CONCLUSIONS
 from collector.store import (
     CommitFileRecord,
     CommitRecord,
     JobRecord,
     LogRecord,
+    PendingLog,
     RepoCounts,
     RepoRecord,
     RunRecord,
@@ -148,6 +150,35 @@ class MemoryStore:
     def upsert_log(self, log: LogRecord) -> None:
         self._put("logs", log)
 
+    def _pending(self, repo_id: int) -> list[tuple[Any, JobRecord]]:
+        runs = {k: r for k, r in self.tables["workflow_runs"].items() if r.repo_id == repo_id}
+        out = []
+        for job in self.tables["jobs"].values():
+            run = runs.get((job.run_id, job.attempt))
+            if (
+                run is not None
+                and job.status == "completed"
+                and job.conclusion in LOG_CONCLUSIONS
+                and (job.job_id,) not in self.tables["logs"]
+            ):
+                out.append((run, job))
+        return out
+
+    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]:
+        found = sorted(
+            self._pending(repo_id),
+            key=lambda rj: (
+                rj[0].created_at is not None,
+                rj[0].created_at or datetime.min.replace(tzinfo=UTC),
+                rj[1].run_id,
+                rj[1].attempt,
+                rj[1].job_id,
+            ),
+            reverse=True,
+        )
+        rows = [PendingLog(j.job_id, j.run_id, j.attempt) for _, j in found]
+        return rows if limit is None else rows[:limit]
+
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
         state = self.tables["sync_state"][(repo_id,)]
         self.tables["sync_state"][(repo_id,)] = SyncStateRecord(
@@ -174,6 +205,7 @@ class MemoryStore:
             jobs=len(jobs),
             logs=logs,
             commits=len(commits),
+            logs_pending=len(self._pending(repo_id)),
         )
 
     def run_days(self, repo_id: int) -> list[date]:
