@@ -13,6 +13,9 @@ PASSED_CONCLUSIONS = frozenset({"success"})
 # DEFAULT: gzip level 6 (the zlib default); the level is fixed so the bytes are stable.
 GZIP_LEVEL = 6
 
+# Conclusions whose job log the policy asks for (when the job is completed).
+LOG_CONCLUSIONS = FAILED_CONCLUSIONS | PASSED_CONCLUSIONS
+
 
 def should_fetch_log(status: str | None, conclusion: str | None, workflow_relevant: bool) -> bool:
     """Log policy (DATA 3.2): every failed job, plus passing jobs in relevant workflows."""

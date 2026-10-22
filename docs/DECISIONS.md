@@ -116,6 +116,9 @@ entry that references it rather than editing history.
 **D37 — Claude Code works as an orchestrator with project subagents in `.claude/agents/`:** `implementer` and `reviewer` on Sonnet; `scaffolder` and `doc-writer` on Haiku. Each task goes build → review → document, and the main session ticks and commits.
 *Why:* keeps cost down, keeps the main session's context small across a long build, and gives every task an independent review.
 
+**D38 — Collection order: two passes (`backfill --logs failed`, then `fill-logs`) and one parallel lane per repo.** Date: 2026-10-23. The end state of D11 is unchanged (all failed-job logs, plus passing-job logs in relevant workflows); only the order changes. `backfill` still defaults to `--logs all` and `daily` always fetches all logs.
+*Why:* downloading logs of passing jobs dominates the backfill (about 2.3 s per log, around 20 jobs per run in some repos), which would take 1 to 2 weeks for one runner, while GitHub deletes a day of history every day. Failed logs and metadata come first, passing logs are filled newest first.
+
 ## Open items (don't block the build)
 
 | # | Item | Owner |

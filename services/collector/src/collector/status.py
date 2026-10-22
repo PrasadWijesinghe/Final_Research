@@ -181,6 +181,10 @@ def render_status(member: str, repos: Sequence[RepoStatus], rate: RateLimit, now
             lines.append("  not collected yet: run `collector backfill` first")
             continue
         lines.append(f"  backfill: {_backfill_state(r.state)}")
+        lines.append(
+            f"  logs pending: {r.counts.logs_pending}"
+            + (" (run `collector fill-logs` to fetch them)" if r.counts.logs_pending else "")
+        )
         lines.append(f"  last daily sync: {_ts(r.state.last_daily_sync_at if r.state else None)}")
         if r.first_day and r.last_day:
             lines.append(f"  runs created from {r.first_day} to {r.last_day}")
