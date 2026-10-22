@@ -1,0 +1,29 @@
+2026-03-11T08:00:01.8778588Z ##[group]Run actions/checkout@v4
+2026-03-11T08:00:02.4450932Z with:
+2026-03-11T08:00:02.4959630Z   repository: acme/app
+2026-03-11T08:00:02.3640580Z   token: ***
+2026-03-11T08:00:02.1433128Z   ssh-strict: true
+2026-03-11T08:00:03.8513238Z ##[endgroup]
+2026-03-11T08:00:03.0255478Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-03-11T08:00:04.2848260Z HEAD is now at 68ee74f7d6afe0164fe0f1197aa9177c946d8834 Merge pull request #19 from acme/feature-9
+2026-03-11T08:00:05.4368261Z Cache restored from key: Linux-node-c3c81c2b9a9ae9e358d68fc47dbc8596f19b420011e71c657d1616f14fb77917
+2026-03-11T08:00:05.3961256Z Cache key: npm-y0QP4vfsINVPRyZjDOutuGc5Zcy1emS77adXhC/S-48c7489aa2e8
+2026-03-11T08:00:06.3402023Z Run id ea3ab6d2-bf03-4644-a8c0-6f25f1d7b8aa correlation 63825046-e152-4ae4-b122-c81553add817
+2026-03-17T08:00:01.5512216Z sourcemap fclvd2yEI+V6J4VImj+cQ/tudWh21q2anKxKpOcuwZM Tf9Oo0DwqCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4XLaeTpuedVg5ff5vQWKEqKAQz7W+kZRCk3/TqNA8Kgj8V0/TwGrYurg5dpXnMuFH4253+hMWLKze4mQOnQOHuFy2nk6bnnVYOX3+b0FihKigEM+1vpGUQpN/06jQPCoI/FdP08Bq2Lq4OXaV5zLhR+Nud/oTFiys3uJkDp0Dh7hctp5Om551WDl9/m9BYoSooBDPtb6RlEKTf9Oo0DwqCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4XLaeTpuedVg5ff5vQWKEqKAQz7W+kZRCk3/TqNA8Kgj8V0/TwGrYurg5dpXnMuFH4253+hMWLKze4mQOnQOHuFy2nk6bnnVYOX3+b0FihKigEM+1vpGUQpN/06jQPCoI/FdP08Bq2Lq4OXaV5zLhR+Nud/oTFiys3uJkDp0Dh7hctp5Om551WDl9/m9BYoSooBDPtb6RlEKTf9Oo0DwqCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4XLaeTpuedVg5ff5vQWKEqKAQz7W+kZRCk3/TqNA8Kgj8V0/TwGrYurg5dpXnMuFH4253+hMWLKze4mQOnQOHuFy2nk6bnnVYOX3+b0FihKigEM+1vpGUQpN/06jQPCoI/FdP08Bq2Lq4OXaV5zLhR+Nud/oTFiys3uJkDp0Dh7hctp5Om551WDl9/m9BYoSooBDPtb6RlEKTf9Oo0DwqCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4XLaeTpuedVg5ff5vQWKEqKAQz7W+kZRCk3/TqNA8Kgj8V0/TwGrYurg5dpXnMuFH4253+hMWLKze4mQOnQOHuFy2nk6bnnVYOX3+b0FihKigEM+1vpGUQpN/06jQPCoI/FdP08Bq2Lq4OXaV5zLhR+Nud/oTFiys3uJkDp0Dh7hctp5Om551WDl9/m9BYoSooBDPtb6RlEKTf9Oo0DwqCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4XLaeTpuedVg5ff5vQWKEqKAQz7W+kZRCk3/TqNA8Kgj8V0/TwGrYurg5dpXnMuFH4253+hMWLKze4mQOnQOHuFy2nk6bnnVYOX3+b0FihKigEM+1vpGUQpN/06j
+2026-03-17T08:00:01.4012569Z sourcemap SBTZIJOsig9KIWOrh97lCbowalj1iIvg7csvzQcSAos QLJEESZB3XjdT5O2yRkN1G4AmRlNWkQle3761u+f9Gg9oe2gJERIyzQ6poj10+/XMU2v5YCsC8vxFa7Kno3BFECyRBEmQd143U+TtskZDdRuAJkZTVpEJXt++tbvn/RoPaHtoCRESMs0OqaI9dPv1zFNr+WArAvL8RWuyp6NwRRAskQRJkHdeN1Pk7bJGQ3UbgCZGU1aRCV7fvrW75/0aD2h7aAkREjLNDqmiPXT79cxTa/lgKwLy/EVrsqejcEUQLJEESZB3XjdT5O2yRkN1G4AmRlNWkQle3761u+f9Gg9oe2gJERIyzQ6poj10+/XMU2v5YCsC8vxFa7Kno3BFECyRBEmQd143U+TtskZDdRuAJkZTVpEJXt++tbvn/RoPaHtoCRESMs0OqaI9dPv1zFNr+WArAvL8RWuyp6NwRRAskQRJkHdeN1Pk7bJGQ3UbgCZGU1aRCV7fvrW75/0aD2h7aAkREjLNDqmiPXT79cxTa/lgKwLy/EVrsqejcEUQLJEESZB3XjdT5O2yRkN1G4AmRlNWkQle3761u+f9Gg9oe2gJERIyzQ6poj10+/XMU2v5YCsC8vxFa7Kno3BFECyRBEmQd143U+TtskZDdRuAJkZTVpEJXt++tbvn/RoPaHtoCRESMs0OqaI9dPv1zFNr+WArAvL8RWuyp6NwRRAskQRJkHdeN1Pk7bJGQ3UbgCZGU1aRCV7fvrW75/0aD2h7aAkREjLNDqmiPXT79cxTa/lgKwLy/EVrsqejcEUQLJEESZB3XjdT5O2yRkN1G4AmRlNWkQle3761u+f9Gg9oe2gJERIyzQ6poj10+/XMU2v5YCsC8vxFa7Kno3BFECyRBEmQd143U+TtskZDdRuAJkZTVpEJXt++tbvn/RoPaHtoCRESMs0OqaI9dPv1zFNr+WArAvL8RWuyp6NwRRAskQRJkHdeN1Pk7bJGQ3UbgCZGU1aRCV7fvrW75/0aD2h7aAkREjLNDqmiPXT79cxTa/lgKwLy/EVrsqejcEUQLJEESZB3XjdT5O2yRkN1G4AmRlNWkQle3761u+f9Gg9oe2gJERIyzQ6poj10+/XMU2v5YCsC8vxFa7Kno3BFECyRBEmQd143U+TtskZDdRuAJkZTVpEJXt++tbvn/RoPaHtoCRESMs0OqaI9dPv1zFNr+WArAvL8RWuyp6NwRRAskQR
+2026-03-16T08:00:01.6366096Z > tsc -p tsconfig.build.json
+2026-03-16T08:00:05.8998559Z > webpack --mode production
+2026-03-16T08:00:06.7876784Z asset main.c3c81c2b.js 493 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.8902297Z asset main.4ae43fd8.js 724 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.0107067Z asset main.13876d06.js 888 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.0444877Z asset main.58e08f69.js 457 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.3922990Z asset main.6774e97b.js 594 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.5163202Z asset main.3a8cfe81.js 818 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.3556201Z asset main.5bd4ca49.js 410 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:06.9820246Z asset main.8d68c655.js 89 KiB [emitted] [minimized] (name: main)
+2026-03-16T08:00:07.9482559Z webpack 5.91.0 compiled successfully in 9213 ms
+2026-03-16T08:00:08.2878065Z Uploading artifact dist-68ee74f digest sha256:362eb7f8954e74e3a7b823b3735979bd9a475ceccbcf9471b7736266c4881bd4
+2026-03-16T08:00:09.2425900Z Artifact id 29345678 url https://github.com/acme/app/actions/runs/9987654/artifacts/192345
+2026-03-16T08:00:09.0552198Z Docker image ghcr.io/acme/app@sha256:58e08f69ba8386e2db875b1a2d92734a4c9c4f62e44962fd29e59a546fadb366
+2026-03-16T08:00:09.0451349Z git remote origin https://github.com/acme/app.git ; ssh git@github.com:acme/app.git
+2026-03-16T08:00:10.1877253Z listening on http://localhost:3000 and postgres://localhost:5432/test db user via env

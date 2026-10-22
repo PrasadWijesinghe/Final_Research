@@ -1,0 +1,3 @@
+2026-10-15T09:01:00.1000000Z > jest --ci
+2026-10-15T09:01:05.2000000Z FAIL test/b.test.js
+2026-10-15T09:01:05.4000000Z Tests:       2 failed, 10 passed, 12 total

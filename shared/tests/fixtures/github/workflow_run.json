@@ -1,0 +1,29 @@
+{
+  "id": 9876543210,
+  "name": "CI",
+  "node_id": "WFR_kwLOAbCdEs8AAAACS1a2bQ",
+  "head_branch": "main",
+  "head_sha": "3f1c9d2a7b6e4c85a0d1f2e3b4c5d6e7f8091a2b",
+  "path": ".github/workflows/ci.yml@refs/heads/main",
+  "display_title": "fix: handle empty config",
+  "run_number": 4821,
+  "run_attempt": 1,
+  "event": "push",
+  "status": "completed",
+  "conclusion": "failure",
+  "workflow_id": 1234567,
+  "url": "https://api.github.com/repos/acme/widgets/actions/runs/9876543210",
+  "html_url": "https://github.com/acme/widgets/actions/runs/9876543210",
+  "created_at": "2026-09-20T10:15:30Z",
+  "updated_at": "2026-09-20T10:22:41Z",
+  "run_started_at": "2026-09-20T10:15:30Z",
+  "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9876543210/jobs",
+  "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9876543210/logs",
+  "actor": {"login": "octocat", "id": 583231, "type": "User"},
+  "head_commit": {
+    "id": "3f1c9d2a7b6e4c85a0d1f2e3b4c5d6e7f8091a2b",
+    "message": "fix: handle empty config",
+    "timestamp": "2026-09-20T10:14:58Z"
+  },
+  "repository": {"id": 1296269, "full_name": "acme/widgets", "private": false}
+}
