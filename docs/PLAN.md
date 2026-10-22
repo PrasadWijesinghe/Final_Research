@@ -99,6 +99,10 @@ Design: `docs/experts/test.md`.
 - [ ] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`.
 - [ ] **P4.11 Diagnosis worker:** prompt file, gateway call, `BehaviourDetails`, citation rules, misrouted handling.
 - [ ] **P4.12 Swap the stub** for the real expert, keeping the stub tests green.
+- [x] **P4.13 Dependency prototype packaging (Member 1).** Move the existing data extraction, feature engineering, model training, and local API prototype into the Dependency expert's project structure. Keep generated datasets and model artifacts under ignored `data/` and `models/` paths; document prototype limitations and do not replace the contract-based `/predict` stub until evaluation and integration tasks are complete.
+  *Accept:* no prototype source remains at the repository root; scripts use explicit project-relative or CLI paths, contain no hard-coded secrets, and have focused tests; `make check` passes.
+- [x] **P4.14 Dependency repository group loader (Member 1).** Add `scripts/load_groups.py` to merge one selected candidate group (or all groups explicitly) from `config/dependency_repository_groups.yaml` into `config/repos/dependency.yaml`, preserving existing repo settings and marking new repos disabled until their licence and selection are reviewed.
+  *Accept:* tests cover group selection, all-groups selection, preserving existing config and safe defaults; no network access is required.
 
 ## Phase 5 — Evaluation
 

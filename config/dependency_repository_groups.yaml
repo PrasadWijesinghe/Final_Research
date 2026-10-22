@@ -1,0 +1,122 @@
+# Research candidate groups for the Dependency prediction prototype.
+# Select one with the extractor's --group option.
+groups:
+  backend_frameworks:
+    - expressjs/express
+    - nestjs/nest
+    - fastify/fastify
+    - koajs/koa
+    - strapi/strapi
+    - adonisjs/adonis-framework
+    - loopbackio/loopback-next
+    - hapi/hapi
+    - sailsjs/sails
+    - meteor/meteor
+    - feathersjs/feathers
+    - totaljs/framework
+    - rollup/rollup
+    - evanw/esbuild
+    - remix-run/remix
+    - tj/commander.js
+
+  frontend_and_build_tools:
+    - facebook/react
+    - vercel/next.js
+    - vitejs/vite
+    - tailwindlabs/tailwindcss
+    - reduxjs/redux
+    - eslint/eslint
+    - prettier/prettier
+    - babel/babel
+    - webpack/webpack
+    - jestjs/jest
+    - vuejs/core
+    - angular/angular
+    - sveltejs/svelte
+    - mui/material-ui
+    - ant-design/ant-design
+
+  database_and_orms:
+    - prisma/prisma
+    - typeorm/typeorm
+    - sequelize/sequelize
+    - Automattic/mongoose
+    - knex/knex
+
+  utils_and_testing:
+    - axios/axios
+    - lodash/lodash
+    - moment/moment
+    - socketio/socket.io
+    - pnpm/pnpm
+    - kelektiv/node-cron
+    - motdotla/dotenv
+    - nocode-js/sequential-workflow-designer
+    - microsoft/playwright
+    - cypress-io/cypress
+    - puppeteer/puppeteer
+    - vitest-dev/vitest
+
+  personal_and_misc:
+    - neoclide/coc.nvim
+
+  New_one:
+    - DasuniSamaraweera/smart-cm
+    - eslint/eslint
+    - webpack/webpack
+    - vitejs/vite
+    - mochajs/mocha
+    - jestjs/jest
+    - Automattic/mongoose
+    - typeorm/typeorm
+    - socketio/socket.io
+    - sequelize/sequelize
+    - TryGhost/Ghost
+    - strapi/strapi
+    - n8n-io/n8n
+
+  top_nodejs_repos:
+    - mrdoob/three.js
+    - meteor/meteor
+    - gatsbyjs/gatsby
+    - storybookjs/storybook
+    - chartjs/Chart.js
+    - d3/d3
+    - puppeteer/puppeteer
+    - cypress-io/cypress
+    - microsoft/playwright
+    - sveltejs/svelte
+    - remix-run/remix
+    - solidjs/solid
+    - rollup/rollup
+    - evanw/esbuild
+    - parcel-bundler/parcel
+    - feathersjs/feathers
+    - sailsjs/sails
+    - ionic-team/ionic-framework
+    - prisma/prisma
+    - typeorm/typeorm
+    - mikro-orm/mikro-orm
+    - node-fetch/node-fetch
+    - jaredpalmer/formik
+    - TanStack/query
+    - ant-design/ant-design
+    - mui/material-ui
+    - chakra-ui/chakra-ui
+
+  additional_new_repos:
+    - honojs/hono
+    - trpc/trpc
+    - colinhacks/zod
+    - swc-project/swc
+    - vercel/turbo
+    - serverless/serverless
+    - yarnpkg/berry
+    - npm/cli
+    - sindresorhus/got
+    - chalk/chalk
+    - date-fns/date-fns
+    - iamkun/dayjs
+    - shadcn-ui/ui
+    - lucide-icons/lucide
+    - inversify/InversifyJS
