@@ -1,4 +1,4 @@
-"""Command line entry point (`uv run collector ...`): `backfill`, `daily` and `status`."""
+"""Command line entry point (`uv run collector ...`): backfill, fill-logs, daily, status, more."""
 
 from __future__ import annotations
 
@@ -10,7 +10,13 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 
-from collector.backfill import DEFAULT_DAYS, DEFAULT_WINDOW_DAYS, Backfiller
+from collector.backfill import (
+    DEFAULT_DAYS,
+    DEFAULT_WINDOW_DAYS,
+    LOGS_ALL,
+    LOGS_FAILED,
+    Backfiller,
+)
 from collector.daily import DailySummary, DailySyncer, NotBackfilledError
 from collector.export_import import TransferError, export_data, import_data, resolve_target
 from collector.file_tags import load_file_tagger
@@ -44,6 +50,22 @@ def _build_parser() -> argparse.ArgumentParser:
     bf.add_argument("--days", type=int, default=DEFAULT_DAYS, help="how far back (default 90)")
     bf.add_argument("--window-days", type=int, default=DEFAULT_WINDOW_DAYS, help=argparse.SUPPRESS)
     bf.add_argument(
+        "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
+    )
+    bf.add_argument(
+        "--logs",
+        choices=(LOGS_ALL, LOGS_FAILED),
+        default=LOGS_ALL,
+        help="'failed' skips logs of passing jobs (fetch them later with `fill-logs`); "
+        "default 'all'",
+    )
+    fill = sub.add_parser(
+        "fill-logs", help="fetch logs the policy wants but the database lacks, newest first"
+    )
+    fill.add_argument("--member", required=True, choices=MEMBERS)
+    fill.add_argument("--repo", help="only this owner/name (must be in the member's list)")
+    fill.add_argument("--limit", type=int, help="fetch at most this many logs in this run")
+    fill.add_argument(
         "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
     )
     daily = sub.add_parser(
@@ -112,6 +134,7 @@ def run_backfill(args: argparse.Namespace) -> int:
             rules=rules,
             days=args.days,
             window_days=args.window_days,
+            logs=args.logs,
         )
         for entry in repos:
             try:
@@ -125,6 +148,61 @@ def run_backfill(args: argparse.Namespace) -> int:
                 _err(f"{entry.full_name}: failed ({exc}); re-run to resume")
                 continue
             sys.stdout.write(f"{entry.full_name}: {summary}\n")
+    return EXIT_FAILED if failed else EXIT_OK
+
+
+def run_fill_logs(args: argparse.Namespace) -> int:
+    """Run `collector fill-logs` (pass 2 of the backfill); returns the process exit code."""
+    missing = _missing_env(("GITHUB_TOKEN", "DATABASE_URL"))
+    if missing:
+        _err(
+            f"{', '.join(missing)} not set. Put them in .env (see .env.example) and run with "
+            "`uv run --env-file .env collector fill-logs ...`."
+        )
+        return EXIT_USAGE
+    if args.limit is not None and args.limit < 1:
+        _err("--limit must be at least 1")
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+        tagger = load_file_tagger()
+        rules = load_detection_rules()
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    repos = config.enabled_repos()
+    if args.repo:
+        repos = [r for r in config.repos if r.full_name == args.repo]
+        if not repos:
+            _err(f"{args.repo} is not in config/repos/{args.member}.yaml")
+            return EXIT_USAGE
+    data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
+    failed = 0
+    remaining: int | None = args.limit  # DEFAULT: --limit is a total over all repos of this run
+    store = SqlStore(get_engine())
+    with GitHubClient() as client:
+        filler = Backfiller(
+            client, store, member=args.member, data_dir=data_dir, tagger=tagger, rules=rules
+        )
+        for entry in repos:
+            if remaining is not None and remaining <= 0:
+                break
+            try:
+                summary = filler.fill_logs_repo(entry, remaining)
+            except GitHubError as exc:
+                failed += 1
+                logger.error(
+                    "fill-logs failed for repo; re-run to resume",
+                    extra={"repo": entry.full_name, "error": str(exc), "status": exc.status_code},
+                )
+                _err(f"{entry.full_name}: failed ({exc}); re-run to resume")
+                continue
+            if remaining is not None:
+                remaining -= summary.logs_ok + summary.logs_expired + summary.logs_missing
+            sys.stdout.write(
+                f"{entry.full_name}: logs ok {summary.logs_ok}, expired {summary.logs_expired}, "
+                f"missing {summary.logs_missing}\n"
+            )
     return EXIT_FAILED if failed else EXIT_OK
 
 
@@ -272,6 +350,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "backfill":
         return run_backfill(args)
+    if args.command == "fill-logs":
+        return run_fill_logs(args)
     if args.command == "daily":
         return run_daily(args)
     if args.command == "status":

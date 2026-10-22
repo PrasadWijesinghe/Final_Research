@@ -29,6 +29,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB, insert
 
+from collector.policy import LOG_CONCLUSIONS
 from shared.db import models as m
 
 
@@ -179,6 +180,16 @@ class RepoCounts:
     jobs: int = 0
     logs: dict[str, int] = field(default_factory=dict)  # status -> number of logs
     commits: int = 0
+    logs_pending: int = 0  # jobs the log policy wants a log for, with no raw.logs row yet
+
+
+@dataclass(frozen=True)
+class PendingLog:
+    """A job that needs a log fetched (see `Store.pending_logs`)."""
+
+    job_id: int
+    run_id: int
+    attempt: int
 
 
 class Store(Protocol):
@@ -206,6 +217,7 @@ class Store(Protocol):
     def upsert_snapshot(self, snapshot: SnapshotRecord) -> None: ...
     def has_log(self, job_id: int) -> bool: ...
     def upsert_log(self, log: LogRecord) -> None: ...
+    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]: ...
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None: ...
     def list_repos(self, member: str) -> list[RepoRecord]: ...
     def repo_counts(self, repo_id: int) -> RepoCounts: ...
@@ -383,6 +395,33 @@ class SqlStore:
         """Insert or update a raw.logs row."""
         self._upsert(m.Log, asdict(log), ["job_id"], update=True)
 
+    def _pending_query(self, repo_id: int) -> Any:
+        wr, jb, lg = _table(m.WorkflowRun), _table(m.Job), _table(m.Log)
+        on_run = and_(jb.c.run_id == wr.c.run_id, jb.c.attempt == wr.c.attempt)
+        return (
+            select(jb.c.job_id, jb.c.run_id, jb.c.attempt)
+            .select_from(jb.join(wr, on_run).outerjoin(lg, lg.c.job_id == jb.c.job_id))
+            .where(
+                wr.c.repo_id == repo_id,
+                lg.c.job_id.is_(None),
+                jb.c.status == "completed",
+                jb.c.conclusion.in_(sorted(LOG_CONCLUSIONS)),
+            )
+        )
+
+    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]:
+        """Jobs needing a log with no raw.logs row, newest run first."""
+        wr, jb = _table(m.WorkflowRun), _table(m.Job)
+        stmt = self._pending_query(repo_id).order_by(
+            wr.c.created_at.desc().nulls_last(),
+            jb.c.run_id.desc(),
+            jb.c.attempt.desc(),
+            jb.c.job_id.desc(),
+        )
+        if limit is not None:
+            stmt = stmt.limit(limit)
+        return [PendingLog(r[0], r[1], r[2]) for r in self._c.execute(stmt).all()]
+
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
         """Record when the last successful daily sync of the repo started."""
         t = _table(m.SyncState)
@@ -424,6 +463,11 @@ class SqlStore:
             jobs=int(jobs),
             logs={str(status): int(n) for status, n in log_rows},
             commits=int(commits),
+            logs_pending=int(
+                self._c.execute(
+                    select(func.count()).select_from(self._pending_query(repo_id).subquery())
+                ).scalar_one()
+            ),
         )
 
     def run_days(self, repo_id: int) -> list[date]:
