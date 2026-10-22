@@ -10,7 +10,9 @@ repos:
   - {full_name: socketio/socket.io,           licence: MIT,        framework: mocha,  flaky: 2,   note: "real-time sockets; per-package workflows"}
   - {full_name: sequelize/sequelize,          licence: MIT,        framework: mocha,  flaky: 12,  note: "multi-database"}
   - {full_name: knex/knex,                    licence: MIT,        framework: mocha,  flaky: 4,   note: "separate DB integration workflow"}
-  - {full_name: redis/node-redis,             licence: MIT,        framework: mocha,  flaky: 4,   note: "Redis network timing"}
+  # Tests run through a local composite action (./.github/actions/run-tests), which
+  # auto-detection cannot see, so the workflow is listed explicitly (re-run check, 2026-10-22).
+  - {full_name: redis/node-redis,             licence: MIT,        framework: mocha,  flaky: 4,   note: "Redis network timing", workflows: [".github/workflows/tests.yml"]}
   - {full_name: typeorm/typeorm,              licence: MIT,        framework: mocha,  flaky: 3,   note: "multi-database ORM"}
   - {full_name: puppeteer/puppeteer,          licence: Apache-2.0, framework: mocha,  flaky: 112, note: "browser automation"}
   - {full_name: eslint/eslint,                licence: MIT,        framework: mocha,  flaky: 3,   note: "large, stable (control)"}
