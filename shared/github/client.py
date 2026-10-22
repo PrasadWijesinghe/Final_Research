@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 API_URL = "https://api.github.com"
 RAW_URL = "https://raw.githubusercontent.com"
 RESULT_CAP = 1000  # the runs listing stops returning results past 1,000
+TOTAL_COUNT_CAP = 2500  # a `total_count` of 2500 means "2500 or more", never exactly 2500
 
 
 class GitHubError(Exception):
@@ -29,6 +30,14 @@ class GitHubError(Exception):
 
 class GitHubNotFoundError(GitHubError):
     """The resource does not exist (404), or is not visible to the token."""
+
+
+@dataclass(frozen=True)
+class RunCount:
+    """Number of runs in a window. `capped` means "at least `count`" (GitHub stops counting)."""
+
+    count: int
+    capped: bool = False
 
 
 @dataclass(frozen=True)
@@ -45,6 +54,9 @@ class GitHubConfig:
     secondary_backoff: float = 60.0
     # DEFAULT: stop halving date windows at one hour; below that we accept truncation and warn.
     min_window: timedelta = timedelta(hours=1)
+    # DEFAULT: an empty run window is re-asked twice (1 s, 2 s backoff) before it is cross-checked;
+    # GitHub sometimes answers slow filtered queries with total_count 0 instead of an error.
+    empty_retries: int = 2
     # DEFAULT: 30 s request timeout.
     timeout: float = 30.0
     base_url: str = API_URL
@@ -279,33 +291,99 @@ class GitHubClient:
         end: datetime,
         params: dict[str, Any] | None = None,
     ) -> Iterator[dict[str, Any]]:
-        """Yield workflow runs created in [start, end], splitting windows that hit the 1,000 cap."""
+        """Yield workflow runs created in [start, end].
+
+        Windows that hit the 1,000 cap are split. Windows that come back empty are not believed
+        straight away: GitHub silently returns `total_count: 0` for some slow filtered queries
+        (see `_confirm_empty`).
+        """
         if start.tzinfo is None or end.tzinfo is None:
             raise ValueError("start and end must be timezone-aware")
-        yield from self._runs_window(full_name, start, end, params or {})
+        yield from self._runs_window(full_name, start, end, params or {}, verify=True)
+
+    def count_workflow_runs(
+        self,
+        full_name: str,
+        start: datetime,
+        end: datetime,
+        params: dict[str, Any] | None = None,
+    ) -> RunCount:
+        """Count runs created in [start, end] with one cheap call (`per_page=1`).
+
+        A non-zero `total_count` is trusted; a zero is cross-checked like in `iter_workflow_runs`.
+        A count of 2,500 or more is returned as capped ("at least"), never as exact.
+        """
+        if start.tzinfo is None or end.tzinfo is None:
+            raise ValueError("start and end must be timezone-aware")
+        return self._count_window(full_name, start, end, params or {}, verify=True)
+
+    @staticmethod
+    def _window_query(
+        start: datetime, end: datetime, params: dict[str, Any], per_page: int
+    ) -> dict[str, Any]:
+        return {"per_page": per_page, **params, "created": f"{_iso(start)}..{_iso(end)}"}
+
+    @staticmethod
+    def _split(start: datetime, end: datetime) -> tuple[datetime, datetime]:
+        # Halve; the right half starts one second later so the halves never overlap.
+        mid = (start + (end - start) / 2).replace(microsecond=0)
+        return mid, mid + timedelta(seconds=1)
+
+    def _first_page(
+        self,
+        full_name: str,
+        start: datetime,
+        end: datetime,
+        params: dict[str, Any],
+        per_page: int,
+        verify: bool,
+    ) -> httpx.Response:
+        """Fetch a window's first page; an empty answer is re-asked `empty_retries` times."""
+        path = f"/repos/{full_name}/actions/runs"
+        query = self._window_query(start, end, params, per_page)
+        response = self.get(path, query)
+        retries = self.config.empty_retries if verify else 0
+        for attempt in range(retries):
+            body = response.json()
+            if body.get("workflow_runs") or int(body.get("total_count", 0)) > 0:
+                break
+            logger.info(
+                "empty run window, asking again",
+                extra={"repo": full_name, "start": _iso(start), "end": _iso(end)},
+            )
+            self._sleep(self._backoff(attempt))
+            response = self.get(path, query)
+        return response
 
     def _runs_window(
-        self, full_name: str, start: datetime, end: datetime, params: dict[str, Any]
+        self,
+        full_name: str,
+        start: datetime,
+        end: datetime,
+        params: dict[str, Any],
+        *,
+        verify: bool,
     ) -> Iterator[dict[str, Any]]:
-        query = {"per_page": 100, **params, "created": f"{_iso(start)}..{_iso(end)}"}
-        response = self.get(f"/repos/{full_name}/actions/runs", query)
+        response = self._first_page(full_name, start, end, params, 100, verify)
         body = response.json()
         total = int(body.get("total_count", 0))
         if total >= RESULT_CAP:
             if end - start > self.config.min_window:
-                # Halve; the right half starts one second later so the halves never overlap.
-                mid = (start + (end - start) / 2).replace(microsecond=0)
+                mid, right = self._split(start, end)
                 logger.info(
                     "window hit result cap, splitting",
                     extra={"repo": full_name, "start": _iso(start), "end": _iso(end)},
                 )
-                yield from self._runs_window(full_name, start, mid, params)
-                yield from self._runs_window(full_name, mid + timedelta(seconds=1), end, params)
+                yield from self._runs_window(full_name, start, mid, params, verify=verify)
+                yield from self._runs_window(full_name, right, end, params, verify=verify)
                 return
             logger.warning(
                 "window at minimum size still hits result cap; results truncated",
                 extra={"repo": full_name, "start": _iso(start), "end": _iso(end), "total": total},
             )
+        elif not body.get("workflow_runs") and verify:
+            yield from self._confirm_empty(full_name, start, end, params)
+            return
         while True:
             yield from body.get("workflow_runs", [])
             next_url = response.links.get("next", {}).get("url")
@@ -313,6 +391,56 @@ class GitHubClient:
                 return
             response = self.get(next_url)
             body = response.json()
+
+    def _confirm_empty(
+        self, full_name: str, start: datetime, end: datetime, params: dict[str, Any]
+    ) -> Iterator[dict[str, Any]]:
+        """Cross-check a window that stayed empty after retries by asking for its two halves.
+
+        # DEFAULT: one level only (two extra calls, halves asked once each, no further checks),
+        # so a genuinely quiet window costs at most 1 + empty_retries + 2 calls and never loops.
+        Both halves empty: accept "no runs". Otherwise GitHub contradicted itself: warn and use
+        the halves' runs.
+        """
+        if end - start <= self.config.min_window:
+            return
+        mid, right = self._split(start, end)
+        found = False
+        for lo, hi in ((start, mid), (right, end)):
+            for run in self._runs_window(full_name, lo, hi, params, verify=False):
+                found = True
+                yield run
+        if found:
+            logger.warning(
+                "GitHub returned no runs for a window but its halves have runs; using the halves",
+                extra={"repo": full_name, "start": _iso(start), "end": _iso(end)},
+            )
+
+    def _count_window(
+        self,
+        full_name: str,
+        start: datetime,
+        end: datetime,
+        params: dict[str, Any],
+        *,
+        verify: bool,
+    ) -> RunCount:
+        response = self._first_page(full_name, start, end, params, 1, verify)
+        total = int(response.json().get("total_count", 0))
+        if total >= TOTAL_COUNT_CAP:
+            return RunCount(total, capped=True)
+        if total > 0 or not verify or end - start <= self.config.min_window:
+            return RunCount(total)
+        mid, right = self._split(start, end)
+        left = self._count_window(full_name, start, mid, params, verify=False)
+        other = self._count_window(full_name, right, end, params, verify=False)
+        count = left.count + other.count
+        if count:
+            logger.warning(
+                "GitHub counted no runs for a window but its halves have runs; using the halves",
+                extra={"repo": full_name, "start": _iso(start), "end": _iso(end)},
+            )
+        return RunCount(count, capped=left.capped or other.capped)
 
     # ---- raw.githubusercontent.com ---------------------------------------------------------
 

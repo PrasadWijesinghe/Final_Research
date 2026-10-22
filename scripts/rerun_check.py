@@ -2,8 +2,9 @@
 
 Usage:  uv run --env-file .env python scripts/rerun_check.py --member test [--all]
 
-About 5 REST calls per repo (see `check_repo`); workflow files come from raw.githubusercontent.com
-and do not use the REST quota.
+About 30 REST calls per repo (see `check_repo`): run counts are summed over 7-day windows because
+GitHub answers big filtered queries (a 90-day range, `status=failure`) with a silent
+`total_count: 0`. Workflow files come from raw.githubusercontent.com and do not use the REST quota.
 """
 
 from __future__ import annotations
@@ -26,7 +27,7 @@ from collector.workflow_detection import (
     load_detection_rules,
 )
 
-from shared.github import GitHubClient, GitHubError, GitHubNotFoundError
+from shared.github import GitHubClient, GitHubError, GitHubNotFoundError, RunCount
 
 logger = logging.getLogger("rerun_check")
 
@@ -37,6 +38,10 @@ DEFAULT_OUT_DIR = REPO_ROOT / "data" / "reports"
 WINDOW_DAYS = 90
 # GitHub's run list never returns more than 1,000 results (docs/DATA.md section 1).
 RESULT_CAP = 1000
+# DEFAULT: counts are summed over 7-day windows; one window is small enough for GitHub to answer.
+COUNT_WINDOW_DAYS = 7
+# DEFAULT: the re-run/failure sample is the newest 100 runs (one page).
+SAMPLE_SIZE = 100
 WORKFLOW_DIR = ".github/workflows/"
 # DEFAULT: these SPDX values mean "GitHub could not tell", so the licence check says `unknown`.
 UNKNOWN_LICENCES = {"", "NOASSERTION", "NONE", "OTHER"}
@@ -53,7 +58,9 @@ class RepoReport:
     default_branch: str | None = None
     archived: bool | None = None
     runs_90d: int | None = None
+    runs_capped: bool = False  # runs_90d is "at least" (a window hit GitHub's 2,500 count cap)
     failed_90d: int | None = None
+    failed_capped: bool = False
     sample_size: int | None = None
     sample_failed: int | None = None
     sample_rerun: int | None = None
@@ -71,8 +78,10 @@ class RepoReport:
 
     @property
     def failure_rate(self) -> float | None:
-        """True failure rate over the whole 90-day window (failed runs / all runs)."""
+        """Failure rate over the 90-day window; None if either number is only "at least"."""
         if not self.runs_90d or self.failed_90d is None:
+            return None
+        if self.runs_capped or self.failed_capped or self.failed_90d > self.runs_90d:
             return None
         return self.failed_90d / self.runs_90d
 
@@ -105,27 +114,67 @@ class RepoReport:
         return "match" if gh.lower() == self.licence_config.strip().lower() else "MISMATCH"
 
 
-def _find_oldest(client: GitHubClient, full_name: str, runs_90d: int, report: RepoReport) -> None:
-    """Call 4 (sometimes a 4b): the oldest run still listed, via the last page of per_page=1."""
-    path = f"/repos/{full_name}/actions/runs"
-    # Guess the last page from the 90-day count (GitHub keeps at most 90 days, so it is usually
-    # right). The response's total_count tells us if the guess was wrong; then one more call.
-    page = max(1, min(runs_90d, RESULT_CAP))
-    body = client.get_json(path, {"per_page": 1, "page": page})
-    total = int(body.get("total_count", 0))
-    runs = body.get("workflow_runs", [])
-    if total == 0:
+def _find_oldest(client: GitHubClient, full_name: str, total_all: int, report: RepoReport) -> None:
+    """The oldest run still listed: the last page of the unfiltered list at per_page=1."""
+    if total_all == 0:
         return
-    if min(total, RESULT_CAP) != page:
-        page = min(total, RESULT_CAP)
-        body = client.get_json(path, {"per_page": 1, "page": page})
-        runs = body.get("workflow_runs", [])
-    if total > RESULT_CAP:
+    path = f"/repos/{full_name}/actions/runs"
+    # The list cannot be read past result 1,000; a total above that means "older than" only.
+    page = min(total_all, RESULT_CAP)
+    body = client.get_json(path, {"per_page": 1, "page": page})
+    runs = body.get("workflow_runs", [])
+    if total_all > RESULT_CAP:
         report.oldest_is_capped = True
     if runs:
         report.oldest_created = datetime.fromisoformat(runs[0]["created_at"].replace("Z", "+00:00"))
     else:
         report.notes.append("could not read the oldest run")
+
+
+def count_windows(today: date) -> list[tuple[datetime, datetime]]:
+    """The 90-day look-back (today included) cut into 7-day windows that do not overlap."""
+    first = datetime.combine(today - timedelta(days=WINDOW_DAYS), datetime.min.time(), tzinfo=UTC)
+    last = datetime.combine(today + timedelta(days=1), datetime.min.time(), tzinfo=UTC)
+    step = timedelta(days=COUNT_WINDOW_DAYS)
+    windows = []
+    start = first
+    while start < last:
+        windows.append((start, min(start + step, last) - timedelta(seconds=1)))
+        start += step
+    return windows
+
+
+def _sum_counts(parts: Sequence[RunCount]) -> RunCount:
+    return RunCount(sum(p.count for p in parts), any(p.capped for p in parts))
+
+
+def _count_runs(client: GitHubClient, full_name: str, today: date, report: RepoReport) -> None:
+    """Fill runs_90d / failed_90d by summing 7-day windows (never one big filtered query)."""
+    runs: list[RunCount] = []
+    failed: list[RunCount] = []
+    inconsistent = 0
+    for start, end in count_windows(today):
+        run_w = client.count_workflow_runs(full_name, start, end)
+        # Always asked, even after an empty run count: that is how a lying 0 gets caught.
+        fail_w = client.count_workflow_runs(full_name, start, end, {"status": "failure"})
+        if fail_w.count > run_w.count:
+            # GitHub contradicts itself. Failures are a lower bound for runs, so keep that.
+            inconsistent += 1
+            run_w = RunCount(fail_w.count, capped=True)
+        runs.append(run_w)
+        failed.append(fail_w)
+    total_runs, total_failed = _sum_counts(runs), _sum_counts(failed)
+    report.runs_90d, report.runs_capped = total_runs.count, total_runs.capped
+    report.failed_90d, report.failed_capped = total_failed.count, total_failed.capped
+    if total_runs.capped or total_failed.capped:
+        report.notes.append(
+            "run counts are 'at least': GitHub stops counting at 2,500 per window; no rate shown"
+        )
+    if inconsistent:
+        report.notes.append(
+            f"GitHub gave more failed than total runs in {inconsistent} window(s); "
+            "run count is shown as 'at least' and no rate is shown"
+        )
 
 
 def check_repo(
@@ -135,10 +184,9 @@ def check_repo(
     today: date,
     rules: DetectionRules,
 ) -> RepoReport:
-    """Run the ~5-call check for one repo. A GitHubError ends up in `error`, never raised."""
+    """Check one repo (about 30 REST calls). A GitHubError ends up in `error`, never raised."""
     report = RepoReport(entry.full_name, entry.enabled, entry.licence)
     calls_before, raw_before = client.api_calls, client.raw_calls
-    since = (today - timedelta(days=WINDOW_DAYS)).isoformat()
     runs_path = f"/repos/{entry.full_name}/actions/runs"
     try:
         # Call 1: licence, default branch, archived.
@@ -151,23 +199,25 @@ def check_repo(
         if repo.get("full_name") and repo["full_name"].lower() != entry.full_name.lower():
             report.notes.append(f"repo was renamed to {repo['full_name']}")
 
-        # Call 2: total runs in the window + a sample of the newest 100.
-        created = f">={since}"
-        body = client.get_json(runs_path, {"created": created, "per_page": 100})
-        report.runs_90d = int(body.get("total_count", 0))
+        # Newest runs: a sample of 100 plus the unfiltered total (this query has no date filter,
+        # so GitHub answers it reliably). The sample is "the newest N runs", not a random one.
+        body = client.get_json(runs_path, {"per_page": SAMPLE_SIZE})
+        total_all = int(body.get("total_count", 0))
         sample = body.get("workflow_runs", [])
         report.sample_size = len(sample)
         report.sample_failed = sum(1 for r in sample if r.get("conclusion") == "failure")
         report.sample_rerun = sum(1 for r in sample if int(r.get("run_attempt") or 1) > 1)
 
-        # Call 3: how many runs failed in the window (counted exactly by GitHub).
-        body = client.get_json(runs_path, {"status": "failure", "created": created, "per_page": 1})
-        report.failed_90d = int(body.get("total_count", 0))
+        # Run and failure counts: sum of 7-day windows through the hardened client.
+        _count_runs(client, entry.full_name, today, report)
+        if total_all == 0 and report.runs_90d:
+            report.notes.append("newest-runs list came back empty although windows found runs")
+            total_all = min(report.runs_90d, RESULT_CAP)
 
-        # Call 4: oldest run still available.
-        _find_oldest(client, entry.full_name, report.runs_90d, report)
+        # Oldest run still available.
+        _find_oldest(client, entry.full_name, total_all, report)
 
-        # Call 5: workflow paths, then the files themselves from raw.githubusercontent.com.
+        # Workflow paths, then the files themselves from raw.githubusercontent.com.
         workflows = list(
             client.paginate(f"/repos/{entry.full_name}/actions/workflows", items_key="workflows")
         )
@@ -207,20 +257,30 @@ COLUMNS: list[tuple[str, str]] = [
     ("Enabled", "`enabled` flag in the config file (disabled repos only appear with `--all`)."),
     (
         "Runs 90d",
-        "Workflow runs created in the last 90 days. Exact count from GitHub (`total_count`).",
+        "Workflow runs created in the last 90 days: the sum of 13 seven-day counts from GitHub. "
+        "`≥N` means at least N (GitHub stops counting at 2,500 per window).",
     ),
-    ("Failed 90d", "Runs in that window whose status is `failure` (exact count from GitHub)."),
-    ("Failure rate 90d", "Failed 90d / Runs 90d. This is the true rate, not an estimate."),
+    (
+        "Failed 90d",
+        "Runs in that window whose status is `failure` (sum of 7-day counts; `≥N` = at least N).",
+    ),
+    (
+        "Failure rate 90d",
+        "Failed 90d / Runs 90d. Empty when either number is `≥N` or the counts disagree.",
+    ),
     (
         "Sample n",
         "How many runs are in the sample used for the next two columns: the newest 100 runs of "
-        "the window (fewer if the repo has fewer).",
+        "the repo (fewer if it has fewer), not a random sample.",
     ),
-    ("Failure rate (sample)", "Failure rate on that sample only. Biased towards recent runs."),
+    (
+        "Failure rate (sample)",
+        "Failure rate on the newest-N sample only. Biased towards recent runs.",
+    ),
     (
         "Re-run share (sample)",
         "Share of sample runs with `run_attempt` above 1, i.e. runs that were re-run at least "
-        "once. A high value is the flaky-test signal. Sample only.",
+        "once. A high value is the flaky-test signal. Newest-N sample only.",
     ),
     (
         "Oldest run",
@@ -249,7 +309,10 @@ COLUMNS: list[tuple[str, str]] = [
         "`match`, `MISMATCH` (config and GitHub disagree: fix the config) or `unknown` "
         "(GitHub gave no usable id: check by hand).",
     ),
-    ("API calls", "REST calls spent on this repo, including retries. Target: about 5."),
+    (
+        "API calls",
+        "REST calls spent on this repo, including retries and empty-window checks. About 30.",
+    ),
     ("Raw calls", "Workflow files fetched from raw.githubusercontent.com (not REST quota)."),
     ("Notes", "Errors and warnings for this repo. An error leaves the other cells empty."),
 ]
@@ -260,8 +323,10 @@ def _pct(value: float | None) -> str:
     return "" if value is None else f"{value * 100:.1f}%"
 
 
-def _num(value: int | None) -> str:
-    return "" if value is None else str(value)
+def _num(value: int | None, capped: bool = False) -> str:
+    if value is None:
+        return ""
+    return f"≥{value}" if capped else str(value)
 
 
 def _row_notes(r: RepoReport) -> str:
@@ -291,8 +356,8 @@ def report_cells(r: RepoReport, today: date) -> list[str]:
     return [
         r.full_name,
         "yes" if r.enabled else "no",
-        _num(r.runs_90d),
-        _num(r.failed_90d),
+        _num(r.runs_90d, r.runs_capped),
+        _num(r.failed_90d, r.failed_capped),
         _pct(r.failure_rate),
         _num(r.sample_size),
         _pct(r.sample_failure_rate),
@@ -353,7 +418,10 @@ def render_markdown(reports: Sequence[RepoReport], member: str, today: date, ski
         "## How to read this",
         "",
         "- Cells marked *sample* use only the newest 100 runs, so they are rough. "
-        "`Failure rate 90d` uses every run and is exact.",
+        "`Failure rate 90d` uses every counted run.",
+        "- Run and failure counts are sums of 7-day windows: GitHub sometimes answers a big "
+        "filtered query with 0 instead of an error. `≥N` means GitHub stopped counting; no "
+        "rate is shown for such rows.",
         "- `Oldest run` comes from the last page of the unfiltered run list, which GitHub cuts "
         "off at 1,000 results.",
         "- Empty cells on a row with an ERROR note mean that call did not happen or failed.",

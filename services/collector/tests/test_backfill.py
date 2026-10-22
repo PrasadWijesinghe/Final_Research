@@ -7,7 +7,10 @@ These run in `make check` without Docker. The same scenarios run against Postgre
 from __future__ import annotations
 
 import logging
+import re
+from datetime import datetime, timedelta
 from pathlib import Path
+from urllib.parse import unquote
 
 import pytest
 from collector.repo_config import RepoEntry
@@ -104,7 +107,14 @@ def test_resume_after_crash_reaches_the_same_state(
     check_expected_state(store.dump(), data)
     if crash_job == 5008:
         # 11 windows were saved before the crash, so only the last two are walked again
-        assert fake_github.count("/actions/runs?") == 2
+        # (an empty window is also re-asked and split in halves, so count the time span instead)
+        starts = [
+            re.search(r"created=([0-9T:Z-]+)", unquote(r)).group(1)  # type: ignore[union-attr]
+            for r in fake_github.requests
+            if "/actions/runs?" in r
+        ]
+        first, last = datetime.fromisoformat(min(starts)), datetime.fromisoformat(max(starts))
+        assert last - first < timedelta(days=14)
 
 
 def test_cursor_from_other_settings_is_ignored(fake_github: FakeGitHub, tmp_path: Path) -> None:

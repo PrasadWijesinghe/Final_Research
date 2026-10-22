@@ -52,6 +52,18 @@ The run list returns at most 1,000 results for one query. To get every run in a 
 4. Each half is handled the same way. Halving stops when a window is one hour or less.
 5. If a window is at the minimum size and still has 1,000 or more runs, the client logs a warning that the results were truncated. It keeps the runs it can see. It does not raise an error.
 
+### Empty windows are not believed
+
+GitHub sometimes answers a slow filtered run query with `total_count: 0` and no runs, instead of an error. It was seen on a busy repo: a 90-day range returned 0 while a one-week range returned 40, and the same `status=failure` query returned 113 and then 0 an hour later. A silent empty answer would mean silently missing runs, so the client does not trust an empty window:
+
+1. If a window (date range) comes back with no runs, the client asks again, up to 2 more times, waiting 1 s and then 2 s.
+2. If it is still empty and the window is longer than the minimum window, the client asks for its two halves, once each.
+3. If both halves are empty too, the window really is empty and the client accepts it. If a half has runs, GitHub contradicted itself: the client logs a warning (`GitHub returned no runs for a window but its halves have runs`) with the repo and the window, and uses the halves' runs.
+
+A genuinely empty window costs 5 calls (1 + 2 retries + 2 halves) and never loops. Windows shorter than the minimum are only retried.
+
+Counts follow the same rule. `count_workflow_runs(repo, start, end, params)` makes one `per_page=1` call and returns a `RunCount(count, capped)`. A non-zero `total_count` is trusted, a zero is retried and cross-checked as above. GitHub stops counting at 2,500: a `total_count` of 2,500 or more is returned with `capped=True`, which means "at least this many", never an exact number. Whether a window is complete is decided by walking its pages (Link headers), not by `total_count`, except for the 1,000-result split above.
+
 ### Raw file fetcher
 
 `fetch_raw_file` asks `raw.githubusercontent.com` for one file at one commit. It uses the same retry path, but it does not read or count the REST rate-limit headers. If the file does not exist (404), it returns `None` and does not raise.
@@ -125,6 +137,7 @@ From `test_retry_after_is_honoured` in `shared/tests/test_github_client.py`.
 - **`Retry-After` is ignored for 5xx errors.** Those always use the backoff.
 - **The 60-second cap is never reached with default settings.** With 5 retries the 5xx waits are 1, 2, 4, 8 and 16 seconds. The 60-second cap only matters if the retry count is raised.
 - **410 (expired log) has no special handling.** It raises a plain `GitHubError` with `status_code` 410. No test covers this. Callers must catch it.
+- **GitHub can still be wrong in a way we cannot see.** The empty-window check catches a silent `0`. It cannot catch a window that returns only some of its runs with a non-zero count. The cross-check only goes one level deep.
 - **Truncated windows lose runs.** A window at the minimum size that still has 1,000 or more runs is cut short. Only a warning in the log shows this.
 - **`api_calls` counts everything.** That includes retries and the `/rate_limit` call. The `get_rate_limit` docstring says that call does not use quota, but the counter still goes up.
 - **Raw fetches do not check the rate-limit budget.** They have no quota sleep and no 60-second floor for 429. Their 429 waits are 1, 2, 4 and so on.
@@ -140,8 +153,9 @@ From `test_retry_after_is_honoured` in `shared/tests/test_github_client.py`.
 2. `GitHubConfig.max_retries`, `backoff_base`, `backoff_cap`: 5 retries, 1 s doubling to a 60 s cap, bounded in time and with no jitter (no random spread), so the behaviour is repeatable.
 3. `GitHubConfig.secondary_backoff`: a limit-related 403 or a 429 with no `Retry-After` waits at least 60 s, which is GitHub's advice.
 4. `GitHubConfig.min_window`: stop halving date windows at one hour. Below that the client accepts truncation and warns.
-5. `GitHubConfig.timeout`: 30 s per request.
-6. `GitHubClient.__init__`: a synchronous `httpx.Client` that follows redirects. The collector is a sequential command-line tool, and `httpx` drops the token on cross-host redirects.
+5. `GitHubConfig.empty_retries`: an empty run window is asked again twice (1 s, 2 s backoff), then cross-checked by its two halves (one level only, so a quiet window costs at most 5 calls).
+6. `GitHubConfig.timeout`: 30 s per request.
+7. `GitHubClient.__init__`: a synchronous `httpx.Client` that follows redirects. The collector is a sequential command-line tool, and `httpx` drops the token on cross-host redirects.
 
 The environment defaults are also marked in `.env.example`: the threshold (200) and the minimum window (1 hour).
 

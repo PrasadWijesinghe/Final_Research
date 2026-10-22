@@ -1,10 +1,19 @@
 """GitHub REST client and raw file fetcher."""
 
 from shared.github.client import (
+    TOTAL_COUNT_CAP,
     GitHubClient,
     GitHubConfig,
     GitHubError,
     GitHubNotFoundError,
+    RunCount,
 )
 
-__all__ = ["GitHubClient", "GitHubConfig", "GitHubError", "GitHubNotFoundError"]
+__all__ = [
+    "TOTAL_COUNT_CAP",
+    "GitHubClient",
+    "GitHubConfig",
+    "GitHubError",
+    "GitHubNotFoundError",
+    "RunCount",
+]
