@@ -24,7 +24,7 @@ CSV_FIELDS = (
 
 
 def dependency_feature_rows(records: object) -> list[FeatureRow]:
-    """Convert collected run records into simple dependency-change feature rows."""
+    """Convert dependency-file-change candidate records into feature rows."""
     if not isinstance(records, list):
         raise ValueError("records must be a JSON array")
     rows: list[FeatureRow] = []
@@ -66,16 +66,46 @@ def dependency_feature_rows(records: object) -> list[FeatureRow]:
     return rows
 
 
+def dependency_change_candidates(records: object) -> list[dict[str, object]]:
+    """Keep only valid run records that changed at least one dependency file."""
+    if not isinstance(records, list):
+        raise ValueError("records must be a JSON array")
+    candidates: list[dict[str, object]] = []
+    for index, item in enumerate(records):
+        if not isinstance(item, Mapping):
+            raise ValueError(f"record {index} must be an object")
+        changed_files = item.get("dependency_files_changed", [])
+        if not isinstance(changed_files, list):
+            raise ValueError(f"record {index} dependency_files_changed must be a list")
+        if changed_files:
+            candidates.append(dict(item))
+    return candidates
+
+
 def engineer_features(input_json: Path, output_csv: Path) -> int:
-    """Write feature rows to CSV and return the number of records processed."""
+    """Write dependency-change feature rows to CSV and return the candidate count."""
     with input_json.open(encoding="utf-8") as input_file:
         records = json.load(input_file)
-    if not isinstance(records, list):
-        raise ValueError(f"{input_json} must contain a JSON array")
-
-    rows = dependency_feature_rows(records)
+    candidates = dependency_change_candidates(records)
+    rows = dependency_feature_rows(candidates)
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     with output_csv.open("w", encoding="utf-8", newline="") as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=CSV_FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+    return len(rows)
+
+
+def write_candidate_datasets(records: object, dataset_json: Path, feature_csv: Path) -> int:
+    """Keep only dependency-change runs in the dataset and regenerate their feature CSV."""
+    candidates = dependency_change_candidates(records)
+    dataset_json.parent.mkdir(parents=True, exist_ok=True)
+    with dataset_json.open("w", encoding="utf-8") as output_file:
+        json.dump(candidates, output_file, indent=2)
+
+    rows = dependency_feature_rows(candidates)
+    feature_csv.parent.mkdir(parents=True, exist_ok=True)
+    with feature_csv.open("w", encoding="utf-8", newline="") as output_file:
         writer = csv.DictWriter(output_file, fieldnames=CSV_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
@@ -88,8 +118,10 @@ def main() -> None:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
-    count = engineer_features(args.input, args.output)
-    print(f"Wrote {count} feature rows to {args.output}")
+    with args.input.open(encoding="utf-8") as input_file:
+        records = json.load(input_file)
+    count = write_candidate_datasets(records, args.input, args.output)
+    print(f"Wrote {count} dependency-change feature rows to {args.output}")
 
 
 if __name__ == "__main__":

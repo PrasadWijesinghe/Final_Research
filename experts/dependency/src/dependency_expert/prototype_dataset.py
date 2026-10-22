@@ -10,6 +10,7 @@ from typing import Any
 
 import yaml
 
+from dependency_expert.features.prototype import write_candidate_datasets
 from shared.github import GitHubClient
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_CONFIG = REPOSITORY_ROOT / "config/repos/dependency.yaml"
 DEFAULT_GROUPS = REPOSITORY_ROOT / "config/dependency_repository_groups.yaml"
 DEFAULT_DATA = REPOSITORY_ROOT / "data/datasets/dependency/prototype/dependency_runs_dataset.json"
+DEFAULT_FEATURE_CSV = REPOSITORY_ROOT / "data/datasets/dependency/prototype/dependency_features.csv"
 # DEFAULT: the documented collection horizon is the last 90 days.
 DEFAULT_DAYS = 90
 _REPOSITORY_NAME = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
@@ -130,7 +132,7 @@ def collect_dataset(
                 commit_cache[commit_key] = dependency_files_changed(client, repo, head_sha)
             dependency_files = commit_cache[commit_key]
             conclusion = run.get("conclusion")
-            if dependency_files or conclusion == "failure":
+            if dependency_files:
                 dataset.append(
                     {
                         "repository": repo,
@@ -149,6 +151,15 @@ def collect_dataset(
         data_path.parent.mkdir(parents=True, exist_ok=True)
         with data_path.open("w", encoding="utf-8") as output_file:
             json.dump(dataset, output_file, indent=2)
+    candidate_count = write_candidate_datasets(
+        dataset,
+        data_path,
+        data_path.parent / DEFAULT_FEATURE_CSV.name,
+    )
+    logger.info(
+        "dependency candidate datasets refreshed",
+        extra={"candidate_records": candidate_count},
+    )
     return added
 
 
@@ -178,8 +189,16 @@ def main() -> None:
 
     with GitHubClient() as client:
         added = collect_dataset(client, repositories, args.output, days=args.days)
-    logger.info("prototype dataset updated", extra={"records_added": added})
-    print(f"Added {added} records to {args.output}")
+    candidate_records, seen = read_existing_data(args.output)
+    candidate_count = len(candidate_records)
+    logger.info(
+        "prototype dataset updated",
+        extra={"records_added": added, "total_runs": len(seen), "candidates": candidate_count},
+    )
+    print(
+        f"Added {added} raw records; refreshed {candidate_count} dependency-change candidates "
+        f"from {len(seen)} total records."
+    )
 
 
 if __name__ == "__main__":
