@@ -103,6 +103,11 @@ Design: `docs/experts/test.md`.
   *Accept:* no prototype source remains at the repository root; scripts use explicit project-relative or CLI paths, contain no hard-coded secrets, and have focused tests; `make check` passes.
 - [x] **P4.14 Dependency repository group loader (Member 1).** Add `scripts/load_groups.py` to merge one selected candidate group (or all groups explicitly) from `config/dependency_repository_groups.yaml` into `config/repos/dependency.yaml`, preserving existing repo settings and marking new repos disabled until their licence and selection are reviewed.
   *Accept:* tests cover group selection, all-groups selection, preserving existing config and safe defaults; no network access is required.
+- [x] **P4.15 Dependency candidate dataset refresh (Member 1).** Keep only runs where a dependency manifest or lockfile changed in the prototype JSON dataset; regenerate its matching feature CSV after collection. Do not create redundant candidate JSON/CSV copies.
+  *Accept:* existing JSON rows without dependency-file changes are removed; collection and offline feature generation maintain matching JSON/CSV rows without network access.
+  *Accept:* offline tests prove collection refreshes both derived files, excludes records without dependency-file changes, and preserves the raw records.
+- [x] **P4.16 Dependency failure sample labels (Member 1).** Select a reproducible sample of failed dependency-change runs, fetch failed-job logs through the shared GitHub client, sanitise logs before classification, and save labels plus evidence without retaining log text. Treat regex matches as heuristic candidates, not verified ground truth; missing/expired logs remain undetermined.
+  *Accept:* tests cover sampling, run-attempt matching, pagination, log sanitisation, heuristic and undetermined outcomes, and output safety without network access.
 
 ## Phase 5 — Evaluation
 
