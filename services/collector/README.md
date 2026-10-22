@@ -85,7 +85,7 @@ A few words first. A **run** is one execution of a workflow. A run can be re-run
 1. **Load the config.** The command reads `config/repos/<member>.yaml`, `config/file_tags.yaml` and `config/workflow_detection.yaml`. A problem here stops the command with exit code 2 before any network call.
 2. **Save the repo.** For each repo, the collector asks GitHub for the repo's ID and default branch, and saves a row in `raw.repos`. It also creates a `raw.sync_state` row if there is none.
 3. **Sync workflows.** It lists the repo's workflow files and saves each one in `raw.workflows`. Relevance is decided once for each file path. The decision uses the file as it is at the head of the default branch (the newest commit on the main branch). The commit sha used is stored with the answer. Later backfills reuse the stored answer and do not look at the file again.
-4. **Split the time range.** The range runs from 00:00 UTC, 90 days ago, to now. It is cut into 7-day windows. The newest window is walked first. For the default 90 days that makes 13 windows. If GitHub's 1,000-result limit is hit for one window, the GitHub client splits that window into smaller ones.
+4. **Split the time range.** The range runs from 00:00 UTC, 90 days ago, to now. It is cut into 7-day windows. The newest window is walked first. For the default 90 days that makes 13 windows. If GitHub's 1,000-result limit is hit for one window, the GitHub client splits that window into smaller ones. If a window comes back empty, the client does not accept that at once: it asks again and then checks the two halves, because GitHub sometimes returns "0 runs" for a busy window without an error (see Limitations). Daily sync lists its window through the same client method, so it has the same protection.
 5. **Walk each window.** The collector lists the runs in the window. A run of a workflow that is not relevant is skipped and nothing is stored for it. Every other run is processed in its own transaction (see the next section).
 6. **Save the cursor.** After each window, the collector stores how many windows are done in `raw.sync_state.backfill_cursor`.
 7. **Finish.** When all windows are done, it records `backfill_done_at` and clears the cursor.
@@ -502,6 +502,12 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 ```
 
 ## Limitations and known issues
+
+**GitHub returns empty results for slow queries**
+
+- GitHub's run list sometimes answers a filtered query with `total_count: 0` and no runs, with no error. A silent empty window would mean a week of runs missing from the database, so backfill and daily list runs through `GitHubClient.iter_workflow_runs`, which retries an empty window twice and then cross-checks its halves before accepting it (details in `shared/github/README.md`). A real warning in the log (`GitHub returned no runs for a window but its halves have runs`) shows GitHub contradicted itself. After the first real backfill, check `collector status`: days with no runs in a repo that is normally busy are worth a second look.
+- A genuinely quiet window costs 5 calls instead of 1. On a repo with many empty 7-day windows that adds up but stays far below the hourly limit.
+- Runs are still listed per repo, not per workflow (`/actions/workflows/{id}/runs`). That would cut volume per query but multiplies calls by the number of relevant workflows, and the recorded test fixtures serve only the repo-wide list. The collector already skips non-relevant runs after listing, so this is left as a later optimisation. `iter_workflow_runs` accepts extra query parameters (such as `workflow_id`), so the change would be small.
 
 **Not built yet**
 
