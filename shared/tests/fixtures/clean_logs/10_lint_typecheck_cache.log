@@ -1,0 +1,61 @@
+2026-03-11T08:00:01.1789766Z ##[group]Run actions/checkout@v4
+2026-03-11T08:00:02.2714742Z with:
+2026-03-11T08:00:02.5785852Z   repository: acme/lib
+2026-03-11T08:00:02.2379706Z   token: ***
+2026-03-11T08:00:02.0482053Z   ssh-strict: true
+2026-03-11T08:00:03.0517910Z ##[endgroup]
+2026-03-11T08:00:03.0698761Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-03-11T08:00:04.2322003Z HEAD is now at 48c7489aa2e8309a658e9b785074e360a5eff369 Merge pull request #20 from acme/feature-10
+2026-03-11T08:00:05.0715486Z Cache restored from key: Linux-node-4ae43fd8358484a65b03cff3b3f0ebe5478dea48398d24628f41429518e4bce0
+2026-03-11T08:00:05.1137959Z Cache key: npm-CH9McQnXZjZTbHEsUSElIBj6LdD93rqATx33hJTY-9e8adf58ef5b
+2026-03-11T08:00:06.0783312Z Run id c3034515-9729-49b0-9b43-738610d5fe14 correlation f45eaf1c-d14b-47f5-b306-1fbc5d082eea
+2026-03-18T08:00:00.8957257Z Cache saved with key: Linux-node-d1a5ac9a015fac2ef7b341673635512a1511f41fe37d111b267f039eec5d4f58 size 0MB id e134f9f8-10e1-4ec9-aa06-9dd3e42af0ad
+2026-03-18T08:00:01.6439811Z Cache saved with key: Linux-node-6ab9f1eb8f7d3388f4f9d586f66e99fd54080df2c446f0e58668b09c08a16dd0 size 1MB id 340252a6-34aa-4a20-bf1f-b2411b6bf273
+2026-03-18T08:00:02.1878540Z Cache saved with key: Linux-node-015f7e6bc5aeaf483724089e9252cc13b50951a6b69412522765cff4d780306e size 2MB id d903ff4d-f302-44c5-88d0-323c08ab1715
+2026-03-18T08:00:03.1467498Z Cache saved with key: Linux-node-2f5052c9fd15b19a18c584d01363568198613f0c34e84409ef7938709a159ec2 size 3MB id a1dbbd89-a1ac-4036-805d-7b62d337264b
+2026-03-18T08:00:04.4821186Z Cache saved with key: Linux-node-94091dd64a21ffe94214bc6d17deeb43873a5cf2f0a71b4b5caa9a5c81b6967d size 4MB id 190d78d3-21f5-4868-9991-8b8a7a243b32
+2026-03-18T08:00:05.3439219Z Cache saved with key: Linux-node-88dbf612972c594a2c2f6dde493ef1c4cd27adba8c36e6ebd00b89ff143aba61 size 5MB id 6c7be37e-5625-4671-91b3-15ec4b61b0fd
+2026-03-18T08:00:06.4381531Z Cache saved with key: Linux-node-1d92ad4b6987fa0347cc5d2fb6cf9e47c83f4f6caeb3b5ef6f629730528921c3 size 6MB id ee1addc8-41b7-4d54-99d4-a28c055ae98e
+2026-03-18T08:00:07.4741127Z Cache saved with key: Linux-node-fb848c99b9a43ec7866a23ea000c1939a168f5ff17314a0b88c7be711d7ef7d0 size 7MB id 5e36d760-c285-48c6-b73c-30c80c647801
+2026-03-18T08:00:08.5382603Z Cache saved with key: Linux-node-5a3df89da7bf23d71ec63f111d9171c3f05047380a17812f20248e63cfded4fb size 8MB id 80f4edd8-9a1d-4876-b6c8-a64ac4ecbfa2
+2026-03-18T08:00:09.7987343Z Cache saved with key: Linux-node-c3c81c2b9a9ae9e358d68fc47dbc8596f19b420011e71c657d1616f14fb77917 size 9MB id bee33d4a-9e47-4394-89a3-5964d9f3dd45
+2026-03-18T08:00:10.0519780Z Cache saved with key: Linux-node-4ae43fd8358484a65b03cff3b3f0ebe5478dea48398d24628f41429518e4bce0 size 10MB id 6fbb28f3-07ff-438e-a9b5-2fc2c9ff9090
+2026-03-18T08:00:11.8701039Z Cache saved with key: Linux-node-13876d0627a48f198e5d5eeba044eaaece7545a112d872ef1fc7af768e4da77f size 11MB id 780c8fb0-58c6-4eea-992a-2829c5e50641
+2026-03-18T08:00:12.0807270Z Cache saved with key: Linux-node-58e08f69ba8386e2db875b1a2d92734a4c9c4f62e44962fd29e59a546fadb366 size 12MB id b6e24482-3771-490c-90eb-c2c389b28a18
+2026-03-18T08:00:13.1524873Z Cache saved with key: Linux-node-6774e97b32d47e4e848019c7333d0aecfb1eb46f335917f34df1e5ad9c0116f9 size 13MB id 2b9d7364-4980-4525-91df-24d093151cf9
+2026-03-18T08:00:14.7315830Z Cache saved with key: Linux-node-3a8cfe81d50302b031cde30603c4bbfbe2af5a32fffb80a034f4a9da9d315153 size 14MB id 49d04ce5-33b8-43a5-8607-bfbf00552293
+2026-03-18T08:00:40.0905374Z /home/runner/work/lib/lib/src/index.ts
+  12:5  warning  Unexpected any  @typescript-eslint/no-explicit-any
+2026-03-13T08:00:01.0073176Z > acme@1.10.0 test
+2026-03-13T08:00:01.5835177Z > jest --ci --coverage
+
+2026-03-13T08:00:02.8234643Z PASS src/lodash/jest.test.js (2.603 s)
+2026-03-13T08:00:02.3095718Z PASS src/express/mocha.test.js (8.706 s)
+2026-03-13T08:00:02.5824809Z PASS src/react/vitest.test.js (9.366 s)
+2026-03-13T08:00:02.9697354Z PASS src/jest/axios.test.js (3.390 s)
+2026-03-13T08:00:02.3602308Z PASS src/mocha/chalk.test.js (4.610 s)
+2026-03-13T08:00:02.2781511Z PASS src/vitest/glob.test.js (2.751 s)
+2026-03-13T08:00:02.1356984Z PASS src/axios/semver.test.js (8.906 s)
+2026-03-13T08:00:02.9416290Z PASS src/chalk/debug.test.js (2.743 s)
+2026-03-13T08:00:02.5480180Z PASS src/glob/minimist.test.js (6.197 s)
+2026-03-13T08:00:02.6732202Z PASS src/semver/lodash.test.js (7.863 s)
+2026-03-13T08:00:02.1445741Z PASS src/debug/express.test.js (7.761 s)
+2026-03-13T08:00:02.0422350Z PASS src/minimist/react.test.js (6.311 s)
+2026-03-13T08:00:02.5085862Z PASS src/lodash/jest.test.js (5.538 s)
+2026-03-13T08:00:02.9142525Z PASS src/express/mocha.test.js (9.275 s)
+2026-03-13T08:00:02.6363684Z PASS src/react/vitest.test.js (4.571 s)
+2026-03-13T08:00:02.2128701Z PASS src/jest/axios.test.js (9.708 s)
+2026-03-13T08:00:02.0568481Z PASS src/mocha/chalk.test.js (6.695 s)
+2026-03-13T08:00:02.5480448Z PASS src/vitest/glob.test.js (9.259 s)
+2026-03-13T08:00:02.7554890Z PASS src/axios/semver.test.js (9.859 s)
+2026-03-13T08:00:02.5424642Z PASS src/chalk/debug.test.js (3.574 s)
+2026-03-13T08:00:02.7361809Z PASS src/glob/minimist.test.js (5.693 s)
+2026-03-13T08:00:02.3875947Z PASS src/semver/lodash.test.js (3.442 s)
+2026-03-13T08:00:02.7751375Z PASS src/debug/express.test.js (4.619 s)
+2026-03-13T08:00:02.3214074Z PASS src/minimist/react.test.js (5.408 s)
+2026-03-13T08:00:02.2593662Z PASS src/lodash/jest.test.js (3.353 s)
+2026-03-13T08:00:40.5478810Z Snapshot Summary
+2026-03-13T08:00:40.8760705Z Test Suites: 25 passed, 25 total
+2026-03-13T08:00:40.5849075Z Tests:       110 passed, 110 total
+2026-03-13T08:00:40.2699862Z Time:        18.10 s
+2026-03-13T08:00:41.3962997Z Test run id: 42396323-3074-48e6-b4ae-dd0253fcba58  seed 4188229643  snapshot hash 4ae43fd8358484a65b03cff3b3f0ebe5

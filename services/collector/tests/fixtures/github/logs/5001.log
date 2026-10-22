@@ -1,0 +1,13 @@
+2026-10-12T10:01:00.1000000Z ##[group]Run npm test
+2026-10-12T10:01:00.1100000Z npm test
+2026-10-12T10:01:00.1200000Z ##[endgroup]
+2026-10-12T10:01:02.5000000Z > widgets@2.4.0 test
+2026-10-12T10:01:02.5100000Z > jest --ci
+2026-10-12T10:01:05.2000000Z FAIL test/a.test.js
+2026-10-12T10:01:05.2100000Z   parses empty
+2026-10-12T10:01:05.2200000Z     expect(received).toEqual(expected)
+2026-10-12T10:01:05.2300000Z     Expected: {}
+2026-10-12T10:01:05.2400000Z     Received: undefined
+2026-10-12T10:01:05.3000000Z env GITHUB_TOKEN=@@LOG_SECRET@@
+2026-10-12T10:01:05.4000000Z Tests:       1 failed, 11 passed, 12 total
+2026-10-12T10:01:05.5000000Z ##[error]Process completed with exit code 1.

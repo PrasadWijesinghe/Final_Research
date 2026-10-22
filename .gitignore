@@ -1,0 +1,24 @@
+.env
+data/
+models/
+mlruns/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+node_modules/
+*.egg-info/
+.coverage
+htmlcov/
+.vscode/
+.idea/
+PROMPT_FOR_CLAUDE_CODE.md
+/dist/
+
+# DEFAULT: generated JSON Schemas are build output, not committed (make schemas)
+shared/contracts/schemas/
+
+# Claude Code agent worktrees
+.claude/worktrees/

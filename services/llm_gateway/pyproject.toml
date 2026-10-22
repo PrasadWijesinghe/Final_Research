@@ -1,0 +1,25 @@
+[project]
+name = "pipelineiq-llm-gateway"
+version = "0.1.0"
+description = "LLM gateway: provider interface, mock provider, cache, spending caps, call logging."
+requires-python = ">=3.12"
+dependencies = [
+    "pipelineiq-shared",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "redis>=5",
+    "jsonschema>=4.20",
+    "pydantic>=2.7",
+    "pyyaml>=6",
+    "sqlalchemy>=2.1.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_gateway"]
+
+[tool.uv.sources]
+pipelineiq-shared = { workspace = true }

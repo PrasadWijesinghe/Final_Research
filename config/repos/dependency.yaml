@@ -1,0 +1,4 @@
+# Owner: fill in your repos. Same format as config/repos/test.yaml.
+# Repos may overlap with other members' lists.
+member: dependency
+repos: []

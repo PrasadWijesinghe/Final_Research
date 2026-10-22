@@ -1,0 +1,12 @@
+name: Browser tests
+on:
+  schedule:
+    - cron: '0 3 * * *'
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pnpm install
+      - run: pnpm exec playwright install --with-deps
+      - run: pnpm exec vitest run --project browser

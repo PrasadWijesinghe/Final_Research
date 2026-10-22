@@ -1,0 +1,37 @@
+{
+  "repo": "acme/widgets",
+  "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "base_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "branch": "feature/x",
+  "committed_at": "2026-09-01T12:00:00Z",
+  "files": [
+    {
+      "path": "package.json",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -1 +1 @@\n-a\n+b",
+      "content": "{\"name\": \"widgets\", \"scripts\": {\"test\": \"jest\"}}"
+    },
+    {
+      "path": "src/index.ts",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 0,
+      "patch": "@@ -1 +1,3 @@\n+x"
+    },
+    {
+      "path": "test/index.test.ts",
+      "status": "added",
+      "additions": 5,
+      "deletions": 0,
+      "patch": "@@ -0,0 +1,5 @@\n+t"
+    }
+  ],
+  "workflows": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "content": "jobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: npm test\n"
+    }
+  ]
+}
