@@ -213,6 +213,21 @@ Desktop must be running whenever you run it.
    hour per token, so a backfill can take hours. You can stop it with Ctrl+C at any time. Run the
    same command again to resume.
 
+   **Recommended for big repo lists: two passes.** Most of the time goes on the logs of
+   passing jobs, so collect the failures first and the passing logs afterwards:
+
+   ```bash
+   uv run --env-file .env collector backfill --member <member> --logs failed
+   uv run --env-file .env collector fill-logs --member <member>
+   ```
+
+   The first command collects everything except the logs of passing jobs. The second fetches
+   the missing logs, newest first, and can be stopped and re-run at any time (add `--limit N`
+   to fetch only N logs). `status` shows how many logs are still pending per repo. To go
+   faster, open several terminals and run each command with a different `--repo owner/name`
+   (never the same repo twice at once). They share your token's 5,000 requests per hour. The
+   end result is the same as a single `backfill`.
+
 3. Check what has been collected:
 
    ```bash

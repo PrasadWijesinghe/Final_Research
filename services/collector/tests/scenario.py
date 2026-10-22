@@ -39,7 +39,9 @@ def make_client() -> GitHubClient:
     return GitHubClient(token=FAKE_TOKEN, config=GitHubConfig(max_retries=0), sleep=lambda _s: None)
 
 
-def make_backfiller(store: Store, data_dir: Path, client: GitHubClient | None = None) -> Backfiller:
+def make_backfiller(
+    store: Store, data_dir: Path, client: GitHubClient | None = None, logs: str = "all"
+) -> Backfiller:
     """A Backfiller for the `test` member with a fixed clock (2026-10-19 12:00 UTC)."""
     return Backfiller(
         client or make_client(),
@@ -48,6 +50,7 @@ def make_backfiller(store: Store, data_dir: Path, client: GitHubClient | None = 
         data_dir=data_dir,
         tagger=load_file_tagger(),
         rules=load_detection_rules(),
+        logs=logs,
         clock=lambda: NOW,
     )
 
