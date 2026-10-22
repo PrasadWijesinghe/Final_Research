@@ -1,0 +1,113 @@
+{
+  "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+  "node_id": "C_1",
+  "commit": {
+    "author": {
+      "name": "Dana Dev",
+      "email": "dana@example.com",
+      "date": "2026-10-15T08:55:00Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-10-15T08:55:00Z"
+    },
+    "message": "Update lockfile and rename helpers\n\nauthorised with @@COMMIT_SECRET@@",
+    "tree": {
+      "sha": "9999999999999999999999999999999999999999"
+    },
+    "comment_count": 0
+  },
+  "url": "https://api.github.com/repos/acme/widgets/commits/b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+  "author": {
+    "login": "dana-dev",
+    "id": 2001,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/2001?v=4",
+    "html_url": "https://github.com/dana-dev"
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "html_url": "https://github.com/web-flow"
+  },
+  "parents": [
+    {
+      "sha": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "url": "https://api.github.com/repos/acme/widgets/commits/a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+    }
+  ],
+  "stats": {
+    "total": 10,
+    "additions": 7,
+    "deletions": 3
+  },
+  "files": [
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "package-lock.json",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/acme/widgets/blob/x/package-lock.json",
+      "raw_url": "https://github.com/acme/widgets/raw/x/package-lock.json",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/package-lock.json?ref=x",
+      "patch": "@@ -10,2 +10,2 @@\n-      \"version\": \"29.6.0\"\n+      \"version\": \"29.7.0\"\n"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "src/big.js",
+      "status": "modified",
+      "additions": 9000,
+      "deletions": 0,
+      "changes": 9000,
+      "blob_url": "https://github.com/acme/widgets/blob/x/src/big.js",
+      "raw_url": "https://github.com/acme/widgets/raw/x/src/big.js",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/src/big.js?ref=x",
+      "patch": "@@BIG@@"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "lib/new.js",
+      "status": "renamed",
+      "additions": 0,
+      "deletions": 0,
+      "changes": 0,
+      "blob_url": "https://github.com/acme/widgets/blob/x/lib/new.js",
+      "raw_url": "https://github.com/acme/widgets/raw/x/lib/new.js",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/lib/new.js?ref=x",
+      "previous_filename": "lib/old.js"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "src/gone.js",
+      "status": "removed",
+      "additions": 0,
+      "deletions": 5,
+      "changes": 5,
+      "blob_url": "https://github.com/acme/widgets/blob/x/src/gone.js",
+      "raw_url": "https://github.com/acme/widgets/raw/x/src/gone.js",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/src/gone.js?ref=x",
+      "patch": "@@ -1,5 +0,0 @@\n-a\n-b\n-c\n-d\n-e\n"
+    },
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "docs/guide.md",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0,
+      "changes": 1,
+      "blob_url": "https://github.com/acme/widgets/blob/x/docs/guide.md",
+      "raw_url": "https://github.com/acme/widgets/raw/x/docs/guide.md",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/docs/guide.md?ref=x",
+      "patch": "@@ -1 +1,2 @@\n # Guide\n+More.\n"
+    }
+  ]
+}

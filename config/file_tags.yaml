@@ -1,0 +1,59 @@
+# File-tagging patterns (docs/DATA.md §5). Glob syntax, matched against repo-relative paths.
+# Each tag is checked independently; a file may carry several tags.
+# "other" applies only when nothing else matched. Owners: review your rows.
+limits:
+  max_patch_bytes: 1048576        # patches above 1 MB are dropped and the context is marked truncated
+  lockfiles_inline: false         # lockfiles are always stored by reference
+
+tags:
+  test:              # Member 3
+    - "**/*.test.*"
+    - "**/*.spec.*"
+    - "**/__tests__/**"
+    - "test/**"
+    - "tests/**"
+    - "e2e/**"
+  test_config:       # Member 3
+    - "**/jest.config.*"
+    - "**/vitest.config.*"
+    - "**/.mocharc*"
+    - "**/playwright.config.*"
+    # vite.config.* is also tagged test_config when it contains a `test:` block (checked in code)
+  source:
+    include: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.mjs", "**/*.cjs"]
+    exclude_tags: [test]
+  package_manifest:  # Member 1
+    - "**/package.json"
+  lockfile:          # Member 1
+    - "**/package-lock.json"
+    - "**/yarn.lock"
+    - "**/pnpm-lock.yaml"
+  build_config:      # Member 2
+    - "**/tsconfig*.json"
+    - "**/babel.config.*"
+    - "**/.babelrc*"
+  lint_config:       # Member 2
+    - "**/eslint.config.*"
+    - "**/.eslintrc*"
+    - "**/.prettierrc*"
+  bundler_config:    # Member 2
+    - "**/webpack.config.*"
+    - "**/vite.config.*"
+    - "**/rollup.config.*"
+    - "**/esbuild.*"
+  workflow:          # Member 4
+    - ".github/workflows/*.yml"
+    - ".github/workflows/*.yaml"
+  dockerfile:        # Member 4
+    - "**/Dockerfile*"
+    - "**/docker-compose*.yml"
+    - "**/.dockerignore"
+  deploy_config:     # Member 4
+    - "vercel.json"
+    - "netlify.toml"
+    - "fly.toml"
+    - "k8s/**"
+    - "helm/**"
+  docs:
+    - "**/*.md"
+    - "docs/**"

@@ -1,0 +1,83 @@
+{
+  "id": 9001,
+  "name": "Test",
+  "node_id": "WFR_9001",
+  "head_branch": "main",
+  "head_sha": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "path": ".github/workflows/test.yml",
+  "display_title": "fix: parse empty config",
+  "run_number": 101,
+  "event": "push",
+  "status": "completed",
+  "conclusion": "failure",
+  "workflow_id": 101,
+  "check_suite_id": 90010,
+  "url": "https://api.github.com/repos/acme/widgets/actions/runs/9001",
+  "html_url": "https://github.com/acme/widgets/actions/runs/9001",
+  "pull_requests": [],
+  "created_at": "2026-10-12T10:00:00Z",
+  "updated_at": "2026-10-12T10:20:00Z",
+  "run_attempt": 1,
+  "run_started_at": "2026-10-12T10:00:04Z",
+  "actor": {
+    "login": "lee-ci",
+    "id": 2002,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+    "html_url": "https://github.com/lee-ci"
+  },
+  "triggering_actor": {
+    "login": "lee-ci",
+    "id": 2002,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/2002?v=4",
+    "html_url": "https://github.com/lee-ci"
+  },
+  "jobs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9001/jobs",
+  "logs_url": "https://api.github.com/repos/acme/widgets/actions/runs/9001/logs",
+  "head_commit": {
+    "id": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "message": "fix: parse empty config",
+    "timestamp": "2026-10-12T10:00:00Z",
+    "author": {
+      "name": "Dana Dev",
+      "email": "dana@example.com"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com"
+    }
+  },
+  "repository": {
+    "id": 424242,
+    "node_id": "R_kgDOAAZiYg",
+    "name": "widgets",
+    "full_name": "acme/widgets",
+    "private": false,
+    "owner": {
+      "login": "octo-owner",
+      "id": 1001,
+      "type": "Organization"
+    },
+    "html_url": "https://github.com/acme/widgets",
+    "fork": false
+  },
+  "head_repository": {
+    "id": 424242,
+    "node_id": "R_kgDOAAZiYg",
+    "name": "widgets",
+    "full_name": "acme/widgets",
+    "private": false,
+    "owner": {
+      "login": "octo-owner",
+      "id": 1001,
+      "type": "Organization"
+    },
+    "html_url": "https://github.com/acme/widgets",
+    "fork": false
+  }
+}

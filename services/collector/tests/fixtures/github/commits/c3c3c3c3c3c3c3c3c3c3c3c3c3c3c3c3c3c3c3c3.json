@@ -1,0 +1,57 @@
+{
+  "sha": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+  "node_id": "C_1",
+  "commit": {
+    "author": {
+      "name": "Dana Dev",
+      "email": "dana@example.com",
+      "date": "2026-08-01T07:25:00Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-08-01T07:25:00Z"
+    },
+    "message": "docs: readme",
+    "tree": {
+      "sha": "9999999999999999999999999999999999999999"
+    },
+    "comment_count": 0
+  },
+  "url": "https://api.github.com/repos/acme/widgets/commits/c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+  "author": null,
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE=",
+    "type": "User",
+    "site_admin": false,
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "html_url": "https://github.com/web-flow"
+  },
+  "parents": [
+    {
+      "sha": "0000000000000000000000000000000000000000",
+      "url": "https://api.github.com/repos/acme/widgets/commits/0000000000000000000000000000000000000000"
+    }
+  ],
+  "stats": {
+    "total": 10,
+    "additions": 7,
+    "deletions": 3
+  },
+  "files": [
+    {
+      "sha": "ffffffffffffffffffffffffffffffffffffffff",
+      "filename": "README.md",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0,
+      "changes": 1,
+      "blob_url": "https://github.com/acme/widgets/blob/x/README.md",
+      "raw_url": "https://github.com/acme/widgets/raw/x/README.md",
+      "contents_url": "https://api.github.com/repos/acme/widgets/contents/README.md?ref=x",
+      "patch": "@@ -1 +1,2 @@\n # widgets\n+Now with docs.\n"
+    }
+  ]
+}

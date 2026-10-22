@@ -1,0 +1,16 @@
+name: CodeQL
+on:
+  schedule:
+    - cron: '30 1 * * 0'
+jobs:
+  analyze:
+    uses: github/codeql-action/.github/workflows/codeql.yml@v3
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+      - name: Describe jest-like words without running anything
+        run: echo "see the jest docs, mocha docs and vitest docs"

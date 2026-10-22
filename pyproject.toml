@@ -1,0 +1,123 @@
+[project]
+name = "pipelineiq"
+version = "0.1.0"
+description = "PipelineIQ workspace root (tooling only; code lives in the member packages)."
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+# The root is a virtual project: it is not built or installed, it only holds the shared config.
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+# A member is any folder matching these globs that has a pyproject.toml. Folders without one
+# (the empty scaffold) are skipped, so a later task only has to add services/<name>/pyproject.toml.
+members = ["shared", "services/*", "experts/*"]
+# uv errors on a matching folder without a pyproject.toml, so folders that are still empty are
+# excluded. DEFAULT: when a task adds <folder>/pyproject.toml, delete that folder from this list.
+# services/dashboard is a Node project and stays excluded permanently.
+exclude = [
+    "services/dashboard",
+    "services/api",
+    "services/features",
+    "services/llm_gateway",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pytest>=8",
+    "pre-commit>=3.8",
+    "psycopg[binary]>=3.2",
+    "redis>=5",
+    "respx>=0.23.1",
+    "types-pyyaml>=6.0.12.20260906",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["services/dashboard"]
+
+[tool.ruff.lint]
+# DEFAULT: E,F,I,UP,B as the minimum rule set (errors, pyflakes, isort, pyupgrade, bugbear).
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# DEFAULT: shared/contracts/ is frozen (must not be edited), so its style findings are ignored
+# here rather than fixed: E501 (one 101-char line), UP042 (`class X(str, Enum)` instead of
+# StrEnum), UP017 (`timezone.utc` instead of `datetime.UTC`). The contract tests use UP017 too.
+"shared/contracts/*.py" = ["E501", "UP042", "UP017"]
+"shared/tests/test_contracts.py" = ["UP017"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["shared"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+warn_unused_configs = true
+warn_redundant_casts = true
+# DEFAULT: mypy errors on folders with no .py files, so only `shared` is listed for now;
+# the task that adds services/<name> or experts/<name> appends its src/ and tests/ folders here.
+files = ["shared", "services/collector/src", "services/collector/tests", "experts/_template/src", "experts/_template/tests", "experts/dependency/src", "experts/dependency/tests", "experts/build/src", "experts/build/tests", "experts/testing/src", "experts/testing/tests", "experts/infra/src", "experts/infra/tests", "scripts"]
+explicit_package_bases = true
+# DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
+# `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests", "$MYPY_CONFIG_FILE_DIR/experts/_template/src", "$MYPY_CONFIG_FILE_DIR/experts/dependency/src", "$MYPY_CONFIG_FILE_DIR/experts/build/src", "$MYPY_CONFIG_FILE_DIR/experts/testing/src", "$MYPY_CONFIG_FILE_DIR/experts/infra/src"]
+
+# DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
+# spelled out for shared.* (this is what `--strict` enables).
+[[tool.mypy.overrides]]
+module = ["shared", "shared.*"]
+warn_unused_ignores = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+extra_checks = true
+
+# DEFAULT: tests are not held to strict annotations (no `-> None` on every test function).
+# test_contracts.py also passes a deliberately invalid value (verifying_run_passed=False) to
+# prove validation rejects it (intended arg-type error); line 188 calls model_json_schema on a
+# class from a list (attr-defined, same cause as export_schemas.py below).
+[[tool.mypy.overrides]]
+module = ["shared.tests.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_calls = false
+disable_error_code = ["arg-type", "attr-defined"]
+
+# DEFAULT: the frozen contracts (not editable) fail strict mypy in exactly these places:
+#   diagnosis.py:146  union-attr  Item "None" of "DependencyDetails | ... | None" has no attribute "expert"
+#   diagnosis.py:149  union-attr  Item "None" of "Remediation | None" has no attribute "cites_case_ids"
+#   export_schemas.py:18  attr-defined  "ModelMetaclass" has no attribute "model_json_schema"
+# Suppressed per module and per error code only. Propose fixes to the contract owner.
+[[tool.mypy.overrides]]
+module = ["shared.contracts.diagnosis"]
+disable_error_code = ["union-attr"]
+
+[[tool.mypy.overrides]]
+module = ["shared.contracts.export_schemas"]
+disable_error_code = ["attr-defined"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.pytest.ini_options]
+testpaths = ["shared/tests", "services/*/tests", "experts/*/tests", "scripts/tests"]
+# DEFAULT: scripts/ is not a package; its folder is put on the path so tests can `import rerun_check`.
+pythonpath = ["scripts"]
+addopts = "-ra"
+markers = [
+    "integration: needs a live Postgres (DATABASE_URL); skipped automatically when unreachable",
+]

@@ -1,0 +1,33 @@
+# CODEOWNERS for PipelineIQ.
+#
+# GitHub applies the LAST matching rule, so the default `*` line comes first
+# and the more specific rules below override it.
+#
+# TODO: replace every `@TODO-...` placeholder with the real GitHub username
+# (or team, e.g. @your-org/dependency-team) before enabling
+# "Require review from Code Owners" in branch protection on `main`.
+# Each placeholder below is marked with the member it stands for.
+
+# Default: shared code needs one approval from any member.
+* @TODO-member1-dependency @TODO-member2-build @TODO-member3-test @TODO-member4-infra
+
+# Member 1 (dependency): expert folder and repo config.
+/experts/dependency/ @TODO-member1-dependency
+/config/repos/dependency.yaml @TODO-member1-dependency
+
+# Member 2 (build): expert folder and repo config.
+/experts/build/ @TODO-member2-build
+/config/repos/build.yaml @TODO-member2-build
+
+# Member 3 (test): expert folder, repo config and expert doc.
+/experts/testing/ @TODO-member3-test
+/config/repos/test.yaml @TODO-member3-test
+/docs/experts/test.md @TODO-member3-test
+
+# Member 4 (infra): expert folder and repo config.
+/experts/infra/ @TODO-member4-infra
+/config/repos/infra.yaml @TODO-member4-infra
+
+# Contracts: all four members own this folder. Changes need a version bump
+# and approval from the owners listed here.
+/shared/contracts/ @TODO-member1-dependency @TODO-member2-build @TODO-member3-test @TODO-member4-infra
