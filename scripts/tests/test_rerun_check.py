@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import csv
 import shutil
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -34,12 +34,62 @@ def _run(created: str, conclusion: str = "success", attempt: int = 1) -> dict[st
     }
 
 
+def _spread_runs() -> list[dict[str, Any]]:
+    """50 runs spread over the 90 days, every second one failed, run 0 was re-run."""
+    base = datetime(2026, 7, 22, 10, tzinfo=UTC)
+    runs = []
+    for i in range(50):
+        when = base + timedelta(days=int(i * 1.7))
+        runs.append(
+            _run(
+                when.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "failure" if i % 2 == 1 else "success",
+                2 if i == 0 else 1,
+            )
+        )
+    return runs
+
+
+def _parse(value: str) -> datetime:
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
 class FakeGitHub:
-    """Per-repo canned answers, dispatched on path and query. Records every request."""
+    """Per-repo canned answers: a list of runs, filtered by `created` range and `status`."""
 
     def __init__(self) -> None:
         self.repos: dict[str, dict[str, Any]] = {}
         self.requests: list[httpx.Request] = []
+
+    def _runs_answer(self, spec: dict[str, Any], q: Any) -> httpx.Response:
+        runs: list[dict[str, Any]] = sorted(
+            spec["runs"], key=lambda r: r["created_at"], reverse=True
+        )
+        if "created" in q:
+            lo, hi = (_parse(x) for x in q["created"].split(".."))
+            runs = [r for r in runs if lo <= _parse(r["created_at"]) <= hi]
+            if q.get("status") == "failure":
+                runs = [r for r in runs if r["conclusion"] == "failure"]
+                if spec.get("failure_overcount"):
+                    return httpx.Response(
+                        200, json={"total_count": len(runs) + 5, "workflow_runs": runs[:1]}
+                    )
+            elif spec.get("runs_undercount"):
+                return httpx.Response(200, json={"total_count": 0, "workflow_runs": []})
+            total = min(len(runs), spec.get("count_cap", 2500))
+            if spec.get("capped_windows") and runs:
+                total = 2500
+            return httpx.Response(
+                200, json={"total_count": total, "workflow_runs": runs[: int(q["per_page"])]}
+            )
+        total = spec.get("total_all", len(runs))
+        if "page" in q:  # per_page=1: the page number is the run's position
+            page = int(q["page"])
+            picked = runs[page - 1 : page] if page <= len(runs) else [spec["oldest"]]
+            return httpx.Response(200, json={"total_count": total, "workflow_runs": picked})
+        return httpx.Response(
+            200, json={"total_count": total, "workflow_runs": runs[: int(q["per_page"])]}
+        )
 
     def handler(self, request: httpx.Request) -> httpx.Response:
         self.requests.append(request)
@@ -63,19 +113,7 @@ class FakeGitHub:
         if tail == "actions/runs":
             if spec.get("runs_error"):
                 return httpx.Response(403, json={"message": "Actions are disabled"})
-            if "created" in q and q["per_page"] == "100":
-                runs = spec["sample"]
-                return httpx.Response(
-                    200, json={"total_count": spec["total_90d"], "workflow_runs": runs}
-                )
-            if q.get("status") == "failure":
-                return httpx.Response(
-                    200, json={"total_count": spec["failed_90d"], "workflow_runs": []}
-                )
-            page = int(q["page"])
-            total = spec["total_all"]
-            runs = [spec["oldest"]] if page == min(total, 1000) else []
-            return httpx.Response(200, json={"total_count": total, "workflow_runs": runs})
+            return self._runs_answer(spec, q)
         return httpx.Response(404)
 
 
@@ -87,16 +125,7 @@ def _repo_spec(**over: Any) -> dict[str, Any]:
             "archived": False,
             "license": {"spdx_id": "MIT"},
         },
-        "sample": [
-            _run("2026-10-18T10:00:00Z", "failure", 2),
-            _run("2026-10-17T10:00:00Z", "failure"),
-            _run("2026-10-16T10:00:00Z"),
-            _run("2026-10-15T10:00:00Z"),
-        ],
-        "total_90d": 50,
-        "failed_90d": 10,
-        "total_all": 50,
-        "oldest": _run("2026-07-25T08:00:00Z"),
+        "runs": _spread_runs(),
         "workflows": [".github/workflows/test.yml", ".github/workflows/release.yml"],
     }
     spec.update(over)
@@ -125,7 +154,7 @@ def fake() -> Any:
 
 
 def _client() -> GitHubClient:
-    # Obviously fake token; sleep is a no-op so retries would run instantly.
+    # Obviously fake token; sleep is a no-op so retries run instantly.
     return GitHubClient(token="fake-token-not-real", config=GitHubConfig(), sleep=lambda s: None)
 
 
@@ -135,45 +164,82 @@ def _check(name: str = "acme/widgets", licence: str = "MIT", **kw: Any) -> Any:
         return rerun_check.check_repo(client, entry, "test", TODAY, load_detection_rules())
 
 
-def test_happy_path_numbers_and_five_calls(fake: FakeGitHub) -> None:
+def test_count_windows_cover_90_days_without_overlap() -> None:
+    windows = rerun_check.count_windows(TODAY)
+    assert len(windows) == 13
+    assert windows[0][0] == datetime(2026, 7, 21, tzinfo=UTC)
+    assert windows[-1][1] == datetime(2026, 10, 19, 23, 59, 59, tzinfo=UTC)
+    for (_, end), (start, _) in zip(windows, windows[1:], strict=False):
+        assert start - end == timedelta(seconds=1)
+
+
+def test_happy_path_numbers_and_budget(fake: FakeGitHub) -> None:
     fake.repos["acme/widgets"] = _repo_spec()
     r = _check()
     assert r.error is None
-    assert (r.runs_90d, r.failed_90d) == (50, 10)
-    assert r.failure_rate == pytest.approx(0.2)
-    assert (r.sample_size, r.sample_failure_rate, r.sample_rerun_share) == (4, 0.5, 0.25)
-    assert r.oldest_created is not None and r.oldest_created.date() == date(2026, 7, 25)
-    assert r.retention_days(TODAY) == 86 and not r.oldest_is_capped
+    assert (r.runs_90d, r.failed_90d) == (50, 25)
+    assert not r.runs_capped and not r.failed_capped
+    assert r.failure_rate == pytest.approx(25 / 50)
+    # the sample is the newest 100 runs (here: all 50)
+    assert r.sample_size == 50 and r.sample_rerun == 1
+    assert r.oldest_created is not None and r.oldest_created.date() == date(2026, 7, 22)
+    assert r.retention_days(TODAY) == 89 and not r.oldest_is_capped
     assert r.workflows_total == 2
     assert r.relevant_workflows == [".github/workflows/test.yml"]
     assert r.licence_status == "match"
-    assert r.api_calls == 5
-    assert r.raw_calls == 2
     rest = [x for x in fake.requests if x.url.host == "api.github.com"]
-    assert len(rest) == 5
-    assert rest[1].url.params["created"] == ">=2026-07-21"
-    assert rest[2].url.params["status"] == "failure" and rest[2].url.params["per_page"] == "1"
-    assert (rest[3].url.params["per_page"], rest[3].url.params["page"]) == ("1", "50")
+    # repo + sample + 13 run windows + 13 failure windows + oldest + workflows
+    assert r.api_calls == len(rest) == 30
+    assert r.raw_calls == 2
+    # never one big filtered query: every created filter is a closed 7-day range
+    for req in rest:
+        created = req.url.params.get("created")
+        if created:
+            lo, hi = (_parse(x) for x in created.split(".."))
+            assert hi - lo < timedelta(days=7)
 
 
-def test_wrong_guess_for_oldest_costs_one_more_call(fake: FakeGitHub) -> None:
-    # Runs older than the 90-day window still exist: 90d total 50, unfiltered total 60.
-    fake.repos["acme/widgets"] = _repo_spec(total_all=60)
-    r = _check()
-    assert r.api_calls == 6
-    assert r.oldest_created is not None
+def test_oldest_uses_the_unfiltered_total_so_no_extra_call(fake: FakeGitHub) -> None:
+    fake.repos["acme/widgets"] = _repo_spec()
+    assert _check().api_calls == 30
 
 
-def test_result_cap_is_reported_honestly(fake: FakeGitHub) -> None:
+def test_capped_counts_are_shown_as_at_least_and_give_no_rate(fake: FakeGitHub) -> None:
     fake.repos["acme/widgets"] = _repo_spec(
-        total_90d=2500, total_all=2500, oldest=_run("2026-09-30T00:00:00Z")
+        capped_windows=True, total_all=2500, oldest=_run("2026-09-30T00:00:00Z")
     )
     r = _check()
-    assert r.oldest_is_capped
+    assert r.runs_capped and r.failed_capped
+    assert r.failure_rate is None
     cells = dict(zip(rerun_check.COLUMN_NAMES, rerun_check.report_cells(r, TODAY), strict=True))
-    assert cells["Oldest run"] == "older than 2026-09-30"
-    assert cells["Retention (days)"] == ">19"
-    assert r.api_calls == 5  # the guess page (1000) was already the capped page
+    assert cells["Runs 90d"].startswith("≥")
+    assert cells["Failed 90d"].startswith("≥")
+    assert cells["Failure rate 90d"] == ""
+    assert "at least" in cells["Notes"]
+    assert r.oldest_is_capped and cells["Oldest run"].startswith("older than")
+
+
+def test_failed_is_never_more_than_runs(fake: FakeGitHub) -> None:
+    # GitHub says 0 runs in every window but still counts failures (the real bug).
+    fake.repos["acme/widgets"] = _repo_spec(runs_undercount=True, failure_overcount=True)
+    r = _check()
+    assert r.runs_90d is not None and r.failed_90d is not None
+    assert r.failed_90d <= r.runs_90d
+    assert r.runs_capped  # shown as "at least"
+    assert r.failure_rate is None
+    cells = dict(zip(rerun_check.COLUMN_NAMES, rerun_check.report_cells(r, TODAY), strict=True))
+    assert cells["Runs 90d"].startswith("≥") and cells["Failure rate 90d"] == ""
+    assert "more failed than total" in cells["Notes"]
+
+
+def test_quiet_windows_are_verified_not_trusted(fake: FakeGitHub) -> None:
+    # Only two runs, in different weeks: the other 11 empty windows are re-asked and split.
+    runs = [_run("2026-07-22T10:00:00Z", "failure"), _run("2026-10-18T10:00:00Z")]
+    fake.repos["acme/widgets"] = _repo_spec(runs=runs)
+    r = _check()
+    assert (r.runs_90d, r.failed_90d) == (2, 1)
+    # empty windows cost 5 calls each (1 + 2 retries + 2 halves) instead of 1
+    assert r.api_calls > 30
 
 
 def test_licence_mismatch_and_unknown(fake: FakeGitHub) -> None:
@@ -206,11 +272,9 @@ def test_actions_disabled_keeps_licence_and_reports_error(fake: FakeGitHub) -> N
 
 
 def test_repo_without_runs(fake: FakeGitHub) -> None:
-    fake.repos["acme/widgets"] = _repo_spec(
-        sample=[], total_90d=0, failed_90d=0, total_all=0, oldest=None
-    )
+    fake.repos["acme/widgets"] = _repo_spec(runs=[])
     r = _check()
-    assert r.error is None and r.runs_90d == 0
+    assert r.error is None and r.runs_90d == 0 and r.failed_90d == 0
     assert r.failure_rate is None and r.oldest_created is None
 
 
@@ -264,7 +328,7 @@ def test_main_writes_md_and_csv_and_continues_after_404(
     assert rows[0] == rerun_check.COLUMN_NAMES
     assert len(rows) == 3
     by_repo = {r[0]: r for r in rows[1:]}
-    assert by_repo["acme/widgets"][-3] == "5"  # API calls column
+    assert by_repo["acme/widgets"][-3] == "30"  # API calls column
     assert by_repo["gone/repo"][-1].startswith("ERROR:")
 
 
