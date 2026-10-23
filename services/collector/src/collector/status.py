@@ -185,6 +185,14 @@ def render_status(member: str, repos: Sequence[RepoStatus], rate: RateLimit, now
             f"  logs pending: {r.counts.logs_pending}"
             + (" (run `collector fill-logs` to fetch them)" if r.counts.logs_pending else "")
         )
+        lines.append(
+            f"  runs skipped (GitHub server errors): {r.counts.runs_skipped}"
+            + (
+                " (retried by the next `collector backfill` or `daily`)"
+                if r.counts.runs_skipped
+                else ""
+            )
+        )
         lines.append(f"  last daily sync: {_ts(r.state.last_daily_sync_at if r.state else None)}")
         if r.first_day and r.last_day:
             lines.append(f"  runs created from {r.first_day} to {r.last_day}")

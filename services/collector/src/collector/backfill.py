@@ -13,7 +13,7 @@ import json
 import logging
 import os
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -29,6 +29,7 @@ from collector.store import (
     LogRecord,
     RepoRecord,
     RunRecord,
+    SkippedRunRecord,
     SnapshotRecord,
     StepRecord,
     Store,
@@ -113,6 +114,9 @@ class RepoSummary:
     logs_expired: int = 0
     logs_missing: int = 0
     logs_deferred: int = 0  # passing-job logs left for `fill-logs` (--logs failed)
+    logs_failed: int = 0  # logs GitHub answered 5xx for; left pending for a later `fill-logs`
+    runs_skipped_failing: int = 0  # runs skipped this time after persistent 5xx (kept for retry)
+    skipped_cleared: int = 0  # previously skipped runs that were collected now
     windows_done: int = 0
     windows_total: int = 0
 
@@ -150,6 +154,9 @@ class Backfiller:
         self._clock = clock
         self._hash = hash_fn
         self._sanitise = sanitise_fn
+        # Per repo call: ids stored as skipped, and ids that failed during this call (not re-tried).
+        self._skipped: set[int] = set()
+        self._failed_runs: set[int] = set()
 
     # ---- per repo ---------------------------------------------------------------------------
 
@@ -160,6 +167,7 @@ class Backfiller:
         repo_id, default_branch, state = self._register_repo(entry)
         started_at, done = self._resume_point(state.backfill_cursor if state else None)
         relevant = self._sync_workflows(entry, repo_id, default_branch)
+        self._retry_skipped(entry, repo_id, relevant, summary)
 
         windows = date_windows(started_at, self.days, self.window_days)
         summary.windows_total = len(windows)
@@ -288,15 +296,109 @@ class Backfiller:
     ) -> None:
         summary.runs_seen += 1
         path = workflow_path_of(run)
+        run_id = int(run["id"])
         if not relevant.get(path, False):
             summary.runs_skipped_workflow += 1
+            self._forget_skipped(repo_id, run_id, summary)
             return
+        if run_id in self._failed_runs:
+            return  # already failed in this call (the retry pass); do not spend retries again
+        before = replace(summary)
+        try:
+            self._collect_run(entry, repo_id, run, path, summary)
+        except GitHubError as exc:
+            if not exc.is_server_error:
+                raise  # network, auth and rate-limit failures stop the repo; a re-run resumes
+            for f in fields(summary):  # the run was rolled back: its counters must not count
+                setattr(summary, f.name, getattr(before, f.name))
+            self._skip_run(entry, repo_id, run, exc, summary)
+
+    def _forget_skipped(self, repo_id: int, run_id: int, summary: RepoSummary) -> None:
+        """Remove a run from the skipped set (inside the caller's transaction or its own)."""
+        if run_id in self._skipped:
+            with self.store.transaction():
+                self.store.clear_skipped_run(repo_id, run_id)
+            self._skipped.discard(run_id)
+            summary.skipped_cleared += 1
+
+    def _skip_run(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        run: dict[str, Any],
+        exc: GitHubError,
+        summary: RepoSummary,
+    ) -> None:
+        """Record a run GitHub keeps failing on, so the repo can finish; it is retried later."""
+        run_id = int(run["id"])
+        attempt = int(run.get("run_attempt") or 1)
+        logger.warning(
+            "run skipped after persistent GitHub server errors; will be retried on later runs",
+            extra={
+                "repo": entry.full_name,
+                "run_id": run_id,
+                "attempt": attempt,
+                "status": exc.status_code,
+                "error": str(exc),
+            },
+        )
+        with self.store.transaction():
+            self.store.add_skipped_run(
+                SkippedRunRecord(repo_id, run_id, attempt, str(exc)[:200], self._clock())
+            )
+        self._skipped.add(run_id)
+        self._failed_runs.add(run_id)
+        summary.runs_skipped_failing += 1
+
+    def _retry_skipped(
+        self, entry: RepoEntry, repo_id: int, relevant: dict[str, bool], summary: RepoSummary
+    ) -> None:
+        """Try every previously skipped run of the repo again, before the normal walk."""
+        fn = entry.full_name
+        self._failed_runs = set()
+        with self.store.transaction():
+            records = self.store.skipped_runs(repo_id)
+        self._skipped = {r.run_id for r in records}
+        for record in records:
+            try:
+                run = self.client.get_json(f"/repos/{fn}/actions/runs/{record.run_id}")
+            except GitHubNotFoundError:
+                logger.warning(
+                    "skipped run no longer exists; dropped from the skipped set",
+                    extra={"repo": fn, "run_id": record.run_id},
+                )
+                self._forget_skipped(repo_id, record.run_id, summary)
+                continue
+            except GitHubError as exc:
+                if not exc.is_server_error:
+                    raise
+                self._skip_run(
+                    entry,
+                    repo_id,
+                    {"id": record.run_id, "run_attempt": record.attempt},
+                    exc,
+                    summary,
+                )
+                continue
+            logger.info("retrying skipped run", extra={"repo": fn, "run_id": record.run_id})
+            self._process_run(entry, repo_id, run, relevant, summary)
+
+    def _collect_run(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        run: dict[str, Any],
+        path: str,
+        summary: RepoSummary,
+    ) -> None:
+        """Collect one run in one transaction; any exception rolls the whole run back."""
         fn = entry.full_name
         run_id = int(run["id"])
         latest = int(run.get("run_attempt") or 1)
         with self.store.transaction():
             if self.store.attempt_done(repo_id, run_id, latest):
                 summary.runs_already_done += 1
+                self._forget_skipped(repo_id, run_id, summary)
                 return
             attempts: dict[int, dict[str, Any]] = {latest: run}
             for k in range(1, latest):
@@ -309,12 +411,8 @@ class Backfiller:
                         "attempt metadata not found; attempt skipped",
                         extra={"repo": fn, "run_id": run_id, "attempt": k},
                     )
-            jobs = list(
-                self.client.paginate(
-                    f"/repos/{fn}/actions/runs/{run_id}/jobs",
-                    {"filter": "all"},
-                    items_key="jobs",
-                )
+            jobs = self.client.list_shrinking(
+                f"/repos/{fn}/actions/runs/{run_id}/jobs", {"filter": "all"}, items_key="jobs"
             )
             by_attempt: dict[int, list[dict[str, Any]]] = {}
             for job in jobs:
@@ -323,6 +421,7 @@ class Backfiller:
                 self._process_attempt(
                     entry, repo_id, k, attempts[k], by_attempt.get(k, []), path, summary
                 )
+            self._forget_skipped(repo_id, run_id, summary)
             summary.runs_processed += 1
 
     def _process_attempt(
@@ -440,10 +539,18 @@ class Backfiller:
                 (r for r in self.store.list_repos(self.member) if r.full_name == entry.full_name),
                 None,
             )
-            pending = self.store.pending_logs(repo.id, limit) if repo else []
+            # DEFAULT: the whole pending list is read even with a limit: logs that fail with a
+            # 5xx stay pending and must not use up the limit (or they would block the rest).
+            pending = self.store.pending_logs(repo.id, None) if repo else []
+        fetched = 0
         for job in pending:
+            if limit is not None and fetched >= limit:
+                break
+            failed_before = summary.logs_failed
             with self.store.transaction():
                 self._store_log(entry, job.run_id, job.attempt, job.job_id, summary)
+            if summary.logs_failed == failed_before:
+                fetched += 1
         return summary
 
     def _store_log(
@@ -455,11 +562,20 @@ class Backfiller:
             body = self.client.get_bytes(f"/repos/{fn}/actions/jobs/{job_id}/logs")
         except GitHubError as exc:
             code = exc.status_code
+            if exc.is_server_error:
+                # GitHub keeps failing on this log: leave it pending (no row) so `fill-logs` and
+                # later runs try again, and carry on. Network and rate-limit errors still raise.
+                logger.warning(
+                    "log download failed with a server error; left pending",
+                    extra={"repo": fn, "run_id": run_id, "job_id": job_id, "status": code},
+                )
+                summary.logs_failed += 1
+                return
             gave_up = str(exc).startswith("gave up after retries")  # rate limit never cleared
             if code != 410 and (
                 gave_up or code == 429 or not (code is not None and 400 <= code < 500)
             ):
-                raise  # 5xx, network and rate-limit failures stop the repo; a re-run resumes
+                raise  # network and rate-limit failures stop the repo; a re-run resumes
             body = None
             status = "expired" if code == 410 else "missing"
             if code != 410:

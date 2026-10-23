@@ -17,6 +17,7 @@ from collector.store import (
     LogRecord,
     RepoRecord,
     RunRecord,
+    SkippedRunRecord,
     SnapshotRecord,
     SqlStore,
     StepRecord,
@@ -115,11 +116,14 @@ def test_every_statement_compiles_and_conflict_targets_are_primary_keys(
         store.upsert_snapshot(SnapshotRecord(1, "s", "p", "c", None, NOW))
         store.has_log(4)
         store.upsert_log(LogRecord(4, "x", 1, "0" * 64, 0, "ok", NOW))
+        store.add_skipped_run(SkippedRunRecord(1, 2, 3, "HTTP 502", NOW))
+        store.skipped_runs(1)
+        store.clear_skipped_run(1, 2)
 
     assert len(engine.conn.sql) >= 18
     assert {model for model, _, _ in seen} == {
         m.Repo, m.SyncState, m.Workflow, m.WorkflowRun, m.Job, m.Step, m.Commit,
-        m.CommitFile, m.FileSnapshot, m.Log,
+        m.CommitFile, m.FileSnapshot, m.Log, m.SkippedRun,
     }  # fmt: skip
     for model, keys, _ in seen:
         primary = [c.name for c in model.__table__.primary_key.columns]  # type: ignore[attr-defined]
@@ -135,7 +139,7 @@ def test_record_fields_match_table_columns() -> None:
         (RepoRecord, m.Repo), (SyncStateRecord, m.SyncState), (WorkflowRecord, m.Workflow),
         (RunRecord, m.WorkflowRun), (JobRecord, m.Job), (StepRecord, m.Step),
         (CommitRecord, m.Commit), (CommitFileRecord, m.CommitFile),
-        (SnapshotRecord, m.FileSnapshot), (LogRecord, m.Log),
+        (SnapshotRecord, m.FileSnapshot), (LogRecord, m.Log), (SkippedRunRecord, m.SkippedRun),
     ]  # fmt: skip
     for record, model in pairs:
         columns = {c.name for c in model.__table__.columns}  # type: ignore[attr-defined]

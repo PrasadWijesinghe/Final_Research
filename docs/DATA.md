@@ -84,6 +84,7 @@ One PostgreSQL database per member (Docker, `pgvector/pgvector:pg17`). Migration
 | `commits` | `sha`, `repo_id`, `parent_shas`, `author_hash`, `committed_at`, `message` (sanitised) |
 | `commit_files` | `sha`, `repo_id`, `path`, `previous_path`, `status`, `additions`, `deletions`, `patch` (nullable), `patch_truncated` |
 | `file_snapshots` | `repo_id`, `sha`, `path`, `content` or `storage_path`, `fetched_at` |
+| `skipped_runs` | `repo_id`, `run_id`, `attempt`, `reason`, `skipped_at`: runs skipped after persistent GitHub 5xx errors, retried by later backfill and daily runs (D39) |
 | `logs` | `job_id`, `storage_path`, `bytes`, `sha256`, `redactions`, `status` (`ok`, `expired`, `missing`), `fetched_at` |
 
 Job names are often templated (`test (20)`), so map them to the workflow's YAML job key
