@@ -171,11 +171,24 @@ What lanes **share**: the token's 5,000 requests per hour. Each process counts o
 
 #### Errors and resuming
 
-1. A 5xx error or a network error stops the current repo. The transaction for the run that was being saved is rolled back, so no job is stored without its run.
+1. A network error, an auth error (401, 403) or a rate limit that never clears stops the current repo. The transaction for the run that was being saved is rolled back, so no job is stored without its run. A 5xx error does **not** stop the repo any more: see "Skipped runs" below.
 2. The cursor stays at the last finished window. Other repos in the same command still run. The command exits with code 1 at the end.
 3. Run the same command again. Finished windows are skipped. Runs that are already stored as complete are skipped too.
 
 The cursor is a small JSON value holding `started_at`, `days`, `window_days` and `windows_done`. If the saved cursor was made with different `--days` or `--window-days` values, it is ignored with a warning, and the backfill starts over. Data already stored is skipped, so this costs API calls but does not duplicate rows.
+
+#### Skipped runs (GitHub 5xx on one run)
+
+For a few big runs GitHub answers the jobs listing with HTTP 502 on every retry (it times out). Before this, one such run stopped the whole repo and every re-run hit it again. Now:
+
+1. When the jobs listing of a run fails with a 5xx after the normal retries, the client asks again with smaller pages (30 jobs per page, then 10), still with `filter=all`. The result is the same jobs as a normal listing, never duplicated, because each attempt starts again from page 1.
+2. If it still fails (or the attempt metadata, a commit or a file of that run fails with a 5xx), the run is **skipped**: the run's transaction is rolled back (nothing half-collected), a row is written to `raw.skipped_runs` (repo, run id, latest attempt, reason, time), a warning with `repo`, `run_id` and `attempt` is logged, and the backfill goes on. The window cursor advances as usual, so the repo finishes.
+3. The next `backfill` of that repo, and every `daily`, first retries the repo's skipped runs (it fetches the run again by id, then processes it). A run that works is removed from `raw.skipped_runs`. A run GitHub no longer has (404) is dropped from the list with a warning. A run that still fails is not tried a second time in the same command.
+4. Network errors (`transport error`), auth errors (401/403) and rate limits that do not clear still stop the repo. An internet outage therefore never marks runs as skipped.
+5. A log download that fails with a 5xx (in `backfill` or `fill-logs`) is not a skipped run: the log is left without a `raw.logs` row (pending), a warning is logged, and the command continues. `fill-logs` tries it again next time; its `--limit` counts only logs that were really fetched.
+6. `collector status` shows `runs skipped (GitHub server errors): N` in each repo's detail block.
+
+The table comes from migration `0003` (run `make migrate`).
 
 #### Running twice changes nothing
 
@@ -535,6 +548,11 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 ```
 
 ## Limitations and known issues
+
+**Skipped runs**
+
+- A skipped run is missing from the data until a later `backfill` or `daily` collects it. Check `collector status` for the count before you export or train. Each retry of a run GitHub still cannot serve costs three listing attempts with the normal retry waits (about 90 s), per command.
+- Skipped runs are looked up by run id; a skipped run older than GitHub's retention (404) is dropped and its data is lost.
 
 **GitHub returns empty results for slow queries**
 

@@ -64,6 +64,7 @@ class DailySyncer(Backfiller):
             )
         summary.window_start = start
         relevant = self._sync_workflows(entry, repo_id, default_branch)
+        self._retry_skipped(entry, repo_id, relevant, summary)
         for run in self.client.iter_workflow_runs(fn, start, started):
             self._process_run(entry, repo_id, run, relevant, summary)
         with self.store.transaction():

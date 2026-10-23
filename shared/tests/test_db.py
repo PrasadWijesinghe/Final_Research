@@ -35,7 +35,7 @@ def test_missing_database_url_gives_clear_error(monkeypatch: pytest.MonkeyPatch)
 def test_every_model_table_is_in_raw_or_platform() -> None:
     schemas = {t.schema for t in m.Base.metadata.sorted_tables}
     assert schemas == {"raw", "platform"}
-    assert len(m.Base.metadata.sorted_tables) == 18
+    assert len(m.Base.metadata.sorted_tables) == 19
 
 
 @pytest.fixture(scope="session")
@@ -135,6 +135,9 @@ def test_round_trip_one_row_per_table(engine: Engine) -> None:
                 m.CommitFile(repo_id=repo_id, sha="abc", path="a.js", additions=1, deletions=0),
                 m.FileSnapshot(repo_id=repo_id, sha="abc", path="a.js", content="x"),
                 m.Log(job_id=job_id, status="ok", bytes=3, sha256="0" * 64, redactions=0),
+                m.SkippedRun(
+                    repo_id=repo_id, run_id=run_id, attempt=1, reason="HTTP 502", skipped_at=NOW
+                ),
                 m.CommitContextRow(
                     context_id=ids["ctx"],
                     repo="octo/roundtrip",
@@ -194,7 +197,7 @@ def test_round_trip_one_row_per_table(engine: Engine) -> None:
             for row in rows:
                 session.add(row)
                 session.flush()
-            assert len(rows) == 18
+            assert len(rows) == 19
             session.expire_all()
             run = session.get(m.WorkflowRun, (run_id, 1))
             assert run is not None and run.pr_numbers == [1, 2] and run.raw == {"k": "v"}

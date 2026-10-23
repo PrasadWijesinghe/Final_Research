@@ -62,6 +62,7 @@ def test_backfill_creates_rows_and_files(
     assert counts(engine) == {
         "repos": 1, "sync_state": 1, "workflows": 2, "workflow_runs": 4, "jobs": 8,
         "steps": 32, "commits": 3, "commit_files": 9, "file_snapshots": 5, "logs": 7,
+        "skipped_runs": 0,
     }  # fmt: skip
 
 
@@ -238,3 +239,25 @@ def test_sql_store_rolls_back_a_failed_transaction(engine: Engine) -> None:
     assert counts(engine)["repos"] == 0
     with pytest.raises(RuntimeError, match="outside transaction"):
         store.has_log(1)
+
+
+def test_skipped_run_is_stored_retried_and_cleared(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    fake_github.jobs_status = {9002: 502}
+    store = SqlStore(engine)
+    make_backfiller(store, tmp_path).backfill_repo(ENTRY)
+    dump = dump_db(engine)
+    assert [(r["run_id"], r["attempt"]) for r in dump["skipped_runs"]] == [(9002, 1)]
+    assert 9002 not in {r["run_id"] for r in dump["workflow_runs"]}
+    assert dump["sync_state"][0]["backfill_cursor"] is None
+    with store.transaction():
+        repo_id = store.list_repos("test")[0].id
+        assert store.repo_counts(repo_id).runs_skipped == 1
+
+    fake_github.jobs_status = {}
+    make_backfiller(store, tmp_path).backfill_repo(ENTRY)
+    assert dump_db(engine)["skipped_runs"] == []
+    check_expected_state(dump_db(engine), tmp_path)
+    with store.transaction():
+        assert store.repo_counts(repo_id).runs_skipped == 0

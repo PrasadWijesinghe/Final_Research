@@ -213,6 +213,8 @@ def _daily_line(full_name: str, s: DailySummary) -> str:
         f"{s.runs_processed}, already stored {s.runs_already_done}, attempts {s.attempts}, "
         f"jobs {s.jobs}, logs ok {s.logs_ok}"
     )
+    if s.runs_skipped_failing or s.skipped_cleared:
+        line += f"; skipped runs: {s.runs_skipped_failing} still failing, {s.skipped_cleared} fixed"
     if s.data_lost:
         line += (
             f"; WARNING: {s.gap_days} days since the last sync, runs older than 90 days are lost"
