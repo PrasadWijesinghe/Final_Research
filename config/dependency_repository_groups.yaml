@@ -9,18 +9,14 @@ groups:
     - strapi/strapi
     - adonisjs/adonis-framework
     - loopbackio/loopback-next
-    - hapi/hapi
-    - sailsjs/sails
     - meteor/meteor
     - feathersjs/feathers
-    - totaljs/framework
     - rollup/rollup
     - evanw/esbuild
     - remix-run/remix
     - tj/commander.js
 
   frontend_and_build_tools:
-    - facebook/react
     - vercel/next.js
     - vitejs/vite
     - tailwindlabs/tailwindcss
@@ -59,6 +55,7 @@ groups:
 
   personal_and_misc:
     - neoclide/coc.nvim
+    - facebook/react
 
   New_one:
     - DasuniSamaraweera/smart-cm
