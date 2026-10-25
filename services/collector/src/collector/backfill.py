@@ -45,6 +45,9 @@ logger = logging.getLogger(__name__)
 # DEFAULT: 7-day windows; the client halves any window that hits the 1,000-result cap.
 DEFAULT_WINDOW_DAYS = 7
 DEFAULT_DAYS = 90
+# DEFAULT: after 5 runs in a row skipped for 5xx errors, GitHub itself looks unhealthy: stop the
+# repo instead of skipping everything (a re-run resumes).
+MAX_CONSECUTIVE_SKIPS = 5
 
 # `--logs all` fetches every log the policy asks for; `--logs failed` leaves logs of passing jobs
 # for a later `fill-logs` pass (collection order only; the end state is the same, D11 and D18).
@@ -157,6 +160,10 @@ class Backfiller:
         # Per repo call: ids stored as skipped, and ids that failed during this call (not re-tried).
         self._skipped: set[int] = set()
         self._failed_runs: set[int] = set()
+        self._cleared: list[int] = []  # skipped runs removed in the open transaction
+        self._streak = 0  # runs skipped in a row during the walk (reset by any success)
+        self._retrying = False  # the retry pass does not count towards the streak
+        self.max_consecutive_skips = MAX_CONSECUTIVE_SKIPS
 
     # ---- per repo ---------------------------------------------------------------------------
 
@@ -299,7 +306,8 @@ class Backfiller:
         run_id = int(run["id"])
         if not relevant.get(path, False):
             summary.runs_skipped_workflow += 1
-            self._forget_skipped(repo_id, run_id, summary)
+            self._forget_skipped(repo_id, run_id)
+            self._flush_cleared(summary)
             return
         if run_id in self._failed_runs:
             return  # already failed in this call (the retry pass); do not spend retries again
@@ -307,19 +315,29 @@ class Backfiller:
         try:
             self._collect_run(entry, repo_id, run, path, summary)
         except GitHubError as exc:
+            self._cleared.clear()  # the transaction was rolled back
             if not exc.is_server_error:
                 raise  # network, auth and rate-limit failures stop the repo; a re-run resumes
             for f in fields(summary):  # the run was rolled back: its counters must not count
                 setattr(summary, f.name, getattr(before, f.name))
             self._skip_run(entry, repo_id, run, exc, summary)
+        else:
+            self._streak = 0
+            self._flush_cleared(summary)  # the transaction is committed now
 
-    def _forget_skipped(self, repo_id: int, run_id: int, summary: RepoSummary) -> None:
-        """Remove a run from the skipped set (inside the caller's transaction or its own)."""
+    def _forget_skipped(self, repo_id: int, run_id: int) -> None:
+        """Delete a run's skipped row (in the caller's transaction or its own)."""
         if run_id in self._skipped:
             with self.store.transaction():
                 self.store.clear_skipped_run(repo_id, run_id)
+            self._cleared.append(run_id)
+
+    def _flush_cleared(self, summary: RepoSummary) -> None:
+        """Update the in-memory skipped set once the deletes are committed."""
+        for run_id in self._cleared:
             self._skipped.discard(run_id)
             summary.skipped_cleared += 1
+        self._cleared.clear()
 
     def _skip_run(
         self,
@@ -349,16 +367,40 @@ class Backfiller:
         self._skipped.add(run_id)
         self._failed_runs.add(run_id)
         summary.runs_skipped_failing += 1
+        if not self._retrying:
+            self._streak += 1
+            if self._streak >= self.max_consecutive_skips:
+                raise GitHubError(
+                    f"GitHub looks unhealthy: {self._streak} runs in a row failed with server "
+                    "errors; re-run to resume",
+                    exc.status_code,
+                )
 
     def _retry_skipped(
         self, entry: RepoEntry, repo_id: int, relevant: dict[str, bool], summary: RepoSummary
     ) -> None:
         """Try every previously skipped run of the repo again, before the normal walk."""
-        fn = entry.full_name
         self._failed_runs = set()
+        self._streak = 0
+        self._cleared.clear()
         with self.store.transaction():
             records = self.store.skipped_runs(repo_id)
         self._skipped = {r.run_id for r in records}
+        self._retrying = True
+        try:
+            self._retry_records(entry, repo_id, relevant, summary, records)
+        finally:
+            self._retrying = False
+
+    def _retry_records(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        relevant: dict[str, bool],
+        summary: RepoSummary,
+        records: list[SkippedRunRecord],
+    ) -> None:
+        fn = entry.full_name
         for record in records:
             try:
                 run = self.client.get_json(f"/repos/{fn}/actions/runs/{record.run_id}")
@@ -367,7 +409,8 @@ class Backfiller:
                     "skipped run no longer exists; dropped from the skipped set",
                     extra={"repo": fn, "run_id": record.run_id},
                 )
-                self._forget_skipped(repo_id, record.run_id, summary)
+                self._forget_skipped(repo_id, record.run_id)
+                self._flush_cleared(summary)
                 continue
             except GitHubError as exc:
                 if not exc.is_server_error:
@@ -398,7 +441,7 @@ class Backfiller:
         with self.store.transaction():
             if self.store.attempt_done(repo_id, run_id, latest):
                 summary.runs_already_done += 1
-                self._forget_skipped(repo_id, run_id, summary)
+                self._forget_skipped(repo_id, run_id)
                 return
             attempts: dict[int, dict[str, Any]] = {latest: run}
             for k in range(1, latest):
@@ -421,7 +464,7 @@ class Backfiller:
                 self._process_attempt(
                     entry, repo_id, k, attempts[k], by_attempt.get(k, []), path, summary
                 )
-            self._forget_skipped(repo_id, run_id, summary)
+            self._forget_skipped(repo_id, run_id)
             summary.runs_processed += 1
 
     def _process_attempt(
