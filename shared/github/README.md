@@ -64,6 +64,10 @@ A genuinely empty window costs 5 calls (1 + 2 retries + 2 halves) and never loop
 
 Counts follow the same rule. `count_workflow_runs(repo, start, end, params)` makes one `per_page=1` call and returns a `RunCount(count, capped)`. A non-zero `total_count` is trusted, a zero is retried and cross-checked as above. GitHub stops counting at 2,500: a `total_count` of 2,500 or more is returned with `capped=True`, which means "at least this many", never an exact number. Whether a window is complete is decided by walking its pages (Link headers), not by `total_count`, except for the 1,000-result split above.
 
+### Smaller pages after a 5xx
+
+`GitHubError.is_server_error` is true for a 5xx answer that survived the retries (and false for network errors, which have no status). `list_shrinking(path, params, items_key=...)` returns all items like `paginate`, but if any page fails with a 5xx it starts again from page 1 with a smaller `per_page`: first the requested size (100 by default), then each size in `GitHubConfig.fallback_page_sizes` (default 30, then 10). The result comes from one complete attempt, so it is the same list a normal listing gives, with no duplicates. Other errors are raised at once, and so is a 5xx at the smallest size. The collector uses it for a run's jobs, because big runs make GitHub time out on 100 jobs per page.
+
 ### Raw file fetcher
 
 `fetch_raw_file` asks `raw.githubusercontent.com` for one file at one commit. It uses the same retry path, but it does not read or count the REST rate-limit headers. If the file does not exist (404), it returns `None` and does not raise.

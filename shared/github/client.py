@@ -27,6 +27,11 @@ class GitHubError(Exception):
         super().__init__(message)
         self.status_code = status_code
 
+    @property
+    def is_server_error(self) -> bool:
+        """True for a 5xx answer (GitHub is failing on this request); False for network errors."""
+        return self.status_code is not None and self.status_code >= 500
+
 
 class GitHubNotFoundError(GitHubError):
     """The resource does not exist (404), or is not visible to the token."""
@@ -59,6 +64,9 @@ class GitHubConfig:
     empty_retries: int = 2
     # DEFAULT: 30 s request timeout.
     timeout: float = 30.0
+    # DEFAULT: after a 5xx on a listing, ask again with 30, then 10 items per page (big runs make
+    # GitHub time out on 100 jobs per page).
+    fallback_page_sizes: tuple[int, ...] = (30, 10)
     base_url: str = API_URL
     raw_url: str = RAW_URL
 
@@ -283,6 +291,38 @@ class GitHubClient:
             yield from (body[items_key] if items_key else body)
             next_url = response.links.get("next", {}).get("url")
             response = self.get(next_url) if next_url else None
+
+    def list_shrinking(
+        self,
+        path: str,
+        params: dict[str, Any] | None = None,
+        *,
+        items_key: str | None = None,
+    ) -> list[Any]:
+        """Return all items like `paginate`, retrying with smaller pages after a 5xx.
+
+        A listing that GitHub cannot serve at 100 per page (HTTP 5xx after the normal retries, on
+        any page) is restarted from page 1 with each of `fallback_page_sizes`. The result is a
+        complete list from one attempt, so nothing is missing or duplicated. Other errors, and a
+        5xx at the smallest size, are raised.
+        """
+        base = dict(params or {})
+        sizes = [int(base.pop("per_page", 100)), *self.config.fallback_page_sizes]
+        for index, size in enumerate(sizes):
+            try:
+                return list(self.paginate(path, {**base, "per_page": size}, items_key=items_key))
+            except GitHubError as exc:
+                if not exc.is_server_error or index == len(sizes) - 1:
+                    raise
+                logger.warning(
+                    "listing failed with a server error; retrying with smaller pages",
+                    extra={
+                        "path": path,
+                        "status": exc.status_code,
+                        "next_per_page": sizes[index + 1],
+                    },
+                )
+        raise GitHubError("unreachable")  # pragma: no cover
 
     def iter_workflow_runs(
         self,
