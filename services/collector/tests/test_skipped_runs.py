@@ -182,3 +182,31 @@ def test_status_shows_the_skipped_run_count(fake_github: FakeGitHub, tmp_path: P
     assert header.split() == [
         "repo", "runs", "attempts", "jobs", "logs", "ok", "expired", "missing", "commits",
     ]  # fmt: skip
+
+
+def test_a_streak_of_skipped_runs_aborts_the_repo_and_keeps_the_rows(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    fake_github.jobs_status = {9002: 502, 9001: 502, 9004: 502}
+    store = MemoryStore()
+    backfiller = make_backfiller(store, tmp_path)
+    backfiller.max_consecutive_skips = 2  # the default is 5; the fixture has only 3 runs
+    with pytest.raises(GitHubError, match="GitHub looks unhealthy: 2 runs in a row"):
+        backfiller.backfill_repo(ENTRY)
+    assert sorted(_skipped(store)) == [9001, 9002]  # kept for the next run
+    assert store.dump()["sync_state"][0]["backfill_done_at"] is None
+
+
+def test_a_success_resets_the_streak(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    fake_github.jobs_status = {9002: 502, 9004: 502}  # 9001 (between them) works
+    store = MemoryStore()
+    backfiller = make_backfiller(store, tmp_path)
+    backfiller.max_consecutive_skips = 2
+    backfiller.backfill_repo(ENTRY)
+    assert sorted(_skipped(store)) == [9002, 9004]
+
+
+def test_default_streak_limit_is_five() -> None:
+    from collector.backfill import MAX_CONSECUTIVE_SKIPS
+
+    assert MAX_CONSECUTIVE_SKIPS == 5
