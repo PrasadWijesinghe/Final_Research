@@ -56,6 +56,17 @@ class SyncStateRecord:
 
 
 @dataclass(frozen=True)
+class SkippedRunRecord:
+    """A row of raw.skipped_runs: a run given up on after persistent GitHub 5xx errors."""
+
+    repo_id: int
+    run_id: int
+    attempt: int
+    reason: str
+    skipped_at: datetime
+
+
+@dataclass(frozen=True)
 class WorkflowRecord:
     """A row of raw.workflows."""
 
@@ -181,6 +192,7 @@ class RepoCounts:
     logs: dict[str, int] = field(default_factory=dict)  # status -> number of logs
     commits: int = 0
     logs_pending: int = 0  # jobs the log policy wants a log for, with no raw.logs row yet
+    runs_skipped: int = 0  # runs given up on after GitHub 5xx errors, retried on later runs
 
 
 @dataclass(frozen=True)
@@ -218,6 +230,9 @@ class Store(Protocol):
     def has_log(self, job_id: int) -> bool: ...
     def upsert_log(self, log: LogRecord) -> None: ...
     def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]: ...
+    def add_skipped_run(self, skipped: SkippedRunRecord) -> None: ...
+    def clear_skipped_run(self, repo_id: int, run_id: int) -> None: ...
+    def skipped_runs(self, repo_id: int) -> list[SkippedRunRecord]: ...
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None: ...
     def list_repos(self, member: str) -> list[RepoRecord]: ...
     def repo_counts(self, repo_id: int) -> RepoCounts: ...
@@ -422,6 +437,25 @@ class SqlStore:
             stmt = stmt.limit(limit)
         return [PendingLog(r[0], r[1], r[2]) for r in self._c.execute(stmt).all()]
 
+    def add_skipped_run(self, skipped: SkippedRunRecord) -> None:
+        """Record (or refresh) a skipped run."""
+        self._upsert(m.SkippedRun, asdict(skipped), ["repo_id", "run_id"], update=True)
+
+    def clear_skipped_run(self, repo_id: int, run_id: int) -> None:
+        """Forget a skipped run (no-op if it was not skipped)."""
+        t = _table(m.SkippedRun)
+        self._c.execute(t.delete().where(t.c.repo_id == repo_id, t.c.run_id == run_id))
+
+    def skipped_runs(self, repo_id: int) -> list[SkippedRunRecord]:
+        """The repo's skipped runs, newest run id first."""
+        t = _table(m.SkippedRun)
+        rows = (
+            self._c.execute(select(t).where(t.c.repo_id == repo_id).order_by(t.c.run_id.desc()))
+            .mappings()
+            .all()
+        )
+        return [SkippedRunRecord(**dict(r)) for r in rows]
+
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
         """Record when the last successful daily sync of the repo started."""
         t = _table(m.SyncState)
@@ -466,6 +500,13 @@ class SqlStore:
             logs_pending=int(
                 self._c.execute(
                     select(func.count()).select_from(self._pending_query(repo_id).subquery())
+                ).scalar_one()
+            ),
+            runs_skipped=int(
+                self._c.execute(
+                    select(func.count())
+                    .select_from(_table(m.SkippedRun))
+                    .where(_table(m.SkippedRun).c.repo_id == repo_id)
                 ).scalar_one()
             ),
         )

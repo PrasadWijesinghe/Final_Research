@@ -406,3 +406,54 @@ def test_count_window_zero_is_retried_then_cross_checked(
             result = client.count_workflow_runs("acme/widgets", WIN_START, WIN_END)
     assert (result.count, result.capped) == (42, False)
     assert "halves have runs" in caplog.text
+
+
+def _jobs_page(ids: list[int]) -> dict[str, Any]:
+    return {"total_count": 5, "jobs": [{"id": i} for i in ids]}
+
+
+def test_list_shrinking_retries_smaller_pages_after_a_5xx_without_duplicates(
+    sleeper: Sleeper,
+) -> None:
+    client = GitHubClient(
+        token=FAKE_TOKEN,
+        config=GitHubConfig(max_retries=0, fallback_page_sizes=(2,)),
+        clock=lambda: NOW,
+        sleep=sleeper,
+    )
+    path = "/repos/acme/widgets/actions/runs/1/jobs"
+    page2 = f"{API}{path}?filter=all&per_page=2&page=2"
+    page3 = f"{API}{path}?filter=all&per_page=2&page=3"
+    with respx.mock:
+        respx.get(f"{API}{path}", params={"per_page": "100"}).respond(502, json={})
+        respx.get(f"{API}{path}", params={"per_page": "2"}).mock(
+            side_effect=[
+                httpx.Response(
+                    200, json=_jobs_page([1, 2]), headers={"link": f'<{page2}>; rel="next"'}
+                ),
+                httpx.Response(
+                    200, json=_jobs_page([3, 4]), headers={"link": f'<{page3}>; rel="next"'}
+                ),
+                httpx.Response(200, json=_jobs_page([5])),
+            ]
+        )
+        jobs = client.list_shrinking(path, {"filter": "all"}, items_key="jobs")
+    assert [j["id"] for j in jobs] == [1, 2, 3, 4, 5]
+
+
+def test_list_shrinking_does_not_shrink_for_other_errors_and_raises_at_the_end() -> None:
+    client = GitHubClient(
+        token=FAKE_TOKEN,
+        config=GitHubConfig(max_retries=0, fallback_page_sizes=(5,)),
+        sleep=lambda _s: None,
+    )
+    path = "/repos/acme/widgets/actions/runs/1/jobs"
+    with respx.mock:
+        route = respx.get(f"{API}{path}").respond(403, json={"message": "Forbidden"})
+        with pytest.raises(GitHubError):
+            client.list_shrinking(path, {"filter": "all"}, items_key="jobs")
+        assert route.call_count == 1  # a 403 is final: no smaller pages
+        route.respond(502, json={})
+        with pytest.raises(GitHubError) as info:
+            client.list_shrinking(path, {"filter": "all"}, items_key="jobs")
+        assert info.value.is_server_error and route.call_count == 3  # 100, then 5

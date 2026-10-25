@@ -19,6 +19,7 @@ from collector.store import (
     RepoCounts,
     RepoRecord,
     RunRecord,
+    SkippedRunRecord,
     SnapshotRecord,
     StepRecord,
     SyncStateRecord,
@@ -37,6 +38,7 @@ PRIMARY_KEYS: dict[str, tuple[str, ...]] = {
     "commit_files": ("repo_id", "sha", "path"),
     "file_snapshots": ("repo_id", "sha", "path"),
     "logs": ("job_id",),
+    "skipped_runs": ("repo_id", "run_id"),
 }
 
 
@@ -179,6 +181,18 @@ class MemoryStore:
         rows = [PendingLog(j.job_id, j.run_id, j.attempt) for _, j in found]
         return rows if limit is None else rows[:limit]
 
+    def add_skipped_run(self, skipped: SkippedRunRecord) -> None:
+        self._put("skipped_runs", skipped)
+
+    def clear_skipped_run(self, repo_id: int, run_id: int) -> None:
+        self.tables["skipped_runs"].pop((repo_id, run_id), None)
+
+    def skipped_runs(self, repo_id: int) -> list[SkippedRunRecord]:
+        rows: list[SkippedRunRecord] = [
+            r for r in self.tables["skipped_runs"].values() if r.repo_id == repo_id
+        ]
+        return sorted(rows, key=lambda r: r.run_id, reverse=True)
+
     def set_last_daily_sync(self, repo_id: int, at: datetime) -> None:
         state = self.tables["sync_state"][(repo_id,)]
         self.tables["sync_state"][(repo_id,)] = SyncStateRecord(
@@ -206,6 +220,7 @@ class MemoryStore:
             logs=logs,
             commits=len(commits),
             logs_pending=len(self._pending(repo_id)),
+            runs_skipped=len(self.skipped_runs(repo_id)),
         )
 
     def run_days(self, repo_id: int) -> list[date]:

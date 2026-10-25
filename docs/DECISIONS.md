@@ -119,6 +119,8 @@ entry that references it rather than editing history.
 **D38 — Collection order: two passes (`backfill --logs failed`, then `fill-logs`) and one parallel lane per repo.** Date: 2026-10-23. The end state of D11 is unchanged (all failed-job logs, plus passing-job logs in relevant workflows); only the order changes. `backfill` still defaults to `--logs all` and `daily` always fetches all logs.
 *Why:* downloading logs of passing jobs dominates the backfill (about 2.3 s per log, around 20 jobs per run in some repos), which would take 1 to 2 weeks for one runner, while GitHub deletes a day of history every day. Failed logs and metadata come first, passing logs are filled newest first.
 
+**D39 — A run GitHub keeps failing on (5xx) is skipped and retried later; the repo still finishes.** Date: 2026-10-23. *Why:* in the real backfill the jobs listing of some big runs returned 502 on every retry, so the repo aborted and every re-run hit the same run (puppeteer, mongoose, prettier, babel). The jobs listing now falls back to 30 then 10 per page; if a run still fails with a 5xx it is recorded in `raw.skipped_runs` (migration 0003), warned about, and retried first by later `backfill` and `daily`. Network errors, 401/403 and rate limits still abort, so an outage never marks runs skipped. A log that fails with a 5xx stays pending for `fill-logs`.
+
 ## Open items (don't block the build)
 
 | # | Item | Owner |
