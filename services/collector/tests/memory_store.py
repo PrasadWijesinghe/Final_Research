@@ -9,7 +9,7 @@ from dataclasses import asdict
 from datetime import UTC, date, datetime
 from typing import Any
 
-from collector.policy import LOG_CONCLUSIONS
+from collector.policy import FAILED_CONCLUSIONS, LOG_CONCLUSIONS, PASSED_CONCLUSIONS
 from collector.store import (
     CommitFileRecord,
     CommitRecord,
@@ -152,8 +152,11 @@ class MemoryStore:
     def upsert_log(self, log: LogRecord) -> None:
         self._put("logs", log)
 
-    def _pending(self, repo_id: int) -> list[tuple[Any, JobRecord]]:
+    def _pending(self, repo_id: int, failed_runs_only: bool = False) -> list[tuple[Any, JobRecord]]:
         runs = {k: r for k, r in self.tables["workflow_runs"].items() if r.repo_id == repo_id}
+        failed_run_ids = {
+            j.run_id for j in self.tables["jobs"].values() if j.conclusion in FAILED_CONCLUSIONS
+        }
         out = []
         for job in self.tables["jobs"].values():
             run = runs.get((job.run_id, job.attempt))
@@ -162,13 +165,20 @@ class MemoryStore:
                 and job.status == "completed"
                 and job.conclusion in LOG_CONCLUSIONS
                 and (job.job_id,) not in self.tables["logs"]
+                and not (
+                    failed_runs_only
+                    and job.conclusion in PASSED_CONCLUSIONS
+                    and job.run_id not in failed_run_ids
+                )
             ):
                 out.append((run, job))
         return out
 
-    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]:
+    def pending_logs(
+        self, repo_id: int, limit: int | None, *, failed_runs_only: bool = False
+    ) -> list[PendingLog]:
         found = sorted(
-            self._pending(repo_id),
+            self._pending(repo_id, failed_runs_only),
             key=lambda rj: (
                 rj[0].created_at is not None,
                 rj[0].created_at or datetime.min.replace(tzinfo=UTC),

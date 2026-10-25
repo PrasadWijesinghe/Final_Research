@@ -2,20 +2,22 @@
 
 **In one sentence:** The collector reads each team member's list of GitHub repositories and pulls the last 90 days of CI (continuous integration, automated build and test) runs, failure logs, commits and config files into the database, so the experts can learn from real failures.
 
-**Status:** working (backfill, daily, status, export and import) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import). The export and import tests that need a real database have not been run yet (see Limitations).
+**Status:** working (backfill with its two passes and `fill-logs`, skipped-run retry, daily, status, export and import) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import). The two-pass log fill is decision D38, its `--passing` option is D40, and skipped runs are D39.
 
 ## What it does
 
 PipelineIQ learns from real CI failures on real GitHub repositories. Each of the four team members (dependency, build, test, infra) picks a set of repositories that fit their topic. Those lists live in `config/repos/<member>.yaml`.
 
-The collector is the part that reads those lists and collects the data. It has six jobs:
+The collector is the part that reads those lists and collects the data. It has these jobs:
 
 1. **Repo config loader (P1.2).** It opens a member's YAML file, checks every field, and turns it into clean Python objects. If the file has a mistake, it stops with a message that names the file, the repository and the field.
 2. **Workflow detection (P1.2).** A GitHub repository can have many workflows (automated job files under `.github/workflows/`). Most are not relevant to a member. For example, the Test member only cares about workflows that run tests. Detection looks inside a workflow file and says whether it is relevant, and why.
-3. **Backfill (P1.5).** The `backfill` command pulls the last 90 days of data for a member's repositories. It writes the data to Postgres tables and to files in the data folder. It is safe to run again: a second run adds nothing new. If it stops part way, the next run picks up where it left off.
-4. **Daily sync (P1.6).** The `daily` command keeps the data up to date after the backfill. It fetches the runs created since the last sync, and looks again at the last 14 days for new attempts of older runs.
-5. **Status (P1.6).** The `status` command prints what is stored for each repo, the days with no runs, the backfill state, the last daily sync and the GitHub rate limit. It changes nothing.
-6. **Export and import (P1.7).** `export` packs the whole database and the collected files into one `.tar.gz` archive, for sharing between members or as a weekly backup. `import` checks an archive and restores it into a database. Both work through the Postgres container, so no local Postgres tools are needed.
+3. **Backfill (P1.5).** The `backfill` command pulls the last 90 days of data for a member's repositories. It writes the data to Postgres tables and to files in the data folder. It is safe to run again: a second run adds nothing new. If it stops part way, the next run picks up where it left off. With `--logs failed` it skips the logs of passing jobs, which pass 2 collects later.
+4. **Log fill, pass 2 (D38, D40).** The `fill-logs` command fetches the logs that the backfill left out. It goes newest run first. It can also fetch only the passing-job logs of runs that had a failure (`--passing failed-runs`). See "Two passes and parallel lanes" below.
+5. **Skipped runs (D39).** When GitHub keeps answering one run with server errors (HTTP 5xx), the collector records that run in `raw.skipped_runs` and carries on with the repo. The next `backfill` or `daily` tries those runs again.
+6. **Daily sync (P1.6).** The `daily` command keeps the data up to date after the backfill. It fetches the runs created since the last sync, and looks again at the last 14 days for new attempts of older runs.
+7. **Status (P1.6).** The `status` command prints what is stored for each repo, the days with no runs, the backfill state, the logs still pending, the runs skipped, the last daily sync and the GitHub rate limit. It changes nothing.
+8. **Export and import (P1.7).** `export` packs the whole database and the collected files into one `.tar.gz` archive, for sharing between members or as a weekly backup. `import` checks an archive and restores it into a database. Both work through the Postgres container, so no local Postgres tools are needed.
 
 ## How it works
 
@@ -148,8 +150,10 @@ The database stores the path relative to the data folder (`storage_path`), so th
 Logs of passing test jobs are by far the biggest part of a backfill: one run can have 20 jobs, and each log download takes a couple of seconds. GitHub deletes a day of history every day, so a single slow pass can lose data it has not reached yet. The collector therefore lets you collect in two passes. The end state is the same as one pass (D11); only the order changes.
 
 1. **Pass 1: `collector backfill --member X --logs failed`.** Everything is collected as usual (runs, attempts, jobs, steps, commits, diffs, config snapshots) except the logs of passing jobs. Logs of failed jobs are fetched. A skipped passing log gets no row in `raw.logs`, not even a "missing" one, so pass 2 can find it. The summary line shows how many were deferred (`logs_deferred`).
-2. **Pass 2: `collector fill-logs --member X [--repo R] [--limit N]`.** It looks for jobs that the log policy wants a log for and that have no `raw.logs` row, then fetches them newest run first (so if you stop early, you have the newest logs). Each log goes through the same code as the backfill: clean, gzip, write the file, save the row. An expired log (HTTP 410) or an unreadable one gets a status row, exactly as in the backfill. Each log is saved on its own, so you can stop with Ctrl+C at any time and run it again. A second run only sees what is still missing, so it fetches nothing once everything is done. `--limit N` stops after N logs in total across the repos of that run. `fill-logs` does not list runs, commits or files: it only asks GitHub for the logs.
+2. **Pass 2: `collector fill-logs --member X [--repo R] [--limit N] [--passing all|failed-runs]`.** It looks for jobs that the log policy wants a log for and that have no `raw.logs` row, then fetches them newest run first (so if you stop early, you have the newest logs). Each log goes through the same code as the backfill: clean, gzip, write the file, save the row. An expired log (HTTP 410) or an unreadable one gets a status row, exactly as in the backfill. Each log is saved on its own, so you can stop with Ctrl+C at any time and run it again. A second run only sees what is still missing, so it fetches nothing once everything is done. `--limit N` stops after N logs in total across the repos of that run. `fill-logs` does not list runs, commits or files: it only asks GitHub for the logs.
 3. **See progress:** `collector status` shows `logs pending: N` for each repo (jobs that need a log and have no row yet).
+
+**Only the failed runs (`--passing failed-runs`, D40).** The default, `--passing all`, fetches every pending log, as described above. `--passing failed-runs` is narrower. Failed jobs (`failure`, `timed_out` or `startup_failure`) always get their log. A passing job gets its log only when its run has at least one failed, timed-out or startup-failed job, in any attempt. So if attempt 1 of a run failed and attempt 2 passed, attempt 2's passing logs are still fetched, because the run had a failure in attempt 1. Passing jobs in runs with no failure are left out. Those jobs stay without a `raw.logs` row, so `status` still counts them as `logs pending`. Running `fill-logs` without the flag later fetches the rest.
 
 `daily` is unchanged and always fetches all logs, because new runs are few. Running `backfill --logs all` again after a `--logs failed` pass does **not** fill the gaps (runs already stored as complete are skipped); use `fill-logs`.
 
@@ -167,7 +171,7 @@ What was checked for conflicts:
 - The one shared path was `snapshots/blobs/<hash>.gz` (lockfiles are stored by content hash, so two repos can have the same file). Its temporary file name now includes the process id, so two lanes cannot overwrite each other's temp file. Both write identical bytes, so the result is the same.
 - Each process has its own database connection and its own GitHub client. The rate-limit pause is per process.
 
-What lanes **share**: the token's 5,000 requests per hour. Each process counts only its own calls, so several lanes can together pass the limit and get an HTTP 403 or 429 from GitHub; the client then waits for the reset and retries. Log downloads appeared not to count against this limit in the first real runs, but this has not been measured. Do not run two lanes on the same repo at the same time: they would share one cursor. (Running `fill-logs` for a repo while its pass 1 is still running is safe but wasteful: both may fetch the same log, and the second write changes nothing.)
+What lanes **share**: the token's 5,000 requests per hour. Job-log downloads count against this limit too. This was measured on 2026-10-25. Pass 1 and pass 2 ran side by side, and every lane got HTTP 403 "API rate limit exceeded" on its job-log requests. The response had `x-ratelimit-remaining: 0` and `resource: core`. Each lane then waited for the hourly reset. So extra lanes do not speed up collection once the limit is the bottleneck. Each process counts only its own calls, so the lanes together can pass the limit before any one of them sees it. The client then waits for the reset and retries. `collector status` shows the remaining count as it was when `status` ran, so the number can be out of date. Do not run two lanes on the same repo at the same time: they would share one cursor. (Running `fill-logs` for a repo while its pass 1 is still running is safe but wasteful: both may fetch the same log, and the second write changes nothing.)
 
 #### Errors and resuming
 
@@ -365,7 +369,7 @@ With `make`, the `MEMBER` and `FILE` values can come from `.env`. The Makefile l
 
 **Example.** The offline tests (`test_export_import.py`) run an export with a fake Postgres. The file is named `test-2026-11-02.tar.gz`. The archive starts with `manifest.json` and `db.dump`, then `files/logs/...` and `files/snapshots/...`. The manifest says `"member": "test"`, `"date": "2026-11-02"` and the commit. The row counts are the `raw` tables only. The export command then prints `wrote <path> (<rows> rows in <tables> tables, <files> files)`. The import command prints `imported <file>: ... checksums and counts match` when everything passes.
 
-The integration test (`test_export_import_db.py`) is meant to do the same thing with real Docker. It has not been run yet. It backfills the recorded repo `acme/widgets`, exports the database, imports the archive into a fresh database called `<main db>_import_test`, and checks that the row counts and file checksums match. It then checks that a second import is refused, and that `--force` works.
+The integration test (`test_export_import_db.py`) does the same thing with real Docker. It has run in `make check` against a throwaway database. It backfills the recorded repo `acme/widgets`, exports the database, imports the archive into a fresh database called `<main db>_import_test`, and checks that the row counts and file checksums match. It then checks that a second import is refused, and that `--force` works.
 
 ## How to run it
 
@@ -379,7 +383,9 @@ uv run --env-file .env collector backfill --member test --repo owner/name --days
 # two passes: failed-job logs first, then the logs of passing jobs (newest first)
 uv run --env-file .env collector backfill --member test --logs failed
 uv run --env-file .env collector fill-logs --member test
-# fill-logs options: --repo owner/name, --limit N (total for the run), --data-dir PATH
+# only the passing-job logs of runs that had a failure (any attempt)
+uv run --env-file .env collector fill-logs --member test --passing failed-runs
+# fill-logs options: --repo owner/name, --limit N (total for the run), --passing all|failed-runs, --data-dir PATH
 
 # after the backfill has finished: fetch what is new since the last sync
 uv run --env-file .env collector daily --member test
@@ -425,7 +431,7 @@ uv run pytest services/collector -m integration
 
 They read `DATABASE_URL` from `.env`. Use `127.0.0.1`, not `localhost`, on Windows. The tests create and drop a throwaway database called `<name>_collector_test`, so the database user needs the right to create databases. If the database cannot be reached, the integration tests are skipped, not passed. **These integration tests had not been run when P1.5 was written, because Docker was not available.**
 
-The export and import integration test (`test_export_import_db.py`) also runs `docker compose exec` against the `postgres` service. It is skipped if that does not work. It creates and drops a database called `<main db>_import_test`. **It had not been run when P1.7 was written, because Docker was not available.** To run it: start Docker Desktop, run `make up`, export `DATABASE_URL` (see above), then run `uv run pytest services/collector -m integration`. A skipped test is not a passed test, so check the output says "passed" for the export and import test.
+The export and import integration test (`test_export_import_db.py`) also runs `docker compose exec` against the `postgres` service. It is skipped if that does not work. It creates and drops a database called `<main db>_import_test`. It was written for P1.7 when Docker was not available, and it has since run in `make check` against a throwaway database. To run it yourself: start Docker Desktop, run `make up`, export `DATABASE_URL` (see above), then run `uv run pytest services/collector -m integration`. A skipped test is not a passed test, so check the output says "passed" for the export and import test.
 
 The full check that must pass before a task is done is `make check`.
 
@@ -438,6 +444,7 @@ The full check that must pass before a task is done is `make check`.
 | `--days N` | How far back to go. Default 90 |
 | `--logs all\|failed` | `backfill` only. `failed` skips logs of passing jobs for `fill-logs` to fetch later. Default `all` |
 | `--limit N` | `fill-logs` only. Stop after N logs in total |
+| `--passing all\|failed-runs` | `fill-logs` only. `failed-runs` fetches passing-job logs only in runs with a failed job (any attempt). Failed-job logs are always fetched. Default `all` (D40) |
 | `--data-dir PATH` | Where logs and blobs go. Overrides `DATA_DIR` |
 | `--window-days N` | Window size. Default 7. Hidden from `--help`, used by tests |
 
@@ -488,7 +495,7 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | `IDENTITY_SALT` | Environment (`.env`) | Required | The salt for hashing logins and author emails. Changing it changes every hash |
 | `DATABASE_URL` | Environment (`.env`) | Required | The Postgres connection |
 | `DATA_DIR` | Environment (`.env`) | `<checkout>/data` | Where logs and blobs are written. Exports go to `DATA_DIR/exports` and imports read and write here too. Empty means the default |
-| `DATABASE_URL` (export and import) | Environment (`.env`) | Required for normal use | Only the user and database name are used by export and import. The host and port are ignored, because the commands run in the compose container. If it is empty, the defaults `pipelineiq` and `pipelineiq` are used |
+| `DATABASE_URL` (export and import) | Environment (`.env`) | Required for normal use | Only the user and database name are used by export and import. The host and port are ignored, because the commands run in the compose container. If it is empty, `POSTGRES_USER` and `POSTGRES_DB` are used when set, else `pipelineiq` and `pipelineiq` |
 | `--database` (export and import) | Command line | The name in `DATABASE_URL` | Which database to dump or restore into |
 | `--out-dir` (export) | Command line | `<data-dir>/exports` | Where the archive is written |
 | `--force` (import) | Command line | Off | Lets the import replace a database that has rows in `raw` |
@@ -566,7 +573,7 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 
 **Export and import (P1.7)**
 
-- **The database tests have not been run.** `test_export_import_db.py` needs Docker, which was not available when P1.7 was written. The offline tests (`test_export_import.py`) use a fake Postgres and do run without Docker. Until the integration test has passed, the real `pg_dump`, `pg_restore` and `psql` calls are checked only by reading the code.
+- **The database test needs Docker.** `test_export_import_db.py` was written when Docker was not available. It has run in `make check` against a throwaway database, and it is the only test that calls the real `pg_dump`, `pg_restore` and `psql`. If Docker is down, the test is skipped, not passed. The offline tests (`test_export_import.py`) use a fake Postgres and run without Docker.
 - **Only `raw` is counted.** The row counts in the manifest, the "database changed during export" check and the "already holds rows" check all look only at tables in the `raw` schema. Platform tables are in the dump, but nothing counts them. Their restore relies on pg_restore's exit code.
 - **An import is not refused when `raw` is empty, even if platform tables already have rows.** Without `--force`, the import still restores the dump, and `--clean` replaces every table in the dump. So platform data in the target can be overwritten without a warning.
 - **`--clean` does not drop objects that are not in the dump.** Extra tables in the target are left alone. The restore fails, and rolls back, only if something left in the target depends on a table the dump replaces (for example a foreign key from a table that is not in the dump). I could not check this against a live Postgres.
@@ -585,6 +592,8 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 **Rate-limit errors on logs**
 
 - A log that fails with a 429, or a limit-related 403 that never cleared after all retries, stops the repo like a 5xx. A re-run resumes. Only other 4xx answers (for example a plain 403) are stored as `missing`.
+- **Job-log downloads use the same 5,000 requests per hour as everything else.** This was measured on 2026-10-25 with two passes running side by side. Every lane was held at the hourly reset. Extra lanes do not help once that limit is the bottleneck, and `collector status` can show a remaining count that is already out of date.
+- **`--passing failed-runs` leaves passing logs for later.** Those jobs stay pending until `fill-logs` runs without the flag. `status` counts them as `logs pending` in the meantime.
 
 **Behaviour to know about**
 
@@ -621,29 +630,37 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 
 **Every `# DEFAULT:` in this component**
 
-In `services/collector/src`:
+Line numbers are as of this writing and may drift. Search for the marker text if a number is off.
+
+In `services/collector/src/collector`:
 
 - `repo_config.py`, line 15: `DEFAULT_CONFIG_DIR` is found from the location of the source file, four folders up to the repository root, then `config/`. A packaged install would point to the wrong place, so callers should pass `config_dir` explicitly outside a checkout.
 - `workflow_detection.py`, line 98: members with no detection rule (`dependency`, `build`, `infra`) keep every workflow until their owner adds a rule. Keeping a workflow is safer than dropping data that may matter.
-- `daily.py`, line 20: `RESCAN_DAYS = 14`. The daily window always starts at least this far back, so re-runs of recent runs are picked up. Taken from the design note in `docs/DATA.md` 3.3 (the code cites it; the design section was not re-checked here).
+- `daily.py`, line 20: `RESCAN_DAYS = 14`. The daily window always starts at least this far back, so re-runs of recent runs are picked up. Taken from the design note in `docs/DATA.md` 3.3 (re-runs of older runs appear later).
 - `status.py`, line 20: `GAP_DAYS_WINDOW = 90`. Gaps are looked for in the last 90 days, the length of GitHub's run retention.
 - `status.py`, line 22: `MAX_GAP_RANGES = 8`. At most 8 gap ranges are printed per repo, then "and N more".
-- `backfill.py`, line 43: 7-day windows (`DEFAULT_WINDOW_DAYS`). The client halves any window that hits the 1,000-result cap. The 90-day default is `DEFAULT_DAYS`.
-- `backfill.py`, line 47: personal data and bulky objects are dropped from the stored run JSON (`actor`, `triggering_actor`, `head_commit`, `repository`, `head_repository`). Logins and emails must only appear hashed, and the repository blobs repeat on every run.
-- `backfill.py`, line 82: the runner OS is guessed from the first job label naming Ubuntu or Linux, Windows, or macOS.
-- `backfill.py`, line 158: the licence recorded is the one in the member's config file. `scripts/rerun_check.py` (P1.3) flags a mismatch with GitHub's `spdx_id`.
-- `backfill.py`, line 254: a workflow file that cannot be read is treated as not relevant and checked again on the next backfill (`detected_at_sha` stays empty).
-- `backfill.py`, line 424: a non-retryable 4xx (for example 403) on a log is recorded as `missing`, so one unreadable log does not stop the repo. Rate-limit failures are not treated this way; they stop the repo.
-- `backfill.py`, line 474: a commit that no longer exists (force-push) is skipped, not fatal.
-- `backfill.py`, line 484: if GitHub has no account for a commit's author, the commit's author email is hashed instead.
-- `cli.py`, line 30: logs and snapshots live in `<checkout>/data` unless `DATA_DIR` or `--data-dir` says otherwise.
+- `backfill.py`, line 53: 7-day windows (`DEFAULT_WINDOW_DAYS`). The client halves any window that hits the 1,000-result cap. The 90-day default is `DEFAULT_DAYS`.
+- `backfill.py`, line 56: `MAX_CONSECUTIVE_SKIPS = 5`. After 5 runs in a row are skipped for 5xx errors, the command stops the repo with "GitHub looks unhealthy", because GitHub itself is probably down. A success resets the count. The skipped rows are kept, so a re-run resumes (D39).
+- `backfill.py`, line 65: personal data and bulky objects are dropped from the stored run JSON (`actor`, `triggering_actor`, `head_commit`, `repository`, `head_repository`). Logins and emails must only appear hashed, and the repository blobs repeat on every run.
+- `backfill.py`, line 100: the runner OS is guessed from the first job label naming Ubuntu or Linux, Windows, or macOS.
+- `backfill.py`, line 217: the licence recorded is the one in the member's config file. `scripts/rerun_check.py` (P1.3) flags a mismatch with GitHub's `spdx_id`.
+- `backfill.py`, line 293: a workflow file that cannot be read is treated as not relevant and checked again on the next backfill (`detected_at_sha` stays empty).
+- `backfill.py`, line 602: `fill-logs` reads the whole pending list even when `--limit` is set. Logs that fail with a 5xx stay pending, and if they used up the limit they would block the rest.
+- `backfill.py`, line 648: a non-retryable 4xx (for example 403) on a log is recorded as `missing`, so one unreadable log does not stop the repo. Rate-limit failures are not treated this way; they stop the repo.
+- `backfill.py`, line 700: a commit that no longer exists (force-push) is skipped, not fatal.
+- `backfill.py`, line 710: if GitHub has no account for a commit's author, the commit's author email is hashed instead.
+- `cli.py`, line 37: logs and snapshots live in `<checkout>/data` unless `DATA_DIR` or `--data-dir` says otherwise.
+- `cli.py`, line 189: `--limit` on `fill-logs` is a total over all repos of that run, not a limit per repo. Logs that failed with a 5xx do not count (see the `backfill.py` line 602 note above).
 - `export_import.py`, line 46: only `logs/` and `snapshots/` under `data/` travel with an export. Reports and exports do not.
 - `export_import.py`, line 48: names are limited to plain Postgres identifiers (letters, digits, underscores, at most 63), so they are safe in SQL and command arguments.
 - `export_import.py`, line 161: pg_restore runs with `--clean --if-exists --single-transaction`. This works into an empty database and over a migrated one, and a failure leaves the database unchanged.
-- `export_import.py`, line 531: a file already at the same path in `data/` is replaced by the import.
 - `file_tags.py`, line 18: tags whose files are worth a content snapshot are the ones that are not `test`, `source`, `docs` or `other`. That means configuration and manifests (and lockfiles). Test files, plain source and docs are already visible in the commit diff.
-- `policy.py`, line 8: "failed" means `failure`, `timed_out` or `startup_failure`. Cancelled and skipped jobs are not failures, and their logs carry no useful signal.
-- `policy.py`, line 13: gzip level 6, which is the zlib default. The level is fixed so the bytes are stable.
+- `policy.py`, line 9: "failed" means `failure`, `timed_out` or `startup_failure`. Cancelled and skipped jobs are not failures, and their logs carry no useful signal.
+- `policy.py`, line 14: gzip level 6, which is the zlib default. The level is fixed so the bytes are stable.
+
+One more is written as `(DEFAULT: ...)` inside a step comment, not as the `# DEFAULT:` marker:
+
+- `export_import.py`, line 531 (the import's step 4, "files"): a file already at the same path in `data/` is replaced by the import.
 
 Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth knowing:
 
@@ -663,13 +680,16 @@ Not marked with a `# DEFAULT:` comment, but chosen by the implementer and worth 
 
 `config/workflow_detection.yaml` has no `# DEFAULT:` comments.
 
-`services/collector/tests/conftest.py`, line 39: the tests use their own throwaway database (`<name>_collector_test`), not the `_test` database that `shared/tests` uses, so the two suites never drop each other's database. The database user needs the CREATEDB right.
+In the tests:
+
+- `tests/conftest.py`, line 39: the tests use their own throwaway database (`<name>_collector_test`), not the `_test` database that `shared/tests` uses, so the two suites never drop each other's database. The database user needs the CREATEDB right.
+- `tests/test_export_import_db.py`, line 49: the import target is `<main db>_import_test`, dropped before and after the test.
 
 ## Related
 
 - Plan: `docs/PLAN.md`, tasks P1.2 (repo config and detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import).
 - Export and import code: `services/collector/src/collector/export_import.py` (archive, checks, pg commands) and the `export` and `import` commands in `cli.py`. Makefile targets `export-data` and `import-data`. Design: `docs/DATA.md` section 9.
-- Export and import tests: `services/collector/tests/test_export_import.py` (offline, fake Postgres) and `test_export_import_db.py` (integration, Docker, not yet run).
+- Export and import tests: `services/collector/tests/test_export_import.py` (offline, fake Postgres) and `test_export_import_db.py` (integration, Docker, runs in `make check`).
 - Design: `docs/DATA.md` section 2 (repo lists and auto-detection), section 3 (the collector), section 5 (file tags).
 - The GitHub client that the backfill uses: `shared/github/README.md`.
 - The sanitiser that cleans logs and text: `shared/sanitise/README.md`.

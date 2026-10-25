@@ -10,6 +10,13 @@ from collector import cli
 from collector.repo_config import RepoConfig, RepoEntry
 from collector.status import RateLimit, collect_status, render_status
 from collector.store import PendingLog
+from fill_scope import (
+    check_default_selection,
+    check_failed_runs_selection,
+    check_fill_limit,
+    check_fill_scope,
+    seed_scope_scenario,
+)
 from memory_store import MemoryStore
 from recorded_github import NOW, REPO, FakeGitHub, file_checksums
 from scenario import ENTRY, check_expected_state, make_backfiller, make_client
@@ -164,6 +171,130 @@ def test_fill_logs_cli(
     assert f"{REPO}: logs ok 2, expired 0, missing 1" in capsys.readouterr().out
     assert cli.main(["fill-logs", "--member", "test", "--repo", "nobody/nothing"]) == 2
     assert cli.main(["fill-logs", "--member", "test", "--limit", "0"]) == 2
+
+
+def _pending_ids(store: MemoryStore, *, failed_runs_only: bool = False) -> list[int]:
+    with store.transaction():
+        found = store.pending_logs(_repo_id(store), None, failed_runs_only=failed_runs_only)
+    return [p.job_id for p in found]
+
+
+def test_passing_failed_runs_skips_passing_jobs_of_green_runs(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = _pass_one(tmp_path)
+    fake_github.requests.clear()
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, passing="failed-runs")
+    # run 9001 failed in attempt 1 (job 5001) and passed in attempt 2: its passing logs of BOTH
+    # attempts are fetched (5002 in attempt 1, 5003 and 5004 in attempt 2); run 9002 has a failed
+    # job (5005) so 5007 is fetched too. Run 9004 (job 5008) has no failed job: left out.
+    assert _log_requests(fake_github) == [5007, 5004, 5003, 5002]
+    logged = {row["job_id"] for row in store.dump()["logs"]}
+    assert logged == {5001, 5005, 5007, 5004, 5003, 5002}  # no row for 5008, not even "missing"
+    assert _pending_ids(store) == [5008]
+    assert store.repo_counts(_repo_id(store)).logs_pending == 1  # `status` keeps counting it
+
+
+def test_passing_failed_runs_then_plain_fill_logs_completes_the_collection(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = _pass_one(tmp_path)
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, passing="failed-runs")
+    fake_github.requests.clear()
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY)
+    assert _log_requests(fake_github) == [5008]
+    check_expected_state(store.dump(), tmp_path)  # same end state as a one-pass backfill
+
+
+def test_passing_all_is_the_default(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = _pass_one(tmp_path)
+    fake_github.requests.clear()
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, passing="all")
+    assert _log_requests(fake_github) == [5007, 5004, 5003, 5002, 5008]
+
+
+def test_passing_failed_runs_keeps_failed_job_logs(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    # no logs fetched at all yet (as after a backfill that was stopped early): failed jobs
+    # are still wanted, in a failed-runs fill
+    store = MemoryStore()
+    make_backfiller(store, tmp_path).backfill_repo(ENTRY)
+    store.tables["logs"].clear()
+    assert _pending_ids(store, failed_runs_only=True) == [5007, 5005, 5004, 5003, 5002, 5001]
+    assert _pending_ids(store) == [5007, 5005, 5004, 5003, 5002, 5001, 5008]  # unchanged default
+
+
+def test_passing_failed_runs_with_limit_takes_the_newest(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = _pass_one(tmp_path)
+    fake_github.requests.clear()
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, 2, passing="failed-runs")
+    assert _log_requests(fake_github) == [5007, 5004]
+    make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, passing="failed-runs")
+    assert _log_requests(fake_github) == [5007, 5004, 5003, 5002]
+
+
+def test_invalid_passing_is_rejected(tmp_path: Path) -> None:
+    with pytest.raises(ValueError):
+        make_backfiller(MemoryStore(), tmp_path).fill_logs_repo(ENTRY, passing="some")  # type: ignore[arg-type]
+
+
+def test_scope_default_selection_memory() -> None:
+    store = MemoryStore()
+    seed_scope_scenario(store)
+    check_default_selection(store)
+
+
+def test_scope_failed_runs_selection_memory() -> None:
+    store = MemoryStore()
+    seed_scope_scenario(store)
+    check_failed_runs_selection(store)
+
+
+def test_scope_fill_logs_memory(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    seed_scope_scenario(store)
+    check_fill_scope(store, fake_github, tmp_path)
+
+
+def test_scope_fill_logs_limit_memory(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    seed_scope_scenario(store)
+    check_fill_limit(store, fake_github, tmp_path)
+
+
+def test_fill_logs_cli_passing_failed_runs(
+    fake_github: FakeGitHub,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store = _pass_one(tmp_path)
+    fake_github.requests.clear()
+    monkeypatch.setattr(cli, "SqlStore", lambda _engine: store)
+    monkeypatch.setattr(cli, "get_engine", lambda: None)
+    monkeypatch.setattr(cli, "GitHubClient", make_client)
+    monkeypatch.setattr(
+        cli, "load_member_config", lambda member: RepoConfig(member="test", repos=[ENTRY])
+    )
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://x@127.0.0.1/x")
+    monkeypatch.setenv("GITHUB_TOKEN", "fake-token-for-tests-only")
+    argv = ["fill-logs", "--member", "test", "--data-dir", str(tmp_path)]
+    assert cli.main([*argv, "--passing", "failed-runs"]) == 0
+    # 5007 ok, 5004 expired, 5003 missing, 5002 ok; 5008 is left out
+    assert f"{REPO}: logs ok 2, expired 1, missing 1" in capsys.readouterr().out
+    assert _log_requests(fake_github) == [5007, 5004, 5003, 5002]
+    assert cli.main([*argv, "--passing", "failed-runs"]) == 0
+    assert f"{REPO}: logs ok 0, expired 0, missing 0" in capsys.readouterr().out
+    assert cli.main(argv) == 0  # without the flag: fills what is still pending
+    assert f"{REPO}: logs ok 1, expired 0, missing 0" in capsys.readouterr().out
+    assert _log_requests(fake_github)[-1] == 5008
+
+
+def test_fill_logs_passing_argument_is_validated() -> None:
+    with pytest.raises(SystemExit) as exc:
+        cli.main(["fill-logs", "--member", "test", "--passing", "bogus"])
+    assert exc.value.code == 2
 
 
 def test_fill_logs_cli_requires_token_and_database(

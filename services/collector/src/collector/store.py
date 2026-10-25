@@ -19,9 +19,11 @@ from sqlalchemy import (
     Engine,
     Table,
     and_,
+    exists,
     func,
     literal_column,
     null,
+    or_,
     select,
 )
 from sqlalchemy import (
@@ -29,7 +31,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB, insert
 
-from collector.policy import LOG_CONCLUSIONS
+from collector.policy import FAILED_CONCLUSIONS, LOG_CONCLUSIONS, PASSED_CONCLUSIONS
 from shared.db import models as m
 
 
@@ -229,7 +231,16 @@ class Store(Protocol):
     def upsert_snapshot(self, snapshot: SnapshotRecord) -> None: ...
     def has_log(self, job_id: int) -> bool: ...
     def upsert_log(self, log: LogRecord) -> None: ...
-    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]: ...
+    def pending_logs(
+        self, repo_id: int, limit: int | None, *, failed_runs_only: bool = False
+    ) -> list[PendingLog]:
+        """Jobs needing a log, newest run first.
+
+        `failed_runs_only`: a passing job counts only if some job of the same run (any attempt)
+        failed. It narrows the list before `limit` applies.
+        """
+        ...
+
     def add_skipped_run(self, skipped: SkippedRunRecord) -> None: ...
     def clear_skipped_run(self, repo_id: int, run_id: int) -> None: ...
     def skipped_runs(self, repo_id: int) -> list[SkippedRunRecord]: ...
@@ -410,10 +421,10 @@ class SqlStore:
         """Insert or update a raw.logs row."""
         self._upsert(m.Log, asdict(log), ["job_id"], update=True)
 
-    def _pending_query(self, repo_id: int) -> Any:
+    def _pending_query(self, repo_id: int, *, failed_runs_only: bool = False) -> Any:
         wr, jb, lg = _table(m.WorkflowRun), _table(m.Job), _table(m.Log)
         on_run = and_(jb.c.run_id == wr.c.run_id, jb.c.attempt == wr.c.attempt)
-        return (
+        stmt = (
             select(jb.c.job_id, jb.c.run_id, jb.c.attempt)
             .select_from(jb.join(wr, on_run).outerjoin(lg, lg.c.job_id == jb.c.job_id))
             .where(
@@ -423,11 +434,24 @@ class SqlStore:
                 jb.c.conclusion.in_(sorted(LOG_CONCLUSIONS)),
             )
         )
+        if failed_runs_only:
+            # Failed jobs always keep their log; a passing job's log only when its run (any
+            # attempt) has a failed job, so a re-run that passed keeps its flip evidence (D40).
+            sibling = _table(m.Job).alias("sibling")
+            run_failed = exists().where(
+                sibling.c.run_id == jb.c.run_id,
+                sibling.c.conclusion.in_(sorted(FAILED_CONCLUSIONS)),
+            )
+            stmt = stmt.where(or_(jb.c.conclusion.not_in(sorted(PASSED_CONCLUSIONS)), run_failed))
+        return stmt
 
-    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]:
+    def pending_logs(
+        self, repo_id: int, limit: int | None, *, failed_runs_only: bool = False
+    ) -> list[PendingLog]:
         """Jobs needing a log with no raw.logs row, newest run first."""
         wr, jb = _table(m.WorkflowRun), _table(m.Job)
-        stmt = self._pending_query(repo_id).order_by(
+        query = self._pending_query(repo_id, failed_runs_only=failed_runs_only)
+        stmt = query.order_by(
             wr.c.created_at.desc().nulls_last(),
             jb.c.run_id.desc(),
             jb.c.attempt.desc(),
