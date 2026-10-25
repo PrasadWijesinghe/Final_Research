@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 from datetime import UTC, datetime, timedelta
+from typing import Final, Literal
 
 # DEFAULT: "failed" means failure, timed_out or startup_failure; cancelled and skipped jobs are
 # not failures, and their logs carry no signal worth the API call.
@@ -24,6 +25,12 @@ def should_fetch_log(status: str | None, conclusion: str | None, workflow_releva
     if conclusion in FAILED_CONCLUSIONS:
         return True
     return conclusion in PASSED_CONCLUSIONS and workflow_relevant
+
+
+# `fill-logs --passing`: which passing-job logs are fetched (D40). Logs of failed jobs always are.
+PassingMode = Literal["all", "failed-runs"]
+PASSING_ALL: Final = "all"
+PASSING_FAILED_RUNS: Final = "failed-runs"  # only passing jobs of a run that has a failed job
 
 
 def gzip_bytes(data: bytes) -> bytes:

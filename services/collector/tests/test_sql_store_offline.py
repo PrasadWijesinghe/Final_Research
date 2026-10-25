@@ -164,3 +164,18 @@ def test_run_upsert_never_overwrites_source_and_none_json_is_sql_null() -> None:
     assert "source" in sql.split("DO UPDATE SET")[0]  # still inserted on first write
     # raw=None is sent as SQL NULL, not the JSON value null
     assert "NULL" in sql.split("VALUES")[1].split("ON CONFLICT")[0]
+
+
+def test_pending_logs_failed_runs_adds_a_correlated_exists_only_when_asked() -> None:
+    engine = _FakeEngine()
+    store = SqlStore(engine)  # type: ignore[arg-type]
+    with store.transaction():
+        store.pending_logs(1, None)
+        store.pending_logs(1, 5, failed_runs_only=True)
+    plain, scoped = engine.conn.sql
+    assert "EXISTS" not in plain  # the default query (and `status` pending counts) is unchanged
+    assert "EXISTS (SELECT *" in scoped and "FROM raw.jobs AS sibling" in scoped
+    assert "sibling.run_id = raw.jobs.run_id" in scoped  # same run, any attempt
+    assert "sibling.conclusion IN" in scoped
+    assert "raw.jobs.conclusion NOT IN" in scoped  # failed jobs never depend on the EXISTS
+    assert "LIMIT" in scoped

@@ -20,7 +20,15 @@ from typing import Any
 
 from collector.file_tags import FileTagger
 from collector.job_keys import map_job_key
-from collector.policy import FAILED_CONCLUSIONS, date_windows, gzip_bytes, should_fetch_log
+from collector.policy import (
+    FAILED_CONCLUSIONS,
+    PASSING_ALL,
+    PASSING_FAILED_RUNS,
+    PassingMode,
+    date_windows,
+    gzip_bytes,
+    should_fetch_log,
+)
 from collector.repo_config import RepoEntry
 from collector.store import (
     CommitFileRecord,
@@ -569,13 +577,22 @@ class Backfiller:
                     return
                 self._store_log(entry, run_id, attempt, job_id, summary)
 
-    def fill_logs_repo(self, entry: RepoEntry, limit: int | None = None) -> RepoSummary:
+    def fill_logs_repo(
+        self, entry: RepoEntry, limit: int | None = None, *, passing: PassingMode = PASSING_ALL
+    ) -> RepoSummary:
         """Pass 2: fetch logs the policy wants but the database lacks, newest runs first.
 
         Each log is committed on its own, so stopping at any point loses nothing, and a second
         call only sees what is still missing. Expired or unreadable logs get a status row exactly
         as in the backfill.
+
+        `passing="failed-runs"` fetches a passing job's log only when its run (any attempt) has a
+        failed job; the other passing jobs stay pending (D40).
         """
+        if passing not in (PASSING_ALL, PASSING_FAILED_RUNS):
+            raise ValueError(
+                f"passing must be '{PASSING_ALL}' or '{PASSING_FAILED_RUNS}', not {passing!r}"
+            )
         summary = RepoSummary()
         with self.store.transaction():
             repo = next(
@@ -584,7 +601,13 @@ class Backfiller:
             )
             # DEFAULT: the whole pending list is read even with a limit: logs that fail with a
             # 5xx stay pending and must not use up the limit (or they would block the rest).
-            pending = self.store.pending_logs(repo.id, None) if repo else []
+            pending = (
+                self.store.pending_logs(
+                    repo.id, None, failed_runs_only=passing == PASSING_FAILED_RUNS
+                )
+                if repo
+                else []
+            )
         fetched = 0
         for job in pending:
             if limit is not None and fetched >= limit:

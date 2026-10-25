@@ -20,6 +20,7 @@ from collector.backfill import (
 from collector.daily import DailySummary, DailySyncer, NotBackfilledError
 from collector.export_import import TransferError, export_data, import_data, resolve_target
 from collector.file_tags import load_file_tagger
+from collector.policy import PASSING_ALL, PASSING_FAILED_RUNS
 from collector.repo_config import DEFAULT_CONFIG_DIR, MEMBERS, ConfigError, load_member_config
 from collector.status import collect_status, fetch_rate_limit, render_status
 from collector.store import SqlStore
@@ -65,6 +66,13 @@ def _build_parser() -> argparse.ArgumentParser:
     fill.add_argument("--member", required=True, choices=MEMBERS)
     fill.add_argument("--repo", help="only this owner/name (must be in the member's list)")
     fill.add_argument("--limit", type=int, help="fetch at most this many logs in this run")
+    fill.add_argument(
+        "--passing",
+        choices=(PASSING_ALL, PASSING_FAILED_RUNS),
+        default=PASSING_ALL,
+        help="'failed-runs' fetches logs of passing jobs only in runs that have a failed job "
+        "(any attempt); default 'all'",
+    )
     fill.add_argument(
         "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
     )
@@ -188,7 +196,7 @@ def run_fill_logs(args: argparse.Namespace) -> int:
             if remaining is not None and remaining <= 0:
                 break
             try:
-                summary = filler.fill_logs_repo(entry, remaining)
+                summary = filler.fill_logs_repo(entry, remaining, passing=args.passing)
             except GitHubError as exc:
                 failed += 1
                 logger.error(
