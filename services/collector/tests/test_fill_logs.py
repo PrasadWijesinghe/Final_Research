@@ -6,6 +6,20 @@ import re
 from pathlib import Path
 
 import pytest
+from archive_scope import (
+    check_5xx_falls_back_to_per_job,
+    check_404_falls_back,
+    check_410_expires_the_whole_attempt,
+    check_410_not_confirmed_falls_back_per_job,
+    check_410_with_limit_expires_only_the_budget,
+    check_ambiguous_names_fall_back,
+    check_archive_replaces_per_job_calls,
+    check_byte_identity,
+    check_limit_never_overshoots,
+    check_no_archive_is_one_request_per_job,
+    check_passing_failed_runs_with_archive,
+    check_single_pending_job_uses_its_own_request,
+)
 from collector import cli
 from collector.repo_config import RepoConfig, RepoEntry
 from collector.status import RateLimit, collect_status, render_status
@@ -73,7 +87,7 @@ def test_fill_logs_fetches_exactly_the_pending_ones_newest_first(
 ) -> None:
     store = _pass_one(tmp_path)
     fake_github.requests.clear()
-    summary = make_backfiller(store, tmp_path).fill_logs_repo(ENTRY)
+    summary = make_backfiller(store, tmp_path).fill_logs_repo(ENTRY, archive=False)
     # newest run first (9002, then 9001 attempt 2 by job id, attempt 1, and the August run last)
     assert _log_requests(fake_github) == [5007, 5004, 5003, 5002, 5008]
     assert (summary.logs_ok, summary.logs_expired, summary.logs_missing) == (3, 1, 1)
@@ -311,3 +325,72 @@ def test_backfill_logs_argument_is_validated() -> None:
     with pytest.raises(SystemExit) as exc:
         cli.main(["backfill", "--member", "test", "--logs", "bogus"])
     assert exc.value.code == 2
+
+
+# ---- run-attempt log archives (D41) -------------------------------------------------------------
+
+
+def test_archive_replaces_per_job_calls(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_archive_replaces_per_job_calls(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_ambiguous_names_fall_back(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_ambiguous_names_fall_back(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_410_expires_the_whole_attempt(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_410_expires_the_whole_attempt(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_410_not_confirmed_falls_back_per_job(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = MemoryStore()
+    check_410_not_confirmed_falls_back_per_job(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_410_with_limit_expires_only_the_budget(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = MemoryStore()
+    check_410_with_limit_expires_only_the_budget(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_404_falls_back_to_per_job(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_404_falls_back(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_5xx_falls_back_to_per_job(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_5xx_falls_back_to_per_job(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_single_pending_job_uses_its_own_request(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    store = MemoryStore()
+    check_single_pending_job_uses_its_own_request(store, fake_github, tmp_path, store.dump)
+
+
+def test_no_archive_is_one_request_per_job(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_no_archive_is_one_request_per_job(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_with_passing_failed_runs(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_passing_failed_runs_with_archive(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_limit_never_overshoots(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_limit_never_overshoots(store, fake_github, tmp_path, store.dump)
+
+
+def test_archive_and_per_job_store_identical_logs(fake_github: FakeGitHub, tmp_path: Path) -> None:
+    store = MemoryStore()
+    check_byte_identity(store, fake_github, tmp_path, store.dump, store.tables["logs"].clear)

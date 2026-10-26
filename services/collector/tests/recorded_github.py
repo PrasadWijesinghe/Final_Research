@@ -65,6 +65,12 @@ class FakeGitHub:
         self.jobs_connect_error: set[int] = set()  # run ids whose jobs listing cannot connect
         self.log_connect_error: set[int] = set()  # job ids whose log download cannot connect
         self.fail_runs_listing = False  # answer 500 to the runs listing (a failing repo)
+        # Job logs and run-attempt log archives (D41) that tests set up themselves; any job or
+        # attempt not listed here answers like before (fixture file or 404).
+        self.job_logs: dict[int, bytes] = {}  # job id -> body of its per-job log request
+        self.archives: dict[tuple[int, int], bytes] = {}  # (run id, attempt) -> zip bytes
+        self.archive_status: dict[tuple[int, int], int] = {}  # (run, attempt) -> HTTP status
+        self.archive_connect_error: set[tuple[int, int]] = set()  # archive requests that fail
         self._api = f"/repos/{REPO}"
 
     # ---- plumbing ---------------------------------------------------------------------------
@@ -98,6 +104,8 @@ class FakeGitHub:
         if url.host == "raw.githubusercontent.com":
             return self._raw(path)
         if url.host == "pipelines.actions.githubusercontent.com":
+            if archive := re.fullmatch(r"/archive/(\d+)/(\d+)", path):
+                return httpx.Response(200, content=self.archives[int(archive[1]), int(archive[2])])
             job = re.fullmatch(r"/log/(\d+)", path)
             return self._log_file(int(job.group(1))) if job else self._not_found()
         if url.host != "api.github.com":
@@ -143,6 +151,8 @@ class FakeGitHub:
             return self._jobs(int(m.group(1)), params)
         if m := re.fullmatch(rf"{api}/actions/jobs/(\d+)/logs", path):
             return self._job_log(int(m.group(1)))
+        if m := re.fullmatch(rf"{api}/actions/runs/(\d+)/attempts/(\d+)/logs", path):
+            return self._archive(int(m.group(1)), int(m.group(2)))
         if m := re.fullmatch(rf"{api}/commits/([0-9a-f]{{40}})", path):
             return self._commit(m.group(1))
         raise AssertionError(f"unexpected API request {path}")
@@ -195,6 +205,18 @@ class FakeGitHub:
                 runs[i] = load_json(f"attempts/{r['id']}_{cap}.json")  # the older state of the run
         return self._json({"total_count": len(runs), "workflow_runs": runs})
 
+    def _archive(self, run_id: int, attempt: int) -> httpx.Response:
+        """The log archive of a run attempt: 302 to blob storage like GitHub, else the status."""
+        key = (run_id, attempt)
+        if key in self.archive_connect_error:
+            raise httpx.ConnectError("network is down")
+        if key in self.archive_status:
+            return self._json({"message": "Archive"}, status=self.archive_status[key])
+        if key not in self.archives:
+            return self._not_found()
+        location = f"https://pipelines.actions.githubusercontent.com/archive/{run_id}/{attempt}"
+        return httpx.Response(302, headers={**_RATE, "location": location})
+
     def _job_log(self, job_id: int) -> httpx.Response:
         if job_id in self.crash_on_log:
             self.crash_on_log.discard(job_id)
@@ -203,6 +225,8 @@ class FakeGitHub:
             raise httpx.ConnectError("network is down")
         if job_id in self.log_status:
             return self._json({"message": "Forbidden"}, status=self.log_status[job_id])
+        if job_id in self.job_logs:
+            return httpx.Response(200, content=self.job_logs[job_id])
         if job_id == 5004:
             return self._json({"message": "Logs expired"}, status=410)
         if job_id == 5001:  # real GitHub answers with a redirect to blob storage

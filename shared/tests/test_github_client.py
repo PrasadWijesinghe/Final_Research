@@ -2,6 +2,7 @@
 
 import json
 import logging
+from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -10,7 +11,13 @@ import httpx
 import pytest
 import respx
 
-from shared.github import GitHubClient, GitHubConfig, GitHubError, GitHubNotFoundError
+from shared.github import (
+    GitHubClient,
+    GitHubConfig,
+    GitHubError,
+    GitHubNotFoundError,
+    GitHubTooLargeError,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "github"
 API = "https://api.github.com"
@@ -205,6 +212,111 @@ def test_get_bytes_follows_redirect_without_leaking_token(client: GitHubClient) 
         body = client.get_bytes("/repos/acme/widgets/actions/jobs/7/logs")
     assert body == b"line 1\nline 2\n"
     assert "authorization" not in blob_route.calls.last.request.headers
+
+
+def test_get_bytes_max_bytes_returns_a_body_that_fits(client: GitHubClient) -> None:
+    blob = "https://pipelinesghubeus1.actions.githubusercontent.com/abc/run.zip"
+    with respx.mock:
+        respx.get(f"{API}/repos/acme/widgets/actions/runs/5/attempts/1/logs").respond(
+            302, headers={"location": blob, **_rl()}
+        )
+        blob_route = respx.get(blob).respond(200, content=b"PK-zip-bytes")
+        body = client.get_bytes("/repos/acme/widgets/actions/runs/5/attempts/1/logs", max_bytes=100)
+    assert body == b"PK-zip-bytes"
+    assert "authorization" not in blob_route.calls.last.request.headers
+    assert client.api_calls == 1
+
+
+def test_get_bytes_max_bytes_refuses_a_larger_body_by_content_length(
+    client: GitHubClient,
+) -> None:
+    blob = "https://pipelinesghubeus1.actions.githubusercontent.com/abc/run.zip"
+    with respx.mock:
+        respx.get(f"{API}/x/logs").respond(302, headers={"location": blob})
+        respx.get(blob).respond(200, content=b"x" * 500)  # httpx sends content-length: 500
+        with pytest.raises(GitHubTooLargeError):
+            client.get_bytes("/x/logs", max_bytes=100)
+
+
+def test_get_bytes_max_bytes_stops_reading_a_stream_without_content_length(
+    client: GitHubClient,
+) -> None:
+    read: list[int] = []
+
+    def chunks() -> Iterator[bytes]:
+        for _ in range(1000):
+            read.append(1)
+            yield b"y" * 50
+
+    with respx.mock:
+        respx.get(f"{API}/x/logs").respond(200, content=chunks())  # chunked: no content-length
+        with pytest.raises(GitHubTooLargeError):
+            client.get_bytes("/x/logs", max_bytes=120)
+    assert len(read) < 10  # it gave up after a few chunks instead of reading all 50 KB
+
+
+def test_get_bytes_max_bytes_joins_a_chunked_body_exactly(client: GitHubClient) -> None:
+    chunks = [bytes([i]) * 50 for i in range(5)]
+    with respx.mock:
+        respx.get(f"{API}/x/logs").respond(200, content=iter(chunks))
+        body = client.get_bytes("/x/logs", max_bytes=250)  # exactly at the limit is fine
+    assert body == b"".join(chunks)
+
+
+def test_get_bytes_max_bytes_keeps_error_handling(client: GitHubClient) -> None:
+    with respx.mock:
+        respx.get(f"{API}/gone/logs").respond(410, json={"message": "Logs expired"})
+        respx.get(f"{API}/none/logs").respond(404)
+        with pytest.raises(GitHubError) as gone:
+            client.get_bytes("/gone/logs", max_bytes=100)
+        assert client.get_bytes("/none/logs", max_bytes=100) is None
+    assert gone.value.status_code == 410 and not isinstance(gone.value, GitHubTooLargeError)
+
+
+def test_rate_limit_final_answer_wins_over_an_earlier_redirect(client: GitHubClient) -> None:
+    with respx.mock:
+        respx.get(f"{API}/old").respond(
+            301, headers={"location": f"{API}/new", **_rl(remaining=300)}
+        )
+        respx.get(f"{API}/new").respond(200, json={}, headers=_rl(remaining=299))
+        client.get_json("/old")
+    assert client._remaining == 299
+
+
+def test_rate_limit_without_headers_on_the_first_hop_reads_the_final_answer(
+    client: GitHubClient,
+) -> None:
+    with respx.mock:
+        respx.get(f"{API}/old").respond(301, headers={"location": f"{API}/new"})
+        respx.get(f"{API}/new").respond(200, json={}, headers=_rl(remaining=100))
+        client.get_json("/old")
+    assert client._remaining == 100
+
+
+def test_rate_limit_falls_back_to_the_api_answer_when_storage_sends_no_headers(
+    client: GitHubClient, sleeper: Sleeper
+) -> None:
+    # the storage answer after a log redirect has no rate-limit headers; the API's 302 does
+    blob = "https://pipelinesghubeus1.actions.githubusercontent.com/abc/log.txt"
+    with respx.mock:
+        respx.get(f"{API}/x/logs").respond(
+            302, headers={"location": blob, **_rl(remaining=50, reset=NOW + 600)}
+        )
+        respx.get(blob).respond(200, content=b"log")
+        client.get_bytes("/x/logs")
+        assert client._remaining == 50
+        respx.get(f"{API}/y").respond(200, json={}, headers=_rl())
+        client.get_json("/y")
+    assert sleeper.calls == [601.0]  # 50 left is below the threshold: waits for the reset
+
+
+def test_rate_limit_without_a_redirect_is_unchanged(client: GitHubClient) -> None:
+    with respx.mock:
+        respx.get(f"{API}/a").respond(200, json={}, headers=_rl(remaining=777))
+        respx.get(f"{API}/b").respond(200, json={})  # no headers: the last value is kept
+        client.get_json("/a")
+        client.get_json("/b")
+    assert client._remaining == 777
 
 
 def test_window_splitting(client: GitHubClient) -> None:

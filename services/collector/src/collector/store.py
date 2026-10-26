@@ -241,6 +241,10 @@ class Store(Protocol):
         """
         ...
 
+    def job_names(self, run_id: int, attempt: int) -> list[tuple[int, str | None]]:
+        """(job id, name) of every job stored for one run attempt."""
+        ...
+
     def add_skipped_run(self, skipped: SkippedRunRecord) -> None: ...
     def clear_skipped_run(self, repo_id: int, run_id: int) -> None: ...
     def skipped_runs(self, repo_id: int) -> list[SkippedRunRecord]: ...
@@ -460,6 +464,16 @@ class SqlStore:
         if limit is not None:
             stmt = stmt.limit(limit)
         return [PendingLog(r[0], r[1], r[2]) for r in self._c.execute(stmt).all()]
+
+    def job_names(self, run_id: int, attempt: int) -> list[tuple[int, str | None]]:
+        """(job id, name) of every job stored for one run attempt, by job id."""
+        jb = _table(m.Job)
+        stmt = (
+            select(jb.c.job_id, jb.c.name)
+            .where(jb.c.run_id == run_id, jb.c.attempt == attempt)
+            .order_by(jb.c.job_id)
+        )
+        return [(int(r[0]), r[1]) for r in self._c.execute(stmt).all()]
 
     def add_skipped_run(self, skipped: SkippedRunRecord) -> None:
         """Record (or refresh) a skipped run."""
