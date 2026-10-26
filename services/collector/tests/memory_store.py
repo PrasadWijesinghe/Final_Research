@@ -191,6 +191,14 @@ class MemoryStore:
         rows = [PendingLog(j.job_id, j.run_id, j.attempt) for _, j in found]
         return rows if limit is None else rows[:limit]
 
+    def job_names(self, run_id: int, attempt: int) -> list[tuple[int, str | None]]:
+        rows = [
+            (j.job_id, j.name)
+            for j in self.tables["jobs"].values()
+            if j.run_id == run_id and j.attempt == attempt
+        ]
+        return sorted(rows, key=lambda r: r[0])
+
     def add_skipped_run(self, skipped: SkippedRunRecord) -> None:
         self._put("skipped_runs", skipped)
 

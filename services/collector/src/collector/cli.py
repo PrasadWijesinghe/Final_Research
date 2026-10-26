@@ -16,6 +16,7 @@ from collector.backfill import (
     LOGS_ALL,
     LOGS_FAILED,
     Backfiller,
+    RepoSummary,
 )
 from collector.daily import DailySummary, DailySyncer, NotBackfilledError
 from collector.export_import import TransferError, export_data, import_data, resolve_target
@@ -65,7 +66,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     fill.add_argument("--member", required=True, choices=MEMBERS)
     fill.add_argument("--repo", help="only this owner/name (must be in the member's list)")
-    fill.add_argument("--limit", type=int, help="fetch at most this many logs in this run")
+    fill.add_argument("--limit", type=int, help="store at most this many logs in this run")
+    fill.add_argument(
+        "--no-archive",
+        action="store_true",
+        help="one request per job log, as before; by default the logs of a run attempt with "
+        "two or more pending jobs come from one zip (far fewer requests)",
+    )
     fill.add_argument(
         "--passing",
         choices=(PASSING_ALL, PASSING_FAILED_RUNS),
@@ -159,6 +166,17 @@ def run_backfill(args: argparse.Namespace) -> int:
     return EXIT_FAILED if failed else EXIT_OK
 
 
+def _fill_line(s: RepoSummary) -> str:
+    line = f"logs ok {s.logs_ok}, expired {s.logs_expired}, missing {s.logs_missing}"
+    if s.archives_fetched or s.archive_fallbacks or s.archives_failed:
+        line += (
+            f"; archives fetched {s.archives_fetched} ({s.logs_from_archive} logs), "
+            f"fell back to one request per job {s.archive_fallbacks}, "
+            f"archive failures {s.archives_failed}"
+        )
+    return line
+
+
 def run_fill_logs(args: argparse.Namespace) -> int:
     """Run `collector fill-logs` (pass 2 of the backfill); returns the process exit code."""
     missing = _missing_env(("GITHUB_TOKEN", "DATABASE_URL"))
@@ -196,7 +214,9 @@ def run_fill_logs(args: argparse.Namespace) -> int:
             if remaining is not None and remaining <= 0:
                 break
             try:
-                summary = filler.fill_logs_repo(entry, remaining, passing=args.passing)
+                summary = filler.fill_logs_repo(
+                    entry, remaining, passing=args.passing, archive=not args.no_archive
+                )
             except GitHubError as exc:
                 failed += 1
                 logger.error(
@@ -207,10 +227,7 @@ def run_fill_logs(args: argparse.Namespace) -> int:
                 continue
             if remaining is not None:
                 remaining -= summary.logs_ok + summary.logs_expired + summary.logs_missing
-            sys.stdout.write(
-                f"{entry.full_name}: logs ok {summary.logs_ok}, expired {summary.logs_expired}, "
-                f"missing {summary.logs_missing}\n"
-            )
+            sys.stdout.write(f"{entry.full_name}: {_fill_line(summary)}\n")
     return EXIT_FAILED if failed else EXIT_OK
 
 

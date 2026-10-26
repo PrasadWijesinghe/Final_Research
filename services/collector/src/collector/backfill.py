@@ -9,9 +9,11 @@ resumed and a second run changes nothing.
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import logging
 import os
+import zipfile
 from collections.abc import Callable
 from dataclasses import dataclass, fields, replace
 from datetime import UTC, datetime
@@ -20,6 +22,7 @@ from typing import Any
 
 from collector.file_tags import FileTagger
 from collector.job_keys import map_job_key
+from collector.log_archive import match_entries, top_level_entries
 from collector.policy import (
     FAILED_CONCLUSIONS,
     PASSING_ALL,
@@ -35,6 +38,7 @@ from collector.store import (
     CommitRecord,
     JobRecord,
     LogRecord,
+    PendingLog,
     RepoRecord,
     RunRecord,
     SkippedRunRecord,
@@ -45,7 +49,7 @@ from collector.store import (
     WorkflowRecord,
 )
 from collector.workflow_detection import DetectionRules, detect_relevant_workflow
-from shared.github import GitHubClient, GitHubError, GitHubNotFoundError
+from shared.github import GitHubClient, GitHubError, GitHubNotFoundError, GitHubTooLargeError
 from shared.sanitise import SanitiseResult, hash_identity, sanitise
 
 logger = logging.getLogger(__name__)
@@ -56,6 +60,17 @@ DEFAULT_DAYS = 90
 # DEFAULT: after 5 runs in a row skipped for 5xx errors, GitHub itself looks unhealthy: stop the
 # repo instead of skipping everything (a re-run resumes).
 MAX_CONSECUTIVE_SKIPS = 5
+
+# DEFAULT: `fill-logs` fetches the logs of one run attempt as a single zip (D41) only when the
+# attempt has at least 2 pending jobs; one pending job costs one request either way, so it is
+# fetched on its own (no name matching involved).
+ARCHIVE_MIN_JOBS = 2
+# DEFAULT: an archive over 150 MiB is not read into memory (checked while streaming, and against
+# Content-Length when GitHub sends it); the attempt's jobs are fetched one by one instead.
+ARCHIVE_MAX_BYTES = 150 * 1024 * 1024
+# DEFAULT: after 5 archive downloads in a row failed with a 5xx or a network error, GitHub (or the
+# network) looks unhealthy: stop the repo instead of burning quota on retries; a re-run resumes.
+MAX_CONSECUTIVE_ARCHIVE_FAILURES = 5
 
 # `--logs all` fetches every log the policy asks for; `--logs failed` leaves logs of passing jobs
 # for a later `fill-logs` pass (collection order only; the end state is the same, D11 and D18).
@@ -126,6 +141,10 @@ class RepoSummary:
     logs_missing: int = 0
     logs_deferred: int = 0  # passing-job logs left for `fill-logs` (--logs failed)
     logs_failed: int = 0  # logs GitHub answered 5xx for; left pending for a later `fill-logs`
+    archives_fetched: int = 0  # `fill-logs`: run-attempt log archives downloaded and opened
+    logs_from_archive: int = 0  # logs saved from those archives (the rest used their own request)
+    archive_fallbacks: int = 0  # attempts whose archive could not be used (404, too big, bad zip)
+    archives_failed: int = 0  # archives that failed with a 5xx or a network error (own requests)
     runs_skipped_failing: int = 0  # runs skipped this time after persistent 5xx (kept for retry)
     skipped_cleared: int = 0  # previously skipped runs that were collected now
     windows_done: int = 0
@@ -172,6 +191,9 @@ class Backfiller:
         self._streak = 0  # runs skipped in a row during the walk (reset by any success)
         self._retrying = False  # the retry pass does not count towards the streak
         self.max_consecutive_skips = MAX_CONSECUTIVE_SKIPS
+        self.archive_max_bytes = ARCHIVE_MAX_BYTES
+        self.max_archive_failures = MAX_CONSECUTIVE_ARCHIVE_FAILURES
+        self._archive_failures = 0  # archive downloads in a row that failed (reset by a success)
 
     # ---- per repo ---------------------------------------------------------------------------
 
@@ -578,7 +600,12 @@ class Backfiller:
                 self._store_log(entry, run_id, attempt, job_id, summary)
 
     def fill_logs_repo(
-        self, entry: RepoEntry, limit: int | None = None, *, passing: PassingMode = PASSING_ALL
+        self,
+        entry: RepoEntry,
+        limit: int | None = None,
+        *,
+        passing: PassingMode = PASSING_ALL,
+        archive: bool = True,
     ) -> RepoSummary:
         """Pass 2: fetch logs the policy wants but the database lacks, newest runs first.
 
@@ -588,6 +615,11 @@ class Backfiller:
 
         `passing="failed-runs"` fetches a passing job's log only when its run (any attempt) has a
         failed job; the other passing jobs stay pending (D40).
+
+        With `archive` (the default) the jobs are grouped by run attempt, and an attempt with two
+        or more pending jobs is fetched as one zip instead of one request per job (D41). Jobs the
+        zip cannot match with certainty still get their own request. `archive=False` makes one
+        request per job, as before. `limit` counts logs stored, so it never overshoots.
         """
         if passing not in (PASSING_ALL, PASSING_FAILED_RUNS):
             raise ValueError(
@@ -608,22 +640,182 @@ class Backfiller:
                 if repo
                 else []
             )
-        fetched = 0
+        # Run attempts in the order their first pending job appears: newest first, as listed.
+        attempts: dict[tuple[int, int], list[PendingLog]] = {}
         for job in pending:
-            if limit is not None and fetched >= limit:
+            attempts.setdefault((job.run_id, job.attempt), []).append(job)
+        for jobs in attempts.values():
+            stored = summary.logs_ok + summary.logs_expired + summary.logs_missing
+            if limit is not None and stored >= limit:
+                break
+            budget = None if limit is None else limit - stored
+            # DEFAULT: with fewer than two logs left under --limit the archive cannot beat the
+            # per-job request, and the rest of a downloaded zip would be thrown away.
+            if archive and len(jobs) >= ARCHIVE_MIN_JOBS and (budget is None or budget >= 2):
+                self._fill_attempt_archive(entry, jobs, budget, summary)
+            else:
+                self._fill_per_job(entry, jobs, budget, summary)
+        return summary
+
+    def _fill_per_job(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """One request per job, each in its own transaction; at most `budget` logs stored."""
+        stored = 0
+        for job in jobs:
+            if budget is not None and stored >= budget:
                 break
             failed_before = summary.logs_failed
             with self.store.transaction():
                 self._store_log(entry, job.run_id, job.attempt, job.job_id, summary)
             if summary.logs_failed == failed_before:
-                fetched += 1
-        return summary
+                stored += 1
+
+    def _fill_attempt_archive(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """Fetch the pending jobs of one run attempt from its log archive (D41).
+
+        Outcomes: 200 stores each certainly-matched job from the zip and gives every other job its
+        own request; 410 is checked with one normal request for the attempt's first job, and only
+        if that is a 410 too are the other pending jobs marked `expired` (up to the `--limit`
+        budget), otherwise they use their own requests; 404, an archive over `archive_max_bytes`,
+        an unreadable zip, a 5xx or a network error and any other 4xx send all jobs to their own
+        request (a 5xx or network error also counts toward the stop-after-N-in-a-row guard, which
+        carries over to the next repo of the same command); 401, 403 and 429 stop the repo.
+        """
+        fn = entry.full_name
+        run_id, attempt = jobs[0].run_id, jobs[0].attempt
+        where = {"repo": fn, "run_id": run_id, "attempt": attempt}
+        try:
+            body = self.client.get_bytes(
+                f"/repos/{fn}/actions/runs/{run_id}/attempts/{attempt}/logs",
+                max_bytes=self.archive_max_bytes,
+            )
+        except GitHubTooLargeError:
+            logger.warning("log archive too large; fetching its logs one by one", extra=where)
+            self._archive_failures = 0
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        except GitHubError as exc:
+            code = exc.status_code
+            if code == 410:  # probably the whole attempt's logs expired: confirm with one job
+                self._archive_failures = 0
+                self._after_archive_gone(entry, jobs, budget, summary)
+                return
+            if code is None or exc.is_server_error:
+                # GitHub (or the network) failed on the archive: its jobs use their own requests,
+                # where a 5xx keeps the D39 rule (left pending). But when archives keep failing
+                # (an outage) the repo stops, so retries do not burn the quota.
+                logger.warning(
+                    "log archive download failed; fetching its logs one by one",
+                    extra={**where, "status": code, "error": str(exc)},
+                )
+                summary.archives_failed += 1
+                self._archive_failures += 1
+                if self._archive_failures >= self.max_archive_failures:
+                    raise GitHubError(
+                        f"GitHub looks unhealthy: {self._archive_failures} log archives in a row "
+                        "failed; re-run to resume",
+                        code,
+                    ) from exc
+                self._fill_per_job(entry, jobs, budget, summary)
+                return
+            if code in (401, 403, 429):
+                raise  # a dead token, a refusal or a rate limit that never clears stops the repo
+            body = None  # any other 4xx: let each job's own request decide and record it
+            logger.warning("log archive not available; fetching its logs one by one", extra=where)
+        self._archive_failures = 0
+        if body is None:  # 404, or the 4xx above
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        try:
+            archive = zipfile.ZipFile(io.BytesIO(body))
+        except Exception as exc:  # untrusted bytes: whatever zipfile raises, per-job is safe
+            logger.warning(
+                "log archive cannot be opened; fetching its logs one by one",
+                extra={**where, "error": type(exc).__name__},
+            )
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        summary.archives_fetched += 1
+        with archive:
+            with self.store.transaction():
+                attempt_jobs = self.store.job_names(run_id, attempt)
+            matched = match_entries(
+                [j.job_id for j in jobs], attempt_jobs, top_level_entries(archive.namelist())
+            )
+            stored = 0
+            for job in jobs:
+                if budget is not None and stored >= budget:
+                    break
+                data = self._read_entry(archive, matched.get(job.job_id))
+                if data is None:  # no certain match: this job gets its own request
+                    failed_before = summary.logs_failed
+                    with self.store.transaction():
+                        self._store_log(entry, run_id, attempt, job.job_id, summary)
+                    if summary.logs_failed == failed_before:
+                        stored += 1
+                    continue
+                with self.store.transaction():
+                    self._save_log(entry, run_id, attempt, job.job_id, data, summary)
+                summary.logs_from_archive += 1
+                stored += 1
+
+    def _read_entry(self, archive: zipfile.ZipFile, name: str | None) -> bytes | None:
+        """The bytes of one archive file, or None if there is none or it cannot be read."""
+        if name is None:
+            return None
+        try:
+            return archive.read(name)
+        except Exception as exc:  # untrusted bytes (bad CRC, encrypted, bzip2/lzma errors, ...)
+            logger.warning(
+                "log archive entry unreadable; fetching that log on its own",
+                extra={"entry": name, "error": type(exc).__name__},
+            )
+            return None
+
+    def _after_archive_gone(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """The archive answered 410: check it with one normal request before trusting it.
+
+        The first pending job of the attempt gets its own request. If that is a 410 too (stored as
+        `expired` by the normal path), the attempt's logs expired and the other pending jobs are
+        marked `expired` without more requests, up to the `--limit` budget. Otherwise the archive's
+        410 is not believed: that job is handled as usual and so are the rest, one request each.
+        """
+        first, rest = jobs[0], jobs[1:]
+        expired_before, failed_before = summary.logs_expired, summary.logs_failed
+        with self.store.transaction():
+            self._store_log(entry, first.run_id, first.attempt, first.job_id, summary)
+        stored = 1 if summary.logs_failed == failed_before else 0
+        left = None if budget is None else budget - stored
+        if summary.logs_expired > expired_before:
+            self._expire_attempt(rest, left, summary)
+        else:
+            logger.warning(
+                "log archive said 410 but the job's own log did not; fetching the rest one by one",
+                extra={"repo": entry.full_name, "run_id": first.run_id, "attempt": first.attempt},
+            )
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, rest, left, summary)
+
+    def _expire_attempt(
+        self, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """Record pending jobs of an attempt as expired, up to `budget` of them."""
+        for job in jobs if budget is None else jobs[: max(budget, 0)]:
+            with self.store.transaction():
+                self._save_unavailable(job.job_id, "expired", summary)
 
     def _store_log(
         self, entry: RepoEntry, run_id: int, attempt: int, job_id: int, summary: RepoSummary
     ) -> None:
         fn = entry.full_name
-        now = self._clock()
         try:
             body = self.client.get_bytes(f"/repos/{fn}/actions/jobs/{job_id}/logs")
         except GitHubError as exc:
@@ -639,11 +831,11 @@ class Backfiller:
                 return
             gave_up = str(exc).startswith("gave up after retries")  # rate limit never cleared
             if code != 410 and (
-                gave_up or code == 429 or not (code is not None and 400 <= code < 500)
+                gave_up or code in (401, 429) or not (code is not None and 400 <= code < 500)
             ):
-                raise  # network and rate-limit failures stop the repo; a re-run resumes
-            body = None
-            status = "expired" if code == 410 else "missing"
+                # Network and rate-limit failures, and a 401 (a dead token would otherwise mark
+                # every log `missing` for good), stop the repo; a re-run resumes.
+                raise
             if code != 410:
                 # DEFAULT: a non-retryable 4xx (e.g. 403) on a log is recorded as 'missing' so one
                 # unreadable log does not abort the repo.
@@ -651,15 +843,32 @@ class Backfiller:
                     "log not available; recorded as missing",
                     extra={"repo": fn, "job_id": job_id, "status": code},
                 )
-        else:
-            status = "ok" if body is not None else "missing"
-        if body is None:
-            self.store.upsert_log(LogRecord(job_id, None, None, None, None, status, now))
-            if status == "expired":
-                summary.logs_expired += 1
-            else:
-                summary.logs_missing += 1
+            self._save_unavailable(job_id, "expired" if code == 410 else "missing", summary)
             return
+        if body is None:
+            self._save_unavailable(job_id, "missing", summary)
+            return
+        self._save_log(entry, run_id, attempt, job_id, body, summary)
+
+    def _save_unavailable(self, job_id: int, status: str, summary: RepoSummary) -> None:
+        """Store a log row without a file: the log expired (410) or is missing."""
+        self.store.upsert_log(LogRecord(job_id, None, None, None, None, status, self._clock()))
+        if status == "expired":
+            summary.logs_expired += 1
+        else:
+            summary.logs_missing += 1
+
+    def _save_log(
+        self,
+        entry: RepoEntry,
+        run_id: int,
+        attempt: int,
+        job_id: int,
+        body: bytes,
+        summary: RepoSummary,
+    ) -> None:
+        """Clean, gzip and write one log, then store its row. Same for every way a log arrives."""
+        now = self._clock()
         result = self._sanitise(body.decode("utf-8", errors="replace"))
         data = gzip_bytes(result.text.encode("utf-8"))
         rel = f"logs/{entry.owner}/{entry.name}/{run_id}/{attempt}/{job_id}.log.gz"

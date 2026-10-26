@@ -6,6 +6,20 @@ import re
 from pathlib import Path
 
 import pytest
+from archive_scope import (
+    check_5xx_falls_back_to_per_job,
+    check_404_falls_back,
+    check_410_expires_the_whole_attempt,
+    check_410_not_confirmed_falls_back_per_job,
+    check_410_with_limit_expires_only_the_budget,
+    check_ambiguous_names_fall_back,
+    check_archive_replaces_per_job_calls,
+    check_byte_identity,
+    check_limit_never_overshoots,
+    check_no_archive_is_one_request_per_job,
+    check_passing_failed_runs_with_archive,
+    check_single_pending_job_uses_its_own_request,
+)
 from collector.store import SqlStore
 from fill_scope import (
     check_default_selection,
@@ -17,7 +31,7 @@ from fill_scope import (
 from memory_store import MemoryStore
 from recorded_github import FakeGitHub, file_checksums
 from scenario import ENTRY, check_expected_state, make_backfiller
-from sqlalchemy import Engine
+from sqlalchemy import Engine, text
 from test_backfill_db import dump_db
 
 pytestmark = pytest.mark.integration
@@ -107,3 +121,102 @@ def test_scope_fill_logs_limit(engine: Engine, fake_github: FakeGitHub, tmp_path
     store = SqlStore(engine)
     seed_scope_scenario(store)
     check_fill_limit(store, fake_github, tmp_path)
+
+
+# ---- run-attempt log archives (D41) -------------------------------------------------------------
+
+
+def test_archive_replaces_per_job_calls(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_archive_replaces_per_job_calls(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_ambiguous_names_fall_back(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_ambiguous_names_fall_back(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_410_expires_the_whole_attempt(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_410_expires_the_whole_attempt(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_410_not_confirmed_falls_back_per_job(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_410_not_confirmed_falls_back_per_job(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_410_with_limit_expires_only_the_budget(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_410_with_limit_expires_only_the_budget(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_404_falls_back_to_per_job(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_404_falls_back(SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine))
+
+
+def test_archive_5xx_falls_back_to_per_job(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_5xx_falls_back_to_per_job(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_single_pending_job_uses_its_own_request(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_single_pending_job_uses_its_own_request(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_no_archive_is_one_request_per_job(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_no_archive_is_one_request_per_job(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_with_passing_failed_runs(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_passing_failed_runs_with_archive(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine)
+    )
+
+
+def test_archive_limit_never_overshoots(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    check_limit_never_overshoots(SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine))
+
+
+def test_archive_and_per_job_store_identical_logs(
+    engine: Engine, fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    def reset_logs() -> None:
+        with engine.begin() as conn:
+            conn.execute(text("DELETE FROM raw.logs"))
+
+    check_byte_identity(
+        SqlStore(engine), fake_github, tmp_path, lambda: dump_db(engine), reset_logs
+    )

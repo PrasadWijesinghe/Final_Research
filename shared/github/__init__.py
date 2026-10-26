@@ -6,6 +6,7 @@ from shared.github.client import (
     GitHubConfig,
     GitHubError,
     GitHubNotFoundError,
+    GitHubTooLargeError,
     RunCount,
 )
 
@@ -15,5 +16,6 @@ __all__ = [
     "GitHubConfig",
     "GitHubError",
     "GitHubNotFoundError",
+    "GitHubTooLargeError",
     "RunCount",
 ]
