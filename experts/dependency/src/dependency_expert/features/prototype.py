@@ -14,6 +14,7 @@ type FeatureRow = dict[str, str | int]
 
 CSV_FIELDS = (
     "run_id",
+    "attempt",
     "repository",
     "commit_sha",
     "total_dependency_files_changed",
@@ -48,6 +49,8 @@ def dependency_feature_rows(records: object) -> list[FeatureRow]:
         rows.append(
             {
                 "run_id": str(item.get("run_id") or ""),
+                # DEFAULT: older collected rows predate attempt storage; GitHub runs start at 1.
+                "attempt": int(item.get("attempt", 1)),
                 "repository": str(item.get("repository") or ""),
                 "commit_sha": str(item.get("commit_sha") or ""),
                 "total_dependency_files_changed": len(names),

@@ -31,6 +31,15 @@ class GitHubNotFoundError(GitHubError):
     """The resource does not exist (404), or is not visible to the token."""
 
 
+class GitHubResponseTooLargeError(GitHubError):
+    """A streamed response exceeded the caller's maximum byte limit."""
+
+    def __init__(self, max_bytes: int, content_length: int | None = None) -> None:
+        super().__init__(f"response exceeds {max_bytes} bytes", 413)
+        self.max_bytes = max_bytes
+        self.content_length = content_length
+
+
 @dataclass(frozen=True)
 class GitHubConfig:
     """Tunable client behaviour. Values come from the environment via `from_env`."""
@@ -243,13 +252,83 @@ class GitHubClient:
         """GET a REST path and return the decoded JSON body."""
         return self.get(path, params).json()
 
-    def get_bytes(self, path: str, params: dict[str, Any] | None = None) -> bytes | None:
+    def get_bytes(
+        self,
+        path: str,
+        params: dict[str, Any] | None = None,
+        *,
+        max_bytes: int | None = None,
+    ) -> bytes | None:
         """GET a body such as a job log (follows redirects); None on 404."""
+        if max_bytes is not None:
+            if max_bytes < 1:
+                raise ValueError("max_bytes must be positive")
+            return self._get_bytes_limited(self._url(path), params, max_bytes)
         response = self._send(self._url(path), params, rest=True)
         if response.status_code == 404:
             return None
         self._check(response)
         return response.content
+
+    def _get_bytes_limited(
+        self,
+        url: str,
+        params: dict[str, Any] | None,
+        max_bytes: int,
+    ) -> bytes | None:
+        """Stream a response and stop as soon as it exceeds a byte limit."""
+        for attempt in range(self.config.max_retries + 1):
+            self._wait_for_quota()
+            self.api_calls += 1
+            retry_wait: float | None = None
+            retry_status_code: int | None = None
+            try:
+                with self._http.stream("GET", url, params=params) as response:
+                    if response.status_code == 404:
+                        return None
+                    self._record_rate_limit(response)
+                    if response.is_error:
+                        response.read()
+                        retry_wait = self._wait_for(response, attempt, rest=True)
+                        if retry_wait is None:
+                            self._check(response)
+                        retry_status_code = response.status_code
+                    else:
+                        content_length_value = response.headers.get("content-length")
+                        try:
+                            content_length = (
+                                int(content_length_value)
+                                if content_length_value is not None
+                                else None
+                            )
+                        except ValueError:
+                            content_length = None
+                        if content_length is not None and content_length > max_bytes:
+                            raise GitHubResponseTooLargeError(max_bytes, content_length)
+                        body = bytearray()
+                        for chunk in response.iter_bytes():
+                            if len(body) + len(chunk) > max_bytes:
+                                raise GitHubResponseTooLargeError(max_bytes)
+                            body.extend(chunk)
+                        return bytes(body)
+            except httpx.TransportError as exc:
+                if attempt == self.config.max_retries:
+                    raise GitHubError(f"transport error: {type(exc).__name__}") from exc
+                retry_wait = self._backoff(attempt)
+                logger.warning(
+                    "transport error, retrying",
+                    extra={
+                        "kind": "rest",
+                        "error": type(exc).__name__,
+                        "sleep_s": retry_wait,
+                    },
+                )
+            if retry_wait is None:
+                raise GitHubError("unreachable")  # pragma: no cover
+            if attempt == self.config.max_retries:
+                raise GitHubError("gave up after retries", retry_status_code)
+            self._sleep(retry_wait)
+        raise GitHubError("unreachable")  # pragma: no cover
 
     def get_rate_limit(self) -> dict[str, Any]:
         """Return the `GET /rate_limit` body (this call does not use quota)."""

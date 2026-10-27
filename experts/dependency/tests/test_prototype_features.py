@@ -18,6 +18,7 @@ def test_dependency_feature_rows_identifies_manifests_and_lockfiles() -> None:
         [
             {
                 "run_id": 5,
+                "attempt": 2,
                 "repository": "owner/repo",
                 "commit_sha": "abc",
                 "status": "failure",
@@ -32,6 +33,7 @@ def test_dependency_feature_rows_identifies_manifests_and_lockfiles() -> None:
     assert rows == [
         {
             "run_id": "5",
+            "attempt": 2,
             "repository": "owner/repo",
             "commit_sha": "abc",
             "total_dependency_files_changed": 2,
@@ -50,6 +52,7 @@ def test_engineer_features_writes_csv_and_creates_parent_directory(tmp_path: Pat
             [
                 {
                     "run_id": 1,
+                    "attempt": 3,
                     "status": "success",
                     "dependency_files_changed": [{"filename": "yarn.lock"}],
                 }
@@ -61,6 +64,7 @@ def test_engineer_features_writes_csv_and_creates_parent_directory(tmp_path: Pat
     assert engineer_features(input_json, output_csv) == 1
     with output_csv.open(encoding="utf-8", newline="") as output_file:
         rows = list(csv.DictReader(output_file))
+    assert rows[0]["attempt"] == "3"
     assert rows[0]["has_lockfile_change"] == "1"
     assert rows[0]["is_failure"] == "0"
 

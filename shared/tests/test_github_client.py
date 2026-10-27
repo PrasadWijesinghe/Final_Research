@@ -10,7 +10,13 @@ import httpx
 import pytest
 import respx
 
-from shared.github import GitHubClient, GitHubConfig, GitHubError, GitHubNotFoundError
+from shared.github import (
+    GitHubClient,
+    GitHubConfig,
+    GitHubError,
+    GitHubNotFoundError,
+    GitHubResponseTooLargeError,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "github"
 API = "https://api.github.com"
@@ -205,6 +211,56 @@ def test_get_bytes_follows_redirect_without_leaking_token(client: GitHubClient) 
         body = client.get_bytes("/repos/acme/widgets/actions/jobs/7/logs")
     assert body == b"line 1\nline 2\n"
     assert "authorization" not in blob_route.calls.last.request.headers
+
+
+def test_get_bytes_stops_before_reading_body_over_limit(client: GitHubClient) -> None:
+    with respx.mock:
+        route = respx.get(f"{API}/large-log").respond(
+            200,
+            content=b"this body exceeds the configured limit",
+            headers={"content-length": "38"},
+        )
+        with pytest.raises(GitHubResponseTooLargeError) as err:
+            client.get_bytes("/large-log", max_bytes=8)
+    assert err.value.max_bytes == 8
+    assert err.value.content_length == 38
+    assert route.call_count == 1
+
+
+def test_get_bytes_limited_accepts_body_at_limit(client: GitHubClient) -> None:
+    with respx.mock:
+        respx.get(f"{API}/small-log").respond(200, content=b"12345678")
+        assert client.get_bytes("/small-log", max_bytes=8) == b"12345678"
+
+
+def test_get_bytes_limited_stops_streaming_when_no_length_is_available() -> None:
+    class TrackingStream(httpx.SyncByteStream):
+        def __init__(self) -> None:
+            self.yielded = 0
+
+        def __iter__(self) -> Any:
+            for chunk in (b"1234", b"5678", b"9", b"unused"):
+                self.yielded += 1
+                yield chunk
+
+        def close(self) -> None:
+            pass
+
+    stream = TrackingStream()
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(200, stream=stream, headers={"content-type": "text/plain"})
+    )
+    client = GitHubClient(config=GitHubConfig(max_retries=0), transport=transport)
+    with pytest.raises(GitHubResponseTooLargeError):
+        client.get_bytes("/large-log", max_bytes=8)
+
+    assert stream.yielded == 3
+    client.close()
+
+
+def test_get_bytes_rejects_nonpositive_limit(client: GitHubClient) -> None:
+    with pytest.raises(ValueError, match="max_bytes must be positive"):
+        client.get_bytes("/small-log", max_bytes=0)
 
 
 def test_window_splitting(client: GitHubClient) -> None:
