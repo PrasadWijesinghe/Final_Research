@@ -1,0 +1,23 @@
+{
+  "framework": "mocha",
+  "repo": "sequelize/sequelize",
+  "job_id": 111295568293,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 199,
+    "failed": 2,
+    "skipped": 0,
+    "total": 201
+  },
+  "failed_test_names": [
+    "HasMany > (1:N) > getting assocations with options > \"before each\" hook for \"gets all associated objects when no options are passed\"",
+    "\"after each\" hook: database reset for \"gets all associated objects when no options are passed\""
+  ],
+  "failed_files": [],
+  "first_error_type": "Error",
+  "first_project_path": null
+}

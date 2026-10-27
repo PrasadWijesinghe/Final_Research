@@ -1,0 +1,292 @@
+﻿2026-08-10T15:10:47.0791196Z Current runner version: '2.336.0'
+2026-08-10T15:10:47.0821229Z ##[group]Runner Image Provisioner
+2026-08-10T15:10:47.0822160Z Hosted Compute Agent
+2026-08-10T15:10:47.0822752Z Version: 20260707.563
+2026-08-10T15:10:47.0823351Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-08-10T15:10:47.0824496Z Build Date: 2026-07-07T19:33:50Z
+2026-08-10T15:10:47.0825256Z Worker ID: {ba705360-b593-4b1c-b981-4ea7932f67b5}
+2026-08-10T15:10:47.0826021Z Azure Region: westcentralus
+2026-08-10T15:10:47.0826636Z ##[endgroup]
+2026-08-10T15:10:47.0828115Z ##[group]Operating System
+2026-08-10T15:10:47.0828851Z Ubuntu
+2026-08-10T15:10:47.0829362Z 24.04.4
+2026-08-10T15:10:47.0829839Z LTS
+2026-08-10T15:10:47.0830400Z ##[endgroup]
+2026-08-10T15:10:47.0830942Z ##[group]Runner Image
+2026-08-10T15:10:47.0831604Z Image: ubuntu-24.04
+2026-08-10T15:10:47.0832182Z Version: 20260720.247.2
+2026-08-10T15:10:47.0833455Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-10T15:10:47.0835305Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+2026-08-10T15:10:47.0836389Z ##[endgroup]
+2026-08-10T15:10:47.0837471Z ##[group]GITHUB_TOKEN Permissions
+2026-08-10T15:10:47.0839327Z Contents: read
+2026-08-10T15:10:47.0840024Z Metadata: read
+2026-08-10T15:10:47.0840603Z ##[endgroup]
+2026-08-10T15:10:47.0842780Z Secret source: None
+2026-08-10T15:10:47.0843846Z Prepare workflow directory
+2026-08-10T15:10:47.1277889Z Prepare all required actions
+2026-08-10T15:10:47.1326133Z Getting action download info
+2026-08-10T15:10:47.4958017Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-10T15:10:48.1642685Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-10T15:10:49.0566049Z Complete job name: Node LTS on Ubuntu with leak detection
+2026-08-10T15:10:49.1525007Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-10T15:10:49.1526871Z with:
+2026-08-10T15:10:49.1527701Z   persist-credentials: false
+2026-08-10T15:10:49.1528704Z   repository: jestjs/jest
+2026-08-10T15:10:49.1538184Z   token: ***
+2026-08-10T15:10:49.1539026Z   ssh-strict: true
+2026-08-10T15:10:49.1539861Z   ssh-user: git
+2026-08-10T15:10:49.1540683Z   clean: true
+2026-08-10T15:10:49.1541541Z   sparse-checkout-cone-mode: true
+2026-08-10T15:10:49.1542576Z   fetch-depth: 1
+2026-08-10T15:10:49.1543403Z   fetch-tags: false
+2026-08-10T15:10:49.1544518Z   show-progress: true
+2026-08-10T15:10:49.1545426Z   lfs: false
+2026-08-10T15:10:49.1546231Z   submodules: false
+2026-08-10T15:10:49.1547092Z   set-safe-directory: true
+2026-08-10T15:10:49.1548082Z   allow-unsafe-pr-checkout: false
+2026-08-10T15:10:49.1549486Z ##[endgroup]
+2026-08-10T15:10:49.2588793Z Syncing repository: jestjs/jest
+2026-08-10T15:10:49.2591267Z ##[group]Getting Git version info
+2026-08-10T15:10:49.2592568Z Working directory is '/home/runner/work/jest/jest'
+2026-08-10T15:10:49.2594877Z [command]/usr/bin/git version
+2026-08-10T15:10:49.3983929Z git version 2.54.0
+2026-08-10T15:10:49.4009800Z ##[endgroup]
+2026-08-10T15:10:49.4020824Z Temporarily overriding HOME='/home/runner/work/_temp/95ede65b-7e82-4819-91d8-f2774dd8e413' before making global git config changes
+2026-08-10T15:10:49.4026329Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-10T15:10:49.4030029Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-10T15:10:49.4076410Z Deleting the contents of '/home/runner/work/jest/jest'
+2026-08-10T15:10:49.4080802Z ##[group]Determining repository object format
+2026-08-10T15:10:49.4084006Z ##[endgroup]
+2026-08-10T15:10:49.4086667Z ##[group]Initializing the repository
+2026-08-10T15:10:49.4088448Z [command]/usr/bin/git init /home/runner/work/jest/jest
+2026-08-10T15:10:49.4191306Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-10T15:10:49.4195889Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-10T15:10:49.4198449Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-10T15:10:49.4199957Z hint: call:
+2026-08-10T15:10:49.4200728Z hint:
+2026-08-10T15:10:49.4201709Z hint: 	git config --global init.defaultBranch <name>
+2026-08-10T15:10:49.4203435Z hint:
+2026-08-10T15:10:49.4204963Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-10T15:10:49.4207421Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-10T15:10:49.4208939Z hint:
+2026-08-10T15:10:49.4209717Z hint: 	git branch -m <name>
+2026-08-10T15:10:49.4210623Z hint:
+2026-08-10T15:10:49.4211941Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-10T15:10:49.4213993Z Initialized empty Git repository in /home/runner/work/jest/jest/.git/
+2026-08-10T15:10:49.4217270Z [command]/usr/bin/git remote add origin https://github.com/jestjs/jest
+2026-08-10T15:10:49.4352198Z ##[endgroup]
+2026-08-10T15:10:49.4354311Z ##[group]Disabling automatic garbage collection
+2026-08-10T15:10:49.4356510Z [command]/usr/bin/git config --local gc.auto 0
+2026-08-10T15:10:49.4385638Z ##[endgroup]
+2026-08-10T15:10:49.4387014Z ##[group]Setting up auth
+2026-08-10T15:10:49.4388032Z Removing SSH command configuration
+2026-08-10T15:10:49.4391142Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-10T15:10:49.4426871Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-10T15:10:49.4783657Z Removing HTTP extra header
+2026-08-10T15:10:49.4789720Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-10T15:10:49.4821889Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-10T15:10:49.5042015Z Removing includeIf entries pointing to credentials config files
+2026-08-10T15:10:49.5046187Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-10T15:10:49.5078885Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-10T15:10:49.5305083Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-10T15:10:49.5340836Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git.path /home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:49.5371858Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:49.5404067Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:49.5436162Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:49.5463127Z ##[endgroup]
+2026-08-10T15:10:49.5465256Z ##[group]Fetching the repository
+2026-08-10T15:10:49.5471044Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bf4b5ff8d0ca6df5e8b18bcd3de4a6bf1f57e2cb:refs/remotes/pull/16318/merge
+2026-08-10T15:10:51.4758531Z From https://github.com/jestjs/jest
+2026-08-10T15:10:51.4759817Z  * [new ref]         bf4b5ff8d0ca6df5e8b18bcd3de4a6bf1f57e2cb -> pull/16318/merge
+2026-08-10T15:10:51.4803178Z ##[endgroup]
+2026-08-10T15:10:51.4804793Z ##[group]Determining the checkout info
+2026-08-10T15:10:51.4805721Z ##[endgroup]
+2026-08-10T15:10:51.4810305Z [command]/usr/bin/git sparse-checkout disable
+2026-08-10T15:10:51.4854996Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-10T15:10:51.4881331Z ##[group]Checking out the ref
+2026-08-10T15:10:51.4885065Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/16318/merge
+2026-08-10T15:10:51.7738146Z Note: switching to 'refs/remotes/pull/16318/merge'.
+2026-08-10T15:10:51.7739245Z 
+2026-08-10T15:10:51.7739859Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-10T15:10:51.7740930Z changes and commit them, and you can discard any commits you make in this
+2026-08-10T15:10:51.7742166Z state without impacting any branches by switching back to a branch.
+2026-08-10T15:10:51.7742816Z 
+2026-08-10T15:10:51.7743493Z If you want to create a new branch to retain commits you create, you may
+2026-08-10T15:10:51.7744826Z do so (now or later) by using -c with the switch command. Example:
+2026-08-10T15:10:51.7745489Z 
+2026-08-10T15:10:51.7746137Z   git switch -c <new-branch-name>
+2026-08-10T15:10:51.7746527Z 
+2026-08-10T15:10:51.7746786Z Or undo this operation with:
+2026-08-10T15:10:51.7747212Z 
+2026-08-10T15:10:51.7747482Z   git switch -
+2026-08-10T15:10:51.7747822Z 
+2026-08-10T15:10:51.7748306Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-10T15:10:51.7748887Z 
+2026-08-10T15:10:51.7749603Z HEAD is now at bf4b5ff Merge fd51bf965af12e361aa7da4b772a3f0a22d64c08 into 468a3486f32900b89e782049c2189009338c2f38
+2026-08-10T15:10:51.7757438Z ##[endgroup]
+2026-08-10T15:10:51.7800760Z [command]/usr/bin/git log -1 --format=%H
+2026-08-10T15:10:51.7825550Z bf4b5ff8d0ca6df5e8b18bcd3de4a6bf1f57e2cb
+2026-08-10T15:10:51.7839459Z ##[group]Removing auth
+2026-08-10T15:10:51.7840148Z Removing SSH command configuration
+2026-08-10T15:10:51.7841435Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-10T15:10:51.7872404Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-10T15:10:51.8095656Z Removing HTTP extra header
+2026-08-10T15:10:51.8099898Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-10T15:10:51.8137627Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-10T15:10:51.8356976Z Removing includeIf entries pointing to credentials config files
+2026-08-10T15:10:51.8360096Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-10T15:10:51.8386479Z includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-10T15:10:51.8387364Z includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-10T15:10:51.8388074Z includeif.gitdir:/github/workspace/.git.path
+2026-08-10T15:10:51.8388647Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-10T15:10:51.8395399Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-10T15:10:51.8416899Z /home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:51.8426771Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-67b7212c\-8c2d\-4d62\-93c6\-0576bde57a52\.config
+2026-08-10T15:10:51.8458017Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-10T15:10:51.8480400Z /home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:51.8488148Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-67b7212c\-8c2d\-4d62\-93c6\-0576bde57a52\.config
+2026-08-10T15:10:51.8519110Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-10T15:10:51.8540228Z /github/runner_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:51.8548559Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-67b7212c\-8c2d\-4d62\-93c6\-0576bde57a52\.config
+2026-08-10T15:10:51.8605354Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-10T15:10:51.8651018Z /github/runner_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config
+2026-08-10T15:10:51.8663380Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-67b7212c\-8c2d\-4d62\-93c6\-0576bde57a52\.config
+2026-08-10T15:10:51.8694953Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-10T15:10:51.8927260Z Removing credentials config '/home/runner/work/_temp/git-credentials-67b7212c-8c2d-4d62-93c6-0576bde57a52.config'
+2026-08-10T15:10:51.8937811Z ##[endgroup]
+2026-08-10T15:10:51.9293144Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-10T15:10:51.9293565Z with:
+2026-08-10T15:10:51.9293768Z   node-version: lts/*
+2026-08-10T15:10:51.9293984Z   cache: yarn
+2026-08-10T15:10:51.9294470Z   check-latest: false
+2026-08-10T15:10:51.9296760Z   token: ***
+2026-08-10T15:10:51.9296992Z   package-manager-cache: true
+2026-08-10T15:10:51.9297242Z ##[endgroup]
+2026-08-10T15:10:52.0530831Z Attempt to resolve LTS alias from manifest...
+2026-08-10T15:10:53.0692234Z Found in cache @ /opt/hostedtoolcache/node/24.18.0/x64
+2026-08-10T15:10:53.0695964Z ##[group]Environment details
+2026-08-10T15:10:53.7113449Z node: v24.18.0
+2026-08-10T15:10:53.7113837Z npm: 11.16.0
+2026-08-10T15:10:53.7114043Z yarn: 4.18.0
+2026-08-10T15:10:53.7116295Z ##[endgroup]
+2026-08-10T15:10:53.7133932Z [command]/usr/local/bin/yarn --version
+2026-08-10T15:10:54.0731264Z 4.18.0
+2026-08-10T15:10:54.0910975Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-08-10T15:10:54.4663375Z /home/runner/.yarn/berry/cache
+2026-08-10T15:10:54.4973567Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-08-10T15:10:54.8892372Z [33mtrue[39m
+2026-08-10T15:10:55.1955685Z Cache hit for: node-cache-Linux-x64-yarn-2df56c434c74ca6194f42d9a6efe56b7da72a09119c836d7822ffe904977bd84
+2026-08-10T15:10:56.4158421Z Received 29360128 of 157092289 (18.7%), 28.0 MBs/sec
+2026-08-10T15:10:57.3789030Z Received 157092289 of 157092289 (100.0%), 76.3 MBs/sec
+2026-08-10T15:10:57.3790069Z Cache Size: ~150 MB (157092289 B)
+2026-08-10T15:10:57.3849131Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f15ef8e7-629a-4e36-ab32-fe0160003d1c/cache.tzst -P -C /home/runner/work/jest/jest --use-compress-program unzstd
+2026-08-10T15:10:57.6650123Z Cache restored successfully
+2026-08-10T15:10:57.6726082Z Cache restored from key: node-cache-Linux-x64-yarn-2df56c434c74ca6194f42d9a6efe56b7da72a09119c836d7822ffe904977bd84
+2026-08-10T15:10:57.6916462Z ##[group]Run yarn --immutable
+2026-08-10T15:10:57.6916799Z [36;1myarn --immutable[0m
+2026-08-10T15:10:57.6969387Z shell: /usr/bin/bash -e {0}
+2026-08-10T15:10:57.6969657Z ##[endgroup]
+2026-08-10T15:10:58.2750333Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-08-10T15:10:58.2753718Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-08-10T15:10:58.2755543Z 
+2026-08-10T15:10:58.2756071Z [94m➤[39m YN0000: · Yarn 4.18.0
+2026-08-10T15:10:58.2857734Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-08-10T15:10:58.2858967Z ##[group]Resolution step
+2026-08-10T15:11:10.4715635Z ##[endgroup]
+2026-08-10T15:11:10.4725915Z [94m➤[39m [90mYN0000[39m: └ Completed in 12s 186ms
+2026-08-10T15:11:10.4746689Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-08-10T15:11:10.4747672Z ##[group]Post-resolution validation
+2026-08-10T15:11:10.4765081Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m7.29.7[39m ([38;5;111mpf247de[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mpreset-react[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-10T15:11:10.4769289Z [93m➤[39m YN0060: │ [38;5;173mgraphql[39m is listed by your project with version [38;5;111m17.0.2[39m ([38;5;111mp1ae269[39m), which doesn't satisfy what [38;5;173mgraphql-request[39m and other dependencies request ([38;5;37m^14.0.0 || ^15.0.0 || ^16.0.0[39m).
+2026-08-10T15:11:10.4773518Z [93m➤[39m YN0002: │ [38;5;166m@jest/[39m[38;5;173mdiff-sequences[39m[38;5;111m@[39m[38;5;111mworkspace:packages/diff-sequences[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp03fd70[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-10T15:11:10.4777923Z [93m➤[39m YN0002: │ [38;5;173mbabel-preset-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-preset-jest[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa5adb7[39m), requested by [38;5;173mbabel-preset-current-node-syntax[39m.
+2026-08-10T15:11:10.4781815Z [93m➤[39m YN0002: │ [38;5;173mcreate-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/create-jest[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp9c2ade[39m), requested by [38;5;173mjest-config[39m.
+2026-08-10T15:11:10.4785650Z [93m➤[39m YN0002: │ [38;5;173mexpect[39m[38;5;111m@[39m[38;5;111mworkspace:packages/expect[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp9fb730[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-10T15:11:10.4789438Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [023ef][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdec1f7[39m), requested by [38;5;173mjest-config[39m.
+2026-08-10T15:11:10.4792967Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [73877][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp6688de[39m), requested by [38;5;173mjest-config[39m.
+2026-08-10T15:11:10.4796654Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdd7483[39m), requested by [38;5;173mjest-config[39m.
+2026-08-10T15:11:10.4800034Z [93m➤[39m YN0002: │ [38;5;173mjest-config[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-config[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp4a73ba[39m), requested by [38;5;173mts-node[39m.
+2026-08-10T15:11:10.4804051Z [93m➤[39m YN0002: │ [38;5;173mjest-website[39m[38;5;111m@[39m[38;5;111mworkspace:website[39m doesn't provide [38;5;166m@mdx-js/[39m[38;5;173mreact[39m ([38;5;111mp1a83d4[39m), requested by [38;5;166m@docusaurus/[39m[38;5;173mcore[39m.
+2026-08-10T15:11:10.4807692Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-08-10T15:11:10.4810529Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-08-10T15:11:10.5519027Z ##[endgroup]
+2026-08-10T15:11:10.5520100Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-08-10T15:11:10.5520835Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-08-10T15:11:10.5522144Z ##[group]Fetch step
+2026-08-10T15:11:11.2804550Z ##[endgroup]
+2026-08-10T15:11:11.2805633Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 729ms
+2026-08-10T15:11:11.3603637Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-08-10T15:11:11.3604603Z ##[group]Link step
+2026-08-10T15:11:29.5991662Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.50.0[39m lists build scripts, but all build scripts have been disabled.
+2026-08-10T15:11:29.8776755Z [94m➤[39m YN0007: │ [38;5;173munrs-resolver[39m[38;5;111m@[39m[38;5;111mnpm:1.12.2[39m must be built because it never has been before or the last one failed
+2026-08-10T15:11:29.8787209Z [94m➤[39m YN0007: │ [38;5;166m@parcel/[39m[38;5;173mwatcher[39m[38;5;111m@[39m[38;5;111mnpm:2.6.0[39m must be built because it never has been before or the last one failed
+2026-08-10T15:11:29.8789163Z [94m➤[39m YN0007: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.1[39m must be built because it never has been before or the last one failed
+2026-08-10T15:11:30.0644586Z ##[endgroup]
+2026-08-10T15:11:30.0645630Z [94m➤[39m [90mYN0000[39m: └ Completed in 18s 704ms
+2026-08-10T15:11:30.2494782Z [93m➤[39m YN0000: · Done with warnings in 31s 975ms
+2026-08-10T15:11:30.3658385Z ##[group]Run yarn build:js
+2026-08-10T15:11:30.3658699Z [36;1myarn build:js[0m
+2026-08-10T15:11:30.3701918Z shell: /usr/bin/bash -e {0}
+2026-08-10T15:11:30.3702192Z ##[endgroup]
+2026-08-10T15:11:31.1476873Z  Bundling packages 
+2026-08-10T15:11:37.3973286Z  DONE 
+2026-08-10T15:11:37.4810959Z ##[group]Run yarn test-leak
+2026-08-10T15:11:37.4811278Z [36;1myarn test-leak[0m
+2026-08-10T15:11:37.4854463Z shell: /usr/bin/bash -e {0}
+2026-08-10T15:11:37.4854748Z ##[endgroup]
+2026-08-10T15:11:40.6356626Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mindex.test.ts[22m
+2026-08-10T15:11:41.1046651Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mImmutable.test.ts[22m
+2026-08-10T15:11:41.7086653Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-diff/src/__tests__/[22m[1mdiff.test.ts[22m
+2026-08-10T15:11:42.0366727Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mprettyFormat.test.ts[22m
+2026-08-10T15:11:42.3262672Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mwhenCalledWith.test.ts[22m
+2026-08-10T15:11:43.3466935Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mreact.test.tsx[22m
+2026-08-10T15:11:43.3467719Z   [1m● [22mTest suite failed to run
+2026-08-10T15:11:43.3467953Z 
+2026-08-10T15:11:43.3468169Z     [31m[1mEXPERIMENTAL FEATURE![22m[39m
+2026-08-10T15:11:43.3468882Z     [31m[1m[22m[39mYour test suite is leaking memory. Please ensure all references are cleaned.
+2026-08-10T15:11:43.3469315Z 
+2026-08-10T15:11:43.3469519Z     There is a number of things that can leak memory:
+2026-08-10T15:11:43.3470256Z       - Async operations that have not finished (e.g. fs.readFile).
+2026-08-10T15:11:43.3471237Z       - Timers not properly mocked (e.g. setInterval, setTimeout).
+2026-08-10T15:11:43.3471705Z       - Keeping references to the global scope.
+2026-08-10T15:11:43.3471936Z 
+2026-08-10T15:11:43.3472318Z       [2mat onResult ([22mpackages/jest-core/build/index.js[2m:1063:18)[22m
+2026-08-10T15:11:43.3472788Z           at Array.map (<anonymous>)
+2026-08-10T15:11:43.3472990Z 
+2026-08-10T15:11:44.1036520Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mDOMElement.test.ts[22m
+2026-08-10T15:11:44.3076449Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mclass-mocks.test.ts[22m
+2026-08-10T15:11:44.5386864Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mAsymmetricMatcher.test.ts[22m
+2026-08-10T15:11:44.7386360Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-diff/src/__tests__/[22m[1mgetAlignedDiffs.test.ts[22m
+2026-08-10T15:11:44.9396660Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mclass-mocks-single-import.test.ts[22m
+2026-08-10T15:11:45.1156641Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-diff/src/__tests__/[22m[1mjoinAlignedDiffs.test.ts[22m
+2026-08-10T15:11:45.3106649Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mDOMCollection.test.ts[22m
+2026-08-10T15:11:45.4887366Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-diff/src/__tests__/[22m[1mescapeControlCharacters.test.ts[22m
+2026-08-10T15:11:45.6786675Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mReactVersions.test.ts[22m
+2026-08-10T15:11:45.8496658Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/pretty-format/src/__tests__/[22m[1mReactElement.test.ts[22m
+2026-08-10T15:11:46.0256836Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mclass-mocks-dual-import.test.ts[22m
+2026-08-10T15:11:46.1946761Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-diff/src/__tests__/[22m[1mdiffStringsRaw.test.ts[22m
+2026-08-10T15:11:46.3596436Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/jest-mock/src/__tests__/[22m[1mwindow-spy.test.ts[22m
+2026-08-10T15:11:46.3620514Z 
+2026-08-10T15:11:46.3629814Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[32m18 passed[39m[22m, 19 total
+2026-08-10T15:11:46.3630933Z [1mTests:       [22m[1m[32m737 passed[39m[22m, 737 total
+2026-08-10T15:11:46.3631492Z [1mSnapshots:   [22m[1m[32m88 passed[39m[22m, 88 total
+2026-08-10T15:11:46.3631886Z [1mTime:[22m        7.016 s
+2026-08-10T15:11:46.3632865Z [2mRan all test suites[22m[2m matching [22mjest-mock|jest-diff|pretty-format[2m.[22m
+2026-08-10T15:11:46.5356758Z ##[error]Process completed with exit code 1.
+2026-08-10T15:11:46.5492187Z Post job cleanup.
+2026-08-10T15:11:46.6369879Z [command]/usr/bin/git version
+2026-08-10T15:11:46.6439021Z git version 2.54.0
+2026-08-10T15:11:46.6474948Z Temporarily overriding HOME='/home/runner/work/_temp/d25a372d-65ed-4745-8d30-e38cc442e93d' before making global git config changes
+2026-08-10T15:11:46.6476613Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-10T15:11:46.6480597Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-10T15:11:46.6509761Z Removing SSH command configuration
+2026-08-10T15:11:46.6516976Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-10T15:11:46.6548182Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-10T15:11:46.6774507Z Removing HTTP extra header
+2026-08-10T15:11:46.6779497Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-10T15:11:46.6812007Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-10T15:11:46.7029136Z Removing includeIf entries pointing to credentials config files
+2026-08-10T15:11:46.7035321Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-10T15:11:46.7065722Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-10T15:11:46.7427464Z Cleaning up orphan processes

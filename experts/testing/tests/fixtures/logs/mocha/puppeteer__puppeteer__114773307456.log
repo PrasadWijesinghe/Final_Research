@@ -1,0 +1,481 @@
+﻿2026-10-12T10:42:23.3631326Z Current runner version: '2.337.0'
+2026-10-12T10:42:23.3656510Z ##[group]Runner Image Provisioner
+2026-10-12T10:42:23.3657797Z Hosted Compute Agent
+2026-10-12T10:42:23.3658949Z Version: 20261002.596
+2026-10-12T10:42:23.3659607Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-12T10:42:23.3660494Z Build Date: 2026-10-02T22:28:27Z
+2026-10-12T10:42:23.3661265Z Worker ID: {18099efe-765a-4693-b526-ac1f7d676273}
+2026-10-12T10:42:23.3661984Z Region: westus
+2026-10-12T10:42:23.3662587Z Cloud: Azure
+2026-10-12T10:42:23.3663122Z ##[endgroup]
+2026-10-12T10:42:23.3664778Z ##[group]Operating System
+2026-10-12T10:42:23.3665535Z Ubuntu
+2026-10-12T10:42:23.3666069Z 24.04.5
+2026-10-12T10:42:23.3666988Z LTS
+2026-10-12T10:42:23.3667711Z ##[endgroup]
+2026-10-12T10:42:23.3668325Z ##[group]Runner Image
+2026-10-12T10:42:23.3669047Z Image: ubuntu-24.04
+2026-10-12T10:42:23.3669620Z Version: 20261004.327.1
+2026-10-12T10:42:23.3670954Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-12T10:42:23.3672593Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-12T10:42:23.3673658Z ##[endgroup]
+2026-10-12T10:42:23.3674813Z ##[group]GITHUB_TOKEN Permissions
+2026-10-12T10:42:23.3677102Z Contents: read
+2026-10-12T10:42:23.3677776Z Metadata: read
+2026-10-12T10:42:23.3678419Z ##[endgroup]
+2026-10-12T10:42:23.3680597Z Secret source: Actions
+2026-10-12T10:42:23.3681684Z Cache mode: write
+2026-10-12T10:42:23.3682397Z Prepare workflow directory
+2026-10-12T10:42:23.4034561Z Prepare all required actions
+2026-10-12T10:42:23.4087844Z Getting action download info
+2026-10-12T10:42:23.7989297Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-12T10:42:23.9002210Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-12T10:42:23.9851979Z Download action repository 'google/wireit@9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5' (SHA:9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5)
+2026-10-12T10:42:24.2173418Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-10-12T10:42:24.4104644Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-12T10:42:24.6314592Z Complete job name: chrome-headful (1-2) on ubuntu-latest
+2026-10-12T10:42:24.7172622Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-12T10:42:24.7173803Z with:
+2026-10-12T10:42:24.7174343Z   repository: puppeteer/puppeteer
+2026-10-12T10:42:24.7178938Z   token: ***
+2026-10-12T10:42:24.7179438Z   ssh-strict: true
+2026-10-12T10:42:24.7179945Z   ssh-user: git
+2026-10-12T10:42:24.7180452Z   persist-credentials: true
+2026-10-12T10:42:24.7180997Z   clean: true
+2026-10-12T10:42:24.7181490Z   sparse-checkout-cone-mode: true
+2026-10-12T10:42:24.7182081Z   fetch-depth: 1
+2026-10-12T10:42:24.7182566Z   fetch-tags: false
+2026-10-12T10:42:24.7183067Z   show-progress: true
+2026-10-12T10:42:24.7183565Z   lfs: false
+2026-10-12T10:42:24.7184032Z   submodules: false
+2026-10-12T10:42:24.7184532Z   set-safe-directory: true
+2026-10-12T10:42:24.7185094Z   allow-unsafe-pr-checkout: false
+2026-10-12T10:42:24.7185963Z ##[endgroup]
+2026-10-12T10:42:24.8210466Z Syncing repository: puppeteer/puppeteer
+2026-10-12T10:42:24.8213064Z ##[group]Getting Git version info
+2026-10-12T10:42:24.8213916Z Working directory is '/home/runner/work/puppeteer/puppeteer'
+2026-10-12T10:42:24.8215112Z [command]/usr/bin/git version
+2026-10-12T10:42:24.8286373Z git version 2.55.0
+2026-10-12T10:42:24.8340735Z ##[endgroup]
+2026-10-12T10:42:24.8352414Z Temporarily overriding HOME='/home/runner/work/_temp/abb0ec1f-3f3b-4f4f-bc8f-4cf403af7ec8' before making global git config changes
+2026-10-12T10:42:24.8353931Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-12T10:42:24.8358900Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/puppeteer/puppeteer
+2026-10-12T10:42:24.8410037Z Deleting the contents of '/home/runner/work/puppeteer/puppeteer'
+2026-10-12T10:42:24.8413937Z ##[group]Determining repository object format
+2026-10-12T10:42:24.8415510Z ##[endgroup]
+2026-10-12T10:42:24.8416377Z ##[group]Initializing the repository
+2026-10-12T10:42:24.8420158Z [command]/usr/bin/git init /home/runner/work/puppeteer/puppeteer
+2026-10-12T10:42:24.8551525Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-12T10:42:24.8552875Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-12T10:42:24.8554576Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-12T10:42:24.8556139Z hint: call:
+2026-10-12T10:42:24.8557306Z hint:
+2026-10-12T10:42:24.8558443Z hint: 	git config --global init.defaultBranch <name>
+2026-10-12T10:42:24.8559840Z hint:
+2026-10-12T10:42:24.8561126Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-12T10:42:24.8563075Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-12T10:42:24.8564557Z hint:
+2026-10-12T10:42:24.8565400Z hint: 	git branch -m <name>
+2026-10-12T10:42:24.8566464Z hint:
+2026-10-12T10:42:24.8568148Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-12T10:42:24.8569602Z Initialized empty Git repository in /home/runner/work/puppeteer/puppeteer/.git/
+2026-10-12T10:42:24.8571567Z [command]/usr/bin/git remote add origin https://github.com/puppeteer/puppeteer
+2026-10-12T10:42:24.8625396Z ##[endgroup]
+2026-10-12T10:42:24.8626307Z ##[group]Disabling automatic garbage collection
+2026-10-12T10:42:24.8629308Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-12T10:42:24.8661646Z ##[endgroup]
+2026-10-12T10:42:24.8662542Z ##[group]Setting up auth
+2026-10-12T10:42:24.8663464Z Removing SSH command configuration
+2026-10-12T10:42:24.8667493Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-12T10:42:24.8699678Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-12T10:42:24.9144188Z Removing HTTP extra header
+2026-10-12T10:42:24.9145361Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-12T10:42:24.9148869Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-12T10:42:24.9318109Z Removing includeIf entries pointing to credentials config files
+2026-10-12T10:42:24.9323458Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-12T10:42:24.9355680Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T10:42:24.9587240Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-12T10:42:24.9623088Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/puppeteer/puppeteer/.git.path /home/runner/work/_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config
+2026-10-12T10:42:24.9654612Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/puppeteer/puppeteer/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config
+2026-10-12T10:42:24.9688990Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config
+2026-10-12T10:42:24.9721627Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config
+2026-10-12T10:42:24.9749235Z ##[endgroup]
+2026-10-12T10:42:24.9750594Z ##[group]Fetching the repository
+2026-10-12T10:42:24.9755053Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +565e5840ca72160ec70f2e748a63bdbc87c63cc5:refs/remotes/origin/main
+2026-10-12T10:42:25.8695656Z From https://github.com/puppeteer/puppeteer
+2026-10-12T10:42:25.8699150Z  * [new ref]         565e5840ca72160ec70f2e748a63bdbc87c63cc5 -> origin/main
+2026-10-12T10:42:25.8706491Z [command]/usr/bin/git branch --list --remote origin/main
+2026-10-12T10:42:25.8735502Z   origin/main
+2026-10-12T10:42:25.8748434Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-10-12T10:42:25.8774709Z 565e5840ca72160ec70f2e748a63bdbc87c63cc5
+2026-10-12T10:42:25.8789207Z ##[endgroup]
+2026-10-12T10:42:25.8790978Z ##[group]Determining the checkout info
+2026-10-12T10:42:25.8792545Z ##[endgroup]
+2026-10-12T10:42:25.8793405Z [command]/usr/bin/git sparse-checkout disable
+2026-10-12T10:42:25.8847299Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-12T10:42:25.8878482Z ##[group]Checking out the ref
+2026-10-12T10:42:25.8882037Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-12T10:42:25.9796075Z Switched to a new branch 'main'
+2026-10-12T10:42:25.9801169Z branch 'main' set up to track 'origin/main'.
+2026-10-12T10:42:25.9812922Z ##[endgroup]
+2026-10-12T10:42:25.9859965Z [command]/usr/bin/git log -1 --format=%H
+2026-10-12T10:42:25.9885759Z 565e5840ca72160ec70f2e748a63bdbc87c63cc5
+2026-10-12T10:42:26.0291555Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-12T10:42:26.0293252Z with:
+2026-10-12T10:42:26.0294086Z   cache: npm
+2026-10-12T10:42:26.0294992Z   node-version-file: .nvmrc
+2026-10-12T10:42:26.0296058Z   check-latest: false
+2026-10-12T10:42:26.0307015Z   token: ***
+2026-10-12T10:42:26.0307993Z   package-manager-cache: true
+2026-10-12T10:42:26.0309083Z ##[endgroup]
+2026-10-12T10:42:26.1595062Z Node version file is not JSON file
+2026-10-12T10:42:26.1597381Z Resolved .nvmrc as 24
+2026-10-12T10:42:26.1663545Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-12T10:42:26.1667770Z ##[group]Environment details
+2026-10-12T10:42:26.6177857Z node: v24.21.0
+2026-10-12T10:42:26.6179583Z npm: 11.19.0
+2026-10-12T10:42:26.6181090Z yarn: 1.22.22
+2026-10-12T10:42:26.6183940Z ##[endgroup]
+2026-10-12T10:42:26.6201791Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-12T10:42:26.7408277Z /home/runner/.npm
+2026-10-12T10:42:27.0114491Z Cache hit for: node-cache-Linux-x64-npm-d427ee0c72171a137ee1d618403734a3d1832d6bd5ed64bb0302ec8b49d81428
+2026-10-12T10:42:28.3238381Z Received 0 of 110496025 (0.0%), 0.0 MBs/sec
+2026-10-12T10:42:29.2338861Z Received 110496025 of 110496025 (100.0%), 55.2 MBs/sec
+2026-10-12T10:42:29.2339948Z Cache Size: ~105 MB (110496025 B)
+2026-10-12T10:42:29.2404153Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e8832939-9f01-44fc-a2fa-e6b33bf61899/cache.tzst -P -C /home/runner/work/puppeteer/puppeteer --use-compress-program unzstd
+2026-10-12T10:42:29.9262044Z Cache restored successfully
+2026-10-12T10:42:29.9333165Z Cache restored from key: node-cache-Linux-x64-npm-d427ee0c72171a137ee1d618403734a3d1832d6bd5ed64bb0302ec8b49d81428
+2026-10-12T10:42:29.9508444Z ##[group]Run echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+2026-10-12T10:42:29.9509132Z [36;1mecho 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns[0m
+2026-10-12T10:42:29.9803170Z shell: /usr/bin/bash -e {0}
+2026-10-12T10:42:29.9803512Z ##[endgroup]
+2026-10-12T10:42:29.9991977Z 0
+2026-10-12T10:42:30.0043113Z ##[group]Run npm ci
+2026-10-12T10:42:30.0043428Z [36;1mnpm ci[0m
+2026-10-12T10:42:30.0108386Z shell: /usr/bin/bash -e {0}
+2026-10-12T10:42:30.0108664Z env:
+2026-10-12T10:42:30.0108885Z   PUPPETEER_SKIP_DOWNLOAD: true
+2026-10-12T10:42:30.0109410Z ##[endgroup]
+2026-10-12T10:42:44.0844882Z npm warn deprecated readdir-scoped-modules@1.1.0: This functionality has been moved to @npmcli/fs
+2026-10-12T10:42:44.0853352Z npm warn deprecated read-package-json@2.1.2: This package is no longer supported. Please use @npmcli/package-json instead.
+2026-10-12T10:42:44.0878600Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-10-12T10:42:44.0889728Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-10-12T10:42:44.0894444Z npm warn deprecated debuglog@1.0.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-10-12T10:42:44.0913716Z npm warn deprecated osenv@0.1.5: This package is no longer supported.
+2026-10-12T10:42:47.3801834Z npm warn deprecated read-installed@4.0.3: This package is no longer supported.
+2026-10-12T10:43:35.3625967Z 
+2026-10-12T10:43:35.3628613Z > postinstall
+2026-10-12T10:43:35.3629572Z > npm run postinstall --workspaces --if-present
+2026-10-12T10:43:35.3629903Z 
+2026-10-12T10:43:35.5152204Z 
+2026-10-12T10:43:35.5152949Z > puppeteer@25.13.0 postinstall
+2026-10-12T10:43:35.5153782Z > node install.mjs
+2026-10-12T10:43:35.5154101Z 
+2026-10-12T10:43:35.5467779Z Skipping browser installation because the Puppeteer build is not available. Run `npm install` again after you have re-built Puppeteer.
+2026-10-12T10:43:35.5613488Z 
+2026-10-12T10:43:35.5614502Z > prepare
+2026-10-12T10:43:35.5615106Z > npm run prepare --workspaces --if-present
+2026-10-12T10:43:35.5615508Z 
+2026-10-12T10:43:35.7126856Z 
+2026-10-12T10:43:35.7127803Z > @puppeteer/eslint@0.1.0 prepare
+2026-10-12T10:43:35.7128254Z > wireit
+2026-10-12T10:43:35.7128384Z 
+2026-10-12T10:43:35.8100987Z Analyzing
+2026-10-12T10:43:35.8558232Z ✅ Ran 0 scripts and skipped 1 in 0s.
+2026-10-12T10:43:36.0864965Z 
+2026-10-12T10:43:36.0866060Z added 2613 packages, and audited 2624 packages in 1m
+2026-10-12T10:43:36.0866865Z 
+2026-10-12T10:43:36.0867238Z 265 packages are looking for funding
+2026-10-12T10:43:36.0868100Z   run `npm fund` for details
+2026-10-12T10:43:36.2015184Z 
+2026-10-12T10:43:36.2016329Z 23 vulnerabilities (9 moderate, 14 high)
+2026-10-12T10:43:36.2017058Z 
+2026-10-12T10:43:36.2017635Z To address all issues possible (including breaking changes), run:
+2026-10-12T10:43:36.2018352Z   npm audit fix --force
+2026-10-12T10:43:36.2018633Z 
+2026-10-12T10:43:36.2019047Z Some issues need review, and may require choosing
+2026-10-12T10:43:36.2019771Z a different dependency.
+2026-10-12T10:43:36.2020037Z 
+2026-10-12T10:43:36.2020271Z Run `npm audit` for details.
+2026-10-12T10:43:36.2031849Z npm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:
+2026-10-12T10:43:36.2031849Z [fixture trimmed: 70 lines omitted]
+2026-10-12T10:43:48.7072567Z ##[group]Run xvfb-run --auto-servernum npm run test -- --shard '1-2' --test-suite chrome-headful --save-stats-to /tmp/artifacts/push_INSERTID.json
+2026-10-12T10:43:48.7073806Z [36;1mxvfb-run --auto-servernum npm run test -- --shard '1-2' --test-suite chrome-headful --save-stats-to /tmp/artifacts/push_INSERTID.json[0m
+2026-10-12T10:43:48.7135570Z shell: /usr/bin/bash -e {0}
+2026-10-12T10:43:48.7135835Z env:
+2026-10-12T10:43:48.7136074Z   WIREIT_CACHE: github
+2026-10-12T10:43:48.7136333Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 54289
+2026-10-12T10:43:48.7136883Z ##[endgroup]
+2026-10-12T10:43:49.3080129Z 
+2026-10-12T10:43:49.3080989Z > test
+2026-10-12T10:43:49.3081711Z > wireit --shard 1-2 --test-suite chrome-headful --save-stats-to /tmp/artifacts/push_INSERTID.json
+2026-10-12T10:43:49.3082162Z 
+2026-10-12T10:43:49.4439445Z Analyzing
+2026-10-12T10:43:49.4439445Z [fixture trimmed: 309 lines omitted]
+2026-10-12T10:44:49.6711660Z     [32m✔[39m should drop (209ms)
+2026-10-12T10:44:49.8731998Z     [32m✔[39m should drop using mouse (196ms)
+2026-10-12T10:44:50.8732260Z     1) should drag and drop
+2026-10-12T10:44:51.0675763Z     [32m✔[39m should release the mouse button when the drop fails (189ms)
+2026-10-12T10:44:51.0728622Z 
+2026-10-12T10:44:51.0729120Z   Emulation
+2026-10-12T10:44:51.0729543Z     Page.viewport
+2026-10-12T10:44:51.1661520Z       [32m✔[39m should get the proper viewport size (93ms)
+2026-10-12T10:44:51.3256925Z       [32m✔[39m should support mobile emulation (155ms)
+2026-10-12T10:44:51.4870743Z       [32m✔[39m should support touch emulation (156ms)
+2026-10-12T10:44:51.6562140Z       [32m✔[39m should be detectable by Modernizr (164ms)
+2026-10-12T10:44:51.7730323Z       [32m✔[39m should detect touch when applying viewport with touches (112ms)
+2026-10-12T10:44:51.9312811Z       [32m✔[39m should support landscape emulation (154ms)
+2026-10-12T10:44:52.8612277Z       [32m✔[39m should update media queries when resolution changes (925ms)
+2026-10-12T10:44:53.0362820Z       [32m✔[39m should load correct pictures when emulation dpr (170ms)
+2026-10-12T10:44:53.0429570Z     Page.emulate
+2026-10-12T10:44:53.1767814Z       [32m✔[39m should work (134ms)
+2026-10-12T10:44:53.3065260Z       [32m✔[39m should work twice on about:blank (125ms)
+2026-10-12T10:44:53.4719233Z       [32m✔[39m should support clicking (161ms)
+2026-10-12T10:44:53.4775839Z     Page.emulateMediaType
+2026-10-12T10:44:53.5758303Z       [32m✔[39m should work (98ms)
+2026-10-12T10:44:53.6654967Z       [32m✔[39m should throw in case of bad argument (85ms)
+2026-10-12T10:44:53.6709905Z     Page.emulateMediaFeatures
+2026-10-12T10:44:53.7775117Z       [32m✔[39m should work (107ms)
+2026-10-12T10:44:53.8774550Z       [32m✔[39m should work with prefers-contrast (96ms)
+2026-10-12T10:44:53.9798306Z       [32m✔[39m should work with prefers-reduced-transparency (98ms)
+2026-10-12T10:44:54.0813243Z       [32m✔[39m should work with forced-colors (97ms)
+2026-10-12T10:44:54.1804699Z       [32m✔[39m should throw in case of bad argument (95ms)
+2026-10-12T10:44:54.1804699Z [fixture trimmed: 87 lines omitted]
+2026-10-12T10:45:03.8743156Z     [32m✔[39m should trigger commands of keyboard shortcuts (155ms)
+2026-10-12T10:45:04.0154031Z     [32m✔[39m should send a character with ElementHandle.press (135ms)
+2026-10-12T10:45:04.5938368Z     2) ElementHandle.press should not support |text| option
+2026-10-12T10:45:04.7476497Z     [32m✔[39m should send a character with sendCharacter (149ms)
+2026-10-12T10:45:04.8883518Z     [32m✔[39m should send a character with sendCharacter in iframe (135ms)
+2026-10-12T10:45:05.0301303Z     [32m✔[39m should report modifiers (136ms)
+2026-10-12T10:45:05.1688293Z     [32m✔[39m should report multiple modifiers (134ms)
+2026-10-12T10:45:05.2945275Z     [32m✔[39m should send proper codes while typing (121ms)
+2026-10-12T10:45:05.4236866Z     [32m✔[39m should send proper codes while typing with shift (124ms)
+2026-10-12T10:45:05.5795237Z     [32m✔[39m should not type canceled events (152ms)
+2026-10-12T10:45:05.7339809Z     [32m✔[39m should specify repeat property (149ms)
+2026-10-12T10:45:05.9279382Z     [32m✔[39m should type all kinds of characters (189ms)
+2026-10-12T10:45:06.0776531Z     [32m✔[39m should specify location (145ms)
+2026-10-12T10:45:06.1774963Z     [32m✔[39m should throw on unknown keys (94ms)
+2026-10-12T10:45:06.3460686Z     [32m✔[39m should type emoji (164ms)
+2026-10-12T10:45:06.5303125Z     [32m✔[39m should type emoji into an iframe (179ms)
+2026-10-12T10:45:06.5364149Z     [32m✔[39m should press the meta key
+2026-10-12T10:45:06.5364653Z 
+2026-10-12T10:45:06.5365508Z   Locator
+2026-10-12T10:45:06.7067223Z     [32m✔[39m should work with a frame (170ms)
+2026-10-12T10:45:06.7563410Z     3) should type into a textarea
+2026-10-12T10:45:06.7567545Z     4) should move with the arrow keys
+2026-10-12T10:45:06.7571331Z     5) should trigger commands of keyboard shortcuts
+2026-10-12T10:45:06.7575559Z     6) should send a character with ElementHandle.press
+2026-10-12T10:45:06.7582033Z     7) ElementHandle.press should not support |text| option
+2026-10-12T10:45:06.7598667Z     8) should send a character with sendCharacter
+2026-10-12T10:45:06.8415147Z     [32m✔[39m should work without preconditions (131ms)
+2026-10-12T10:45:06.8471112Z     Locator.click
+2026-10-12T10:45:07.0062841Z       [32m✔[39m should work (159ms)
+2026-10-12T10:45:07.1731865Z       [32m✔[39m should work for multiple selectors (162ms)
+2026-10-12T10:45:07.4565110Z       [32m✔[39m should work if the element is out of viewport (279ms)
+2026-10-12T10:45:07.7357513Z       [32m✔[39m should work with element handles (275ms)
+2026-10-12T10:45:07.9032480Z       [32m✔[39m should work if the element becomes visible later (162ms)
+2026-10-12T10:45:08.0689223Z       [32m✔[39m should work if the element becomes enabled later (161ms)
+2026-10-12T10:45:08.3522880Z       [32m✔[39m should work if multiple conditions are satisfied later (278ms)
+2026-10-12T10:45:08.5844826Z       [32m✔[39m should time out (228ms)
+2026-10-12T10:45:08.7222665Z       [32m✔[39m should retry clicks on errors (133ms)
+2026-10-12T10:45:08.8623859Z       [32m✔[39m can be aborted (135ms)
+2026-10-12T10:45:09.0415171Z       [32m✔[39m should work with a OOPIF (175ms)
+2026-10-12T10:45:09.0478281Z     Locator.hover
+2026-10-12T10:45:09.2204334Z       [32m✔[39m should work (173ms)
+2026-10-12T10:45:09.2249342Z     Locator.scroll
+2026-10-12T10:45:09.3704728Z       [32m✔[39m should work (146ms)
+2026-10-12T10:45:09.3749239Z     Locator.fill
+2026-10-12T10:45:09.5250028Z       [32m✔[39m should work for textarea (150ms)
+2026-10-12T10:45:09.6684363Z       [32m✔[39m should work for selects (139ms)
+2026-10-12T10:45:09.8067690Z       [32m✔[39m should work for inputs (134ms)
+2026-10-12T10:45:09.9570395Z       [32m✔[39m should work if the input becomes enabled later (146ms)
+2026-10-12T10:45:10.1067075Z       [32m✔[39m should work for contenteditable (145ms)
+2026-10-12T10:45:10.2388674Z       [32m✔[39m should work for pre-filled inputs (128ms)
+2026-10-12T10:45:10.3905733Z       [32m✔[39m should override pre-filled inputs (148ms)
+2026-10-12T10:45:10.3905733Z [fixture trimmed: 57 lines omitted]
+2026-10-12T10:45:19.7084403Z       [32m✔[39m should disable timeout when its set to 0 (133ms)
+2026-10-12T10:45:19.8230483Z       [32m✔[39m should work when navigating to valid url (108ms)
+2026-10-12T10:45:20.3713931Z       9) should work when navigating to a URL with a client redirect
+2026-10-12T10:45:20.5062473Z       [32m✔[39m should work when a page redirects on DOMContentLoaded (130ms)
+2026-10-12T10:45:20.6451152Z       [32m✔[39m should work when navigating to data url (133ms)
+2026-10-12T10:45:20.7721091Z       [32m✔[39m should work when navigating to 404 (120ms)
+2026-10-12T10:45:20.9801909Z       [32m✔[39m should not throw an error for a 404 response with an empty body (202ms)
+2026-10-12T10:45:21.1720744Z       [32m✔[39m should not throw an error for a 500 response with an empty body (184ms)
+2026-10-12T10:45:21.2991162Z       [32m✔[39m should return last response in redirect chain (122ms)
+2026-10-12T10:45:22.4106533Z       [32m✔[39m should wait for network idle to succeed navigation (1105ms)
+2026-10-12T10:45:22.8566867Z       [32m✔[39m should not leak listeners during navigation (441ms)
+2026-10-12T10:45:22.9709333Z       [32m✔[39m should not leak listeners during bad navigation (106ms)
+2026-10-12T10:45:23.7905768Z       [32m✔[39m should not leak listeners during navigation of 11 pages (816ms)
+2026-10-12T10:45:23.9987145Z       [32m✔[39m should navigate to dataURL and fire dataURL requests (178ms)
+2026-10-12T10:45:24.1259547Z       [32m✔[39m should navigate to URL with hash and fire requests without hash (120ms)
+2026-10-12T10:45:24.2404314Z       [32m✔[39m should work with self requesting page (109ms)
+2026-10-12T10:45:24.3598645Z       [32m✔[39m should fail when navigating and show the url at the error message (112ms)
+2026-10-12T10:45:24.5083159Z       [32m✔[39m should send referer (141ms)
+2026-10-12T10:45:24.6253526Z       [32m✔[39m should send referer policy (112ms)
+2026-10-12T10:45:24.6303382Z     Page.waitForNavigation
+2026-10-12T10:45:24.7880412Z       [32m✔[39m should work (156ms)
+2026-10-12T10:45:24.9093622Z       [32m✔[39m should work with both domcontentloaded and load (117ms)
+2026-10-12T10:45:25.0568455Z       [32m✔[39m should work with clicking on anchor links (142ms)
+2026-10-12T10:45:25.2053276Z       [32m✔[39m should work with history.pushState() (144ms)
+2026-10-12T10:45:25.3552789Z       [32m✔[39m should work with history.replaceState() (145ms)
+2026-10-12T10:45:25.5227375Z       [32m✔[39m should work with DOM history.back()/history.forward() (163ms)
+2026-10-12T10:45:25.6579640Z       [32m✔[39m should work when subframe issues window.stop() (130ms)
+2026-10-12T10:45:25.7572364Z       [32m✔[39m should be cancellable (93ms)
+2026-10-12T10:45:25.7572364Z [fixture trimmed: 107 lines omitted]
+2026-10-12T10:45:44.4602076Z       [32m✔[39m should intercept (121ms)
+2026-10-12T10:45:44.6193394Z       [32m✔[39m should work when POST is redirected with 302 (153ms)
+2026-10-12T10:45:49.1007037Z       10) should work with keep alive redirects
+2026-10-12T10:45:49.2317036Z       [32m✔[39m should work when header manipulation headers with redirect (125ms)
+2026-10-12T10:45:49.3545393Z       [32m✔[39m should be able to remove headers (117ms)
+2026-10-12T10:45:49.4793141Z       [32m✔[39m should contain referer header (117ms)
+2026-10-12T10:45:49.6008061Z       [32m✔[39m should not allow mutating request headers (117ms)
+2026-10-12T10:45:49.7244867Z       [32m✔[39m should work with requests without networkId (119ms)
+2026-10-12T10:45:49.8662278Z       [32m✔[39m should properly return navigation response when URL has cookies (137ms)
+2026-10-12T10:45:50.0059416Z       [32m✔[39m should stop intercepting (134ms)
+2026-10-12T10:45:50.1225855Z       [32m✔[39m should show custom HTTP headers (111ms)
+2026-10-12T10:45:50.2482512Z       [32m✔[39m should work with redirect inside sync XHR (121ms)
+2026-10-12T10:45:50.3689990Z       [32m✔[39m should work with custom referer headers (116ms)
+2026-10-12T10:45:50.4974770Z       [32m✔[39m should be abortable (120ms)
+2026-10-12T10:45:50.6065820Z       [32m✔[39m should be abortable with custom error codes (102ms)
+2026-10-12T10:45:50.7626175Z       [32m✔[39m should send referer (148ms)
+2026-10-12T10:45:50.8728605Z       [32m✔[39m should fail navigation when aborting main resource (104ms)
+2026-10-12T10:45:51.0028406Z       [32m✔[39m should work with redirects (122ms)
+2026-10-12T10:45:51.1390033Z       [32m✔[39m should work with redirects for subresources (129ms)
+2026-10-12T10:45:51.2630958Z       [32m✔[39m should be able to abort redirects (119ms)
+2026-10-12T10:45:51.3899647Z       [32m✔[39m should work with equal requests (122ms)
+2026-10-12T10:45:51.5276040Z       [32m✔[39m should navigate to dataURL and fire dataURL requests (131ms)
+2026-10-12T10:45:51.6564994Z       [32m✔[39m should be able to fetch dataURL and fire dataURL requests (126ms)
+2026-10-12T10:45:51.7744998Z       [32m✔[39m should navigate to URL with hash and fire requests without hash (113ms)
+2026-10-12T10:45:51.8918311Z       [32m✔[39m should work with encoded server (113ms)
+2026-10-12T10:45:52.0137760Z       [32m✔[39m should work with badly encoded server (117ms)
+2026-10-12T10:45:52.1377035Z       [32m✔[39m should work with missing stylesheets (119ms)
+2026-10-12T10:45:52.2688667Z       [32m✔[39m should not throw "Invalid Interception Id" if the request was cancelled (126ms)
+2026-10-12T10:45:52.2688667Z [fixture trimmed: 118 lines omitted]
+2026-10-12T10:46:11.7080354Z       [32m✔[39m should work
+2026-10-12T10:46:11.7892220Z 
+2026-10-12T10:46:11.8666390Z 
+2026-10-12T10:46:11.8667576Z   608 passing (2m)
+2026-10-12T10:46:11.8668310Z   8 pending
+2026-10-12T10:46:11.8668868Z   10 failing
+2026-10-12T10:46:11.8669268Z 
+2026-10-12T10:46:11.8673856Z   1) Drag n' Drop
+2026-10-12T10:46:11.8674508Z        should drag and drop:
+2026-10-12T10:46:11.8675430Z      Error: expect(received).toBe(expected) // Object.is equality
+2026-10-12T10:46:11.8676131Z 
+2026-10-12T10:46:11.8676453Z Expected: 1234
+2026-10-12T10:46:11.8677523Z Received: 12334
+2026-10-12T10:46:11.8678761Z       at Context.<anonymous> (file:///home/runner/work/puppeteer/puppeteer/test/src/drag-and-drop.test.ts:153:34)
+2026-10-12T10:46:11.8679801Z 
+2026-10-12T10:46:11.8680050Z   2) Keyboard
+2026-10-12T10:46:11.8680677Z        ElementHandle.press should not support |text| option:
+2026-10-12T10:46:11.8681519Z      Error: expect(received).toBe(expected) // Object.is equality
+2026-10-12T10:46:11.8681993Z 
+2026-10-12T10:46:11.8682151Z Expected: "a"
+2026-10-12T10:46:11.8682746Z Received: "ё"
+2026-10-12T10:46:11.8683643Z       at Context.<anonymous> (file:///home/runner/work/puppeteer/puppeteer/test/src/keyboard.test.ts:131:7)
+2026-10-12T10:46:11.8684401Z 
+2026-10-12T10:46:11.8684548Z   3) Keyboard
+2026-10-12T10:46:11.8684952Z        should type into a textarea:
+2026-10-12T10:46:11.8688320Z      Error: done() called multiple times in test <Keyboard should type into a textarea> of file /home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js; in addition, done() received error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js)
+2026-10-12T10:46:11.8691163Z     at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8691827Z     at processTimers (node:internal/timers:618:7) {
+2026-10-12T10:46:11.8692369Z   code: 'ERR_MOCHA_TIMEOUT',
+2026-10-12T10:46:11.8692792Z   timeout: 2000,
+2026-10-12T10:46:11.8693439Z   file: '/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js'
+2026-10-12T10:46:11.8694102Z }
+2026-10-12T10:46:11.8694547Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8695192Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8695592Z 
+2026-10-12T10:46:11.8695737Z   4) Keyboard
+2026-10-12T10:46:11.8696151Z        should move with the arrow keys:
+2026-10-12T10:46:11.8699542Z      Error: done() called multiple times in test <Keyboard should move with the arrow keys> of file /home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js; in addition, done() received error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js)
+2026-10-12T10:46:11.8702402Z     at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8703059Z     at processTimers (node:internal/timers:618:7) {
+2026-10-12T10:46:11.8703609Z   code: 'ERR_MOCHA_TIMEOUT',
+2026-10-12T10:46:11.8704048Z   timeout: 2000,
+2026-10-12T10:46:11.8704710Z   file: '/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js'
+2026-10-12T10:46:11.8705433Z }
+2026-10-12T10:46:11.8705916Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8706907Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8707319Z 
+2026-10-12T10:46:11.8707463Z   5) Keyboard
+2026-10-12T10:46:11.8708294Z        should trigger commands of keyboard shortcuts:
+2026-10-12T10:46:11.8711706Z      Error: done() called multiple times in test <Keyboard should trigger commands of keyboard shortcuts> of file /home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js; in addition, done() received error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js)
+2026-10-12T10:46:11.8714865Z     at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8715535Z     at processTimers (node:internal/timers:618:7) {
+2026-10-12T10:46:11.8716098Z   code: 'ERR_MOCHA_TIMEOUT',
+2026-10-12T10:46:11.8716531Z   timeout: 2000,
+2026-10-12T10:46:11.8717484Z   file: '/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js'
+2026-10-12T10:46:11.8718198Z }
+2026-10-12T10:46:11.8718653Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8719308Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8719695Z 
+2026-10-12T10:46:11.8719843Z   6) Keyboard
+2026-10-12T10:46:11.8720343Z        should send a character with ElementHandle.press:
+2026-10-12T10:46:11.8723650Z      Error: done() called multiple times in test <Keyboard should send a character with ElementHandle.press> of file /home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js; in addition, done() received error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js)
+2026-10-12T10:46:11.8726572Z     at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8728093Z     at processTimers (node:internal/timers:618:7) {
+2026-10-12T10:46:11.8728667Z   code: 'ERR_MOCHA_TIMEOUT',
+2026-10-12T10:46:11.8729113Z   timeout: 2000,
+2026-10-12T10:46:11.8729835Z   file: '/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js'
+2026-10-12T10:46:11.8730516Z }
+2026-10-12T10:46:11.8730969Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8731613Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8732011Z 
+2026-10-12T10:46:11.8732154Z   7) Keyboard
+2026-10-12T10:46:11.8732656Z        ElementHandle.press should not support |text| option:
+2026-10-12T10:46:11.8733448Z      Error: expect(received).toBe(expected) // Object.is equality
+2026-10-12T10:46:11.8733743Z 
+2026-10-12T10:46:11.8733837Z Expected: "a"
+2026-10-12T10:46:11.8734174Z Received: "ё"
+2026-10-12T10:46:11.8734715Z       at Context.<anonymous> (file:///home/runner/work/puppeteer/puppeteer/test/src/keyboard.test.ts:131:7)
+2026-10-12T10:46:11.8735374Z 
+2026-10-12T10:46:11.8735544Z   8) Keyboard
+2026-10-12T10:46:11.8736045Z        should send a character with sendCharacter:
+2026-10-12T10:46:11.8739522Z      Error: done() called multiple times in test <Keyboard should send a character with sendCharacter> of file /home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js; in addition, done() received error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js)
+2026-10-12T10:46:11.8742393Z     at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8743043Z     at processTimers (node:internal/timers:618:7) {
+2026-10-12T10:46:11.8743591Z   code: 'ERR_MOCHA_TIMEOUT',
+2026-10-12T10:46:11.8744006Z   timeout: 2000,
+2026-10-12T10:46:11.8744655Z   file: '/home/runner/work/puppeteer/puppeteer/test/build/keyboard.test.js'
+2026-10-12T10:46:11.8745328Z }
+2026-10-12T10:46:11.8745775Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8746416Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8747023Z 
+2026-10-12T10:46:11.8747178Z   9) navigation
+2026-10-12T10:46:11.8747524Z        Page.goto
+2026-10-12T10:46:11.8748104Z          should work when navigating to a URL with a client redirect:
+2026-10-12T10:46:11.8749006Z      Error: expect(received).toBe(expected) // Object.is equality
+2026-10-12T10:46:11.8749405Z 
+2026-10-12T10:46:11.8749668Z Expected: "http://localhost:37729/client-redirect.html"
+2026-10-12T10:46:11.8750232Z Received: "http://localhost:37729/empty.html"
+2026-10-12T10:46:11.8750851Z       at Context.<anonymous> (file:///home/runner/work/puppeteer/puppeteer/test/src/navigation.test.ts:347:30)
+2026-10-12T10:46:11.8751276Z 
+2026-10-12T10:46:11.8751382Z   10) request interception
+2026-10-12T10:46:11.8751665Z        Page.setRequestInterception
+2026-10-12T10:46:11.8751991Z          should work with keep alive redirects:
+2026-10-12T10:46:11.8752357Z      TimeoutError: Timed out after waiting 1000ms
+2026-10-12T10:46:11.8752933Z       at file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/src/common/util.ts:286:17
+2026-10-12T10:46:11.8753735Z       at file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:1944:31
+2026-10-12T10:46:11.8754715Z       at OperatorSubscriber2._this._next (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:1001:9)
+2026-10-12T10:46:11.8755844Z       at OperatorSubscriber2.Subscriber2.next (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:704:12)
+2026-10-12T10:46:11.8757246Z       at AsyncAction2.<anonymous> (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:2288:20)
+2026-10-12T10:46:11.8758308Z       at AsyncAction2._execute (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:1368:12)
+2026-10-12T10:46:11.8759338Z       at AsyncAction2.execute (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:1357:22)
+2026-10-12T10:46:11.8760344Z       at AsyncScheduler2.flush (file:///home/runner/work/puppeteer/puppeteer/packages/puppeteer-core/lib/third_party/rxjs/rxjs.js:1435:26)
+2026-10-12T10:46:11.8761032Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-12T10:46:11.8761411Z       at processTimers (node:internal/timers:618:7)
+2026-10-12T10:46:11.8761647Z 
+2026-10-12T10:46:11.8761653Z 
+2026-10-12T10:46:11.8761658Z 
+2026-10-12T10:46:11.9186061Z Finished ["chrome","headful","cdp"]
+2026-10-12T10:46:11.9626457Z Test run matches expectations
+2026-10-12T10:46:11.9664275Z Run succeeded.
+2026-10-12T10:46:11.9725117Z ✅ Ran 1 script and skipped 11 in 142.6s.
+2026-10-12T10:46:11.9725117Z [fixture trimmed: 57 lines omitted]
+2026-10-12T10:46:13.9634899Z /github/runner_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config
+2026-10-12T10:46:13.9642701Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-9f86ab3d\-e4f8\-4225\-812a\-a79e6d589c50\.config
+2026-10-12T10:46:13.9674312Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-12T10:46:13.9901595Z Removing credentials config '/home/runner/work/_temp/git-credentials-9f86ab3d-e4f8-4225-812a-a79e6d589c50.config'
+2026-10-12T10:46:14.0081692Z Cleaning up orphan processes
+2026-10-12T10:46:14.0441134Z Terminate orphan process: pid (2504) (MainThread)

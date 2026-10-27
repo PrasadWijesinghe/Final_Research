@@ -1,2 +1,4 @@
 *.sql text eol=lf
 *.sh text eol=lf
+# Real CI log fixtures are byte-exact: no line-ending conversion on any platform.
+experts/testing/tests/fixtures/logs/**/*.log -text

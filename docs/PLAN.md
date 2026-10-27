@@ -87,7 +87,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 Design: `docs/experts/test.md`.
 
-- [ ] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
+- [x] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
 - [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity.
 - [ ] **P4.3 Labelling** per §3, written as `FailureLabel`s; a manual-review sample exporter; a kappa calculator.
 - [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving.

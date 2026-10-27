@@ -1,0 +1,609 @@
+﻿2026-08-07T12:07:33.9312100Z Current runner version: '2.336.0'
+2026-08-07T12:07:33.9335070Z ##[group]Runner Image Provisioner
+2026-08-07T12:07:33.9335760Z Hosted Compute Agent
+2026-08-07T12:07:33.9336520Z Version: 20260707.563
+2026-08-07T12:07:33.9337250Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-08-07T12:07:33.9337880Z Build Date: 2026-07-07T19:33:50Z
+2026-08-07T12:07:33.9338660Z Worker ID: {ef887d6b-568c-477b-89b1-ca167ca815cd}
+2026-08-07T12:07:33.9340720Z Azure Region: westus
+2026-08-07T12:07:33.9342170Z ##[endgroup]
+2026-08-07T12:07:33.9346260Z ##[group]Operating System
+2026-08-07T12:07:33.9347790Z macOS
+2026-08-07T12:07:33.9348690Z 26.5.2
+2026-08-07T12:07:33.9349710Z 25F84
+2026-08-07T12:07:33.9350790Z ##[endgroup]
+2026-08-07T12:07:33.9351840Z ##[group]Runner Image
+2026-08-07T12:07:33.9353190Z Image: macos-26-arm64
+2026-08-07T12:07:33.9355260Z Version: 20260728.0273.1
+2026-08-07T12:07:33.9358110Z Included Software: https://github.com/actions/runner-images/blob/macos-26-arm64/20260728.0273/images/macos/macos-26-arm64-Readme.md
+2026-08-07T12:07:33.9361410Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20260728.0273
+2026-08-07T12:07:33.9363290Z ##[endgroup]
+2026-08-07T12:07:33.9365740Z ##[group]GITHUB_TOKEN Permissions
+2026-08-07T12:07:33.9376980Z Contents: read
+2026-08-07T12:07:33.9378160Z Metadata: read
+2026-08-07T12:07:33.9379160Z ##[endgroup]
+2026-08-07T12:07:33.9384050Z Secret source: Actions
+2026-08-07T12:07:33.9385400Z Prepare workflow directory
+2026-08-07T12:07:33.9880380Z Prepare all required actions
+2026-08-07T12:07:33.9944420Z Getting action download info
+2026-08-07T12:07:34.4506620Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-07T12:07:34.7748780Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-07T12:07:34.9480790Z Download action repository 'SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403' (SHA:97330871fe1b7d3529392ea000e3d2c4b357e403)
+2026-08-07T12:07:35.3535660Z Download action repository 'nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60' (SHA:ad984534de44a9489a53aefd81eb77f87c70dc60)
+2026-08-07T12:07:35.8900660Z Uses: jestjs/jest/.github/workflows/test.yml@refs/pull/16309/merge (e0f62e1e12338c7cc53f6678054b72984c8a19ce)
+2026-08-07T12:07:35.8904980Z ##[group] Inputs
+2026-08-07T12:07:35.8905640Z   os: macos-latest
+2026-08-07T12:07:35.8906220Z   shard: 2/3
+2026-08-07T12:07:35.8906790Z ##[endgroup]
+2026-08-07T12:07:35.8907600Z Complete job name: macOS with shard 2/3 / Node LTS using jest-jasmine2
+2026-08-07T12:07:35.9784010Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-07T12:07:35.9785260Z with:
+2026-08-07T12:07:35.9785790Z   persist-credentials: false
+2026-08-07T12:07:35.9786420Z   repository: jestjs/jest
+2026-08-07T12:07:35.9792970Z   token: ***
+2026-08-07T12:07:35.9793580Z   ssh-strict: true
+2026-08-07T12:07:35.9794430Z   ssh-user: git
+2026-08-07T12:07:35.9795090Z   clean: true
+2026-08-07T12:07:35.9795660Z   sparse-checkout-cone-mode: true
+2026-08-07T12:07:35.9796390Z   fetch-depth: 1
+2026-08-07T12:07:35.9797010Z   fetch-tags: false
+2026-08-07T12:07:35.9797550Z   show-progress: true
+2026-08-07T12:07:35.9798150Z   lfs: false
+2026-08-07T12:07:35.9798710Z   submodules: false
+2026-08-07T12:07:35.9799340Z   set-safe-directory: true
+2026-08-07T12:07:35.9799960Z   allow-unsafe-pr-checkout: false
+2026-08-07T12:07:35.9800990Z ##[endgroup]
+2026-08-07T12:07:36.6615710Z Syncing repository: jestjs/jest
+2026-08-07T12:07:36.6617290Z ##[group]Getting Git version info
+2026-08-07T12:07:36.6629510Z Working directory is '/Users/runner/work/jest/jest'
+2026-08-07T12:07:36.6632020Z [command]/opt/homebrew/bin/git version
+2026-08-07T12:07:36.7010160Z git version 2.55.0
+2026-08-07T12:07:36.7028290Z ##[endgroup]
+2026-08-07T12:07:36.7037920Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/14a84b5d-ad88-4225-9aea-be752e3f7d3f/.gitconfig'
+2026-08-07T12:07:36.7047070Z Temporarily overriding HOME='/Users/runner/work/_temp/14a84b5d-ad88-4225-9aea-be752e3f7d3f' before making global git config changes
+2026-08-07T12:07:36.7050130Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-07T12:07:36.7052080Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/jest/jest
+2026-08-07T12:07:36.7215210Z Deleting the contents of '/Users/runner/work/jest/jest'
+2026-08-07T12:07:36.7218130Z ##[group]Determining repository object format
+2026-08-07T12:07:36.7219010Z ##[endgroup]
+2026-08-07T12:07:36.7219720Z ##[group]Initializing the repository
+2026-08-07T12:07:36.7221360Z [command]/opt/homebrew/bin/git init /Users/runner/work/jest/jest
+2026-08-07T12:07:36.7650740Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-07T12:07:36.7662890Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-07T12:07:36.7664800Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-07T12:07:36.7670780Z hint: call:
+2026-08-07T12:07:36.7671610Z hint:
+2026-08-07T12:07:36.7672330Z hint: 	git config --global init.defaultBranch <name>
+2026-08-07T12:07:36.7672960Z hint:
+2026-08-07T12:07:36.7673580Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-07T12:07:36.7674450Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-07T12:07:36.7675180Z hint:
+2026-08-07T12:07:36.7675670Z hint: 	git branch -m <name>
+2026-08-07T12:07:36.7676150Z hint:
+2026-08-07T12:07:36.7676930Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-07T12:07:36.7678020Z Initialized empty Git repository in /Users/runner/work/jest/jest/.git/
+2026-08-07T12:07:36.7680070Z [command]/opt/homebrew/bin/git remote add origin https://github.com/jestjs/jest
+2026-08-07T12:07:36.7781670Z ##[endgroup]
+2026-08-07T12:07:36.7783580Z ##[group]Disabling automatic garbage collection
+2026-08-07T12:07:36.7785240Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-08-07T12:07:36.7907100Z ##[endgroup]
+2026-08-07T12:07:36.7909520Z ##[group]Setting up auth
+2026-08-07T12:07:36.7911100Z Removing SSH command configuration
+2026-08-07T12:07:36.7912980Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-07T12:07:36.8027360Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-07T12:07:36.9688140Z Removing HTTP extra header
+2026-08-07T12:07:36.9698700Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-07T12:07:36.9806930Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-07T12:07:37.1077120Z Removing includeIf entries pointing to credentials config files
+2026-08-07T12:07:37.1078690Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-07T12:07:37.1170590Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-07T12:07:37.2448820Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-07T12:07:37.2807530Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/jest/jest/.git.path /Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:37.2809660Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/jest/jest/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:37.3052980Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:37.3055380Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:37.3118070Z ##[endgroup]
+2026-08-07T12:07:37.3119780Z ##[group]Fetching the repository
+2026-08-07T12:07:37.3125220Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e0f62e1e12338c7cc53f6678054b72984c8a19ce:refs/remotes/pull/16309/merge
+2026-08-07T12:07:38.8254600Z From https://github.com/jestjs/jest
+2026-08-07T12:07:38.8259440Z  * [new ref]         e0f62e1e12338c7cc53f6678054b72984c8a19ce -> pull/16309/merge
+2026-08-07T12:07:38.8267890Z ##[endgroup]
+2026-08-07T12:07:38.8268310Z ##[group]Determining the checkout info
+2026-08-07T12:07:38.8268700Z ##[endgroup]
+2026-08-07T12:07:38.8269000Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-08-07T12:07:38.8353650Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-07T12:07:38.8456400Z ##[group]Checking out the ref
+2026-08-07T12:07:38.8457240Z [command]/opt/homebrew/bin/git checkout --progress --force refs/remotes/pull/16309/merge
+2026-08-07T12:07:39.5106830Z HEAD is now at e0f62e1 Merge db7637822375768108ae1ec9bc4e8d028ec60eb3 into f6dee87a2882bc52bdf447c99f11c9915ec626e0
+2026-08-07T12:07:39.5120740Z ##[endgroup]
+2026-08-07T12:07:39.5266090Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-08-07T12:07:39.5385190Z e0f62e1e12338c7cc53f6678054b72984c8a19ce
+2026-08-07T12:07:39.5394760Z ##[group]Removing auth
+2026-08-07T12:07:39.5397610Z Removing SSH command configuration
+2026-08-07T12:07:39.5399140Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-07T12:07:39.5513250Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-07T12:07:39.6948410Z Removing HTTP extra header
+2026-08-07T12:07:39.6954200Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-07T12:07:39.6961160Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-07T12:07:39.8280900Z Removing includeIf entries pointing to credentials config files
+2026-08-07T12:07:39.8286670Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-07T12:07:39.8361460Z includeif.gitdir:/Users/runner/work/jest/jest/.git.path
+2026-08-07T12:07:39.8362470Z includeif.gitdir:/Users/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-07T12:07:39.8363560Z includeif.gitdir:/github/workspace/.git.path
+2026-08-07T12:07:39.8364350Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-07T12:07:39.8372700Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/jest/jest/.git.path
+2026-08-07T12:07:39.8450070Z /Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:39.8465390Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/jest/jest/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-97a47628\-1ce6\-4781\-b1a9\-39afa50dafe0\.config
+2026-08-07T12:07:39.8553560Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-07T12:07:39.8633580Z /Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:39.8644550Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/jest/jest/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-97a47628\-1ce6\-4781\-b1a9\-39afa50dafe0\.config
+2026-08-07T12:07:39.8736830Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-07T12:07:39.8815470Z /github/runner_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:39.8829820Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-97a47628\-1ce6\-4781\-b1a9\-39afa50dafe0\.config
+2026-08-07T12:07:39.8924550Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-07T12:07:39.9001200Z /github/runner_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config
+2026-08-07T12:07:39.9012840Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-97a47628\-1ce6\-4781\-b1a9\-39afa50dafe0\.config
+2026-08-07T12:07:39.9138940Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-07T12:07:40.0635840Z Removing credentials config '/Users/runner/work/_temp/git-credentials-97a47628-1ce6-4781-b1a9-39afa50dafe0.config'
+2026-08-07T12:07:40.0637130Z ##[endgroup]
+2026-08-07T12:07:40.0837930Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-07T12:07:40.0838290Z with:
+2026-08-07T12:07:40.0838430Z   node-version: lts/*
+2026-08-07T12:07:40.0838600Z   cache: yarn
+2026-08-07T12:07:40.0838760Z   check-latest: false
+2026-08-07T12:07:40.0840820Z   token: ***
+2026-08-07T12:07:40.0841430Z   package-manager-cache: true
+2026-08-07T12:07:40.0841620Z ##[endgroup]
+2026-08-07T12:07:40.2294720Z Attempt to resolve LTS alias from manifest...
+2026-08-07T12:07:41.0481400Z Found in cache @ /Users/runner/hostedtoolcache/node/24.18.0/arm64
+2026-08-07T12:07:41.0483840Z ##[group]Environment details
+2026-08-07T12:07:42.3798890Z node: v24.18.0
+2026-08-07T12:07:42.3799440Z npm: 11.16.0
+2026-08-07T12:07:42.3799870Z yarn: 4.18.0
+2026-08-07T12:07:42.3801110Z ##[endgroup]
+2026-08-07T12:07:42.3823590Z [command]/Users/runner/.yarn/bin/yarn --version
+2026-08-07T12:07:42.9156170Z 4.18.0
+2026-08-07T12:07:42.9458800Z [command]/Users/runner/.yarn/bin/yarn config get cacheFolder
+2026-08-07T12:07:43.4933620Z /Users/runner/.yarn/berry/cache
+2026-08-07T12:07:43.5351430Z [command]/Users/runner/.yarn/bin/yarn config get enableGlobalCache
+2026-08-07T12:07:43.9964110Z [33mtrue[39m
+2026-08-07T12:07:44.2719190Z Cache hit for: node-cache-macOS-arm64-yarn-a06a347f8b069910d9d3934bb4cefd2423d523ba80f48283ced20324777569a2
+2026-08-07T12:07:45.5669300Z Received 0 of 152521531 (0.0%), 0.0 MBs/sec
+2026-08-07T12:07:46.5693960Z Received 58720256 of 152521531 (38.5%), 27.9 MBs/sec
+2026-08-07T12:07:47.5719420Z Received 125829120 of 152521531 (82.5%), 39.9 MBs/sec
+2026-08-07T12:07:48.5626480Z Received 152521531 of 152521531 (100.0%), 36.4 MBs/sec
+2026-08-07T12:07:48.5648660Z Cache Size: ~145 MB (152521531 B)
+2026-08-07T12:07:48.5797280Z [command]/opt/homebrew/bin/gtar -xf /Users/runner/work/_temp/0d87c986-65bb-4f41-8ed6-930f2a8adb3a/cache.tzst -P -C /Users/runner/work/jest/jest --delay-directory-restore --use-compress-program unzstd
+2026-08-07T12:07:49.5980030Z Cache restored successfully
+2026-08-07T12:07:49.6113970Z Cache restored from key: node-cache-macOS-arm64-yarn-a06a347f8b069910d9d3934bb4cefd2423d523ba80f48283ced20324777569a2
+2026-08-07T12:07:49.6533700Z ##[group]Run yarn --immutable
+2026-08-07T12:07:49.6534910Z [36;1myarn --immutable[0m
+2026-08-07T12:07:49.6620040Z shell: /bin/bash -e {0}
+2026-08-07T12:07:49.6620490Z ##[endgroup]
+2026-08-07T12:07:50.4340470Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-08-07T12:07:50.4399010Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-08-07T12:07:50.4409450Z 
+2026-08-07T12:07:50.4410040Z [94m➤[39m YN0000: · Yarn 4.18.0
+2026-08-07T12:07:50.4410580Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-08-07T12:07:50.4412810Z ##[group]Resolution step
+2026-08-07T12:08:03.0735770Z ##[endgroup]
+2026-08-07T12:08:03.0879380Z [94m➤[39m [90mYN0000[39m: └ Completed in 12s 633ms
+2026-08-07T12:08:03.1003100Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-08-07T12:08:03.1105770Z ##[group]Post-resolution validation
+2026-08-07T12:08:03.1210010Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m7.29.7[39m ([38;5;111mpf247de[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mpreset-react[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-07T12:08:03.1310950Z [93m➤[39m YN0060: │ [38;5;173mgraphql[39m is listed by your project with version [38;5;111m17.0.2[39m ([38;5;111mp1ae269[39m), which doesn't satisfy what [38;5;173mgraphql-request[39m and other dependencies request ([38;5;37m^14.0.0 || ^15.0.0 || ^16.0.0[39m).
+2026-08-07T12:08:03.1415050Z [93m➤[39m YN0060: │ [38;5;173mreact[39m is listed by your project with version [38;5;111m18.3.1[39m ([38;5;111mp4a9fd3[39m), which doesn't satisfy what [38;5;173mreact-native[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-07T12:08:03.1554770Z [93m➤[39m YN0002: │ [38;5;166m@jest/[39m[38;5;173mdiff-sequences[39m[38;5;111m@[39m[38;5;111mworkspace:packages/diff-sequences[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp03fd70[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-07T12:08:03.1604960Z [93m➤[39m YN0002: │ [38;5;173mbabel-preset-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-preset-jest[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa5adb7[39m), requested by [38;5;173mbabel-preset-current-node-syntax[39m.
+2026-08-07T12:08:03.1712620Z [93m➤[39m YN0002: │ [38;5;173mcreate-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/create-jest[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp9c2ade[39m), requested by [38;5;173mjest-config[39m.
+2026-08-07T12:08:03.1819370Z [93m➤[39m YN0002: │ [38;5;173mexpect[39m[38;5;111m@[39m[38;5;111mworkspace:packages/expect[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp9fb730[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-07T12:08:03.1893410Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [023ef][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdec1f7[39m), requested by [38;5;173mjest-config[39m.
+2026-08-07T12:08:03.1893410Z [fixture trimmed: 29 lines omitted]
+2026-08-07T12:08:47.2219660Z ##[group]Run nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+2026-08-07T12:08:47.2219990Z with:
+2026-08-07T12:08:47.2220170Z   timeout_minutes: 10
+2026-08-07T12:08:47.2220350Z   max_attempts: 3
+2026-08-07T12:08:47.2220520Z   retry_on: error
+2026-08-07T12:08:47.2220750Z   command: yarn jest-jasmine-ci --max-workers 3 --shard=2/3
+2026-08-07T12:08:47.2221010Z   retry_wait_seconds: 10
+2026-08-07T12:08:47.2221240Z   polling_interval_seconds: 1
+2026-08-07T12:08:47.2221440Z   warning_on_retry: true
+2026-08-07T12:08:47.2221610Z   continue_on_error: false
+2026-08-07T12:08:47.2221790Z ##[endgroup]
+2026-08-07T12:08:47.3152770Z ##[group]Attempt 1
+2026-08-07T12:08:47.3152770Z [fixture trimmed: 131 lines omitted]
+2026-08-07T12:09:58.6527410Z /Users/runner/work/jest/jest/e2e/__tests__/detectOpenHandles.ts
+2026-08-07T12:09:58.6527690Z 
+2026-08-07T12:09:58.6528540Z [1m[31m  [1m● [22m[1mnotify › does not report --notify flag[39m[22m
+2026-08-07T12:09:58.6528850Z 
+2026-08-07T12:09:58.6529480Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+2026-08-07T12:09:58.6529870Z 
+2026-08-07T12:09:58.6530060Z     Expected: [32m""[39m
+2026-08-07T12:09:58.6530860Z     Received: [31m"Jest did not exit one second after the test run has completed.·[39m
+2026-08-07T12:09:58.6532210Z     [31m'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue."[39m
+2026-08-07T12:09:58.6533060Z [2m[22m
+2026-08-07T12:09:58.6567610Z [2m    [0m [90m 109 |[39m     [36mconst[39m textAfterTest [33m=[39m getTextAfterTest(stderr)[33m;[39m[22m
+2026-08-07T12:09:58.6568190Z [2m     [90m 110 |[39m[22m
+2026-08-07T12:09:58.6569040Z [2m    [31m[1m>[22m[2m[39m[90m 111 |[39m     expect(textAfterTest)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:09:58.6569880Z [2m     [90m     |[39m                           [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:09:58.6570590Z [2m     [90m 112 |[39m   })[33m;[39m[22m
+2026-08-07T12:09:58.6571090Z [2m     [90m 113 |[39m })[33m;[39m[22m
+2026-08-07T12:09:58.6571540Z [2m     [90m 114 |[39m[0m[22m
+2026-08-07T12:09:58.6571990Z [2m[22m
+2026-08-07T12:09:58.6572690Z [2m      [2mat Object.toBe ([22m[2m[0m[36me2e/__tests__/detectOpenHandles.ts[39m[0m[2m:111:27)[22m[2m[22m
+2026-08-07T12:09:58.6573130Z 
+2026-08-07T12:10:23.8207080Z .....................[33m[1mfoo[22m:[39m
+2026-08-07T12:10:23.8310960Z [33m[39m
+2026-08-07T12:10:23.8413740Z [33mDeprecation message[39m
+2026-08-07T12:10:23.8516000Z [33m[39m
+2026-08-07T12:10:23.8619540Z [33m  [1mCLI Options Documentation:[22m[39m
+2026-08-07T12:10:23.8828760Z [33m  https://jestjs.io/docs/cli[39m
+2026-08-07T12:10:23.8930210Z [33m[39m
+2026-08-07T12:10:28.3532260Z ......[SKIP] Does not work on Jasmine
+2026-08-07T12:10:28.3532260Z [fixture trimmed: 47 lines omitted]
+2026-08-07T12:11:13.9494080Z ....
+2026-08-07T12:11:13.9494500Z 
+2026-08-07T12:11:13.9494520Z 
+2026-08-07T12:11:13.9495510Z [1mSummary of all failing tests[22m
+2026-08-07T12:11:13.9548540Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2me2e/__tests__/[22m[1mnativeEsm.test.ts[22m ([0m[1m[41m13.165 s[49m[22m[0m)
+2026-08-07T12:11:13.9550160Z [1m[31m  [1m● [22m[1mruns test with native ESM[39m[22m
+2026-08-07T12:11:13.9550470Z 
+2026-08-07T12:11:13.9550900Z     [2mexpect([22m[36m[107mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
+2026-08-07T12:11:13.9551240Z 
+2026-08-07T12:11:13.9551420Z     Snapshot name: `runs test with native ESM 1`
+2026-08-07T12:11:13.9551690Z 
+2026-08-07T12:11:13.9551920Z     [35m[103m- Snapshot  - 2[49m[39m
+2026-08-07T12:11:13.9552690Z     [36m[107m+ Received  + 2[49m[39m
+2026-08-07T12:11:13.9553370Z 
+2026-08-07T12:11:13.9554430Z     [35m[103m- Test Suites: 1 [7mpass[27med, 1 total[49m[39m
+2026-08-07T12:11:13.9555790Z     [36m[107m+ Test Suites: 1 [7mfail[27med, 1 total[49m[39m
+2026-08-07T12:11:13.9556970Z     [35m[103m- Tests:       [7m30[27m passed, 30 total[49m[39m
+2026-08-07T12:11:13.9558500Z     [36m[107m+ Tests:       [7m1 failed, 29[27m passed, 30 total[49m[39m
+2026-08-07T12:11:13.9561130Z     [2m  Snapshots:   0 total[22m
+2026-08-07T12:11:13.9562240Z     [2m  Time:        <<REPLACED>>[22m
+2026-08-07T12:11:13.9564430Z     [2m  Ran all test suites matching native-esm.test.js.[22m
+2026-08-07T12:11:13.9565560Z [2m[22m
+2026-08-07T12:11:13.9566180Z [2m    [0m [90m 55 |[39m   [36mconst[39m {summary} [33m=[39m extractSummary(stderr)[33m;[39m[22m
+2026-08-07T12:11:13.9575300Z [2m     [90m 56 |[39m[22m
+2026-08-07T12:11:13.9576660Z [2m    [31m[1m>[22m[2m[39m[90m 57 |[39m   expect(summary)[33m.[39mtoMatchSnapshot()[33m;[39m[22m
+2026-08-07T12:11:13.9577680Z [2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:11:13.9578680Z [2m     [90m 58 |[39m   expect(stdout)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:11:13.9579580Z [2m     [90m 59 |[39m   expect(exitCode)[33m.[39mtoBe([35m0[39m)[33m;[39m[22m
+2026-08-07T12:11:13.9580280Z [2m     [90m 60 |[39m })[33m;[39m[0m[22m
+2026-08-07T12:11:13.9580670Z [2m[22m
+2026-08-07T12:11:13.9587360Z [2m      [2mat Object.toMatchSnapshot ([22m[2m[0m[36me2e/__tests__/nativeEsm.test.ts[39m[0m[2m:57:19)[22m[2m[22m
+2026-08-07T12:11:13.9587810Z 
+2026-08-07T12:11:13.9588790Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2me2e/__tests__/[22m[1mdetectOpenHandles.ts[22m ([0m[1m[41m26.812 s[49m[22m[0m)
+2026-08-07T12:11:13.9592590Z [1m[31m  [1m● [22m[1mnotify › does not report --notify flag[39m[22m
+2026-08-07T12:11:13.9593410Z 
+2026-08-07T12:11:13.9594600Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+2026-08-07T12:11:13.9596120Z 
+2026-08-07T12:11:13.9596370Z     Expected: [32m""[39m
+2026-08-07T12:11:13.9597000Z     Received: [31m"Jest did not exit one second after the test run has completed.·[39m
+2026-08-07T12:11:13.9598340Z     [31m'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue."[39m
+2026-08-07T12:11:13.9599340Z [2m[22m
+2026-08-07T12:11:13.9621780Z [2m    [0m [90m 109 |[39m     [36mconst[39m textAfterTest [33m=[39m getTextAfterTest(stderr)[33m;[39m[22m
+2026-08-07T12:11:13.9622620Z [2m     [90m 110 |[39m[22m
+2026-08-07T12:11:13.9623530Z [2m    [31m[1m>[22m[2m[39m[90m 111 |[39m     expect(textAfterTest)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:11:13.9624380Z [2m     [90m     |[39m                           [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:11:13.9624980Z [2m     [90m 112 |[39m   })[33m;[39m[22m
+2026-08-07T12:11:13.9625590Z [2m     [90m 113 |[39m })[33m;[39m[22m
+2026-08-07T12:11:13.9626140Z [2m     [90m 114 |[39m[0m[22m
+2026-08-07T12:11:13.9627790Z [2m[22m
+2026-08-07T12:11:13.9628740Z [2m      [2mat Object.toBe ([22m[2m[0m[36me2e/__tests__/detectOpenHandles.ts[39m[0m[2m:111:27)[22m[2m[22m
+2026-08-07T12:11:13.9629200Z 
+2026-08-07T12:11:13.9629390Z 
+2026-08-07T12:11:13.9629700Z [1mSnapshot Summary[22m
+2026-08-07T12:11:13.9630710Z [1m[31m › 1 snapshot failed[39m[22m from 1 test suite. [2mInspect your code changes or re-run jest with `-u` to update them.[22m
+2026-08-07T12:11:13.9631350Z 
+2026-08-07T12:11:13.9632040Z [1mTest Suites: [22m[1m[31m2 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m174 passed[39m[22m, 176 of 177 total
+2026-08-07T12:11:13.9633110Z [1mTests:       [22m[1m[31m2 failed[39m[22m, [1m[33m61 skipped[39m[22m, [1m[32m1690 passed[39m[22m, 1753 total
+2026-08-07T12:11:13.9634200Z [1mSnapshots:   [22m[1m[31m1 failed[39m[22m, [1m[32m410 passed[39m[22m, 411 total
+2026-08-07T12:11:13.9634820Z [1mTime:[22m        143.538 s
+2026-08-07T12:11:13.9635520Z [2mRan all test suites[22m[2m in [22m9[2m projects[22m[2m.[22m
+2026-08-07T12:11:24.7097920Z ##[warning]Attempt 1 failed. Reason: Child_process exited with error code 1
+2026-08-07T12:11:24.7114790Z ##[endgroup]
+2026-08-07T12:11:24.7116120Z ##[group]Attempt 2
+2026-08-07T12:11:41.7315210Z .
+2026-08-07T12:11:41.7431320Z ##[error]expect(received).toMatchSnapshot()
+
+Snapshot name: `runs test with native ESM 1`
+
+- Snapshot  - 2
++ Received  + 2
+
+- Test Suites: 1 passed, 1 total
++ Test Suites: 1 failed, 1 total
+- Tests:       30 passed, 30 total
++ Tests:       1 failed, 29 passed, 30 total
+  Snapshots:   0 total
+  Time:        <<REPLACED>>
+  Ran all test suites matching native-esm.test.js.
+    at Object.toMatchSnapshot (e2e/__tests__/nativeEsm.test.ts:57:19)
+2026-08-07T12:11:41.7625450Z .
+2026-08-07T12:11:41.7678130Z /Users/runner/work/jest/jest/e2e/__tests__/nativeEsm.test.ts
+2026-08-07T12:11:41.7788480Z 
+2026-08-07T12:11:41.7895300Z [1m[31m  [1m● [22m[1mruns test with native ESM[39m[22m
+2026-08-07T12:11:41.8048490Z 
+2026-08-07T12:11:41.8153350Z     [2mexpect([22m[36m[107mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
+2026-08-07T12:11:41.8308830Z 
+2026-08-07T12:11:41.8309850Z     Snapshot name: `runs test with native ESM 1`
+2026-08-07T12:11:41.8310560Z 
+2026-08-07T12:11:41.8311340Z     [35m[103m- Snapshot  - 2[49m[39m
+2026-08-07T12:11:41.8312360Z     [36m[107m+ Received  + 2[49m[39m
+2026-08-07T12:11:41.8312790Z 
+2026-08-07T12:11:41.8313470Z     [35m[103m- Test Suites: 1 [7mpass[27med, 1 total[49m[39m
+2026-08-07T12:11:41.8314820Z     [36m[107m+ Test Suites: 1 [7mfail[27med, 1 total[49m[39m
+2026-08-07T12:11:41.8316010Z     [35m[103m- Tests:       [7m30[27m passed, 30 total[49m[39m
+2026-08-07T12:11:41.8317420Z     [36m[107m+ Tests:       [7m1 failed, 29[27m passed, 30 total[49m[39m
+2026-08-07T12:11:41.8318790Z     [2m  Snapshots:   0 total[22m
+2026-08-07T12:11:41.8319590Z     [2m  Time:        <<REPLACED>>[22m
+2026-08-07T12:11:41.8320720Z     [2m  Ran all test suites matching native-esm.test.js.[22m
+2026-08-07T12:11:41.8321660Z [2m[22m
+2026-08-07T12:11:41.8323210Z [2m    [0m [90m 55 |[39m   [36mconst[39m {summary} [33m=[39m extractSummary(stderr)[33m;[39m[22m
+2026-08-07T12:11:41.8324470Z [2m     [90m 56 |[39m[22m
+2026-08-07T12:11:41.8325950Z [2m    [31m[1m>[22m[2m[39m[90m 57 |[39m   expect(summary)[33m.[39mtoMatchSnapshot()[33m;[39m[22m
+2026-08-07T12:11:41.8327570Z [2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:11:41.8329380Z [2m     [90m 58 |[39m   expect(stdout)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:11:41.8331010Z [2m     [90m 59 |[39m   expect(exitCode)[33m.[39mtoBe([35m0[39m)[33m;[39m[22m
+2026-08-07T12:11:41.8332330Z [2m     [90m 60 |[39m })[33m;[39m[0m[22m
+2026-08-07T12:11:41.8333020Z [2m[22m
+2026-08-07T12:11:41.8336740Z [2m      [2mat Object.toMatchSnapshot ([22m[2m[0m[36me2e/__tests__/nativeEsm.test.ts[39m[0m[2m:57:19)[22m[2m[22m
+2026-08-07T12:11:41.8349130Z 
+2026-08-07T12:11:41.8349780Z `isolated-vm` is not installed, skipping its test
+2026-08-07T12:11:41.8350450Z [1m[31m › 1 snapshot test[39m[22m failed.
+2026-08-07T12:12:36.1129300Z ...................Mercurial (hg) is not installed - skipping some tests
+2026-08-07T12:12:36.1130820Z Sapling (sl) or Mercurial (hg) is not installed - skipping some tests
+2026-08-07T12:12:36.1131560Z Mercurial (hg) is not installed - skipping some tests
+2026-08-07T12:12:36.1132160Z Mercurial (hg) is not installed - skipping some tests
+2026-08-07T12:12:36.1132570Z Mercurial (hg) is not installed - skipping some tests
+2026-08-07T12:12:36.1134000Z Sapling (sl) is not installed - skipping some tests
+2026-08-07T12:12:36.1134000Z [fixture trimmed: 124 lines omitted]
+2026-08-07T12:13:06.5755320Z ............
+2026-08-07T12:13:06.5814260Z 
+2026-08-07T12:13:06.5814460Z 
+2026-08-07T12:13:06.5815590Z [1mSummary of all failing tests[22m
+2026-08-07T12:13:06.5823570Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2me2e/__tests__/[22m[1mnativeEsm.test.ts[22m ([0m[1m[41m11.969 s[49m[22m[0m)
+2026-08-07T12:13:06.5830520Z [1m[31m  [1m● [22m[1mruns test with native ESM[39m[22m
+2026-08-07T12:13:06.5832130Z 
+2026-08-07T12:13:06.5832730Z     [2mexpect([22m[36m[107mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
+2026-08-07T12:13:06.5834440Z 
+2026-08-07T12:13:06.5834700Z     Snapshot name: `runs test with native ESM 1`
+2026-08-07T12:13:06.5835030Z 
+2026-08-07T12:13:06.5835320Z     [35m[103m- Snapshot  - 2[49m[39m
+2026-08-07T12:13:06.5835780Z     [36m[107m+ Received  + 2[49m[39m
+2026-08-07T12:13:06.5836040Z 
+2026-08-07T12:13:06.5836380Z     [35m[103m- Test Suites: 1 [7mpass[27med, 1 total[49m[39m
+2026-08-07T12:13:06.5837040Z     [36m[107m+ Test Suites: 1 [7mfail[27med, 1 total[49m[39m
+2026-08-07T12:13:06.5837720Z     [35m[103m- Tests:       [7m30[27m passed, 30 total[49m[39m
+2026-08-07T12:13:06.5838280Z     [36m[107m+ Tests:       [7m1 failed, 29[27m passed, 30 total[49m[39m
+2026-08-07T12:13:06.5839060Z     [2m  Snapshots:   0 total[22m
+2026-08-07T12:13:06.5839510Z     [2m  Time:        <<REPLACED>>[22m
+2026-08-07T12:13:06.5839950Z     [2m  Ran all test suites matching native-esm.test.js.[22m
+2026-08-07T12:13:06.5840410Z [2m[22m
+2026-08-07T12:13:06.5841880Z [2m    [0m [90m 55 |[39m   [36mconst[39m {summary} [33m=[39m extractSummary(stderr)[33m;[39m[22m
+2026-08-07T12:13:06.5842550Z [2m     [90m 56 |[39m[22m
+2026-08-07T12:13:06.5843380Z [2m    [31m[1m>[22m[2m[39m[90m 57 |[39m   expect(summary)[33m.[39mtoMatchSnapshot()[33m;[39m[22m
+2026-08-07T12:13:06.5844050Z [2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:13:06.5844760Z [2m     [90m 58 |[39m   expect(stdout)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:13:06.5845530Z [2m     [90m 59 |[39m   expect(exitCode)[33m.[39mtoBe([35m0[39m)[33m;[39m[22m
+2026-08-07T12:13:06.5846070Z [2m     [90m 60 |[39m })[33m;[39m[0m[22m
+2026-08-07T12:13:06.5846500Z [2m[22m
+2026-08-07T12:13:06.5847590Z [2m      [2mat Object.toMatchSnapshot ([22m[2m[0m[36me2e/__tests__/nativeEsm.test.ts[39m[0m[2m:57:19)[22m[2m[22m
+2026-08-07T12:13:06.5848060Z 
+2026-08-07T12:13:06.5848120Z 
+2026-08-07T12:13:06.5848390Z [1mSnapshot Summary[22m
+2026-08-07T12:13:06.5849460Z [1m[31m › 1 snapshot failed[39m[22m from 1 test suite. [2mInspect your code changes or re-run jest with `-u` to update them.[22m
+2026-08-07T12:13:06.5851410Z 
+2026-08-07T12:13:06.5852350Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m175 passed[39m[22m, 176 of 177 total
+2026-08-07T12:13:06.5853780Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m61 skipped[39m[22m, [1m[32m1691 passed[39m[22m, 1753 total
+2026-08-07T12:13:06.5854730Z [1mSnapshots:   [22m[1m[31m1 failed[39m[22m, [1m[32m410 passed[39m[22m, 411 total
+2026-08-07T12:13:06.5866460Z [1mTime:[22m        98.158 s, estimated 140 s
+2026-08-07T12:13:06.5867090Z [2mRan all test suites[22m[2m in [22m9[2m projects[22m[2m.[22m
+2026-08-07T12:13:17.0360810Z ##[warning]Attempt 2 failed. Reason: Child_process exited with error code 1
+2026-08-07T12:13:17.0416500Z ##[endgroup]
+2026-08-07T12:13:17.0418270Z ##[group]Attempt 3
+2026-08-07T12:13:32.2665330Z .
+2026-08-07T12:13:32.2785800Z ##[error]expect(received).toMatchSnapshot()
+
+Snapshot name: `runs test with native ESM 1`
+
+- Snapshot  - 2
++ Received  + 2
+
+- Test Suites: 1 passed, 1 total
++ Test Suites: 1 failed, 1 total
+- Tests:       30 passed, 30 total
++ Tests:       1 failed, 29 passed, 30 total
+  Snapshots:   0 total
+  Time:        <<REPLACED>>
+  Ran all test suites matching native-esm.test.js.
+    at Object.toMatchSnapshot (e2e/__tests__/nativeEsm.test.ts:57:19)
+2026-08-07T12:13:32.2895040Z .
+2026-08-07T12:13:32.3001320Z /Users/runner/work/jest/jest/e2e/__tests__/nativeEsm.test.ts
+2026-08-07T12:13:32.3102380Z 
+2026-08-07T12:13:32.3206500Z [1m[31m  [1m● [22m[1mruns test with native ESM[39m[22m
+2026-08-07T12:13:32.3346140Z 
+2026-08-07T12:13:32.3448710Z     [2mexpect([22m[36m[107mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
+2026-08-07T12:13:32.3550780Z 
+2026-08-07T12:13:32.3653050Z     Snapshot name: `runs test with native ESM 1`
+2026-08-07T12:13:32.3754320Z 
+2026-08-07T12:13:32.3862680Z     [35m[103m- Snapshot  - 2[49m[39m
+2026-08-07T12:13:32.3965130Z     [36m[107m+ Received  + 2[49m[39m
+2026-08-07T12:13:32.4066120Z 
+2026-08-07T12:13:32.4167310Z     [35m[103m- Test Suites: 1 [7mpass[27med, 1 total[49m[39m
+2026-08-07T12:13:32.4269070Z     [36m[107m+ Test Suites: 1 [7mfail[27med, 1 total[49m[39m
+2026-08-07T12:13:32.4370730Z     [35m[103m- Tests:       [7m30[27m passed, 30 total[49m[39m
+2026-08-07T12:13:32.4496240Z     [36m[107m+ Tests:       [7m1 failed, 29[27m passed, 30 total[49m[39m
+2026-08-07T12:13:32.4623420Z     [2m  Snapshots:   0 total[22m
+2026-08-07T12:13:32.4736740Z     [2m  Time:        <<REPLACED>>[22m
+2026-08-07T12:13:32.4843970Z     [2m  Ran all test suites matching native-esm.test.js.[22m
+2026-08-07T12:13:32.4984370Z [2m[22m
+2026-08-07T12:13:32.5091300Z [2m    [0m [90m 55 |[39m   [36mconst[39m {summary} [33m=[39m extractSummary(stderr)[33m;[39m[22m
+2026-08-07T12:13:32.5230130Z [2m     [90m 56 |[39m[22m
+2026-08-07T12:13:32.5371540Z [2m    [31m[1m>[22m[2m[39m[90m 57 |[39m   expect(summary)[33m.[39mtoMatchSnapshot()[33m;[39m[22m
+2026-08-07T12:13:32.5503010Z [2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:13:32.5617750Z [2m     [90m 58 |[39m   expect(stdout)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:13:32.5724470Z [2m     [90m 59 |[39m   expect(exitCode)[33m.[39mtoBe([35m0[39m)[33m;[39m[22m
+2026-08-07T12:13:32.5851170Z [2m     [90m 60 |[39m })[33m;[39m[0m[22m
+2026-08-07T12:13:32.5996390Z [2m[22m
+2026-08-07T12:13:32.6129900Z [2m      [2mat Object.toMatchSnapshot ([22m[2m[0m[36me2e/__tests__/nativeEsm.test.ts[39m[0m[2m:57:19)[22m[2m[22m
+2026-08-07T12:13:32.6266490Z 
+2026-08-07T12:13:32.6368580Z `isolated-vm` is not installed, skipping its test
+2026-08-07T12:13:32.6470750Z [1m[31m › 1 snapshot test[39m[22m failed.
+2026-08-07T12:13:48.8952970Z ..
+2026-08-07T12:13:48.9071250Z ##[error]expect(received).toBe(expected) // Object.is equality
+
+Expected: ""
+Received: "Jest did not exit one second after the test run has completed.·
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue."
+[fixture trimmed: 2 lines omitted]
+2026-08-07T12:13:48.9284190Z /Users/runner/work/jest/jest/e2e/__tests__/detectOpenHandles.ts
+2026-08-07T12:13:48.9385550Z 
+2026-08-07T12:13:48.9487680Z [1m[31m  [1m● [22m[1mnotify › does not report --notify flag[39m[22m
+2026-08-07T12:13:48.9589400Z 
+2026-08-07T12:13:48.9697790Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+2026-08-07T12:13:48.9800030Z 
+2026-08-07T12:13:48.9901410Z     Expected: [32m""[39m
+2026-08-07T12:13:49.0032480Z     Received: [31m"Jest did not exit one second after the test run has completed.·[39m
+2026-08-07T12:13:49.0137160Z     [31m'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue."[39m
+2026-08-07T12:13:49.0240150Z [2m[22m
+2026-08-07T12:13:49.0345980Z [2m    [0m [90m 109 |[39m     [36mconst[39m textAfterTest [33m=[39m getTextAfterTest(stderr)[33m;[39m[22m
+2026-08-07T12:13:49.0448220Z [2m     [90m 110 |[39m[22m
+2026-08-07T12:13:49.0552310Z [2m    [31m[1m>[22m[2m[39m[90m 111 |[39m     expect(textAfterTest)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:13:49.0655430Z [2m     [90m     |[39m                           [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:13:49.0757210Z [2m     [90m 112 |[39m   })[33m;[39m[22m
+2026-08-07T12:13:49.0869120Z [2m     [90m 113 |[39m })[33m;[39m[22m
+2026-08-07T12:13:49.0973430Z [2m     [90m 114 |[39m[0m[22m
+2026-08-07T12:13:49.1075760Z [2m[22m
+2026-08-07T12:13:49.1178200Z [2m      [2mat Object.toBe ([22m[2m[0m[36me2e/__tests__/detectOpenHandles.ts[39m[0m[2m:111:27)[22m[2m[22m
+2026-08-07T12:13:49.1279570Z 
+2026-08-07T12:14:29.7707800Z .................[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:29.7810990Z [33m  Current: 'on'[39m
+2026-08-07T12:14:29.7910880Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:29.8014350Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:29.8115710Z [33m  Current: 'on'[39m
+2026-08-07T12:14:29.8217830Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:29.8323760Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:29.8425570Z [33m  Current: 'on'[39m
+2026-08-07T12:14:29.8425570Z [fixture trimmed: 84 lines omitted]
+2026-08-07T12:14:55.5205360Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:56.6999990Z ................[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:56.7102110Z [33m  Current: 'on'[39m
+2026-08-07T12:14:56.7115790Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:56.7519680Z .[33m[1mfoo[22m:[39m
+2026-08-07T12:14:56.7621070Z [33m[39m
+2026-08-07T12:14:56.7722580Z [33mDeprecation message[39m
+2026-08-07T12:14:56.7824060Z [33m[39m
+2026-08-07T12:14:56.7850280Z [33m  [1mCLI Options Documentation:[22m[39m
+2026-08-07T12:14:56.7851140Z [33m  https://jestjs.io/docs/cli[39m
+2026-08-07T12:14:56.7852210Z [33m[39m
+2026-08-07T12:14:57.2566220Z .............[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:57.2670060Z [33m  Current: 'on'[39m
+2026-08-07T12:14:57.2770370Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:57.4447570Z ........[SKIP] Does not work on Jasmine
+2026-08-07T12:14:57.5108190Z ....Warning: ReactDOMTestUtils is deprecated and will be removed in a future major release, because it exposes internal implementation details that are highly likely to change between releases. Upgrade to a modern testing library, such as @testing-library/react. See https://react.dev/warnings/react-dom-test-utils for more info.
+2026-08-07T12:14:57.5208900Z Warning: ReactDOM.render is no longer supported in React 18. Use createRoot instead. Until you switch to the new API, your app will behave as if it's running React 17. Learn more: https://reactjs.org/link/switch-to-createroot
+2026-08-07T12:14:57.6161060Z ...[SKIP] Does not work on Jasmine
+2026-08-07T12:14:57.6281020Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:57.6401510Z [33m  Current: 'on'[39m
+2026-08-07T12:14:57.6506570Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:57.6820970Z ...[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:57.6933680Z [33m  Current: 'on'[39m
+2026-08-07T12:14:57.7036490Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:57.7251940Z ..[SKIP] Does not work on Jasmine
+2026-08-07T12:14:57.7476810Z .[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:57.7579180Z [33m  Current: 'on'[39m
+2026-08-07T12:14:57.7681070Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:58.0066380Z .........[SKIP] Does not work on Jasmine
+2026-08-07T12:14:58.1783630Z ......[SKIP] Does not work on Jasmine
+2026-08-07T12:14:58.2827290Z ....[SKIP] Does not work on Jasmine
+2026-08-07T12:14:58.6363060Z ..............[SKIP] Does not work on Jasmine
+2026-08-07T12:14:58.6910950Z ..[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:58.7070600Z [33m  Current: 'on'[39m
+2026-08-07T12:14:58.7173580Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:58.8215370Z .....[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-07T12:14:58.8528560Z [33m  Current: 'on'[39m
+2026-08-07T12:14:58.8674110Z [33m  Given: 'soft'[39m
+2026-08-07T12:14:59.2170480Z ......
+2026-08-07T12:14:59.2171080Z 
+2026-08-07T12:14:59.2171420Z 
+2026-08-07T12:14:59.2173320Z [1mSummary of all failing tests[22m
+2026-08-07T12:14:59.2256220Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2me2e/__tests__/[22m[1mnativeEsm.test.ts[22m ([0m[1m[41m11.052 s[49m[22m[0m)
+2026-08-07T12:14:59.2260180Z [1m[31m  [1m● [22m[1mruns test with native ESM[39m[22m
+2026-08-07T12:14:59.2267020Z 
+2026-08-07T12:14:59.2267800Z     [2mexpect([22m[36m[107mreceived[49m[39m[2m).[22mtoMatchSnapshot[2m()[22m
+2026-08-07T12:14:59.2268170Z 
+2026-08-07T12:14:59.2268400Z     Snapshot name: `runs test with native ESM 1`
+2026-08-07T12:14:59.2268660Z 
+2026-08-07T12:14:59.2268850Z     [35m[103m- Snapshot  - 2[49m[39m
+2026-08-07T12:14:59.2269860Z     [36m[107m+ Received  + 2[49m[39m
+2026-08-07T12:14:59.2270140Z 
+2026-08-07T12:14:59.2270510Z     [35m[103m- Test Suites: 1 [7mpass[27med, 1 total[49m[39m
+2026-08-07T12:14:59.2271030Z     [36m[107m+ Test Suites: 1 [7mfail[27med, 1 total[49m[39m
+2026-08-07T12:14:59.2271690Z     [35m[103m- Tests:       [7m30[27m passed, 30 total[49m[39m
+2026-08-07T12:14:59.2272240Z     [36m[107m+ Tests:       [7m1 failed, 29[27m passed, 30 total[49m[39m
+2026-08-07T12:14:59.2272880Z     [2m  Snapshots:   0 total[22m
+2026-08-07T12:14:59.2273370Z     [2m  Time:        <<REPLACED>>[22m
+2026-08-07T12:14:59.2273760Z     [2m  Ran all test suites matching native-esm.test.js.[22m
+2026-08-07T12:14:59.2278970Z [2m[22m
+2026-08-07T12:14:59.2279690Z [2m    [0m [90m 55 |[39m   [36mconst[39m {summary} [33m=[39m extractSummary(stderr)[33m;[39m[22m
+2026-08-07T12:14:59.2281360Z [2m     [90m 56 |[39m[22m
+2026-08-07T12:14:59.2282100Z [2m    [31m[1m>[22m[2m[39m[90m 57 |[39m   expect(summary)[33m.[39mtoMatchSnapshot()[33m;[39m[22m
+2026-08-07T12:14:59.2282710Z [2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:14:59.2283360Z [2m     [90m 58 |[39m   expect(stdout)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:14:59.2284110Z [2m     [90m 59 |[39m   expect(exitCode)[33m.[39mtoBe([35m0[39m)[33m;[39m[22m
+2026-08-07T12:14:59.2284650Z [2m     [90m 60 |[39m })[33m;[39m[0m[22m
+2026-08-07T12:14:59.2285160Z [2m[22m
+2026-08-07T12:14:59.2285860Z [2m      [2mat Object.toMatchSnapshot ([22m[2m[0m[36me2e/__tests__/nativeEsm.test.ts[39m[0m[2m:57:19)[22m[2m[22m
+2026-08-07T12:14:59.2286310Z 
+2026-08-07T12:14:59.2287010Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2me2e/__tests__/[22m[1mdetectOpenHandles.ts[22m ([0m[1m[41m16.616 s[49m[22m[0m)
+2026-08-07T12:14:59.2288030Z [1m[31m  [1m● [22m[1mnotify › does not report --notify flag[39m[22m
+2026-08-07T12:14:59.2288370Z 
+2026-08-07T12:14:59.2289430Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+2026-08-07T12:14:59.2289920Z 
+2026-08-07T12:14:59.2290170Z     Expected: [32m""[39m
+2026-08-07T12:14:59.2290970Z     Received: [31m"Jest did not exit one second after the test run has completed.·[39m
+2026-08-07T12:14:59.2292310Z     [31m'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue."[39m
+2026-08-07T12:14:59.2293200Z [2m[22m
+2026-08-07T12:14:59.2293960Z [2m    [0m [90m 109 |[39m     [36mconst[39m textAfterTest [33m=[39m getTextAfterTest(stderr)[33m;[39m[22m
+2026-08-07T12:14:59.2294510Z [2m     [90m 110 |[39m[22m
+2026-08-07T12:14:59.2295260Z [2m    [31m[1m>[22m[2m[39m[90m 111 |[39m     expect(textAfterTest)[33m.[39mtoBe([32m''[39m)[33m;[39m[22m
+2026-08-07T12:14:59.2296050Z [2m     [90m     |[39m                           [31m[1m^[22m[2m[39m[22m
+2026-08-07T12:14:59.2296680Z [2m     [90m 112 |[39m   })[33m;[39m[22m
+2026-08-07T12:14:59.2297210Z [2m     [90m 113 |[39m })[33m;[39m[22m
+2026-08-07T12:14:59.2297580Z [2m     [90m 114 |[39m[0m[22m
+2026-08-07T12:14:59.2297960Z [2m[22m
+2026-08-07T12:14:59.2298790Z [2m      [2mat Object.toBe ([22m[2m[0m[36me2e/__tests__/detectOpenHandles.ts[39m[0m[2m:111:27)[22m[2m[22m
+2026-08-07T12:14:59.2299110Z 
+2026-08-07T12:14:59.2299120Z 
+2026-08-07T12:14:59.2299310Z [1mSnapshot Summary[22m
+2026-08-07T12:14:59.2300200Z [1m[31m › 1 snapshot failed[39m[22m from 1 test suite. [2mInspect your code changes or re-run jest with `-u` to update them.[22m
+2026-08-07T12:14:59.2300920Z 
+2026-08-07T12:14:59.2301590Z [1mTest Suites: [22m[1m[31m2 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m174 passed[39m[22m, 176 of 177 total
+2026-08-07T12:14:59.2302830Z [1mTests:       [22m[1m[31m2 failed[39m[22m, [1m[33m61 skipped[39m[22m, [1m[32m1690 passed[39m[22m, 1753 total
+2026-08-07T12:14:59.2304010Z [1mSnapshots:   [22m[1m[31m1 failed[39m[22m, [1m[32m410 passed[39m[22m, 411 total
+2026-08-07T12:14:59.2304680Z [1mTime:[22m        [1m[33m98.884 s[39m[22m
+2026-08-07T12:14:59.2358920Z [2mRan all test suites[22m[2m in [22m9[2m projects[22m[2m.[22m
+2026-08-07T12:15:10.3975820Z ##[endgroup]
+2026-08-07T12:15:10.3995170Z ##[error]Final attempt failed. Child_process exited with error code 1
+2026-08-07T12:15:10.4272240Z Post job cleanup.
+2026-08-07T12:15:10.6769520Z [command]/opt/homebrew/bin/git version
+2026-08-07T12:15:10.7006240Z git version 2.55.0
+2026-08-07T12:15:10.7060350Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/be9713af-2a42-4183-ada3-8fc2356f76b3/.gitconfig'
+2026-08-07T12:15:10.7071680Z Temporarily overriding HOME='/Users/runner/work/_temp/be9713af-2a42-4183-ada3-8fc2356f76b3' before making global git config changes
+2026-08-07T12:15:10.7074520Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-07T12:15:10.7078140Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/jest/jest
+2026-08-07T12:15:10.7228000Z Removing SSH command configuration
+2026-08-07T12:15:10.7235070Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-07T12:15:10.7330100Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-07T12:15:10.9627980Z Removing HTTP extra header
+2026-08-07T12:15:10.9634890Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-07T12:15:10.9753960Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-07T12:15:11.1500120Z Removing includeIf entries pointing to credentials config files
+2026-08-07T12:15:11.1521620Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-07T12:15:11.1565550Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-07T12:15:11.3531640Z Cleaning up orphan processes
+2026-08-07T12:15:12.7205750Z Terminate orphan process: pid (31601) (node)
+2026-08-07T12:15:13.3037950Z Terminate orphan process: pid (17788) (node)
+2026-08-07T12:15:15.0144060Z Terminate orphan process: pid (10258) (node)

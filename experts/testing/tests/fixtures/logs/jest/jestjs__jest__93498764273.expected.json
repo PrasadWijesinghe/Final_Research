@@ -1,0 +1,30 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 93498764273,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 737,
+    "failed": 0,
+    "skipped": 0,
+    "total": 737,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "Test suite failed to run"
+  ],
+  "failed_files": [
+    "packages/pretty-format/src/__tests__/react.test.tsx"
+  ],
+  "failure_kinds": {
+    "suite": 1
+  },
+  "first_error_type": null,
+  "first_project_path": "packages/jest-core/build/index.js",
+  "note": "A suite that failed to run next to 737 passing tests (the memory-leak warning)."
+}

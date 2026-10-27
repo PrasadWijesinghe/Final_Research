@@ -1,0 +1,478 @@
+﻿2026-07-29T18:09:57.1502457Z Current runner version: '2.336.0'
+2026-07-29T18:09:57.1528844Z ##[group]Runner Image Provisioner
+2026-07-29T18:09:57.1529649Z Hosted Compute Agent
+2026-07-29T18:09:57.1530180Z Version: 20260707.563
+2026-07-29T18:09:57.1530845Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-29T18:09:57.1531634Z Build Date: 2026-07-07T19:33:50Z
+2026-07-29T18:09:57.1532479Z Worker ID: {7adfdeac-b927-4e7e-b124-1e93f59c906e}
+2026-07-29T18:09:57.1533234Z Azure Region: northcentralus
+2026-07-29T18:09:57.1534078Z ##[endgroup]
+2026-07-29T18:09:57.1535508Z ##[group]Operating System
+2026-07-29T18:09:57.1536150Z Microsoft Windows Server 2025
+2026-07-29T18:09:57.1536698Z 10.0.26100
+2026-07-29T18:09:57.1537466Z Datacenter
+2026-07-29T18:09:57.1537944Z ##[endgroup]
+2026-07-29T18:09:57.1538437Z ##[group]Runner Image
+2026-07-29T18:09:57.1539064Z Image: windows-2025-vs2026
+2026-07-29T18:09:57.1539605Z Version: 20260714.173.1
+2026-07-29T18:09:57.1541191Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260714.173/images/windows/Windows2025-VS2026-Readme.md
+2026-07-29T18:09:57.1542872Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260714.173
+2026-07-29T18:09:57.1543848Z ##[endgroup]
+2026-07-29T18:09:57.1546926Z ##[group]GITHUB_TOKEN Permissions
+2026-07-29T18:09:57.1549109Z Actions: write
+2026-07-29T18:09:57.1549710Z ArtifactMetadata: write
+2026-07-29T18:09:57.1550378Z Attestations: write
+2026-07-29T18:09:57.1550863Z Checks: write
+2026-07-29T18:09:57.1551413Z CodeQuality: write
+2026-07-29T18:09:57.1551969Z Contents: write
+2026-07-29T18:09:57.1552490Z CopilotRequests: write
+2026-07-29T18:09:57.1553019Z Deployments: write
+2026-07-29T18:09:57.1553833Z Discussions: write
+2026-07-29T18:09:57.1554343Z Drives: write
+2026-07-29T18:09:57.1554856Z Issues: write
+2026-07-29T18:09:57.1555330Z Metadata: read
+2026-07-29T18:09:57.1555862Z Models: read
+2026-07-29T18:09:57.1556352Z Packages: write
+2026-07-29T18:09:57.1556860Z Pages: write
+2026-07-29T18:09:57.1557597Z PullRequests: write
+2026-07-29T18:09:57.1558143Z RepositoryProjects: write
+2026-07-29T18:09:57.1558689Z SecurityEvents: write
+2026-07-29T18:09:57.1559286Z Statuses: write
+2026-07-29T18:09:57.1559796Z VulnerabilityAlerts: read
+2026-07-29T18:09:57.1560331Z ##[endgroup]
+2026-07-29T18:09:57.1562346Z Secret source: Actions
+2026-07-29T18:09:57.1563493Z Prepare workflow directory
+2026-07-29T18:09:57.1968586Z Prepare all required actions
+2026-07-29T18:09:57.2039767Z Getting action download info
+2026-07-29T18:09:57.4020917Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-07-29T18:09:57.7183581Z Download action repository 'actions/setup-node@v7' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-07-29T18:09:58.2460495Z Complete job name: Tests (windows, node 22)
+2026-07-29T18:09:58.4018116Z ##[group]Run actions/checkout@v7
+2026-07-29T18:09:58.4019887Z with:
+2026-07-29T18:09:58.4020843Z   repository: mikro-orm/mikro-orm
+2026-07-29T18:09:58.4029439Z   token: ***
+2026-07-29T18:09:58.4030208Z   ssh-strict: true
+2026-07-29T18:09:58.4031292Z   ssh-user: git
+2026-07-29T18:09:58.4032300Z   persist-credentials: true
+2026-07-29T18:09:58.4033282Z   clean: true
+2026-07-29T18:09:58.4034076Z   sparse-checkout-cone-mode: true
+2026-07-29T18:09:58.4035002Z   fetch-depth: 1
+2026-07-29T18:09:58.4035760Z   fetch-tags: false
+2026-07-29T18:09:58.4036546Z   show-progress: true
+2026-07-29T18:09:58.4037348Z   lfs: false
+2026-07-29T18:09:58.4038087Z   submodules: false
+2026-07-29T18:09:58.4038900Z   set-safe-directory: true
+2026-07-29T18:09:58.4039805Z   allow-unsafe-pr-checkout: false
+2026-07-29T18:09:58.4041005Z ##[endgroup]
+2026-07-29T18:09:58.5474555Z Syncing repository: mikro-orm/mikro-orm
+2026-07-29T18:09:58.5477526Z ##[group]Getting Git version info
+2026-07-29T18:09:58.5478730Z Working directory is 'D:\a\mikro-orm\mikro-orm'
+2026-07-29T18:09:58.6357620Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-07-29T18:09:59.0684359Z git version 2.55.0.windows.2
+2026-07-29T18:09:59.0730734Z ##[endgroup]
+2026-07-29T18:09:59.0746704Z Temporarily overriding HOME='D:\a\_temp\c9385ec7-802c-4394-9f12-6479286ba2bb' before making global git config changes
+2026-07-29T18:09:59.0747609Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-29T18:09:59.0756245Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\mikro-orm\mikro-orm
+2026-07-29T18:09:59.1372791Z Deleting the contents of 'D:\a\mikro-orm\mikro-orm'
+2026-07-29T18:09:59.1377546Z ##[group]Determining repository object format
+2026-07-29T18:09:59.1379676Z ##[endgroup]
+2026-07-29T18:09:59.1380357Z ##[group]Initializing the repository
+2026-07-29T18:09:59.1387466Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\mikro-orm\mikro-orm
+2026-07-29T18:09:59.2346522Z Initialized empty Git repository in D:/a/mikro-orm/mikro-orm/.git/
+2026-07-29T18:09:59.2393115Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/mikro-orm/mikro-orm
+2026-07-29T18:09:59.3015505Z ##[endgroup]
+2026-07-29T18:09:59.3017485Z ##[group]Disabling automatic garbage collection
+2026-07-29T18:09:59.3025150Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-07-29T18:09:59.3372374Z ##[endgroup]
+2026-07-29T18:09:59.3373467Z ##[group]Setting up auth
+2026-07-29T18:09:59.3374391Z Removing SSH command configuration
+2026-07-29T18:09:59.3383356Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-07-29T18:09:59.3661593Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-07-29T18:10:00.9307500Z Removing HTTP extra header
+2026-07-29T18:10:00.9316832Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-29T18:10:00.9601054Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-07-29T18:10:01.4505801Z Removing includeIf entries pointing to credentials config files
+2026-07-29T18:10:01.4520435Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-29T18:10:01.4807637Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-07-29T18:10:01.9853121Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-07-29T18:10:02.0136278Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/mikro-orm/mikro-orm/.git.path D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:10:02.0427187Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/mikro-orm/mikro-orm/.git/worktrees/*.path D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:10:02.0767603Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:10:02.1046455Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:10:02.1334583Z ##[endgroup]
+2026-07-29T18:10:02.1335525Z ##[group]Fetching the repository
+2026-07-29T18:10:02.1352405Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +59288159fe499360cd9a6992546566555c1180a3:refs/remotes/pull/8052/merge
+2026-07-29T18:10:06.5513986Z From https://github.com/mikro-orm/mikro-orm
+2026-07-29T18:10:06.5515087Z  * [new ref]         59288159fe499360cd9a6992546566555c1180a3 -> pull/8052/merge
+2026-07-29T18:10:06.5560695Z ##[endgroup]
+2026-07-29T18:10:06.5561558Z ##[group]Determining the checkout info
+2026-07-29T18:10:06.5562400Z ##[endgroup]
+2026-07-29T18:10:06.5571692Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-07-29T18:10:06.6047093Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-07-29T18:10:06.6322294Z ##[group]Checking out the ref
+2026-07-29T18:10:06.6329562Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/8052/merge
+2026-07-29T18:10:07.6807301Z Updating files:  47% (1283/2721)
+2026-07-29T18:10:07.6866658Z Updating files:  48% (1307/2721)
+2026-07-29T18:10:07.6925757Z Updating files:  49% (1334/2721)
+2026-07-29T18:10:07.6996170Z Updating files:  50% (1361/2721)
+2026-07-29T18:10:07.7061606Z Updating files:  51% (1388/2721)
+2026-07-29T18:10:07.7124419Z Updating files:  52% (1415/2721)
+2026-07-29T18:10:07.7184549Z Updating files:  53% (1443/2721)
+2026-07-29T18:10:07.7259887Z Updating files:  54% (1470/2721)
+2026-07-29T18:10:07.7329671Z Updating files:  55% (1497/2721)
+2026-07-29T18:10:07.7396962Z Updating files:  56% (1524/2721)
+2026-07-29T18:10:07.7611607Z Updating files:  57% (1551/2721)
+2026-07-29T18:10:07.7682093Z Updating files:  58% (1579/2721)
+2026-07-29T18:10:07.7771076Z Updating files:  59% (1606/2721)
+2026-07-29T18:10:07.7842250Z Updating files:  60% (1633/2721)
+2026-07-29T18:10:07.7938105Z Updating files:  61% (1660/2721)
+2026-07-29T18:10:07.8006590Z Updating files:  62% (1688/2721)
+2026-07-29T18:10:07.8077256Z Updating files:  63% (1715/2721)
+2026-07-29T18:10:07.8159350Z Updating files:  64% (1742/2721)
+2026-07-29T18:10:07.8223048Z Updating files:  65% (1769/2721)
+2026-07-29T18:10:07.8275154Z Updating files:  66% (1796/2721)
+2026-07-29T18:10:07.8357174Z Updating files:  67% (1824/2721)
+2026-07-29T18:10:07.8421297Z Updating files:  68% (1851/2721)
+2026-07-29T18:10:07.8486699Z Updating files:  69% (1878/2721)
+2026-07-29T18:10:07.8544188Z Updating files:  70% (1905/2721)
+2026-07-29T18:10:07.8611031Z Updating files:  71% (1932/2721)
+2026-07-29T18:10:07.8673039Z Updating files:  72% (1960/2721)
+2026-07-29T18:10:07.8738767Z Updating files:  73% (1987/2721)
+2026-07-29T18:10:07.8801004Z Updating files:  74% (2014/2721)
+2026-07-29T18:10:07.8864581Z Updating files:  75% (2041/2721)
+2026-07-29T18:10:07.8944840Z Updating files:  76% (2068/2721)
+2026-07-29T18:10:07.9006146Z Updating files:  77% (2096/2721)
+2026-07-29T18:10:07.9073038Z Updating files:  78% (2123/2721)
+2026-07-29T18:10:07.9149257Z Updating files:  79% (2150/2721)
+2026-07-29T18:10:07.9211524Z Updating files:  80% (2177/2721)
+2026-07-29T18:10:07.9278375Z Updating files:  81% (2205/2721)
+2026-07-29T18:10:07.9334360Z Updating files:  82% (2232/2721)
+2026-07-29T18:10:07.9396036Z Updating files:  83% (2259/2721)
+2026-07-29T18:10:07.9456179Z Updating files:  84% (2286/2721)
+2026-07-29T18:10:07.9515448Z Updating files:  85% (2313/2721)
+2026-07-29T18:10:07.9573684Z Updating files:  86% (2341/2721)
+2026-07-29T18:10:07.9633798Z Updating files:  87% (2368/2721)
+2026-07-29T18:10:07.9688283Z Updating files:  88% (2395/2721)
+2026-07-29T18:10:07.9742164Z Updating files:  89% (2422/2721)
+2026-07-29T18:10:07.9800671Z Updating files:  90% (2449/2721)
+2026-07-29T18:10:07.9855334Z Updating files:  91% (2477/2721)
+2026-07-29T18:10:07.9914440Z Updating files:  92% (2504/2721)
+2026-07-29T18:10:07.9971871Z Updating files:  93% (2531/2721)
+2026-07-29T18:10:08.0029910Z Updating files:  94% (2558/2721)
+2026-07-29T18:10:08.0091201Z Updating files:  95% (2585/2721)
+2026-07-29T18:10:08.0146572Z Updating files:  96% (2613/2721)
+2026-07-29T18:10:08.0211222Z Updating files:  97% (2640/2721)
+2026-07-29T18:10:08.0274574Z Updating files:  98% (2667/2721)
+2026-07-29T18:10:08.0359479Z Updating files:  99% (2694/2721)
+2026-07-29T18:10:08.0359952Z Updating files: 100% (2721/2721)
+2026-07-29T18:10:08.0360273Z Updating files: 100% (2721/2721), done.
+2026-07-29T18:10:08.0483934Z Note: switching to 'refs/remotes/pull/8052/merge'.
+2026-07-29T18:10:08.0484325Z 
+2026-07-29T18:10:08.0484619Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-07-29T18:10:08.0485176Z changes and commit them, and you can discard any commits you make in this
+2026-07-29T18:10:08.0486029Z state without impacting any branches by switching back to a branch.
+2026-07-29T18:10:08.0486620Z 
+2026-07-29T18:10:08.0486855Z If you want to create a new branch to retain commits you create, you may
+2026-07-29T18:10:08.0487366Z do so (now or later) by using -c with the switch command. Example:
+2026-07-29T18:10:08.0487679Z 
+2026-07-29T18:10:08.0487798Z   git switch -c <new-branch-name>
+2026-07-29T18:10:08.0488006Z 
+2026-07-29T18:10:08.0488109Z Or undo this operation with:
+2026-07-29T18:10:08.0488311Z 
+2026-07-29T18:10:08.0488410Z   git switch -
+2026-07-29T18:10:08.0488563Z 
+2026-07-29T18:10:08.0488777Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-07-29T18:10:08.0489112Z 
+2026-07-29T18:10:08.0489487Z HEAD is now at 5928815 Merge 6ea93af5fd6e2d13237e1004d9e0db17acda3739 into bd2a1cf06d8d0f4823e19c5d6670a8e2be837c24
+2026-07-29T18:10:08.0649084Z ##[endgroup]
+2026-07-29T18:10:08.1028673Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-07-29T18:10:08.1277840Z 59288159fe499360cd9a6992546566555c1180a3
+2026-07-29T18:10:08.1805520Z ##[group]Run actions/setup-node@v7
+2026-07-29T18:10:08.1805831Z with:
+2026-07-29T18:10:08.1806002Z   node-version: 22
+2026-07-29T18:10:08.1806203Z   package-manager-cache: false
+2026-07-29T18:10:08.1806434Z   check-latest: false
+2026-07-29T18:10:08.1809168Z   token: ***
+2026-07-29T18:10:08.1809344Z ##[endgroup]
+2026-07-29T18:10:08.3495730Z Found in cache @ C:\hostedtoolcache\windows\node\22.23.1\x64
+2026-07-29T18:10:08.3501188Z ##[group]Environment details
+2026-07-29T18:10:13.4388690Z node: v22.23.1
+2026-07-29T18:10:13.4389046Z npm: 10.9.8
+2026-07-29T18:10:13.4389284Z yarn: 1.22.22
+2026-07-29T18:10:13.4390440Z ##[endgroup]
+2026-07-29T18:10:13.4674848Z ##[group]Run npm install -g corepack@latest --force
+2026-07-29T18:10:13.4675326Z [36;1mnpm install -g corepack@latest --force[0m
+2026-07-29T18:10:13.4675635Z [36;1mcorepack enable[0m
+2026-07-29T18:10:13.4675888Z [36;1mcorepack prepare yarn@stable --activate[0m
+2026-07-29T18:10:13.5887990Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T18:10:13.5888522Z ##[endgroup]
+2026-07-29T18:10:20.2203105Z npm warn using --force Recommended protections disabled.
+2026-07-29T18:10:23.0772810Z 
+2026-07-29T18:10:23.0773547Z added 1 package in 3s
+2026-07-29T18:10:25.4151584Z Preparing yarn@stable for immediate activation...
+2026-07-29T18:10:25.8425407Z ##[group]Run actions/setup-node@v7
+2026-07-29T18:10:25.8425725Z with:
+2026-07-29T18:10:25.8425889Z   cache: yarn
+2026-07-29T18:10:25.8426064Z   check-latest: false
+2026-07-29T18:10:25.8428761Z   token: ***
+2026-07-29T18:10:25.8428958Z   package-manager-cache: true
+2026-07-29T18:10:25.8429175Z ##[endgroup]
+2026-07-29T18:10:25.9952668Z ##[group]Environment details
+2026-07-29T18:10:26.9556726Z node: v22.23.1
+2026-07-29T18:10:26.9557393Z npm: 10.9.8
+2026-07-29T18:10:26.9558106Z yarn: 4.17.1
+2026-07-29T18:10:26.9558765Z ##[endgroup]
+2026-07-29T18:10:27.0277233Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\22.23.1\x64\yarn.CMD --version"
+2026-07-29T18:10:27.2755822Z 4.17.1
+2026-07-29T18:10:27.3632566Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\22.23.1\x64\yarn.CMD config get cacheFolder"
+2026-07-29T18:10:27.6275180Z D:\a\mikro-orm\mikro-orm\.yarn\cache
+2026-07-29T18:10:27.7219091Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\22.23.1\x64\yarn.CMD config get enableGlobalCache"
+2026-07-29T18:10:27.9895121Z [33mfalse[39m
+2026-07-29T18:10:28.0049617Z All dependencies are managed locally by yarn3, the previous cache can be used
+2026-07-29T18:10:28.2388432Z Cache hit for: node-cache-Windows-x64-yarn-12e6a4971c6b8fdf06a7dca3ad18968cc1026e84e60f54f8dba938f0dd3eeb81
+2026-07-29T18:10:29.3108141Z Received 147780167 of 147780167 (100.0%), 145.4 MBs/sec
+2026-07-29T18:10:29.3110670Z Cache Size: ~141 MB (147780167 B)
+2026-07-29T18:10:29.3172700Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/143afcaf-ced6-4806-a1bc-031eed5b1a24/cache.tzst -P -C D:/a/mikro-orm/mikro-orm --force-local --use-compress-program "zstd -d"
+2026-07-29T18:10:29.9296288Z Cache restored successfully
+2026-07-29T18:10:29.9398259Z Cache restored from key: node-cache-Windows-x64-yarn-12e6a4971c6b8fdf06a7dca3ad18968cc1026e84e60f54f8dba938f0dd3eeb81
+2026-07-29T18:10:29.9776286Z ##[group]Run yarn
+2026-07-29T18:10:29.9776571Z [36;1myarn[0m
+2026-07-29T18:10:29.9835938Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T18:10:29.9836293Z ##[endgroup]
+2026-07-29T18:10:30.7175671Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-07-29T18:10:30.7177670Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-07-29T18:10:30.7178725Z 
+2026-07-29T18:10:30.7179069Z [94m➤[39m YN0000: · Yarn 4.17.1
+2026-07-29T18:10:30.7336787Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-07-29T18:10:30.7338844Z ##[group]Resolution step
+2026-07-29T18:10:38.3097591Z ##[endgroup]
+2026-07-29T18:10:38.3105530Z [94m➤[39m [90mYN0000[39m: └ Completed in 7s 575ms
+2026-07-29T18:10:38.3123569Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-07-29T18:10:38.3124766Z ##[group]Post-resolution validation
+2026-07-29T18:10:38.3127628Z [93m➤[39m YN0060: │ [38;5;173mtypescript[39m is listed by your project with version [38;5;111m7.0.2[39m ([38;5;111mpd2acfd[39m), which doesn't satisfy what [38;5;166m@swc-node/[39m[38;5;173mregister[39m and other dependencies request ([38;5;37m^5.1.0[39m).
+2026-07-29T18:10:38.3131429Z [93m➤[39m YN0002: │ [38;5;166m@mikro-orm/[39m[38;5;173mmysql[39m[38;5;111m@[39m[38;5;111mworkspace:packages/mysql [4940c][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp3d35db[39m), requested by [38;5;173mmysql2[39m.
+2026-07-29T18:10:38.3134790Z [93m➤[39m YN0002: │ [38;5;166m@mikro-orm/[39m[38;5;173mmysql[39m[38;5;111m@[39m[38;5;111mworkspace:packages/mysql[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp075288[39m), requested by [38;5;173mmysql2[39m.
+2026-07-29T18:10:38.3137869Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-07-29T18:10:38.3140303Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-07-29T18:10:38.3638841Z ##[endgroup]
+2026-07-29T18:10:38.3640439Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-07-29T18:10:38.3648418Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-07-29T18:10:38.3649397Z ##[group]Fetch step
+2026-07-29T18:10:38.8457426Z ##[endgroup]
+2026-07-29T18:10:38.8458696Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 481ms
+2026-07-29T18:10:38.8853788Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-07-29T18:10:38.8855010Z ##[group]Link step
+2026-07-29T18:10:53.1016549Z [94m➤[39m YN0007: │ [38;5;166m@swc/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mnpm:1.15.46 [04a29][39m must be built because it never has been before or the last one failed
+2026-07-29T18:10:53.1032877Z [94m➤[39m YN0007: │ [38;5;173mnx[39m[38;5;111m@[39m[38;5;111mnpm:22.1.3 [5c4c4][39m must be built because it never has been before or the last one failed
+2026-07-29T18:10:53.1038091Z [94m➤[39m YN0007: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.1[39m must be built because it never has been before or the last one failed
+2026-07-29T18:10:53.1040467Z [94m➤[39m YN0007: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m must be built because it never has been before or the last one failed
+2026-07-29T18:10:53.1046818Z [94m➤[39m YN0007: │ [38;5;173mbetter-sqlite3[39m[38;5;111m@[39m[38;5;111mnpm:12.11.1[39m must be built because it never has been before or the last one failed
+2026-07-29T18:10:53.3159773Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ********************************************************************************
+2026-07-29T18:10:53.3162630Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ** Node-oracledb 7.0.1 installed in Node.js 22.23.1 (win32, x64)
+2026-07-29T18:10:53.3191731Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ** To use node-oracledb in Thin mode, no additional steps are needed.
+2026-07-29T18:10:53.3348280Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ** To use the optional Thick mode, the Oracle Client libraries (64-bit)
+2026-07-29T18:10:53.3373969Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ** must be available, see the installation instructions:
+2026-07-29T18:10:53.3378495Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb **   https://node-oracledb.readthedocs.io/en/latest/user_guide/installation.html#node-oracledb-installation-on-microsoft-windowsstallation
+2026-07-29T18:10:53.3385674Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m oracledb ********************************************************************************
+2026-07-29T18:10:53.3390205Z [94m➤[39m [90mYN0000[39m: │ [38;5;173moracledb[39m[38;5;111m@[39m[38;5;111mnpm:7.0.1[39m [32mSTDOUT[39m 
+2026-07-29T18:10:53.6903330Z ##[endgroup]
+2026-07-29T18:10:53.6904833Z [94m➤[39m [90mYN0000[39m: └ Completed in 14s 805ms
+2026-07-29T18:10:53.7624312Z [93m➤[39m YN0000: · Done with warnings in 23s 45ms
+2026-07-29T18:10:53.8485796Z ##[group]Run yarn test:sqlite
+2026-07-29T18:10:53.8486162Z [36;1myarn test:sqlite[0m
+2026-07-29T18:10:53.8545164Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T18:10:53.8545513Z ##[endgroup]
+2026-07-29T18:10:55.9377455Z 
+2026-07-29T18:10:55.9381655Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mD:/a/mikro-orm/mikro-orm[39m
+2026-07-29T18:10:55.9382336Z 
+2026-07-29T18:11:00.1252661Z  [32m✓[39m [30m[46m es [49m[39m tests/features/decorators/es/decorators.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+2026-07-29T18:11:00.6334142Z  [32m✓[39m [30m[46m es [49m[39m tests/features/decorators/es/formulas.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 364[2mms[22m[39m
+2026-07-29T18:11:00.6432648Z  [32m✓[39m [30m[46m es [49m[39m tests/features/decorators/es/basic-usage.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 521[2mms[22m[39m
+2026-07-29T18:11:00.7059973Z  [32m✓[39m [30m[46m es [49m[39m tests/features/decorators/es/embedded-entities.sqlite.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 584[2mms[22m[39m
+2026-07-29T18:11:00.7327004Z  [32m✓[39m [30m[46m es [49m[39m tests/features/decorators/es/trigger.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 15[2mms[22m[39m
+2026-07-29T18:11:04.1967150Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-relations.sqlite.test.ts [2m([22m[2m41 tests[22m[2m)[22m[33m 789[2mms[22m[39m
+2026-07-29T18:11:05.6071862Z  [32m✓[39m [30m[43m legacy [49m[39m tests/Utils.win.test.ts [2m([22m[2m36 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 447[2mms[22m[39m
+2026-07-29T18:11:06.0140657Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/migrations/Migrator.sqlite.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 696[2mms[22m[39m
+2026-07-29T18:11:06.0476053Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-tpt.sqlite.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 294[2mms[22m[39m
+2026-07-29T18:11:06.3874402Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-loading-strategies.sqlite.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 248[2mms[22m[39m
+2026-07-29T18:11:06.4334233Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-issues.sqlite.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+2026-07-29T18:11:06.5763694Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/transactions/transaction-propagation.sqlite.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+2026-07-29T18:11:06.8053294Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-many-to-many.sqlite.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 234[2mms[22m[39m
+2026-07-29T18:11:07.0529805Z  [31m❯[39m [30m[43m legacy [49m[39m tests/features/composite-keys/composite-keys.sqlite.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 368[2mms[22m[39m
+2026-07-29T18:11:07.0531641Z      [32m✓[39m dynamic attributes[32m 17[2mms[22m[39m
+2026-07-29T18:11:07.0549317Z      [32m✓[39m working with composite entity[32m 31[2mms[22m[39m
+2026-07-29T18:11:07.0559835Z      [32m✓[39m simple derived entity[32m 36[2mms[22m[39m
+2026-07-29T18:11:07.0560985Z      [32m✓[39m composite entity in m:1 relationship[32m 29[2mms[22m[39m
+2026-07-29T18:11:07.0563392Z      [32m✓[39m composite entity in m:1 relationship (multi update)[32m 18[2mms[22m[39m
+2026-07-29T18:11:07.0565776Z      [32m✓[39m composite entity in m:n relationship, both entities are composite[32m 36[2mms[22m[39m
+2026-07-29T18:11:07.0568906Z      [32m✓[39m removing composite entity in m:n relationship, one of entity is composite (GH #1961)[32m 36[2mms[22m[39m
+2026-07-29T18:11:07.0574905Z      [32m✓[39m composite entity in m:n relationship, one of entity is composite[32m 38[2mms[22m[39m
+2026-07-29T18:11:07.0576699Z      [32m✓[39m composite key references[32m 6[2mms[22m[39m
+2026-07-29T18:11:07.0577660Z      [32m✓[39m composite key in em.create()[32m 19[2mms[22m[39m
+2026-07-29T18:11:07.0584162Z [31m     [31m×[31m batch updates with optimistic locking[39m[32m 43[2mms[22m[39m
+2026-07-29T18:11:07.0590159Z      [32m✓[39m loadCount for composite keys[32m 11[2mms[22m[39m
+2026-07-29T18:11:07.0964170Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/non-pk-relation-target/non-pk-relation-target.sqlite.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+2026-07-29T18:11:07.3385994Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-m-to-n-union.sqlite.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+2026-07-29T18:11:07.6612998Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/virtual-entities/virtual-entities.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+2026-07-29T18:11:07.8308884Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-composite-keys.sqlite.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+2026-07-29T18:11:09.9410854Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/attach-database/attach-database.sqlite.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 2779[2mms[22m[39m
+2026-07-29T18:11:10.1125510Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/partial-index.sqlite.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+2026-07-29T18:11:10.2936528Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/custom-order/custom-order.sqlite.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+2026-07-29T18:11:10.5161525Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+2026-07-29T18:11:12.2858095Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/embeddables/polymorphic-embedded-entities.sqlite.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 3859[2mms[22m[39m
+2026-07-29T18:11:12.5783373Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-wrong-order.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+2026-07-29T18:11:12.7670964Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-auto-discovery.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+2026-07-29T18:11:13.0638822Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/view-entities/view-entities.sqlite.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+2026-07-29T18:11:13.2202655Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-custom-discriminator.sqlite.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+2026-07-29T18:11:13.3912561Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-fixed-order.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+2026-07-29T18:11:13.5589109Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-uni.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+2026-07-29T18:11:13.7880554Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/cancellation/cancellation.sqlite.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+2026-07-29T18:11:14.0006527Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-define-entity.sqlite.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+2026-07-29T18:11:14.2027555Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/index-diffing.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 85[2mms[22m[39m
+2026-07-29T18:11:14.4136009Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/define-entity-setclass.sqlite.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+2026-07-29T18:11:14.5865835Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/trigger.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+2026-07-29T18:11:14.8873346Z 
+2026-07-29T18:11:14.8874795Z (node:2720) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-07-29T18:11:14.8876422Z (Use `node --trace-warnings ...` to show where the warning was created) 
+2026-07-29T18:11:14.8880724Z 
+2026-07-29T18:11:14.8881238Z   at node_modules\vitest\suppress-warnings.cjs:21:18
+2026-07-29T18:11:14.8881824Z 
+2026-07-29T18:11:15.2736959Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/check-constraint.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 461[2mms[22m[39m
+2026-07-29T18:11:15.2738931Z      [33m[2m✓[22m[39m check constraint diff [sqlite] [33m 439[2mms[22m[39m
+2026-07-29T18:11:18.6430099Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/polymorphic-relations/polymorphic-tsmorph.sqlite.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3226[2mms[22m[39m
+2026-07-29T18:11:18.8612747Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/fk-diffing.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+2026-07-29T18:11:18.9444036Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-manager/EntityManager.sqlite.test.ts [2m([22m[2m199 tests[22m[2m)[22m[33m 13714[2mms[22m[39m
+2026-07-29T18:11:18.9453054Z      [33m[2m✓[22m[39m perf: one to many [33m 620[2mms[22m[39m
+2026-07-29T18:11:18.9482506Z      [33m[2m✓[22m[39m perf: batch insert and update [33m 2539[2mms[22m[39m
+2026-07-29T18:11:18.9484281Z      [33m[2m✓[22m[39m perf: one to many [33m 493[2mms[22m[39m
+2026-07-29T18:11:18.9485602Z      [33m[2m✓[22m[39m perf: batch insert and update [33m 3424[2mms[22m[39m
+2026-07-29T18:11:18.9486750Z      [33m[2m✓[22m[39m perf: one to many [33m 575[2mms[22m[39m
+2026-07-29T18:11:18.9487965Z      [33m[2m✓[22m[39m perf: batch insert and update [33m 2625[2mms[22m[39m
+2026-07-29T18:11:19.0328342Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/refresh/refresh-custom-type.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+2026-07-29T18:11:19.1215501Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/generated-columns/generated-columns.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+2026-07-29T18:11:19.2695736Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/collation-diffing.sqlite.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+2026-07-29T18:11:19.4507472Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/cli/DiscoveryExportCommand.win.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 29[2mms[22m[39m
+2026-07-29T18:11:19.5252003Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-generator/index-expressions.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 82[2mms[22m[39m
+2026-07-29T18:11:19.5667859Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/default-values/default-values.sqlite.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+2026-07-29T18:11:19.6743265Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/deferrable-fks.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 38[2mms[22m[39m
+2026-07-29T18:11:19.7854929Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-complex.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 97[2mms[22m[39m
+2026-07-29T18:11:19.8003908Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/advanced-index-features.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+2026-07-29T18:11:20.3235403Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/SchemaGenerator.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 396[2mms[22m[39m
+2026-07-29T18:11:20.3732871Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/libsql/connection-recycling.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-07-29T18:11:20.5070269Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/adding-fk-column.sqlite.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+2026-07-29T18:11:20.6159348Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/embeddables/GH3887.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 26[2mms[22m[39m
+2026-07-29T18:11:20.7039351Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/GH4919.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 23[2mms[22m[39m
+2026-07-29T18:11:20.7858477Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/migrations/MigrationRuntimeSchema.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 24[2mms[22m[39m
+2026-07-29T18:11:20.8949466Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/schema-generator/enum-diffing.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 38[2mms[22m[39m
+2026-07-29T18:11:20.9890365Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/truncate/truncate.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 21[2mms[22m[39m
+2026-07-29T18:11:21.0808303Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-generator/collation.sqlite.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 24[2mms[22m[39m
+2026-07-29T18:11:23.4423422Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-generator/CustomBase.sqlite.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 3359[2mms[22m[39m
+2026-07-29T18:11:23.4651520Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/reflection/TsMorphMetadataProvider.sqlite.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 12136[2mms[22m[39m
+2026-07-29T18:11:23.4653238Z      [33m[2m✓[22m[39m should load TS files directly [33m 4294[2mms[22m[39m
+2026-07-29T18:11:23.4654559Z      [33m[2m✓[22m[39m should load entities based on .d.ts files [33m 3340[2mms[22m[39m
+2026-07-29T18:11:23.4655170Z      [33m[2m✓[22m[39m should load entities [33m 2589[2mms[22m[39m
+2026-07-29T18:11:23.4655853Z      [33m[2m✓[22m[39m should handle file:/// URLs in metadata paths (GH #7220) [33m 1664[2mms[22m[39m
+2026-07-29T18:11:23.4716346Z 
+2026-07-29T18:11:23.4717151Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-07-29T18:11:23.4717697Z 
+2026-07-29T18:11:23.4722945Z [41m[1m FAIL [22m[49m [30m[43m legacy [49m[39m tests/features/composite-keys/composite-keys.sqlite.test.ts[2m > [22mcomposite keys in sqlite[2m > [22mbatch updates with optimistic locking
+2026-07-29T18:11:23.4732602Z [31m[1mAssertionError[22m: expected { Object (value, version, ...) } to be { Object (value, version, ...) } // Object.is equality[39m
+2026-07-29T18:11:23.4733541Z 
+2026-07-29T18:11:23.4733835Z [32m- Expected[39m
+2026-07-29T18:11:23.4734609Z [31m+ Received[39m
+2026-07-29T18:11:23.4734918Z 
+2026-07-29T18:11:23.4735201Z [2m  FooParam12 {[22m
+2026-07-29T18:11:23.4735751Z [2m    "bar": FooBar12 {[22m
+2026-07-29T18:11:23.4736295Z [32m-     "id": 27,[39m
+2026-07-29T18:11:23.4736822Z [32m-     "name": "bar 2",[39m
+2026-07-29T18:11:23.4737339Z [31m+     "id": 17,[39m
+2026-07-29T18:11:23.4737854Z [31m+     "name": "bar 1",[39m
+2026-07-29T18:11:23.4738324Z [2m    },[22m
+2026-07-29T18:11:23.4738790Z [2m    "baz": FooBaz12 {[22m
+2026-07-29T18:11:23.4739273Z [32m-     "id": 23,[39m
+2026-07-29T18:11:23.4739782Z [32m-     "name": "baz 2",[39m
+2026-07-29T18:11:23.4740289Z [31m+     "id": 13,[39m
+2026-07-29T18:11:23.4740796Z [31m+     "name": "baz 1",[39m
+2026-07-29T18:11:23.4741268Z [2m    },[22m
+2026-07-29T18:11:23.4742116Z [2m    "value": "val 1 changed! changed!!",[22m
+2026-07-29T18:11:23.4742921Z [2m    "version": 2026-07-29T18:11:06.000Z,[22m
+2026-07-29T18:11:23.4743647Z [2m    Symbol(PrimaryKeyProp): undefined,[22m
+2026-07-29T18:11:23.4744236Z [2m  }[22m
+2026-07-29T18:11:23.4744491Z 
+2026-07-29T18:11:23.4745325Z [36m [2m❯[22m tests/features/composite-keys/composite-keys.sqlite.test.ts:[2m632:50[22m[39m
+2026-07-29T18:11:23.5004034Z     [90m630|[39m     } [35mcatch[39m (e) {
+2026-07-29T18:11:23.5004403Z 
+2026-07-29T18:11:23.5031086Z     [90m631|[39m       [34mexpect[39m(e)[33m.[39m[34mtoBeInstanceOf[39m([33mValidationError[39m)[33m;[39m
+2026-07-29T18:11:23.5033407Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m57 passed[39m[22m[90m (58)[39m
+2026-07-29T18:11:23.5037830Z     [90m632|[39m       [34mexpect[39m((e [35mas[39m [33mValidationError[39m)[33m.[39m[34mgetEntity[39m())[33m.[39m[34mtoBe[39m(param2)[33m;[39m
+2026-07-29T18:11:23.5096919Z     [90m   |[39m                                                  [31m^[39m
+2026-07-29T18:11:23.5098248Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m717 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (719)[39m
+2026-07-29T18:11:23.5099344Z     [90m633|[39m     }
+2026-07-29T18:11:23.5099841Z [2m   Start at [22m 18:10:56
+2026-07-29T18:11:23.5102950Z     [90m634|[39m   })[33m;[39m
+2026-07-29T18:11:23.5107523Z [2m   Duration [22m 27.06s[2m (transform 15.11s, setup 7.15s, import 19.87s, tests 47.62s, environment 11ms)[22m
+2026-07-29T18:11:23.5108856Z 
+2026-07-29T18:11:23.5108875Z 
+2026-07-29T18:11:23.5116324Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-07-29T18:11:23.5117538Z 
+2026-07-29T18:11:23.5123744Z 
+2026-07-29T18:11:23.5282387Z ##[error]AssertionError: expected { Object (value, version, ...) } to be { Object (value, version, ...) } // Object.is equality
+
+- Expected
++ Received
+
+  FooParam12 {
+    "bar": FooBar12 {
+-     "id": 27,
+-     "name": "bar 2",
++     "id": 17,
++     "name": "bar 1",
+    },
+    "baz": FooBaz12 {
+-     "id": 23,
+-     "name": "baz 2",
++     "id": 13,
++     "name": "baz 1",
+    },
+    "value": "val 1 changed! changed!!",
+    "version": 2026-07-29T18:11:06.000Z,
+    Symbol(PrimaryKeyProp): undefined,
+  }
+
+ ❯ tests/features/composite-keys/composite-keys.sqlite.test.ts:632:50
+
+
+2026-07-29T18:11:23.7300905Z ##[error]Process completed with exit code 1.
+2026-07-29T18:11:23.7541342Z Post job cleanup.
+2026-07-29T18:11:23.9411440Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-07-29T18:11:23.9726172Z git version 2.55.0.windows.2
+2026-07-29T18:11:23.9805070Z Temporarily overriding HOME='D:\a\_temp\3b5fbb76-790e-4480-a310-906837d3fcc8' before making global git config changes
+2026-07-29T18:11:23.9806468Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-29T18:11:23.9818492Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\mikro-orm\mikro-orm
+2026-07-29T18:11:24.0148219Z Removing SSH command configuration
+2026-07-29T18:11:24.0162989Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-07-29T18:11:24.0474090Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-07-29T18:11:24.5248500Z Removing HTTP extra header
+2026-07-29T18:11:24.5258103Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-29T18:11:24.5551022Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-07-29T18:11:25.0924320Z Removing includeIf entries pointing to credentials config files
+2026-07-29T18:11:25.0935794Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-29T18:11:25.1185103Z includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git.path
+2026-07-29T18:11:25.1185953Z includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-07-29T18:11:25.1186714Z includeif.gitdir:/github/workspace/.git.path
+2026-07-29T18:11:25.1187471Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-07-29T18:11:25.1228994Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git.path
+2026-07-29T18:11:25.1471711Z D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:11:25.1511438Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git.path D\:\\a\\_temp\\git\-credentials\-3e01e45e\-f4ed\-40cd\-a4ab\-f84fb41a0a12\.config
+2026-07-29T18:11:25.1837218Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-07-29T18:11:25.2085297Z D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:11:25.2123490Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/mikro-orm/mikro-orm/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-3e01e45e\-f4ed\-40cd\-a4ab\-f84fb41a0a12\.config
+2026-07-29T18:11:25.2404471Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-07-29T18:11:25.2641048Z /github/runner_temp/git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:11:25.2676100Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-3e01e45e\-f4ed\-40cd\-a4ab\-f84fb41a0a12\.config
+2026-07-29T18:11:25.2952012Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-07-29T18:11:25.3187055Z /github/runner_temp/git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config
+2026-07-29T18:11:25.3224669Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-3e01e45e\-f4ed\-40cd\-a4ab\-f84fb41a0a12\.config
+2026-07-29T18:11:25.3500944Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-07-29T18:11:25.8274811Z Removing credentials config 'D:\a\_temp\git-credentials-3e01e45e-f4ed-40cd-a4ab-f84fb41a0a12.config'
+2026-07-29T18:11:25.8474836Z Cleaning up orphan processes

@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "vitest-dev/vitest",
+  "job_id": 120268840053,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 1646,
+    "failed": 1,
+    "skipped": 88,
+    "total": 1736,
+    "todo": 1,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "prints the last attempt of a retried test"
+  ],
+  "failed_files": [
+    "test/trace-timeline.test.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "test/trace-timeline.test.ts",
+  "note": "The FAIL line is `main  test/trace-timeline.test.ts:163 > name`: a project badge and a line number after the file."
+}

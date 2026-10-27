@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "sveltejs/svelte",
+  "job_id": 112798946537,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 1831,
+    "failed": 1,
+    "skipped": 9,
+    "total": 1841,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "hydrate-modified-input-unbound (hydrate)"
+  ],
+  "failed_files": [
+    "packages/svelte/tests/runtime-runes/test.ts"
+  ],
+  "first_error_type": "CompileError",
+  "first_project_path": null,
+  "note": "`Test Files 1 failed (1)`: one file holds the failing test. A file name with a `(hydrate)` variant suffix on the test name."
+}

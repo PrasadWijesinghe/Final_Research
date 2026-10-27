@@ -1,0 +1,494 @@
+﻿2026-08-18T20:21:51.4930281Z Current runner version: '2.336.0'
+2026-08-18T20:21:51.4943520Z ##[group]Runner Image Provisioner
+2026-08-18T20:21:51.4944019Z Hosted Compute Agent
+2026-08-18T20:21:51.4944385Z Version: 20260729.566
+2026-08-18T20:21:51.4944784Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-18T20:21:51.4945184Z Build Date: 2026-07-29T19:17:02Z
+2026-08-18T20:21:51.4945777Z Worker ID: {3e3e0727-90a0-4c9a-818a-f5720617764b}
+2026-08-18T20:21:51.4946208Z Azure Region: westus2
+2026-08-18T20:21:51.4946562Z ##[endgroup]
+2026-08-18T20:21:51.4947263Z ##[group]Operating System
+2026-08-18T20:21:51.4947622Z Ubuntu
+2026-08-18T20:21:51.4948037Z 24.04.4
+2026-08-18T20:21:51.4948361Z LTS
+2026-08-18T20:21:51.4948753Z ##[endgroup]
+2026-08-18T20:21:51.4949049Z ##[group]Runner Image
+2026-08-18T20:21:51.4949423Z Image: ubuntu-24.04
+2026-08-18T20:21:51.4949744Z Version: 20260810.271.1
+2026-08-18T20:21:51.4950465Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-18T20:21:51.4951289Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+2026-08-18T20:21:51.4951840Z ##[endgroup]
+2026-08-18T20:21:51.4952436Z ##[group]GITHUB_TOKEN Permissions
+2026-08-18T20:21:51.4953557Z Contents: read
+2026-08-18T20:21:51.4953902Z Metadata: read
+2026-08-18T20:21:51.4954257Z ##[endgroup]
+2026-08-18T20:21:51.4955371Z Secret source: None
+2026-08-18T20:21:51.4956142Z Prepare workflow directory
+2026-08-18T20:21:51.5139081Z Prepare all required actions
+2026-08-18T20:21:51.5167447Z Getting action download info
+2026-08-18T20:21:51.8614920Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-18T20:21:52.5740197Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-18T20:21:53.5381796Z Download action repository 'SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403' (SHA:97330871fe1b7d3529392ea000e3d2c4b357e403)
+2026-08-18T20:21:53.8731811Z Download action repository 'nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60' (SHA:ad984534de44a9489a53aefd81eb77f87c70dc60)
+2026-08-18T20:21:54.5603250Z Uses: jestjs/jest/.github/workflows/test.yml@refs/pull/16368/merge (4ed925df90e595e1a6f5a1e6fdebd6c4b7896981)
+2026-08-18T20:21:54.5606005Z ##[group] Inputs
+2026-08-18T20:21:54.5606161Z   os: ubuntu-latest
+2026-08-18T20:21:54.5606269Z   shard: 1/4
+2026-08-18T20:21:54.5606376Z ##[endgroup]
+2026-08-18T20:21:54.5606543Z Complete job name: Ubuntu with shard 1/4 / Node LTS using jest-jasmine2
+2026-08-18T20:21:54.6006049Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-18T20:21:54.6006348Z with:
+2026-08-18T20:21:54.6006463Z   persist-credentials: false
+2026-08-18T20:21:54.6006594Z   repository: jestjs/jest
+2026-08-18T20:21:54.6007934Z   token: ***
+2026-08-18T20:21:54.6008041Z   ssh-strict: true
+2026-08-18T20:21:54.6008155Z   ssh-user: git
+2026-08-18T20:21:54.6008267Z   clean: true
+2026-08-18T20:21:54.6008381Z   sparse-checkout-cone-mode: true
+2026-08-18T20:21:54.6008516Z   fetch-depth: 1
+2026-08-18T20:21:54.6008624Z   fetch-tags: false
+2026-08-18T20:21:54.6008735Z   show-progress: true
+2026-08-18T20:21:54.6008843Z   lfs: false
+2026-08-18T20:21:54.6008939Z   submodules: false
+2026-08-18T20:21:54.6009052Z   set-safe-directory: true
+2026-08-18T20:21:54.6009188Z   allow-unsafe-pr-checkout: false
+2026-08-18T20:21:54.6009388Z ##[endgroup]
+2026-08-18T20:21:54.6635731Z Syncing repository: jestjs/jest
+2026-08-18T20:21:54.6636969Z ##[group]Getting Git version info
+2026-08-18T20:21:54.6637308Z Working directory is '/home/runner/work/jest/jest'
+2026-08-18T20:21:54.6637734Z [command]/usr/bin/git version
+2026-08-18T20:21:54.7181000Z git version 2.54.0
+2026-08-18T20:21:54.7192521Z ##[endgroup]
+2026-08-18T20:21:54.7199829Z Temporarily overriding HOME='/home/runner/work/_temp/47b27b37-5587-4506-91c9-c423642408e5' before making global git config changes
+2026-08-18T20:21:54.7200558Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-18T20:21:54.7203484Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-18T20:21:54.7262016Z Deleting the contents of '/home/runner/work/jest/jest'
+2026-08-18T20:21:54.7268454Z ##[group]Determining repository object format
+2026-08-18T20:21:54.7268846Z ##[endgroup]
+2026-08-18T20:21:54.7269069Z ##[group]Initializing the repository
+2026-08-18T20:21:54.7269247Z [command]/usr/bin/git init /home/runner/work/jest/jest
+2026-08-18T20:21:54.7760926Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-18T20:21:54.7761501Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-18T20:21:54.7761983Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-18T20:21:54.7762365Z hint: call:
+2026-08-18T20:21:54.7762599Z hint:
+2026-08-18T20:21:54.7762915Z hint: 	git config --global init.defaultBranch <name>
+2026-08-18T20:21:54.7763256Z hint:
+2026-08-18T20:21:54.7763582Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-18T20:21:54.7764093Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-18T20:21:54.7764474Z hint:
+2026-08-18T20:21:54.7764723Z hint: 	git branch -m <name>
+2026-08-18T20:21:54.7764987Z hint:
+2026-08-18T20:21:54.7767644Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-18T20:21:54.7768279Z Initialized empty Git repository in /home/runner/work/jest/jest/.git/
+2026-08-18T20:21:54.7769271Z [command]/usr/bin/git remote add origin https://github.com/jestjs/jest
+2026-08-18T20:21:54.8660231Z ##[endgroup]
+2026-08-18T20:21:54.8660439Z ##[group]Disabling automatic garbage collection
+2026-08-18T20:21:54.8662490Z [command]/usr/bin/git config --local gc.auto 0
+2026-08-18T20:21:54.8866318Z ##[endgroup]
+2026-08-18T20:21:54.8866760Z ##[group]Setting up auth
+2026-08-18T20:21:54.8867146Z Removing SSH command configuration
+2026-08-18T20:21:54.8870526Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T20:21:54.8898163Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-18T20:21:55.0304421Z Removing HTTP extra header
+2026-08-18T20:21:55.0307650Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T20:21:55.0333130Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-18T20:21:55.0495237Z Removing includeIf entries pointing to credentials config files
+2026-08-18T20:21:55.0499335Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T20:21:55.0525134Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-18T20:21:55.0689849Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-18T20:21:55.0757175Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git.path /home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:55.0825329Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:55.0867967Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:55.0968195Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:55.1067039Z ##[endgroup]
+2026-08-18T20:21:55.1067337Z ##[group]Fetching the repository
+2026-08-18T20:21:55.1071592Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4ed925df90e595e1a6f5a1e6fdebd6c4b7896981:refs/remotes/pull/16368/merge
+2026-08-18T20:21:56.6721937Z From https://github.com/jestjs/jest
+2026-08-18T20:21:56.6722542Z  * [new ref]         4ed925df90e595e1a6f5a1e6fdebd6c4b7896981 -> pull/16368/merge
+2026-08-18T20:21:56.6740626Z ##[endgroup]
+2026-08-18T20:21:56.6740962Z ##[group]Determining the checkout info
+2026-08-18T20:21:56.6741373Z ##[endgroup]
+2026-08-18T20:21:56.6745355Z [command]/usr/bin/git sparse-checkout disable
+2026-08-18T20:21:56.6802770Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-18T20:21:56.8443077Z ##[group]Checking out the ref
+2026-08-18T20:21:56.8445891Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/16368/merge
+2026-08-18T20:21:57.0438100Z Note: switching to 'refs/remotes/pull/16368/merge'.
+2026-08-18T20:21:57.0438342Z 
+2026-08-18T20:21:57.0438509Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-18T20:21:57.0438892Z changes and commit them, and you can discard any commits you make in this
+2026-08-18T20:21:57.0439271Z state without impacting any branches by switching back to a branch.
+2026-08-18T20:21:57.0439711Z 
+2026-08-18T20:21:57.0439890Z If you want to create a new branch to retain commits you create, you may
+2026-08-18T20:21:57.0440248Z do so (now or later) by using -c with the switch command. Example:
+2026-08-18T20:21:57.0440461Z 
+2026-08-18T20:21:57.0440548Z   git switch -c <new-branch-name>
+2026-08-18T20:21:57.0440695Z 
+2026-08-18T20:21:57.0440797Z Or undo this operation with:
+2026-08-18T20:21:57.0440972Z 
+2026-08-18T20:21:57.0441049Z   git switch -
+2026-08-18T20:21:57.0441188Z 
+2026-08-18T20:21:57.0441363Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-18T20:21:57.0441606Z 
+2026-08-18T20:21:57.0441886Z HEAD is now at 4ed925d Merge 4eac471eaec6b297832711510aaf42a16917bff3 into cf76681707ac94d72724215ba17e865dbe14323f
+2026-08-18T20:21:57.0454129Z ##[endgroup]
+2026-08-18T20:21:57.0496965Z [command]/usr/bin/git log -1 --format=%H
+2026-08-18T20:21:57.0520703Z 4ed925df90e595e1a6f5a1e6fdebd6c4b7896981
+2026-08-18T20:21:57.0528998Z ##[group]Removing auth
+2026-08-18T20:21:57.0529256Z Removing SSH command configuration
+2026-08-18T20:21:57.0532374Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T20:21:57.0561861Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-18T20:21:57.0739043Z Removing HTTP extra header
+2026-08-18T20:21:57.0741081Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T20:21:57.0776745Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-18T20:21:57.0943527Z Removing includeIf entries pointing to credentials config files
+2026-08-18T20:21:57.0946230Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T20:21:57.0968206Z includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-18T20:21:57.0968583Z includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-18T20:21:57.0968912Z includeif.gitdir:/github/workspace/.git.path
+2026-08-18T20:21:57.0969183Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-18T20:21:57.0975132Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-18T20:21:57.0996833Z /home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:57.1004748Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-508a76db\-1214\-401a\-95ed\-c54033953802\.config
+2026-08-18T20:21:57.1034219Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-18T20:21:57.1057408Z /home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:57.1062959Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-508a76db\-1214\-401a\-95ed\-c54033953802\.config
+2026-08-18T20:21:57.1091467Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-18T20:21:57.1111265Z /github/runner_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:57.1116727Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-508a76db\-1214\-401a\-95ed\-c54033953802\.config
+2026-08-18T20:21:57.1184653Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-18T20:21:57.1212047Z /github/runner_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config
+2026-08-18T20:21:57.1228180Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-508a76db\-1214\-401a\-95ed\-c54033953802\.config
+2026-08-18T20:21:57.1250606Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-18T20:21:57.1414798Z Removing credentials config '/home/runner/work/_temp/git-credentials-508a76db-1214-401a-95ed-c54033953802.config'
+2026-08-18T20:21:57.1421588Z ##[endgroup]
+2026-08-18T20:21:57.1578247Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-18T20:21:57.1578444Z with:
+2026-08-18T20:21:57.1578548Z   node-version: lts/*
+2026-08-18T20:21:57.1578658Z   cache: yarn
+2026-08-18T20:21:57.1578760Z   check-latest: false
+2026-08-18T20:21:57.1580051Z   token: ***
+2026-08-18T20:21:57.1580164Z   package-manager-cache: true
+2026-08-18T20:21:57.1580295Z ##[endgroup]
+2026-08-18T20:21:57.2333002Z Attempt to resolve LTS alias from manifest...
+2026-08-18T20:21:57.9111452Z Found in cache @ /opt/hostedtoolcache/node/24.19.0/x64
+2026-08-18T20:21:57.9113639Z ##[group]Environment details
+2026-08-18T20:21:58.9016046Z node: v24.19.0
+2026-08-18T20:21:58.9016281Z npm: 11.17.0
+2026-08-18T20:21:58.9016453Z yarn: 4.18.0
+2026-08-18T20:21:58.9016775Z ##[endgroup]
+2026-08-18T20:21:58.9028866Z [command]/usr/local/bin/yarn --version
+2026-08-18T20:21:59.1184830Z 4.18.0
+2026-08-18T20:21:59.1390662Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-08-18T20:21:59.3691026Z /home/runner/.yarn/berry/cache
+2026-08-18T20:21:59.3931329Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-08-18T20:21:59.6571994Z [33mtrue[39m
+2026-08-18T20:21:59.9204584Z Cache hit for: node-cache-Linux-x64-yarn-9332dd55c208fac88cc0ab85ad2850d857d712fe70f4b9b3009ee28b03785707
+2026-08-18T20:22:01.2261715Z Received 0 of 157271758 (0.0%), 0.0 MBs/sec
+2026-08-18T20:22:02.2261442Z Received 109051904 of 157271758 (69.3%), 52.0 MBs/sec
+2026-08-18T20:22:03.2258460Z Received 134217728 of 157271758 (85.3%), 42.7 MBs/sec
+2026-08-18T20:22:04.2263975Z Received 148883150 of 157271758 (94.7%), 35.5 MBs/sec
+2026-08-18T20:22:05.2266202Z Received 153077454 of 157271758 (97.3%), 29.2 MBs/sec
+2026-08-18T20:22:05.2936519Z Received 157271758 of 157271758 (100.0%), 29.6 MBs/sec
+2026-08-18T20:22:05.2948425Z Cache Size: ~150 MB (157271758 B)
+2026-08-18T20:22:05.2979565Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c957f164-415a-4e2d-ab9b-2a239a986e8c/cache.tzst -P -C /home/runner/work/jest/jest --use-compress-program unzstd
+2026-08-18T20:22:05.4798144Z Cache restored successfully
+2026-08-18T20:22:05.4864598Z Cache restored from key: node-cache-Linux-x64-yarn-9332dd55c208fac88cc0ab85ad2850d857d712fe70f4b9b3009ee28b03785707
+2026-08-18T20:22:05.5010995Z ##[group]Run yarn --immutable
+2026-08-18T20:22:05.5011179Z [36;1myarn --immutable[0m
+2026-08-18T20:22:05.5049942Z shell: /usr/bin/bash -e {0}
+2026-08-18T20:22:05.5050090Z ##[endgroup]
+2026-08-18T20:22:05.8325220Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-08-18T20:22:05.8326325Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-08-18T20:22:05.8326668Z 
+2026-08-18T20:22:05.8326794Z [94m➤[39m YN0000: · Yarn 4.18.0
+2026-08-18T20:22:05.8373313Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-08-18T20:22:05.8373892Z ##[group]Resolution step
+2026-08-18T20:22:12.3480363Z ##[endgroup]
+2026-08-18T20:22:12.3482744Z [94m➤[39m [90mYN0000[39m: └ Completed in 6s 510ms
+2026-08-18T20:22:12.3493342Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-08-18T20:22:12.3493861Z ##[group]Post-resolution validation
+2026-08-18T20:22:12.3495364Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m7.29.7[39m ([38;5;111mpf247de[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mpreset-react[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-18T20:22:12.3497432Z [93m➤[39m YN0060: │ [38;5;173mgraphql[39m is listed by your project with version [38;5;111m17.0.2[39m ([38;5;111mp1ae269[39m), which doesn't satisfy what [38;5;173mgraphql-request[39m and other dependencies request ([38;5;37m^14.0.0 || ^15.0.0 || ^16.0.0[39m).
+2026-08-18T20:22:12.3499309Z [93m➤[39m YN0060: │ [38;5;173mreact[39m is listed by your project with version [38;5;111m19.2.8[39m ([38;5;111mpbfd061[39m), which doesn't satisfy what [38;5;173mreact-test-renderer[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-18T20:22:12.3501241Z [93m➤[39m YN0002: │ [38;5;166m@jest/[39m[38;5;173mdiff-sequences[39m[38;5;111m@[39m[38;5;111mworkspace:packages/diff-sequences[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp03fd70[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-18T20:22:12.3503091Z [93m➤[39m YN0002: │ [38;5;173mbabel-preset-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-preset-jest[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa5adb7[39m), requested by [38;5;173mbabel-preset-current-node-syntax[39m.
+2026-08-18T20:22:12.3504828Z [93m➤[39m YN0002: │ [38;5;173mcreate-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/create-jest[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp9c2ade[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T20:22:12.3506799Z [93m➤[39m YN0002: │ [38;5;173mexample-react-native[39m[38;5;111m@[39m[38;5;111mworkspace:examples/react-native[39m doesn't provide [38;5;166m@types/[39m[38;5;173mreact[39m ([38;5;111mp0285ab[39m), requested by [38;5;166m@react-native/[39m[38;5;173mjest-preset[39m and other dependencies.
+2026-08-18T20:22:12.3526048Z [93m➤[39m YN0002: │ [38;5;173mexpect[39m[38;5;111m@[39m[38;5;111mworkspace:packages/expect[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp9fb730[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-18T20:22:12.3527857Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [023ef][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdec1f7[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T20:22:12.3530133Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [73877][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp6688de[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T20:22:12.3531694Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdd7483[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T20:22:12.3533224Z [93m➤[39m YN0002: │ [38;5;173mjest-config[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-config[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp4a73ba[39m), requested by [38;5;173mts-node[39m.
+2026-08-18T20:22:12.3535030Z [93m➤[39m YN0002: │ [38;5;173mjest-website[39m[38;5;111m@[39m[38;5;111mworkspace:website[39m doesn't provide [38;5;166m@mdx-js/[39m[38;5;173mreact[39m ([38;5;111mp1a83d4[39m), requested by [38;5;166m@docusaurus/[39m[38;5;173mcore[39m.
+2026-08-18T20:22:12.3536811Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-08-18T20:22:12.3538059Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-08-18T20:22:12.3947017Z ##[endgroup]
+2026-08-18T20:22:12.3947771Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-08-18T20:22:12.3948007Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-08-18T20:22:12.3948265Z ##[group]Fetch step
+2026-08-18T20:22:12.7429086Z ##[endgroup]
+2026-08-18T20:22:12.7429828Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 348ms
+2026-08-18T20:22:12.7880055Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-08-18T20:22:12.7880524Z ##[group]Link step
+2026-08-18T20:22:29.1759016Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.50.0[39m lists build scripts, but all build scripts have been disabled.
+2026-08-18T20:22:29.3449373Z [94m➤[39m YN0007: │ [38;5;173munrs-resolver[39m[38;5;111m@[39m[38;5;111mnpm:1.12.2[39m must be built because it never has been before or the last one failed
+2026-08-18T20:22:29.3454965Z [94m➤[39m YN0007: │ [38;5;166m@parcel/[39m[38;5;173mwatcher[39m[38;5;111m@[39m[38;5;111mnpm:2.6.0[39m must be built because it never has been before or the last one failed
+2026-08-18T20:22:29.3456761Z [94m➤[39m YN0007: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.2[39m must be built because it never has been before or the last one failed
+2026-08-18T20:22:29.4761183Z ##[endgroup]
+2026-08-18T20:22:29.4762069Z [94m➤[39m [90mYN0000[39m: └ Completed in 16s 688ms
+2026-08-18T20:22:29.6546847Z [93m➤[39m YN0000: · Done with warnings in 23s 823ms
+2026-08-18T20:22:29.7741172Z ##[group]Run yarn build:js
+2026-08-18T20:22:29.7741343Z [36;1myarn build:js[0m
+2026-08-18T20:22:29.7770693Z shell: /usr/bin/bash -e {0}
+2026-08-18T20:22:29.7770832Z ##[endgroup]
+2026-08-18T20:22:30.2741583Z  Bundling packages 
+2026-08-18T20:22:33.7807254Z  DONE 
+2026-08-18T20:22:33.8482131Z ##[group]Run SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403
+2026-08-18T20:22:33.8482370Z ##[endgroup]
+2026-08-18T20:22:33.9020561Z ##[group]Run nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+2026-08-18T20:22:33.9020765Z with:
+2026-08-18T20:22:33.9020867Z   timeout_minutes: 10
+2026-08-18T20:22:33.9020978Z   max_attempts: 3
+2026-08-18T20:22:33.9021083Z   retry_on: error
+2026-08-18T20:22:33.9021234Z   command: yarn jest-jasmine-ci --max-workers 4 --shard=1/4
+2026-08-18T20:22:33.9021419Z   retry_wait_seconds: 10
+2026-08-18T20:22:33.9021545Z   polling_interval_seconds: 1
+2026-08-18T20:22:33.9021673Z   warning_on_retry: true
+2026-08-18T20:22:33.9021792Z   continue_on_error: false
+2026-08-18T20:22:33.9021916Z ##[endgroup]
+2026-08-18T20:22:33.9406258Z ##[group]Attempt 1
+2026-08-18T20:22:39.0587611Z ..................
+2026-08-18T20:22:39.0644324Z ##[error]expect(received).toEqual(expected) // deep equality
+
+- Expected  - 0
++ Received  + 2
+
+  Array [
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",
+  ]
+    at Object.toEqual (packages/jest-core/src/__tests__/SearchSource.test.ts:441:42)
+2026-08-18T20:22:39.0684151Z .
+2026-08-18T20:22:39.0716322Z /home/runner/work/jest/jest/packages/jest-core/src/__tests__/SearchSource.test.ts
+2026-08-18T20:22:39.0745827Z 
+2026-08-18T20:22:39.0786990Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:22:39.0852704Z 
+2026-08-18T20:22:39.0874774Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:22:39.0916140Z 
+2026-08-18T20:22:39.0947748Z     [32m- Expected  - 0[39m
+2026-08-18T20:22:39.0948100Z     [31m+ Received  + 2[39m
+2026-08-18T20:22:39.0948249Z 
+2026-08-18T20:22:39.0948363Z     [2m  Array [[22m
+2026-08-18T20:22:39.0948979Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:22:39.0949861Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:22:39.0950729Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:22:39.0951564Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:22:39.0952365Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:22:39.0953126Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:22:39.0953566Z     [2m  ][22m
+2026-08-18T20:22:39.0953726Z 
+2026-08-18T20:22:39.0954351Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:22:39.0954794Z 
+2026-08-18T20:22:43.5158635Z ..........react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:22:43.5200347Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:22:43.5216588Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:23:30.9599259Z ............................................................................[SKIP] Does not work on Jasmine
+2026-08-18T20:23:35.3286986Z ............[SKIP] Does not work on Jasmine
+2026-08-18T20:23:39.1145520Z ....................
+2026-08-18T20:23:39.1145867Z 
+2026-08-18T20:23:39.1146230Z 
+2026-08-18T20:23:39.1146688Z [1mSummary of all failing tests[22m
+2026-08-18T20:23:39.1155023Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-core/src/__tests__/[22m[1mSearchSource.test.ts[22m
+2026-08-18T20:23:39.1156438Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:23:39.1156833Z 
+2026-08-18T20:23:39.1163087Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:23:39.1168248Z 
+2026-08-18T20:23:39.1168758Z     [32m- Expected  - 0[39m
+2026-08-18T20:23:39.1169039Z     [31m+ Received  + 2[39m
+2026-08-18T20:23:39.1169439Z 
+2026-08-18T20:23:39.1169537Z     [2m  Array [[22m
+2026-08-18T20:23:39.1197891Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:23:39.1198517Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:23:39.1198997Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:23:39.1199439Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:23:39.1199872Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:23:39.1200291Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:23:39.1200537Z     [2m  ][22m
+2026-08-18T20:23:39.1200608Z 
+2026-08-18T20:23:39.1200963Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:23:39.1201213Z 
+2026-08-18T20:23:39.1201217Z 
+2026-08-18T20:23:39.1201516Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m135 passed[39m[22m, 136 of 137 total
+2026-08-18T20:23:39.1201995Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m12 skipped[39m[22m, [1m[32m1352 passed[39m[22m, 1365 total
+2026-08-18T20:23:39.1202346Z [1mSnapshots:   [22m[1m[32m341 passed[39m[22m, 341 total
+2026-08-18T20:23:39.1202569Z [1mTime:[22m        63.711 s
+2026-08-18T20:23:39.1202818Z [2mRan all test suites[22m[2m in [22m7[2m projects[22m[2m.[22m
+2026-08-18T20:23:50.0512181Z ##[warning]Attempt 1 failed. Reason: Child_process exited with error code 1
+2026-08-18T20:23:50.0513308Z ##[endgroup]
+2026-08-18T20:23:50.0513529Z ##[group]Attempt 2
+2026-08-18T20:23:52.6871607Z .
+2026-08-18T20:23:52.6902107Z ##[error]expect(received).toEqual(expected) // deep equality
+
+- Expected  - 0
++ Received  + 2
+
+  Array [
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",
+  ]
+    at Object.toEqual (packages/jest-core/src/__tests__/SearchSource.test.ts:441:42)
+2026-08-18T20:23:52.6934191Z .
+2026-08-18T20:23:52.6966232Z /home/runner/work/jest/jest/packages/jest-core/src/__tests__/SearchSource.test.ts
+2026-08-18T20:23:52.6995972Z 
+2026-08-18T20:23:52.6997136Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:23:52.7019961Z 
+2026-08-18T20:23:52.7034946Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:23:52.7059874Z 
+2026-08-18T20:23:52.7094425Z     [32m- Expected  - 0[39m
+2026-08-18T20:23:52.7116762Z     [31m+ Received  + 2[39m
+2026-08-18T20:23:52.7117087Z 
+2026-08-18T20:23:52.7117309Z     [2m  Array [[22m
+2026-08-18T20:23:52.7117809Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:23:52.7118424Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:23:52.7119018Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:23:52.7119573Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:23:52.7120317Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:23:52.7120853Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:23:52.7121213Z     [2m  ][22m
+2026-08-18T20:23:52.7121397Z 
+2026-08-18T20:23:52.7121844Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:23:52.7122195Z 
+2026-08-18T20:24:33.7318779Z .............................................................................................react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:24:33.7345158Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:24:33.7346414Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:24:34.1156946Z .............................[SKIP] Does not work on Jasmine
+2026-08-18T20:24:34.2066051Z ..........[SKIP] Does not work on Jasmine
+2026-08-18T20:24:34.3090073Z ...
+2026-08-18T20:24:34.3090248Z 
+2026-08-18T20:24:34.3090255Z 
+2026-08-18T20:24:34.3090727Z [1mSummary of all failing tests[22m
+2026-08-18T20:24:34.3108193Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-core/src/__tests__/[22m[1mSearchSource.test.ts[22m
+2026-08-18T20:24:34.3116855Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:24:34.3117382Z 
+2026-08-18T20:24:34.3117739Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:24:34.3118023Z 
+2026-08-18T20:24:34.3118259Z     [32m- Expected  - 0[39m
+2026-08-18T20:24:34.3134052Z     [31m+ Received  + 2[39m
+2026-08-18T20:24:34.3134230Z 
+2026-08-18T20:24:34.3134368Z     [2m  Array [[22m
+2026-08-18T20:24:34.3134899Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:24:34.3135831Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:24:34.3136581Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:24:34.3137269Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:24:34.3137957Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:24:34.3138604Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:24:34.3138989Z     [2m  ][22m
+2026-08-18T20:24:34.3139088Z 
+2026-08-18T20:24:34.3139596Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:24:34.3139985Z 
+2026-08-18T20:24:34.3139989Z 
+2026-08-18T20:24:34.3140684Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m135 passed[39m[22m, 136 of 137 total
+2026-08-18T20:24:34.3141400Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m12 skipped[39m[22m, [1m[32m1352 passed[39m[22m, 1365 total
+2026-08-18T20:24:34.3141961Z [1mSnapshots:   [22m[1m[32m341 passed[39m[22m, 341 total
+2026-08-18T20:24:34.3142341Z [1mTime:[22m        42.915 s, estimated 62 s
+2026-08-18T20:24:34.3142745Z [2mRan all test suites[22m[2m in [22m7[2m projects[22m[2m.[22m
+2026-08-18T20:24:45.1043476Z ##[warning]Attempt 2 failed. Reason: Child_process exited with error code 1
+2026-08-18T20:24:45.1044801Z ##[endgroup]
+2026-08-18T20:24:45.1045091Z ##[group]Attempt 3
+2026-08-18T20:24:47.8723286Z .
+2026-08-18T20:24:47.8752549Z ##[error]expect(received).toEqual(expected) // deep equality
+
+- Expected  - 0
++ Received  + 2
+
+  Array [
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",
++   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",
+    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",
+  ]
+    at Object.toEqual (packages/jest-core/src/__tests__/SearchSource.test.ts:441:42)
+2026-08-18T20:24:47.8756600Z .
+2026-08-18T20:24:47.8803050Z /home/runner/work/jest/jest/packages/jest-core/src/__tests__/SearchSource.test.ts
+2026-08-18T20:24:47.8809820Z 
+2026-08-18T20:24:47.8821812Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:24:47.8822701Z 
+2026-08-18T20:24:47.8823338Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:24:47.8823882Z 
+2026-08-18T20:24:47.8824211Z     [32m- Expected  - 0[39m
+2026-08-18T20:24:47.8824624Z     [31m+ Received  + 2[39m
+2026-08-18T20:24:47.8824898Z 
+2026-08-18T20:24:47.8825136Z     [2m  Array [[22m
+2026-08-18T20:24:47.8825975Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:24:47.8827196Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:24:47.8839009Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:24:47.8839964Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:24:47.8840897Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:24:47.8841812Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:24:47.8842400Z     [2m  ][22m
+2026-08-18T20:24:47.8842656Z 
+2026-08-18T20:24:47.8843351Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:24:47.8843915Z 
+2026-08-18T20:25:27.9722362Z .................................................................................react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:25:27.9759405Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:25:27.9876897Z react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+2026-08-18T20:25:28.4916724Z ..............................[SKIP] Does not work on Jasmine
+2026-08-18T20:25:28.5486870Z .......[SKIP] Does not work on Jasmine
+2026-08-18T20:25:28.8776909Z .................
+2026-08-18T20:25:28.8777400Z 
+2026-08-18T20:25:28.8777632Z 
+2026-08-18T20:25:28.8778588Z [1mSummary of all failing tests[22m
+2026-08-18T20:25:28.8784568Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-core/src/__tests__/[22m[1mSearchSource.test.ts[22m
+2026-08-18T20:25:28.8788149Z [1m[31m  [1m● [22m[1mSearchSource › findRelatedTests › finds tests that depend directly on the path[39m[22m
+2026-08-18T20:25:28.8788508Z 
+2026-08-18T20:25:28.8791598Z     [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+2026-08-18T20:25:28.8791932Z 
+2026-08-18T20:25:28.8798288Z     [32m- Expected  - 0[39m
+2026-08-18T20:25:28.8798555Z     [31m+ Received  + 2[39m
+2026-08-18T20:25:28.8798692Z 
+2026-08-18T20:25:28.8798791Z     [2m  Array [[22m
+2026-08-18T20:25:28.8803818Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenParentModule.js",[39m
+2026-08-18T20:25:28.8804658Z     [31m+   "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ChildrenSecondParentModule.js",[39m
+2026-08-18T20:25:28.8805425Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/ModuleWithSideEffects.js",[22m
+2026-08-18T20:25:28.8806299Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RegularModule.js",[22m
+2026-08-18T20:25:28.8824562Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/RequireRegularModule.js",[22m
+2026-08-18T20:25:28.8831976Z     [2m    "/home/runner/work/jest/jest/packages/jest-runtime/src/__tests__/test_root/root.js",[22m
+2026-08-18T20:25:28.8832407Z     [2m  ][22m
+2026-08-18T20:25:28.8832517Z 
+2026-08-18T20:25:28.8833057Z [2m      [2mat Object.toEqual ([22m[2m[0m[36mpackages/jest-core/src/__tests__/SearchSource.test.ts[39m[0m[2m:441:42)[22m[2m[22m
+2026-08-18T20:25:28.8833449Z 
+2026-08-18T20:25:28.8833454Z 
+2026-08-18T20:25:28.8833916Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m135 passed[39m[22m, 136 of 137 total
+2026-08-18T20:25:28.8834666Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m12 skipped[39m[22m, [1m[32m1352 passed[39m[22m, 1365 total
+2026-08-18T20:25:28.8835202Z [1mSnapshots:   [22m[1m[32m341 passed[39m[22m, 341 total
+2026-08-18T20:25:28.8835704Z [1mTime:[22m        42.443 s
+2026-08-18T20:25:28.8836080Z [2mRan all test suites[22m[2m in [22m7[2m projects[22m[2m.[22m
+2026-08-18T20:25:39.1670605Z ##[endgroup]
+2026-08-18T20:25:39.1672864Z ##[error]Final attempt failed. Child_process exited with error code 1
+2026-08-18T20:25:39.1798174Z Post job cleanup.
+2026-08-18T20:25:39.2344282Z [command]/usr/bin/git version
+2026-08-18T20:25:39.2374731Z git version 2.54.0
+2026-08-18T20:25:39.2397115Z Temporarily overriding HOME='/home/runner/work/_temp/4dc43eb5-2935-4f85-9855-0b44ca969ce2' before making global git config changes
+2026-08-18T20:25:39.2397840Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-18T20:25:39.2400132Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-18T20:25:39.2423086Z Removing SSH command configuration
+2026-08-18T20:25:39.2427378Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T20:25:39.2451639Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-18T20:25:39.2641850Z Removing HTTP extra header
+2026-08-18T20:25:39.2646619Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T20:25:39.2681178Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-18T20:25:39.2867692Z Removing includeIf entries pointing to credentials config files
+2026-08-18T20:25:39.2873741Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T20:25:39.2903846Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-18T20:25:39.3175323Z Cleaning up orphan processes

@@ -1,0 +1,25 @@
+{
+  "framework": "mocha",
+  "repo": "socketio/socket.io",
+  "job_id": 103219432652,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 112,
+    "failed": 1,
+    "skipped": 0,
+    "total": 113
+  },
+  "failed_test_names": [
+    "autoUnref option > should not stop with autoUnref set to false"
+  ],
+  "failed_files": [
+    "packages/***.io-client/test/node.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "packages/***.io-client/test/node.ts",
+  "note": "GitHub masked the repo name as `***` in the paths; the workspace prefix is still removed."
+}

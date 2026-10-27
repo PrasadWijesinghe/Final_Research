@@ -1,0 +1,27 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 95634536799,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 6,
+  "summary": {
+    "passed": 6246,
+    "failed": 3,
+    "skipped": 72,
+    "total": 6321,
+    "todo": 0,
+    "files_failed": 3
+  },
+  "failed_test_names": [
+    "onRunComplete > collects untested files from project-level collectCoverageFrom"
+  ],
+  "failed_files": [
+    "packages/jest-reporters/src/__tests__/CoverageReporter.test.js"
+  ],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Windows. Three small passing runs (4 suites, 18 tests, `● Console`) and three attempts of the big run with one failure. The only stack frame is in node_modules (a dependency)."
+}

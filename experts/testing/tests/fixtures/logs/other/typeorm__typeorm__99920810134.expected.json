@@ -1,0 +1,16 @@
+{
+  "framework": "other",
+  "repo": "typeorm/typeorm",
+  "job_id": 99920810134,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 0.0,
+  "granularity": "none",
+  "summaries_found": 0,
+  "summary": null,
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "node-gyp build failure while installing (Windows)."
+}

@@ -1,0 +1,16 @@
+{
+  "framework": "other",
+  "repo": "puppeteer/puppeteer",
+  "job_id": 121025524778,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 0.0,
+  "granularity": "none",
+  "summaries_found": 0,
+  "summary": null,
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "node:test output (`ℹ tests 30`): a runner we do not parse (its `✔` lines are not mocha's)."
+}

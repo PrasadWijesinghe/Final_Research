@@ -1,0 +1,25 @@
+{
+  "framework": "mocha",
+  "repo": "eslint/eslint",
+  "job_id": 112349519907,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 770,
+    "failed": 1,
+    "skipped": 0,
+    "total": 771
+  },
+  "failed_test_names": [
+    "Linter with FlatConfigArray > Languages > With a language that doesn't have language options > linter.verify() should work"
+  ],
+  "failed_files": [
+    "tests/lib/linter/linter.js"
+  ],
+  "first_error_type": "TypeError",
+  "first_project_path": "build/eslint.js",
+  "note": "webpack://eslint/./... frames. The error type is on the second line of the error text."
+}

@@ -1,0 +1,32 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 92726590162,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 3,
+  "summary": {
+    "passed": 5589,
+    "failed": 3,
+    "skipped": 96,
+    "total": 5688,
+    "todo": 0,
+    "files_failed": 6
+  },
+  "failed_test_names": [
+    "prints correct coverage report, if a TS module is transpiled by custom transformer to ESM put under test",
+    "Test suite failed to run"
+  ],
+  "failed_files": [
+    "e2e/__tests__/coverageProviderV8.test.ts",
+    "examples/angular/app.component.spec.ts"
+  ],
+  "failure_kinds": {
+    "suite": 1
+  },
+  "first_error_type": null,
+  "first_project_path": "e2e/__tests__/coverageProviderV8.test.ts",
+  "note": "Three identical attempts (Attempt 1..3): the summaries are added (3x), the failures are listed once. Dot reporter: failures are also printed inline without `●` first."
+}

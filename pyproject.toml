@@ -129,4 +129,5 @@ addopts = "-ra"
 markers = [
     "integration: needs a live Postgres (DATABASE_URL); skipped automatically when unreachable",
     "e2e: needs the Compose e2e stack (`make e2e`); skipped when the backend API is unreachable",
+    "slow: takes a few seconds (builds a 50 MB log); deselect with -m 'not slow' for a quick run",
 ]

@@ -1,0 +1,23 @@
+{
+  "framework": "vitest",
+  "repo": "vitejs/vite",
+  "job_id": 91913223721,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 4,
+  "summary": {
+    "passed": 3304,
+    "failed": 0,
+    "skipped": 565,
+    "total": 3869,
+    "todo": 0,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Trimmed. Passing; four vitest runs (unit, plugin tests, two more) each print a summary; `✓ N modules transformed.` build lines are not tests."
+}

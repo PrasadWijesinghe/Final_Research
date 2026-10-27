@@ -1,0 +1,349 @@
+﻿2026-07-29T06:58:26.8708428Z Current runner version: '2.336.0'
+2026-07-29T06:58:26.8727864Z ##[group]Runner Image Provisioner
+2026-07-29T06:58:26.8728407Z Hosted Compute Agent
+2026-07-29T06:58:26.8728762Z Version: 20260707.563
+2026-07-29T06:58:26.8729115Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-29T06:58:26.8729515Z Build Date: 2026-07-07T19:33:50Z
+2026-07-29T06:58:26.8729894Z Worker ID: {a54e637e-7ca7-4398-b0ec-1abddc7a279e}
+2026-07-29T06:58:26.8730296Z Azure Region: westus3
+2026-07-29T06:58:26.8730590Z ##[endgroup]
+2026-07-29T06:58:26.8731348Z ##[group]Operating System
+2026-07-29T06:58:26.8731675Z Microsoft Windows Server 2025
+2026-07-29T06:58:26.8732079Z 10.0.26100
+2026-07-29T06:58:26.8732359Z Datacenter
+2026-07-29T06:58:26.8732654Z ##[endgroup]
+2026-07-29T06:58:26.8732949Z ##[group]Runner Image
+2026-07-29T06:58:26.8733292Z Image: windows-2025-vs2026
+2026-07-29T06:58:26.8733634Z Version: 20260714.173.1
+2026-07-29T06:58:26.8734573Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260714.173/images/windows/Windows2025-VS2026-Readme.md
+2026-07-29T06:58:26.8735525Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260714.173
+2026-07-29T06:58:26.8736066Z ##[endgroup]
+2026-07-29T06:58:26.8737660Z ##[group]GITHUB_TOKEN Permissions
+2026-07-29T06:58:26.8738954Z Actions: read
+2026-07-29T06:58:26.8739250Z ArtifactMetadata: read
+2026-07-29T06:58:26.8739614Z Attestations: read
+2026-07-29T06:58:26.8739902Z Checks: read
+2026-07-29T06:58:26.8740531Z CodeQuality: read
+2026-07-29T06:58:26.8740865Z Contents: read
+2026-07-29T06:58:26.8741136Z Deployments: read
+2026-07-29T06:58:26.8741436Z Discussions: read
+2026-07-29T06:58:26.8741719Z Drives: read
+2026-07-29T06:58:26.8741988Z Issues: read
+2026-07-29T06:58:26.8742269Z Metadata: read
+2026-07-29T06:58:26.8742550Z Models: read
+2026-07-29T06:58:26.8742877Z Packages: read
+2026-07-29T06:58:26.8743233Z Pages: read
+2026-07-29T06:58:26.8743502Z PullRequests: read
+2026-07-29T06:58:26.8743843Z RepositoryProjects: read
+2026-07-29T06:58:26.8744167Z SecurityEvents: read
+2026-07-29T06:58:26.8744462Z Statuses: read
+2026-07-29T06:58:26.8744816Z VulnerabilityAlerts: read
+2026-07-29T06:58:26.8745174Z ##[endgroup]
+2026-07-29T06:58:26.8746589Z Secret source: Actions
+2026-07-29T06:58:26.8747185Z Prepare workflow directory
+2026-07-29T06:58:26.8967954Z Prepare all required actions
+2026-07-29T06:58:26.9001815Z Getting action download info
+2026-07-29T06:58:27.2258589Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-07-29T06:58:27.7846917Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-07-29T06:58:28.3835658Z Download action repository 'google/wireit@9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5' (SHA:9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5)
+2026-07-29T06:58:28.6084033Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-07-29T06:58:28.7078300Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-07-29T06:58:28.9846983Z Complete job name: firefox-headful (3-4) on windows-latest
+2026-07-29T06:58:29.1913038Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-07-29T06:58:29.1913907Z with:
+2026-07-29T06:58:29.1914065Z   repository: puppeteer/puppeteer
+2026-07-29T06:58:29.1915685Z   token: ***
+2026-07-29T06:58:29.1915822Z   ssh-strict: true
+2026-07-29T06:58:29.1915967Z   ssh-user: git
+2026-07-29T06:58:29.1916110Z   persist-credentials: true
+2026-07-29T06:58:29.1916273Z   clean: true
+2026-07-29T06:58:29.1916415Z   sparse-checkout-cone-mode: true
+2026-07-29T06:58:29.1916591Z   fetch-depth: 1
+2026-07-29T06:58:29.1916742Z   fetch-tags: false
+2026-07-29T06:58:29.1916879Z   show-progress: true
+2026-07-29T06:58:29.1917014Z   lfs: false
+2026-07-29T06:58:29.1918305Z   submodules: false
+2026-07-29T06:58:29.1918453Z   set-safe-directory: true
+2026-07-29T06:58:29.1918611Z   allow-unsafe-pr-checkout: false
+2026-07-29T06:58:29.1918927Z ##[endgroup]
+2026-07-29T06:58:29.3011234Z Syncing repository: puppeteer/puppeteer
+2026-07-29T06:58:29.3012524Z ##[group]Getting Git version info
+2026-07-29T06:58:29.3012757Z Working directory is 'D:\a\puppeteer\puppeteer'
+2026-07-29T06:58:29.4292195Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-07-29T06:58:30.3103742Z git version 2.55.0.windows.2
+2026-07-29T06:58:30.3137323Z ##[endgroup]
+2026-07-29T06:58:30.3149528Z Temporarily overriding HOME='D:\a\_temp\52c2bbfd-a49c-4b40-855f-8ec11eacd939' before making global git config changes
+2026-07-29T06:58:30.3150012Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-29T06:58:30.3155934Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\puppeteer\puppeteer
+2026-07-29T06:58:30.3686725Z Deleting the contents of 'D:\a\puppeteer\puppeteer'
+2026-07-29T06:58:30.3690965Z ##[group]Determining repository object format
+2026-07-29T06:58:30.3692654Z ##[endgroup]
+2026-07-29T06:58:30.3692971Z ##[group]Initializing the repository
+2026-07-29T06:58:30.3698966Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\puppeteer\puppeteer
+2026-07-29T06:58:30.5527227Z Initialized empty Git repository in D:/a/puppeteer/puppeteer/.git/
+2026-07-29T06:58:30.5562870Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/puppeteer/puppeteer
+2026-07-29T06:58:30.7038021Z ##[endgroup]
+2026-07-29T06:58:30.7038407Z ##[group]Disabling automatic garbage collection
+2026-07-29T06:58:30.7045636Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-07-29T06:58:30.7297070Z ##[endgroup]
+2026-07-29T06:58:30.7297444Z ##[group]Setting up auth
+2026-07-29T06:58:30.7297874Z Removing SSH command configuration
+2026-07-29T06:58:30.7307261Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-07-29T06:58:30.7536456Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-07-29T06:58:32.6363870Z Removing HTTP extra header
+2026-07-29T06:58:32.6373464Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-29T06:58:32.6591899Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-07-29T06:58:33.0737159Z Removing includeIf entries pointing to credentials config files
+2026-07-29T06:58:33.0746179Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-29T06:58:33.0967723Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-07-29T06:58:33.5140069Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-07-29T06:58:33.5364658Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/puppeteer/puppeteer/.git.path D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T06:58:33.5577607Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T06:58:33.5842251Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T06:58:33.6059822Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T06:58:33.6270879Z ##[endgroup]
+2026-07-29T06:58:33.6271174Z ##[group]Fetching the repository
+2026-07-29T06:58:33.6284399Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c74a58d6b9a6590d7bd8e35348a984063524f20a:refs/remotes/pull/15269/merge
+2026-07-29T06:58:35.3191565Z From https://github.com/puppeteer/puppeteer
+2026-07-29T06:58:35.3192032Z  * [new ref]         c74a58d6b9a6590d7bd8e35348a984063524f20a -> pull/15269/merge
+2026-07-29T06:58:35.3226087Z ##[endgroup]
+2026-07-29T06:58:35.3226631Z ##[group]Determining the checkout info
+2026-07-29T06:58:35.3227141Z ##[endgroup]
+2026-07-29T06:58:35.3234754Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-07-29T06:58:35.3635053Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-07-29T06:58:35.3851025Z ##[group]Checking out the ref
+2026-07-29T06:58:35.3858413Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/15269/merge
+2026-07-29T06:58:35.7433172Z Note: switching to 'refs/remotes/pull/15269/merge'.
+2026-07-29T06:58:35.7433404Z 
+2026-07-29T06:58:35.7433525Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-07-29T06:58:35.7433796Z changes and commit them, and you can discard any commits you make in this
+2026-07-29T06:58:35.7434118Z state without impacting any branches by switching back to a branch.
+2026-07-29T06:58:35.7434345Z 
+2026-07-29T06:58:35.7434529Z If you want to create a new branch to retain commits you create, you may
+2026-07-29T06:58:35.7434889Z do so (now or later) by using -c with the switch command. Example:
+2026-07-29T06:58:35.7435111Z 
+2026-07-29T06:58:35.7435260Z   git switch -c <new-branch-name>
+2026-07-29T06:58:35.7435456Z 
+2026-07-29T06:58:35.7435534Z Or undo this operation with:
+2026-07-29T06:58:35.7435674Z 
+2026-07-29T06:58:35.7435739Z   git switch -
+2026-07-29T06:58:35.7435848Z 
+2026-07-29T06:58:35.7435977Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-07-29T06:58:35.7436146Z 
+2026-07-29T06:58:35.7436359Z HEAD is now at c74a58d Merge d06d8851a098ce23bb2d01299756f1f4f23f6aca into 9a6f6461996dcd1918f87e018e1916417e531628
+2026-07-29T06:58:35.7546601Z ##[endgroup]
+2026-07-29T06:58:35.7837475Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-07-29T06:58:35.8027566Z c74a58d6b9a6590d7bd8e35348a984063524f20a
+2026-07-29T06:58:35.8370570Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-07-29T06:58:35.8370830Z with:
+2026-07-29T06:58:35.8370944Z   cache: npm
+2026-07-29T06:58:35.8371053Z   node-version-file: .nvmrc
+2026-07-29T06:58:35.8371176Z   check-latest: false
+2026-07-29T06:58:35.8372634Z   token: ***
+2026-07-29T06:58:35.8372747Z   package-manager-cache: true
+2026-07-29T06:58:35.8372879Z ##[endgroup]
+2026-07-29T06:58:35.9425573Z Node version file is not JSON file
+2026-07-29T06:58:35.9426269Z Resolved .nvmrc as 24.15.0
+2026-07-29T06:58:35.9437041Z Attempting to download 24.15.0...
+2026-07-29T06:58:36.8485898Z Acquiring 24.15.0 - x64 from https://github.com/actions/node-versions/releases/download/24.15.0-24511264946/node-24.15.0-win32-x64.7z
+2026-07-29T06:58:37.3264582Z Extracting ...
+2026-07-29T06:58:38.8195290Z Adding to the cache ...
+2026-07-29T06:58:43.7395960Z ##[group]Environment details
+2026-07-29T06:58:45.7120680Z node: v24.15.0
+2026-07-29T06:58:45.7121051Z npm: 11.12.1
+2026-07-29T06:58:45.7121322Z yarn: 1.22.22
+2026-07-29T06:58:45.7121738Z ##[endgroup]
+2026-07-29T06:58:45.7407624Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\24.15.0\x64\npm.cmd config get cache"
+2026-07-29T06:58:45.9326502Z C:\npm\cache
+2026-07-29T06:58:46.2753076Z Cache hit for: node-cache-Windows-x64-npm-a0148be661fb7102240295bfb6301306e381346a6770f276fea605b3991c00fe
+2026-07-29T06:58:47.5116415Z Received 50331648 of 78551686 (64.1%), 47.9 MBs/sec
+2026-07-29T06:58:48.3467254Z Received 78551686 of 78551686 (100.0%), 40.9 MBs/sec
+2026-07-29T06:58:48.3467593Z Cache Size: ~75 MB (78551686 B)
+2026-07-29T06:58:48.3512115Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/a1d3b58a-1467-42a3-b04d-b0719a5f494a/cache.tzst -P -C D:/a/puppeteer/puppeteer --force-local --use-compress-program "zstd -d"
+2026-07-29T06:59:00.4470996Z Cache restored successfully
+2026-07-29T06:59:00.4528719Z Cache restored from key: node-cache-Windows-x64-npm-a0148be661fb7102240295bfb6301306e381346a6770f276fea605b3991c00fe
+2026-07-29T06:59:00.4784605Z ##[group]Run npm ci
+2026-07-29T06:59:00.4784801Z [36;1mnpm ci[0m
+2026-07-29T06:59:00.6424040Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T06:59:00.6424269Z env:
+2026-07-29T06:59:00.6424443Z   PUPPETEER_SKIP_DOWNLOAD: true
+2026-07-29T06:59:00.6424581Z ##[endgroup]
+2026-07-29T06:59:16.4140153Z npm warn deprecated readdir-scoped-modules@1.1.0: This functionality has been moved to @npmcli/fs
+2026-07-29T06:59:16.4141032Z npm warn deprecated debuglog@1.0.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-07-29T06:59:16.4156481Z npm warn deprecated osenv@0.1.5: This package is no longer supported.
+2026-07-29T06:59:16.4175251Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-07-29T06:59:16.9072676Z npm warn deprecated read-package-json@2.1.2: This package is no longer supported. Please use @npmcli/package-json instead.
+2026-07-29T06:59:17.5855004Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-07-29T06:59:21.5163692Z npm warn deprecated read-installed@4.0.3: This package is no longer supported.
+2026-07-29T06:59:23.7000894Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-07-29T06:59:34.9366136Z 
+2026-07-29T06:59:34.9367725Z > postinstall
+2026-07-29T06:59:34.9368211Z > npm run postinstall --workspaces --if-present
+2026-07-29T06:59:34.9368495Z 
+2026-07-29T06:59:35.2070043Z 
+2026-07-29T06:59:35.2070872Z > puppeteer@25.4.0 postinstall
+2026-07-29T06:59:35.2071193Z > node install.mjs
+2026-07-29T06:59:35.2071305Z 
+2026-07-29T06:59:35.2535968Z Skipping browser installation because the Puppeteer build is not available. Run `npm install` again after you have re-built Puppeteer.
+2026-07-29T06:59:35.3199108Z 
+2026-07-29T06:59:35.3200095Z > prepare
+2026-07-29T06:59:35.3200590Z > npm run prepare --workspaces --if-present
+2026-07-29T06:59:35.3200776Z 
+2026-07-29T06:59:35.5596635Z 
+2026-07-29T06:59:35.5597218Z > @puppeteer/eslint@0.1.0 prepare
+2026-07-29T06:59:35.5597462Z > wireit
+2026-07-29T06:59:35.5597528Z 
+2026-07-29T06:59:35.6683346Z Analyzing
+2026-07-29T06:59:35.7028918Z ✅ Ran 0 scripts and skipped 1 in 0s.
+2026-07-29T06:59:35.7795023Z 
+2026-07-29T06:59:35.7795654Z added 3024 packages, and audited 3036 packages in 27s
+2026-07-29T06:59:35.7795863Z 
+2026-07-29T06:59:35.7800234Z 282 packages are looking for funding
+2026-07-29T06:59:35.7800537Z   run `npm fund` for details
+2026-07-29T06:59:35.8183840Z 
+2026-07-29T06:59:35.8184810Z 18 vulnerabilities (2 low, 11 moderate, 5 high)
+2026-07-29T06:59:35.8185150Z 
+2026-07-29T06:59:35.8185332Z To address issues that do not require attention, run:
+2026-07-29T06:59:35.8186028Z   npm audit fix
+2026-07-29T06:59:35.8186131Z 
+2026-07-29T06:59:35.8186312Z To address all issues (including breaking changes), run:
+2026-07-29T06:59:35.8186654Z   npm audit fix --force
+2026-07-29T06:59:35.8186781Z 
+2026-07-29T06:59:35.8186889Z Run `npm audit` for details.
+2026-07-29T06:59:37.1915347Z ##[group]Run google/wireit@9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5
+2026-07-29T06:59:37.1915653Z ##[endgroup]
+2026-07-29T06:59:37.2359242Z [main] Launching background custodian service
+2026-07-29T06:59:37.2368269Z [main] Writing logs to C:\Users\RUNNER~1\AppData\Local\Temp\wireit_custodian_logs_ZmwLeD
+2026-07-29T06:59:37.2408147Z (node:7248) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-07-29T06:59:37.2410207Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-29T06:59:40.6277150Z 
+2026-07-29T06:59:40.6277892Z [custodian] Trying port 57124
+2026-07-29T06:59:40.6278554Z [custodian] Listening on port 57124
+2026-07-29T06:59:40.6278737Z 
+2026-07-29T06:59:40.6278852Z [main] Custodian server ready
+2026-07-29T06:59:40.6459566Z ##[group]Run npm run build --workspace @puppeteer-test/test
+2026-07-29T06:59:40.6459896Z [36;1mnpm run build --workspace @puppeteer-test/test[0m
+2026-07-29T06:59:40.6545607Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T06:59:40.6545833Z env:
+2026-07-29T06:59:40.6545955Z   WIREIT_CACHE: github
+2026-07-29T06:59:40.6546102Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 57124
+2026-07-29T06:59:40.6546267Z ##[endgroup]
+2026-07-29T06:59:41.1860439Z 
+2026-07-29T06:59:41.1860952Z > @puppeteer-test/test@latest build
+2026-07-29T06:59:41.1861194Z > wireit
+2026-07-29T06:59:41.1861269Z 
+2026-07-29T06:59:41.3334771Z Analyzing
+2026-07-29T06:59:42.3392203Z  25% [2 / 8] [1 running] ../packages\puppeteer-core:build:tsc
+2026-07-29T06:59:48.3616617Z  38% [3 / 8] [0 running]
+2026-07-29T06:59:49.3623818Z  38% [3 / 8] [1 running] ../packages\puppeteer-core:build:types
+2026-07-29T07:00:22.4993395Z  50% [4 / 8] [0 running]
+2026-07-29T07:00:24.5130186Z  50% [4 / 8] [1 running] ../packages\puppeteer-core:build:es5
+2026-07-29T07:00:26.5137352Z  63% [5 / 8] [0 running]
+2026-07-29T07:00:27.5148010Z  63% [5 / 8] [1 running] ../packages\puppeteer:build:tsc
+2026-07-29T07:00:29.5280725Z  75% [6 / 8] [0 running]
+2026-07-29T07:00:30.5278677Z  75% [6 / 8] [1 running] ../packages\puppeteer:build:types
+2026-07-29T07:00:38.5338517Z  88% [7 / 8] [0 running]
+2026-07-29T07:00:39.5500204Z  88% [7 / 8] [1 running] build
+2026-07-29T07:00:43.5566947Z 100% [8 / 8] [0 running]
+2026-07-29T07:00:43.8140389Z ✅ Ran 6 scripts and skipped 2 in 62.5s.
+2026-07-29T07:00:44.0193873Z ##[group]Run actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+2026-07-29T07:00:44.0194225Z with:
+2026-07-29T07:00:44.0194347Z   path: ~/.cache/puppeteer/
+2026-07-29T07:00:44.0194767Z   key: Browsers-Windows-1d3d57de333819f39a1146db34e6259ef5cfd4456ef8f198e0278e442f6d870a-53289de9e091fb3fcb7496e2961e9d141df482ddac51ef1e7c4608ac05a3ee73
+2026-07-29T07:00:44.0195177Z   enableCrossOsArchive: false
+2026-07-29T07:00:44.0195319Z   fail-on-cache-miss: false
+2026-07-29T07:00:44.0195450Z   lookup-only: false
+2026-07-29T07:00:44.0195782Z   save-always: false
+2026-07-29T07:00:44.0195938Z env:
+2026-07-29T07:00:44.0196045Z   WIREIT_CACHE: github
+2026-07-29T07:00:44.0196181Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 57124
+2026-07-29T07:00:44.0196341Z ##[endgroup]
+2026-07-29T07:00:44.3954066Z Cache not found for input keys: Browsers-Windows-1d3d57de333819f39a1146db34e6259ef5cfd4456ef8f198e0278e442f6d870a-53289de9e091fb3fcb7496e2961e9d141df482ddac51ef1e7c4608ac05a3ee73
+2026-07-29T07:00:44.4179555Z ##[group]Run npm run postinstall
+2026-07-29T07:00:44.4179880Z [36;1mnpm run postinstall[0m
+2026-07-29T07:00:44.4238675Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-07-29T07:00:44.4239579Z env:
+2026-07-29T07:00:44.4239694Z   WIREIT_CACHE: github
+2026-07-29T07:00:44.4239840Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 57124
+2026-07-29T07:00:44.4239995Z ##[endgroup]
+2026-07-29T07:00:44.8701965Z 
+2026-07-29T07:00:44.8702561Z > postinstall
+2026-07-29T07:00:44.8702935Z > npm run postinstall --workspaces --if-present
+2026-07-29T07:00:44.8703150Z 
+2026-07-29T07:00:45.0802975Z 
+2026-07-29T07:00:45.0817512Z > puppeteer@25.4.0 postinstall
+2026-07-29T07:00:45.0817858Z > node install.mjs
+2026-07-29T07:00:45.0817978Z 
+2026-07-29T07:00:54.9307786Z chrome (151.0.7922.47) downloaded to C:\Users\runneradmin\.cache\puppeteer\chrome\win64-151.0.7922.47
+2026-07-29T07:00:54.9309633Z chrome-headless-shell (151.0.7922.47) downloaded to C:\Users\runneradmin\.cache\puppeteer\chrome-headless-shell\win64-151.0.7922.47
+2026-07-29T07:00:54.9324043Z Error: ERROR: Failed to set up firefox vstable_153.0.1! Set "PUPPETEER_SKIP_DOWNLOAD" env variable to skip download.
+2026-07-29T07:00:54.9324880Z     at downloadBrowser (file:///D:/a/puppeteer/puppeteer/packages/puppeteer/lib/puppeteer/node/install.js:26:15)
+2026-07-29T07:00:54.9325404Z     at async Promise.allSettled (index 2)
+2026-07-29T07:00:54.9325958Z     at async downloadBrowsers (file:///D:/a/puppeteer/puppeteer/packages/puppeteer/lib/puppeteer/node/install.js:83:21) {
+2026-07-29T07:00:54.9326534Z   [cause]: Error: All providers failed for firefox stable_153.0.1:
+2026-07-29T07:00:54.9327191Z     - DefaultProvider: EBUSY: resource busy or locked, unlink 'C:\Users\runneradmin\.cache\puppeteer\firefox\stable_153.0.1-Firefox Setup 153.0.1.exe'
+2026-07-29T07:00:54.9328325Z       at installWithProviders (file:///D:/a/puppeteer/puppeteer/packages/browsers/lib/install.js:108:11)
+2026-07-29T07:00:54.9329002Z       at async install (file:///D:/a/puppeteer/puppeteer/packages/browsers/lib/install.js:118:12)
+2026-07-29T07:00:54.9329655Z       at async downloadBrowser (file:///D:/a/puppeteer/puppeteer/packages/puppeteer/lib/puppeteer/node/install.js:14:24)
+2026-07-29T07:00:54.9330203Z       at async Promise.allSettled (index 2)
+2026-07-29T07:00:54.9330796Z       at async downloadBrowsers (file:///D:/a/puppeteer/puppeteer/packages/puppeteer/lib/puppeteer/node/install.js:83:21)
+2026-07-29T07:00:54.9331325Z }
+2026-07-29T07:00:54.9448988Z npm error Lifecycle script `postinstall` failed with error:
+2026-07-29T07:00:54.9449351Z npm error code 1
+2026-07-29T07:00:54.9449858Z npm error path D:\a\puppeteer\puppeteer\packages\puppeteer
+2026-07-29T07:00:54.9450319Z npm error workspace puppeteer@25.4.0
+2026-07-29T07:00:54.9450732Z npm error location D:\a\puppeteer\puppeteer\packages\puppeteer
+2026-07-29T07:00:54.9451100Z npm error command failed
+2026-07-29T07:00:54.9452279Z npm error command C:\Windows\system32\cmd.exe /d /s /c node install.mjs
+2026-07-29T07:00:54.9452544Z 
+2026-07-29T07:00:55.0074806Z ##[error]Process completed with exit code 1.
+2026-07-29T07:00:55.0226093Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-07-29T07:00:55.0226428Z with:
+2026-07-29T07:00:55.0226628Z   name: test-results-windows-latest-firefox-headful-3-4
+2026-07-29T07:00:55.0226860Z   path: /tmp/artifacts/*.json
+2026-07-29T07:00:55.0227044Z   if-no-files-found: warn
+2026-07-29T07:00:55.0237590Z   compression-level: 6
+2026-07-29T07:00:55.0237737Z   overwrite: false
+2026-07-29T07:00:55.0237857Z   include-hidden-files: false
+2026-07-29T07:00:55.0237986Z   archive: true
+2026-07-29T07:00:55.0238086Z env:
+2026-07-29T07:00:55.0238194Z   WIREIT_CACHE: github
+2026-07-29T07:00:55.0238323Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 57124
+2026-07-29T07:00:55.0238478Z ##[endgroup]
+2026-07-29T07:00:55.1507131Z ##[warning]No files were found with the provided path: /tmp/artifacts/*.json. No artifacts will be uploaded.
+2026-07-29T07:00:55.1745494Z Post job cleanup.
+2026-07-29T07:00:55.3023157Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-07-29T07:00:55.3238370Z git version 2.55.0.windows.2
+2026-07-29T07:00:55.3281542Z Temporarily overriding HOME='D:\a\_temp\0592e9a6-69e2-474d-894a-b28c780891f6' before making global git config changes
+2026-07-29T07:00:55.3282501Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-29T07:00:55.3291261Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\puppeteer\puppeteer
+2026-07-29T07:00:55.3529521Z Removing SSH command configuration
+2026-07-29T07:00:55.3538969Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-07-29T07:00:55.3824297Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-07-29T07:00:55.8071561Z Removing HTTP extra header
+2026-07-29T07:00:55.8079286Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-29T07:00:55.8307083Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-07-29T07:00:56.2312610Z Removing includeIf entries pointing to credentials config files
+2026-07-29T07:00:56.2321138Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-29T07:00:56.2512709Z includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path
+2026-07-29T07:00:56.2513183Z includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path
+2026-07-29T07:00:56.2513538Z includeif.gitdir:/github/workspace/.git.path
+2026-07-29T07:00:56.2513903Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-07-29T07:00:56.2550492Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path
+2026-07-29T07:00:56.2744645Z D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T07:00:56.2779592Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path D\:\\a\\_temp\\git\-credentials\-9e5ea2ad\-8ae1\-4a82\-b378\-8466d0c1d36b\.config
+2026-07-29T07:00:56.3002676Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path
+2026-07-29T07:00:56.3193548Z D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T07:00:56.3227458Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-9e5ea2ad\-8ae1\-4a82\-b378\-8466d0c1d36b\.config
+2026-07-29T07:00:56.3460294Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-07-29T07:00:56.3650050Z /github/runner_temp/git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T07:00:56.3681835Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-9e5ea2ad\-8ae1\-4a82\-b378\-8466d0c1d36b\.config
+2026-07-29T07:00:56.3904400Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-07-29T07:00:56.4101999Z /github/runner_temp/git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config
+2026-07-29T07:00:56.4168640Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-9e5ea2ad\-8ae1\-4a82\-b378\-8466d0c1d36b\.config
+2026-07-29T07:00:56.4397826Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-07-29T07:00:56.9400802Z Removing credentials config 'D:\a\_temp\git-credentials-9e5ea2ad-8ae1-4a82-b378-8466d0c1d36b.config'
+2026-07-29T07:00:56.9562322Z Cleaning up orphan processes
+2026-07-29T07:00:56.9679232Z Terminate orphan process: pid (7984) (cmd)
+2026-07-29T07:00:56.9817951Z Terminate orphan process: pid (9960) (conhost)
+2026-07-29T07:00:57.0135000Z Terminate orphan process: pid (3100) (node)

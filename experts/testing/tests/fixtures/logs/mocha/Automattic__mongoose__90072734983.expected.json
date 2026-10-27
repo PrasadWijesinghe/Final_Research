@@ -1,0 +1,26 @@
+{
+  "framework": "mocha",
+  "repo": "Automattic/mongoose",
+  "job_id": 90072734983,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 4437,
+    "failed": 2,
+    "skipped": 51,
+    "total": 4490
+  },
+  "failed_test_names": [
+    "Query > throws an error if calling find(null), findOne(null), updateOne(null, update), etc. (gh-14948)",
+    "Query > Query with requireFilter > findOneAndDelete > throws error for null filter when requireFilter is true"
+  ],
+  "failed_files": [
+    "test/query.test.js"
+  ],
+  "first_error_type": "AssertionError",
+  "first_project_path": "test/query.test.js",
+  "note": "Runs under Deno: `ext:deno_node/...` frames are not project code. The error text has a line at column 0."
+}

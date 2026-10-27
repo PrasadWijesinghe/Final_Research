@@ -1,0 +1,355 @@
+﻿2026-09-02T04:58:38.3941904Z Current runner version: '2.337.0'
+2026-09-02T04:58:38.3966217Z ##[group]Runner Image Provisioner
+2026-09-02T04:58:38.3967137Z Hosted Compute Agent
+2026-09-02T04:58:38.3967956Z Version: 20260819.586
+2026-09-02T04:58:38.3968766Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-09-02T04:58:38.3969541Z Build Date: 2026-08-18T23:20:18Z
+2026-09-02T04:58:38.3970378Z Worker ID: {0873ef58-8246-4724-a809-789104b09c3c}
+2026-09-02T04:58:38.3971110Z Azure Region: westus
+2026-09-02T04:58:38.3971672Z ##[endgroup]
+2026-09-02T04:58:38.3973172Z ##[group]Operating System
+2026-09-02T04:58:38.3973857Z Ubuntu
+2026-09-02T04:58:38.3974444Z 24.04.4
+2026-09-02T04:58:38.3974977Z LTS
+2026-09-02T04:58:38.3975484Z ##[endgroup]
+2026-09-02T04:58:38.3976116Z ##[group]Runner Image
+2026-09-02T04:58:38.3976741Z Image: ubuntu-24.04
+2026-09-02T04:58:38.3977331Z Version: 20260823.283.1
+2026-09-02T04:58:38.3978808Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260823.283/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-02T04:58:38.3980451Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260823.283
+2026-09-02T04:58:38.3981466Z ##[endgroup]
+2026-09-02T04:58:38.3982489Z ##[group]GITHUB_TOKEN Permissions
+2026-09-02T04:58:38.3984353Z Metadata: read
+2026-09-02T04:58:38.3985024Z ##[endgroup]
+2026-09-02T04:58:38.3987848Z Secret source: Actions
+2026-09-02T04:58:38.3989037Z Prepare workflow directory
+2026-09-02T04:58:38.4384885Z Prepare all required actions
+2026-09-02T04:58:38.4435270Z Getting action download info
+2026-09-02T04:58:38.8024356Z Download action repository 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+2026-09-02T04:58:38.9709194Z Download action repository 'pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093' (SHA:0e279bb959325dab635dd2c09392533439d90093)
+2026-09-02T04:58:39.2968433Z Download action repository 'actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e' (SHA:48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e)
+2026-09-02T04:58:39.5685408Z Complete job name: Tests (22, ubuntu-latest)
+2026-09-02T04:58:39.6441531Z ##[group]Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+2026-09-02T04:58:39.6442584Z with:
+2026-09-02T04:58:39.6443034Z   repository: sveltejs/svelte
+2026-09-02T04:58:39.6447067Z   token: ***
+2026-09-02T04:58:39.6447491Z   ssh-strict: true
+2026-09-02T04:58:39.6448144Z   ssh-user: git
+2026-09-02T04:58:39.6448587Z   persist-credentials: true
+2026-09-02T04:58:39.6449075Z   clean: true
+2026-09-02T04:58:39.6449516Z   sparse-checkout-cone-mode: true
+2026-09-02T04:58:39.6450041Z   fetch-depth: 1
+2026-09-02T04:58:39.6450466Z   fetch-tags: false
+2026-09-02T04:58:39.6450906Z   show-progress: true
+2026-09-02T04:58:39.6451350Z   lfs: false
+2026-09-02T04:58:39.6451757Z   submodules: false
+2026-09-02T04:58:39.6452206Z   set-safe-directory: true
+2026-09-02T04:58:39.6452918Z env:
+2026-09-02T04:58:39.6453349Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:58:39.6453876Z ##[endgroup]
+2026-09-02T04:58:39.7435759Z Syncing repository: sveltejs/svelte
+2026-09-02T04:58:39.7438185Z ##[group]Getting Git version info
+2026-09-02T04:58:39.7438922Z Working directory is '/home/runner/work/svelte/svelte'
+2026-09-02T04:58:39.7439910Z [command]/usr/bin/git version
+2026-09-02T04:58:39.7532309Z git version 2.55.0
+2026-09-02T04:58:39.7555424Z ##[endgroup]
+2026-09-02T04:58:39.7570000Z Temporarily overriding HOME='/home/runner/work/_temp/c692217d-5834-4605-aed6-b04b79c555ae' before making global git config changes
+2026-09-02T04:58:39.7571424Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-02T04:58:39.7575418Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/svelte/svelte
+2026-09-02T04:58:39.7623665Z Deleting the contents of '/home/runner/work/svelte/svelte'
+2026-09-02T04:58:39.7628171Z ##[group]Initializing the repository
+2026-09-02T04:58:39.7633131Z [command]/usr/bin/git init /home/runner/work/svelte/svelte
+2026-09-02T04:58:39.7744217Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-02T04:58:39.7746031Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-02T04:58:39.7747342Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-02T04:58:39.7749161Z hint: call:
+2026-09-02T04:58:39.7749986Z hint:
+2026-09-02T04:58:39.7751100Z hint: 	git config --global init.defaultBranch <name>
+2026-09-02T04:58:39.7752535Z hint:
+2026-09-02T04:58:39.7753728Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-02T04:58:39.7755495Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-02T04:58:39.7756828Z hint:
+2026-09-02T04:58:39.7757567Z hint: 	git branch -m <name>
+2026-09-02T04:58:39.7758652Z hint:
+2026-09-02T04:58:39.7759825Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-02T04:58:39.7761749Z Initialized empty Git repository in /home/runner/work/svelte/svelte/.git/
+2026-09-02T04:58:39.7764615Z [command]/usr/bin/git remote add origin https://github.com/sveltejs/svelte
+2026-09-02T04:58:39.7844172Z ##[endgroup]
+2026-09-02T04:58:39.7845499Z ##[group]Disabling automatic garbage collection
+2026-09-02T04:58:39.7848999Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-02T04:58:39.7877939Z ##[endgroup]
+2026-09-02T04:58:39.7879346Z ##[group]Setting up auth
+2026-09-02T04:58:39.7880327Z Removing SSH command configuration
+2026-09-02T04:58:39.7885788Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-02T04:58:39.7917070Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-02T04:58:39.8289872Z Removing HTTP extra header
+2026-09-02T04:58:39.8295577Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-02T04:58:39.8327016Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-02T04:58:39.8536639Z Removing includeIf entries pointing to credentials config files
+2026-09-02T04:58:39.8543899Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-02T04:58:39.8574443Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-02T04:58:39.8791140Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-02T04:58:39.8827155Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/svelte/svelte/.git.path /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T04:58:39.8855061Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/svelte/svelte/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T04:58:39.8886872Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T04:58:39.8917134Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T04:58:39.8942702Z ##[endgroup]
+2026-09-02T04:58:39.8943483Z ##[group]Fetching the repository
+2026-09-02T04:58:39.8950855Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +546fa3997b6b7de0d110a5bf87c77ea31f9b4938:refs/remotes/pull/18762/merge
+2026-09-02T04:58:40.7573158Z From https://github.com/sveltejs/svelte
+2026-09-02T04:58:40.7574725Z  * [new ref]         546fa3997b6b7de0d110a5bf87c77ea31f9b4938 -> pull/18762/merge
+2026-09-02T04:58:40.7579414Z ##[endgroup]
+2026-09-02T04:58:40.7581306Z ##[group]Determining the checkout info
+2026-09-02T04:58:40.7583237Z ##[endgroup]
+2026-09-02T04:58:40.7585817Z [command]/usr/bin/git sparse-checkout disable
+2026-09-02T04:58:40.7639332Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-02T04:58:40.7669789Z ##[group]Checking out the ref
+2026-09-02T04:58:40.7673209Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18762/merge
+2026-09-02T04:58:41.2784052Z Note: switching to 'refs/remotes/pull/18762/merge'.
+2026-09-02T04:58:41.2784633Z 
+2026-09-02T04:58:41.2784980Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-02T04:58:41.2785635Z changes and commit them, and you can discard any commits you make in this
+2026-09-02T04:58:41.2786243Z state without impacting any branches by switching back to a branch.
+2026-09-02T04:58:41.2786597Z 
+2026-09-02T04:58:41.2786860Z If you want to create a new branch to retain commits you create, you may
+2026-09-02T04:58:41.2787517Z do so (now or later) by using -c with the switch command. Example:
+2026-09-02T04:58:41.2788196Z 
+2026-09-02T04:58:41.2788369Z   git switch -c <new-branch-name>
+2026-09-02T04:58:41.2788612Z 
+2026-09-02T04:58:41.2788919Z Or undo this operation with:
+2026-09-02T04:58:41.2789152Z 
+2026-09-02T04:58:41.2789296Z   git switch -
+2026-09-02T04:58:41.2789524Z 
+2026-09-02T04:58:41.2789845Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-02T04:58:41.2790228Z 
+2026-09-02T04:58:41.2790642Z HEAD is now at 546fa39 Merge 0f09d5a4f7988b4828e1ab7347e0a43be7540296 into 4bf15ae6f304b9aa49a4396c3f51dc423d0722dc
+2026-09-02T04:58:41.2799572Z ##[endgroup]
+2026-09-02T04:58:41.2842084Z [command]/usr/bin/git log -1 --format=%H
+2026-09-02T04:58:41.2865907Z 546fa3997b6b7de0d110a5bf87c77ea31f9b4938
+2026-09-02T04:58:41.3180243Z ##[group]Run pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093
+2026-09-02T04:58:41.3180870Z with:
+2026-09-02T04:58:41.3181268Z   dest: ~/setup-pnpm
+2026-09-02T04:58:41.3181668Z   run_install: null
+2026-09-02T04:58:41.3182060Z   cache: false
+2026-09-02T04:58:41.3182447Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-02T04:58:41.3182918Z   package_json_file: package.json
+2026-09-02T04:58:41.3183345Z   standalone: false
+2026-09-02T04:58:41.3183686Z env:
+2026-09-02T04:58:41.3184040Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:58:41.3184445Z ##[endgroup]
+2026-09-02T04:58:41.4668948Z ##[group]Running self-installer...
+2026-09-02T04:58:44.7286993Z 
+2026-09-02T04:58:44.7287856Z added 1 package, and audited 2 packages in 3s
+2026-09-02T04:58:44.7290179Z 
+2026-09-02T04:58:44.7290511Z 1 package is looking for funding
+2026-09-02T04:58:44.7290992Z   run `npm fund` for details
+2026-09-02T04:58:44.7678302Z 
+2026-09-02T04:58:44.7678828Z 1 high severity vulnerability
+2026-09-02T04:58:44.7679347Z 
+2026-09-02T04:58:44.7679563Z To address all issues, run:
+2026-09-02T04:58:44.7680063Z   npm audit fix --force
+2026-09-02T04:58:44.7680426Z 
+2026-09-02T04:58:44.7680634Z Run `npm audit` for details.
+2026-09-02T04:58:45.3391065Z Checking for updates...
+2026-09-02T04:58:45.4646714Z Switching pnpm from v11.1.1 to v10.33.4...
+2026-09-02T04:58:45.7296762Z .../.bin/global/v11/8ec-1a0607bde5b      | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-02T04:58:45.7316173Z .../.bin/global/v11/8ec-1a0607bde5b      |   +1 +
+2026-09-02T04:58:45.9711419Z .../.bin/global/v11/8ec-1a0607bde5b      | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-09-02T04:58:45.9969127Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-09-02T04:58:45.9998629Z Successfully updated pnpm to v10.33.4
+2026-09-02T04:58:46.0220760Z ##[endgroup]
+2026-09-02T04:58:46.0221431Z Installation Completed!
+2026-09-02T04:58:46.0420782Z ##[group]Run actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+2026-09-02T04:58:46.0421416Z with:
+2026-09-02T04:58:46.0421619Z   node-version: 22
+2026-09-02T04:58:46.0421825Z   cache: pnpm
+2026-09-02T04:58:46.0422022Z   check-latest: false
+2026-09-02T04:58:46.0424585Z   token: ***
+2026-09-02T04:58:46.0424807Z   package-manager-cache: true
+2026-09-02T04:58:46.0425069Z env:
+2026-09-02T04:58:46.0425279Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:58:46.0425608Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-02T04:58:46.0425911Z ##[endgroup]
+2026-09-02T04:58:46.1990869Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+2026-09-02T04:58:46.1994371Z ##[group]Environment details
+2026-09-02T04:58:50.2172488Z node: v22.23.2
+2026-09-02T04:58:50.2173100Z npm: 10.9.8
+2026-09-02T04:58:50.2173412Z yarn: 1.22.22
+2026-09-02T04:58:50.2174334Z ##[endgroup]
+2026-09-02T04:58:50.2197322Z [command]/home/runner/setup-pnpm/node_modules/.bin/bin/pnpm store path --silent
+2026-09-02T04:58:50.8788955Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+2026-09-02T04:58:51.1422150Z Cache hit for: node-cache-Linux-x64-pnpm-880175a0bfd613d8cff7eeda9bd365ea5699132e38ced1833a17216339a189b0
+2026-09-02T04:58:52.4591746Z Received 0 of 55186992 (0.0%), 0.0 MBs/sec
+2026-09-02T04:58:52.9872046Z Received 55186992 of 55186992 (100.0%), 34.4 MBs/sec
+2026-09-02T04:58:52.9872753Z Cache Size: ~53 MB (55186992 B)
+2026-09-02T04:58:52.9986190Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c8cb800c-0c54-43ff-9b0b-3570376384fb/cache.tzst -P -C /home/runner/work/svelte/svelte --use-compress-program unzstd
+2026-09-02T04:58:53.5702200Z Cache restored successfully
+2026-09-02T04:58:53.5735102Z Cache restored from key: node-cache-Linux-x64-pnpm-880175a0bfd613d8cff7eeda9bd365ea5699132e38ced1833a17216339a189b0
+2026-09-02T04:58:53.5904220Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-02T04:58:53.5904651Z [36;1mpnpm install --frozen-lockfile[0m
+2026-09-02T04:58:53.6001666Z shell: /usr/bin/bash -e {0}
+2026-09-02T04:58:53.6001934Z env:
+2026-09-02T04:58:53.6002172Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:58:53.6002526Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-02T04:58:53.6002854Z ##[endgroup]
+2026-09-02T04:58:53.9104246Z Scope: all 3 workspace projects
+2026-09-02T04:58:53.9735216Z Lockfile is up to date, resolution step is skipped
+2026-09-02T04:58:54.0121372Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-02T04:58:54.0899046Z Packages: +410
+2026-09-02T04:58:54.0899947Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-09-02T04:58:54.5199551Z Progress: resolved 410, reused 409, downloaded 0, added 410, done
+2026-09-02T04:58:55.0464797Z 
+2026-09-02T04:58:55.0465502Z devDependencies:
+2026-09-02T04:58:55.0466359Z + @changesets/changelog-github 1.0.0-next.6
+2026-09-02T04:58:55.0467080Z + @changesets/cli 2.29.8
+2026-09-02T04:58:55.0467939Z + @eslint/js 10.0.1
+2026-09-02T04:58:55.0468635Z + @sveltejs/eslint-config 9.0.0
+2026-09-02T04:58:55.0469312Z + @types/node 20.19.17
+2026-09-02T04:58:55.0469887Z + @types/picomatch 4.0.2
+2026-09-02T04:58:55.0470458Z + @vitest/coverage-v8 4.1.7
+2026-09-02T04:58:55.0470902Z + eslint 10.0.0
+2026-09-02T04:58:55.0471328Z + eslint-plugin-lube 0.5.1
+2026-09-02T04:58:55.0471821Z + eslint-plugin-svelte 3.15.0
+2026-09-02T04:58:55.0472266Z + jsdom 25.0.1
+2026-09-02T04:58:55.0472626Z + playwright 1.62.1
+2026-09-02T04:58:55.0472996Z + prettier 3.2.4
+2026-09-02T04:58:55.0473455Z + prettier-plugin-svelte 3.4.0
+2026-09-02T04:58:55.0473982Z + svelte 5.57.0 <- packages/svelte
+2026-09-02T04:58:55.0474453Z + typescript 5.5.4
+2026-09-02T04:58:55.0474891Z + typescript-eslint 8.56.0
+2026-09-02T04:58:55.0475375Z + v8-natives 1.2.5
+2026-09-02T04:58:55.0475752Z + vitest 4.1.7
+2026-09-02T04:58:55.0475971Z 
+2026-09-02T04:58:55.0662407Z playgrounds/sandbox prepare$ node scripts/create-app-svelte.js
+2026-09-02T04:58:55.1017121Z playgrounds/sandbox prepare: Done
+2026-09-02T04:58:55.1053590Z ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+2026-09-02T04:58:55.1054514Z │                                                                              │
+2026-09-02T04:58:55.1055162Z │   Ignored build scripts: esbuild@0.27.7, esbuild@0.28.1.                     │
+2026-09-02T04:58:55.1055868Z │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+2026-09-02T04:58:55.1056572Z │   to run scripts.                                                            │
+2026-09-02T04:58:55.1057127Z │                                                                              │
+2026-09-02T04:58:55.1058077Z ╰──────────────────────────────────────────────────────────────────────────────╯
+2026-09-02T04:58:55.1238235Z Done in 1.4s using pnpm v10.33.4
+2026-09-02T04:58:55.1401950Z ##[group]Run pnpm playwright install chromium
+2026-09-02T04:58:55.1402341Z [36;1mpnpm playwright install chromium[0m
+2026-09-02T04:58:55.1440588Z shell: /usr/bin/bash -e {0}
+2026-09-02T04:58:55.1440845Z env:
+2026-09-02T04:58:55.1441070Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:58:55.1441428Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-02T04:58:55.1441740Z ##[endgroup]
+2026-09-02T04:58:56.0215713Z Downloading Chrome for Testing 151.0.7922.34 (playwright chromium v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/linux64/chrome-linux64.zip
+2026-09-02T04:58:57.2369424Z |                                                                                |   0% of 184.3 MiB
+2026-09-02T04:58:57.3934788Z |■■■■■■■■                                                                        |  10% of 184.3 MiB
+2026-09-02T04:58:57.5164548Z |■■■■■■■■■■■■■■■■                                                                |  20% of 184.3 MiB
+2026-09-02T04:58:57.6464289Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 184.3 MiB
+2026-09-02T04:58:57.7948525Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 184.3 MiB
+2026-09-02T04:58:57.9299743Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 184.3 MiB
+2026-09-02T04:58:58.0360542Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 184.3 MiB
+2026-09-02T04:58:58.1483645Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 184.3 MiB
+2026-09-02T04:58:58.2588996Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 184.3 MiB
+2026-09-02T04:58:58.3844934Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 184.3 MiB
+2026-09-02T04:58:58.4934163Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 184.3 MiB
+2026-09-02T04:59:01.2396899Z Chrome for Testing 151.0.7922.34 (playwright chromium v1234) downloaded to /home/runner/.cache/ms-playwright/chromium-1234
+2026-09-02T04:59:01.2401231Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-09-02T04:59:02.1970150Z |                                                                                |   0% of 2.3 MiB
+2026-09-02T04:59:02.2028571Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-09-02T04:59:02.2058725Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-09-02T04:59:02.2076455Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-09-02T04:59:02.2090897Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-09-02T04:59:02.2107148Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-09-02T04:59:02.2119391Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-09-02T04:59:02.2136381Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-09-02T04:59:02.2149578Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-09-02T04:59:02.2160763Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-09-02T04:59:02.2173134Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-09-02T04:59:02.2767510Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-09-02T04:59:02.2772320Z Downloading Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/linux64/chrome-headless-shell-linux64.zip
+2026-09-02T04:59:03.3005524Z |                                                                                |   0% of 114.7 MiB
+2026-09-02T04:59:03.4160584Z |■■■■■■■■                                                                        |  10% of 114.7 MiB
+2026-09-02T04:59:03.4812729Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.7 MiB
+2026-09-02T04:59:03.5618151Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.7 MiB
+2026-09-02T04:59:03.6393496Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.7 MiB
+2026-09-02T04:59:03.7165974Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.7 MiB
+2026-09-02T04:59:03.7939556Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.7 MiB
+2026-09-02T04:59:03.8671500Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.7 MiB
+2026-09-02T04:59:03.9423157Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.7 MiB
+2026-09-02T04:59:04.0000839Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.7 MiB
+2026-09-02T04:59:04.0596684Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.7 MiB
+2026-09-02T04:59:06.0654730Z Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1234
+2026-09-02T04:59:06.1007383Z ##[group]Run pnpm test
+2026-09-02T04:59:06.1008061Z [36;1mpnpm test[0m
+2026-09-02T04:59:06.1052451Z shell: /usr/bin/bash -e {0}
+2026-09-02T04:59:06.1052785Z env:
+2026-09-02T04:59:06.1053060Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-02T04:59:06.1053495Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-02T04:59:06.1053907Z   CI: true
+2026-09-02T04:59:06.1054147Z ##[endgroup]
+2026-09-02T04:59:06.4237932Z 
+2026-09-02T04:59:06.4238980Z > svelte-monorepo@0.0.1 test /home/runner/work/svelte/svelte
+2026-09-02T04:59:06.4239634Z > vitest run
+2026-09-02T04:59:06.4239847Z 
+2026-09-02T04:59:06.7379114Z 
+2026-09-02T04:59:06.7399619Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.7 [39m[90m/home/runner/work/svelte/svelte[39m
+2026-09-02T04:59:06.7400497Z 
+2026-09-02T04:59:39.1358536Z  [31m❯[39m packages/svelte/tests/signals/onchange.test.ts [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 30722[2mms[22m[39m
+2026-09-02T04:59:39.1361669Z [31m     [31m×[31m keeps links bounded under index churn[39m[33m 30650[2mms[22m[39m
+2026-09-02T05:00:52.2093641Z init
+2026-09-02T05:01:00.3997495Z 
+2026-09-02T05:01:00.4002375Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-09-02T05:01:00.4003563Z 
+2026-09-02T05:01:00.4005517Z [41m[1m FAIL [22m[49m packages/svelte/tests/signals/onchange.test.ts[2m > [22mproxy onchange kernel[2m > [22mkeeps links bounded under index churn
+2026-09-02T05:01:00.4012455Z [31m[1mError[22m: Test timed out in 30000ms.
+2026-09-02T05:01:00.4014182Z If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+2026-09-02T05:01:00.4016337Z [36m [2m❯[22m packages/svelte/tests/signals/onchange.test.ts:[2m338:2[22m[39m
+2026-09-02T05:01:00.4101655Z     [90m336|[39m  })[33m;[39m
+2026-09-02T05:01:00.4102571Z     [90m337|[39m
+2026-09-02T05:01:00.4104103Z     [90m338|[39m  [34mit[39m([32m'keeps links bounded under index churn'[39m[33m,[39m () [33m=>[39m {
+2026-09-02T05:01:00.4105646Z     [90m   |[39m  [31m^[39m
+2026-09-02T05:01:00.4106791Z     [90m339|[39m   [34mrun[39m(() [33m=>[39m {
+2026-09-02T05:01:00.4108460Z     [90m340|[39m    const arr = proxy([{ id: 0 }, { id: 1 }, { id: 2 }] as any[], () =>…
+2026-09-02T05:01:00.4109321Z 
+2026-09-02T05:01:00.4110041Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-09-02T05:01:00.4110695Z 
+2026-09-02T05:01:00.4111897Z 
+2026-09-02T05:01:00.4126654Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (35)[39m
+2026-09-02T05:01:00.4180978Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7816 passed[39m[22m[2m | [22m[33m55 skipped[39m[90m (7872)[39m
+2026-09-02T05:01:00.4208552Z [2m   Start at [22m 04:59:06
+2026-09-02T05:01:00.4221032Z [2m   Duration [22m 113.63s[2m (transform 22.40s, setup 0ms, import 26.17s, tests 184.49s, environment 4.52s)[22m
+2026-09-02T05:01:00.4238616Z 
+2026-09-02T05:01:00.6819861Z  ELIFECYCLE  Test failed. See above for more details.
+2026-09-02T05:01:00.7044709Z ##[error]Process completed with exit code 1.
+2026-09-02T05:01:00.7140688Z Post job cleanup.
+2026-09-02T05:01:00.8613187Z Pruning is unnecessary.
+2026-09-02T05:01:00.8768139Z Post job cleanup.
+2026-09-02T05:01:00.9672813Z [command]/usr/bin/git version
+2026-09-02T05:01:00.9714325Z git version 2.55.0
+2026-09-02T05:01:00.9756158Z Temporarily overriding HOME='/home/runner/work/_temp/04f8d713-5d19-429f-ad9a-1d23805ca81a' before making global git config changes
+2026-09-02T05:01:00.9758420Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-02T05:01:00.9762870Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/svelte/svelte
+2026-09-02T05:01:00.9794420Z Removing SSH command configuration
+2026-09-02T05:01:00.9801668Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-02T05:01:00.9835083Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-02T05:01:01.0077898Z Removing HTTP extra header
+2026-09-02T05:01:01.0082965Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-02T05:01:01.0116964Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-02T05:01:01.0356937Z Removing includeIf entries pointing to credentials config files
+2026-09-02T05:01:01.0364481Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-02T05:01:01.0390284Z includeif.gitdir:/home/runner/work/svelte/svelte/.git.path
+2026-09-02T05:01:01.0391226Z includeif.gitdir:/home/runner/work/svelte/svelte/.git/worktrees/*.path
+2026-09-02T05:01:01.0392099Z includeif.gitdir:/github/workspace/.git.path
+2026-09-02T05:01:01.0392882Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-02T05:01:01.0402184Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/svelte/svelte/.git.path
+2026-09-02T05:01:01.0424219Z /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0435252Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/svelte/svelte/.git.path /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0470535Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/svelte/svelte/.git/worktrees/*.path
+2026-09-02T05:01:01.0492636Z /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0502211Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/svelte/svelte/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0532627Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-02T05:01:01.0552832Z /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0561170Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0590170Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-02T05:01:01.0610420Z /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0619422Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config
+2026-09-02T05:01:01.0651393Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-02T05:01:01.0892956Z Removing credentials config '/home/runner/work/_temp/git-credentials-efec75f6-b0c6-4980-ae77-364288916c11.config'
+2026-09-02T05:01:01.1041009Z Cleaning up orphan processes
