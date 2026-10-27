@@ -198,6 +198,18 @@ class RepoCounts:
 
 
 @dataclass(frozen=True)
+class RepoQuality:
+    """Extra counts for the data-quality report (`collector report`), beside `RepoCounts`."""
+
+    jobs_by_conclusion: dict[str | None, int] = field(default_factory=dict)  # None: no conclusion
+    runs_with_failed_job: int = 0  # runs where a job of any attempt has a FAILED_CONCLUSIONS one
+    runs_with_reruns: int = 0  # runs stored with more than one attempt
+    redactions: int = 0  # sum of raw.logs.redactions (a missing count adds 0)
+    first_run_at: datetime | None = None  # oldest and newest created_at of the repo's runs
+    last_run_at: datetime | None = None
+
+
+@dataclass(frozen=True)
 class PendingLog:
     """A job that needs a log fetched (see `Store.pending_logs`)."""
 
@@ -252,6 +264,9 @@ class Store(Protocol):
     def list_repos(self, member: str) -> list[RepoRecord]: ...
     def repo_counts(self, repo_id: int) -> RepoCounts: ...
     def run_days(self, repo_id: int) -> list[date]: ...
+    def repo_quality(self, repo_id: int) -> RepoQuality:
+        """Read-only counts for the data-quality report."""
+        ...
 
 
 def _table(model: type[m.Base]) -> Table:
@@ -560,3 +575,47 @@ class SqlStore:
             .order_by(day)
         ).all()
         return [r[0] for r in rows]
+
+    def repo_quality(self, repo_id: int) -> RepoQuality:
+        """Job conclusions, failed and re-run runs, redactions and first/last run (SELECTs only)."""
+        wr, jb, lg = _table(m.WorkflowRun), _table(m.Job), _table(m.Log)
+        job_on_run = and_(jb.c.run_id == wr.c.run_id, jb.c.attempt == wr.c.attempt)
+        by_conclusion = self._c.execute(
+            select(jb.c.conclusion, func.count())
+            .select_from(jb.join(wr, job_on_run))
+            .where(wr.c.repo_id == repo_id)
+            .group_by(jb.c.conclusion)
+        ).all()
+        failed_runs = self._c.execute(
+            select(func.count(jb.c.run_id.distinct()))
+            .select_from(jb.join(wr, job_on_run))
+            .where(wr.c.repo_id == repo_id, jb.c.conclusion.in_(sorted(FAILED_CONCLUSIONS)))
+        ).scalar_one()
+        attempts_per_run = (
+            select(wr.c.run_id)
+            .where(wr.c.repo_id == repo_id)
+            .group_by(wr.c.run_id)
+            .having(func.count() > 1)
+            .subquery()
+        )
+        rerun_runs = self._c.execute(
+            select(func.count()).select_from(attempts_per_run)
+        ).scalar_one()
+        redactions = self._c.execute(
+            select(func.coalesce(func.sum(lg.c.redactions), 0))
+            .select_from(lg.join(jb, lg.c.job_id == jb.c.job_id).join(wr, job_on_run))
+            .where(wr.c.repo_id == repo_id)
+        ).scalar_one()
+        first, last = self._c.execute(
+            select(func.min(wr.c.created_at), func.max(wr.c.created_at)).where(
+                wr.c.repo_id == repo_id
+            )
+        ).one()
+        return RepoQuality(
+            jobs_by_conclusion={c: int(n) for c, n in by_conclusion},
+            runs_with_failed_job=int(failed_runs),
+            runs_with_reruns=int(rerun_runs),
+            redactions=int(redactions),
+            first_run_at=first,
+            last_run_at=last,
+        )

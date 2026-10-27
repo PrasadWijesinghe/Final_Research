@@ -2,7 +2,7 @@
 
 **In one sentence:** The collector reads each team member's list of GitHub repositories and pulls the last 90 days of CI (continuous integration, automated build and test) runs, failure logs, commits and config files into the database, so the experts can learn from real failures.
 
-**Status:** working (backfill with its two passes and `fill-logs`, log archive mode in `fill-logs`, skipped-run retry, daily, status, export and import) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import). The two-pass log fill is decision D38, its `--passing` option is D40, skipped runs are D39, and the log archive mode of `fill-logs` is D41.
+**Status:** working (backfill with its two passes and `fill-logs`, log archive mode in `fill-logs`, skipped-run retry, daily, status, data-quality report, export and import) · **Owner:** shared · **Plan tasks:** P1.2 (repo config and workflow detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import), P1.8 (data-quality report). The two-pass log fill is decision D38, its `--passing` option is D40, skipped runs are D39, and the log archive mode of `fill-logs` is D41.
 
 ## What it does
 
@@ -18,6 +18,7 @@ The collector is the part that reads those lists and collects the data. It has t
 6. **Daily sync (P1.6).** The `daily` command keeps the data up to date after the backfill. It fetches the runs created since the last sync, and looks again at the last 14 days for new attempts of older runs.
 7. **Status (P1.6).** The `status` command prints what is stored for each repo, the days with no runs, the backfill state, the logs still pending, the runs skipped, the last daily sync and the GitHub rate limit. It changes nothing.
 8. **Export and import (P1.7).** `export` packs the whole database and the collected files into one `.tar.gz` archive, for sharing between members or as a weekly backup. `import` checks an archive and restores it into a database. Both work through the Postgres container, so no local Postgres tools are needed.
+9. **Data-quality report (P1.8).** `report` prints a Markdown page for one member: per repo, how many runs, jobs and logs are stored, and a short list of problems to look at. It reads the database only, so it needs no GitHub token and makes no GitHub call. `--out FILE` saves the page to a file.
 
 ## How it works
 
@@ -337,6 +338,109 @@ The report has these parts:
     2026-10-13 to 2026-10-14 (2 days)
 ```
 
+### Data-quality report (P1.8)
+
+The report answers one question: is the stored data good enough to learn from? It reads what is stored for each repo in the member's list and writes a Markdown page. Markdown is plain text with simple table marks, so the page also reads well in a terminal.
+
+A few words first. A **job conclusion** is GitHub's verdict on one job, such as `success` or `failure`. A **redaction** is a secret that the sanitiser replaced in a stored log. An **expired** log is one that GitHub has deleted (HTTP 410).
+
+```mermaid
+flowchart TD
+    A["config/repos/member.yaml"] --> B["Repo list, enabled or disabled"]
+    B --> C{"Repo in the database?"}
+    C -- no --> D["Zero counts: not collected yet"]
+    C -- yes --> E["Count rows with SELECTs only"]
+    D --> F["Add a TOTAL row"]
+    E --> F
+    F --> G["Work out the problems"]
+    G --> H["Print, or write with --out"]
+```
+
+1. **Read the repo list.** The command loads `config/repos/<member>.yaml`. It needs this file, but no GitHub token.
+2. **Look up each repo.** A repo from the list that is not in the database yet gets zero counts and is marked "not collected yet".
+3. **Count what is stored.** For each stored repo, the command runs read-only queries (SELECT only) over the runs, jobs, logs, skipped runs and redactions. The queries are in `store.py` (`repo_counts` and `repo_quality`).
+4. **Add a TOTAL row.** It adds up all repos. The first and last run dates are the earliest and latest of all repos.
+5. **Find the problems.** The rules are in the next part of this section.
+6. **Print the page.** Without `--out`, it goes to the screen. With `--out FILE`, it is written to that file, and the folder is created if it is missing. The command then prints `wrote <path>`.
+
+The page has a Problems section first, then three tables: Runs, Jobs and Logs. Every table has one row per repo from the list, and a TOTAL row.
+
+**Runs table**
+
+| Column | What it means |
+|---|---|
+| repo | `owner/name`. `(disabled)` means the repo has `enabled: false` in the list |
+| runs | Distinct workflow runs stored |
+| attempts | Stored run attempts. A run that was re-run has one row per attempt |
+| re-run runs | Runs with more than one attempt |
+| runs with failed job | Runs where a job of any attempt has a failed conclusion (`failure`, `timed_out` or `startup_failure`) |
+| first run, last run | The UTC day of the oldest and the newest run. `-` if there are none |
+| runs skipped | Runs given up after GitHub server errors (5xx). The next `backfill` or `daily` retries them |
+
+**Jobs table**
+
+| Column | What it means |
+|---|---|
+| jobs | Stored jobs, for all attempts |
+| success, failure, timed_out, cancelled, skipped | Jobs with exactly that conclusion |
+| other | Jobs whose conclusion has no column: `startup_failure`, `neutral`, `action_required`, and jobs with no conclusion yet |
+| failed jobs | `failure` + `timed_out` + `startup_failure`. This is the same set the log policy fetches logs for |
+
+**Logs table**
+
+| Column | What it means |
+|---|---|
+| logs ok | Logs stored and readable |
+| expired | Logs GitHub had deleted (410) |
+| missing | Logs that could not be read, for example after a 404 or another 4xx |
+| pending | Jobs that should have a log but have no log row yet. Run `collector fill-logs` |
+| redactions | Secrets replaced across the stored logs |
+| expired share | expired divided by all log rows stored for the repo, whatever their status. `-` if the repo has no logs |
+
+**How the problems section decides.** Each rule looks at the repos in the list that are enabled. Disabled repos are never checked. A rule with no matches prints nothing. If no rule matches, the page says "No problems found."
+
+- **Repos with zero runs.** Enabled repos with no stored runs. A repo not in the database yet is marked "(not collected yet)". `prettier/prettier` and `vuejs/core` show up here as "not collected yet" because they are postponed on purpose.
+- **Repos with runs but no jobs.** Enabled repos with at least one run and no stored job at all. The jobs were never collected, so the run list alone is not useful.
+- **Repos with jobs but no failed jobs.** Enabled repos with stored jobs and none that failed. A healthy repo can look like this, so this is a question to ask, not a verdict. A repo with runs but no jobs is listed only under the rule above.
+- **Repos where more than 50% of the logs are expired.** The only rule with a threshold. A share of exactly 50% is not flagged.
+- **Repos with logs still pending.** Any repo with at least one pending job. The fix is `collector fill-logs`. Logs that `fill-logs --passing failed-runs` (D40) leaves pending on purpose still show up here as problems, because the report cannot tell them from logs that were simply not fetched yet.
+- **Repos with skipped runs.** Any repo with at least one row in `raw.skipped_runs`.
+
+**Read-only.** The report issues SELECTs only and makes no GitHub request. A test checks that the database is the same before and after the report, and that the GitHub fake gets no request. It needs only `DATABASE_URL`, and it does not need `GITHUB_TOKEN` or `IDENTITY_SALT`.
+
+**Exit codes**
+
+| Code | Meaning |
+|---|---|
+| 0 | The page was printed, or written with `--out` |
+| 1 | `--out` could not be written, for example because the path is a folder. The error says `cannot write <path>` |
+| 2 | `DATABASE_URL` is missing, the config file is bad, or an option is wrong (for example `--member` is missing) |
+
+**Example.** The report tests use the recorded fake repo `acme/widgets` after a backfill. The test adds two more repos to the list: `acme/never-collected` (not in the database) and `acme/reserve` (disabled). With the report time set to 27 October 2026, 09:30 UTC, the start of the output and the Problems and Logs sections read:
+
+```
+# PipelineIQ data-quality report: member=test
+
+As of 2026-10-27 09:30 UTC. Read from the database only; nothing was fetched from GitHub.
+
+## Problems
+
+- Repos with zero runs (1): acme/never-collected (not collected yet)
+
+Disabled repos are listed in the tables but not checked here.
+
+## Logs
+
+| repo                    | logs ok | expired | missing | pending | redactions | expired share |
+| ----------------------- | ------: | ------: | ------: | ------: | ---------: | ------------: |
+| acme/widgets            |       5 |       1 |       1 |       0 |          1 |           14% |
+| acme/never-collected    |       0 |       0 |       0 |       0 |          0 |             - |
+| acme/reserve (disabled) |       0 |       0 |       0 |       0 |          0 |             - |
+| TOTAL                   |       5 |       1 |       1 |       0 |          1 |           14% |
+```
+
+The Runs and Jobs tables and the footnotes are left out of this excerpt. The fixture has 3 runs, 4 attempts and 8 jobs for `acme/widgets`. Its one expired log out of 7 stored logs gives 14%, which is below the 50% limit, so it is not a problem.
+
 ### Export and import (P1.7)
 
 Members share data by sending each other a file, not by copying Docker volume folders. Postgres data folders do not move safely between machines. The export archive is also the weekly backup.
@@ -472,6 +576,10 @@ uv run --env-file .env collector daily --member test --repo owner/name --data-di
 # what is stored, days with no runs, backfill state, last daily sync, rate limit
 uv run --env-file .env collector status --member test
 
+# data-quality report for one member: printed on screen, or saved to a file (needs only DATABASE_URL)
+uv run --env-file .env collector report --member test
+uv run --env-file .env collector report --member test --out data/reports/quality_test.md
+
 # bundle the database, logs and snapshots into data/exports/test-<date>.tar.gz
 # (needs Docker running; the Makefile reads MEMBER from .env if you leave it out)
 make export-data MEMBER=test
@@ -524,6 +632,7 @@ The full check that must pass before a task is done is `make check`.
 | `--no-archive` | `fill-logs` only. One request per job log, with no zip per run attempt. Use it to get out of archive problems. Default: archive mode on (D41) |
 | `--data-dir PATH` | Where logs and blobs go. Overrides `DATA_DIR` |
 | `--window-days N` | Window size. Default 7. Hidden from `--help`, used by tests |
+| `--out FILE` | `report` only. Write the report to FILE (its folder is created) instead of printing it. Default: print it |
 
 ### Exit codes
 
@@ -545,6 +654,8 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 
 `status` returns 0 when it prints the report, and 2 when `DATABASE_URL` is missing or the config is bad. It does not return 1. A missing GitHub token is not an error: the rate limit line says "unavailable".
 
+`report` has its own codes, listed in its section above: 0 when the page is printed or written, 1 when `--out` cannot be written, and 2 when `DATABASE_URL` is missing, the config is bad or an option is wrong.
+
 ## Inputs and outputs
 
 |     | What | Where / format |
@@ -562,6 +673,8 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | In (export) | The whole database, and the logs and snapshots | Postgres, through `docker compose exec postgres` (pg_dump, psql); `data/logs/`, `data/snapshots/` |
 | Out (export) | One archive | `data/exports/<member>-<date>.tar.gz`: `manifest.json`, `db.dump`, `files/...` |
 | In (import) | One archive | The `.tar.gz` path given to `make import-data FILE=` or `collector import` |
+| In (report) | The stored rows, and the member's repo list | Postgres (SELECT only), through `DATABASE_URL`; `config/repos/<member>.yaml` |
+| Out (report) | One Markdown page | Standard output, or the file given with `--out` |
 | Out (import) | Restored database and files | Postgres (pg_restore, through the container); `data/logs/`, `data/snapshots/` |
 
 ## Settings
@@ -715,6 +828,16 @@ config/repos/test.yaml: repo 'a/b': field 'licence': <reason from the validator>
 - **A gap in `status` is not proof of a problem.** It cannot tell a quiet day from a missed sync. It also looks only at the last 90 days of stored runs.
 - **`status` does not check `IDENTITY_SALT`.** It does not need it.
 
+**Data-quality report (P1.8)**
+
+- **Only repos in the member's list are shown.** A repo that is in the database but was removed from the list does not appear.
+- **The numbers describe what is stored, not what GitHub has now.** A repo with skipped runs or pending logs looks smaller than it is. The Problems section names these cases, but the report cannot tell a partial repo from a small one.
+- **The problem rules are constants, not settings.** The 50% expired limit and the other rules are set in `report.py`, not in `config/`. Changing one needs a code change. CONVENTIONS asks for thresholds in `config/`, so this is a known gap.
+- **"Repos with runs but no failed jobs" is a question, not a verdict.** A healthy repo with only passing CI is flagged, and so is a repo whose failed jobs were never stored.
+- **Pending logs are left out of the expired share.** A pending job has no log row, so it is not counted in ok, expired or missing.
+- **`--out` overwrites the file without asking.**
+- **The SQL tests need Postgres.** `test_report_db.py` is an integration test. It skips, not passes, when the database is down. `test_report_sql_offline.py` only checks the SQL text. The in-memory tests (`test_report.py`) need no database.
+
 **Every `# DEFAULT:` in this component**
 
 Line numbers are as of this writing and may drift. Search for the marker text if a number is off.
@@ -749,6 +872,16 @@ In `services/collector/src/collector`:
 - `log_archive.py`, line 21: `match_key` keeps only the letters and digits of a job name, lower-cased, so the characters GitHub removes from file names (`:` `/` `\` `*` `?` `"` `<` `>` `|`, control characters, spaces) cannot make the two sides differ. A name with no letter or digit has no key and is never matched (D41).
 - `policy.py`, line 9: "failed" means `failure`, `timed_out` or `startup_failure`. Cancelled and skipped jobs are not failures, and their logs carry no useful signal.
 - `policy.py`, line 14: gzip level 6, which is the zlib default. The level is fixed so the bytes are stable.
+- `report.py`, line 16: a repo is flagged in the Problems section when MORE than half (`EXPIRED_SHARE_LIMIT = 0.5`, line 18) of its stored logs are expired. Exactly 50% is not flagged.
+- `report.py`, line 19: the job conclusions with their own column are `success`, `failure`, `timed_out`, `cancelled` and `skipped` (`JOB_COLUMNS`, line 21). Every other value, such as `startup_failure`, `neutral` or no conclusion yet, is summed into "other".
+- `report.py`, line 23: "failed jobs" use the collector's own failed set (`policy.FAILED_CONCLUSIONS`: `failure`, `timed_out`, `startup_failure`), so the report agrees with which logs the log policy fetches.
+- `report.py`, line 25: "runs with failed job" counts a run when a job of ANY of its attempts failed. This is the same rule as `fill-logs --passing failed-runs` (D40).
+- `report.py`, line 120: disabled repos (reserves, not collected on purpose) never count as problems. They are still listed in the tables, marked "(disabled)".
+- `report.py`, line 138: "no failed jobs" is judged only for repos that have jobs. A repo with runs and no jobs appears once, under "Repos with runs but no jobs". A repo with jobs and no failures gives no failure labels.
+- `report.py`, line 152: pending logs and skipped runs count as problems for every enabled repo, even when they were left on purpose (`fill-logs --passing failed-runs`, D40), because the report cannot tell the two apart.
+- `cli.py`, line 357 (`run_report`): `--out` creates missing parent folders and overwrites an existing file.
+- `report.py`, line 196: the report uses three narrower tables (Runs, Jobs, Logs), each with a TOTAL row, instead of one wide table. The Problems section comes first.
+- `report.py`, line 212: the report has extra columns beyond the minimum the plan asked for: re-run runs, runs with failed job, runs skipped, jobs by conclusion and the expired share.
 
 One more is written as `(DEFAULT: ...)` inside a step comment, not as the `# DEFAULT:` marker:
 
@@ -784,7 +917,8 @@ In the tests:
 
 ## Related
 
-- Plan: `docs/PLAN.md`, tasks P1.2 (repo config and detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import).
+- Plan: `docs/PLAN.md`, tasks P1.2 (repo config and detection), P1.5 (backfill), P1.6 (daily and status), P1.7 (export and import), P1.8 (data-quality report).
+- Data-quality report: `services/collector/src/collector/report.py` (rules, tables, rendering), `repo_quality` and `repo_counts` in `store.py` (the SQL), and the `report` command in `cli.py` (`run_report`). Tests: `test_report.py` (fixture numbers, problem rules, CLI, in-memory store), `test_report_db.py` (integration, Postgres), `test_report_sql_offline.py` (SQL text).
 - Export and import code: `services/collector/src/collector/export_import.py` (archive, checks, pg commands) and the `export` and `import` commands in `cli.py`. Makefile targets `export-data` and `import-data`. Design: `docs/DATA.md` section 9.
 - Export and import tests: `services/collector/tests/test_export_import.py` (offline, fake Postgres) and `test_export_import_db.py` (integration, Docker, runs in `make check`).
 - Design: `docs/DATA.md` section 2 (repo lists and auto-detection), section 3 (the collector), section 5 (file tags).

@@ -23,6 +23,7 @@ from collector.export_import import TransferError, export_data, import_data, res
 from collector.file_tags import load_file_tagger
 from collector.policy import PASSING_ALL, PASSING_FAILED_RUNS
 from collector.repo_config import DEFAULT_CONFIG_DIR, MEMBERS, ConfigError, load_member_config
+from collector.report import collect_report, render_report
 from collector.status import collect_status, fetch_rate_limit, render_status
 from collector.store import SqlStore
 from collector.workflow_detection import load_detection_rules
@@ -93,6 +94,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     status = sub.add_parser("status", help="show what is collected, gaps and the rate limit")
     status.add_argument("--member", required=True, choices=MEMBERS)
+    rep = sub.add_parser(
+        "report", help="data-quality report per repo (runs, jobs, logs, redactions); read-only"
+    )
+    rep.add_argument("--member", required=True, choices=MEMBERS)
+    rep.add_argument("--out", type=Path, help="write the report to this file instead of stdout")
     exp = sub.add_parser("export", help="bundle the database, logs and a manifest into a tar.gz")
     exp.add_argument("--member", required=True, choices=MEMBERS)
     exp.add_argument("--database", help="database name (default: the one in DATABASE_URL)")
@@ -331,6 +337,33 @@ def run_status(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def run_report(args: argparse.Namespace) -> int:
+    """Run `collector report`: read-only, needs only DATABASE_URL (no token, no network)."""
+    missing = _missing_env(("DATABASE_URL",))
+    if missing:
+        _err("DATABASE_URL not set. Put it in .env and run with `uv run --env-file .env ...`.")
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    repos = collect_report(SqlStore(get_engine()), args.member, config.repos)
+    text = render_report(args.member, repos, datetime.now(UTC))
+    if args.out is None:
+        sys.stdout.write(text)
+        return EXIT_OK
+    try:
+        # DEFAULT: `--out` creates missing parent folders and overwrites an existing file.
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(text, encoding="utf-8")
+    except OSError as exc:
+        _err(f"cannot write {args.out}: {exc.strerror or type(exc).__name__}")
+        return EXIT_FAILED
+    sys.stdout.write(f"wrote {args.out}\n")
+    return EXIT_OK
+
+
 def run_export(args: argparse.Namespace) -> int:
     """Run `collector export`; returns the process exit code."""
     data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
@@ -383,6 +416,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_daily(args)
     if args.command == "status":
         return run_status(args)
+    if args.command == "report":
+        return run_report(args)
     if args.command == "export":
         return run_export(args)
     if args.command == "import":

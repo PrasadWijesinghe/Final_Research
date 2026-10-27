@@ -17,6 +17,7 @@ from collector.store import (
     LogRecord,
     PendingLog,
     RepoCounts,
+    RepoQuality,
     RepoRecord,
     RunRecord,
     SkippedRunRecord,
@@ -248,4 +249,29 @@ class MemoryStore:
                 for r in self.tables["workflow_runs"].values()
                 if r.repo_id == repo_id and r.created_at is not None
             }
+        )
+
+    def repo_quality(self, repo_id: int) -> RepoQuality:
+        runs = [r for r in self.tables["workflow_runs"].values() if r.repo_id == repo_id]
+        keys = {(r.run_id, r.attempt) for r in runs}
+        jobs = [j for j in self.tables["jobs"].values() if (j.run_id, j.attempt) in keys]
+        by_conclusion: dict[str | None, int] = {}
+        for job in jobs:
+            by_conclusion[job.conclusion] = by_conclusion.get(job.conclusion, 0) + 1
+        job_ids = {j.job_id for j in jobs}
+        attempts: dict[int, int] = {}
+        for r in runs:
+            attempts[r.run_id] = attempts.get(r.run_id, 0) + 1
+        created = [r.created_at for r in runs if r.created_at is not None]
+        return RepoQuality(
+            jobs_by_conclusion=by_conclusion,
+            runs_with_failed_job=len(
+                {j.run_id for j in jobs if j.conclusion in FAILED_CONCLUSIONS}
+            ),
+            runs_with_reruns=sum(1 for n in attempts.values() if n > 1),
+            redactions=sum(
+                log.redactions or 0 for log in self.tables["logs"].values() if log.job_id in job_ids
+            ),
+            first_run_at=min(created) if created else None,
+            last_run_at=max(created) if created else None,
         )
