@@ -58,9 +58,9 @@ The run list returns at most 1,000 results for one query. To get every run in a 
 
 ### Job logs
 
-`get_bytes` fetches a body such as a job log. GitHub answers the log request with a redirect to a storage address. The client follows the redirect. The token is not sent to the storage address, because `httpx` (the HTTP library used here) drops the `Authorization` header when a redirect goes to a different host.
+`get_bytes` fetches a body such as a job log. GitHub answers the log request with a redirect to a storage address. The client follows the redirect. The token is not sent to the storage address, because `httpx` (the HTTP library used here) drops the `Authorization` header when a redirect goes to a different host. Callers may pass `max_bytes` to stream the response with a hard size limit; the client stops reading and raises `GitHubResponseTooLargeError` if the response is too large.
 
-If the log has expired, GitHub answers 410. `get_bytes` does not treat 410 as "missing". It raises `GitHubError` with `status_code` 410. The caller must catch that error.
+If the log has expired, GitHub answers 410. `get_bytes` does not treat 410 as "missing". It raises `GitHubError` with `status_code` 410. The caller must catch that error. When `max_bytes` is used, the client rejects a declared oversized body before downloading it, or stops streaming when received bytes exceed the limit.
 
 ## How to run it
 
@@ -91,7 +91,7 @@ make check   # runs ruff, mypy and all tests
 | In | Requests | Paths such as `/repos/<owner>/<repo>/actions/runs`, or a repo name, a commit SHA and a file path |
 | Out | JSON answers | Python dictionaries and lists (`get_json`, `paginate`, `iter_workflow_runs`) |
 | Out | Raw bytes | Job logs and file contents, as `bytes` (`get_bytes`, `fetch_raw_file`) |
-| Out | Errors | `GitHubError` (with `status_code`), or its subclass `GitHubNotFoundError` for 404 |
+| Out | Errors | `GitHubError` (with `status_code`), or subclasses `GitHubNotFoundError` for 404 and `GitHubResponseTooLargeError` for bounded downloads |
 | Out | Counters | `client.api_calls` and `client.raw_calls` |
 | Out | Log lines | Standard `logging` warnings for retries, sleeps and truncation. The token is not in them |
 

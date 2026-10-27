@@ -5,6 +5,13 @@ from shared.github.client import (
     GitHubConfig,
     GitHubError,
     GitHubNotFoundError,
+    GitHubResponseTooLargeError,
 )
 
-__all__ = ["GitHubClient", "GitHubConfig", "GitHubError", "GitHubNotFoundError"]
+__all__ = [
+    "GitHubClient",
+    "GitHubConfig",
+    "GitHubError",
+    "GitHubNotFoundError",
+    "GitHubResponseTooLargeError",
+]

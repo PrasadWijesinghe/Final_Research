@@ -16,6 +16,16 @@ files are local artifacts under the ignored `data/` and `models/` folders. This 
 only: it does not replace the contract-based `/predict` endpoint, and its labels and model
 evaluation are not production-certified. See `research/README.md` before running it.
 
+The random control scan logs repository, run and job IDs without logging job-log contents. It uses
+a 15-second request timeout with no retries; a failed request is recorded and skipped, not labeled.
+The scan writes a valid partial result if interrupted or if another error occurs. Check the
+result's `scan_status` before using it; see `research/README.md` for details.
+Job logs over 5 MiB are not sanitised or matched and cannot be selected as controls. The current
+shared client streams limited responses and stops reading when the content length or received
+bytes exceed the cap.
+Once random controls are manually reviewed and marked final, the master label audit includes
+them from `random_control*.json`; pending controls are not used as training labels.
+
 ## Facts
 
 | Name | Value |
