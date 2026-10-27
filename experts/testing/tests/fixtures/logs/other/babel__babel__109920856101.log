@@ -1,0 +1,417 @@
+﻿2026-09-30T13:57:05.2036452Z Current runner version: '2.337.0'
+2026-09-30T13:57:05.2060667Z ##[group]Runner Image Provisioner
+2026-09-30T13:57:05.2061628Z Hosted Compute Agent
+2026-09-30T13:57:05.2062234Z Version: 20260828.587
+2026-09-30T13:57:05.2063218Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-30T13:57:05.2064068Z Build Date: 2026-08-28T16:44:25Z
+2026-09-30T13:57:05.2064805Z Worker ID: {ec58c143-e204-4bf8-8254-8b6d3d87af58}
+2026-09-30T13:57:05.2066140Z Azure Region: westus
+2026-09-30T13:57:05.2066734Z ##[endgroup]
+2026-09-30T13:57:05.2068371Z ##[group]Operating System
+2026-09-30T13:57:05.2069112Z Ubuntu
+2026-09-30T13:57:05.2069673Z 24.04.5
+2026-09-30T13:57:05.2070221Z LTS
+2026-09-30T13:57:05.2070761Z ##[endgroup]
+2026-09-30T13:57:05.2071361Z ##[group]Runner Image
+2026-09-30T13:57:05.2072013Z Image: ubuntu-24.04
+2026-09-30T13:57:05.2072619Z Version: 20260920.314.1
+2026-09-30T13:57:05.2073988Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-30T13:57:05.2076055Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+2026-09-30T13:57:05.2077125Z ##[endgroup]
+2026-09-30T13:57:05.2078266Z ##[group]GITHUB_TOKEN Permissions
+2026-09-30T13:57:05.2080215Z Contents: read
+2026-09-30T13:57:05.2080860Z Metadata: read
+2026-09-30T13:57:05.2081475Z ##[endgroup]
+2026-09-30T13:57:05.2083505Z Secret source: Actions
+2026-09-30T13:57:05.2084405Z Cache mode: write
+2026-09-30T13:57:05.2085515Z Prepare workflow directory
+2026-09-30T13:57:05.2418109Z Prepare all required actions
+2026-09-30T13:57:05.2466969Z Getting action download info
+2026-09-30T13:57:05.7129993Z Download action repository 'actions/download-artifact@v8' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-09-30T13:57:06.1679799Z Download action repository 'actions/upload-artifact@v7' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-09-30T13:57:06.4419159Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-09-30T13:57:06.6286529Z Complete job name: test262 - Analyze results
+2026-09-30T13:57:06.7151204Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:06.7152351Z with:
+2026-09-30T13:57:06.7152978Z   name: test262-result-0
+2026-09-30T13:57:06.7153669Z   merge-multiple: false
+2026-09-30T13:57:06.7154345Z   repository: babel/babel
+2026-09-30T13:57:06.7155231Z   run-id: 36723876976
+2026-09-30T13:57:06.7155904Z   skip-decompress: false
+2026-09-30T13:57:06.7156598Z   digest-mismatch: error
+2026-09-30T13:57:06.7157561Z ##[endgroup]
+2026-09-30T13:57:06.8628024Z Downloading single artifact
+2026-09-30T13:57:07.1462775Z Preparing to download the following artifacts:
+2026-09-30T13:57:07.1465480Z - test262-result-0 (ID: 11102308772, Size: 57795, Expected Digest: sha256:c4922cffc7d1ac89368ace33c196e732edccc2dc12ce8a775dda15551873300b)
+2026-09-30T13:57:07.6759233Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-e1fa4a9a-a13d-5cf5-9de7-a41ae2d3b101/artifacts/34b318131782691d4082c018bfbd70833ecc82ac8897d8c71397eebeba0f9a97.zip
+2026-09-30T13:57:07.6763390Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:07.9886461Z (node:2078) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:07.9890293Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:08.0614697Z SHA256 digest of downloaded artifact is c4922cffc7d1ac89368ace33c196e732edccc2dc12ce8a775dda15551873300b
+2026-09-30T13:57:08.0617946Z Artifact download completed successfully.
+2026-09-30T13:57:08.0619649Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:08.0621227Z Download artifact has finished successfully
+2026-09-30T13:57:08.0921561Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:08.0922574Z with:
+2026-09-30T13:57:08.0923207Z   name: test262-result-1
+2026-09-30T13:57:08.0924324Z   merge-multiple: false
+2026-09-30T13:57:08.0925332Z   repository: babel/babel
+2026-09-30T13:57:08.0926117Z   run-id: 36723876976
+2026-09-30T13:57:08.0926872Z   skip-decompress: false
+2026-09-30T13:57:08.0927694Z   digest-mismatch: error
+2026-09-30T13:57:08.0928497Z ##[endgroup]
+2026-09-30T13:57:08.2308002Z Downloading single artifact
+2026-09-30T13:57:08.5188119Z Preparing to download the following artifacts:
+2026-09-30T13:57:08.5192165Z - test262-result-1 (ID: 11102034474, Size: 66555, Expected Digest: sha256:2d37bd87631be48da3ca5483d841871012b21bfc4709134397f8cc1d668f21ec)
+2026-09-30T13:57:09.0568638Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-e0614568-9e51-5c83-bc0b-68479b57e98f/artifacts/0cf57f732841e340e184030066674466950eecf32694800d1cac9ddda2c5ec32.zip
+2026-09-30T13:57:09.0576276Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:09.3350591Z (node:2090) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:09.3352862Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:09.4604190Z SHA256 digest of downloaded artifact is 2d37bd87631be48da3ca5483d841871012b21bfc4709134397f8cc1d668f21ec
+2026-09-30T13:57:09.4605613Z Artifact download completed successfully.
+2026-09-30T13:57:09.4609386Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:09.4609930Z Download artifact has finished successfully
+2026-09-30T13:57:09.4752080Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:09.4752436Z with:
+2026-09-30T13:57:09.4752658Z   name: test262-result-2
+2026-09-30T13:57:09.4752921Z   merge-multiple: false
+2026-09-30T13:57:09.4753185Z   repository: babel/babel
+2026-09-30T13:57:09.4753441Z   run-id: 36723876976
+2026-09-30T13:57:09.4753696Z   skip-decompress: false
+2026-09-30T13:57:09.4753977Z   digest-mismatch: error
+2026-09-30T13:57:09.4754225Z ##[endgroup]
+2026-09-30T13:57:09.6080350Z Downloading single artifact
+2026-09-30T13:57:09.8981336Z Preparing to download the following artifacts:
+2026-09-30T13:57:09.8982561Z - test262-result-2 (ID: 11101469665, Size: 61506, Expected Digest: sha256:1477ebf30085d5346c85fb6e14c5d2fff9b215c4cdeac377dcecc4ac3939adbe)
+2026-09-30T13:57:10.4439980Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-80fbc5f6-bb91-5fcd-a7b9-8ac1011932ae/artifacts/098c96718afe6e3f56c3c5eeeb284b377918e9143f9d4c9086f2fd985b2dca65.zip
+2026-09-30T13:57:10.4442666Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:10.7517822Z (node:2103) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:10.7519606Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:10.8340975Z SHA256 digest of downloaded artifact is 1477ebf30085d5346c85fb6e14c5d2fff9b215c4cdeac377dcecc4ac3939adbe
+2026-09-30T13:57:10.8342105Z Artifact download completed successfully.
+2026-09-30T13:57:10.8342855Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:10.8347014Z Download artifact has finished successfully
+2026-09-30T13:57:10.8503795Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:10.8504352Z with:
+2026-09-30T13:57:10.8504725Z   name: test262-result-3
+2026-09-30T13:57:10.8505432Z   merge-multiple: false
+2026-09-30T13:57:10.8505987Z   repository: babel/babel
+2026-09-30T13:57:10.8506405Z   run-id: 36723876976
+2026-09-30T13:57:10.8506813Z   skip-decompress: false
+2026-09-30T13:57:10.8507245Z   digest-mismatch: error
+2026-09-30T13:57:10.8507651Z ##[endgroup]
+2026-09-30T13:57:10.9854464Z Downloading single artifact
+2026-09-30T13:57:11.2653646Z Preparing to download the following artifacts:
+2026-09-30T13:57:11.2655537Z - test262-result-3 (ID: 11102009473, Size: 55326, Expected Digest: sha256:9bb8b7fc540480875fd45d9bf7d3e01b72485439c70edb46914499857d19dcc1)
+2026-09-30T13:57:11.8165779Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-c94ff18f-161e-5e61-a006-090306a3c561/artifacts/06e54d75535415cd8c4904956be05fe9f79e8364add70d44711182f1050e968d.zip
+2026-09-30T13:57:11.8169343Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:12.0908103Z (node:2116) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:12.0909980Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:12.1549774Z SHA256 digest of downloaded artifact is 9bb8b7fc540480875fd45d9bf7d3e01b72485439c70edb46914499857d19dcc1
+2026-09-30T13:57:12.1550812Z Artifact download completed successfully.
+2026-09-30T13:57:12.1551289Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:12.1554716Z Download artifact has finished successfully
+2026-09-30T13:57:12.1764105Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:12.1764659Z with:
+2026-09-30T13:57:12.1765276Z   name: test262-result-4
+2026-09-30T13:57:12.1765727Z   merge-multiple: false
+2026-09-30T13:57:12.1766160Z   repository: babel/babel
+2026-09-30T13:57:12.1766608Z   run-id: 36723876976
+2026-09-30T13:57:12.1767090Z   skip-decompress: false
+2026-09-30T13:57:12.1767388Z   digest-mismatch: error
+2026-09-30T13:57:12.1767640Z ##[endgroup]
+2026-09-30T13:57:12.3045563Z Downloading single artifact
+2026-09-30T13:57:12.6147683Z Preparing to download the following artifacts:
+2026-09-30T13:57:12.6149017Z - test262-result-4 (ID: 11101184308, Size: 77165, Expected Digest: sha256:57cd9bfb7103f9f0133a68edd2265e1061564f92bc2de5dfb55a5d4f65374dbd)
+2026-09-30T13:57:13.1543018Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-d08834ba-b892-5ca6-8e75-77748bc6d137/artifacts/a3121265fd1447a54e0845da70744bc32689aa0a0ee7bc0a6e3fc0bf719c5722.zip
+2026-09-30T13:57:13.1546626Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:13.4229552Z (node:2128) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:13.4231645Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:13.5523249Z SHA256 digest of downloaded artifact is 57cd9bfb7103f9f0133a68edd2265e1061564f92bc2de5dfb55a5d4f65374dbd
+2026-09-30T13:57:13.5524787Z Artifact download completed successfully.
+2026-09-30T13:57:13.5525884Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:13.5529225Z Download artifact has finished successfully
+2026-09-30T13:57:13.5650853Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:13.5651200Z with:
+2026-09-30T13:57:13.5651432Z   name: test262-result-5
+2026-09-30T13:57:13.5651704Z   merge-multiple: false
+2026-09-30T13:57:13.5651970Z   repository: babel/babel
+2026-09-30T13:57:13.5652237Z   run-id: 36723876976
+2026-09-30T13:57:13.5652493Z   skip-decompress: false
+2026-09-30T13:57:13.5652763Z   digest-mismatch: error
+2026-09-30T13:57:13.5653018Z ##[endgroup]
+2026-09-30T13:57:13.6951371Z Downloading single artifact
+2026-09-30T13:57:13.9678020Z Preparing to download the following artifacts:
+2026-09-30T13:57:13.9679015Z - test262-result-5 (ID: 11102134273, Size: 78662, Expected Digest: sha256:fb6aa14c5ed3274644874a7f33ca45f6315f55111d1ad1d76c8c73e1e2ecb703)
+2026-09-30T13:57:14.5070514Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-4335162b-3d0e-5116-b0be-4847381a684f/artifacts/f9b4de3a2eeb00d028f25018560b3ae57f7adc5ed809946462ca6fffcb551d85.zip
+2026-09-30T13:57:14.5073991Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:14.7888307Z (node:2140) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:14.7890199Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:14.9099856Z SHA256 digest of downloaded artifact is fb6aa14c5ed3274644874a7f33ca45f6315f55111d1ad1d76c8c73e1e2ecb703
+2026-09-30T13:57:14.9100981Z Artifact download completed successfully.
+2026-09-30T13:57:14.9101597Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:14.9105481Z Download artifact has finished successfully
+2026-09-30T13:57:14.9246498Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:14.9246858Z with:
+2026-09-30T13:57:14.9247096Z   name: test262-result-6
+2026-09-30T13:57:14.9247380Z   merge-multiple: false
+2026-09-30T13:57:14.9247675Z   repository: babel/babel
+2026-09-30T13:57:14.9247947Z   run-id: 36723876976
+2026-09-30T13:57:14.9248207Z   skip-decompress: false
+2026-09-30T13:57:14.9248477Z   digest-mismatch: error
+2026-09-30T13:57:14.9248745Z ##[endgroup]
+2026-09-30T13:57:15.0565377Z Downloading single artifact
+2026-09-30T13:57:15.3305312Z Preparing to download the following artifacts:
+2026-09-30T13:57:15.3306650Z - test262-result-6 (ID: 11101914494, Size: 65545, Expected Digest: sha256:51a34c8ba3408fdc2f20318716d3f98955d795ee82c976131c29a8bffaff7874)
+2026-09-30T13:57:15.8730068Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-edc90ce3-6f83-54f9-9409-00e68bc68727/artifacts/e384e9b9a9f9b06c6d45fdb39910347ac7414da0b0e257cb334e556ae3001b82.zip
+2026-09-30T13:57:15.8731987Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:16.1421271Z (node:2152) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:16.1423231Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:16.2639954Z SHA256 digest of downloaded artifact is 51a34c8ba3408fdc2f20318716d3f98955d795ee82c976131c29a8bffaff7874
+2026-09-30T13:57:16.2641105Z Artifact download completed successfully.
+2026-09-30T13:57:16.2641781Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:16.2646489Z Download artifact has finished successfully
+2026-09-30T13:57:16.2767668Z ##[group]Run actions/download-artifact@v8
+2026-09-30T13:57:16.2768038Z with:
+2026-09-30T13:57:16.2768285Z   name: test262-result-7
+2026-09-30T13:57:16.2768591Z   merge-multiple: false
+2026-09-30T13:57:16.2768879Z   repository: babel/babel
+2026-09-30T13:57:16.2769170Z   run-id: 36723876976
+2026-09-30T13:57:16.2769446Z   skip-decompress: false
+2026-09-30T13:57:16.2769728Z   digest-mismatch: error
+2026-09-30T13:57:16.2770013Z ##[endgroup]
+2026-09-30T13:57:16.4081195Z Downloading single artifact
+2026-09-30T13:57:16.7170073Z Preparing to download the following artifacts:
+2026-09-30T13:57:16.7171364Z - test262-result-7 (ID: 11101219838, Size: 118639, Expected Digest: sha256:c63d1fc7c33ae3b2129947033cd61bf8d2bb1ea8848bc76ca0ead5f73b9307bd)
+2026-09-30T13:57:17.2629935Z Redirecting to blob download url: https://productionresultssa0.blob.core.windows.net/actions-results/6a8414c3-e379-4b4f-90b1-205d287d9700/workflow-job-run-dd47f342-8c75-598d-8460-f15e03b57ba6/artifacts/c3ba1d39dc03c2f36bb07ee316c4f78df33bfa59a6dd70985e759457fc859f97.zip
+2026-09-30T13:57:17.2633846Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-09-30T13:57:17.5634675Z (node:2164) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-30T13:57:17.5636942Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-30T13:57:17.7688162Z SHA256 digest of downloaded artifact is c63d1fc7c33ae3b2129947033cd61bf8d2bb1ea8848bc76ca0ead5f73b9307bd
+2026-09-30T13:57:17.7689022Z Artifact download completed successfully.
+2026-09-30T13:57:17.7689454Z Total of 1 artifact(s) downloaded
+2026-09-30T13:57:17.7693958Z Download artifact has finished successfully
+2026-09-30T13:57:17.7818936Z ##[group]Run cat test262-0.tap test262-1.tap test262-2.tap test262-3.tap \
+2026-09-30T13:57:17.7819679Z [36;1mcat test262-0.tap test262-1.tap test262-2.tap test262-3.tap \[0m
+2026-09-30T13:57:17.7820258Z [36;1m    test262-4.tap test262-5.tap test262-6.tap test262-7.tap \[0m
+2026-09-30T13:57:17.7820724Z [36;1m  | npx tap-merge > test262.tap[0m
+2026-09-30T13:57:17.8136490Z shell: /usr/bin/bash -e {0}
+2026-09-30T13:57:17.8136863Z ##[endgroup]
+2026-09-30T13:57:24.0667724Z npm warn exec The following package was not found and will be installed: tap-merge@0.3.1
+2026-09-30T13:57:25.9566109Z ##[group]Run actions/upload-artifact@v7
+2026-09-30T13:57:25.9566494Z with:
+2026-09-30T13:57:25.9566737Z   name: test262-result
+2026-09-30T13:57:25.9567015Z   path: test262.tap
+2026-09-30T13:57:25.9567284Z   if-no-files-found: warn
+2026-09-30T13:57:25.9567577Z   compression-level: 6
+2026-09-30T13:57:25.9567840Z   overwrite: false
+2026-09-30T13:57:25.9568111Z   include-hidden-files: false
+2026-09-30T13:57:25.9568405Z   archive: true
+2026-09-30T13:57:25.9568654Z ##[endgroup]
+2026-09-30T13:57:26.0928349Z With the provided path, there will be 1 file uploaded
+2026-09-30T13:57:26.0933726Z Artifact name is valid!
+2026-09-30T13:57:26.0934733Z Root directory input is valid!
+2026-09-30T13:57:26.4860989Z Uploading artifact: test262-result.zip
+2026-09-30T13:57:26.4902858Z Beginning upload of artifact content to blob storage
+2026-09-30T13:57:27.3131416Z Uploaded bytes 579716
+2026-09-30T13:57:27.3955881Z Finished uploading artifact content to blob storage!
+2026-09-30T13:57:27.3957352Z SHA256 digest of uploaded artifact is 2121040ebbbbb2a1974c9a184ad6b341c8ca58737a3c182454c6d520b1d1f7a8
+2026-09-30T13:57:27.3958561Z Finalizing artifact upload
+2026-09-30T13:57:27.8351848Z Artifact test262-result successfully finalized. Artifact ID 11101109327
+2026-09-30T13:57:27.8352836Z Artifact test262-result has been successfully uploaded! Final size is 579716 bytes. Artifact ID is 11101109327
+2026-09-30T13:57:27.8356105Z Artifact download URL: https://github.com/babel/babel/actions/runs/36723876976/artifacts/11101109327
+2026-09-30T13:57:27.8518203Z ##[group]Run actions/checkout@v6
+2026-09-30T13:57:27.8518545Z with:
+2026-09-30T13:57:27.8518811Z   repository: babel/babel-test262-runner
+2026-09-30T13:57:27.8519162Z   path: babel-test262-runner
+2026-09-30T13:57:27.8519471Z   ref: main
+2026-09-30T13:57:27.8521931Z   token: ***
+2026-09-30T13:57:27.8522191Z   ssh-strict: true
+2026-09-30T13:57:27.8522451Z   ssh-user: git
+2026-09-30T13:57:27.8522720Z   persist-credentials: true
+2026-09-30T13:57:27.8523037Z   clean: true
+2026-09-30T13:57:27.8523314Z   sparse-checkout-cone-mode: true
+2026-09-30T13:57:27.8523661Z   fetch-depth: 1
+2026-09-30T13:57:27.8523921Z   fetch-tags: false
+2026-09-30T13:57:27.8524188Z   show-progress: true
+2026-09-30T13:57:27.8524469Z   lfs: false
+2026-09-30T13:57:27.8524721Z   submodules: false
+2026-09-30T13:57:27.8525354Z   set-safe-directory: true
+2026-09-30T13:57:27.8525697Z   allow-unsafe-pr-checkout: false
+2026-09-30T13:57:27.8526026Z ##[endgroup]
+2026-09-30T13:57:27.9407477Z Syncing repository: babel/babel-test262-runner
+2026-09-30T13:57:27.9408814Z ##[group]Getting Git version info
+2026-09-30T13:57:27.9409454Z Working directory is '/home/runner/work/babel/babel/babel-test262-runner'
+2026-09-30T13:57:27.9410126Z [command]/usr/bin/git version
+2026-09-30T13:57:27.9487699Z git version 2.55.0
+2026-09-30T13:57:27.9509043Z ##[endgroup]
+2026-09-30T13:57:27.9521552Z Temporarily overriding HOME='/home/runner/work/_temp/a147ded8-b108-4bde-ac07-f3b9b769e3f8' before making global git config changes
+2026-09-30T13:57:27.9522622Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-30T13:57:27.9526462Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel/babel-test262-runner
+2026-09-30T13:57:27.9567838Z ##[group]Determining repository object format
+2026-09-30T13:57:28.2529438Z ##[endgroup]
+2026-09-30T13:57:28.2530494Z ##[group]Initializing the repository
+2026-09-30T13:57:28.2534683Z [command]/usr/bin/git init /home/runner/work/babel/babel/babel-test262-runner
+2026-09-30T13:57:28.2642911Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-30T13:57:28.2643821Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-30T13:57:28.2645116Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-30T13:57:28.2645966Z hint: call:
+2026-09-30T13:57:28.2646392Z hint:
+2026-09-30T13:57:28.2646929Z hint: 	git config --global init.defaultBranch <name>
+2026-09-30T13:57:28.2647590Z hint:
+2026-09-30T13:57:28.2648264Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-30T13:57:28.2649354Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-30T13:57:28.2650233Z hint:
+2026-09-30T13:57:28.2650815Z hint: 	git branch -m <name>
+2026-09-30T13:57:28.2651338Z hint:
+2026-09-30T13:57:28.2652080Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-30T13:57:28.2653392Z Initialized empty Git repository in /home/runner/work/babel/babel/babel-test262-runner/.git/
+2026-09-30T13:57:28.2662485Z [command]/usr/bin/git remote add origin https://github.com/babel/babel-test262-runner
+2026-09-30T13:57:28.2716091Z ##[endgroup]
+2026-09-30T13:57:28.2716871Z ##[group]Disabling automatic garbage collection
+2026-09-30T13:57:28.2721915Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-30T13:57:28.2758451Z ##[endgroup]
+2026-09-30T13:57:28.2759056Z ##[group]Setting up auth
+2026-09-30T13:57:28.2760006Z Removing SSH command configuration
+2026-09-30T13:57:28.2768363Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-30T13:57:28.2807736Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-30T13:57:28.3143713Z Removing HTTP extra header
+2026-09-30T13:57:28.3149502Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-30T13:57:28.3183094Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-30T13:57:28.3396095Z Removing includeIf entries pointing to credentials config files
+2026-09-30T13:57:28.3401461Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-30T13:57:28.3433766Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-30T13:57:28.3659285Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-30T13:57:28.3732333Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git.path /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:28.3764748Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:28.3799105Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/babel-test262-runner/.git.path /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:28.3832389Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/babel-test262-runner/.git/worktrees/*.path /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:28.3861171Z ##[endgroup]
+2026-09-30T13:57:28.3861918Z ##[group]Fetching the repository
+2026-09-30T13:57:28.3869615Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +refs/heads/main*:refs/remotes/origin/main* +refs/tags/main*:refs/tags/main*
+2026-09-30T13:57:28.9627190Z From https://github.com/babel/babel-test262-runner
+2026-09-30T13:57:28.9627722Z  * [new branch]      main       -> origin/main
+2026-09-30T13:57:28.9633579Z ##[endgroup]
+2026-09-30T13:57:28.9634405Z ##[group]Determining the checkout info
+2026-09-30T13:57:28.9639583Z [command]/usr/bin/git branch --list --remote origin/main
+2026-09-30T13:57:28.9666331Z   origin/main
+2026-09-30T13:57:28.9671046Z ##[endgroup]
+2026-09-30T13:57:28.9676983Z [command]/usr/bin/git sparse-checkout disable
+2026-09-30T13:57:28.9739685Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-30T13:57:28.9759812Z ##[group]Checking out the ref
+2026-09-30T13:57:28.9764412Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-09-30T13:57:28.9838594Z Switched to a new branch 'main'
+2026-09-30T13:57:28.9844353Z branch 'main' set up to track 'origin/main'.
+2026-09-30T13:57:28.9849567Z ##[endgroup]
+2026-09-30T13:57:28.9891724Z [command]/usr/bin/git log -1 --format=%H
+2026-09-30T13:57:28.9917784Z b56f8f586ca4a07df7071887694b81d31ceaa914
+2026-09-30T13:57:29.0054786Z ##[group]Run cd babel-test262-runner
+2026-09-30T13:57:29.0055512Z [36;1mcd babel-test262-runner[0m
+2026-09-30T13:57:29.0055839Z [36;1mnpm ci[0m
+2026-09-30T13:57:29.0056241Z [36;1mnode lib/download-main-artifact/index.mjs ~/test262-main.tap[0m
+2026-09-30T13:57:29.0116766Z shell: /usr/bin/bash -e {0}
+2026-09-30T13:57:29.0117084Z env:
+2026-09-30T13:57:29.0119743Z   GITHUB_TOKEN: ***
+2026-09-30T13:57:29.0120024Z ##[endgroup]
+2026-09-30T13:57:30.6060777Z npm warn deprecated debug@4.1.1: Debug versions >=3.2.0 <3.2.7 || >=4 <4.3.1 have a low-severity ReDos regression when used in a Node.js environment. It is recommended you upgrade to 3.2.7 or 4.3.1. (https://github.com/visionmedia/debug/issues/797)
+2026-09-30T13:57:30.9394789Z npm warn deprecated @babel/plugin-proposal-explicit-resource-management@7.27.4: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-explicit-resource-management instead.
+2026-09-30T13:57:33.2625232Z 
+2026-09-30T13:57:33.2626523Z added 293 packages, and audited 294 packages in 4s
+2026-09-30T13:57:33.2627097Z 
+2026-09-30T13:57:33.2627323Z 17 packages are looking for funding
+2026-09-30T13:57:33.2627911Z   run `npm fund` for details
+2026-09-30T13:57:33.2724602Z 
+2026-09-30T13:57:33.2752039Z 16 vulnerabilities (5 low, 5 moderate, 6 high)
+2026-09-30T13:57:33.2752521Z 
+2026-09-30T13:57:33.2752799Z To address issues that do not require attention, run:
+2026-09-30T13:57:33.2753451Z   npm audit fix
+2026-09-30T13:57:33.2753695Z 
+2026-09-30T13:57:33.2753983Z To address all issues (including breaking changes), run:
+2026-09-30T13:57:33.2754629Z   npm audit fix --force
+2026-09-30T13:57:33.2755127Z 
+2026-09-30T13:57:33.2755325Z Run `npm audit` for details.
+2026-09-30T13:57:35.7444546Z ##[group]Run cd babel-test262-runner
+2026-09-30T13:57:35.7445343Z [36;1mcd babel-test262-runner[0m
+2026-09-30T13:57:35.7445957Z [36;1mnode lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap[0m
+2026-09-30T13:57:35.7507740Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-09-30T13:57:35.7508164Z ##[endgroup]
+2026-09-30T13:57:35.8281538Z TAP version 13
+2026-09-30T13:57:43.0236855Z not ok 46492 test/staging/sm/JSON/parse-mega-huge-array.js default # (expected success, got timeout error)
+2026-09-30T13:57:43.0237751Z   ---
+2026-09-30T13:57:43.0238070Z   name: Error
+2026-09-30T13:57:43.0238682Z   message: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after 60000 ms
+2026-09-30T13:57:43.0239662Z   stack: >-
+2026-09-30T13:57:43.0240206Z     Error: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after
+2026-09-30T13:57:43.0240824Z     60000 ms
+2026-09-30T13:57:43.0241010Z 
+2026-09-30T13:57:43.0241409Z     /home/runner/work/babel/babel/babel-test262-runner/lib/run-tests/index.js:81:17
+2026-09-30T13:57:43.0241882Z 
+2026-09-30T13:57:43.0242245Z     Error: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after
+2026-09-30T13:57:43.0242852Z     60000 ms
+2026-09-30T13:57:43.0243032Z 
+2026-09-30T13:57:43.0243182Z     Timeout._onTimeout
+2026-09-30T13:57:43.0243786Z     (/home/runner/work/babel/babel/babel-test262-runner/lib/run-tests/worker.js:43:20)
+2026-09-30T13:57:43.0244254Z 
+2026-09-30T13:57:43.0244489Z     listOnTimeout (node:internal/timers:685:17)
+2026-09-30T13:57:43.0245144Z 
+2026-09-30T13:57:43.0245686Z     process.processTimers (node:internal/timers:618:7)
+2026-09-30T13:57:43.0246317Z 
+2026-09-30T13:57:43.0246502Z   ...
+2026-09-30T13:57:43.0247348Z not ok 46495 test/staging/sm/JSON/parse-mega-huge-array.js strict mode # (expected success, got timeout error)
+2026-09-30T13:57:43.0248044Z   ---
+2026-09-30T13:57:43.0248318Z   name: Error
+2026-09-30T13:57:43.0248820Z   message: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after 60000 ms
+2026-09-30T13:57:43.0249603Z   stack: >-
+2026-09-30T13:57:43.0250313Z     Error: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after
+2026-09-30T13:57:43.0251153Z     60000 ms
+2026-09-30T13:57:43.0251319Z 
+2026-09-30T13:57:43.0251649Z     /home/runner/work/babel/babel/babel-test262-runner/lib/run-tests/index.js:81:17
+2026-09-30T13:57:43.0252124Z 
+2026-09-30T13:57:43.0252451Z     Error: test test/staging/sm/JSON/parse-mega-huge-array.js timed out after
+2026-09-30T13:57:43.0253292Z     60000 ms
+2026-09-30T13:57:43.0253539Z 
+2026-09-30T13:57:43.0253732Z     Timeout._onTimeout
+2026-09-30T13:57:43.0254279Z     (/home/runner/work/babel/babel/babel-test262-runner/lib/run-tests/worker.js:43:20)
+2026-09-30T13:57:43.0254774Z 
+2026-09-30T13:57:43.0255076Z     listOnTimeout (node:internal/timers:685:17)
+2026-09-30T13:57:43.0255540Z 
+2026-09-30T13:57:43.0255769Z     process.processTimers (node:internal/timers:618:7)
+2026-09-30T13:57:43.0256130Z 
+2026-09-30T13:57:43.0256254Z   ...
+2026-09-30T13:57:43.0256579Z # 48391 tests, 42210 successes
+2026-09-30T13:57:43.0256964Z # 2 new failures, 0 new successes
+2026-09-30T13:57:43.0257293Z 1..2
+2026-09-30T13:57:43.0457465Z ##[error]Process completed with exit code 1.
+2026-09-30T13:57:43.0570374Z Post job cleanup.
+2026-09-30T13:57:43.1373293Z [command]/usr/bin/git version
+2026-09-30T13:57:43.1408951Z git version 2.55.0
+2026-09-30T13:57:43.1447510Z Temporarily overriding HOME='/home/runner/work/_temp/399e7f41-608c-4552-810d-5f7bab0b96f1' before making global git config changes
+2026-09-30T13:57:43.1448411Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-30T13:57:43.1454201Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel/babel-test262-runner
+2026-09-30T13:57:43.1483493Z Removing SSH command configuration
+2026-09-30T13:57:43.1491005Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-30T13:57:43.1523100Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-30T13:57:43.1741787Z Removing HTTP extra header
+2026-09-30T13:57:43.1748182Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-30T13:57:43.1779732Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-30T13:57:43.1990063Z Removing includeIf entries pointing to credentials config files
+2026-09-30T13:57:43.1996791Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-30T13:57:43.2021706Z includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git.path
+2026-09-30T13:57:43.2022964Z includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git/worktrees/*.path
+2026-09-30T13:57:43.2024348Z includeif.gitdir:/github/workspace/babel-test262-runner/.git.path
+2026-09-30T13:57:43.2025876Z includeif.gitdir:/github/workspace/babel-test262-runner/.git/worktrees/*.path
+2026-09-30T13:57:43.2033046Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git.path
+2026-09-30T13:57:43.2054393Z /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2065372Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git.path /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2099644Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git/worktrees/*.path
+2026-09-30T13:57:43.2120202Z /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2129656Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/babel-test262-runner/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2160803Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/babel-test262-runner/.git.path
+2026-09-30T13:57:43.2180251Z /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2189718Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/babel-test262-runner/.git.path /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2220978Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/babel-test262-runner/.git/worktrees/*.path
+2026-09-30T13:57:43.2245509Z /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2251394Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/babel-test262-runner/.git/worktrees/*.path /github/runner_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config
+2026-09-30T13:57:43.2285474Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-30T13:57:43.2491868Z Removing credentials config '/home/runner/work/_temp/git-credentials-002329ed-8b57-4bb3-b2c3-9a6becfcfd7c.config'
+2026-09-30T13:57:43.2642376Z Cleaning up orphan processes

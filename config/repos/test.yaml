@@ -5,7 +5,7 @@
 # Final list depends on the re-run check (PLAN P1.3).
 member: test
 repos:
-  # --- Mocha (8)
+  # --- Mocha (9)
   - {full_name: Automattic/mongoose,          licence: MIT,        framework: mocha,  flaky: 14,  note: "MongoDB integration tests"}
   - {full_name: socketio/socket.io,           licence: MIT,        framework: mocha,  flaky: 2,   note: "real-time sockets; per-package workflows"}
   - {full_name: sequelize/sequelize,          licence: MIT,        framework: mocha,  flaky: 12,  note: "multi-database"}
@@ -16,6 +16,7 @@ repos:
   - {full_name: typeorm/typeorm,              licence: MIT,        framework: mocha,  flaky: 3,   note: "multi-database ORM"}
   - {full_name: puppeteer/puppeteer,          licence: Apache-2.0, framework: mocha,  flaky: 112, note: "browser automation"}
   - {full_name: eslint/eslint,                licence: MIT,        framework: mocha,  flaky: 3,   note: "large, stable (control)"}
+  - {full_name: brianc/node-postgres,         licence: MIT,        framework: mocha,  flaky: 0,   note: "Postgres client; mocha, not vitest (log survey, 2026-10-27)"}
   # --- Jest (6)
   - {full_name: jestjs/jest,                  licence: MIT,        framework: jest,   flaky: 10,  note: "the runner's own suite"}
   - {full_name: babel/babel,                  licence: MIT,        framework: jest,   flaky: 6,   note: "very large suite"}
@@ -23,7 +24,7 @@ repos:
   - {full_name: webpack/webpack,              licence: MIT,        framework: jest,   flaky: 0,   note: "large, filesystem-heavy"}
   - {full_name: prettier/prettier,            licence: MIT,        framework: jest,   flaky: 3,   note: "stable (control)"}
   - {full_name: winstonjs/winston,            licence: MIT,        framework: jest,   flaky: 3,   note: "small library"}
-  # --- Vitest (11)
+  # --- Vitest (10)
   - {full_name: TryGhost/Ghost,               licence: MIT,        framework: vitest, flaky: 114, note: "full app, database-backed"}
   - {full_name: vitejs/vite,                  licence: MIT,        framework: vitest, flaky: 41,  note: "dev server + browser tests"}
   - {full_name: vitest-dev/vitest,            licence: MIT,        framework: vitest, flaky: 30,  note: "many async tests"}
@@ -31,7 +32,6 @@ repos:
   - {full_name: nuxt/nuxt,                    licence: MIT,        framework: vitest, flaky: 9,   note: "build + server tests"}
   - {full_name: TanStack/query,               licence: MIT,        framework: vitest, flaky: 9,   note: "timers and caching"}
   - {full_name: mikro-orm/mikro-orm,          licence: MIT,        framework: vitest, flaky: 4,   note: "multi-database ORM"}
-  - {full_name: brianc/node-postgres,         licence: MIT,        framework: vitest, flaky: 0,   note: "Postgres client"}
   - {full_name: sveltejs/svelte,              licence: MIT,        framework: vitest, flaky: 5,   note: "compiler, mostly deterministic"}
   - {full_name: vuejs/core,                   licence: MIT,        framework: vitest, flaky: 2,   note: "stable (control)"}
   - {full_name: typescript-eslint/typescript-eslint, licence: MIT, framework: vitest, flaky: 3,   note: "stable (control)"}

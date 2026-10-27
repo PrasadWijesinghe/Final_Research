@@ -1,0 +1,416 @@
+﻿2026-10-05T00:43:37.4491443Z Current runner version: '2.337.0'
+2026-10-05T00:43:37.4515941Z ##[group]Runner Image Provisioner
+2026-10-05T00:43:37.4516743Z Hosted Compute Agent
+2026-10-05T00:43:37.4517402Z Version: 20260901.588
+2026-10-05T00:43:37.4517991Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-05T00:43:37.4518718Z Build Date: 2026-09-01T19:56:44Z
+2026-10-05T00:43:37.4519367Z Worker ID: {8f3c0598-7e79-483d-b824-9fa2aaed8816}
+2026-10-05T00:43:37.4520022Z Azure Region: westus3
+2026-10-05T00:43:37.4520590Z ##[endgroup]
+2026-10-05T00:43:37.4522166Z ##[group]Operating System
+2026-10-05T00:43:37.4523176Z Ubuntu
+2026-10-05T00:43:37.4523672Z 24.04.5
+2026-10-05T00:43:37.4524138Z LTS
+2026-10-05T00:43:37.4524666Z ##[endgroup]
+2026-10-05T00:43:37.4525177Z ##[group]Runner Image
+2026-10-05T00:43:37.4525734Z Image: ubuntu-24.04
+2026-10-05T00:43:37.4526258Z Version: 20260927.320.1
+2026-10-05T00:43:37.4527477Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-05T00:43:37.4528866Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-05T00:43:37.4529750Z ##[endgroup]
+2026-10-05T00:43:37.4532707Z ##[group]GITHUB_TOKEN Permissions
+2026-10-05T00:43:37.4535205Z Actions: write
+2026-10-05T00:43:37.4535775Z ArtifactMetadata: write
+2026-10-05T00:43:37.4536326Z Attestations: write
+2026-10-05T00:43:37.4536876Z Checks: write
+2026-10-05T00:43:37.4537430Z CodeQuality: write
+2026-10-05T00:43:37.4537960Z Contents: write
+2026-10-05T00:43:37.4538488Z CopilotRequests: write
+2026-10-05T00:43:37.4539028Z Deployments: write
+2026-10-05T00:43:37.4539613Z Discussions: write
+2026-10-05T00:43:37.4540142Z Drives: write
+2026-10-05T00:43:37.4540636Z Issues: write
+2026-10-05T00:43:37.4541144Z Metadata: read
+2026-10-05T00:43:37.4541731Z Models: read
+2026-10-05T00:43:37.4542429Z Packages: write
+2026-10-05T00:43:37.4542962Z Pages: write
+2026-10-05T00:43:37.4543452Z PullRequests: write
+2026-10-05T00:43:37.4544075Z RepositoryProjects: write
+2026-10-05T00:43:37.4544653Z SecurityEvents: write
+2026-10-05T00:43:37.4545202Z Statuses: write
+2026-10-05T00:43:37.4545754Z VulnerabilityAlerts: read
+2026-10-05T00:43:37.4546300Z ##[endgroup]
+2026-10-05T00:43:37.4548501Z Secret source: Actions
+2026-10-05T00:43:37.4549357Z Cache mode: write
+2026-10-05T00:43:37.4550072Z Prepare workflow directory
+2026-10-05T00:43:37.4936268Z Prepare all required actions
+2026-10-05T00:43:37.4985325Z Getting action download info
+2026-10-05T00:43:37.8013732Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-05T00:43:37.9080965Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-05T00:43:37.9767479Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-10-05T00:43:38.7766576Z Complete job name: sqlite3 (Node 24)
+2026-10-05T00:43:38.8644052Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-05T00:43:38.8645168Z with:
+2026-10-05T00:43:38.8645682Z   repository: sequelize/sequelize
+2026-10-05T00:43:38.8650147Z   token: ***
+2026-10-05T00:43:38.8650641Z   ssh-strict: true
+2026-10-05T00:43:38.8651143Z   ssh-user: git
+2026-10-05T00:43:38.8651664Z   persist-credentials: true
+2026-10-05T00:43:38.8652385Z   clean: true
+2026-10-05T00:43:38.8652912Z   sparse-checkout-cone-mode: true
+2026-10-05T00:43:38.8653519Z   fetch-depth: 1
+2026-10-05T00:43:38.8654025Z   fetch-tags: false
+2026-10-05T00:43:38.8654540Z   show-progress: true
+2026-10-05T00:43:38.8655056Z   lfs: false
+2026-10-05T00:43:38.8655543Z   submodules: false
+2026-10-05T00:43:38.8656067Z   set-safe-directory: true
+2026-10-05T00:43:38.8656636Z   allow-unsafe-pr-checkout: false
+2026-10-05T00:43:38.8657472Z env:
+2026-10-05T00:43:38.8657953Z   DIALECT: sqlite3
+2026-10-05T00:43:38.8658450Z ##[endgroup]
+2026-10-05T00:43:38.9612657Z Syncing repository: sequelize/sequelize
+2026-10-05T00:43:38.9615249Z ##[group]Getting Git version info
+2026-10-05T00:43:38.9616104Z Working directory is '/home/runner/work/sequelize/sequelize'
+2026-10-05T00:43:38.9617340Z [command]/usr/bin/git version
+2026-10-05T00:43:38.9663196Z git version 2.55.0
+2026-10-05T00:43:38.9682870Z ##[endgroup]
+2026-10-05T00:43:38.9694690Z Temporarily overriding HOME='/home/runner/work/_temp/f62c7043-c00f-4ef1-b4b4-619e649f697b' before making global git config changes
+2026-10-05T00:43:38.9697485Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T00:43:38.9701721Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-10-05T00:43:38.9745053Z Deleting the contents of '/home/runner/work/sequelize/sequelize'
+2026-10-05T00:43:38.9756754Z ##[group]Determining repository object format
+2026-10-05T00:43:38.9763634Z ##[endgroup]
+2026-10-05T00:43:38.9764619Z ##[group]Initializing the repository
+2026-10-05T00:43:38.9765449Z [command]/usr/bin/git init /home/runner/work/sequelize/sequelize
+2026-10-05T00:43:38.9858442Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-05T00:43:38.9859625Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-05T00:43:38.9860660Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-05T00:43:38.9861505Z hint: call:
+2026-10-05T00:43:38.9862281Z hint:
+2026-10-05T00:43:38.9863318Z hint: 	git config --global init.defaultBranch <name>
+2026-10-05T00:43:38.9864448Z hint:
+2026-10-05T00:43:38.9865666Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-05T00:43:38.9867186Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-05T00:43:38.9868570Z hint:
+2026-10-05T00:43:38.9869402Z hint: 	git branch -m <name>
+2026-10-05T00:43:38.9870064Z hint:
+2026-10-05T00:43:38.9871189Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-05T00:43:38.9872611Z Initialized empty Git repository in /home/runner/work/sequelize/sequelize/.git/
+2026-10-05T00:43:38.9875863Z [command]/usr/bin/git remote add origin https://github.com/sequelize/sequelize
+2026-10-05T00:43:38.9923582Z ##[endgroup]
+2026-10-05T00:43:38.9924641Z ##[group]Disabling automatic garbage collection
+2026-10-05T00:43:38.9926237Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-05T00:43:38.9952653Z ##[endgroup]
+2026-10-05T00:43:38.9953527Z ##[group]Setting up auth
+2026-10-05T00:43:38.9954169Z Removing SSH command configuration
+2026-10-05T00:43:38.9958424Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T00:43:38.9986012Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T00:43:39.0271800Z Removing HTTP extra header
+2026-10-05T00:43:39.0277323Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T00:43:39.0304803Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T00:43:39.0478256Z Removing includeIf entries pointing to credentials config files
+2026-10-05T00:43:39.0483249Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T00:43:39.0515097Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T00:43:39.0691064Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-05T00:43:39.0725415Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git.path /home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:43:39.0753006Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:43:39.0780897Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:43:39.0808439Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:43:39.0833608Z ##[endgroup]
+2026-10-05T00:43:39.0835119Z ##[group]Fetching the repository
+2026-10-05T00:43:39.0842256Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +043caf6cae2f19bc6401d8d2b36b6f9c601ee6d6:refs/remotes/origin/renovate/node-24.x
+2026-10-05T00:43:40.2472925Z From https://github.com/sequelize/sequelize
+2026-10-05T00:43:40.2477364Z  * [new ref]         043caf6cae2f19bc6401d8d2b36b6f9c601ee6d6 -> origin/renovate/node-24.x
+2026-10-05T00:43:40.2484660Z [command]/usr/bin/git branch --list --remote origin/renovate/node-24.x
+2026-10-05T00:43:40.2501525Z   origin/renovate/node-24.x
+2026-10-05T00:43:40.2511219Z [command]/usr/bin/git rev-parse refs/remotes/origin/renovate/node-24.x
+2026-10-05T00:43:40.2529504Z 043caf6cae2f19bc6401d8d2b36b6f9c601ee6d6
+2026-10-05T00:43:40.2533216Z ##[endgroup]
+2026-10-05T00:43:40.2534670Z ##[group]Determining the checkout info
+2026-10-05T00:43:40.2537415Z ##[endgroup]
+2026-10-05T00:43:40.2538530Z [command]/usr/bin/git sparse-checkout disable
+2026-10-05T00:43:40.2576189Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-05T00:43:40.2599845Z ##[group]Checking out the ref
+2026-10-05T00:43:40.2603285Z [command]/usr/bin/git checkout --progress --force -B renovate/node-24.x refs/remotes/origin/renovate/node-24.x
+2026-10-05T00:43:40.3205719Z Switched to a new branch 'renovate/node-24.x'
+2026-10-05T00:43:40.3209068Z branch 'renovate/node-24.x' set up to track 'origin/renovate/node-24.x'.
+2026-10-05T00:43:40.3217476Z ##[endgroup]
+2026-10-05T00:43:40.3255918Z [command]/usr/bin/git log -1 --format=%H
+2026-10-05T00:43:40.3277172Z 043caf6cae2f19bc6401d8d2b36b6f9c601ee6d6
+2026-10-05T00:43:40.3636345Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-05T00:43:40.3637858Z with:
+2026-10-05T00:43:40.3638916Z   node-version: 24
+2026-10-05T00:43:40.3639787Z   cache: yarn
+2026-10-05T00:43:40.3640635Z   check-latest: false
+2026-10-05T00:43:40.3650468Z   token: ***
+2026-10-05T00:43:40.3651377Z   package-manager-cache: true
+2026-10-05T00:43:40.3652526Z env:
+2026-10-05T00:43:40.3653306Z   DIALECT: sqlite3
+2026-10-05T00:43:40.3654161Z ##[endgroup]
+2026-10-05T00:43:40.4910081Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-05T00:43:40.4913017Z ##[group]Environment details
+2026-10-05T00:43:41.1380970Z node: v24.21.0
+2026-10-05T00:43:41.1382105Z npm: 11.19.0
+2026-10-05T00:43:41.1382729Z yarn: 4.18.1
+2026-10-05T00:43:41.1383763Z ##[endgroup]
+2026-10-05T00:43:41.1402532Z [command]/usr/local/bin/yarn --version
+2026-10-05T00:43:41.5074831Z 4.18.1
+2026-10-05T00:43:41.5226377Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-10-05T00:43:41.8945996Z /home/runner/.yarn/berry/cache
+2026-10-05T00:43:41.9205449Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-10-05T00:43:42.2911711Z [33mtrue[39m
+2026-10-05T00:43:42.5203341Z Cache hit for: node-cache-Linux-x64-yarn-89388bbcce31d936b9ea534fb4eb6845f5e4d3182193170964c9319273f56c23
+2026-10-05T00:43:43.7420145Z Received 33554432 of 87075047 (38.5%), 32.0 MBs/sec
+2026-10-05T00:43:44.0766634Z Received 87075047 of 87075047 (100.0%), 62.2 MBs/sec
+2026-10-05T00:43:44.0767393Z Cache Size: ~83 MB (87075047 B)
+2026-10-05T00:43:44.0802493Z [command]/usr/bin/tar -xf /home/runner/work/_temp/cd78b348-1126-48db-bd41-fa1eef6f0a73/cache.tzst -P -C /home/runner/work/sequelize/sequelize --use-compress-program unzstd
+2026-10-05T00:43:44.6018294Z Cache restored successfully
+2026-10-05T00:43:44.6056168Z Cache restored from key: node-cache-Linux-x64-yarn-89388bbcce31d936b9ea534fb4eb6845f5e4d3182193170964c9319273f56c23
+2026-10-05T00:43:44.6224545Z ##[group]Run actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+2026-10-05T00:43:44.6224967Z with:
+2026-10-05T00:43:44.6225205Z   name: install-build-artifact-node-24
+2026-10-05T00:43:44.6225487Z   merge-multiple: false
+2026-10-05T00:43:44.6225831Z   repository: sequelize/sequelize
+2026-10-05T00:43:44.6226089Z   run-id: 37247876491
+2026-10-05T00:43:44.6226334Z   skip-decompress: false
+2026-10-05T00:43:44.6226573Z   digest-mismatch: error
+2026-10-05T00:43:44.6226800Z env:
+2026-10-05T00:43:44.6227005Z   DIALECT: sqlite3
+2026-10-05T00:43:44.6227207Z ##[endgroup]
+2026-10-05T00:43:44.7538256Z Downloading single artifact
+2026-10-05T00:43:44.9800629Z Preparing to download the following artifacts:
+2026-10-05T00:43:44.9803032Z - install-build-artifact-node-24 (ID: 11320215018, Size: 136952217, Expected Digest: sha256:b7eff807ce58661833eb956d2ee21fde1d919bc7561a9abb74a02b89f0c5116d)
+2026-10-05T00:43:45.4171791Z Redirecting to blob download url: https://productionresultssa3.blob.core.windows.net/actions-results/349de681-acf3-8969-92c0-4e3d16d44904/workflow-job-run-be131f4b-cf6a-55d9-9708-004147864edd/artifacts/c4318b289cb4f347830d768135bca43ef7ac2e66ed52fd89bedecab2421c1846.zip
+2026-10-05T00:43:45.4173751Z Starting download of artifact to: /home/runner/work/sequelize/sequelize
+2026-10-05T00:43:45.6755714Z (node:2334) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-05T00:43:45.6757573Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-05T00:43:50.2644935Z SHA256 digest of downloaded artifact is b7eff807ce58661833eb956d2ee21fde1d919bc7561a9abb74a02b89f0c5116d
+2026-10-05T00:43:50.2646013Z Artifact download completed successfully.
+2026-10-05T00:43:50.2646530Z Total of 1 artifact(s) downloaded
+2026-10-05T00:43:50.2651717Z Download artifact has finished successfully
+2026-10-05T00:43:50.2744724Z ##[group]Run tar -xf install-build-node-24.tar
+2026-10-05T00:43:50.2745196Z [36;1mtar -xf install-build-node-24.tar[0m
+2026-10-05T00:43:50.2935038Z shell: /usr/bin/bash -e {0}
+2026-10-05T00:43:50.2935337Z env:
+2026-10-05T00:43:50.2935554Z   DIALECT: sqlite3
+2026-10-05T00:43:50.2935774Z ##[endgroup]
+2026-10-05T00:43:51.6081715Z ##[group]Run yarn lerna run test-integration --scope=@sequelize/core
+2026-10-05T00:43:51.6082433Z [36;1myarn lerna run test-integration --scope=@sequelize/core[0m
+2026-10-05T00:43:51.6119915Z shell: /usr/bin/bash -e {0}
+2026-10-05T00:43:51.6120187Z env:
+2026-10-05T00:43:51.6120400Z   DIALECT: sqlite3
+2026-10-05T00:43:51.6120615Z ##[endgroup]
+2026-10-05T00:43:53.1202776Z lerna notice cli v10.0.1
+2026-10-05T00:43:53.5427146Z lerna info ci enabled
+2026-10-05T00:43:53.5434181Z lerna notice filter including "@sequelize/core"
+2026-10-05T00:43:53.5438792Z lerna info filter [ '@sequelize/core' ]
+2026-10-05T00:43:53.6770709Z 
+2026-10-05T00:43:53.6772187Z [2m> [22m@sequelize/core:test-integration
+2026-10-05T00:43:53.6772187Z [fixture trimmed: 2243 lines omitted]
+2026-10-05T00:44:26.3773083Z [0m      logging[0m
+2026-10-05T00:44:26.3837504Z       [32m  [32m✔[39m[0m[90m executes a query with global benchmarking option and custom logger[0m
+2026-10-05T00:44:26.3929562Z       [32m  [32m✔[39m[0m[90m executes a query with benchmarking option and custom logger[0m
+2026-10-05T00:44:26.4010811Z       [32m  [32m✔[39m[0m[90m executes a query with queryLabel option and custom logger[0m
+2026-10-05T00:44:26.4110138Z       [32m  [32m✔[39m[0m[90m executes a query with empty string, queryLabel option and custom logger[0m
+2026-10-05T00:44:26.4208207Z       [32m  [32m✔[39m[0m[90m executes a query with benchmarking option, queryLabel option and custom logger[0m
+2026-10-05T00:44:26.4248390Z [0m        with logQueryParameters[0m
+2026-10-05T00:44:26.4357274Z         [32m  [32m✔[39m[0m[90m add parameters in log sql[0m
+2026-10-05T00:44:26.4466154Z         [32m  [32m✔[39m[0m[90m add parameters in log sql when use bind value[0m
+2026-10-05T00:44:26.4495525Z [0m      stacktraces[0m
+2026-10-05T00:44:26.4578558Z       [32m  [32m✔[39m[0m[90m emits raw errors if requested[0m
+2026-10-05T00:44:26.4695910Z       [32m  [32m✔[39m[0m[90m emits full stacktraces for generic database error[0m
+2026-10-05T00:44:26.4821092Z       [32m  [32m✔[39m[0m[90m emits full stacktraces for unique constraint error[0m
+2026-10-05T00:44:26.4936815Z       [32m  [32m✔[39m[0m[90m emits full stacktraces for constraint validation error[0m
+2026-10-05T00:44:26.4973873Z [0m      rejections[0m
+2026-10-05T00:44:26.5020103Z       [32m  [32m✔[39m[0m[90m reject if the query is not a string[0m
+2026-10-05T00:44:26.5084627Z       [32m  [32m✔[39m[0m[90m reject when key is missing in the passed object[0m
+2026-10-05T00:44:26.5145351Z       [32m  [32m✔[39m[0m[90m rejects if replacements is a number[0m
+2026-10-05T00:44:26.5209944Z       [32m  [32m✔[39m[0m[90m rejects if a replacement is missing[0m
+2026-10-05T00:44:26.5270492Z       [32m  [32m✔[39m[0m[90m rejects if replacements is a string[0m
+2026-10-05T00:44:26.5331472Z       [32m  [32m✔[39m[0m[90m reject if replacements is not a plain object[0m
+2026-10-05T00:44:26.5395722Z       [32m  [32m✔[39m[0m[90m reject when binds passed with object and numeric $1 is also present[0m
+2026-10-05T00:44:26.5456088Z       [32m  [32m✔[39m[0m[90m rejects when binds passed as array and a named parameter is also present[0m
+2026-10-05T00:44:26.5520065Z       [32m  [32m✔[39m[0m[90m reject when bind key is $0 and bind is an array[0m
+2026-10-05T00:44:26.5579632Z       [32m  [32m✔[39m[0m[90m reject when bind key is $01 and bind is an array[0m
+2026-10-05T00:44:26.5639535Z       [32m  [32m✔[39m[0m[90m reject when bind key is missing in the passed array[0m
+2026-10-05T00:44:26.5700351Z       [32m  [32m✔[39m[0m[90m reject when bind key is missing in the passed object[0m
+2026-10-05T00:44:26.5760134Z       [32m  [32m✔[39m[0m[90m rejects if options.bind is a number[0m
+2026-10-05T00:44:26.5818323Z       [32m  [32m✔[39m[0m[90m rejects if a bind parameter is not present in options.bind[0m
+2026-10-05T00:44:26.5876260Z       [32m  [32m✔[39m[0m[90m rejects if options.bind is a string[0m
+2026-10-05T00:44:26.5931191Z       [32m  [32m✔[39m[0m[90m rejects if options.bind is a non-pojo object[0m
+2026-10-05T00:44:26.5954058Z [0m  [SQLITE3] Sequelize#transaction[0m
+2026-10-05T00:44:26.5954812Z [0m    nested managed transactions[0m
+2026-10-05T00:44:26.5961419Z     [32m  [32m✔[39m[0m[90m reuses the parent transaction by default[0m
+2026-10-05T00:44:26.6012014Z     [32m  [32m✔[39m[0m[90m requires compatible options if nestMode is set to "reuse"[0m
+2026-10-05T00:44:26.6038179Z     [32m  [32m✔[39m[0m[90m creates a savepoint if nestMode is set to "savepoint"[0m
+2026-10-05T00:44:26.6059984Z     [32m  [32m✔[39m[0m[90m requires compatible options if nestMode is set to "savepoint"[0m
+2026-10-05T00:44:26.6116076Z     [32m  [32m✔[39m[0m[90m defaults nestMode to sequelize's defaultTransactionNestMode option[0m
+2026-10-05T00:44:26.6263662Z [0m    Isolation Levels[0m
+2026-10-05T00:44:26.6494157Z     [32m  [32m✔[39m[0m[90m should allow setting the isolation level during a transaction[0m
+2026-10-05T00:44:30.7288232Z     [32m  [32m✔[39m[0m[90m should block updates after reading a row using SERIALIZABLE[0m[31m (4075ms)[0m
+2026-10-05T00:44:30.7354239Z [0m    Transaction#commit[0m
+2026-10-05T00:44:30.7361660Z     [32m  [32m✔[39m[0m[90m returns a promise that resolves once the transaction has been committed[0m
+2026-10-05T00:44:30.7379408Z [0m    Transaction#rollback[0m
+2026-10-05T00:44:30.7386051Z     [32m  [32m✔[39m[0m[90m returns a promise that resolves once the transaction has been rolled back[0m
+2026-10-05T00:44:30.7401735Z [0m    complex long running example[0m
+2026-10-05T00:44:31.7509691Z     [32m  [32m✔[39m[0m[90m works with promise syntax[0m[31m (1010ms)[0m
+2026-10-05T00:44:31.7560470Z [0m    concurrency: having tables with uniqueness constraints[0m
+2026-10-05T00:44:31.8673645Z     [32m  [32m✔[39m[0m[90m triggers the error event for the second transactions[0m[31m (111ms)[0m
+2026-10-05T00:44:31.8720281Z [0m  Sequelize#truncate[0m
+2026-10-05T00:44:31.8864307Z   [32m  [32m✔[39m[0m[90m supports truncating cyclic associations with { withoutForeignKeyChecks: true }[0m
+2026-10-05T00:44:31.8907215Z [0m  sequelize.withConnection[0m
+2026-10-05T00:44:31.8925548Z   [32m  [32m✔[39m[0m[90m reserves a connection, to ensure multiple queries run on the same connection[0m
+2026-10-05T00:44:31.8970470Z   [32m  [32m✔[39m[0m[90m has an option to kill the connection after using it[0m
+2026-10-05T00:44:31.8994445Z [0m  sql.random[0m
+2026-10-05T00:44:31.9002667Z   [32m  [32m✔[39m[0m[90m generates a value between 0 and 1[0m
+2026-10-05T00:44:31.9017020Z [0m  [SQLITE3] Transaction[0m
+2026-10-05T00:44:31.9029043Z   [32m  [32m✔[39m[0m[90m does not allow queries after commit[0m
+2026-10-05T00:44:31.9053816Z   [32m  [32m✔[39m[0m[90m does not allow queries immediately after commit call[0m
+2026-10-05T00:44:31.9081627Z   [32m  [32m✔[39m[0m[90m does not allow queries after rollback[0m
+2026-10-05T00:44:31.9100548Z   [32m  [32m✔[39m[0m[90m should not rollback if connection was not acquired[0m
+2026-10-05T00:44:31.9124227Z   [32m  [32m✔[39m[0m[90m does not allow queries immediately after rollback call[0m
+2026-10-05T00:44:31.9147168Z   [32m  [32m✔[39m[0m[90m does not allow commits after commit[0m
+2026-10-05T00:44:31.9170015Z   [32m  [32m✔[39m[0m[90m should run hooks if a non-auto callback transaction is committed[0m
+2026-10-05T00:44:31.9188626Z   [32m  [32m✔[39m[0m[90m should not run hooks if a non-auto callback transaction is rolled back[0m
+2026-10-05T00:44:31.9217387Z   [32m  [32m✔[39m[0m[90m should not run hooks if a non-auto callback transaction is rolled back in database[0m
+2026-10-05T00:44:31.9236626Z   [32m  [32m✔[39m[0m[90m should throw an error if null is passed to afterCommit[0m
+2026-10-05T00:44:31.9256503Z   [32m  [32m✔[39m[0m[90m should throw an error if undefined is passed to afterCommit[0m
+2026-10-05T00:44:31.9273639Z   [32m  [32m✔[39m[0m[90m should throw an error if an object is passed to afterCommit[0m
+2026-10-05T00:44:31.9289990Z   [32m  [32m✔[39m[0m[90m does not allow commits after rollback[0m
+2026-10-05T00:44:31.9318826Z   [32m  [32m✔[39m[0m[90m does not allow rollbacks after commit[0m
+2026-10-05T00:44:31.9336609Z   [32m  [32m✔[39m[0m[90m does not allow rollbacks after rollback[0m
+2026-10-05T00:44:31.9355789Z   [32m  [32m✔[39m[0m[90m works even if a transaction: null option is passed[0m
+2026-10-05T00:44:31.9374553Z   [32m  [32m✔[39m[0m[90m works even if a transaction: undefined option is passed[0m
+2026-10-05T00:44:31.9452796Z   [32m  [32m✔[39m[0m[90m provides persistent transactions[0m
+2026-10-05T00:44:31.9607759Z   [32m  [32m✔[39m[0m[90m automatically retries on SQLITE_BUSY failure[0m
+2026-10-05T00:44:32.9723838Z Rolling back transaction a6ae0933-4994-45f3-9a2a-d60ec4391895 failed with error "SQLITE_ERROR: cannot rollback - no transaction is active". We are killing its connection as it is now in an undetermined state.
+2026-10-05T00:44:32.9726106Z   [32m  [32m✔[39m[0m[90m fails with SQLITE_BUSY when retry.match is changed[0m[31m (1007ms)[0m
+2026-10-05T00:44:33.9785035Z [0m    constructor[0m
+2026-10-05T00:44:33.9788503Z     [32m  [32m✔[39m[0m[90m stores options[0m
+2026-10-05T00:44:33.9808367Z     [32m  [32m✔[39m[0m[90m generates an identifier[0m
+2026-10-05T00:44:33.9825987Z     [32m  [32m✔[39m[0m[90m should call dialect specific generateTransactionId method[0m
+2026-10-05T00:44:33.9840365Z [0m    commit[0m
+2026-10-05T00:44:33.9843607Z     [32m  [32m✔[39m[0m[90m is a commit method available[0m
+2026-10-05T00:44:33.9857762Z [0m    rollback[0m
+2026-10-05T00:44:33.9860156Z     [32m  [32m✔[39m[0m[90m is a rollback method available[0m
+2026-10-05T00:44:33.9874085Z [0m    autoCallback[0m
+2026-10-05T00:44:33.9880630Z     [32m  [32m✔[39m[0m[90m supports automatically committing[0m
+2026-10-05T00:44:33.9900416Z     [32m  [32m✔[39m[0m[90m supports automatically rolling back with a thrown error[0m
+2026-10-05T00:44:33.9919800Z     [32m  [32m✔[39m[0m[90m supports automatically rolling back with a rejection[0m
+2026-10-05T00:44:33.9956818Z     [32m  [32m✔[39m[0m[90m runs afterCommit & afterTransaction hooks when a transaction is committed[0m
+2026-10-05T00:44:33.9976996Z     [32m  [32m✔[39m[0m[90m runs afterRollback & afterTransaction hooks when a transaction is rolled back[0m
+2026-10-05T00:44:33.9994142Z     [32m  [32m✔[39m[0m[90m does not run hooks when a transaction is rolled back from database[0m
+2026-10-05T00:44:34.0006925Z [0m    transaction types[0m
+2026-10-05T00:44:34.0012675Z     [32m  [32m✔[39m[0m[90m should support default transaction type DEFERRED[0m
+2026-10-05T00:44:34.0029674Z     [32m  [32m✔[39m[0m[90m should allow specification of DEFERRED type[0m
+2026-10-05T00:44:34.0046450Z     [32m  [32m✔[39m[0m[90m should allow specification of IMMEDIATE type[0m
+2026-10-05T00:44:34.0062557Z     [32m  [32m✔[39m[0m[90m should allow specification of EXCLUSIVE type[0m
+2026-10-05T00:44:34.0074350Z [0m  [SQLITE3] fn()[0m
+2026-10-05T00:44:34.0144760Z   [32m  [32m✔[39m[0m[90m accepts condition object (with cast)[0m
+2026-10-05T00:44:34.0154596Z   [32m  [32m✔[39m[0m[90m accepts condition object (auto casting)[0m
+2026-10-05T00:44:34.0175619Z [0m  [SQLITE3] Vectors[0m
+2026-10-05T00:44:34.0230341Z   [32m  [32m✔[39m[0m[90m should not allow insert backslash[0m
+2026-10-05T00:44:34.0382577Z [92m [0m[32m 1717 passing[0m[90m (37s)[0m
+2026-10-05T00:44:34.0383292Z [36m [0m[36m 15 pending[0m
+2026-10-05T00:44:34.0956543Z 
+2026-10-05T00:44:34.0957923Z [2m[32m[39m[22m
+2026-10-05T00:44:34.0959342Z 
+2026-10-05T00:44:34.0961265Z [7m[1m[32m Lerna (powered by Nx) [39m[22m[27m  [32mSuccessfully ran target [1mtest-integration[22m for project @sequelize/core[39m
+2026-10-05T00:44:34.0962362Z 
+2026-10-05T00:44:34.0963070Z 
+2026-10-05T00:44:34.0988259Z   Run duration:      40.4s
+2026-10-05T00:44:34.0988839Z   Cache:             0/1 hit (0%)
+2026-10-05T00:44:34.0989340Z   Critical path:     40.4s (1 task)
+2026-10-05T00:44:34.0989792Z   Recoverable time:  <1ms
+2026-10-05T00:44:34.0990058Z 
+2026-10-05T00:44:34.0990257Z   Recommendations:
+2026-10-05T00:44:34.0991474Z     - Drastically reduce your run duration by sharing a cache across your team and CI → https://cloud.nx.app/connect/KwPbW5QwQG.
+2026-10-05T00:44:34.0992762Z     - Speed up or split the longest tasks on the critical path:
+2026-10-05T00:44:34.0993423Z         @sequelize/core:test-integration    40.4s
+2026-10-05T00:44:34.1330421Z ##[group]Run yarn lerna run test-smoke --scope=@sequelize/core
+2026-10-05T00:44:34.1330891Z [36;1myarn lerna run test-smoke --scope=@sequelize/core[0m
+2026-10-05T00:44:34.1366606Z shell: /usr/bin/bash -e {0}
+2026-10-05T00:44:34.1366873Z env:
+2026-10-05T00:44:34.1367085Z   DIALECT: sqlite3
+2026-10-05T00:44:34.1367298Z ##[endgroup]
+2026-10-05T00:44:35.3387038Z lerna notice cli v10.0.1
+2026-10-05T00:44:35.4862930Z lerna info ci enabled
+2026-10-05T00:44:35.4868382Z lerna notice filter including "@sequelize/core"
+2026-10-05T00:44:35.4874294Z lerna info filter [ '@sequelize/core' ]
+2026-10-05T00:44:35.5981784Z 
+2026-10-05T00:44:35.5982904Z [2m> [22m@sequelize/core:test-smoke
+2026-10-05T00:44:35.5983175Z 
+2026-10-05T00:44:36.9425707Z (node:2574) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+2026-10-05T00:44:36.9427766Z --import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-node/esm", pathToFileURL("./"));'
+2026-10-05T00:44:36.9429273Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-05T00:44:38.1783470Z (node:2574) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+2026-10-05T00:44:38.1784468Z [0m[0m
+2026-10-05T00:44:38.1833118Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-05T00:44:38.2004415Z [0m  [SQLITE3] Smoke Tests[0m
+2026-10-05T00:44:38.2015377Z [0m    getAssociations[0m
+2026-10-05T00:44:38.2739350Z     [32m  [32m✔[39m[0m[90m gets all associated objects with all fields[0m
+2026-10-05T00:44:38.3059257Z (node:2574) [SEQUELIZE0018] DeprecationWarning: The "field" option in attribute definitions has been renamed to "columnName".
+2026-10-05T00:44:38.3492068Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom through model)[0m[33m (48ms)[0m
+2026-10-05T00:44:38.3558918Z [0m    hasAssociations[0m
+2026-10-05T00:44:38.3782652Z     [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned when passing a primary key instead of an object[0m
+2026-10-05T00:44:38.3825041Z [0m    countAssociations[0m
+2026-10-05T00:44:38.4215396Z     [32m  [32m✔[39m[0m[90m should count scoped through associations[0m
+2026-10-05T00:44:38.4259568Z [0m    createAssociations[0m
+2026-10-05T00:44:38.4438649Z     [32m  [32m✔[39m[0m[90m creates a new associated object[0m
+2026-10-05T00:44:38.4480982Z [0m    belongsTo and hasMany at once[0m
+2026-10-05T00:44:38.4481865Z [0m      target belongs to source[0m
+2026-10-05T00:44:38.4650915Z       [32m  [32m✔[39m[0m[90m correctly uses bId in A[0m
+2026-10-05T00:44:38.4690979Z [0m  [SQLITE3] Instance[0m
+2026-10-05T00:44:38.4701218Z [0m    Escaping[0m
+2026-10-05T00:44:38.4780336Z     [32m  [32m✔[39m[0m[90m is done properly for special characters[0m
+2026-10-05T00:44:38.4807261Z [0m    values[0m
+2026-10-05T00:44:38.4861138Z     [32m  [32m✔[39m[0m[90m returns all values[0m
+2026-10-05T00:44:38.4896170Z [0m    [SQLITE3] Model[0m
+2026-10-05T00:44:38.4896653Z [0m      save[0m
+2026-10-05T00:44:38.5041160Z       [32m  [32m✔[39m[0m[90m should map the correct fields when saving instance (#10589)[0m
+2026-10-05T00:44:38.5092323Z [92m [0m[32m 9 passing[0m[90m (336ms)[0m
+2026-10-05T00:44:38.5530787Z 
+2026-10-05T00:44:38.5531629Z [2m[32m[39m[22m
+2026-10-05T00:44:38.5533740Z 
+2026-10-05T00:44:38.5534599Z [7m[1m[32m Lerna (powered by Nx) [39m[22m[27m  [32mSuccessfully ran target [1mtest-smoke[22m for project @sequelize/core[39m
+2026-10-05T00:44:38.5535049Z 
+2026-10-05T00:44:38.5535056Z 
+2026-10-05T00:44:38.5559310Z   Run duration:      3.0s
+2026-10-05T00:44:38.5559834Z   Cache:             0/1 hit (0%)
+2026-10-05T00:44:38.5560190Z   Critical path:     3.0s (1 task)
+2026-10-05T00:44:38.5560479Z   Recoverable time:  <1ms
+2026-10-05T00:44:38.5952680Z Post job cleanup.
+2026-10-05T00:44:38.7025466Z Cache hit occurred on the primary key node-cache-Linux-x64-yarn-89388bbcce31d936b9ea534fb4eb6845f5e4d3182193170964c9319273f56c23, not saving cache.
+2026-10-05T00:44:38.7129805Z Post job cleanup.
+2026-10-05T00:44:38.7907378Z [command]/usr/bin/git version
+2026-10-05T00:44:38.7948496Z git version 2.55.0
+2026-10-05T00:44:38.7981413Z Temporarily overriding HOME='/home/runner/work/_temp/2f3088af-772a-4d07-a52e-4e3c3205d30e' before making global git config changes
+2026-10-05T00:44:38.7982770Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T00:44:38.7986552Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-10-05T00:44:38.8013070Z Removing SSH command configuration
+2026-10-05T00:44:38.8019183Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T00:44:38.8047522Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T00:44:38.8222317Z Removing HTTP extra header
+2026-10-05T00:44:38.8227668Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T00:44:38.8257036Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T00:44:38.8428165Z Removing includeIf entries pointing to credentials config files
+2026-10-05T00:44:38.8434078Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T00:44:38.8459558Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-10-05T00:44:38.8460623Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-10-05T00:44:38.8461467Z includeif.gitdir:/github/workspace/.git.path
+2026-10-05T00:44:38.8462316Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T00:44:38.8466834Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-10-05T00:44:38.8485937Z /home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:44:38.8495405Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-6aa08abe\-42ec\-4020\-b42f\-d6cb53b8db95\.config
+2026-10-05T00:44:38.8522763Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-10-05T00:44:38.8539736Z /home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:44:38.8553421Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-6aa08abe\-42ec\-4020\-b42f\-d6cb53b8db95\.config
+2026-10-05T00:44:38.8578752Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-05T00:44:38.8595536Z /github/runner_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:44:38.8600630Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-6aa08abe\-42ec\-4020\-b42f\-d6cb53b8db95\.config
+2026-10-05T00:44:38.8625743Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T00:44:38.8642022Z /github/runner_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config
+2026-10-05T00:44:38.8648451Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-6aa08abe\-42ec\-4020\-b42f\-d6cb53b8db95\.config
+2026-10-05T00:44:38.8674682Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T00:44:38.8842122Z Removing credentials config '/home/runner/work/_temp/git-credentials-6aa08abe-42ec-4020-b42f-d6cb53b8db95.config'
+2026-10-05T00:44:38.8968233Z Cleaning up orphan processes

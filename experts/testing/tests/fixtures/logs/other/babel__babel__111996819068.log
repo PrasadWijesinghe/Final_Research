@@ -1,0 +1,251 @@
+﻿2026-10-05T21:57:31.6517263Z Current runner version: '2.337.0'
+2026-10-05T21:57:31.6536923Z ##[group]Runner Image Provisioner
+2026-10-05T21:57:31.6537805Z Hosted Compute Agent
+2026-10-05T21:57:31.6538287Z Version: 20260901.588
+2026-10-05T21:57:31.6538841Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-05T21:57:31.6539454Z Build Date: 2026-09-01T19:56:44Z
+2026-10-05T21:57:31.6539983Z Worker ID: {41364d32-571c-4093-97cc-b29ab6673b90}
+2026-10-05T21:57:31.6540648Z Azure Region: westus
+2026-10-05T21:57:31.6541107Z ##[endgroup]
+2026-10-05T21:57:31.6542487Z ##[group]Operating System
+2026-10-05T21:57:31.6543039Z Ubuntu
+2026-10-05T21:57:31.6543460Z 24.04.5
+2026-10-05T21:57:31.6543936Z LTS
+2026-10-05T21:57:31.6544382Z ##[endgroup]
+2026-10-05T21:57:31.6544881Z ##[group]Runner Image
+2026-10-05T21:57:31.6545405Z Image: ubuntu-24.04
+2026-10-05T21:57:31.6545920Z Version: 20260927.320.1
+2026-10-05T21:57:31.6546978Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-05T21:57:31.6548387Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-05T21:57:31.6549192Z ##[endgroup]
+2026-10-05T21:57:31.6550111Z ##[group]GITHUB_TOKEN Permissions
+2026-10-05T21:57:31.6551897Z Contents: read
+2026-10-05T21:57:31.6552411Z Metadata: read
+2026-10-05T21:57:31.6552980Z ##[endgroup]
+2026-10-05T21:57:31.6554636Z Secret source: None
+2026-10-05T21:57:31.6555426Z Cache mode: write
+2026-10-05T21:57:31.6556023Z Prepare workflow directory
+2026-10-05T21:57:31.6811806Z Prepare all required actions
+2026-10-05T21:57:31.6849989Z Getting action download info
+2026-10-05T21:57:32.0456488Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-05T21:57:32.7085316Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-10-05T21:57:32.9711363Z Complete job name: Validate Yarn dependencies and constraints
+2026-10-05T21:57:33.0412966Z ##[group]Run actions/checkout@v6
+2026-10-05T21:57:33.0413706Z with:
+2026-10-05T21:57:33.0414094Z   repository: babel/babel
+2026-10-05T21:57:33.0417563Z   token: ***
+2026-10-05T21:57:33.0417956Z   ssh-strict: true
+2026-10-05T21:57:33.0418337Z   ssh-user: git
+2026-10-05T21:57:33.0418718Z   persist-credentials: true
+2026-10-05T21:57:33.0419137Z   clean: true
+2026-10-05T21:57:33.0419521Z   sparse-checkout-cone-mode: true
+2026-10-05T21:57:33.0419976Z   fetch-depth: 1
+2026-10-05T21:57:33.0420345Z   fetch-tags: false
+2026-10-05T21:57:33.0420722Z   show-progress: true
+2026-10-05T21:57:33.0421113Z   lfs: false
+2026-10-05T21:57:33.0421476Z   submodules: false
+2026-10-05T21:57:33.0421861Z   set-safe-directory: true
+2026-10-05T21:57:33.0422288Z   allow-unsafe-pr-checkout: false
+2026-10-05T21:57:33.0422947Z ##[endgroup]
+2026-10-05T21:57:33.1207377Z Syncing repository: babel/babel
+2026-10-05T21:57:33.1209009Z ##[group]Getting Git version info
+2026-10-05T21:57:33.1209716Z Working directory is '/home/runner/work/babel/babel'
+2026-10-05T21:57:33.1210648Z [command]/usr/bin/git version
+2026-10-05T21:57:33.1695099Z git version 2.55.0
+2026-10-05T21:57:33.1713092Z ##[endgroup]
+2026-10-05T21:57:33.1724449Z Temporarily overriding HOME='/home/runner/work/_temp/ab549457-3c0c-47a9-bbd8-25a35c085679' before making global git config changes
+2026-10-05T21:57:33.1725761Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T21:57:33.1728451Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-05T21:57:33.1766001Z Deleting the contents of '/home/runner/work/babel/babel'
+2026-10-05T21:57:33.1769995Z ##[group]Determining repository object format
+2026-10-05T21:57:33.1771537Z ##[endgroup]
+2026-10-05T21:57:33.1772378Z ##[group]Initializing the repository
+2026-10-05T21:57:33.1774760Z [command]/usr/bin/git init /home/runner/work/babel/babel
+2026-10-05T21:57:33.1874280Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-05T21:57:33.1875826Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-05T21:57:33.1876890Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-05T21:57:33.1877911Z hint: call:
+2026-10-05T21:57:33.1878260Z hint:
+2026-10-05T21:57:33.1878701Z hint: 	git config --global init.defaultBranch <name>
+2026-10-05T21:57:33.1879245Z hint:
+2026-10-05T21:57:33.1879745Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-05T21:57:33.1880551Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-05T21:57:33.1881190Z hint:
+2026-10-05T21:57:33.1881610Z hint: 	git branch -m <name>
+2026-10-05T21:57:33.1882035Z hint:
+2026-10-05T21:57:33.1882579Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-05T21:57:33.1886813Z Initialized empty Git repository in /home/runner/work/babel/babel/.git/
+2026-10-05T21:57:33.1894468Z [command]/usr/bin/git remote add origin https://github.com/babel/babel
+2026-10-05T21:57:33.1933854Z ##[endgroup]
+2026-10-05T21:57:33.1935024Z ##[group]Disabling automatic garbage collection
+2026-10-05T21:57:33.1936006Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-05T21:57:33.1960140Z ##[endgroup]
+2026-10-05T21:57:33.1961274Z ##[group]Setting up auth
+2026-10-05T21:57:33.1961761Z Removing SSH command configuration
+2026-10-05T21:57:33.1965555Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T21:57:33.1990723Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T21:57:33.2313274Z Removing HTTP extra header
+2026-10-05T21:57:33.2318429Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T21:57:33.2345799Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T21:57:33.2521295Z Removing includeIf entries pointing to credentials config files
+2026-10-05T21:57:33.2525836Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T21:57:33.2550854Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T21:57:33.2733832Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-05T21:57:33.2762405Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:33.2786745Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:33.2814905Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:33.2840061Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:33.2862856Z ##[endgroup]
+2026-10-05T21:57:33.2863839Z ##[group]Fetching the repository
+2026-10-05T21:57:33.2868767Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3fffc6dd3dc9ed1d6373261d058ae36d98eb9be3:refs/remotes/pull/18295/merge
+2026-10-05T21:57:35.7516139Z From https://github.com/babel/babel
+2026-10-05T21:57:35.7517666Z  * [new ref]           3fffc6dd3dc9ed1d6373261d058ae36d98eb9be3 -> pull/18295/merge
+2026-10-05T21:57:35.7521603Z ##[endgroup]
+2026-10-05T21:57:35.7522228Z ##[group]Determining the checkout info
+2026-10-05T21:57:35.7523261Z ##[endgroup]
+2026-10-05T21:57:35.7527469Z [command]/usr/bin/git sparse-checkout disable
+2026-10-05T21:57:35.7571036Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-05T21:57:35.7596104Z ##[group]Checking out the ref
+2026-10-05T21:57:35.7599439Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18295/merge
+2026-10-05T21:57:36.7946492Z Updating files:  65% (18168/27780)
+2026-10-05T21:57:36.8044190Z Updating files:  66% (18335/27780)
+2026-10-05T21:57:36.8143051Z Updating files:  67% (18613/27780)
+2026-10-05T21:57:36.8237227Z Updating files:  68% (18891/27780)
+2026-10-05T21:57:36.8333278Z Updating files:  69% (19169/27780)
+2026-10-05T21:57:36.8427809Z Updating files:  70% (19446/27780)
+2026-10-05T21:57:36.8522382Z Updating files:  71% (19724/27780)
+2026-10-05T21:57:36.8619464Z Updating files:  72% (20002/27780)
+2026-10-05T21:57:36.8715436Z Updating files:  73% (20280/27780)
+2026-10-05T21:57:36.8815563Z Updating files:  74% (20558/27780)
+2026-10-05T21:57:36.8914977Z Updating files:  75% (20835/27780)
+2026-10-05T21:57:36.9013499Z Updating files:  76% (21113/27780)
+2026-10-05T21:57:36.9114555Z Updating files:  77% (21391/27780)
+2026-10-05T21:57:36.9214782Z Updating files:  78% (21669/27780)
+2026-10-05T21:57:36.9317530Z Updating files:  79% (21947/27780)
+2026-10-05T21:57:36.9450835Z Updating files:  80% (22224/27780)
+2026-10-05T21:57:36.9552532Z Updating files:  81% (22502/27780)
+2026-10-05T21:57:36.9652960Z Updating files:  82% (22780/27780)
+2026-10-05T21:57:36.9750313Z Updating files:  83% (23058/27780)
+2026-10-05T21:57:36.9854846Z Updating files:  84% (23336/27780)
+2026-10-05T21:57:36.9954709Z Updating files:  85% (23613/27780)
+2026-10-05T21:57:37.0052610Z Updating files:  86% (23891/27780)
+2026-10-05T21:57:37.0146333Z Updating files:  87% (24169/27780)
+2026-10-05T21:57:37.0248605Z Updating files:  88% (24447/27780)
+2026-10-05T21:57:37.0350011Z Updating files:  89% (24725/27780)
+2026-10-05T21:57:37.0447375Z Updating files:  90% (25002/27780)
+2026-10-05T21:57:37.0604880Z Updating files:  91% (25280/27780)
+2026-10-05T21:57:37.0729836Z Updating files:  92% (25558/27780)
+2026-10-05T21:57:37.0838074Z Updating files:  93% (25836/27780)
+2026-10-05T21:57:37.0938353Z Updating files:  94% (26114/27780)
+2026-10-05T21:57:37.1033061Z Updating files:  95% (26391/27780)
+2026-10-05T21:57:37.1119733Z Updating files:  96% (26669/27780)
+2026-10-05T21:57:37.1214813Z Updating files:  97% (26947/27780)
+2026-10-05T21:57:37.1313814Z Updating files:  98% (27225/27780)
+2026-10-05T21:57:37.1448861Z Updating files:  99% (27503/27780)
+2026-10-05T21:57:37.1449505Z Updating files: 100% (27780/27780)
+2026-10-05T21:57:37.1449985Z Updating files: 100% (27780/27780), done.
+2026-10-05T21:57:37.1808098Z Note: switching to 'refs/remotes/pull/18295/merge'.
+2026-10-05T21:57:37.1808534Z 
+2026-10-05T21:57:37.1808794Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-05T21:57:37.1809827Z changes and commit them, and you can discard any commits you make in this
+2026-10-05T21:57:37.1810637Z state without impacting any branches by switching back to a branch.
+2026-10-05T21:57:37.1811122Z 
+2026-10-05T21:57:37.1811523Z If you want to create a new branch to retain commits you create, you may
+2026-10-05T21:57:37.1812272Z do so (now or later) by using -c with the switch command. Example:
+2026-10-05T21:57:37.1812720Z 
+2026-10-05T21:57:37.1812986Z   git switch -c <new-branch-name>
+2026-10-05T21:57:37.1813355Z 
+2026-10-05T21:57:37.1813632Z Or undo this operation with:
+2026-10-05T21:57:37.1813988Z 
+2026-10-05T21:57:37.1814250Z   git switch -
+2026-10-05T21:57:37.1814551Z 
+2026-10-05T21:57:37.1814980Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-05T21:57:37.1815575Z 
+2026-10-05T21:57:37.1816169Z HEAD is now at 3fffc6dd Merge d95ce5cbd3d3ccda1438ec9bceb245921d7dd306 into 913a4f03483e0c2ff8b5e637a1b4795f27054246
+2026-10-05T21:57:37.1838393Z ##[endgroup]
+2026-10-05T21:57:37.1870555Z [command]/usr/bin/git log -1 --format=%H
+2026-10-05T21:57:37.1897309Z 3fffc6dd3dc9ed1d6373261d058ae36d98eb9be3
+2026-10-05T21:57:37.2215617Z ##[group]Run actions/setup-node@v6
+2026-10-05T21:57:37.2215835Z with:
+2026-10-05T21:57:37.2216001Z   node-version: latest
+2026-10-05T21:57:37.2216182Z   check-latest: true
+2026-10-05T21:57:37.2216361Z   cache: yarn
+2026-10-05T21:57:37.2218390Z   token: ***
+2026-10-05T21:57:37.2218578Z   package-manager-cache: true
+2026-10-05T21:57:37.2218787Z ##[endgroup]
+2026-10-05T21:57:37.3841653Z getting latest node version...
+2026-10-05T21:57:37.3842096Z getting latest node version...
+2026-10-05T21:57:37.3842480Z Attempt to resolve the latest version from manifest...
+2026-10-05T21:57:37.9907900Z Resolved as '26.10.0'
+2026-10-05T21:57:37.9909242Z Attempting to download 26.10.0...
+2026-10-05T21:57:38.6747005Z Acquiring 26.10.0 - x64 from https://github.com/actions/node-versions/releases/download/26.10.0-35737674515/node-26.10.0-linux-x64.tar.gz
+2026-10-05T21:57:39.0889627Z Extracting ...
+2026-10-05T21:57:39.0982867Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e50c105f-8518-4af0-8b39-a905f2a7e1dd -f /home/runner/work/_temp/bbc03870-de64-49f1-81ea-75b76c3074a4
+2026-10-05T21:57:41.4419218Z Adding to the cache ...
+2026-10-05T21:57:43.5847853Z ##[group]Environment details
+2026-10-05T21:57:43.9795688Z node: v26.10.0
+2026-10-05T21:57:43.9796004Z npm: 11.19.1
+2026-10-05T21:57:43.9796260Z yarn: 4.17.0
+2026-10-05T21:57:43.9796989Z ##[endgroup]
+2026-10-05T21:57:43.9811484Z [command]/usr/local/bin/yarn --version
+2026-10-05T21:57:44.2860727Z 4.17.0
+2026-10-05T21:57:44.3016585Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-10-05T21:57:44.6076966Z /home/runner/.yarn/berry/cache
+2026-10-05T21:57:44.6327841Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-10-05T21:57:44.9362815Z [33mtrue[39m
+2026-10-05T21:57:45.7611753Z Cache hit for: node-cache-Linux-x64-yarn-c623f7941a9eef176038cd61eef9f321c46494570bb3799eb50ba13163950e1f
+2026-10-05T21:57:47.0782720Z Received 0 of 69925793 (0.0%), 0.0 MBs/sec
+2026-10-05T21:57:47.7085779Z Received 69925793 of 69925793 (100.0%), 40.9 MBs/sec
+2026-10-05T21:57:47.7086221Z Cache Size: ~67 MB (69925793 B)
+2026-10-05T21:57:47.7171452Z [command]/usr/bin/tar -xf /home/runner/work/_temp/db8b09e9-379e-426d-bd00-9aa65d884f2f/cache.tzst -P -C /home/runner/work/babel/babel --use-compress-program unzstd
+2026-10-05T21:57:47.8317312Z Cache restored successfully
+2026-10-05T21:57:47.8351044Z Cache restored from key: node-cache-Linux-x64-yarn-c623f7941a9eef176038cd61eef9f321c46494570bb3799eb50ba13163950e1f
+2026-10-05T21:57:47.8534916Z ##[group]Run yarn constraints
+2026-10-05T21:57:47.8535209Z [36;1myarn constraints[0m
+2026-10-05T21:57:47.8813289Z shell: /usr/bin/bash -e {0}
+2026-10-05T21:57:47.8813538Z ##[endgroup]
+2026-10-05T21:57:48.7026278Z ##[group]Run yarn dedupe --check
+2026-10-05T21:57:48.7026549Z [36;1myarn dedupe --check[0m
+2026-10-05T21:57:48.7082016Z shell: /usr/bin/bash -e {0}
+2026-10-05T21:57:48.7082248Z ##[endgroup]
+2026-10-05T21:57:49.1767965Z [94m➤[39m [90mYN0000[39m: ┌ Deduplication step
+2026-10-05T21:57:49.1768802Z ##[group]Deduplication step
+2026-10-05T21:57:49.2826344Z [94m➤[39m YN0000: │ [38;5;173mregenerate-unicode-properties[39m[38;5;37m@[39m[38;5;37mnpm:^10.2.2[39m can be deduped from [38;5;173mregenerate-unicode-properties[39m[38;5;111m@[39m[38;5;111mnpm:10.2.2[39m to [38;5;173mregenerate-unicode-properties[39m[38;5;111m@[39m[38;5;111mnpm:10.3.0[39m
+2026-10-05T21:57:49.2962618Z [94m➤[39m YN0000: │ [38;5;173mregexpu-core[39m[38;5;37m@[39m[38;5;37mnpm:^6.3.1[39m can be deduped from [38;5;173mregexpu-core[39m[38;5;111m@[39m[38;5;111mnpm:6.4.0[39m to [38;5;173mregexpu-core[39m[38;5;111m@[39m[38;5;111mnpm:6.5.3[39m
+2026-10-05T21:57:49.3016323Z [94m➤[39m YN0000: │ 2 packages can be deduped using the [38;5;111mhighest[39m strategy
+2026-10-05T21:57:49.3017308Z ##[endgroup]
+2026-10-05T21:57:49.3017717Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-10-05T21:57:49.3322589Z ##[error]Process completed with exit code 1.
+2026-10-05T21:57:49.3436263Z Post job cleanup.
+2026-10-05T21:57:49.4099098Z [command]/usr/bin/git version
+2026-10-05T21:57:49.4128123Z git version 2.55.0
+2026-10-05T21:57:49.4156081Z Temporarily overriding HOME='/home/runner/work/_temp/517b977c-f4fd-436d-9699-b9caad998199' before making global git config changes
+2026-10-05T21:57:49.4156790Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T21:57:49.4159834Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-05T21:57:49.4183432Z Removing SSH command configuration
+2026-10-05T21:57:49.4188145Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T21:57:49.4214805Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T21:57:49.4440702Z Removing HTTP extra header
+2026-10-05T21:57:49.4444677Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T21:57:49.4472201Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T21:57:49.4694532Z Removing includeIf entries pointing to credentials config files
+2026-10-05T21:57:49.4699950Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T21:57:49.4720028Z includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-05T21:57:49.4720668Z includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-05T21:57:49.4721134Z includeif.gitdir:/github/workspace/.git.path
+2026-10-05T21:57:49.4721489Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T21:57:49.4727256Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-05T21:57:49.4745100Z /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4754039Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4784544Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-05T21:57:49.4803496Z /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4811371Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4838883Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-05T21:57:49.4865739Z /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4871694Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4898413Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T21:57:49.4916833Z /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4922252Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config
+2026-10-05T21:57:49.4953924Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T21:57:49.5191485Z Removing credentials config '/home/runner/work/_temp/git-credentials-47d71fe1-1cad-4dda-bcf2-e7ef7a93572a.config'
+2026-10-05T21:57:49.5324063Z Cleaning up orphan processes

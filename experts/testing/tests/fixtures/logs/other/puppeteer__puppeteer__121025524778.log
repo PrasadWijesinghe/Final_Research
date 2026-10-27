@@ -1,0 +1,314 @@
+﻿2026-10-25T00:06:33.9629536Z Current runner version: '2.338.0'
+2026-10-25T00:06:33.9651465Z ##[group]Runner Image Provisioner
+2026-10-25T00:06:33.9652160Z Hosted Compute Agent
+2026-10-25T00:06:33.9652728Z Version: 20261021.618
+2026-10-25T00:06:33.9653251Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-25T00:06:33.9653826Z Build Date: 2026-10-21T00:45:21Z
+2026-10-25T00:06:33.9654422Z Worker ID: {58a06832-da93-47e5-b92f-be908260ceb5}
+2026-10-25T00:06:33.9655152Z Region: westus3
+2026-10-25T00:06:33.9655633Z Cloud: Azure
+2026-10-25T00:06:33.9656175Z ##[endgroup]
+2026-10-25T00:06:33.9657284Z ##[group]Operating System
+2026-10-25T00:06:33.9657850Z Ubuntu
+2026-10-25T00:06:33.9658277Z 24.04.5
+2026-10-25T00:06:33.9658713Z LTS
+2026-10-25T00:06:33.9659189Z ##[endgroup]
+2026-10-25T00:06:33.9659636Z ##[group]Runner Image
+2026-10-25T00:06:33.9660146Z Image: ubuntu-24.04
+2026-10-25T00:06:33.9660637Z Version: 20261012.334.1
+2026-10-25T00:06:33.9661740Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-25T00:06:33.9662949Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-25T00:06:33.9663753Z ##[endgroup]
+2026-10-25T00:06:33.9664925Z ##[group]GITHUB_TOKEN Permissions
+2026-10-25T00:06:33.9666634Z Contents: read
+2026-10-25T00:06:33.9667137Z Metadata: read
+2026-10-25T00:06:33.9667617Z ##[endgroup]
+2026-10-25T00:06:33.9669418Z Secret source: Dependabot
+2026-10-25T00:06:33.9670200Z Cache mode: write
+2026-10-25T00:06:33.9670832Z Prepare workflow directory
+2026-10-25T00:06:33.9953179Z Prepare all required actions
+2026-10-25T00:06:34.0007752Z Getting action download info
+2026-10-25T00:06:34.2743501Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-25T00:06:34.3882097Z Download action repository 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-10-25T00:06:35.3433725Z Complete job name: Angular Schematics unit tests
+2026-10-25T00:06:35.4145536Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-25T00:06:35.4146492Z with:
+2026-10-25T00:06:35.4146909Z   repository: puppeteer/puppeteer
+2026-10-25T00:06:35.4150304Z   token: ***
+2026-10-25T00:06:35.4150707Z   ssh-strict: true
+2026-10-25T00:06:35.4151099Z   ssh-user: git
+2026-10-25T00:06:35.4151482Z   persist-credentials: true
+2026-10-25T00:06:35.4151910Z   clean: true
+2026-10-25T00:06:35.4152302Z   sparse-checkout-cone-mode: true
+2026-10-25T00:06:35.4152760Z   fetch-depth: 1
+2026-10-25T00:06:35.4153134Z   fetch-tags: false
+2026-10-25T00:06:35.4153527Z   show-progress: true
+2026-10-25T00:06:35.4153908Z   lfs: false
+2026-10-25T00:06:35.4154277Z   submodules: false
+2026-10-25T00:06:35.4154961Z   set-safe-directory: true
+2026-10-25T00:06:35.4155474Z   allow-unsafe-pr-checkout: false
+2026-10-25T00:06:35.4156170Z ##[endgroup]
+2026-10-25T00:06:35.4969262Z Syncing repository: puppeteer/puppeteer
+2026-10-25T00:06:35.4970998Z ##[group]Getting Git version info
+2026-10-25T00:06:35.4971653Z Working directory is '/home/runner/work/puppeteer/puppeteer'
+2026-10-25T00:06:35.4972536Z [command]/usr/bin/git version
+2026-10-25T00:06:35.6492257Z git version 2.55.0
+2026-10-25T00:06:35.6509996Z ##[endgroup]
+2026-10-25T00:06:35.6520212Z Temporarily overriding HOME='/home/runner/work/_temp/f9b14e6e-ef36-4d2d-9c81-44d89cf1d825' before making global git config changes
+2026-10-25T00:06:35.6522393Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-25T00:06:35.6525705Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/puppeteer/puppeteer
+2026-10-25T00:06:35.6564859Z Deleting the contents of '/home/runner/work/puppeteer/puppeteer'
+2026-10-25T00:06:35.6567587Z ##[group]Determining repository object format
+2026-10-25T00:06:35.6568937Z ##[endgroup]
+2026-10-25T00:06:35.6569622Z ##[group]Initializing the repository
+2026-10-25T00:06:35.6572771Z [command]/usr/bin/git init /home/runner/work/puppeteer/puppeteer
+2026-10-25T00:06:35.6648028Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-25T00:06:35.6649125Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-25T00:06:35.6649919Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-25T00:06:35.6650547Z hint: call:
+2026-10-25T00:06:35.6650889Z hint:
+2026-10-25T00:06:35.6651486Z hint: 	git config --global init.defaultBranch <name>
+2026-10-25T00:06:35.6652108Z hint:
+2026-10-25T00:06:35.6652697Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-25T00:06:35.6653725Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-25T00:06:35.6654436Z hint:
+2026-10-25T00:06:35.6655098Z hint: 	git branch -m <name>
+2026-10-25T00:06:35.6655632Z hint:
+2026-10-25T00:06:35.6656442Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-25T00:06:35.6658059Z Initialized empty Git repository in /home/runner/work/puppeteer/puppeteer/.git/
+2026-10-25T00:06:35.6660548Z [command]/usr/bin/git remote add origin https://github.com/puppeteer/puppeteer
+2026-10-25T00:06:35.6701263Z ##[endgroup]
+2026-10-25T00:06:35.6702127Z ##[group]Disabling automatic garbage collection
+2026-10-25T00:06:35.6702871Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-25T00:06:35.6728556Z ##[endgroup]
+2026-10-25T00:06:35.6730009Z ##[group]Setting up auth
+2026-10-25T00:06:35.6730789Z Removing SSH command configuration
+2026-10-25T00:06:35.6732315Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-25T00:06:35.6759199Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-25T00:06:35.7025347Z Removing HTTP extra header
+2026-10-25T00:06:35.7036126Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-25T00:06:35.7061061Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-25T00:06:35.7245328Z Removing includeIf entries pointing to credentials config files
+2026-10-25T00:06:35.7250604Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-25T00:06:35.7279047Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-25T00:06:35.7471241Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-25T00:06:35.7502679Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/puppeteer/puppeteer/.git.path /home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:06:35.7528943Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/puppeteer/puppeteer/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:06:35.7558159Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:06:35.7584381Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:06:35.7609021Z ##[endgroup]
+2026-10-25T00:06:35.7609846Z ##[group]Fetching the repository
+2026-10-25T00:06:35.7614903Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3a0ad874360e61379f0c5a1a72cce61380172216:refs/remotes/pull/15660/merge
+2026-10-25T00:06:37.1328980Z From https://github.com/puppeteer/puppeteer
+2026-10-25T00:06:37.1331044Z  * [new ref]         3a0ad874360e61379f0c5a1a72cce61380172216 -> pull/15660/merge
+2026-10-25T00:06:37.1334066Z ##[endgroup]
+2026-10-25T00:06:37.1335045Z ##[group]Determining the checkout info
+2026-10-25T00:06:37.1335855Z ##[endgroup]
+2026-10-25T00:06:37.1340375Z [command]/usr/bin/git sparse-checkout disable
+2026-10-25T00:06:37.1405894Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-25T00:06:37.1433157Z ##[group]Checking out the ref
+2026-10-25T00:06:37.1437022Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/15660/merge
+2026-10-25T00:06:37.2143323Z Note: switching to 'refs/remotes/pull/15660/merge'.
+2026-10-25T00:06:37.2143743Z 
+2026-10-25T00:06:37.2144177Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-25T00:06:37.2144899Z changes and commit them, and you can discard any commits you make in this
+2026-10-25T00:06:37.2145406Z state without impacting any branches by switching back to a branch.
+2026-10-25T00:06:37.2145830Z 
+2026-10-25T00:06:37.2146191Z If you want to create a new branch to retain commits you create, you may
+2026-10-25T00:06:37.2146686Z do so (now or later) by using -c with the switch command. Example:
+2026-10-25T00:06:37.2146953Z 
+2026-10-25T00:06:37.2147136Z   git switch -c <new-branch-name>
+2026-10-25T00:06:37.2147400Z 
+2026-10-25T00:06:37.2147539Z Or undo this operation with:
+2026-10-25T00:06:37.2147767Z 
+2026-10-25T00:06:37.2147913Z   git switch -
+2026-10-25T00:06:37.2148146Z 
+2026-10-25T00:06:37.2148459Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-25T00:06:37.2148906Z 
+2026-10-25T00:06:37.2149432Z HEAD is now at 3a0ad87 Merge 21a739871e9d4003ccfadcedf82cdfc5699c9892 into 08e7b1aebe60462b6f7834e9dfe0f6c70464247c
+2026-10-25T00:06:37.2605685Z ##[endgroup]
+2026-10-25T00:06:37.2642532Z [command]/usr/bin/git log -1 --format=%H
+2026-10-25T00:06:37.2665346Z 3a0ad874360e61379f0c5a1a72cce61380172216
+2026-10-25T00:06:37.3015946Z ##[group]Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+2026-10-25T00:06:37.3016343Z with:
+2026-10-25T00:06:37.3016568Z   cache: npm
+2026-10-25T00:06:37.3016794Z   node-version-file: .nvmrc
+2026-10-25T00:06:37.3017039Z   check-latest: false
+2026-10-25T00:06:37.3019159Z   token: ***
+2026-10-25T00:06:37.3019391Z   package-manager-cache: true
+2026-10-25T00:06:37.3019676Z ##[endgroup]
+2026-10-25T00:06:37.3992266Z Node version file is not JSON file
+2026-10-25T00:06:37.3995479Z Node version file is not TOML file
+2026-10-25T00:06:37.3996034Z Resolved .nvmrc as 24
+2026-10-25T00:06:37.4261320Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-25T00:06:37.4749114Z ##[group]Environment details
+2026-10-25T00:06:37.9590250Z node: v24.21.0
+2026-10-25T00:06:37.9590830Z npm: 11.19.0
+2026-10-25T00:06:37.9591188Z yarn: 1.22.22
+2026-10-25T00:06:37.9592657Z ##[endgroup]
+2026-10-25T00:06:37.9605380Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-25T00:06:38.0475737Z /home/runner/.npm
+2026-10-25T00:06:38.2693316Z Cache hit for: node-cache-Linux-x64-npm-295a876ea354e4b1d1fe16320fa89b050791c08f798dd8b2ec9786dcbec3ab3e
+2026-10-25T00:06:39.5175468Z Received 29360128 of 98468438 (29.8%), 28.0 MBs/sec
+2026-10-25T00:06:40.0557251Z Received 98468438 of 98468438 (100.0%), 61.0 MBs/sec
+2026-10-25T00:06:40.0558020Z Cache Size: ~94 MB (98468438 B)
+2026-10-25T00:06:40.0656243Z [command]/usr/bin/tar -xf /home/runner/work/_temp/3a293abd-6b18-4926-83e2-3eb231230715/cache.tzst -P -C /home/runner/work/puppeteer/puppeteer --use-compress-program unzstd
+2026-10-25T00:06:40.4939468Z Cache restored successfully
+2026-10-25T00:06:40.4984043Z Cache restored from key: node-cache-Linux-x64-npm-295a876ea354e4b1d1fe16320fa89b050791c08f798dd8b2ec9786dcbec3ab3e
+2026-10-25T00:06:40.5138948Z ##[group]Run npm ci
+2026-10-25T00:06:40.5139210Z [36;1mnpm ci[0m
+2026-10-25T00:06:40.6021182Z shell: /usr/bin/bash -e {0}
+2026-10-25T00:06:40.6021439Z env:
+2026-10-25T00:06:40.6021650Z   PUPPETEER_SKIP_DOWNLOAD: true
+2026-10-25T00:06:40.6022141Z ##[endgroup]
+2026-10-25T00:06:59.5246933Z npm warn deprecated readdir-scoped-modules@1.1.0: This functionality has been moved to @npmcli/fs
+2026-10-25T00:06:59.5257563Z npm warn deprecated read-package-json@2.1.2: This package is no longer supported. Please use @npmcli/package-json instead.
+2026-10-25T00:06:59.5267405Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-10-25T00:06:59.5269169Z npm warn deprecated osenv@0.1.5: This package is no longer supported.
+2026-10-25T00:06:59.5274393Z npm warn deprecated debuglog@1.0.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-10-25T00:06:59.5281899Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-10-25T00:07:02.0347005Z npm warn deprecated read-installed@4.0.3: This package is no longer supported.
+2026-10-25T00:07:11.0100177Z 
+2026-10-25T00:07:11.0100774Z > postinstall
+2026-10-25T00:07:11.0101251Z > npm run postinstall --workspaces --if-present
+2026-10-25T00:07:11.0101529Z 
+2026-10-25T00:07:11.1329961Z 
+2026-10-25T00:07:11.1330692Z > puppeteer@25.16.0 postinstall
+2026-10-25T00:07:11.1333502Z > node install.mjs
+2026-10-25T00:07:11.1333719Z 
+2026-10-25T00:07:11.1607276Z Skipping browser installation because the Puppeteer build is not available. Run `npm install` again after you have re-built Puppeteer.
+2026-10-25T00:07:11.1733381Z 
+2026-10-25T00:07:11.1734013Z > prepare
+2026-10-25T00:07:11.1734469Z > npm run prepare --workspaces --if-present
+2026-10-25T00:07:11.1751820Z 
+2026-10-25T00:07:11.2914849Z 
+2026-10-25T00:07:11.2915594Z > @puppeteer/eslint@0.1.0 prepare
+2026-10-25T00:07:11.2916035Z > wireit
+2026-10-25T00:07:11.3704759Z Analyzing
+2026-10-25T00:07:11.3705016Z 
+2026-10-25T00:07:11.4053603Z ✅ Ran 0 scripts and skipped 1 in 0s.
+2026-10-25T00:07:11.5755655Z 
+2026-10-25T00:07:11.5756477Z added 2614 packages, and audited 2625 packages in 31s
+2026-10-25T00:07:11.5756814Z 
+2026-10-25T00:07:11.5757263Z 269 packages are looking for funding
+2026-10-25T00:07:11.5757816Z   run `npm fund` for details
+2026-10-25T00:07:11.6287000Z 
+2026-10-25T00:07:11.6287735Z 14 vulnerabilities (1 low, 6 moderate, 7 high)
+2026-10-25T00:07:11.6287966Z 
+2026-10-25T00:07:11.6288167Z To address issues that do not require attention, run:
+2026-10-25T00:07:11.6288444Z   npm audit fix
+2026-10-25T00:07:11.6288563Z 
+2026-10-25T00:07:11.6288780Z To address all issues (including breaking changes), run:
+2026-10-25T00:07:11.6289066Z   npm audit fix --force
+2026-10-25T00:07:11.6289189Z 
+2026-10-25T00:07:11.6289532Z Run `npm audit` for details.
+2026-10-25T00:07:11.6298620Z npm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:
+2026-10-25T00:07:11.6299720Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-10-25T00:07:11.6300792Z npm warn install-scripts   unrs-resolver@1.11.1 (postinstall: napi-postinstall unrs-resolver 1.11.1 check)
+2026-10-25T00:07:11.6301664Z npm warn install-scripts
+2026-10-25T00:07:11.6302463Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-10-25T00:07:11.8516657Z ##[group]Run npm run unit --workspace @puppeteer/ng-schematics
+2026-10-25T00:07:11.8517240Z [36;1mnpm run unit --workspace @puppeteer/ng-schematics[0m
+2026-10-25T00:07:11.8576484Z shell: /usr/bin/bash -e {0}
+2026-10-25T00:07:11.8576767Z ##[endgroup]
+2026-10-25T00:07:11.9714401Z 
+2026-10-25T00:07:11.9715303Z > @puppeteer/ng-schematics@0.8.0 unit
+2026-10-25T00:07:11.9715641Z > wireit
+2026-10-25T00:07:11.9715741Z 
+2026-10-25T00:07:12.0548536Z Analyzing
+2026-10-25T00:07:13.0586130Z   0% [0 / 3] [2 running] build
+2026-10-25T00:07:14.0560799Z  67% [2 / 3] [1 running] unit
+2026-10-25T00:07:15.2446950Z ▶ @puppeteer/ng-schematics: config
+2026-10-25T00:07:15.2470170Z   ▶ Single Project
+2026-10-25T00:07:15.2486560Z     ✔ should create default file (743.789173ms)
+2026-10-25T00:07:15.2487044Z   ✔ Single Project (744.602781ms)
+2026-10-25T00:07:15.3661111Z   ▶ Multi projects
+2026-10-25T00:07:15.3680437Z     ✔ should create default file (209.851398ms)
+2026-10-25T00:07:15.3682655Z   ✔ Multi projects (210.242945ms)
+2026-10-25T00:07:15.3683501Z ✔ @puppeteer/ng-schematics: config (957.335406ms)
+2026-10-25T00:07:15.4237083Z ▶ @puppeteer/ng-schematics: e2e
+2026-10-25T00:07:15.4237419Z   ▶ Single Project
+2026-10-25T00:07:15.4237714Z     ✔ should create default file (720.801111ms)
+2026-10-25T00:07:15.4238717Z     ✔ should create Node file (241.873071ms)
+2026-10-25T00:07:15.5822566Z     ✔ should create file with route (157.34846ms)
+2026-10-25T00:07:15.7246091Z     ✔ should create with route with starting slash (137.839391ms)
+2026-10-25T00:07:15.7246784Z   ✔ Single Project (1259.016255ms)
+2026-10-25T00:07:15.8734269Z   ▶ Multi projects
+2026-10-25T00:07:15.8736312Z     ✔ should create default file (148.657893ms)
+2026-10-25T00:07:16.0736890Z     ✔ should create Node file (212.637805ms)
+2026-10-25T00:07:16.2237024Z     ✔ should create file with route (143.25771ms)
+2026-10-25T00:07:16.3375756Z     ✔ should create with route with starting slash (157.062333ms)
+2026-10-25T00:07:16.3377061Z   ✔ Multi projects (662.33397ms)
+2026-10-25T00:07:16.3379640Z ✔ @puppeteer/ng-schematics: e2e (1924.485465ms)
+2026-10-25T00:07:16.4623791Z ▶ @puppeteer/ng-schematics: ng-add
+2026-10-25T00:07:16.4624266Z   ▶ Single Project
+2026-10-25T00:07:16.4625127Z     ✔ should create base files and update to "package.json" (800.487162ms)
+2026-10-25T00:07:16.4625942Z     ✔ should update create proper "ng" command for non default tester (353.548481ms)
+2026-10-25T00:07:16.4626489Z     ✔ should not create Puppeteer config (146.871261ms)
+2026-10-25T00:07:16.4626911Z     ✔ should create Jasmine files and update "package.json" (157.611863ms)
+2026-10-25T00:07:16.4627476Z     ✔ should create Jest files and update "package.json" (140.80469ms)
+2026-10-25T00:07:16.4627944Z     ✔ should create Mocha files and update "package.json" (163.242325ms)
+2026-10-25T00:07:16.4628330Z     ✔ should create Node files (243.136642ms)
+2026-10-25T00:07:16.5998497Z     ✔ should create TypeScript files (138.10327ms)
+2026-10-25T00:07:16.7626727Z     ✔ should not create port value (144.527212ms)
+2026-10-25T00:07:16.7627717Z   ✔ Single Project (2290.332975ms)
+2026-10-25T00:07:16.9221870Z   ▶ Multi projects Application
+2026-10-25T00:07:16.9222379Z     ✔ should create base files and update to "package.json" (165.657463ms)
+2026-10-25T00:07:17.1968612Z     ✔ should update create proper "ng" command for non default tester (288.938032ms)
+2026-10-25T00:07:17.3452274Z     ✔ should not create Puppeteer config (147.909895ms)
+2026-10-25T00:07:17.6235187Z     ✔ should create Jasmine files and update "package.json" (279.474612ms)
+2026-10-25T00:07:17.7713966Z     ✔ should create Jest files and update "package.json" (148.799752ms)
+2026-10-25T00:07:17.9423960Z     ✔ should create Mocha files and update "package.json" (165.893102ms)
+2026-10-25T00:07:18.1288267Z     ✔ should create Node files (187.323174ms)
+2026-10-25T00:07:18.2920815Z     ✔ should create TypeScript files (166.079681ms)
+2026-10-25T00:07:18.4199617Z     ✔ should not create port value (128.590402ms)
+2026-10-25T00:07:18.4200691Z   ✔ Multi projects Application (1679.653469ms)
+2026-10-25T00:07:18.5605886Z   ▶ Multi projects Library
+2026-10-25T00:07:18.5606573Z     ✔ should create base files and update to "package.json" (140.610624ms)
+2026-10-25T00:07:18.6782784Z     ✔ should not create Puppeteer config (144.847358ms)
+2026-10-25T00:07:18.6783804Z   ✔ Multi projects Library (285.824643ms)
+2026-10-25T00:07:18.6784946Z ✔ @puppeteer/ng-schematics: ng-add (4258.942391ms)
+2026-10-25T00:07:18.7112892Z ℹ tests 30
+2026-10-25T00:07:18.7113233Z ℹ suites 10
+2026-10-25T00:07:18.7113986Z ℹ pass 30
+2026-10-25T00:07:18.7114260Z ℹ fail 0
+2026-10-25T00:07:18.7114534Z ℹ cancelled 0
+2026-10-25T00:07:18.7115264Z ℹ skipped 0
+2026-10-25T00:07:18.7115541Z ℹ todo 0
+2026-10-25T00:07:18.7115874Z ℹ duration_ms 4635.497049
+2026-10-25T00:07:18.7176990Z ✅ Ran 3 scripts and skipped 0 in 6.7s.
+2026-10-25T00:07:18.7391289Z Post job cleanup.
+2026-10-25T00:07:18.8302945Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-295a876ea354e4b1d1fe16320fa89b050791c08f798dd8b2ec9786dcbec3ab3e, not saving cache.
+2026-10-25T00:07:18.8451414Z Post job cleanup.
+2026-10-25T00:07:18.9128457Z [command]/usr/bin/git version
+2026-10-25T00:07:18.9160586Z git version 2.55.0
+2026-10-25T00:07:18.9188971Z Temporarily overriding HOME='/home/runner/work/_temp/2179d0fc-f0f0-4814-87e9-86308228e3e0' before making global git config changes
+2026-10-25T00:07:18.9190119Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-25T00:07:18.9193402Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/puppeteer/puppeteer
+2026-10-25T00:07:18.9221282Z Removing SSH command configuration
+2026-10-25T00:07:18.9226640Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-25T00:07:18.9257451Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-25T00:07:18.9450986Z Removing HTTP extra header
+2026-10-25T00:07:18.9456111Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-25T00:07:18.9485652Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-25T00:07:18.9671773Z Removing includeIf entries pointing to credentials config files
+2026-10-25T00:07:18.9677744Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-25T00:07:18.9700808Z includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git.path
+2026-10-25T00:07:18.9701585Z includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git/worktrees/*.path
+2026-10-25T00:07:18.9702215Z includeif.gitdir:/github/workspace/.git.path
+2026-10-25T00:07:18.9702748Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-25T00:07:18.9708343Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git.path
+2026-10-25T00:07:18.9726666Z /home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:07:18.9734969Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-9b70597e\-929d\-4872\-82f3\-61e160b77621\.config
+2026-10-25T00:07:18.9765835Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git/worktrees/*.path
+2026-10-25T00:07:18.9785757Z /home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:07:18.9793194Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/puppeteer/puppeteer/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-9b70597e\-929d\-4872\-82f3\-61e160b77621\.config
+2026-10-25T00:07:18.9820666Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-25T00:07:18.9840376Z /github/runner_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:07:18.9847585Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-9b70597e\-929d\-4872\-82f3\-61e160b77621\.config
+2026-10-25T00:07:18.9875439Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-25T00:07:18.9893509Z /github/runner_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config
+2026-10-25T00:07:18.9899435Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-9b70597e\-929d\-4872\-82f3\-61e160b77621\.config
+2026-10-25T00:07:18.9926578Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-25T00:07:19.0112977Z Removing credentials config '/home/runner/work/_temp/git-credentials-9b70597e-929d-4872-82f3-61e160b77621.config'
+2026-10-25T00:07:19.0243160Z Cleaning up orphan processes

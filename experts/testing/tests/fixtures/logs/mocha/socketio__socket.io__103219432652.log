@@ -1,0 +1,465 @@
+﻿2026-09-11T09:44:45.5463411Z Current runner version: '2.337.0'
+2026-09-11T09:44:45.5481695Z ##[group]Runner Image Provisioner
+2026-09-11T09:44:45.5482383Z Hosted Compute Agent
+2026-09-11T09:44:45.5482854Z Version: 20260828.587
+2026-09-11T09:44:45.5483366Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-11T09:44:45.5483880Z Build Date: 2026-08-28T16:44:25Z
+2026-09-11T09:44:45.5484420Z Worker ID: {464a0c95-4b82-420a-9bdd-688e3813e7fc}
+2026-09-11T09:44:45.5484970Z Azure Region: centralus
+2026-09-11T09:44:45.5485411Z ##[endgroup]
+2026-09-11T09:44:45.5486342Z ##[group]Operating System
+2026-09-11T09:44:45.5487168Z Ubuntu
+2026-09-11T09:44:45.5487627Z 24.04.5
+2026-09-11T09:44:45.5488005Z LTS
+2026-09-11T09:44:45.5488400Z ##[endgroup]
+2026-09-11T09:44:45.5488986Z ##[group]Runner Image
+2026-09-11T09:44:45.5489487Z Image: ubuntu-24.04
+2026-09-11T09:44:45.5489908Z Version: 20260907.300.1
+2026-09-11T09:44:45.5490829Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-11T09:44:45.5491908Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-11T09:44:45.5492599Z ##[endgroup]
+2026-09-11T09:44:45.5493455Z ##[group]GITHUB_TOKEN Permissions
+2026-09-11T09:44:45.5495097Z Contents: read
+2026-09-11T09:44:45.5495517Z Metadata: read
+2026-09-11T09:44:45.5495933Z ##[endgroup]
+2026-09-11T09:44:45.5497409Z Secret source: Actions
+2026-09-11T09:44:45.5498065Z Cache mode: write
+2026-09-11T09:44:45.5498587Z Prepare workflow directory
+2026-09-11T09:44:45.5747035Z Prepare all required actions
+2026-09-11T09:44:45.5783477Z Getting action download info
+2026-09-11T09:44:45.8005805Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-09-11T09:44:46.5711095Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-09-11T09:44:46.8224883Z Complete job name: test
+2026-09-11T09:44:46.8840484Z ##[group]Run actions/checkout@v6
+2026-09-11T09:44:46.8841204Z with:
+2026-09-11T09:44:46.8841848Z   repository: ***io/***.io
+2026-09-11T09:44:46.8845043Z   token: ***
+2026-09-11T09:44:46.8845475Z   ssh-strict: true
+2026-09-11T09:44:46.8845936Z   ssh-user: git
+2026-09-11T09:44:46.8846397Z   persist-credentials: true
+2026-09-11T09:44:46.8846896Z   clean: true
+2026-09-11T09:44:46.8847334Z   sparse-checkout-cone-mode: true
+2026-09-11T09:44:46.8847809Z   fetch-depth: 1
+2026-09-11T09:44:46.8848282Z   fetch-tags: false
+2026-09-11T09:44:46.8848726Z   show-progress: true
+2026-09-11T09:44:46.8849386Z   lfs: false
+2026-09-11T09:44:46.8849810Z   submodules: false
+2026-09-11T09:44:46.8850236Z   set-safe-directory: true
+2026-09-11T09:44:46.8850768Z   allow-unsafe-pr-checkout: false
+2026-09-11T09:44:46.8851474Z ##[endgroup]
+2026-09-11T09:44:46.9648233Z Syncing repository: ***io/***.io
+2026-09-11T09:44:46.9650166Z ##[group]Getting Git version info
+2026-09-11T09:44:46.9651068Z Working directory is '/home/runner/work/***.io/***.io'
+2026-09-11T09:44:46.9651977Z [command]/usr/bin/git version
+2026-09-11T09:44:47.0690071Z git version 2.55.0
+2026-09-11T09:44:47.0706759Z ##[endgroup]
+2026-09-11T09:44:47.0720298Z Temporarily overriding HOME='/home/runner/work/_temp/c0c1eff9-7d2b-46fc-b206-a1240a40e1f8' before making global git config changes
+2026-09-11T09:44:47.0724868Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-11T09:44:47.0726398Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/***.io/***.io
+2026-09-11T09:44:47.2784894Z Deleting the contents of '/home/runner/work/***.io/***.io'
+2026-09-11T09:44:47.2787021Z ##[group]Determining repository object format
+2026-09-11T09:44:47.2788634Z ##[endgroup]
+2026-09-11T09:44:47.2789852Z ##[group]Initializing the repository
+2026-09-11T09:44:47.2807561Z [command]/usr/bin/git init /home/runner/work/***.io/***.io
+2026-09-11T09:44:47.5956191Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-11T09:44:47.5957810Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-11T09:44:47.5959819Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-11T09:44:47.5961035Z hint: call:
+2026-09-11T09:44:47.5961690Z hint:
+2026-09-11T09:44:47.5962528Z hint: 	git config --global init.defaultBranch <name>
+2026-09-11T09:44:47.5963485Z hint:
+2026-09-11T09:44:47.5964360Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-11T09:44:47.5965800Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-11T09:44:47.5967016Z hint:
+2026-09-11T09:44:47.5967713Z hint: 	git branch -m <name>
+2026-09-11T09:44:47.5968492Z hint:
+2026-09-11T09:44:47.5969868Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-11T09:44:47.5973227Z Initialized empty Git repository in /home/runner/work/***.io/***.io/.git/
+2026-09-11T09:44:47.5983072Z [command]/usr/bin/git remote add origin https://github.com/***io/***.io
+2026-09-11T09:44:47.6113523Z ##[endgroup]
+2026-09-11T09:44:47.6115621Z ##[group]Disabling automatic garbage collection
+2026-09-11T09:44:47.6117095Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-11T09:44:47.6139058Z ##[endgroup]
+2026-09-11T09:44:47.6140746Z ##[group]Setting up auth
+2026-09-11T09:44:47.6142226Z Removing SSH command configuration
+2026-09-11T09:44:47.6144011Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-11T09:44:47.6167202Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-11T09:44:47.6440641Z Removing HTTP extra header
+2026-09-11T09:44:47.6445381Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-11T09:44:47.6468001Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-11T09:44:47.6607307Z Removing includeIf entries pointing to credentials config files
+2026-09-11T09:44:47.6611270Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-11T09:44:47.6636857Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-11T09:44:47.6785008Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-11T09:44:47.6810272Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/***.io/***.io/.git.path /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:44:47.6829331Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/***.io/***.io/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:44:47.7291949Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:44:47.7312327Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:44:47.7338164Z ##[endgroup]
+2026-09-11T09:44:47.7339837Z ##[group]Fetching the repository
+2026-09-11T09:44:47.7342391Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7371635dd457b9a4006584325bff529c7e412767:refs/remotes/origin/test/execFile
+2026-09-11T09:44:48.9704901Z From https://github.com/***io/***.io
+2026-09-11T09:44:48.9705556Z  * [new ref]         7371635dd457b9a4006584325bff529c7e412767 -> origin/test/execFile
+2026-09-11T09:44:48.9713147Z [command]/usr/bin/git branch --list --remote origin/test/execFile
+2026-09-11T09:44:48.9734103Z   origin/test/execFile
+2026-09-11T09:44:48.9739932Z [command]/usr/bin/git rev-parse refs/remotes/origin/test/execFile
+2026-09-11T09:44:48.9757089Z 7371635dd457b9a4006584325bff529c7e412767
+2026-09-11T09:44:48.9759085Z ##[endgroup]
+2026-09-11T09:44:48.9759673Z ##[group]Determining the checkout info
+2026-09-11T09:44:48.9760499Z ##[endgroup]
+2026-09-11T09:44:48.9764555Z [command]/usr/bin/git sparse-checkout disable
+2026-09-11T09:44:48.9801413Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-11T09:44:48.9819889Z ##[group]Checking out the ref
+2026-09-11T09:44:48.9823064Z [command]/usr/bin/git checkout --progress --force -B test/execFile refs/remotes/origin/test/execFile
+2026-09-11T09:44:49.0615327Z Switched to a new branch 'test/execFile'
+2026-09-11T09:44:49.0618027Z branch 'test/execFile' set up to track 'origin/test/execFile'.
+2026-09-11T09:44:49.0624174Z ##[endgroup]
+2026-09-11T09:44:49.0658337Z [command]/usr/bin/git log -1 --format=%H
+2026-09-11T09:44:49.0674754Z 7371635dd457b9a4006584325bff529c7e412767
+2026-09-11T09:44:49.0874354Z ##[group]Run actions/setup-node@v6
+2026-09-11T09:44:49.0874672Z with:
+2026-09-11T09:44:49.0874920Z   node-version: 24
+2026-09-11T09:44:49.0875180Z   cache: npm
+2026-09-11T09:44:49.0875406Z   check-latest: false
+2026-09-11T09:44:49.0877218Z   token: ***
+2026-09-11T09:44:49.0877462Z   package-manager-cache: true
+2026-09-11T09:44:49.0877718Z ##[endgroup]
+2026-09-11T09:44:49.2300530Z Found in cache @ /opt/hostedtoolcache/node/24.20.0/x64
+2026-09-11T09:44:49.2302813Z ##[group]Environment details
+2026-09-11T09:44:51.3006909Z node: v24.20.0
+2026-09-11T09:44:51.3007935Z npm: 11.19.0
+2026-09-11T09:44:51.3008328Z yarn: 1.22.22
+2026-09-11T09:44:51.3009417Z ##[endgroup]
+2026-09-11T09:44:51.3022042Z [command]/opt/hostedtoolcache/node/24.20.0/x64/bin/npm config get cache
+2026-09-11T09:44:51.4056852Z /home/runner/.npm
+2026-09-11T09:44:51.6146379Z Cache hit for: node-cache-Linux-x64-npm-fd9bfa1d39de96edaf2690ecc48f019e64013d24f7d7447084a2b4e097faa585
+2026-09-11T09:44:52.5404888Z Received 11002508 of 11002508 (100.0%), 13.8 MBs/sec
+2026-09-11T09:44:52.5405426Z Cache Size: ~10 MB (11002508 B)
+2026-09-11T09:44:52.5425821Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e31e44aa-b4a4-407e-ab0b-a2647e4d1c53/cache.tzst -P -C /home/runner/work/***.io/***.io --use-compress-program unzstd
+2026-09-11T09:44:52.5892403Z Cache restored successfully
+2026-09-11T09:44:52.5899480Z Cache restored from key: node-cache-Linux-x64-npm-fd9bfa1d39de96edaf2690ecc48f019e64013d24f7d7447084a2b4e097faa585
+2026-09-11T09:44:52.6011232Z ##[group]Run npm ci
+2026-09-11T09:44:52.6011545Z [36;1mnpm ci[0m
+2026-09-11T09:44:52.6053924Z shell: /usr/bin/bash -e {0}
+2026-09-11T09:44:52.6054274Z ##[endgroup]
+2026-09-11T09:44:54.8458741Z npm warn EBADENGINE Unsupported engine {
+2026-09-11T09:44:54.8459756Z npm warn EBADENGINE   package: 'eiows@7.1.0',
+2026-09-11T09:44:54.8460385Z npm warn EBADENGINE   required: { node: '>=16 <23.0' },
+2026-09-11T09:44:54.8460996Z npm warn EBADENGINE   current: { node: 'v24.20.0', npm: '11.19.0' }
+2026-09-11T09:44:54.8461599Z npm warn EBADENGINE }
+2026-09-11T09:44:56.7101705Z npm warn deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+2026-09-11T09:44:57.1236507Z npm warn deprecated npmlog@6.0.2: This package is no longer supported.
+2026-09-11T09:44:57.2703761Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2026-09-11T09:44:57.4513454Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-09-11T09:44:57.6030176Z npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-09-11T09:44:58.0157971Z npm warn deprecated gauge@4.0.4: This package is no longer supported.
+2026-09-11T09:44:58.1970417Z npm warn deprecated fstream@1.0.12: This package is no longer supported.
+2026-09-11T09:44:58.4335870Z npm warn deprecated are-we-there-yet@3.0.1: This package is no longer supported.
+2026-09-11T09:44:59.3318035Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-09-11T09:44:59.5228565Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-09-11T09:44:59.5609109Z npm warn deprecated glob@8.1.0: Glob versions prior to v9 are no longer supported
+2026-09-11T09:44:59.6024332Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-09-11T09:44:59.6498720Z npm warn deprecated glob@7.1.7: Glob versions prior to v9 are no longer supported
+2026-09-11T09:44:59.6507094Z npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+2026-09-11T09:45:40.5051834Z 
+2026-09-11T09:45:40.5053283Z added 1257 packages, and audited 1271 packages in 48s
+2026-09-11T09:45:40.5053791Z 
+2026-09-11T09:45:40.5054186Z 181 packages are looking for funding
+2026-09-11T09:45:40.5054911Z   run `npm fund` for details
+2026-09-11T09:45:40.5713501Z 
+2026-09-11T09:45:40.5714640Z 65 vulnerabilities (5 low, 17 moderate, 41 high, 2 critical)
+2026-09-11T09:45:40.5716858Z 
+2026-09-11T09:45:40.5717170Z To address issues that do not require attention, run:
+2026-09-11T09:45:40.5717552Z   npm audit fix
+2026-09-11T09:45:40.5717775Z 
+2026-09-11T09:45:40.5718023Z To address all issues (including breaking changes), run:
+2026-09-11T09:45:40.5718532Z   npm audit fix --force
+2026-09-11T09:45:40.5718711Z 
+2026-09-11T09:45:40.5718989Z Run `npm audit` for details.
+2026-09-11T09:45:40.5730296Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-09-11T09:45:40.5731649Z npm warn install-scripts   @fails-components/webtransport-transport-http3-quiche@1.5.1 (install: node build.js install)
+2026-09-11T09:45:40.5733166Z npm warn install-scripts   geckodriver@4.2.1 (postinstall: test -f ./dist/install.js && node ./dist/install.js || echo "Skipping install, project not build!")
+2026-09-11T09:45:40.5734619Z npm warn install-scripts   edgedriver@5.6.0 (install: test -f ./dist/install.js && node ./dist/install.js || echo "Skipping install, project not build!")
+2026-09-11T09:45:40.5736098Z npm warn install-scripts   eiows@7.1.0 (preinstall: make; install: node-gyp rebuild > build_log.txt 2>&1 || exit 0; postinstall: make clean)
+2026-09-11T09:45:40.5737146Z npm warn install-scripts   esbuild@0.25.11 (postinstall: node install.js)
+2026-09-11T09:45:40.5739165Z npm warn install-scripts   geckodriver@4.4.1 (postinstall: test -f ./dist/install.js && node ./dist/install.js || echo "Skipping install, project not build!")
+2026-09-11T09:45:40.5740120Z npm warn install-scripts
+2026-09-11T09:45:40.5741047Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-09-11T09:45:40.6091862Z ##[group]Run npm run compile \
+2026-09-11T09:45:40.6092201Z [36;1mnpm run compile \[0m
+2026-09-11T09:45:40.6092574Z [36;1m  --workspace=engine.io-parser \[0m
+2026-09-11T09:45:40.6092868Z [36;1m  --workspace=engine.io-client \[0m
+2026-09-11T09:45:40.6093248Z [36;1m  --workspace=***.io-parser[0m
+2026-09-11T09:45:40.6114114Z shell: /usr/bin/bash -e {0}
+2026-09-11T09:45:40.6114444Z ##[endgroup]
+2026-09-11T09:45:40.7082204Z 
+2026-09-11T09:45:40.7083400Z > engine.io-parser@5.2.3 compile
+2026-09-11T09:45:40.7084234Z > rimraf ./build && tsc && tsc -p tsconfig.esm.json && ./postcompile.sh
+2026-09-11T09:45:40.7084571Z 
+2026-09-11T09:45:44.1132897Z 
+2026-09-11T09:45:44.1133900Z > engine.io-client@6.6.6 compile
+2026-09-11T09:45:44.1134884Z > rimraf ./build && tsc && tsc -p tsconfig.esm.json && ./postcompile.sh
+2026-09-11T09:45:44.1135170Z 
+2026-09-11T09:45:47.5951174Z 
+2026-09-11T09:45:47.5952395Z > ***.io-parser@4.2.7 compile
+2026-09-11T09:45:47.5953244Z > rimraf ./build && tsc && tsc -p tsconfig.esm.json && ./postcompile.sh
+2026-09-11T09:45:47.5953496Z 
+2026-09-11T09:45:50.8279904Z ##[group]Run npm run compile --workspace=***.io-client
+2026-09-11T09:45:50.8280520Z [36;1mnpm run compile --workspace=***.io-client[0m
+2026-09-11T09:45:50.8301360Z shell: /usr/bin/bash -e {0}
+2026-09-11T09:45:50.8301658Z ##[endgroup]
+2026-09-11T09:45:50.9195135Z 
+2026-09-11T09:45:50.9195690Z > ***.io-client@4.8.3 compile
+2026-09-11T09:45:50.9196306Z > rimraf ./build && tsc && tsc -p tsconfig.esm.json && ./postcompile.sh
+2026-09-11T09:45:50.9196592Z 
+2026-09-11T09:45:54.3198506Z ##[group]Run npm run compile \
+2026-09-11T09:45:54.3199406Z [36;1mnpm run compile \[0m
+2026-09-11T09:45:54.3199749Z [36;1m  --workspace=engine.io \[0m
+2026-09-11T09:45:54.3200182Z [36;1m  --workspace=***.io-adapter \[0m
+2026-09-11T09:45:54.3200539Z [36;1m  --workspace=***.io[0m
+2026-09-11T09:45:54.3220608Z shell: /usr/bin/bash -e {0}
+2026-09-11T09:45:54.3220909Z ##[endgroup]
+2026-09-11T09:45:54.4172216Z 
+2026-09-11T09:45:54.4173281Z > engine.io@6.6.10 compile
+2026-09-11T09:45:54.4173840Z > rimraf ./build && tsc
+2026-09-11T09:45:54.4174238Z 
+2026-09-11T09:45:56.2981117Z 
+2026-09-11T09:45:56.2982188Z > ***.io-adapter@2.5.8 compile
+2026-09-11T09:45:56.2982670Z > rimraf ./dist && tsc
+2026-09-11T09:45:56.2982843Z 
+2026-09-11T09:45:57.9749851Z 
+2026-09-11T09:45:57.9751272Z > ***.io@4.8.3 compile
+2026-09-11T09:45:57.9752043Z > rimraf ./dist && tsc
+2026-09-11T09:45:57.9752371Z 
+2026-09-11T09:46:00.1320188Z ##[group]Run npm test --workspace=***.io-client
+2026-09-11T09:46:00.1320593Z [36;1mnpm test --workspace=***.io-client[0m
+2026-09-11T09:46:00.1341195Z shell: /usr/bin/bash -e {0}
+2026-09-11T09:46:00.1341543Z ##[endgroup]
+2026-09-11T09:46:00.2620749Z 
+2026-09-11T09:46:00.2621996Z > ***.io-client@4.8.3 test
+2026-09-11T09:46:00.2623261Z > npm run format:check && npm run compile && if test "$BROWSERS" = "1" ; then npm run test:browser; else npm run test:node; fi
+2026-09-11T09:46:00.2623921Z 
+2026-09-11T09:46:00.3613842Z 
+2026-09-11T09:46:00.3615100Z > ***.io-client@4.8.3 format:check
+2026-09-11T09:46:00.3615951Z > prettier --check "*.js" "lib/**/*.ts" "test/**/*.ts" "support/**/*.js"
+2026-09-11T09:46:00.3616346Z 
+2026-09-11T09:46:00.4240223Z Checking formatting...
+2026-09-11T09:46:00.9079947Z All matched files use Prettier code style!
+2026-09-11T09:46:01.0218319Z 
+2026-09-11T09:46:01.0219917Z > ***.io-client@4.8.3 compile
+2026-09-11T09:46:01.0220998Z > rimraf ./build && tsc && tsc -p tsconfig.esm.json && ./postcompile.sh
+2026-09-11T09:46:01.0221403Z 
+2026-09-11T09:46:04.5303085Z 
+2026-09-11T09:46:04.5304659Z > ***.io-client@4.8.3 test:node
+2026-09-11T09:46:04.5305559Z > mocha --import=tsx --require test/support/hooks.ts --exit test/index.ts
+2026-09-11T09:46:04.5305958Z 
+2026-09-11T09:46:04.9804731Z 
+2026-09-11T09:46:04.9829428Z 
+2026-09-11T09:46:04.9865698Z   url
+2026-09-11T09:46:04.9911049Z     ✔ works with undefined
+2026-09-11T09:46:04.9917049Z     ✔ works with relative paths
+2026-09-11T09:46:04.9920324Z     ✔ works with no protocol
+2026-09-11T09:46:04.9924504Z     ✔ works with no schema
+2026-09-11T09:46:04.9930441Z     ✔ forces ports for unique url ids
+2026-09-11T09:46:04.9935418Z     ✔ identifies the namespace
+2026-09-11T09:46:04.9940387Z     ✔ works with ipv6
+2026-09-11T09:46:04.9944996Z     ✔ works with ipv6 location
+2026-09-11T09:46:04.9947829Z     ✔ works with a custom path
+2026-09-11T09:46:04.9948396Z 
+2026-09-11T09:46:04.9950142Z   connection
+2026-09-11T09:46:05.0296906Z     ✔ should connect to localhost
+2026-09-11T09:46:05.0307510Z     ✔ should not connect when autoConnect option set to false
+2026-09-11T09:46:05.0321640Z     ✔ should start two connections with same path
+2026-09-11T09:46:05.0339409Z     ✔ should start two connections with same path and different querystrings
+2026-09-11T09:46:05.0355787Z     ✔ should start two connections with different paths
+2026-09-11T09:46:05.0376350Z     ✔ should start a single connection with different namespaces
+2026-09-11T09:46:05.0570475Z     ✔ should work with acks
+2026-09-11T09:46:05.0747580Z     ✔ should receive date with ack
+2026-09-11T09:46:05.0932503Z     ✔ should work with false
+2026-09-11T09:46:05.1119830Z     ✔ should receive utf8 multibyte characters
+2026-09-11T09:46:05.1285980Z     ✔ should connect to a namespace after connection established
+2026-09-11T09:46:05.1617779Z     ✔ should open a new namespace after connection gets closed
+2026-09-11T09:46:05.2903357Z     ✔ should reconnect by default (128ms)
+2026-09-11T09:46:05.3228343Z     ✔ should reconnect manually
+2026-09-11T09:46:05.4639981Z     ✔ should reconnect automatically after reconnecting manually (140ms)
+2026-09-11T09:46:05.5245407Z     ✔ should attempt reconnects after a failed reconnect (60ms)
+2026-09-11T09:46:06.2398532Z     ✔ reconnect delay should increase every time (715ms)
+2026-09-11T09:46:06.3421478Z     ✔ should not reconnect when force closed (102ms)
+2026-09-11T09:46:06.4511230Z     ✔ should stop reconnecting when force closed (109ms)
+2026-09-11T09:46:06.4794166Z     ✔ should reconnect after stopping reconnection
+2026-09-11T09:46:06.6584834Z     ✔ should stop reconnecting on a *** and keep to reconnect on another (179ms)
+2026-09-11T09:46:06.6911211Z     ✔ should try to reconnect twice and fail when requested two attempts with immediate timeout and reconnect enabled
+2026-09-11T09:46:06.7353086Z     ✔ should fire reconnect_* events on manager (45ms)
+2026-09-11T09:46:06.7666725Z     ✔ should fire reconnecting (on manager) with attempts number when reconnecting twice
+2026-09-11T09:46:06.8832484Z     ✔ should not try to reconnect and should form a connection when connecting to correct port with default timeout (116ms)
+2026-09-11T09:46:06.8988053Z     ✔ should connect while disconnecting another ***
+2026-09-11T09:46:06.8990629Z     ✔ should emit a connect_error event when reaching a Socket.IO server in v2.x
+2026-09-11T09:46:07.1150008Z     ✔ should not close the connection when disconnecting a single *** (216ms)
+2026-09-11T09:46:07.2290576Z     ✔ should stop trying to reconnect (113ms)
+2026-09-11T09:46:07.2775355Z     ✔ should try to reconnect twice and fail when requested two attempts with incorrect address and reconnect enabled (49ms)
+2026-09-11T09:46:07.3813182Z     ✔ should not try to reconnect with incorrect port when reconnection disabled (103ms)
+2026-09-11T09:46:07.4292469Z     ✔ should still try to reconnect twice after opening another *** asynchronously (47ms)
+2026-09-11T09:46:07.4455505Z     ✔ should emit date as string
+2026-09-11T09:46:07.4615029Z     ✔ should emit date in object
+2026-09-11T09:46:07.4788890Z     ✔ should get binary data (as an ArrayBuffer)
+2026-09-11T09:46:07.4948098Z     ✔ should send binary data (as an ArrayBuffer)
+2026-09-11T09:46:07.5110861Z     ✔ should send binary data (as an ArrayBuffer) mixed with json
+2026-09-11T09:46:07.5264039Z     ✔ should send events with ArrayBuffers in the correct order
+2026-09-11T09:46:07.5578565Z     ✔ should reopen a cached ***
+2026-09-11T09:46:07.5739812Z     ✔ should not reopen a cached but active ***
+2026-09-11T09:46:07.5893817Z     ✔ should not reopen an already active ***
+2026-09-11T09:46:07.6893899Z     ✔ should close the engine upon decoding exception (100ms)
+2026-09-11T09:46:07.6894596Z     reconnect timeout
+2026-09-11T09:46:08.1939659Z       ✔ should use overridden setTimeout by default (503ms)
+2026-09-11T09:46:08.7948428Z       ✔ should use native setTimeout with useNativeSetTimers (601ms)
+2026-09-11T09:46:08.7949227Z 
+2026-09-11T09:46:08.7949500Z   ***
+2026-09-11T09:46:08.8127722Z     ✔ should have an accessible *** id equal to the server-side *** id (default namespace)
+2026-09-11T09:46:08.8291507Z     ✔ should have an accessible *** id equal to the server-side *** id (custom namespace)
+2026-09-11T09:46:08.8450997Z     ✔ clears ***.id upon disconnection
+2026-09-11T09:46:09.1452059Z     ✔ doesn't fire an error event if we force disconnect in opening state (299ms)
+2026-09-11T09:46:09.1493985Z     ✔ fire a connect_error event when the connection cannot be established
+2026-09-11T09:46:09.1504438Z     ✔ fire a connect_error event on open timeout (polling)
+2026-09-11T09:46:09.1517883Z     ✔ fire a connect_error event on open timeout (web***)
+2026-09-11T09:46:09.4526366Z     ✔ doesn't fire a connect_error event when the connection is already established (301ms)
+2026-09-11T09:46:09.4964302Z     ✔ should change ***.id upon reconnection (44ms)
+2026-09-11T09:46:09.5130839Z     ✔ should enable compression by default
+2026-09-11T09:46:09.5287834Z     ✔ should disable compression
+2026-09-11T09:46:09.5444096Z     ✔ should fire an error event on middleware failure from custom namespace
+2026-09-11T09:46:09.5612526Z     ✔ should fire a connect_error event with error data on middleware failure
+2026-09-11T09:46:09.6625526Z     ✔ should not try to reconnect after a middleware failure (101ms)
+2026-09-11T09:46:09.7652169Z     ✔ should properly disconnect then reconnect (102ms)
+2026-09-11T09:46:09.7668642Z     ✔ should throw on reserved event
+2026-09-11T09:46:09.7857612Z     ✔ should emit events in order
+2026-09-11T09:46:09.8014504Z     ✔ should emit an event and wait for the acknowledgement
+2026-09-11T09:46:09.8015135Z     query option
+2026-09-11T09:46:09.8175096Z       ✔ should accept an object (default namespace)
+2026-09-11T09:46:09.8332430Z       ✔ should accept a query string (default namespace)
+2026-09-11T09:46:09.8489239Z       ✔ should accept an object
+2026-09-11T09:46:09.8643366Z       ✔ should accept a query string
+2026-09-11T09:46:09.8809953Z       ✔ should properly encode the parameters
+2026-09-11T09:46:09.8813964Z     auth option
+2026-09-11T09:46:09.8970092Z       ✔ should accept an object
+2026-09-11T09:46:09.9154811Z       ✔ should accept an function
+2026-09-11T09:46:09.9159013Z     volatile packets
+2026-09-11T09:46:09.9318733Z       ✔ should discard a volatile packet when the *** is not connected
+2026-09-11T09:46:09.9478868Z       ✔ should discard a volatile packet when the pipe is not ready
+2026-09-11T09:46:10.1497358Z       ✔ should send a volatile packet when the *** is connected and the pipe is ready (201ms)
+2026-09-11T09:46:10.1497969Z     onAny
+2026-09-11T09:46:10.1663440Z       ✔ should call listener
+2026-09-11T09:46:10.1823778Z       ✔ should prepend listener
+2026-09-11T09:46:10.1977783Z       ✔ should remove listener
+2026-09-11T09:46:10.1982758Z     onAnyOutgoing
+2026-09-11T09:46:10.2127730Z       ✔ should call listener
+2026-09-11T09:46:10.2302741Z       ✔ should call listener with binary data
+2026-09-11T09:46:10.2457838Z       ✔ should prepend listener
+2026-09-11T09:46:10.2614997Z       ✔ should remove listener
+2026-09-11T09:46:10.2618173Z     timeout
+2026-09-11T09:46:10.3137027Z       ✔ should timeout after the given delay when *** is not connected (52ms)
+2026-09-11T09:46:10.3647561Z       ✔ should timeout when the server does not acknowledge the event (50ms)
+2026-09-11T09:46:10.5661838Z       ✔ should timeout when the server does not acknowledge the event in time (201ms)
+2026-09-11T09:46:10.5833587Z       ✔ should not timeout when the server does acknowledge the event
+2026-09-11T09:46:10.6338686Z       ✔ should timeout when the server does not acknowledge the event (promise) (50ms)
+2026-09-11T09:46:10.6495767Z       ✔ should not timeout when the server does acknowledge the event (promise)
+2026-09-11T09:46:10.7015947Z       ✔ should use the default timeout value (52ms)
+2026-09-11T09:46:10.7017712Z       acknowledgement upon disconnection
+2026-09-11T09:46:10.8171823Z         ✔ should not ack upon disconnection (callback) (115ms)
+2026-09-11T09:46:10.8376830Z         ✔ should ack with an error upon disconnection (callback & timeout)
+2026-09-11T09:46:10.8536853Z         ✔ should ack with an error upon disconnection (callback & ackTimeout)
+2026-09-11T09:46:10.8692742Z         ✔ should ack with an error upon disconnection (promise)
+2026-09-11T09:46:10.8853105Z         ✔ should ack with an error upon disconnection (promise & timeout)
+2026-09-11T09:46:11.0187949Z         ✔ should not discard an unsent ack (callback) (133ms)
+2026-09-11T09:46:11.0194208Z     throttled timer
+2026-09-11T09:46:11.0626581Z       ✔ should buffer the event and send it upon reconnection (43ms)
+2026-09-11T09:46:11.0627394Z 
+2026-09-11T09:46:11.0628399Z   autoUnref option
+2026-09-11T09:46:11.2121387Z     ✔ should stop once the timer is triggered (149ms)
+2026-09-11T09:46:11.3580196Z     ✔ should stop once the timer is triggered (even when trying to reconnect) (145ms)
+2026-09-11T09:46:11.5040895Z     ✔ should stop once the timer is triggered (polling) (146ms)
+2026-09-11T09:46:11.6510062Z     ✔ should stop once the timer is triggered (web***) (147ms)
+2026-09-11T09:46:11.7542337Z     ✔ should not stop with autoUnref set to false (103ms)
+2026-09-11T09:46:11.7542592Z 
+2026-09-11T09:46:11.7542763Z   connection state recovery
+2026-09-11T09:46:11.7596473Z     1) should not stop with autoUnref set to false
+2026-09-11T09:46:11.7932633Z     ✔ should have an accessible *** id equal to the server-side *** id (default namespace) (38ms)
+2026-09-11T09:46:11.7933353Z 
+2026-09-11T09:46:11.7933503Z   retry
+2026-09-11T09:46:11.8102603Z     ✔ should preserve the order of the packets
+2026-09-11T09:46:12.0279631Z     ✔ should fail when the server does not acknowledge the packet (217ms)
+2026-09-11T09:46:12.1458378Z     ✔ should not drain the queue while the *** is disconnected (117ms)
+2026-09-11T09:46:12.2478217Z     ✔ should not emit a packet twice in the 'connect' handler (102ms)
+2026-09-11T09:46:12.2479181Z 
+2026-09-11T09:46:12.2485794Z 
+2026-09-11T09:46:12.2486333Z   112 passing (7s)
+2026-09-11T09:46:12.2486948Z   1 failing
+2026-09-11T09:46:12.2487111Z 
+2026-09-11T09:46:12.2489783Z   1) autoUnref option
+2026-09-11T09:46:12.2490229Z        should not stop with autoUnref set to false:
+2026-09-11T09:46:12.2491243Z      done() called multiple times in test <autoUnref option should not stop with autoUnref set to false> of file /home/runner/work/***.io/***.io/packages/***.io-client/test/index.ts; in addition, done() received error: Error: should not happen
+2026-09-11T09:46:12.2492181Z     at <anonymous> (/home/runner/work/***.io/***.io/packages/***.io-client/test/node.ts:36:12)
+2026-09-11T09:46:12.2492870Z     at ChildProcess.exithandler (node:child_process:424:5)
+2026-09-11T09:46:12.2493348Z     at ChildProcess.emit (node:events:514:28)
+2026-09-11T09:46:12.2493748Z     at maybeClose (node:internal/child_process:1141:16)
+2026-09-11T09:46:12.2494123Z     at ChildProcess._handle.onexit (node:internal/child_process:306:5)
+2026-09-11T09:46:12.2495056Z   Error: done() called multiple times in test <autoUnref option should not stop with autoUnref set to false> of file /home/runner/work/***.io/***.io/packages/***.io-client/test/index.ts; in addition, done() received error: Error: should not happen
+2026-09-11T09:46:12.2495771Z       at <anonymous> (test/node.ts:36:12)
+2026-09-11T09:46:12.2496158Z       at ChildProcess.exithandler (node:child_process:424:5)
+2026-09-11T09:46:12.2496503Z       at ChildProcess.emit (node:events:514:28)
+2026-09-11T09:46:12.2496875Z       at maybeClose (node:internal/child_process:1141:16)
+2026-09-11T09:46:12.2497321Z       at ChildProcess._handle.onexit (node:internal/child_process:306:5)
+2026-09-11T09:46:12.2497761Z       at <anonymous> (test/node.ts:36:7)
+2026-09-11T09:46:12.2498173Z       at ChildProcess.exithandler (node:child_process:424:5)
+2026-09-11T09:46:12.2498630Z       at ChildProcess.emit (node:events:514:28)
+2026-09-11T09:46:12.2499167Z       at maybeClose (node:internal/child_process:1141:16)
+2026-09-11T09:46:12.2499651Z       at ChildProcess._handle.onexit (node:internal/child_process:306:5)
+2026-09-11T09:46:12.2499884Z 
+2026-09-11T09:46:12.2499938Z 
+2026-09-11T09:46:12.2499949Z 
+2026-09-11T09:46:12.2667709Z npm error Lifecycle script `test:node` failed with error:
+2026-09-11T09:46:12.2668192Z npm error code 1
+2026-09-11T09:46:12.2668994Z npm error path /home/runner/work/***.io/***.io/packages/***.io-client
+2026-09-11T09:46:12.2671976Z npm error workspace ***.io-client@4.8.3
+2026-09-11T09:46:12.2672722Z npm error location /home/runner/work/***.io/***.io/packages/***.io-client
+2026-09-11T09:46:12.2673307Z npm error command failed
+2026-09-11T09:46:12.2673919Z npm error command sh -c mocha --import=tsx --require test/support/hooks.ts --exit test/index.ts
+2026-09-11T09:46:12.2739425Z npm error Lifecycle script `test` failed with error:
+2026-09-11T09:46:12.2740205Z npm error code 1
+2026-09-11T09:46:12.2740966Z npm error path /home/runner/work/***.io/***.io/packages/***.io-client
+2026-09-11T09:46:12.2741529Z npm error workspace ***.io-client@4.8.3
+2026-09-11T09:46:12.2742252Z npm error location /home/runner/work/***.io/***.io/packages/***.io-client
+2026-09-11T09:46:12.2742824Z npm error command failed
+2026-09-11T09:46:12.2746590Z npm error command sh -c npm run format:check && npm run compile && if test "$BROWSERS" = "1" ; then npm run test:browser; else npm run test:node; fi
+2026-09-11T09:46:12.2802711Z ##[error]Process completed with exit code 1.
+2026-09-11T09:46:12.2933626Z Post job cleanup.
+2026-09-11T09:46:12.3606236Z [command]/usr/bin/git version
+2026-09-11T09:46:12.3633826Z git version 2.55.0
+2026-09-11T09:46:12.3659663Z Temporarily overriding HOME='/home/runner/work/_temp/0364af4c-1bb0-40e3-a0a3-24dba29ae616' before making global git config changes
+2026-09-11T09:46:12.3660555Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-11T09:46:12.3663968Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/***.io/***.io
+2026-09-11T09:46:12.3686601Z Removing SSH command configuration
+2026-09-11T09:46:12.3691263Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-11T09:46:12.3716609Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-11T09:46:12.3875272Z Removing HTTP extra header
+2026-09-11T09:46:12.3879039Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-11T09:46:12.3903270Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-11T09:46:12.4055698Z Removing includeIf entries pointing to credentials config files
+2026-09-11T09:46:12.4060606Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-11T09:46:12.4082469Z includeif.gitdir:/home/runner/work/***.io/***.io/.git.path
+2026-09-11T09:46:12.4083318Z includeif.gitdir:/home/runner/work/***.io/***.io/.git/worktrees/*.path
+2026-09-11T09:46:12.4083970Z includeif.gitdir:/github/workspace/.git.path
+2026-09-11T09:46:12.4084537Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-11T09:46:12.4089702Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/***.io/***.io/.git.path
+2026-09-11T09:46:12.4107084Z /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4114662Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/***.io/***.io/.git.path /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4138647Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/***.io/***.io/.git/worktrees/*.path
+2026-09-11T09:46:12.4157059Z /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4163510Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/***.io/***.io/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4186868Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-11T09:46:12.4203051Z /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4207653Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4966858Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-11T09:46:12.4990486Z /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.4997430Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config
+2026-09-11T09:46:12.5031272Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-11T09:46:12.5207148Z Removing credentials config '/home/runner/work/_temp/git-credentials-40b5acb5-3b78-4854-88a9-58a6982dcfdc.config'
+2026-09-11T09:46:12.5373542Z Cleaning up orphan processes

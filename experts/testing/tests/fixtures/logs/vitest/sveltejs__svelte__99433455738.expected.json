@@ -1,0 +1,23 @@
+{
+  "framework": "vitest",
+  "repo": "sveltejs/svelte",
+  "job_id": 99433455738,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 7764,
+    "failed": 0,
+    "skipped": 56,
+    "total": 7820,
+    "todo": 0,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Passing, dot reporter: nothing per test or file."
+}

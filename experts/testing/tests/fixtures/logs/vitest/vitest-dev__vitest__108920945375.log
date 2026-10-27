@@ -1,0 +1,266 @@
+﻿2026-09-28T12:11:36.1318492Z Current runner version: '2.337.0'
+2026-09-28T12:11:36.1335840Z ##[group]Runner Image Provisioner
+2026-09-28T12:11:36.1336442Z Hosted Compute Agent
+2026-09-28T12:11:36.1336964Z Version: 20260828.587
+2026-09-28T12:11:36.1337402Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-28T12:11:36.1337929Z Build Date: 2026-08-28T16:44:25Z
+2026-09-28T12:11:36.1338405Z Worker ID: {83fe2c5d-31a9-4913-9862-0806c93195c4}
+2026-09-28T12:11:36.1338881Z Azure Region: centralus
+2026-09-28T12:11:36.1339423Z ##[endgroup]
+2026-09-28T12:11:36.1340299Z ##[group]Operating System
+2026-09-28T12:11:36.1340716Z Ubuntu
+2026-09-28T12:11:36.1341098Z 24.04.5
+2026-09-28T12:11:36.1341445Z LTS
+2026-09-28T12:11:36.1341808Z ##[endgroup]
+2026-09-28T12:11:36.1342206Z ##[group]Runner Image
+2026-09-28T12:11:36.1342892Z Image: ubuntu-24.04
+2026-09-28T12:11:36.1343327Z Version: 20260920.314.1
+2026-09-28T12:11:36.1344219Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-28T12:11:36.1345274Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+2026-09-28T12:11:36.1345921Z ##[endgroup]
+2026-09-28T12:11:36.1346620Z ##[group]GITHUB_TOKEN Permissions
+2026-09-28T12:11:36.1348142Z Metadata: read
+2026-09-28T12:11:36.1348540Z ##[endgroup]
+2026-09-28T12:11:36.1349977Z Secret source: Actions
+2026-09-28T12:11:36.1350644Z Cache mode: write
+2026-09-28T12:11:36.1351107Z Prepare workflow directory
+2026-09-28T12:11:36.1718283Z Prepare all required actions
+2026-09-28T12:11:36.1755651Z Getting action download info
+2026-09-28T12:11:36.4362866Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-28T12:11:36.6458395Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-09-28T12:11:37.4282322Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-09-28T12:11:37.7306256Z Complete job name: Merge Reports
+2026-09-28T12:11:37.8136611Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-28T12:11:37.8137852Z with:
+2026-09-28T12:11:37.8138563Z   persist-credentials: false
+2026-09-28T12:11:37.8139376Z   repository: vitest-dev/vitest
+2026-09-28T12:11:37.8145281Z   token: ***
+2026-09-28T12:11:37.8145913Z   ssh-strict: true
+2026-09-28T12:11:37.8146550Z   ssh-user: git
+2026-09-28T12:11:37.8147160Z   clean: true
+2026-09-28T12:11:37.8147818Z   sparse-checkout-cone-mode: true
+2026-09-28T12:11:37.8148602Z   fetch-depth: 1
+2026-09-28T12:11:37.8149254Z   fetch-tags: false
+2026-09-28T12:11:37.8149914Z   show-progress: true
+2026-09-28T12:11:37.8150583Z   lfs: false
+2026-09-28T12:11:37.8151206Z   submodules: false
+2026-09-28T12:11:37.8151868Z   set-safe-directory: true
+2026-09-28T12:11:37.8152688Z   allow-unsafe-pr-checkout: false
+2026-09-28T12:11:37.8153749Z env:
+2026-09-28T12:11:37.8154689Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-09-28T12:11:37.8155899Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-09-28T12:11:37.8156636Z ##[endgroup]
+2026-09-28T12:11:37.8996434Z Syncing repository: vitest-dev/vitest
+2026-09-28T12:11:37.8998882Z ##[group]Getting Git version info
+2026-09-28T12:11:37.8999896Z Working directory is '/home/runner/work/vitest/vitest'
+2026-09-28T12:11:37.9001340Z [command]/usr/bin/git version
+2026-09-28T12:11:38.2321148Z git version 2.55.0
+2026-09-28T12:11:38.2335652Z ##[endgroup]
+2026-09-28T12:11:38.2345495Z Temporarily overriding HOME='/home/runner/work/_temp/26e7a4cf-f67c-4908-a478-a95c7ff862b7' before making global git config changes
+2026-09-28T12:11:38.2346339Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-28T12:11:38.2350643Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vitest/vitest
+2026-09-28T12:11:38.2890394Z Deleting the contents of '/home/runner/work/vitest/vitest'
+2026-09-28T12:11:38.2895520Z ##[group]Determining repository object format
+2026-09-28T12:11:38.2897211Z ##[endgroup]
+2026-09-28T12:11:38.2898038Z ##[group]Initializing the repository
+2026-09-28T12:11:38.2900802Z [command]/usr/bin/git init /home/runner/work/vitest/vitest
+2026-09-28T12:11:38.3006101Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-28T12:11:38.3006736Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-28T12:11:38.3007261Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-28T12:11:38.3007707Z hint: call:
+2026-09-28T12:11:38.3007879Z hint:
+2026-09-28T12:11:38.3008224Z hint: 	git config --global init.defaultBranch <name>
+2026-09-28T12:11:38.3008550Z hint:
+2026-09-28T12:11:38.3008882Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-28T12:11:38.3009376Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-28T12:11:38.3009847Z hint:
+2026-09-28T12:11:38.3010050Z hint: 	git branch -m <name>
+2026-09-28T12:11:38.3010272Z hint:
+2026-09-28T12:11:38.3010540Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-28T12:11:38.3011246Z Initialized empty Git repository in /home/runner/work/vitest/vitest/.git/
+2026-09-28T12:11:38.3014978Z [command]/usr/bin/git remote add origin https://github.com/vitest-dev/vitest
+2026-09-28T12:11:38.3056312Z ##[endgroup]
+2026-09-28T12:11:38.3056679Z ##[group]Disabling automatic garbage collection
+2026-09-28T12:11:38.3058723Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-28T12:11:38.3081887Z ##[endgroup]
+2026-09-28T12:11:38.3082304Z ##[group]Setting up auth
+2026-09-28T12:11:38.3082803Z Removing SSH command configuration
+2026-09-28T12:11:38.3087139Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-28T12:11:38.3108563Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-28T12:11:38.3427745Z Removing HTTP extra header
+2026-09-28T12:11:38.3431758Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-28T12:11:38.3453863Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-28T12:11:38.3596777Z Removing includeIf entries pointing to credentials config files
+2026-09-28T12:11:38.3601085Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-28T12:11:38.3621933Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-28T12:11:38.3769966Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-28T12:11:38.3796015Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vitest/vitest/.git.path /home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:38.3820671Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:38.3845798Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:38.4107121Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:38.4128324Z ##[endgroup]
+2026-09-28T12:11:38.4128692Z ##[group]Fetching the repository
+2026-09-28T12:11:38.4134013Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5d6dbd36155881db8842cf1c27b8f3690e75dfb7:refs/remotes/pull/11167/merge
+2026-09-28T12:11:40.4733592Z From https://github.com/vitest-dev/vitest
+2026-09-28T12:11:40.4734258Z  * [new ref]         5d6dbd36155881db8842cf1c27b8f3690e75dfb7 -> pull/11167/merge
+2026-09-28T12:11:40.4737721Z ##[endgroup]
+2026-09-28T12:11:40.4738315Z ##[group]Determining the checkout info
+2026-09-28T12:11:40.4738676Z ##[endgroup]
+2026-09-28T12:11:40.4744248Z [command]/usr/bin/git sparse-checkout disable
+2026-09-28T12:11:40.4797327Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-28T12:11:40.4821495Z ##[group]Checking out the ref
+2026-09-28T12:11:40.4824899Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/11167/merge
+2026-09-28T12:11:40.6415865Z Note: switching to 'refs/remotes/pull/11167/merge'.
+2026-09-28T12:11:40.6416181Z 
+2026-09-28T12:11:40.6416365Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-28T12:11:40.6416760Z changes and commit them, and you can discard any commits you make in this
+2026-09-28T12:11:40.6417107Z state without impacting any branches by switching back to a branch.
+2026-09-28T12:11:40.6417397Z 
+2026-09-28T12:11:40.6417566Z If you want to create a new branch to retain commits you create, you may
+2026-09-28T12:11:40.6417877Z do so (now or later) by using -c with the switch command. Example:
+2026-09-28T12:11:40.6418045Z 
+2026-09-28T12:11:40.6418139Z   git switch -c <new-branch-name>
+2026-09-28T12:11:40.6418273Z 
+2026-09-28T12:11:40.6418368Z Or undo this operation with:
+2026-09-28T12:11:40.6418486Z 
+2026-09-28T12:11:40.6418551Z   git switch -
+2026-09-28T12:11:40.6418679Z 
+2026-09-28T12:11:40.6418867Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-28T12:11:40.6419077Z 
+2026-09-28T12:11:40.6419307Z HEAD is now at 5d6dbd3 Merge c80a76652fb2ff670d74423f54eff1110d753d9f into 15cc006aa9f8683dc5f7e895d011fa7dc751ce35
+2026-09-28T12:11:40.6482974Z ##[endgroup]
+2026-09-28T12:11:40.6518285Z [command]/usr/bin/git log -1 --format=%H
+2026-09-28T12:11:40.6537141Z 5d6dbd36155881db8842cf1c27b8f3690e75dfb7
+2026-09-28T12:11:40.6543577Z ##[group]Removing auth
+2026-09-28T12:11:40.6543856Z Removing SSH command configuration
+2026-09-28T12:11:40.6546418Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-28T12:11:40.6568063Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-28T12:11:40.6718244Z Removing HTTP extra header
+2026-09-28T12:11:40.6720849Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-28T12:11:40.6743488Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-28T12:11:40.6886034Z Removing includeIf entries pointing to credentials config files
+2026-09-28T12:11:40.6888744Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-28T12:11:40.6905488Z includeif.gitdir:/home/runner/work/vitest/vitest/.git.path
+2026-09-28T12:11:40.6905910Z includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path
+2026-09-28T12:11:40.6906335Z includeif.gitdir:/github/workspace/.git.path
+2026-09-28T12:11:40.6906691Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-28T12:11:40.6911287Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vitest/vitest/.git.path
+2026-09-28T12:11:40.6928104Z /home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:40.6935456Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vitest/vitest/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-a7ef2588\-70a4\-4e6e\-abb2\-7a6149a95f44\.config
+2026-09-28T12:11:40.6958769Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path
+2026-09-28T12:11:40.6973920Z /home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:40.6978551Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-a7ef2588\-70a4\-4e6e\-abb2\-7a6149a95f44\.config
+2026-09-28T12:11:40.7000129Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-28T12:11:40.7016542Z /github/runner_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:40.7022159Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-a7ef2588\-70a4\-4e6e\-abb2\-7a6149a95f44\.config
+2026-09-28T12:11:40.7047447Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-28T12:11:40.7063497Z /github/runner_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config
+2026-09-28T12:11:40.7075705Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-a7ef2588\-70a4\-4e6e\-abb2\-7a6149a95f44\.config
+2026-09-28T12:11:40.7115965Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-28T12:11:40.7282648Z Removing credentials config '/home/runner/work/_temp/git-credentials-a7ef2588-70a4-4e6e-abb2-7a6149a95f44.config'
+2026-09-28T12:11:40.7291411Z ##[endgroup]
+2026-09-28T12:11:40.7479478Z Prepare all required actions
+2026-09-28T12:11:40.7479943Z Getting action download info
+2026-09-28T12:11:40.8722212Z Download action repository 'pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320' (SHA:fc06bc1257f339d1d5d8b3a19a8cae5388b55320)
+2026-09-28T12:11:41.6142885Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-28T12:11:41.9884315Z ##[group]Run ./.github/actions/setup-and-cache
+2026-09-28T12:11:41.9884553Z with:
+2026-09-28T12:11:41.9884712Z   node-version: 24.x
+2026-09-28T12:11:41.9884871Z env:
+2026-09-28T12:11:41.9885115Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-09-28T12:11:41.9885423Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-09-28T12:11:41.9885618Z ##[endgroup]
+2026-09-28T12:11:41.9934072Z ##[start-action display=Install pnpm;id=__self.__pnpm_action-setup]
+2026-09-28T12:11:41.9979779Z ##[group]Run pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+2026-09-28T12:11:41.9980075Z with:
+2026-09-28T12:11:41.9980237Z   dest: ~/setup-pnpm
+2026-09-28T12:11:41.9980411Z   run_install: null
+2026-09-28T12:11:41.9980574Z   cache: false
+2026-09-28T12:11:41.9980761Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-28T12:11:41.9980973Z   package_json_file: package.json
+2026-09-28T12:11:41.9981184Z   standalone: false
+2026-09-28T12:11:41.9981337Z env:
+2026-09-28T12:11:41.9981583Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-09-28T12:11:41.9981885Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-09-28T12:11:41.9982075Z ##[endgroup]
+2026-09-28T12:11:42.0991633Z ##[group]Running self-installer...
+2026-09-28T12:11:42.4543441Z (node:2141) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-09-28T12:11:42.4544515Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-28T12:11:42.6802928Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-28T12:11:42.6859401Z Packages: +1
+2026-09-28T12:11:42.6859666Z +
+2026-09-28T12:11:42.9714122Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-09-28T12:11:43.2983678Z 
+2026-09-28T12:11:43.2984254Z dependencies:
+2026-09-28T12:11:43.2984737Z + pnpm 11.28.0 (12.6.0 is available)
+2026-09-28T12:11:43.2985042Z 
+2026-09-28T12:11:43.4254303Z Done in 1.1s
+2026-09-28T12:11:43.4362291Z ##[endgroup]
+2026-09-28T12:11:43.4362830Z Installation Completed!
+2026-09-28T12:11:43.4429900Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=1449]
+2026-09-28T12:11:43.4444808Z ##[start-action display=Set node version to 24.x;id=__self.__actions_setup-node]
+2026-09-28T12:11:43.4497827Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-28T12:11:43.4498108Z with:
+2026-09-28T12:11:43.4498276Z   node-version: 24.x
+2026-09-28T12:11:43.4498466Z   cache: pnpm
+2026-09-28T12:11:43.4498629Z   check-latest: false
+2026-09-28T12:11:43.4500249Z   token: ***
+2026-09-28T12:11:43.4500410Z   package-manager-cache: true
+2026-09-28T12:11:43.4500585Z env:
+2026-09-28T12:11:43.4500830Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-09-28T12:11:43.4501118Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-09-28T12:11:43.4501342Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-28T12:11:43.4501559Z ##[endgroup]
+2026-09-28T12:11:43.5647151Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-09-28T12:11:43.5649205Z ##[group]Environment details
+2026-09-28T12:11:48.7547642Z node: v24.21.0
+2026-09-28T12:11:48.7547896Z npm: 11.19.0
+2026-09-28T12:11:48.7548043Z yarn: 1.22.22
+2026-09-28T12:11:48.7548435Z ##[endgroup]
+2026-09-28T12:11:48.7561061Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+2026-09-28T12:11:50.0893601Z /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-09-28T12:11:50.3365808Z Cache hit for: node-cache-Linux-x64-pnpm-02f2304cf397be6708570c8cecd1c9af450f3044c16efcce6b3724e2d306466a
+2026-09-28T12:11:51.5071671Z Received 121634816 of 145828434 (83.4%), 116.0 MBs/sec
+2026-09-28T12:11:51.7326891Z Received 145828434 of 145828434 (100.0%), 113.4 MBs/sec
+2026-09-28T12:11:51.7327274Z Cache Size: ~139 MB (145828434 B)
+2026-09-28T12:11:51.7354625Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2c6b91da-2458-42fe-86e9-eb8411976856/cache.tzst -P -C /home/runner/work/vitest/vitest --use-compress-program unzstd
+2026-09-28T12:11:53.1997714Z Cache restored successfully
+2026-09-28T12:11:53.2046973Z Cache restored from key: node-cache-Linux-x64-pnpm-02f2304cf397be6708570c8cecd1c9af450f3044c16efcce6b3724e2d306466a
+2026-09-28T12:11:53.2146434Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=9770]
+2026-09-28T12:11:53.2278320Z ##[group]Run pnpm i --filter '!docs'
+2026-09-28T12:11:53.2278684Z [36;1mpnpm i --filter '!docs'[0m
+2026-09-28T12:11:53.6299848Z shell: /usr/bin/bash -e {0}
+2026-09-28T12:11:53.6300105Z env:
+2026-09-28T12:11:53.6300389Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-09-28T12:11:53.6300723Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-09-28T12:11:53.6300982Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-28T12:11:53.6301211Z ##[endgroup]
+2026-09-28T12:11:54.0138002Z Scope: 40 of 41 workspace projects
+2026-09-28T12:11:54.2535993Z .                                        | [WARN] There are cyclic workspace dependencies: /home/runner/work/vitest/vitest/packages/browser, /home/runner/work/vitest/vitest/packages/vitest, /home/runner/work/vitest/vitest/packages/browser-playwright
+2026-09-28T12:11:54.3369268Z [ERR_PNPM_LOCKFILE_CONFIG_MISMATCH] Cannot proceed with the frozen installation. The current "catalogs" configuration doesn't match the value found in the lockfile
+2026-09-28T12:11:54.3369813Z 
+2026-09-28T12:11:54.3370071Z Update your lockfile using "pnpm install --no-frozen-lockfile"
+2026-09-28T12:11:54.5168436Z ##[error]Process completed with exit code 1.
+2026-09-28T12:11:54.5266388Z Post job cleanup.
+2026-09-28T12:11:54.5270910Z ##[start-action display=Set node version to 24.x;id=__3b482dec-84ba-445d-8a34-91d04c6e9434.__actions_setup-node]
+2026-09-28T12:11:54.5273931Z ##[end-action id=__3b482dec-84ba-445d-8a34-91d04c6e9434.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-09-28T12:11:54.5275741Z ##[start-action display=Install pnpm;id=__3b482dec-84ba-445d-8a34-91d04c6e9434.__pnpm_action-setup]
+2026-09-28T12:11:54.5308156Z Post job cleanup.
+2026-09-28T12:11:54.6354427Z Pruning is unnecessary.
+2026-09-28T12:11:54.6399564Z ##[end-action id=__3b482dec-84ba-445d-8a34-91d04c6e9434.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=112]
+2026-09-28T12:11:54.6453366Z Post job cleanup.
+2026-09-28T12:11:54.7085315Z [command]/usr/bin/git version
+2026-09-28T12:11:54.7111681Z git version 2.55.0
+2026-09-28T12:11:54.7135477Z Temporarily overriding HOME='/home/runner/work/_temp/915c7d0f-5e12-4b02-890f-ea9842a3cbbd' before making global git config changes
+2026-09-28T12:11:54.7136219Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-28T12:11:54.7139199Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vitest/vitest
+2026-09-28T12:11:54.7168203Z Removing SSH command configuration
+2026-09-28T12:11:54.7173422Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-28T12:11:54.7198710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-28T12:11:54.7349149Z Removing HTTP extra header
+2026-09-28T12:11:54.7352779Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-28T12:11:54.7374055Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-28T12:11:54.7518992Z Removing includeIf entries pointing to credentials config files
+2026-09-28T12:11:54.7523943Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-28T12:11:54.7544247Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-28T12:11:54.7786226Z Cleaning up orphan processes

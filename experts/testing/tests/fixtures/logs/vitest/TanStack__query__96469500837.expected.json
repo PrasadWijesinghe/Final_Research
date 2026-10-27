@@ -1,0 +1,32 @@
+{
+  "framework": "vitest",
+  "repo": "TanStack/query",
+  "job_id": 96469500837,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 621,
+    "failed": 1,
+    "skipped": 0,
+    "total": 622,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "mutationObserver > resubscribing should reattach the observer to the in-flight mutation",
+    "Unhandled Source Error > TypeCheckError: Duplicate function implementation."
+  ],
+  "failed_files": [
+    "src/__tests__/mutationObserver.test.tsx",
+    "src/mutationObserver.ts"
+  ],
+  "failure_kinds": {
+    "unhandled": 1
+  },
+  "first_error_type": "AssertionError",
+  "first_project_path": "src/__tests__/mutationObserver.test.tsx",
+  "note": "Trimmed. `Errors 2 errors` (two Unhandled Source Error blocks with the same first line, listed once, kind unhandled). Project badge `@tanstack/query-core` before the file."
+}

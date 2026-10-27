@@ -1,0 +1,23 @@
+{
+  "framework": "vitest",
+  "repo": "typescript-eslint/typescript-eslint",
+  "job_id": 117232585738,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0,
+    "total": 19,
+    "todo": 0,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Passing. File lines with a project badge; slow tests are listed under their file."
+}

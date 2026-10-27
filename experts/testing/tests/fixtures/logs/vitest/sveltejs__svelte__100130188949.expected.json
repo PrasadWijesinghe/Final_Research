@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "sveltejs/svelte",
+  "job_id": 100130188949,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 7816,
+    "failed": 1,
+    "skipped": 55,
+    "total": 7872,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "proxy onchange kernel > keeps links bounded under index churn"
+  ],
+  "failed_files": [
+    "packages/svelte/tests/signals/onchange.test.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "packages/svelte/tests/signals/onchange.test.ts",
+  "note": "A timeout. Dot reporter: only the failing file's line is printed."
+}

@@ -1,0 +1,21 @@
+{
+  "framework": "mocha",
+  "repo": "Automattic/mongoose",
+  "job_id": 100222815707,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 4553,
+    "failed": 0,
+    "skipped": 9,
+    "total": 4562
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Dot/min reporter: no per-test lines. Mocha prints no total; total = passing + failing + pending."
+}

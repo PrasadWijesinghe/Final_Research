@@ -1,0 +1,26 @@
+{
+  "framework": "mocha",
+  "repo": "puppeteer/puppeteer",
+  "job_id": 92611261356,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 15,
+    "failed": 2,
+    "skipped": 6,
+    "total": 23
+  },
+  "failed_test_names": [
+    "`puppeteer` with Webpack > \"before all\" hook for \"evaluates WebPack Bundles\"",
+    "`puppeteer` with Webpack > \"after all\" hook for \"evaluates WebPack Bundles\""
+  ],
+  "failed_files": [
+    "test/installation/src/sandbox.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": null,
+  "note": "Windows; two hook failures; `file:///D:/a/puppeteer/puppeteer/...` frames become repo-relative paths."
+}

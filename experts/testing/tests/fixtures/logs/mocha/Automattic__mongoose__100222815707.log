@@ -1,0 +1,216 @@
+﻿2026-09-02T11:03:10.9125275Z Current runner version: '2.337.0'
+2026-09-02T11:03:10.9145274Z ##[group]Runner Image Provisioner
+2026-09-02T11:03:10.9146004Z Hosted Compute Agent
+2026-09-02T11:03:10.9146505Z Version: 20260819.586
+2026-09-02T11:03:10.9147107Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-09-02T11:03:10.9147758Z Build Date: 2026-08-18T23:20:18Z
+2026-09-02T11:03:10.9148379Z Worker ID: {59a7f7b4-eabc-45bf-ab00-af144deebef4}
+2026-09-02T11:03:10.9149060Z Azure Region: westus3
+2026-09-02T11:03:10.9149554Z ##[endgroup]
+2026-09-02T11:03:10.9150725Z ##[group]Operating System
+2026-09-02T11:03:10.9151252Z Ubuntu
+2026-09-02T11:03:10.9151698Z 22.04.5
+2026-09-02T11:03:10.9152201Z LTS
+2026-09-02T11:03:10.9152659Z ##[endgroup]
+2026-09-02T11:03:10.9153158Z ##[group]Runner Image
+2026-09-02T11:03:10.9153735Z Image: ubuntu-22.04
+2026-09-02T11:03:10.9154321Z Version: 20260824.273.3
+2026-09-02T11:03:10.9155751Z Included Software: https://github.com/actions/runner-images/blob/ubuntu22/20260824.273/images/ubuntu/Ubuntu2204-Readme.md
+2026-09-02T11:03:10.9157070Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu22%2F20260824.273
+2026-09-02T11:03:10.9157868Z ##[endgroup]
+2026-09-02T11:03:10.9158793Z ##[group]GITHUB_TOKEN Permissions
+2026-09-02T11:03:10.9160362Z Contents: read
+2026-09-02T11:03:10.9160847Z Metadata: read
+2026-09-02T11:03:10.9161446Z ##[endgroup]
+2026-09-02T11:03:10.9163070Z Secret source: Actions
+2026-09-02T11:03:10.9164238Z Prepare workflow directory
+2026-09-02T11:03:10.9480640Z Prepare all required actions
+2026-09-02T11:03:10.9534985Z Getting action download info
+2026-09-02T11:03:11.2561423Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-02T11:03:11.3291628Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-02T11:03:11.6884900Z Complete job name: Replica Set tests
+2026-09-02T11:03:11.7461775Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-02T11:03:11.7462600Z with:
+2026-09-02T11:03:11.7462953Z   repository: Automattic/mongoose
+2026-09-02T11:03:11.7466099Z   token: ***
+2026-09-02T11:03:11.7466445Z   ssh-strict: true
+2026-09-02T11:03:11.7466795Z   ssh-user: git
+2026-09-02T11:03:11.7467146Z   persist-credentials: true
+2026-09-02T11:03:11.7467529Z   clean: true
+2026-09-02T11:03:11.7467877Z   sparse-checkout-cone-mode: true
+2026-09-02T11:03:11.7468285Z   fetch-depth: 1
+2026-09-02T11:03:11.7468618Z   fetch-tags: false
+2026-09-02T11:03:11.7468961Z   show-progress: true
+2026-09-02T11:03:11.7469306Z   lfs: false
+2026-09-02T11:03:11.7469623Z   submodules: false
+2026-09-02T11:03:11.7469971Z   set-safe-directory: true
+2026-09-02T11:03:11.7470356Z   allow-unsafe-pr-checkout: false
+2026-09-02T11:03:11.7470966Z env:
+2026-09-02T11:03:11.7471281Z   FORCE_COLOR: true
+2026-09-02T11:03:11.7471622Z ##[endgroup]
+2026-09-02T11:03:11.8255851Z Syncing repository: Automattic/mongoose
+2026-09-02T11:03:11.8257227Z ##[group]Getting Git version info
+2026-09-02T11:03:11.8257793Z Working directory is '/home/runner/work/mongoose/mongoose'
+2026-09-02T11:03:11.8258604Z [command]/usr/bin/git version
+2026-09-02T11:03:11.8708774Z git version 2.55.0
+2026-09-02T11:03:11.8755605Z ##[endgroup]
+2026-09-02T11:03:11.8764217Z Temporarily overriding HOME='/home/runner/work/_temp/73d8e261-30ca-4814-9c05-c662ebc76dbb' before making global git config changes
+2026-09-02T11:03:11.8765580Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-02T11:03:11.8768542Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mongoose/mongoose
+2026-09-02T11:03:11.8797418Z Deleting the contents of '/home/runner/work/mongoose/mongoose'
+2026-09-02T11:03:11.8800339Z ##[group]Determining repository object format
+2026-09-02T11:03:11.8801572Z ##[endgroup]
+2026-09-02T11:03:11.8802141Z ##[group]Initializing the repository
+2026-09-02T11:03:11.8804965Z [command]/usr/bin/git init /home/runner/work/mongoose/mongoose
+2026-09-02T11:03:11.8873652Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-02T11:03:11.8875534Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-02T11:03:11.8876985Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-02T11:03:11.8878206Z hint: call:
+2026-09-02T11:03:11.8878937Z hint:
+2026-09-02T11:03:11.8879740Z hint: 	git config --global init.defaultBranch <name>
+2026-09-02T11:03:11.8880633Z hint:
+2026-09-02T11:03:11.8881463Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-02T11:03:11.8882816Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-02T11:03:11.8884334Z hint:
+2026-09-02T11:03:11.8885038Z hint: 	git branch -m <name>
+2026-09-02T11:03:11.8885770Z hint:
+2026-09-02T11:03:11.8886632Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-02T11:03:11.8888042Z Initialized empty Git repository in /home/runner/work/mongoose/mongoose/.git/
+2026-09-02T11:03:11.8890300Z [command]/usr/bin/git remote add origin https://github.com/Automattic/mongoose
+2026-09-02T11:03:11.8916266Z ##[endgroup]
+2026-09-02T11:03:11.8917110Z ##[group]Disabling automatic garbage collection
+2026-09-02T11:03:11.8918269Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-02T11:03:11.8945423Z ##[endgroup]
+2026-09-02T11:03:11.8946397Z ##[group]Setting up auth
+2026-09-02T11:03:11.8947059Z Removing SSH command configuration
+2026-09-02T11:03:11.8950208Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-02T11:03:11.8978352Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-02T11:03:11.9234602Z Removing HTTP extra header
+2026-09-02T11:03:11.9238990Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-02T11:03:11.9265647Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-02T11:03:11.9471324Z Removing includeIf entries pointing to credentials config files
+2026-09-02T11:03:11.9475444Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-02T11:03:11.9502218Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-02T11:03:11.9724994Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-02T11:03:11.9758158Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mongoose/mongoose/.git.path /home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:03:11.9787924Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:03:11.9815130Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:03:11.9842949Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:03:11.9868669Z ##[endgroup]
+2026-09-02T11:03:11.9869407Z ##[group]Fetching the repository
+2026-09-02T11:03:11.9875378Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cf9a5d34367e334f51bfb4f626e5fa765e15dc56:refs/remotes/origin/master
+2026-09-02T11:03:12.9129308Z From https://github.com/Automattic/mongoose
+2026-09-02T11:03:12.9131077Z  * [new ref]         cf9a5d34367e334f51bfb4f626e5fa765e15dc56 -> origin/master
+2026-09-02T11:03:12.9137916Z [command]/usr/bin/git branch --list --remote origin/master
+2026-09-02T11:03:12.9162824Z   origin/master
+2026-09-02T11:03:12.9170499Z [command]/usr/bin/git rev-parse refs/remotes/origin/master
+2026-09-02T11:03:12.9191699Z cf9a5d34367e334f51bfb4f626e5fa765e15dc56
+2026-09-02T11:03:12.9196644Z ##[endgroup]
+2026-09-02T11:03:12.9197598Z ##[group]Determining the checkout info
+2026-09-02T11:03:12.9199840Z ##[endgroup]
+2026-09-02T11:03:12.9205263Z [command]/usr/bin/git sparse-checkout disable
+2026-09-02T11:03:12.9243471Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-02T11:03:12.9272617Z ##[group]Checking out the ref
+2026-09-02T11:03:12.9275655Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-09-02T11:03:12.9751296Z Reset branch 'master'
+2026-09-02T11:03:12.9752586Z branch 'master' set up to track 'origin/master'.
+2026-09-02T11:03:12.9759400Z ##[endgroup]
+2026-09-02T11:03:12.9794997Z [command]/usr/bin/git log -1 --format=%H
+2026-09-02T11:03:12.9818521Z cf9a5d34367e334f51bfb4f626e5fa765e15dc56
+2026-09-02T11:03:13.0100734Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-02T11:03:13.0101905Z with:
+2026-09-02T11:03:13.0102526Z   node-version: 22
+2026-09-02T11:03:13.0103208Z   check-latest: false
+2026-09-02T11:03:13.0109829Z   token: ***
+2026-09-02T11:03:13.0110517Z   package-manager-cache: true
+2026-09-02T11:03:13.0111337Z env:
+2026-09-02T11:03:13.0111951Z   FORCE_COLOR: true
+2026-09-02T11:03:13.0112612Z ##[endgroup]
+2026-09-02T11:03:13.1171760Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+2026-09-02T11:03:13.1174275Z ##[group]Environment details
+2026-09-02T11:03:14.7260889Z node: v22.23.2
+2026-09-02T11:03:14.7261378Z npm: 10.9.8
+2026-09-02T11:03:14.7261689Z yarn: 1.22.22
+2026-09-02T11:03:14.7263109Z ##[endgroup]
+2026-09-02T11:03:14.7448811Z ##[group]Run npm install
+2026-09-02T11:03:14.7449151Z [36;1mnpm install[0m
+2026-09-02T11:03:14.7712736Z shell: /usr/bin/bash -e {0}
+2026-09-02T11:03:14.7713009Z env:
+2026-09-02T11:03:14.7713211Z   FORCE_COLOR: true
+2026-09-02T11:03:14.7713425Z ##[endgroup]
+2026-09-02T11:03:32.8376715Z npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+2026-09-02T11:03:33.2760775Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-09-02T11:03:33.5941365Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2026-09-02T11:03:35.5167813Z 
+2026-09-02T11:03:35.5168768Z added 628 packages, and audited 629 packages in 21s
+2026-09-02T11:03:35.5169278Z 
+2026-09-02T11:03:35.5169486Z 194 packages are looking for funding
+2026-09-02T11:03:35.5169925Z   run `npm fund` for details
+2026-09-02T11:03:35.5189759Z 
+2026-09-02T11:03:35.5190368Z 6 vulnerabilities (3 moderate, 2 high, 1 critical)
+2026-09-02T11:03:35.5191012Z 
+2026-09-02T11:03:35.5191645Z To address all issues (including breaking changes), run:
+2026-09-02T11:03:35.5192141Z   npm audit fix --force
+2026-09-02T11:03:35.5192337Z 
+2026-09-02T11:03:35.5192503Z Run `npm audit` for details.
+2026-09-02T11:03:35.5663402Z ##[group]Run npm run test-rs:ci
+2026-09-02T11:03:35.5663652Z [36;1mnpm run test-rs:ci[0m
+2026-09-02T11:03:35.5726611Z shell: /usr/bin/bash -e {0}
+2026-09-02T11:03:35.5726822Z env:
+2026-09-02T11:03:35.5726987Z   FORCE_COLOR: true
+2026-09-02T11:03:35.5727157Z ##[endgroup]
+2026-09-02T11:03:35.6647002Z 
+2026-09-02T11:03:35.6647714Z > mongoose@9.9.4 test-rs:ci
+2026-09-02T11:03:35.6648275Z > npm run test-rs -- --reporter min
+2026-09-02T11:03:35.6648540Z 
+2026-09-02T11:03:35.7512469Z 
+2026-09-02T11:03:35.7512920Z > mongoose@9.9.4 test-rs
+2026-09-02T11:03:35.7513580Z > START_REPLICA_SET=1 mocha --timeout 30000 --exit --ignore "test/encryption/**/*.test.js" "./test/**/*.test.js" --reporter min
+2026-09-02T11:03:35.7514510Z 
+2026-09-02T11:03:36.3702785Z [31m
+2026-09-02T11:03:36.3703252Z You're not testing shards!
+2026-09-02T11:03:36.3703753Z Please set the MONGOOSE_SHARD_TEST_URI env variable.
+2026-09-02T11:03:36.3704564Z e.g: `mongodb://127.0.0.1:27017/database
+2026-09-02T11:03:36.3705168Z Sharding must already be enabled on your database
+2026-09-02T11:03:36.3705629Z [39m
+2026-09-02T11:03:36.5882213Z Downloading MongoDB "8.2.6": 0% (0mb / 122.6mb)
+2026-09-02T11:03:36.8995292Z Downloading MongoDB "8.2.6": 100% (122.6mb / 122.6mb)
+2026-09-02T11:03:37.0392184Z Downloading MongoDB "8.2.6": 100% (0mb / 0mb)
+2026-09-02T11:05:11.5277113Z [2J[1;3H
+2026-09-02T11:05:11.5280056Z [92m [0m[32m 4553 passing[0m[90m (2m)[0m
+2026-09-02T11:05:11.5280659Z [36m [0m[36m 9 pending[0m
+2026-09-02T11:05:11.5280882Z 
+2026-09-02T11:05:16.2316371Z Post job cleanup.
+2026-09-02T11:05:16.3382164Z Post job cleanup.
+2026-09-02T11:05:16.4064953Z [command]/usr/bin/git version
+2026-09-02T11:05:16.4134195Z git version 2.55.0
+2026-09-02T11:05:16.4161484Z Temporarily overriding HOME='/home/runner/work/_temp/decc0ebd-cc6c-4b29-8358-9c47e9cfcd85' before making global git config changes
+2026-09-02T11:05:16.4162622Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-02T11:05:16.4166159Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mongoose/mongoose
+2026-09-02T11:05:16.4193784Z Removing SSH command configuration
+2026-09-02T11:05:16.4198249Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-02T11:05:16.4228397Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-02T11:05:16.4441501Z Removing HTTP extra header
+2026-09-02T11:05:16.4445469Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-02T11:05:16.4474551Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-02T11:05:16.4680232Z Removing includeIf entries pointing to credentials config files
+2026-09-02T11:05:16.4684929Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-02T11:05:16.4706997Z includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path
+2026-09-02T11:05:16.4707739Z includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path
+2026-09-02T11:05:16.4708375Z includeif.gitdir:/github/workspace/.git.path
+2026-09-02T11:05:16.4708927Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-02T11:05:16.4714861Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path
+2026-09-02T11:05:16.4735503Z /home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:05:16.4742734Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-5042fbbd\-8e67\-4a1b\-a79c\-e9d4d5587330\.config
+2026-09-02T11:05:16.4772263Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path
+2026-09-02T11:05:16.4792688Z /home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:05:16.4799934Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-5042fbbd\-8e67\-4a1b\-a79c\-e9d4d5587330\.config
+2026-09-02T11:05:16.4835577Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-02T11:05:16.4855821Z /github/runner_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:05:16.4862379Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-5042fbbd\-8e67\-4a1b\-a79c\-e9d4d5587330\.config
+2026-09-02T11:05:16.4891866Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-02T11:05:16.4912353Z /github/runner_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config
+2026-09-02T11:05:16.4918336Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-5042fbbd\-8e67\-4a1b\-a79c\-e9d4d5587330\.config
+2026-09-02T11:05:16.4949678Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-02T11:05:16.5158551Z Removing credentials config '/home/runner/work/_temp/git-credentials-5042fbbd-8e67-4a1b-a79c-e9d4d5587330.config'
+2026-09-02T11:05:16.5304375Z Cleaning up orphan processes
