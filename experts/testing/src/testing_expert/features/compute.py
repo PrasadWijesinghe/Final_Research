@@ -19,6 +19,7 @@ from . import (
     config_change,
     dependencies,
     history,
+    history_tests,
     repo,
     run_setup,
     source_test_link,
@@ -26,6 +27,7 @@ from . import (
 )
 from ._types import ChangedTestFile, FeatureDict, FileChange, JobTarget
 from .history import EMPTY_SERIES, SeriesIndex
+from .history_tests import EMPTY_TEST_HISTORY, TestHistory
 from .repo import EMPTY_DURATIONS, EMPTY_TIMELINE, DurationIndex, FrameworkTimeline
 from .settings import FeatureSettings, get_settings
 
@@ -40,6 +42,7 @@ FEATURE_GROUPS = (
     "test_deps",
     "history",
     "history_by_os",
+    "history_tests",
     "test_changes",
     "run_setup",
     "repo",
@@ -59,6 +62,7 @@ def feature_names(settings: FeatureSettings | None = None) -> tuple[str, ...]:
         *test_changes.FEATURE_NAMES,
         *run_setup.FEATURE_NAMES,
         *repo.FEATURE_NAMES,
+        *history_tests.FEATURE_NAMES,
     )
 
 
@@ -72,6 +76,8 @@ def build_row(
     os_series: SeriesIndex = EMPTY_SERIES,
     test_files: Sequence[ChangedTestFile] = (),
     test_change_row: FeatureDict | None = None,
+    touched_test_files: Sequence[str] = (),
+    test_history: TestHistory = EMPTY_TEST_HISTORY,
 ) -> FeatureDict:
     """Pure: combine every group for one job attempt. No I/O.
 
@@ -94,6 +100,8 @@ def build_row(
     )
     row.update(run_setup.run_setup(target))
     row.update(repo.repo_features(durations, target.cutoff, framework, settings))
+    touched = [f.path for f in test_files] if test_files else touched_test_files
+    row.update(test_history.features(target.cutoff, touched, settings))
     return row
 
 
@@ -125,6 +133,7 @@ def compute_features_batch(
     tw_cache: dict[tuple[int, str], FeatureDict] = {}  # one parse per commit, not per job
     durations = loader.load_durations(conn, repo_ids, before, s)
     timelines = loader.load_frameworks(conn, repo_ids, s)
+    test_hist = loader.load_test_history(conn, repo_ids, before, only)
     out: dict[JobKey, FeatureDict] = {}
     for t in targets:
         sha_key = (t.repo_id, t.head_sha)
@@ -139,6 +148,8 @@ def compute_features_batch(
             s,
             os_series.get(loader.os_series_key_of(t), EMPTY_SERIES),
             test_change_row=tw_cache[sha_key],
+            touched_test_files=[f.path for f in test_files.get(sha_key, [])],
+            test_history=test_hist.get(loader.series_key_of(t), EMPTY_TEST_HISTORY),
         )
     logger.info(
         "features computed",

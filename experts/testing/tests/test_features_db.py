@@ -168,3 +168,42 @@ def test_test_change_features_from_patch(conn: psycopg.Connection[Any]) -> None:
     assert a["tw_test_files_parsed"] == 1
     assert rows[other]["tw_new_tests"] == 0 and rows[other]["tw_test_files_parsed"] == 0
     assert rows[nopatch]["tw_new_tests"] is None
+
+
+def add_results(
+    c: psycopg.Connection[Any], key: tuple[int, int, int], failed: list[str], passed: list[str]
+) -> None:
+    """Pretend the log of this job was parsed: one test-level row per test name."""
+    run_id, attempt, job_id = key
+    c.execute(
+        "insert into testing.log_parses (job_id, run_id, attempt, repo, head_sha, job_name, reason,"
+        " framework, granularity, parsed_ok, is_test_job) values (%s, %s, %s, 'x/y', 'sha', 'test (20)',"
+        " 'all', 'mocha', 'test', true, true)",
+        (job_id, run_id, attempt),
+    )
+    for name, outcome in [*((n, "failed") for n in failed), *((n, "passed") for n in passed)]:
+        c.execute(
+            "insert into testing.test_results (job_id, test_id, attempt, file, full_name, outcome,"
+            " duration_ms, granularity) values (%s, %s, %s, 'test/a.test.js', %s, %s, null, 'test')",
+            (job_id, f"x-{name}", attempt, name, outcome),
+        )
+
+
+def test_per_test_history_has_no_leakage(conn: psycopg.Connection[Any]) -> None:
+    keys = [add_run(conn, n, "failure" if n % 2 else "success") for n in range(1, 7)]
+    for k, n in zip(keys, range(1, 7), strict=True):
+        add_results(conn, k, ["t1"] if n % 2 else [], ["t2"] + ([] if n % 2 else ["t1"]))
+    before = compute_features_batch(conn, keys)
+    last = before[keys[5]]
+    assert last["ht_parsed_runs_90d"] == 5 and last["ht_last_run_failed_tests"] == 1
+    assert last["ht_failed_tests_90d"] == 1 and last["ht_flaky_tests_90d"] == 1
+    assert before[keys[0]]["ht_parsed_runs_90d"] == 0 and before[keys[0]]["ht_test_level"] is None
+    # later runs with failures, and a late re-run of run 2, must not touch earlier rows
+    for n in range(8, 14):
+        late = add_run(conn, n, "failure", day=n)
+        add_results(conn, late, ["t1", "t3", "t4"], [])
+    rerun = add_run(conn, 2, "failure", attempt=2, day=2, done_days=60)
+    add_results(conn, rerun, ["t9"], [])
+    after = compute_features_batch(conn, keys)
+    assert before == after
+    assert compute_features(conn, *keys[5]) == before[keys[5]]  # single-job path agrees

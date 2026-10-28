@@ -31,6 +31,7 @@ from .config import EXPERT
 from .features import compute, describe, loader, test_changes
 from .features._types import ChangedTestFile, FeatureDict, FileChange, JobTarget
 from .features.history import EMPTY_SERIES
+from .features.history_tests import EMPTY_TEST_HISTORY
 from .features.repo import EMPTY_DURATIONS, EMPTY_TIMELINE
 from .features.settings import get_settings
 from .model.data import CLASSES, Encoder
@@ -221,13 +222,15 @@ def build_features(
     """
     settings = get_settings()
     files = _file_changes(context)
-    tw = test_changes.what_changed_in_tests(_test_files(context))
+    test_files = _test_files(context)
+    tw = test_changes.what_changed_in_tests(test_files)
     db_failed = False
     repo_id = 0
     series: dict[Any, Any] = {}
     os_series: dict[Any, Any] = {}
     durations: dict[Any, Any] = {}
     timelines: dict[Any, Any] = {}
+    test_hist: dict[Any, Any] = {}
     cutoff = context.history_cutoff.timestamp()
     try:
         conn = _connect()
@@ -248,6 +251,7 @@ def build_features(
                     os_series = loader.load_series_by_os(conn, [repo_id], cutoff, only)
                     durations = loader.load_durations(conn, [repo_id], cutoff, settings)
                     timelines = loader.load_frameworks(conn, [repo_id], settings)
+                    test_hist = loader.load_test_history(conn, [repo_id], cutoff, only)
     except Exception:
         logger.warning("history unavailable, scoring with cold-start history", exc_info=True)
         db_failed = True
@@ -265,6 +269,8 @@ def build_features(
                 settings,
                 os_series.get(loader.os_series_key_of(t), EMPTY_SERIES),
                 test_change_row=tw,
+                touched_test_files=[f.path for f in test_files],
+                test_history=test_hist.get(loader.series_key_of(t), EMPTY_TEST_HISTORY),
             )
         )
     return rows, db_failed
