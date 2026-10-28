@@ -119,6 +119,51 @@ Known limits: matrix cells of one job key share one history (a Windows cell sees
 the matrix size is the number of jobs with the same key in the run, not the parsed YAML matrix;
 the framework comes from sparse `package.json` snapshots, else a word in the job key.
 
+## Labelling (P4.3, v1)
+
+What it does: gives every test job attempt one label, following `docs/experts/test.md` section 3. Labels go to
+`testing.labels` and, for failed attempts, are copied into `platform.failure_labels` as `FailureLabel` rows
+(category `test`).
+
+Which attempts: a job counts as a test job when its series (repo, workflow file, job name) had at least one
+attempt that the P4.2 parsers recognised as a test job. This is needed because passing logs were not parsed in v1.
+Skipped jobs are left out.
+
+| Label | Rule |
+|---|---|
+| `pass` (high) | attempt 1 passed and no attempt of that job on the same commit failed |
+| `flaky` (high) | failed, and another attempt or run of the same job passed on the same commit |
+| `flaky` silent (low) | failed, never passed on that commit, and a child commit that changed only docs passed |
+| `genuine` (high) | failed, never passed on that commit, and a commit within 7 days on the same branch that touched the failing test file made the job pass |
+| `unclear` | anything else, or the failed job has no log |
+| `not_test` | cancelled, or the failed job's log shows no test runner |
+
+A pass that follows a failure on the same commit is a rerun pass and gets no label. Failed attempts that
+another category also claimed get `is_final = false`. `pass` and `not_test` are not copied to
+`platform.failure_labels`, which is for failed jobs.
+
+Run it (safe to run again; it replaces the earlier rule labels in one transaction, about 30 seconds):
+
+```
+make migrate-testing    # adds the unique index (migration t0002)
+uv run --env-file .env python -m testing_expert.labels --member test
+```
+
+It prints the label counts per rule and per repo and writes the manual-review sample to `data/reports/`:
+`test_labels_sample.csv` (what the reviewer sees: repo, commit, job, failing tests, log path, empty
+`human_label` and `ai_prelabel` columns) and `test_labels_sample_key.csv` (the rule labels, kept apart so the
+reviewer is blind). About 50 rows per label (flaky split by confidence), fixed seed. After the reviewer fills
+`human_label` (pass, flaky, genuine, unclear, not_test):
+
+```
+uv run python -m testing_expert.labels --kappa data/reports/test_labels_sample.csv   # Cohen's kappa
+uv run python -m testing_expert.labels --kappa FILE --rater ai_prelabel               # same for the AI column
+```
+
+Known limits: only the failing test file is used for the genuine rule, because P4.2 did not store stack frames.
+A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
+7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
+
 ## Limitations and known issues
 
 - Stub only. See `experts/_template/README.md` for the limits that all four experts share.
