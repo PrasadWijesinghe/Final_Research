@@ -198,3 +198,11 @@ The environment defaults are also marked in `.env.example`: the threshold (200) 
 - `shared/tests/test_github_client.py`: the tests, with recorded responses in `shared/tests/fixtures/github/`.
 - `.env.example`: the environment variables this client reads.
 - `docs/CONVENTIONS.md`: the rules for tests (no network) and secrets (never logged).
+
+## GitHub App authentication (P3.1)
+
+`shared/github/app_auth.py` holds what the backend needs to act as the GitHub App: `create_app_jwt`
+(RS256 JWT from the `.pem`, 9 minutes of life), `InstallationTokenCache` (exchanges the JWT for an
+installation token and reuses it until 2 minutes before expiry; pass the token to `GitHubClient`)
+and `verify_signature` (constant-time check of `X-Hub-Signature-256`). Keys and tokens are never
+logged. Uses the `cryptography` package.
