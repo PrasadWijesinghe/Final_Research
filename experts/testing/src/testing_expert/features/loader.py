@@ -18,6 +18,7 @@ from shared.file_tags import FileTagger
 
 from ._types import ChangedTestFile, FileChange, JobTarget
 from .history import SeriesIndex
+from .history_tests import ResultRow, TestHistory
 from .repo import (
     DurationIndex,
     FrameworkTimeline,
@@ -202,6 +203,52 @@ def load_series_by_os(
         for repo_id, skey, os_name, ts, failed, rerun, job_id in cur.fetchall():
             grouped[(repo_id, skey, os_name)].append((float(ts), failed, rerun, job_id))
     return {k: SeriesIndex(v) for k, v in grouped.items()}
+
+
+def load_test_history(
+    conn: psycopg.Connection[Any],
+    repo_ids: Sequence[int],
+    before: float,
+    only: Sequence[tuple[int, str, str]] | None = None,
+) -> dict[SeriesKey, TestHistory]:
+    """Parsed test results per series, of attempts completed before `before` (epoch).
+
+    Reads `testing.log_parses` / `testing.test_results` (P4.2). Attempts whose log was parsed but
+    kept no rows still count as parsed runs. Streamed with a server-side cursor.
+    """
+    sql = f"""
+        select w.repo_id, w.workflow_path || E'\\x1f' || {SERIES_KEY_SQL} as skey, j.job_id,
+               extract(epoch from j.completed_at), t.test_id, t.file, t.outcome, t.granularity,
+               (p.granularity = 'test')::int
+        from testing.log_parses p
+        join raw.jobs j on j.job_id = p.job_id
+        join raw.workflow_runs w on w.run_id = j.run_id and w.attempt = j.attempt
+        left join testing.test_results t on t.job_id = p.job_id
+        where p.is_test_job and w.repo_id = any(%s) and j.completed_at is not null
+          and j.conclusion in ('success', 'failure') and j.completed_at < to_timestamp(%s)
+    """
+    params: list[Any] = [list(repo_ids), before]
+    if only is not None:
+        sql += (
+            " and (w.repo_id::text || E'\\x1f' || w.workflow_path || E'\\x1f' || "
+            + SERIES_KEY_SQL
+            + ") = any(%s)"
+        )
+        params.append([f"{r}\x1f{p}\x1f{k}" for r, p, k in only])
+    rows: dict[SeriesKey, list[ResultRow]] = defaultdict(list)
+    empty: dict[SeriesKey, list[tuple[float, int, int]]] = defaultdict(list)
+    with conn.cursor(name="ht_load") as cur:
+        cur.itersize = 50_000
+        cur.execute(sql, params)
+        for repo_id, skey, job_id, ts, tid, file, outcome, gran, lvl in cur:
+            key = (repo_id, skey)
+            if tid is None:
+                empty[key].append((float(ts), job_id, lvl))
+                continue
+            rows[key].append(
+                ResultRow(job_id, float(ts), tid, file, outcome == "failed", gran, lvl)
+            )
+    return {k: TestHistory(rows.get(k, ()), empty.get(k, ())) for k in {*rows, *empty}}
 
 
 def os_series_key_of(t: JobTarget) -> OsSeriesKey:

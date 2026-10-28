@@ -170,3 +170,41 @@ rp_test_jobs_in_window:
 rp_framework:
   template: "The repository uses {value} for tests"
   missing: "The test framework is unknown"
+ht_test_level:
+  template: "This job's logs list individual tests (flag {value}: 1 = test level, 0 = file level)"
+  missing: "No earlier test results are known for this job"
+ht_parsed_runs_30d:
+  template: "{value} earlier runs of this job with readable test results in the last 30 days"
+ht_parsed_runs_90d:
+  template: "{value} earlier runs of this job with readable test results in the last 90 days"
+ht_last_run_failed_tests:
+  template: "{value} tests failed in the job's most recent earlier run"
+  missing: "No earlier test results are known for this job"
+ht_persistent_failing_tests:
+  template: "{value} tests failed in both of the job's last two runs"
+  missing: "No earlier test results are known for this job"
+ht_failed_tests_30d:
+  template: "{value} different tests failed in this job in the last 30 days"
+ht_failed_tests_90d:
+  template: "{value} different tests failed in this job in the last 90 days"
+ht_flaky_tests_30d:
+  template: "{value} tests both failed and passed in this job in the last 30 days"
+ht_flaky_tests_90d:
+  template: "{value} tests both failed and passed in this job in the last 90 days"
+ht_touched_test_files:
+  template: "The commit changes {value} test files"
+ht_touched_files_with_history:
+  template: "{value} of the changed test files have earlier results in this job"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_fail_rate:
+  template: "The changed test files failed in {value:.0%} of their earlier runs"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_max_flip_rate:
+  template: "A changed test file flipped between pass and fail in {value:.0%} of its recent runs"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_last_failed:
+  template: "The last earlier run of a changed test file failed (flag {value}: 1 = yes)"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_failures_90d:
+  template: "The changed test files failed {value} times in the last 90 days"
+  missing: "The changed test files have no earlier results in this job"
