@@ -7,7 +7,7 @@ import { Link } from "../lib/router";
 import { useAsync } from "../lib/useAsync";
 import type { Diagnosis, FailureView } from "../types/api";
 
-function DiagnosisCard({ d, view }: { d: Diagnosis; view: FailureView }) {
+function DiagnosisCard({ d, view, onSaved }: { d: Diagnosis; view: FailureView; onSaved: () => void }) {
   const { auth } = useAuth();
   const reviews = view.reviews.filter((r) => r.diagnosis_id === d.diagnosis_id);
   return (
@@ -60,7 +60,7 @@ function DiagnosisCard({ d, view }: { d: Diagnosis; view: FailureView }) {
         </>
       )}
       {d.status === "diagnosed" && auth.status === "authed" && (
-        <ReviewForm diagnosis={d} reviewerHash={auth.me.user_hash} />
+        <ReviewForm diagnosis={d} reviewerHash={auth.me.user_hash} onSaved={onSaved} />
       )}
     </article>
   );
@@ -87,7 +87,7 @@ export default function FailureDetail({ id }: { id: string }) {
             {v.diagnoses.length === 0 ? (
               <Empty title="No diagnosis yet" hint="The expert is still working, or has not answered." />
             ) : (
-              <div className="pq-cards">{v.diagnoses.map((d) => <DiagnosisCard key={d.diagnosis_id} d={d} view={v} />)}</div>
+              <div className="pq-cards">{v.diagnoses.map((d) => <DiagnosisCard key={d.diagnosis_id} d={d} view={v} onSaved={reload} />)}</div>
             )}
           </>
         )}

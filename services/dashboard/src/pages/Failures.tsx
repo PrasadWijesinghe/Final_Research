@@ -28,9 +28,9 @@ export default function Failures() {
                     <td>{f.repo}</td>
                     <td className="pq-mono">{shortSha(f.head_sha)}</td>
                     <td><Link to={`/failures/${f.failure_id}`}>{f.job_name}</Link></td>
-                    <td>{f.expert ?? "-"}</td>
+                    <td>{f.expert}</td>
                     <td>{f.diagnosis_count}</td>
-                    <td>{f.latest_review ? (typeof f.latest_review === "string" ? f.latest_review : (f.latest_review.decision ?? "reviewed")) : <span className="pq-dim">not reviewed</span>}</td>
+                    <td>{f.latest_review ?? <span className="pq-dim">not reviewed</span>}</td>
                   </tr>
                 ))}
               </tbody>
