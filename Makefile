@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: webhooks check-hook setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
+.PHONY: webhooks check-hook check-dashboard setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -45,6 +45,7 @@ check:
 	uv run mypy
 	uv run pytest
 	$(MAKE) check-hook
+	$(MAKE) check-dashboard
 
 # DEFAULT (P3.4): Node tests of the pre-push hook run with the built-in test runner (Node 22, no
 # dependencies). Skipped with a notice when node is missing locally; CI installs Node 22 and sets
@@ -53,6 +54,17 @@ check-hook:
 	@if command -v node >/dev/null 2>&1; then cd tools/pre-push-hook && node --test "test/*.test.mjs"; \
 	elif [ -n "$(REQUIRE_NODE)" ]; then echo "check-hook: node is required"; exit 1; \
 	else echo "check-hook: node not found, skipping hook tests"; fi
+
+# DEFAULT (P3.5): dashboard lint, tests and build. Skipped with a notice when node is missing or
+# dependencies are not installed (run `npm ci` in services/dashboard); with REQUIRE_NODE=1 (CI) it
+# installs them and cannot be skipped.
+check-dashboard:
+	@if ! command -v node >/dev/null 2>&1; then \
+		if [ -n "$(REQUIRE_NODE)" ]; then echo "check-dashboard: node is required"; exit 1; \
+		else echo "check-dashboard: node not found, skipping"; fi; \
+	elif [ -n "$(REQUIRE_NODE)" ] || [ -d services/dashboard/node_modules ]; then \
+		cd services/dashboard && { [ -d node_modules ] || npm ci; } && npm run lint && npm test && npm run build; \
+	else echo "check-dashboard: run npm ci in services/dashboard first, skipping"; fi
 
 # DEFAULT (P3.2): relay GitHub App webhooks from smee.io to the local API. Needs Node (npx); leave it
 # running in its own terminal next to the API. SMEE_URL comes from .env.
