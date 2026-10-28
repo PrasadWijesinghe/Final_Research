@@ -17,6 +17,14 @@ htmlcov/
 PROMPT_FOR_CLAUDE_CODE.md
 /dist/
 
+# Infra research local artifacts, logs, generated data, and model binaries.
+experts/infra/research/.venv/
+experts/infra/research/data/
+experts/infra/research/artifacts/
+experts/infra/research/reports/
+experts/infra/research/outputs/
+experts/infra/src/infra_expert/model/*.joblib
+
 # DEFAULT: generated JSON Schemas are build output, not committed (make schemas)
 shared/contracts/schemas/
 
