@@ -14,11 +14,12 @@ from typing import Any
 
 from features.live import build_live_context
 
-from shared.contracts import CommitContext, RepoRef
+from shared.contracts import CommitContext, Expert, RepoRef, RiskOutput
 from shared.contracts.routed_failure import FailedStep
 from shared.github import GitHubClient, GitHubError, TokenProvider
 from shared.sanitise import SanitiseResult, hash_identity, sanitise
 
+from .checks import CheckPublisher
 from .config import Settings
 from .experts import fan_out_predict
 from .raw_store import AppJob, AppLog, AppRun, RawStore
@@ -82,6 +83,7 @@ class WebhookHandler:
         self._client_factory = client_factory
         self._hash = hash_fn
         self._sanitise = sanitise_fn
+        self._late: set[asyncio.Task[None]] = set()
 
     async def handle(self, event: str, payload: dict[str, Any]) -> str:
         """Process one delivery; returns a short outcome word (logged, never the payload)."""
@@ -122,11 +124,86 @@ class WebhookHandler:
         ready = [risk for r in results for risk in r.risks]
         if ready:
             await asyncio.to_thread(self._store.save_predictions, ready)
+        pending = [r.expert for r in results if r.state != "ready"]
+        installation = int(payload["installation"]["id"])
+        await self._publish_check(installation, repo, context.head_sha, ready, pending)
+        if pending and self._cfg.check_retry_delays_s:
+            task = asyncio.create_task(
+                self._poll_late(installation, repo, context, ready, pending),
+                name=f"late-results-{context.head_sha[:7]}",
+            )
+            self._late.add(task)
+            task.add_done_callback(self._late.discard)
         logger.info(
             "live predict done",
             extra={"context_id": str(context.context_id), "event": context.event},
         )
         return "predicted"
+
+    # --------------------------------------------------------------------- PR check (P3.3)
+
+    async def _publish_check(
+        self,
+        installation: int,
+        repo: str,
+        head_sha: str,
+        risks: list[RiskOutput],
+        pending: list[Expert],
+        *,
+        final: bool = False,
+    ) -> None:
+        """Create or update the check run. Never raises: a GitHub problem must not stop webhooks."""
+        publisher = CheckPublisher(
+            self._store,
+            self._cfg.dashboard_url,
+            lambda: self._client_factory(self._tokens.get_token(installation)),
+        )
+        try:
+            await asyncio.to_thread(publisher.publish, repo, head_sha, risks, pending, final=final)
+        except Exception:
+            logger.exception("check run failed", extra={"repo": repo, "sha": head_sha})
+
+    async def _poll_late(
+        self,
+        installation: int,
+        repo: str,
+        context: CommitContext,
+        ready: list[RiskOutput],
+        pending: list[Expert],
+    ) -> None:
+        """Ask the experts that were not ready again, a bounded number of times, and update the
+        same check run with each new answer. The last round finishes the check either way.
+
+        # DEFAULT: no queue or callback from the experts exists yet (/predict is synchronous), so
+        # late results come from re-polling /predict after CHECK_RETRY_DELAYS_SECONDS.
+        """
+        risks = list(ready)
+        delays = self._cfg.check_retry_delays_s
+        try:
+            for i, delay in enumerate(delays):
+                await asyncio.sleep(delay)
+                results = await fan_out_predict(
+                    self._cfg, context, self._cfg.pr_budget_ms, experts=pending
+                )
+                new = [risk for r in results for risk in r.risks]
+                if new:
+                    await asyncio.to_thread(self._store.save_predictions, new)
+                    risks += new
+                pending = [r.expert for r in results if r.state != "ready"]
+                last = i == len(delays) - 1
+                if new or last or not pending:
+                    await self._publish_check(
+                        installation, repo, context.head_sha, risks, pending, final=last
+                    )
+                if not pending:
+                    return
+        except Exception:
+            logger.exception("late results failed", extra={"repo": repo})
+
+    async def wait_idle(self) -> None:
+        """Wait for the late-result tasks to finish (tests and shutdown)."""
+        while self._late:
+            await asyncio.gather(*list(self._late), return_exceptions=True)
 
     async def _push(self, p: dict[str, Any]) -> str:
         ref = str(p.get("ref", ""))

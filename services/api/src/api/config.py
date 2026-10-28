@@ -89,3 +89,13 @@ class Settings:
     )
     # DEFAULT: sessions last 7 days.
     session_ttl_s: int = field(default_factory=lambda: _int_env("SESSION_TTL_SECONDS", 7 * 86400))
+
+    # PR check (P3.3). Late experts are asked again after each of these delays (seconds), then the
+    # check is finished with whatever arrived. DEFAULT: 30 s, 90 s, 5 min, 15 min (empty = never).
+    check_retry_delays_s: tuple[float, ...] = field(
+        default_factory=lambda: tuple(
+            float(x)
+            for x in (os.environ.get("CHECK_RETRY_DELAYS_SECONDS") or "30,90,300,900").split(",")
+            if x.strip()
+        )
+    )

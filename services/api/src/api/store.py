@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from shared.contracts import CommitContext, Diagnosis, ReviewDecision, RiskOutput, RoutedFailure
 from shared.db.models import (
     ApiKey,
+    CheckRunRow,
     CommitContextRow,
     DiagnosisRow,
     PredictionRow,
@@ -80,6 +81,14 @@ class Store(Protocol):
 
     def list_failures(self, *, repo: str | None, limit: int) -> list[FailureItem]:
         """Routed failures (not replay), newest first, with diagnosis count and latest review."""
+        ...
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        ...
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
         ...
 
     def save_context(self, context: CommitContext) -> None:
@@ -210,6 +219,24 @@ class SqlStore:
                 )
                 items.append(_failure_item(f, len(dids), reviews))
         return items
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        with Session(self._engine) as s:
+            row = s.get(CheckRunRow, (repo, head_sha))
+            return int(row.check_run_id) if row else None
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
+        with Session(self._engine) as s, s.begin():
+            s.merge(
+                CheckRunRow(
+                    repo=repo,
+                    head_sha=head_sha,
+                    check_run_id=check_run_id,
+                    updated_at=datetime.now(UTC),
+                )
+            )
 
     def save_context(self, context: CommitContext) -> None:
         """Save a CommitContext."""
@@ -389,6 +416,7 @@ class InMemoryStore:
         self.diagnoses: dict[uuid.UUID, Diagnosis] = {}
         self.failures: dict[uuid.UUID, RoutedFailure] = {}
         self.reviews: dict[uuid.UUID, ReviewDecision] = {}
+        self.check_runs: dict[tuple[str, str], int] = {}
         # (repo, head_sha) -> (run_id, status, conclusion); tests fill it to fake raw.workflow_runs
         self.run_outcomes: dict[tuple[str, str], tuple[int, str | None, str | None]] = {}
 
@@ -438,6 +466,14 @@ class InMemoryStore:
             reviews = [r for r in self.reviews.values() if r.diagnosis_id in dids]
             items.append(_failure_item(f, len(dids), reviews))
         return items
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        return self.check_runs.get((repo, head_sha))
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
+        self.check_runs[(repo, head_sha)] = check_run_id
 
     def save_context(self, context: CommitContext) -> None:
         """Save a CommitContext."""
