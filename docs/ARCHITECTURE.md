@@ -114,7 +114,10 @@ through the GitHub REST API. Details in `docs/DATA.md`.
 | `GET /runs` | Dashboard | History: predictions next to actual outcomes |
 | `GET /failures/{id}` | Dashboard | A failure and its diagnoses |
 | `POST /api-keys`, `DELETE /api-keys/{id}` | Dashboard settings | Issue / revoke a pre-push hook key |
-| `GET /auth/github/*` | Dashboard | "Sign in with GitHub" (OAuth through the GitHub App) |
+| `GET /auth/github/login`, `GET /auth/github/callback` | Dashboard | "Sign in with GitHub" (OAuth through the GitHub App); callback sets the `piq_session` cookie |
+| `GET /auth/me`, `POST /auth/logout` | Dashboard | Who is signed in (401 if nobody); clear the session |
+| `GET /me/api-keys`, `POST /me/api-keys`, `DELETE /me/api-keys/{id}` | Dashboard settings | The signed-in user's own hook keys (session cookie) |
+| `GET /failures?repo=&limit=` | Dashboard | Failure list with diagnosis count and latest review |
 | `GET /health` | Anyone | Status of the backend and each expert |
 
 ### Every expert (ports 8101 dependency, 8102 build, 8103 test, 8104 infra)

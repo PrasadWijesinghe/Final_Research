@@ -100,3 +100,33 @@ class HealthResponse(_Body):
 
     status: Literal["ok", "degraded"]
     experts: dict[str, ExpertHealth]
+
+
+class ApiKeyItem(_Body):
+    """One line of GET /me/api-keys (never the key or its hash)."""
+
+    id: UUID
+    created_at: datetime
+    revoked_at: datetime | None = None
+
+
+class FailureItem(_Body):
+    """One line of GET /failures."""
+
+    failure_id: UUID
+    repo: str
+    head_sha: str
+    run_id: int
+    job_name: str
+    expert: Expert  # the routed expert (rank 1 of `sent_to`)
+    created_at: datetime  # when the router saved the failure
+    diagnosis_count: int
+    latest_review: Literal["accept", "reject", "modify", "request_revision"] | None = None
+
+
+class MeResponse(_Body):
+    """Body of GET /auth/me."""
+
+    login: str
+    avatar_url: str
+    user_hash: str

@@ -345,14 +345,3 @@ async def test_health_reports_each_expert(
     assert body["status"] == "degraded"
     assert body["experts"]["infra"]["status"] == "unreachable"
     assert body["experts"]["test"]["detail"]["model_version"] == "stub"
-
-
-@pytest.mark.parametrize(
-    ("method", "path"),
-    [
-        ("GET", "/auth/github/login"),
-        ("GET", "/auth/github/callback"),
-    ],
-)
-async def test_github_sign_in_is_501(client: httpx.AsyncClient, method: str, path: str) -> None:
-    assert (await client.request(method, path)).status_code == 501
