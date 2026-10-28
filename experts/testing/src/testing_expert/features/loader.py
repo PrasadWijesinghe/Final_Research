@@ -16,7 +16,7 @@ import psycopg
 
 from shared.file_tags import FileTagger
 
-from ._types import FileChange, JobTarget
+from ._types import ChangedTestFile, FileChange, JobTarget
 from .history import SeriesIndex
 from .repo import (
     DurationIndex,
@@ -24,14 +24,29 @@ from .repo import (
     framework_from_package_json,
 )
 from .settings import FeatureSettings, find_config_file
+from .test_changes import MAX_PATCH_CHARS, is_code_path
 
 logger = logging.getLogger(__name__)
 
 SeriesKey = tuple[int, str]  # (repo_id, workflow_path + "\x1f" + job key)
+OsSeriesKey = tuple[int, str, str]  # the same plus the normalised runner OS
 
 # DEFAULT: job key, else the job name with its "(matrix)" suffix cut off, so `Tests (node 22)` and
 # `Tests (node 24)` share one history. Mirrors the brief's "job_key, fall back to job name".
 SERIES_KEY_SQL = "coalesce(j.job_key, regexp_replace(j.name, '\\s*\\(.*$', ''))"
+
+# DEFAULT: runner OS = runner_os, else the runs-on labels, else the job name ("x on windows")
+# or a resolved matrix name); anything else (e.g. `${{ matrix.os }}` left unresolved) = 'unknown'.
+# Raw `jobs.runner_os` is Linux / Windows / macOS or null; labels like ubuntu-latest, macos-15.
+_OS_BLOB = "(coalesce(j.runner_os, '') || ' ' || array_to_string(j.labels, ' '))"
+OS_SQL = f"""(case
+    when {_OS_BLOB} ~* 'windows' then 'windows'
+    when {_OS_BLOB} ~* 'mac|darwin' then 'macos'
+    when {_OS_BLOB} ~* 'ubuntu|linux' then 'linux'
+    when j.name !~ '[$][{{][{{]' and j.name ~* 'windows' then 'windows'
+    when j.name !~ '[$][{{][{{]' and j.name ~* 'mac(os)?([^a-z]|$)' then 'macos'
+    when j.name !~ '[$][{{][{{]' and j.name ~* 'ubuntu|linux' then 'linux'
+    else 'unknown' end)"""
 
 _JOIN = "raw.jobs j join raw.workflow_runs w on w.run_id = j.run_id and w.attempt = j.attempt"
 _FILE_WITH_PATCH = r"(^|/)(package\.json|vite\.config\.[^/]*)$"
@@ -62,7 +77,9 @@ def load_targets(
                (select count(*) from raw.jobs m where m.run_id = j.run_id and m.attempt = j.attempt
                   and coalesce(m.job_key, regexp_replace(m.name, '\\s*\\(.*$', ''))
                       = {SERIES_KEY_SQL}),
-               (select count(*) from raw.jobs m where m.run_id = j.run_id and m.attempt = j.attempt)
+               (select count(*) from raw.jobs m
+                 where m.run_id = j.run_id and m.attempt = j.attempt),
+               {OS_SQL}
         from {_JOIN} join raw.repos r on r.id = w.repo_id
         join unnest(%s::bigint[], %s::int[], %s::bigint[]) as k(run_id, attempt, job_id)
           on k.run_id = j.run_id and k.attempt = j.attempt and k.job_id = j.job_id
@@ -86,6 +103,7 @@ def load_targets(
                 series_key=r[11],
                 matrix_size=int(r[12]),
                 jobs_in_run=int(r[13]),
+                os_name=r[14],
             )
             for r in cur.fetchall()
         ]
@@ -154,6 +172,65 @@ def load_series(
         for repo_id, skey, ts, failed, rerun, job_id in cur.fetchall():
             grouped[(repo_id, skey)].append((float(ts), failed, rerun, job_id))
     return {k: SeriesIndex(v) for k, v in grouped.items()}
+
+
+def load_series_by_os(
+    conn: psycopg.Connection[Any],
+    repo_ids: Sequence[int],
+    before: float,
+    only: Sequence[tuple[int, str, str]] | None = None,
+) -> dict[OsSeriesKey, SeriesIndex]:
+    """Like `load_series`, but one series per (job key, runner OS) for the `h_os_*` features."""
+    sql = f"""
+        select w.repo_id, w.workflow_path || E'\\x1f' || {SERIES_KEY_SQL} as skey, {OS_SQL},
+               extract(epoch from j.completed_at), (j.conclusion = 'failure')::int,
+               (j.attempt > 1)::int, j.job_id
+        from {_JOIN}
+        where w.repo_id = any(%s) and j.completed_at is not null
+          and j.conclusion in ('success', 'failure') and j.completed_at < to_timestamp(%s)
+    """
+    params: list[Any] = [list(repo_ids), before]
+    if only is not None:
+        sql += (
+            " and (w.repo_id::text || E'\\x1f' || w.workflow_path || E'\\x1f' || " + SERIES_KEY_SQL
+        )
+        sql += ") = any(%s)"
+        params.append([f"{r}\x1f{p}\x1f{k}" for r, p, k in only])
+    grouped: dict[OsSeriesKey, list[tuple[float, int, int, int]]] = defaultdict(list)
+    with conn.cursor() as cur:
+        cur.execute(sql, params)
+        for repo_id, skey, os_name, ts, failed, rerun, job_id in cur.fetchall():
+            grouped[(repo_id, skey, os_name)].append((float(ts), failed, rerun, job_id))
+    return {k: SeriesIndex(v) for k, v in grouped.items()}
+
+
+def os_series_key_of(t: JobTarget) -> OsSeriesKey:
+    """The dict key under which `load_series_by_os` stores this target's series."""
+    return (t.repo_id, f"{t.workflow_path}\x1f{t.series_key}", t.os_name)
+
+
+def load_test_files(
+    conn: psycopg.Connection[Any], shas: Iterable[tuple[int, str]]
+) -> dict[tuple[int, str], list[ChangedTestFile]]:
+    """Changed JS/TS test files per (repo_id, sha) with their patch (None when GitHub sent none)."""
+    wanted = sorted(set(shas))
+    out: dict[tuple[int, str], list[ChangedTestFile]] = {k: [] for k in wanted}
+    sql = """
+        select cf.repo_id, cf.sha, cf.path, case when length(cf.patch) <= %s then cf.patch end
+        from raw.commit_files cf
+        join unnest(%s::bigint[], %s::text[]) as k(repo_id, sha)
+          on k.repo_id = cf.repo_id and k.sha = cf.sha
+        where cf.path ~* '\\.[cm]?[jt]sx?$' and coalesce(cf.status, '') <> 'removed'
+          and not cf.patch_truncated
+    """
+    for i in range(0, len(wanted), _SHA_CHUNK):
+        chunk = wanted[i : i + _SHA_CHUNK]
+        with conn.cursor() as cur:
+            cur.execute(sql, (MAX_PATCH_CHARS, [c[0] for c in chunk], [c[1] for c in chunk]))
+            for repo_id, sha, path, patch in cur.fetchall():
+                if is_code_path(path) and "test" in _tags(path, None):
+                    out[(repo_id, sha)].append(ChangedTestFile(path, patch))
+    return out
 
 
 def series_key_of(t: JobTarget) -> SeriesKey:

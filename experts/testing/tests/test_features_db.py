@@ -34,10 +34,16 @@ def conn() -> Iterator[psycopg.Connection[Any]]:
 
 
 def add_run(
-    c: psycopg.Connection[Any], n: int, conclusion: str, attempt: int = 1, done_days: float = 0
+    c: psycopg.Connection[Any],
+    n: int,
+    conclusion: str,
+    attempt: int = 1,
+    done_days: float = 0,
+    runner_os: str | None = "Linux",
+    day: float | None = None,
 ) -> tuple[int, int, int]:
     """Run n happens on day n, job finishes 10 minutes later. Returns the job key."""
-    created = T0 + timedelta(days=n)
+    created = T0 + timedelta(days=n if day is None else day)
     run_id = REPO * 10 + n
     c.execute(
         "insert into raw.workflow_runs (run_id, attempt, repo_id, workflow_path, head_sha, head_branch, event, created_at)"
@@ -46,7 +52,7 @@ def add_run(
     )
     job_id = run_id * 10 + attempt
     c.execute(
-        f"insert into raw.jobs {JOB_COLS} values (%s, %s, %s, 'test (20)', 'test', %s, %s, %s, 'Linux')",
+        f"insert into raw.jobs {JOB_COLS} values (%s, %s, %s, 'test (20)', 'test', %s, %s, %s, %s)",
         (
             job_id,
             run_id,
@@ -54,6 +60,7 @@ def add_run(
             conclusion,
             created,
             created + timedelta(minutes=10, days=done_days),
+            runner_os,
         ),
     )
     c.execute(
@@ -99,3 +106,65 @@ def test_history_values_on_fake_repo(conn: psycopg.Connection[Any]) -> None:
 def test_unknown_job_returns_none(conn: psycopg.Connection[Any]) -> None:
     assert compute_features(conn, -1, 1, -1) is None
     assert compute_features_batch(conn, []) == {}
+
+
+def test_history_is_split_by_runner_os(conn: psycopg.Connection[Any]) -> None:
+    # same job key on two OSes, interleaved: linux always passes, windows always fails
+    lin = [add_run(conn, n, "success", day=n * 2) for n in range(1, 5)]
+    win = [
+        add_run(conn, n + 50, "failure", runner_os="Windows", day=n * 2 + 1) for n in range(1, 5)
+    ]
+    last = add_run(conn, 60, "success", day=20)  # linux job after all of them
+    last_win = add_run(conn, 61, "failure", runner_os="Windows", day=20)
+    rows = compute_features_batch(conn, [*lin, *win, last, last_win])
+    r_lin, r_win = rows[last], rows[last_win]
+    # job-key history mixes both OSes, the per-OS history does not
+    assert r_lin["h_n_prior"] == 8 and r_lin["h_os_n_prior"] == 4
+    assert r_lin["h_fail_rate_all"] == pytest.approx(0.5) and r_lin["h_os_fail_rate_all"] == 0
+    assert r_win["h_os_n_prior"] == 4 and r_win["h_os_fail_rate_all"] == 1
+    assert r_win["h_os_consecutive_failures"] == 4 and r_lin["h_os_consecutive_failures"] == 0
+    assert r_lin["h_os_last_failed"] == 0 and r_win["h_os_last_failed"] == 1
+
+
+def test_os_history_has_no_leakage_and_normalises_unknown_os(
+    conn: psycopg.Connection[Any],
+) -> None:
+    keys = [add_run(conn, n, "failure", day=n) for n in range(1, 4)]
+    nul = add_run(conn, 70, "success", runner_os=None, day=10)
+    before = compute_features_batch(conn, [*keys, nul])
+    for n in range(80, 90):  # later runs on every OS, plus a late re-run of run 2
+        add_run(conn, n, "failure", day=20 + n)
+        add_run(conn, n + 100, "failure", runner_os="Windows", day=20 + n)
+    add_run(conn, 2, "failure", attempt=2, day=2, done_days=60)
+    after = compute_features_batch(conn, [*keys, nul])
+    assert before == after
+    # a job with no runner OS and no label is its own 'unknown' series: no linux history leaks in
+    assert before[nul]["h_os_n_prior"] == 0 and before[nul]["h_n_prior"] == 3
+
+
+def test_test_change_features_from_patch(conn: psycopg.Connection[Any]) -> None:
+    key = add_run(conn, 1, "success")
+    patch = "@@ -0,0 +1,3 @@\n+it('a', async () => {\n+  setTimeout(f, 5);\n+});"
+    conn.execute(
+        "insert into raw.commit_files (repo_id, sha, path, additions, deletions, patch)"
+        " values (%s, 'sha1', 'test/a.test.js', 3, 0, %s)",
+        (REPO, patch),
+    )
+    conn.execute(  # a test file with no patch makes no difference; a source file is ignored
+        "insert into raw.commit_files (repo_id, sha, path, additions, deletions)"
+        " values (%s, 'sha1', 'test/big.test.js', 900, 0)",
+        (REPO,),
+    )
+    other = add_run(conn, 2, "success")  # sha2 only has src/a.ts: zeros, not unknown
+    nopatch = add_run(conn, 3, "success")
+    conn.execute(
+        "insert into raw.commit_files (repo_id, sha, path, additions, deletions)"
+        " values (%s, 'sha3', 'test/z.test.js', 5, 0)",
+        (REPO,),
+    )
+    rows = compute_features_batch(conn, [key, other, nopatch])
+    a = rows[key]
+    assert a["tw_new_async_tests"] == 1 and a["tw_set_timeout"] == 1
+    assert a["tw_test_files_parsed"] == 1
+    assert rows[other]["tw_new_tests"] == 0 and rows[other]["tw_test_files_parsed"] == 0
+    assert rows[nopatch]["tw_new_tests"] is None

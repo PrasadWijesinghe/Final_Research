@@ -80,7 +80,7 @@ short failure reason, so you can see what was tried and what went wrong.
 First run on the real data (2026-10-28, 2.5 minutes): 15,553 failed jobs plus 1,213 same-commit
 sibling jobs read, 10,856 of them test jobs, no parse failures, 2.79M test rows and 223k file rows.
 
-## Pre-run features (P4.4, v1)
+## Pre-run features (P4.4, v1 + v2)
 
 What it does: turns one test job attempt into a row of numbers the model can read, using only what
 was known before the run started (`history_cutoff` = the run's `created_at`). Code in
@@ -93,13 +93,33 @@ was known before the run started (`history_cutoff` = the run's `created_at`). Co
 | Test config | `config_change.py` | jest / vitest / mocha / playwright config changed |
 | Test dependencies | `dependencies.py` | package.json or lockfile changed, test-library version bumped |
 | History | `history.py` | fail rate over 7 / 30 / 90 days, recency-weighted flip rate, failures in a row, re-runs |
+| History by runner OS | `history.py` (`h_os_*`) | the same history numbers, counting only earlier runs on the same OS as this job (linux / windows / macos / unknown) |
+| What changed in tests | `test_changes.py` (`tw_*`) | new async tests, un-awaited promises, `setTimeout`, real timers, `Date.now()`, `Math.random()`, unmocked network calls, changed timeouts, `.only` / `.skip`, file-level shared state, setup with no `after*` cleanup |
 | Run setup | `run_setup.py` | runner OS, matrix size, pull request or push, default branch |
 | Repo | `repo.py` | average test-job duration, test framework |
 
 History is kept per job key (the workflow's YAML key, or the job name without its `(matrix)` part),
 not per test (v1 cut). A past job only counts if it finished strictly before the cutoff. Tunables
 are in `config/test_features.yaml`. `features/descriptions.yaml` has one plain-language sentence
-per feature for the later SHAP explanations. Not in v1: the tree-sitter group and the code vector.
+per feature for the later SHAP explanations. Still not built: per-test history and the optional code vector.
+
+**`tw_*` (what changed in tests).** Counts of risky constructs the commit ADDED in its changed
+JavaScript / TypeScript test files, found with tree-sitter. The database keeps only each file's
+patch (the diff), not the file before and after. So each hunk is rebuilt as the new text (unchanged
+lines plus added lines), parsed on its own, and a pattern counts only if it starts on an added line.
+It is best-effort: a hunk can start in the middle of a block, so edge cases can be missed. A commit
+with no test file gets zeros; a commit whose test files have no usable patch (missing, over 200,000
+characters, GitHub-truncated) gets empty values (unknown), never fake zeros. `tw_test_files_parsed`
+says how many files were read. Network calls only count when the file shows no mock (`jest.mock`,
+`nock`, `msw`, ...). `tw_missing_cleanup` counts setups (timers, listeners, servers, spies, env or
+global writes) in a file whose patch has no `afterEach` / `afterAll` hook. On the real data, 47% of
+test-job rows have a parsed test diff, 53% changed no test file, 0.1% are unknown. One parse per
+commit, shared by all its jobs.
+
+**`h_os_*` (history by runner OS).** Same 13 numbers as `h_*`, but within the job key AND the same
+OS. The OS comes from `raw.jobs.runner_os`, else the `runs-on` labels, else the job name; unresolved
+`${{ matrix.os }}` names become `unknown` (its own bucket). Only attempts finished before the
+cutoff count.
 
 Two entry points, same code underneath: `compute_features(conn, run_id, attempt, job_id)` for one
 job (serving) and `compute_features_batch(conn, keys)` for many (the dataset builder). Both read
@@ -112,7 +132,10 @@ uv run --env-file .env python -m testing_expert.features --repo vitest-dev/vites
 ```
 
 **Expected:** a line like `31587 rows in 3.8s`, then one sample row. All test-like job attempts
-of all repos (285,665 rows) take about 28 seconds.
+of all repos (285,665 rows) take about 110 seconds with the v2 groups (about 28 s in v1).
+
+Tree-sitter is pinned to `tree-sitter==0.25.2`: version 0.26.0 crashed the Python process
+(segfault) on real patches.
 
 Known limits: matrix cells of one job key share one history (a Windows cell sees Linux outcomes);
 "test job" for the repo-level duration is a name match (`test|spec|jest|mocha|vitest|e2e|unit`);
