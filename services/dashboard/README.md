@@ -22,6 +22,22 @@ npm run dev
 
 Open `http://127.0.0.1:5173`. Vite proxies `/api` to `http://127.0.0.1:8104`.
 
+### Dependency Expert log classifier
+
+Train the verified log-only model once, then start its standalone API in a separate terminal. Text
+and uploaded logs work without GitHub credentials; run URL analysis requires `GITHUB_TOKEN` in the
+API process environment.
+
+```powershell
+.venv\Scripts\python.exe experts\dependency\research\prototype\train_log_only_model.py
+.venv\Scripts\python.exe -m uvicorn main:app --app-dir services/dependency_api --host 127.0.0.1 --port 8001
+```
+
+Then start the dashboard with `npm run dev`. The Dependency Expert sends log text or run URLs to
+`http://127.0.0.1:8001/api/v1/predict/dependency`. If the API is unreachable or returns a server
+error, the page labels its sample fallback `OFFLINE / MOCK RESULT`; invalid input and unavailable
+GitHub logs remain visible errors and do not receive a predicted class.
+
 For a container demo, run from the repository root:
 
 ```bash
