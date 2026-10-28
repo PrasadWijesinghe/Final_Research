@@ -9,6 +9,7 @@ __pycache__/
 .ruff_cache/
 .venv/
 node_modules/
+services/dashboard/dist/
 *.egg-info/
 .coverage
 htmlcov/
@@ -16,6 +17,13 @@ htmlcov/
 .idea/
 PROMPT_FOR_CLAUDE_CODE.md
 /dist/
+
+# Infra research workspace: source workbooks and generated model outputs stay local.
+experts/infra/research/data/
+experts/infra/research/artifacts/
+experts/infra/research/reports/
+experts/infra/research/outputs/
+experts/infra/src/infra_expert/model/*.joblib
 
 # DEFAULT: generated JSON Schemas are build output, not committed (make schemas)
 shared/contracts/schemas/
