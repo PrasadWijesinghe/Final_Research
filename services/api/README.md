@@ -12,7 +12,7 @@ Other callers use the same service. Expert workers post their finished diagnoses
 
 The backend has a second job, the router. When a CI job fails, the router decides which expert should diagnose it, saves that decision, and puts the failure on the expert's work queue. See the Router section below.
 
-The backend never changes user code and never blocks a push on its own. It only reports. The GitHub webhook and GitHub sign-in endpoints exist but return "501 Not Implemented" until Phase 3.
+The backend never changes user code and never blocks a push on its own. It only reports. The GitHub webhook (P3.1), GitHub sign-in (P3.5) and PR check runs (P3.3) are built. Sign-in needs its GitHub settings in `.env`; without them it answers 503.
 
 ## How it works
 
@@ -193,7 +193,10 @@ The host also needs `DATABASE_URL` and `REDIS_URL`. All three variables are list
 | `POST /api-keys` | Admin | Admin token | Issues a key. The plain key is returned once |
 | `DELETE /api-keys/{id}` | Admin | Admin token | Revokes a key (204, or 404 if unknown) |
 | `POST /webhooks/github` | GitHub App | `X-Hub-Signature-256` | Checks the signature (401 if wrong, 503 if no secret is set), answers 202 and handles the event in the background. See "GitHub App webhooks (P3.1)" |
-| `GET` or `POST /auth/github/...` | Dashboard (later) | None | Returns 501 (GitHub sign-in is left for the dashboard task, P3.5) |
+| `GET /auth/github/login`, `GET /auth/github/callback` | Browser (dashboard sign-in) | None | Starts and finishes GitHub sign-in and sets the `piq_session` cookie (P3.5) |
+| `GET /auth/me`, `POST /auth/logout` | Dashboard | Session cookie | Who is signed in (or 401), and sign-out (204) |
+| `GET /me/api-keys`, `POST /me/api-keys`, `DELETE /me/api-keys/{id}` | Dashboard | Session cookie | A signed-in developer's own pre-push keys (P3.5) |
+| `GET /failures` | Dashboard | None (see Limits) | Routed failures, newest first, with diagnosis count and latest review |
 | `GET /health` | Anyone | None | Backend status plus each expert's health |
 
 ## GitHub App webhooks (P3.1)
@@ -229,7 +232,7 @@ real work afterwards (GitHub gives up after 10 seconds).
 
 - `job_key` is left empty for App-sourced jobs (the collector fills it from the workflow file).
 - Duplicate deliveries are not detected. A repeated push predicts again; stored rows are upserted.
-- Sign in with GitHub (`/auth/github/*`) still returns 501.
+- Sign-in and the dashboard are covered in "Dashboard sign-in, own keys and failure list (P3.5)" below.
 
 ### Tests
 
@@ -560,9 +563,9 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 - `GET /runs`, `GET /commits/{sha}/risks`, and `GET /failures/{id}` have no authentication. Anyone who can reach the port can read them. (`POST /reviews` needs a sign-in session since P3.5.) They stay open until the GitHub sign-in (P3.1) and the dashboard (P3.5) add real checks.
 - `POST /diagnoses` has no authentication. It is meant for expert workers on the internal network, like the LLM gateway. Add a shared worker token before any public deployment.
-- The first API key is made by hand. Call `POST /api-keys` with `API_ADMIN_TOKEN` as the Bearer token and a `user_hash`. The `user_hash` must be 64 lowercase hex characters: the salted hash of the developer's GitHub login, made the same way the sanitiser hashes logins (see `shared/sanitise/README.md`). This stays until GitHub sign-in exists.
+- The first API key is made by hand. Call `POST /api-keys` with `API_ADMIN_TOKEN` as the Bearer token and a `user_hash`. The `user_hash` must be 64 lowercase hex characters: the salted hash of the developer's GitHub login, made the same way the sanitiser hashes logins (see `shared/sanitise/README.md`). Signed-in developers can make their own keys with `/me/api-keys` instead (P3.5).
 - A key is shown once, in the response to `POST /api-keys`. Only its SHA-256 hash is stored. A lost key cannot be recovered; issue a new one and revoke the old.
-- No rate limiting. No CORS settings either. The dashboard will need CORS when it is built (P3.5).
+- No rate limiting. No CORS settings either. The dashboard does not need CORS: it calls the API through its own `/api` proxy, so the cookies stay same-origin.
 
 **Router (P2.7):**
 
@@ -617,7 +620,6 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 **Not built yet:**
 
-- The webhook and GitHub sign-in endpoints return 501.
 - `PREDICT_BUDGET_PR_MS` (2 minutes for PR notes) is used by the replay CLI only. The webhook task (P3.1) will use it for PR notes.
 - The API has a Dockerfile and a Compose service in the `e2e` profile (P2.9). Neither has been built or run yet. `make up-experts` does not start the API. Only `make e2e` does.
 

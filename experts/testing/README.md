@@ -1,8 +1,10 @@
 # Test expert (testing)
 
-**In one sentence:** the Test and App Behaviour expert. It will predict and explain failures in test runs. Today its endpoints are a stub with fake answers; the log parsers (P4.1) are real. Its prediction works per test job, not per commit.
+**In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** endpoints are a stub, log parsers built · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1
+**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Model v5 is a candidate, not served. The diagnosis worker is still a stub · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.7 (partly)
+
+> **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
 ## What it does
 
@@ -367,9 +369,13 @@ the test slice, so it needs a validation-based re-check before shipping. The v5 
 Tests: `tests/test_features_history_tests.py` (pure), `tests/test_features_db.py` (no leakage, real
 Postgres), `tests/test_model_v5.py`, `tests/test_extract.py` (batching, idempotency, pruning).
 
+**Where `--export` writes.** `compare_v5.py` writes its bundle to `models/testing_candidates/v5`, which the service
+never reads. To ship v5, move the folder to `models/testing/v5` and rebuild `testing-api`; the service serves the
+newest `v<N>` in `models/testing/`.
+
 ## Limitations and known issues
 
-- Stub only. See `experts/_template/README.md` for the limits that all four experts share.
+- The diagnosis worker is still a stub. Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
 - The test-job heuristic is simple on purpose. It can give false matches. A command like `npm install --save-dev jest` counts as a test job, because the bare word `jest` matches. It can also miss test runners it does not list. The real model replaces it.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: the heuristic above is the definition of a test job.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: every job in one commit gets the same stub probability.

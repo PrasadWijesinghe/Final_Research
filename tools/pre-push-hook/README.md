@@ -97,6 +97,31 @@ When the hook cannot open a terminal, after it gets the risk answer it:
 `dashboard_url` defaults to `http://localhost:5173`. The block only happens when the API answered
 and flagged a risk. API down, timeout, missing key or any other error still lets the push go ahead.
 
+## Limitations and defaults
+
+- Only the first branch in a push is checked. One request, one 10-second budget.
+- Desktop notifications work on macOS (`osascript`) and Linux (`notify-send`) only. Elsewhere they do nothing.
+- `block_when_no_tty` is off by default. Turn it on only if you want agents and GUI pushes to stop on a flagged risk.
+- The hook guesses which files are config files by name. The API tags them again from `config/file_tags.yaml`.
+- Large files are capped. The API ignores the content of non-config files anyway.
+- No known fork point: the diff is the head commit against its parent.
+
+**Every `# DEFAULT:` in `tools/pre-push-hook/src/`:**
+
+| Where | Choice | Why |
+|---|---|---|
+| `config.mjs` line 5 | Local dev API address when nothing is configured | Works out of the box on one machine |
+| `config.mjs` line 7 | Dashboard address `http://localhost:5173` for notification links | The Vite dev server address |
+| `config.mjs` line 18 | A file holding only the key (one line) is accepted | Simplest setup |
+| `config.mjs` line 39 | A regular file at `~/.pipelineiq` is the legacy config and is still read | Older installs keep working |
+| `config.mjs` line 48 | Blocking without a terminal is off unless the file says `true` | The hook must never stop a push by default |
+| `git.mjs` line 6 | Caps on the size of the payload | Keeps requests small |
+| `git.mjs` line 12 | "Config file" is guessed by name | The API has the final say |
+| `git.mjs` line 58 | No fork point: diff against the parent | Simplest correct fallback |
+| `install.mjs` line 3 | Writes `.git/hooks/pre-push` directly, no husky | No dependencies; works in any repo |
+| `pre-push.mjs` line 112 | Only the first pushed branch is checked | One request per push |
+| `notify.mjs` line 5 | Notifications must not hold up a push | A slow desktop tool must not delay git |
+
 ## Run the tests
 
 ```

@@ -74,11 +74,11 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 - [x] **P3.1 GitHub App.** Registration guide in `docs/` (permissions: Actions read, Contents read, Checks write, Pull requests write, Metadata read; events: push, pull_request, workflow_run, workflow_job); webhook signature verification; installation tokens; storing App-sourced data in `raw` with `source="app"`.
   *Accept:* recorded webhook payloads drive the live flows in tests.
 - [x] **P3.2 Webhooks on a laptop.** smee.io client setup (and a Cloudflare Tunnel fallback) in `ONBOARDING.md`.
-- [ ] **P3.3 PR check.** Post a check run with alerts, and update it when late results arrive.
+- [x] **P3.3 PR check.** Post a check run with alerts, and update it when late results arrive.
   *Accept:* tested against recorded API calls; replay never posts.
 - [x] **P3.4 Pre-push hook.** `tools/pre-push-hook`: Node 22 script plus installer (husky or direct `.git/hooks`). Sends the diff and the tagged config files, reads the API key from env or `~/.pipelineiq`, 10 s timeout, prints risks, asks "Push anyway?" only if interactive, and always allows the push on error.
   *Accept:* tests for the risky, clean, timeout and backend-down cases.
-- [ ] **P3.5 Dashboard MVP.** React + Vite + TypeScript, styled to match the prototype (PipelineIQ): sign-in with GitHub, risk dashboard, pipeline history, diagnosis and review (accept / reject / modify / request revision, with a decision timer), settings (API keys). Types generated from the contract JSON Schemas.
+- [x] **P3.5 Dashboard MVP.** React + Vite + TypeScript, styled to match the prototype (PipelineIQ): sign-in with GitHub, risk dashboard, pipeline history, diagnosis and review (accept / reject / modify / request revision, with a decision timer), settings (API keys). Types generated from the contract JSON Schemas.
   *Accept:* every page works against the stub-backed backend.
 - [ ] **P3.6 Review loop.** `/reviews` → expert `/review` → `VerifiedCase` only after a confirmed cause and a later passing run.
   *Accept:* tested for both the pass and no-pass paths.
@@ -88,12 +88,12 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 Design: `docs/experts/test.md`.
 
 - [x] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
-- [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
+- [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Full log parse built 2026-10-29; awaiting kappa round.*
 - [ ] **P4.3 Labelling** per §3, written as `FailureLabel`s; a manual-review sample exporter; a kappa calculator. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
-- [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
-- [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
+- [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. v2 groups and per-test history built 2026-10-29; awaiting kappa round.*
+- [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Datasets v2 to v4 built 2026-10-29; not frozen, awaiting kappa round.*
 - [ ] **P4.6 Baselines** per §5. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
-- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
+- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Models v2 to v5 built 2026-10-29 (v4 served, v5 candidate); awaiting kappa round.*
 - [ ] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`.
 - [ ] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor.
 - [ ] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`.
