@@ -121,7 +121,17 @@ services:
     profiles: ["experts", "e2e"]
     build: { context: ., dockerfile: experts/testing/Dockerfile }
     image: pipelineiq-expert-testing
-    environment: { <<: *expert-env, EXPERT_PORT: "8103" }
+    # DEFAULT (P4.12 partial): the trained model and the feature config are mounted read-only, not
+    # baked into the image. TESTING_MODEL_BUNDLE names a folder of versions (newest v<N> is served);
+    # without a bundle the service answers with the stub.
+    environment:
+      <<: *expert-env
+      EXPERT_PORT: "8103"
+      TESTING_MODEL_BUNDLE: /models/testing
+      TEST_FEATURES_FILE: /app/config/test_features.yaml
+    volumes:
+      - ./models:/models:ro
+      - ./config:/app/config:ro
     ports: ["127.0.0.1:8103:8103"]
 
   testing-worker:
