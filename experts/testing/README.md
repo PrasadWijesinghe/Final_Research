@@ -187,7 +187,7 @@ Known limits: only the failing test file is used for the genuine rule, because P
 A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
 7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
 
-## Dataset builder (P4.5, v1)
+## Dataset builder (P4.5, v1 and v2)
 
 What it does: freezes the labelled attempts and their pre-run features into one table that the baselines and
 the model train on. Output: `data/datasets/testing/<version>/rows.parquet` and `manifest.json` (build date,
@@ -205,7 +205,15 @@ the features are the same. A finished version is frozen: the command refuses to 
 
 ```
 uv run --env-file .env python -m testing_expert.dataset --version v1    # about 45 seconds
+uv run --env-file .env python -m testing_expert.dataset --version v2    # about 90 seconds
 ```
+
+The version is an argument. `v1` keeps its original 41 features (so it stays reproducible after new feature
+groups were added). `v2` has the same rows and labels plus two new feature groups, 68 features in all:
+`tw_*` (14, the tree-sitter test-change group; empty means unknown, 0 means the commit changes no test) and
+`h_os_*` (13, job history counted only on the same runner OS). Its manifest says `"frozen": false`: labels are
+still rule labels, so v2 is not frozen until the human kappa round (P4.3) is done. Remaining cuts, listed in the
+manifest: no daily collector (one-off data, no newer runs), no new repos (same 16), P4.2 and P4.3 still at v1 scope.
 
 ## Serving the trained model (P4.12, partial)
 
@@ -244,13 +252,15 @@ The package `testing_expert.parsing` reads the log of a failed job. For Jest, Mo
 - Rebuild the fixtures from the local database (read-only): `uv run --env-file .env python -m testing_expert.parsing.make_fixtures [--suggest]`
 - Check the parsers on about 2,000 real failed-job logs (read-only, not part of `make check`): `uv run --env-file .env python -m testing_expert.parsing.survey`
 
-## Baselines and model training (P4.6 and P4.7, v1)
+## Baselines and model training (P4.6 and P4.7, v1 and v2)
 
-The package `testing_expert.model` trains the pre-run model on `data/datasets/testing/v1/` and compares it with three simple baselines: always "pass", "same as the series' previous run", and a re-run heuristic ("flaky when 20% or more of the last 30 days' runs were re-runs"). Models are logistic regression and LightGBM, both with class weights. Probabilities are calibrated with isotonic regression on a calibration slice. A P(fail) threshold is chosen for precision 0.8 with the most recall.
+The package `testing_expert.model` trains the pre-run model on `data/datasets/testing/<version>/` (v1 or v2) and compares it with three simple baselines: always "pass", "same as the series' previous run", and a re-run heuristic ("flaky when 20% or more of the last 30 days' runs were re-runs"). Models are logistic regression and LightGBM, both with class weights. Probabilities are calibrated with isotonic regression on a calibration slice. A P(fail) threshold is chosen for precision 0.8 with the most recall.
 
 - Run everything (about 8 minutes on the full data): `uv run --env-file .env python -m testing_expert.model train --dataset v1` (`--no-loro`, `--variants all`, `--no-mlflow` make it faster).
 - Splits: temporal (earliest 70% train, 10% calibration, last 20% test) and leave-one-repo-out (repos with at least 20 non-pass rows). Variants: all, high (no low-confidence labels), strict (genuine only if failed 2 or more times on the SHA).
-- Outputs: `models/testing/v1/` (model, calibrator, features, threshold, card), `data/reports/testing_model_v1.md`, MLflow runs in `mlruns/mlflow.db` (view with `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db`). All are git-ignored.
+- Outputs: `models/testing/<version>/` (model, calibrator, features, threshold, card; v2 sits next to v1), `data/reports/testing_model_<version>.md`, MLflow runs in `mlruns/mlflow.db` (view with `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db`). All are git-ignored.
+- Missing values: LightGBM reads empty (None) features, such as unknown `tw_*`, as native missing. Logistic regression fills them with the training median and adds a missing-indicator column (`# DEFAULT:` in `model/models.py`).
+- Compare two dataset versions on identical rows and splits, with ablations (minus `tw_`, minus `h_os_`) and a paired bootstrap of the PR-AUC difference (about 15 minutes): `uv run --env-file .env python -m testing_expert.model.compare --base v1 --new v2`. It writes `experts/testing/reports/v2_vs_v1.md`.
 - On macOS LightGBM needs `brew install libomp`.
 - Calibration: the calibration slice is split in time order. The first half fits the isotonic maps, the second half picks the P(fail) threshold (precision 0.8 with the most recall, else best F0.5). The second half holds few failures, so the threshold is noisy; read the test-slice precision and recall in the report.
 

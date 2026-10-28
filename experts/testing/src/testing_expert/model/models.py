@@ -86,7 +86,15 @@ def fit_model(kind: str, train: pd.DataFrame, cols: list[str]) -> FittedModel:
             transformers.append(
                 (
                     "num",
-                    Pipeline([("imp", SimpleImputer(strategy="median")), ("sc", StandardScaler())]),
+                    Pipeline(
+                        [
+                            # DEFAULT: missing values (e.g. tw_* unknown, None) get the median
+                            # plus a missing-indicator column, so "unknown" is not read as a value.
+                            # LightGBM instead handles NaN natively (own branch per split).
+                            ("imp", SimpleImputer(strategy="median", add_indicator=True)),
+                            ("sc", StandardScaler()),
+                        ]
+                    ),
                     enc.numeric,
                 )
             )
