@@ -16,6 +16,7 @@ from shared.github import (
     GitHubConfig,
     GitHubError,
     GitHubNotFoundError,
+    GitHubResponseTooLargeError,
     GitHubTooLargeError,
 )
 
@@ -317,6 +318,18 @@ def test_rate_limit_without_a_redirect_is_unchanged(client: GitHubClient) -> Non
         client.get_json("/a")
         client.get_json("/b")
     assert client._remaining == 777
+
+
+def test_too_large_error_keeps_the_old_name_and_its_fields(client: GitHubClient) -> None:
+    # The Dependency research scripts on main catch GitHubResponseTooLargeError and read max_bytes.
+    with respx.mock:
+        respx.get(f"{API}/large-log").respond(
+            200, content=b"this body exceeds the configured limit", headers={"content-length": "38"}
+        )
+        with pytest.raises(GitHubResponseTooLargeError) as err:
+            client.get_bytes("/large-log", max_bytes=8)
+    assert err.value.max_bytes == 8
+    assert err.value.content_length == 38
 
 
 def test_window_splitting(client: GitHubClient) -> None:

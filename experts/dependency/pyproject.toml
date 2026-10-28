@@ -12,6 +12,15 @@ dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.7",
     "sqlalchemy>=2.1.4",
+    "PyYAML>=6.0.2",
+]
+
+[project.optional-dependencies]
+prototype = [
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+    "shap>=0.46",
+    "xgboost>=2.1",
 ]
 
 [build-system]

@@ -41,6 +41,17 @@ class GitHubNotFoundError(GitHubError):
 class GitHubTooLargeError(GitHubError):
     """A body was larger than the caller's `max_bytes`; it was not read into memory."""
 
+    def __init__(
+        self, message: str, *, max_bytes: int | None = None, content_length: int | None = None
+    ) -> None:
+        super().__init__(message)
+        self.max_bytes = max_bytes
+        self.content_length = content_length
+
+
+# Older name used by the Dependency research scripts on main; same error.
+GitHubResponseTooLargeError = GitHubTooLargeError
+
 
 @dataclass(frozen=True)
 class RunCount:
@@ -216,14 +227,20 @@ class GitHubClient:
                 return response
             declared = response.headers.get("content-length", "")
             if declared.isdigit() and int(declared) > max_bytes:
-                raise GitHubTooLargeError(f"body is {declared} bytes, over {max_bytes}")
+                raise GitHubTooLargeError(
+                    f"body is {declared} bytes, over {max_bytes}",
+                    max_bytes=max_bytes,
+                    content_length=int(declared),
+                )
             # BytesIO.getvalue() hands out its buffer without a copy, and httpx keeps that same
             # object, so the body is held once (a bytearray plus bytes() would hold it twice).
             body = io.BytesIO()
             for chunk in response.iter_bytes():  # already decoded, so no content-encoding is left
                 body.write(chunk)
                 if body.tell() > max_bytes:
-                    raise GitHubTooLargeError(f"body is over {max_bytes} bytes")
+                    raise GitHubTooLargeError(
+                        f"body is over {max_bytes} bytes", max_bytes=max_bytes
+                    )
             return httpx.Response(
                 response.status_code,
                 headers={
