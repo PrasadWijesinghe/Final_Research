@@ -210,7 +210,7 @@ The package `testing_expert.model` trains the pre-run model on `data/datasets/te
 - Splits: temporal (earliest 70% train, 10% calibration, last 20% test) and leave-one-repo-out (repos with at least 20 non-pass rows). Variants: all, high (no low-confidence labels), strict (genuine only if failed 2 or more times on the SHA).
 - Outputs: `models/testing/v1/` (model, calibrator, features, threshold, card), `data/reports/testing_model_v1.md`, MLflow runs in `mlruns/mlflow.db` (view with `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db`). All are git-ignored.
 - On macOS LightGBM needs `brew install libomp`.
-- Known weakness: the threshold is picked on the calibration slice, where the isotonic fit is in-sample, so it comes out very high and flags almost nothing. Read the test-slice precision and recall in the report.
+- Calibration: the calibration slice is split in time order. The first half fits the isotonic maps, the second half picks the P(fail) threshold (precision 0.8 with the most recall, else best F0.5). The second half holds few failures, so the threshold is noisy; read the test-slice precision and recall in the report.
 
 ## Related
 

@@ -94,8 +94,8 @@ def _threshold_table(res: VariantResult) -> str:
             "model",
             "threshold",
             "rule",
-            "cal precision",
-            "cal recall",
+            "val precision",
+            "val recall",
             "test precision",
             "test recall",
             "test flagged",
@@ -135,11 +135,11 @@ def _body(results: dict[str, VariantResult], winner: str, loro_detail: bool) -> 
             "",
             _class_table(res.temporal),
             "",
-            "### Calibration (isotonic, fit on the calibration slice, scored on test)",
+            "### Calibration (isotonic, fit on the first half of the calibration slice, scored on test)",
             "",
             _calibration_table(res),
             "",
-            "### P(fail) threshold (picked on the calibration slice)",
+            "### P(fail) threshold (picked on the second half of the calibration slice)",
             "",
             _threshold_table(res),
             "",
@@ -238,7 +238,7 @@ Full tables (all variants, leave-one-repo-out, calibration): `data/reports/testi
 - Label caveats: `flaky` = pass after fail on the same SHA (reliable) or a silent-flaky rule (low confidence);
   `genuine` can include failures nobody retried. Rule labels are not validated by a human yet (kappa pending).
 - Selection bias: only runs that failed or share a SHA with a failed attempt have rich labels.
-- The threshold was picked on the calibration slice; expect some drift in production.
+- The threshold was picked on a small held-out half of the calibration slice (few failures there), so it is noisy; expect drift in production.
 - Test is the last 20% in time: later repo behaviour may differ.
 """
     path.write_text(text)
