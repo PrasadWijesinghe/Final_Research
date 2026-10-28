@@ -25,6 +25,10 @@ RUN uv sync --frozen --no-dev --no-editable --package pipelineiq-expert-testing
 
 FROM python:3.12.8-slim-bookworm
 
+# DEFAULT: LightGBM needs the OpenMP runtime (libgomp1), which the slim image lacks.
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Run as a non-root user.
 RUN useradd --system --create-home --uid 10001 expert
 COPY --from=builder /opt/venv /opt/venv

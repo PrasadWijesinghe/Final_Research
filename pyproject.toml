@@ -116,6 +116,11 @@ disable_error_code = ["attr-defined"]
 module = ["sentence_transformers", "sentence_transformers.*"]
 ignore_missing_imports = true
 
+# DEFAULT (P4.6/P4.7): pandas, scikit-learn, joblib, mlflow and lightgbm ship no usable type stubs.
+[[tool.mypy.overrides]]
+module = ["pandas", "pandas.*", "sklearn", "sklearn.*", "joblib", "mlflow", "mlflow.*", "lightgbm", "lightgbm.*", "pyarrow", "pyarrow.*"]
+ignore_missing_imports = true
+
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
