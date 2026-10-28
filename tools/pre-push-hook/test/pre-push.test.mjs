@@ -27,6 +27,8 @@ function setup(api, extra = {}) {
       home,
       cwd: repo.dir,
       err: (s) => lines.push(s),
+      hasTty: () => true, // tests never touch the real terminal or desktop
+      notify: async () => false,
       prompt: async (q) => {
         prompts.push(q);
         return extra.answer ?? null;

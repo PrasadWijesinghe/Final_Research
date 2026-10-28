@@ -5,7 +5,8 @@ PipelineIQ API, prints any failure risks it gets back, and lets you decide wheth
 
 **It never gets in your way.** If the API is down, slow (over 10 seconds), returns an error, or you
 have no API key, the hook prints one line and the push goes ahead. The only time a push stops is
-when a person at a terminal answers `n` to "Push anyway?".
+when a person at a terminal answers `n` to "Push anyway?", or when you turn on `block_when_no_tty`
+(see below).
 
 ## What it sends
 
@@ -69,6 +70,30 @@ The question appears only when a risk was flagged and a terminal is available. T
 answer from `/dev/tty` because git uses the hook's normal input for the list of refs. With no
 terminal (CI, an editor's push button) the warning is printed and the push continues.
 
+## Pushes with no terminal (GUI clients, AI agents)
+
+Some pushes have nobody to ask: a Git app with a push button, or an AI agent running `git push`.
+When the hook cannot open a terminal, after it gets the risk answer it:
+
+1. **Shows a desktop notification** with a short summary (how many risks, the highest one and its
+   top reason) and a link to the commit in the dashboard, `<dashboard_url>/#/commits/<sha>`.
+   macOS uses `osascript`, Linux uses `notify-send`. On any other system, or if that program is
+   missing, it quietly does nothing. A failed notification never stops or delays the push.
+2. **Optionally blocks the push.** Off by default. Turn it on in `~/.pipelineiq`:
+
+   ```
+   block_when_no_tty=true
+   dashboard_url=http://localhost:5173
+   ```
+
+   With `block_when_no_tty=true`, no terminal and at least one flagged risk, the hook exits with an
+   error and prints plain text saying what risk was found, that the push was blocked because
+   `block_when_no_tty` is on, and how to get past it: `git push --no-verify`, or set
+   `block_when_no_tty=false`. That text is written so an AI agent can read it and act on it.
+
+`dashboard_url` defaults to `http://localhost:5173`. The block only happens when the API answered
+and flagged a risk. API down, timeout, missing key or any other error still lets the push go ahead.
+
 ## Run the tests
 
 ```
@@ -84,8 +109,9 @@ state and the installer.
 
 - `src/pre-push.mjs`: the hook (`run()` holds the logic).
 - `src/git.mjs`: builds the payload with the `git` command.
-- `src/config.mjs`: reads the key and URL.
+- `src/config.mjs`: reads the key, URLs and `block_when_no_tty`.
 - `src/format.mjs`: turns the API answer into text.
+- `src/notify.mjs`: the desktop notification (macOS and Linux).
 - `src/install.mjs`: install and uninstall.
 
 Payload shape: `PrePushPayload` in `services/features/src/features/pre_push.py`; endpoint:

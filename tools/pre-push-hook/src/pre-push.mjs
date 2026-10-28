@@ -6,7 +6,8 @@ import { resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { fileURLToPath } from "node:url";
 import { loadConfig } from "./config.mjs";
-import { formatReport, hasAlerts } from "./format.mjs";
+import { formatReport, hasAlerts, summarize } from "./format.mjs";
+import { sendNotification } from "./notify.mjs";
 import { ZERO_SHA, buildPayload, repoFromUrl } from "./git.mjs";
 
 export const TIMEOUT_MS = 10_000; // ARCHITECTURE 3.1: 10 seconds total budget
@@ -62,6 +63,27 @@ export function ttyPrompt(question) {
   });
 }
 
+/** Plain-text explanation for an AI agent or GUI client when a push is blocked. */
+export function blockMessage(body) {
+  return [
+    "PipelineIQ: PUSH BLOCKED.",
+    `Risk found: ${summarize(body)}`,
+    "The push was blocked because block_when_no_tty is on in ~/.pipelineiq and no terminal is available to confirm it.",
+    "To push anyway: run `git push --no-verify` (or `PIPELINEIQ_SKIP=1 git push`), or set block_when_no_tty=false in ~/.pipelineiq.",
+    "To fix the cause: review the risks listed above, then push again.",
+  ];
+}
+
+/** True when a controlling terminal can be opened. */
+export function ttyAvailable() {
+  try {
+    closeSync(openSync("/dev/tty", "r+"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Run the hook. Returns the process exit code (0 = push may go on).
  * Everything external is injectable so tests need no real terminal or network.
@@ -75,11 +97,13 @@ export async function run({
   fetchImpl = globalThis.fetch,
   err = (s) => process.stderr.write(`${s}\n`),
   prompt = ttyPrompt,
+  hasTty = ttyAvailable,
+  notify = sendNotification,
   timeoutMs = TIMEOUT_MS,
 } = {}) {
   try {
     if (env.PIPELINEIQ_SKIP === "1") return 0;
-    const { apiKey, apiUrl } = await loadConfig(env, home);
+    const { apiKey, apiUrl, dashboardUrl, blockWhenNoTty } = await loadConfig(env, home);
     if (!apiKey) {
       err("PipelineIQ: no API key (set PIPELINEIQ_API_KEY or put api_key=... in ~/.pipelineiq); skipping check.");
       return 0;
@@ -121,7 +145,28 @@ export async function run({
     }
     const body = await res.json();
     for (const line of formatReport(body)) err(line);
-    if (!hasAlerts(body)) return 0;
+    const alerts = hasAlerts(body);
+    let noTty = false;
+    try {
+      noTty = !hasTty();
+    } catch {
+      noTty = false;
+    }
+    if (noTty) {
+      // Nobody can answer a prompt: tell the person by desktop notification, never fail on it.
+      try {
+        const link = `${dashboardUrl.replace(/\/+$/, "")}/#/commits/${encodeURIComponent(ref.localSha)}`;
+        const summary = summarize(body) ?? "No risks flagged for this push.";
+        await notify("PipelineIQ", `${summary} ${link}`);
+      } catch {
+        // notification failure never matters
+      }
+      if (alerts && blockWhenNoTty) {
+        for (const line of blockMessage(body)) err(line);
+        return 1;
+      }
+    }
+    if (!alerts) return 0;
     const answer = await prompt("Push anyway? (y/n) ");
     if (answer === null) return 0; // no terminal: warn and continue
     return answer ? 0 : 1;

@@ -37,3 +37,13 @@ export function formatReport(response) {
   }
   return lines;
 }
+
+/** One-line summary and top alert for a notification, or null when nothing was flagged. */
+export function summarize(response) {
+  const alerts = alertRisks(response);
+  if (alerts.length === 0) return null;
+  const top = alerts.reduce((a, b) => (b.probability > a.probability ? b : a));
+  const reason = top.top_factors?.[0]?.reason;
+  const level = `${alerts.length} risk${alerts.length === 1 ? "" : "s"} flagged`;
+  return `${level}. Top: ${top.expert} ${pct(top.probability)} chance of failure (alert at ${pct(top.threshold)})${reason ? `, ${reason}` : ""}`;
+}
