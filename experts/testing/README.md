@@ -164,6 +164,26 @@ Known limits: only the failing test file is used for the genuine rule, because P
 A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
 7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
 
+## Dataset builder (P4.5, v1)
+
+What it does: freezes the labelled attempts and their pre-run features into one table that the baselines and
+the model train on. Output: `data/datasets/testing/<version>/rows.parquet` and `manifest.json` (build date,
+git commit, repos, row counts per label, feature list, the v1 cuts, sha256 of the parquet file).
+
+One row per attempt labelled `pass`, `flaky` or `genuine` (unclear and not_test are left out). Columns: keys
+(`run_id`, `attempt`, `job_id`, `repo`, `created_at`, `series_key`), target (`label` = `pass` / `genuine_fail` /
+`flaky_fail`, `label_confidence`, `rule_name`, `genuine_strict`) and every feature from `feature_names()`.
+`genuine_strict` is true when the job failed in at least two attempts on that commit.
+Train variants: all rows, "high" (drop low confidence), "strict" (genuine only if `genuine_strict`).
+
+How: the builder reads `raw` and `testing.labels` directly and calls the same feature code the live expert
+uses, with each row's history cutoff set to its run's `created_at`. It does not go through the replay CLI;
+the features are the same. A finished version is frozen: the command refuses to overwrite it without `--force`.
+
+```
+uv run --env-file .env python -m testing_expert.dataset --version v1    # about 45 seconds
+```
+
 ## Limitations and known issues
 
 - Stub only. See `experts/_template/README.md` for the limits that all four experts share.
