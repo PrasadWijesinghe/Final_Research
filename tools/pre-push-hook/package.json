@@ -1,0 +1,9 @@
+{
+  "name": "pipelineiq-pre-push-hook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Git pre-push hook: asks the PipelineIQ API for risks before you push. Never blocks on errors.",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test \"test/*.test.mjs\"" }
+}

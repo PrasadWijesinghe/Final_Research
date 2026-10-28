@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
+.PHONY: check-hook setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -44,6 +44,15 @@ check:
 	uv run ruff format --check .
 	uv run mypy
 	uv run pytest
+	$(MAKE) check-hook
+
+# DEFAULT (P3.4): Node tests of the pre-push hook run with the built-in test runner (Node 22, no
+# dependencies). Skipped with a notice when node is missing locally; CI installs Node 22 and sets
+# REQUIRE_NODE=1 so it cannot be skipped there.
+check-hook:
+	@if command -v node >/dev/null 2>&1; then cd tools/pre-push-hook && node --test "test/*.test.mjs"; \
+	elif [ -n "$(REQUIRE_NODE)" ]; then echo "check-hook: node is required"; exit 1; \
+	else echo "check-hook: node not found, skipping hook tests"; fi
 
 # DEFAULT: alembic config lives with the migrations in shared/db; the URL is read from DATABASE_URL.
 migrate:
