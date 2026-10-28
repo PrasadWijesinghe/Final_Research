@@ -13,7 +13,7 @@ import pandas as pd
 CLASSES = ("pass", "genuine_fail", "flaky_fail")
 CLASS_INDEX = {c: i for i, c in enumerate(CLASSES)}
 FLAKY_IDX = CLASS_INDEX["flaky_fail"]
-FEATURE_PREFIXES = ("cs_", "stl_", "tc_", "td_", "h_", "rs_", "rp_", "tw_")
+FEATURE_PREFIXES = ("cs_", "stl_", "tc_", "td_", "h_", "rs_", "rp_", "tw_", "ht_")
 VARIANTS = ("all", "high", "strict")
 
 # DEFAULT: v1 cut, temporal split by created_at: earliest 70% train, next 10% calibration,

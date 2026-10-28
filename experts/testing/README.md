@@ -54,33 +54,65 @@ uv run pytest experts/testing/tests
 
 **Expected:** all tests pass. To start the stub in Docker, run `make up-experts`. That was not run in P2.1.
 
-## Test results extraction (P4.2, v1)
+## Test results extraction (P4.2, v1 + full scope)
 
 What it does: reads job logs from `data/logs/`, runs the log parsers, and stores which tests ran
 and how they ended in `testing.test_results` (with a stable id per test in `testing.test_ids`).
+`testing.log_parses` has one row per log read: the framework, whether parsing worked, a short failure
+reason, and the granularity the reporter gave (`test`, `file` or `none`).
 
-Which logs (the v1 cut): failed job attempts, plus every other attempt or run of the same job
-(same repo, same commit, same job name) that has a log. A failed job only counts as a test job when
-the parsers recognise Jest, Mocha or Vitest in its log. Passing logs in general come in v2.
+Two scopes:
 
-Rows are `test` granularity (one test) or `file` granularity (the reporter only printed files, or
-a whole file failed to run). Each row says which. A Jest log usually gives both: file rows from the
-reporter and test rows from the failure details.
+- **v1 (default mode):** failed job attempts, plus every other attempt of the same job on the same commit.
+- **Full scope (`--all`):** EVERY stored job log, passing or failing, that is not yet in `log_parses`.
+  A log with no Jest, Mocha or Vitest run is recorded as "not a test job" and writes no rows.
 
-Run it (database and logs must be present; safe to run again, it skips jobs already done):
+Rows are `test` granularity (one test) or `file` granularity (the reporter printed only files, or a
+whole file failed to run). Each row says which. Mocha lists every test but not its file; Jest and
+Vitest usually list files only, and a failing test is also named in the failure details.
+
+How it stays fast and safe: parsing runs in several processes (`--workers`), results are written in
+batches of 200 jobs, each batch with `COPY` into temporary tables followed by set-based inserts. A job that already has a `log_parses` row is skipped, so an interrupted
+run resumes where it stopped, and re-writing a job replaces its earlier rows (idempotent).
+`--sample N` reads a random N logs, for a throughput trial.
+
+**What is not stored (a choice).** Storing every passing test of every passing log would be about 130
+million rows (Mocha prints 1,000+ tests per run). A passing or skipped *test-level* row is kept only
+when that test has failed somewhere in the data (`prune_passing` in `extract.py`). File-level rows and
+all failed rows are always kept. A test that never failed has a fail rate of 0 whether or not its passes
+are stored, so the history features lose nothing they could use.
+
+Run it (database and logs must be present):
 
 ```
-make migrate-testing    # creates the testing tables (also part of `make migrate`)
-uv run --env-file .env python -m testing_expert.extract --member test
+make migrate-testing    # creates the testing tables and indexes (migrations t0001 to t0003)
+uv run --env-file .env python -m testing_expert.extract --member test --all            # full scope
+uv run --env-file .env python -m testing_expert.extract --member test --all --sample 2000   # trial
+uv run --env-file .env python -m testing_expert.extract --member test                  # v1 scope
 ```
 
-`testing.log_parses` has one row per log read, with the framework, whether parsing worked, and a
-short failure reason, so you can see what was tried and what went wrong.
+**Real run (2026-10-29, 10-core Mac).** Trial: 2,000 random logs at 157 logs/s. Full run: 269,564 logs in
+980 s (275 logs/s, about 16 minutes), no parse failures. Together with the v1 run all 288,330 stored logs
+are parsed: 204,849 are test jobs (Jest 57,636, Mocha 97,168, Vitest 49,339, other 706) and 83,481 are not
+test jobs. The table now holds 17.1 million result rows (13.4M test level, 3.7M file level, 4.9 GB with
+indexes, 58,490 distinct test ids).
 
-First run on the real data (2026-10-28, 2.5 minutes): 15,553 failed jobs plus 1,213 same-commit
-sibling jobs read, 10,856 of them test jobs, no parse failures, 2.79M test rows and 223k file rows.
+**Coverage of the 212,000 labelled attempts of dataset v3:**
 
-## Pre-run features (P4.4, v1 + v2)
+| | attempts | share |
+|---|---|---|
+| no stored log (mostly passing jobs whose log was not collected) | 43,527 | 20.5% |
+| log read, not a test runner | 2,181 | 1.0% |
+| test job, reporter listed nothing usable (`none`) | 37,597 | 17.7% |
+| test job with parsed results | 128,695 | 60.7% |
+| of those: per test | 74,574 | 57.9% of parsed |
+| of those: per file | 54,121 | 42.1% of parsed |
+
+By framework (parsed results, per test / per file / none): Mocha 53,354 / 0 / 18,265; Jest 3,609 / 38,806 /
+11,157; Vitest 16,922 / 15,315 / 8,175. "None" means the job's CI used a reporter or flags that print no
+per-test or per-file lines (a summary only), so no results can be recovered from the log.
+
+## Pre-run features (P4.4, v1 + v2 + per-test history)
 
 What it does: turns one test job attempt into a row of numbers the model can read, using only what
 was known before the run started (`history_cutoff` = the run's `created_at`). Code in
@@ -97,11 +129,12 @@ was known before the run started (`history_cutoff` = the run's `created_at`). Co
 | What changed in tests | `test_changes.py` (`tw_*`) | new async tests, un-awaited promises, `setTimeout`, real timers, `Date.now()`, `Math.random()`, unmocked network calls, changed timeouts, `.only` / `.skip`, file-level shared state, setup with no `after*` cleanup |
 | Run setup | `run_setup.py` | runner OS, matrix size, pull request or push, default branch |
 | Repo | `repo.py` | average test-job duration, test framework |
+| History per test / file | `history_tests.py` (`ht_*`) | failing and flaky tests of the job over 30 / 90 days, last run's failing tests, fail rate and last outcome of the test files this commit changes |
 
 History is kept per job key (the workflow's YAML key, or the job name without its `(matrix)` part),
 not per test (v1 cut). A past job only counts if it finished strictly before the cutoff. Tunables
 are in `config/test_features.yaml`. `features/descriptions.yaml` has one plain-language sentence
-per feature for the later SHAP explanations. Still not built: per-test history and the optional code vector.
+per feature for the later SHAP explanations. Still not built: the optional code vector.
 
 **`tw_*` (what changed in tests).** Counts of risky constructs the commit ADDED in its changed
 JavaScript / TypeScript test files, found with tree-sitter. The database keeps only each file's
@@ -121,6 +154,22 @@ OS. The OS comes from `raw.jobs.runner_os`, else the `runs-on` labels, else the 
 `${{ matrix.os }}` names become `unknown` (its own bucket). Only attempts finished before the
 cutoff count.
 
+**`ht_*` (history per test and per file, 15 features).** Built from the parsed test results (P4.2).
+Same series as `h_*` (one job key), and only attempts that finished strictly before the cutoff count.
+Job level: `ht_parsed_runs_30d/90d` (earlier runs with readable results), `ht_last_run_failed_tests`
+(tests that failed in the job's latest earlier run), `ht_persistent_failing_tests` (failed in both of the
+last two runs), `ht_failed_tests_30d/90d` (distinct failing tests), `ht_flaky_tests_30d/90d` (distinct tests
+that both failed and passed in the window). Touched files: for the test files this commit changes,
+`ht_touched_test_files`, `ht_touched_files_with_history`, `ht_touched_fail_rate` (failed runs divided by
+runs seen), `ht_touched_max_flip_rate`, `ht_touched_last_failed`, `ht_touched_failures_90d`.
+**Granularity is recorded** in `ht_test_level` (1 = the job's reporter lists individual tests, as Mocha
+does; 0 = files only, as Jest and Vitest usually do). Per-file history needs file names, so Mocha jobs
+(test names only) get job-level numbers but no "touched file" numbers. Passing tests that never failed
+are not stored (see P4.2), so there is no "number of tests run" feature, and per-file rates use only
+file-level rows. Missing history is empty (`None`), counts are 0. Caveat from the data: the Jest repo's
+own test suite deliberately runs failing fixture tests, so its `ht_` numbers are large; the model sees that
+as a repo trait. Serving computes the same numbers with `loader.load_test_history`, one series only.
+
 Two entry points, same code underneath: `compute_features(conn, run_id, attempt, job_id)` for one
 job (serving) and `compute_features_batch(conn, keys)` for many (the dataset builder). Both read
 the `raw` tables only.
@@ -132,7 +181,8 @@ uv run --env-file .env python -m testing_expert.features --repo vitest-dev/vites
 ```
 
 **Expected:** a line like `31587 rows in 3.8s`, then one sample row. All test-like job attempts
-of all repos (285,665 rows) take about 110 seconds with the v2 groups (about 28 s in v1).
+of all repos (285,665 rows) take about 110 seconds with the v2 groups (about 28 s in v1); the `ht_` group
+adds about 9 minutes on the full dataset because it reads 17 million result rows (the v4 dataset build takes about 12 minutes).
 
 Tree-sitter is pinned to `tree-sitter==0.25.2`: version 0.26.0 crashed the Python process
 (segfault) on real patches.
@@ -216,6 +266,7 @@ the features are the same. A finished version is frozen: the command refuses to 
 uv run --env-file .env python -m testing_expert.dataset --version v1    # about 45 seconds
 uv run --env-file .env python -m testing_expert.dataset --version v2    # about 90 seconds
 uv run --env-file .env python -m testing_expert.dataset --version v3    # about 3 minutes
+uv run --env-file .env python -m testing_expert.dataset --version v4    # about 12 minutes
 ```
 
 The version is an argument. `v1` keeps its original 41 features (so it stays reproducible after new feature
@@ -224,7 +275,9 @@ groups were added). `v2` has the same rows and labels plus two new feature group
 `h_os_*` (13, job history counted only on the same runner OS). Its manifest says `"frozen": false`: labels are
 still rule labels, so v2 is not frozen until the human kappa round (P4.3) is done. `v3` has the same 68 features and
 rows as v2 plus the 492 streak rows (212,000 rows; genuine 2,324, flaky 823), after the P4.3 streak rule; it is also
-`"frozen": false`, with a `label_changes` note in the manifest. v1 and v2 files are untouched. Remaining cuts, listed in the
+`"frozen": false`, with a `label_changes` note in the manifest. `v4` has the same 212,000 rows and labels as v3 (nothing was rewritten in the database) plus the 15 `ht_*`
+features, 83 in all; it is `"frozen": false` with a `kappa_note` (the human label check is still pending). v1 to v3 files are untouched
+(v2 and v3 are built without `ht_`). Remaining cuts, listed in the
 manifest: no daily collector (one-off data, no newer runs), no new repos (same 16), P4.2 and P4.3 still at v1 scope.
 
 ## Serving the trained model (P4.12, partial)
@@ -234,7 +287,7 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 **What happens on a request**
 1. The service loads a model bundle once (a folder like `models/testing/v2/` with the model, calibrator, feature list and threshold).
 2. It finds the test jobs in the commit's workflow files (same test-job check as the stub). No test job: it scores one commit-level row.
-3. It builds the same features used for training. The test-change (`tw_*`), change-size, config and run-setup features come from the commit context itself, including the diffs of changed test files. History features (`h_*`, `h_os_*`) come from the database when `DATABASE_URL` works and the repository is known.
+3. It builds the same features used for training. The test-change (`tw_*`), change-size, config and run-setup features come from the commit context itself, including the diffs of changed test files. History features (`h_*`, `h_os_*`, and `ht_*` for bundles that use them) come from the database when `DATABASE_URL` works and the repository is known.
 4. An unknown repository, or no database, means "cold start": history is missing and the model handles that. If `DATABASE_URL` is set but the database fails, the output is marked `degraded`.
 5. The answer is a normal `RiskOutput`: calibrated probability of failing, the bundle's threshold, the alert flag and `model_version` (for example `lightgbm-v2`). Each test job gets its own output; the highest one is the commit's headline risk.
 
@@ -242,7 +295,7 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 
 **Interim reasons.** Until SHAP reasons exist (P4.8), the "top factors" are the LightGBM per-feature contributions to the fail score, largest first (at most 5, never zero), worded with `features/descriptions.yaml`. For `tw_*` factors the file and line of the first matching added line are attached when the diff shows one.
 
-**Known limits.** A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
+**Known limits.** Loading the per-test history (`ht_*`) for one job series takes about 5 seconds (it scans the repository's parsed results); a v4 bundle does not use `ht_*`, so that cost only matters once a bundle that does is shipped. A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
 
 Code: `src/testing_expert/serving.py`. Tests: `tests/test_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
 
@@ -296,6 +349,23 @@ Result in short: v4 is better calibrated (ECE 0.0118 to 0.0066) and ranks genuin
 a real but small gain); the any-fail gain (+0.006) is within the noise; leave-one-repo-out is mixed. **Streaks are still
 under-scored** (mean P about 3% where 13% fail) and "same as last outcome" still beats the model on those rows. Tests:
 `tests/test_calibration_v4.py`, `tests/test_model_v4.py`.
+
+## Model v5 candidate: per-test history (P4.5 v4, P4.7 v5)
+
+Dataset v4 (212,000 rows, v3 labels, 83 features) adds the `ht_*` group. Compared with model v4 on the
+same rows and time splits, with the same recipe, in `reports/v5_vs_v4.md` (run:
+`uv run python -m testing_expert.model.compare_v5 --export --json data/reports/v5_results.json`, about 20
+minutes; add `--from-json FILE --notes NOTES.json` to re-render the report).
+
+Result in short: **not better, so v4 is still the model in service.** Any-fail PR-AUC 0.189 to 0.193 (the
+interval includes zero), genuine PR-AUC falls 0.106 to 0.096, flaky rises 0.191 to 0.207, leave-one-repo-out
+is a wash (0.205 against 0.201). Only the job-level `ht_` features carry signal (any-fail +0.018 with an
+interval above zero); the touched-test-file features add noise. That sub-group was picked after looking at
+the test slice, so it needs a validation-based re-check before shipping. The v5 bundle sits in
+`models/testing_candidates/v5/` so that a service restart cannot pick it up by accident.
+
+Tests: `tests/test_features_history_tests.py` (pure), `tests/test_features_db.py` (no leakage, real
+Postgres), `tests/test_model_v5.py`, `tests/test_extract.py` (batching, idempotency, pruning).
 
 ## Limitations and known issues
 

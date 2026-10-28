@@ -47,6 +47,17 @@ V1_CUTS = [
 # DEFAULT: dataset versions are explicit. v1 keeps its original 41 features (so it stays
 # reproducible after new feature groups land); v2 adds the groups below.
 V2_ADDED_PREFIXES = ("tw_", "h_os_")
+# v4 adds the per-test / per-file history group (P4.4 v2) on top of the v3 rows and labels.
+V4_ADDED_PREFIXES = ("ht_",)
+V4_FEATURE_GROUPS_ADDED = [
+    "ht_*: per-test / per-file history from parsed test results (15 features; None = unknown)",
+]
+V4_CUTS = [
+    "ht_ history reads testing.test_results from ALL parsed test-job logs (P4.2 full scope); "
+    "passing test-level rows are stored only for tests that failed somewhere (see extract.py)",
+    "same rows and labels as v3 (rule labels; human kappa round not done, so not frozen)",
+    "ht_ is test level for Mocha (no file names), file level for Jest/Vitest",
+]
 V2_FEATURE_GROUPS_ADDED = [
     "tw_*: tree-sitter test-change group (14 features; None = unknown, 0 = no test change)",
     "h_os_*: job-history features per runner OS (13 features)",
@@ -95,7 +106,9 @@ def dataset_feature_names(version: str) -> list[str]:
     """Feature columns of a dataset version: v1 = the original 41, later = all current ones."""
     names = list(feature_names())
     if version == "v1":
-        return [n for n in names if not n.startswith(V2_ADDED_PREFIXES)]
+        return [n for n in names if not n.startswith(V2_ADDED_PREFIXES + V4_ADDED_PREFIXES)]
+    if version in ("v2", "v3"):
+        return [n for n in names if not n.startswith(V4_ADDED_PREFIXES)]
     return names
 
 
@@ -225,8 +238,18 @@ def write_dataset(
                 "cuts": V2_CUTS,
             }
         )
-        if version != "v2":
+        if version not in ("v2",):
             manifest["label_changes"] = V3_LABEL_CHANGES
+        if version not in ("v2", "v3"):
+            manifest["feature_groups_added"] = [
+                *V2_FEATURE_GROUPS_ADDED,
+                *V4_FEATURE_GROUPS_ADDED,
+            ]
+            manifest["cuts"] = V4_CUTS
+            manifest["kappa_note"] = (
+                "labels are rule labels from the v3 labeller and were not rewritten; the human "
+                "kappa round (P4.3) is still pending, so this dataset is not frozen"
+            )
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     return manifest
 

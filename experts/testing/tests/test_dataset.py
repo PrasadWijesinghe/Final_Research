@@ -141,7 +141,10 @@ def test_dataset_feature_names_by_version_and_v2_manifest(tmp_path: Path) -> Non
     from testing_expert.dataset import V2_FROZEN_NOTE, dataset_feature_names
 
     v1, v2 = dataset_feature_names("v1"), dataset_feature_names("v2")
-    assert v2 == list(feature_names()) and len(v2) == len(v1) + 27
+    v4 = dataset_feature_names("v4")
+    assert v4 == list(feature_names()) and len(v4) == len(v2) + 15
+    assert dataset_feature_names("v3") == v2 and len(v2) == len(v1) + 27
+    assert not any(n.startswith("ht_") for n in v2) and sum(n.startswith("ht_") for n in v4) == 15
     assert not any(n.startswith(("tw_", "h_os_")) for n in v1)
     assert sum(n.startswith("tw_") for n in v2) == 14
     m1 = write_dataset(_tiny_table(), tmp_path / "v1", "v1")
@@ -151,3 +154,6 @@ def test_dataset_feature_names_by_version_and_v2_manifest(tmp_path: Path) -> Non
     assert m2["feature_groups_added"] and any("no daily collector" in c for c in m2["cuts"])
     assert m2["rows_per_label"] == {"pass": 1} and m2["git_commit"]
     assert verify_manifest(tmp_path / "v2")
+    m4 = write_dataset(_tiny_table(), tmp_path / "v4", "v4")
+    assert m4["frozen"] is False and "kappa" in m4["kappa_note"]
+    assert any(g.startswith("ht_") for g in m4["feature_groups_added"])
