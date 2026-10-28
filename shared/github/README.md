@@ -76,7 +76,7 @@ Counts follow the same rule. `count_workflow_runs(repo, start, end, params)` mak
 
 `get_bytes` fetches a body such as a job log, or a whole run attempt's log archive (a zip). GitHub answers the log request with a redirect to a storage address. The client follows the redirect. The token is not sent to the storage address, because `httpx` (the HTTP library used here) drops the `Authorization` header when a redirect goes to a different host.
 
-If the log has expired, GitHub answers 410. `get_bytes` does not treat 410 as "missing". It raises `GitHubError` with `status_code` 410. The caller must catch that error.
+If the log has expired, GitHub answers 410. `get_bytes` does not treat 410 as "missing". It raises `GitHubError` with `status_code` 410. The caller must catch that error. When `max_bytes` is used, the client rejects a declared oversized body before downloading it, or stops streaming when received bytes exceed the limit.
 
 ### Size limit for a download (D41)
 
@@ -129,7 +129,7 @@ make check   # runs ruff, mypy and all tests
 | In | Requests | Paths such as `/repos/<owner>/<repo>/actions/runs`, or a repo name, a commit SHA and a file path |
 | Out | JSON answers | Python dictionaries and lists (`get_json`, `paginate`, `iter_workflow_runs`) |
 | Out | Raw bytes | Job logs, log archives and file contents, as `bytes` (`get_bytes`, `fetch_raw_file`). `get_bytes` takes an optional `max_bytes` |
-| Out | Errors | `GitHubError` (with `status_code`), its subclass `GitHubNotFoundError` for 404, and `GitHubTooLargeError` (no status code) for a body over `max_bytes` |
+| Out | Errors | `GitHubError` (with `status_code`), its subclass `GitHubNotFoundError` for 404, and `GitHubTooLargeError` (no status code; carries `max_bytes` and, when GitHub sent it, `content_length`) for a body over `max_bytes`. `GitHubResponseTooLargeError` is the same error under the older name used by the Dependency research scripts |
 | Out | Counters | `client.api_calls` and `client.raw_calls` |
 | Out | Log lines | Standard `logging` warnings for retries, sleeps and truncation. The token is not in them |
 

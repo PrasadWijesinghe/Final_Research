@@ -147,6 +147,14 @@ services:
     command: ["python", "-m", "infra_expert.worker"]
     depends_on: { redis: { condition: service_healthy }, infra-api: { condition: service_started } }
 
+  dashboard:
+    profiles: ["experts"]
+    build: { context: ./services/dashboard, dockerfile: Dockerfile }
+    image: pipelineiq-dashboard
+    ports: ["127.0.0.1:3000:80"]
+    depends_on: { infra-api: { condition: service_started } }
+    restart: unless-stopped
+
 volumes:
   pgdata:
   redisdata:

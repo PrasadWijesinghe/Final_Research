@@ -1,8 +1,33 @@
-# Re-run check script
+# Repository helper scripts
 
-**In one sentence:** A command that looks at every repo in a member's list on GitHub and writes a report saying whether each repo is still a good place to collect failure data from.
+**In one sentence:** These scripts help choose dependency repositories and check whether configured repos are useful data sources.
 
-**Status:** Working · **Owner:** shared (run by Member 3, Test) · **Plan tasks:** P1.3
+**Status:** Working · **Owner:** shared · **Plan tasks:** P1.3, P4.14
+
+## Load Dependency repository groups
+
+`load_groups.py` adds candidate repos from `config/dependency_repository_groups.yaml` to
+`config/repos/dependency.yaml`. Select one group, or deliberately select every group:
+
+```bash
+uv run python scripts/load_groups.py --group backend_frameworks
+uv run python scripts/load_groups.py --all-groups
+```
+
+It merges candidates instead of replacing the config. Existing repository settings are kept,
+and repos already present are not duplicated. New entries use `licence: TODO` and
+`enabled: false`; this prevents guesses about licences from being treated as facts. Check the
+licence on GitHub, replace `TODO` with its SPDX identifier (for example, `MIT`), and set
+`enabled: true` for each repo you actually want to collect. Then run the Dependency collector
+or prototype extractor.
+
+Use `--groups-file` or `--config` to select different input/output files. The defaults point
+to the project config files. `--group` and `--all-groups` cannot be used together.
+
+## Re-run check script
+
+The re-run check looks at every repo in a member's list on GitHub and writes a report saying
+whether each repo is still a good place to collect failure data from.
 
 ## What it does
 

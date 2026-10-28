@@ -1,7 +1,7 @@
 [project]
 name = "pipelineiq-expert-infra"
 version = "0.1.0"
-description = "The infra expert: /predict, /review, /health and a diagnose worker (stub behaviour)."
+description = "Infrastructure failure-risk expert with a calibrated research model."
 requires-python = ">=3.12"
 dependencies = [
     "pipelineiq-shared",
@@ -12,6 +12,13 @@ dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.7",
     "sqlalchemy>=2.1.4",
+    "joblib>=1.6",
+    "numpy>=2.5",
+    "pandas>=3.1",
+    "scikit-learn>=1.9",
+    # DEFAULT: CPU-only wheels on common x86-64 hosts; the full package covers other platforms.
+    "xgboost-cpu==3.4.1; (platform_system == 'Windows' and platform_machine == 'AMD64') or (platform_system == 'Linux' and platform_machine == 'x86_64')",
+    "xgboost==3.4.1; (platform_system != 'Windows' or platform_machine != 'AMD64') and (platform_system != 'Linux' or platform_machine != 'x86_64')",
 ]
 
 [build-system]
