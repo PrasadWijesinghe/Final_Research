@@ -153,17 +153,6 @@ def create_app(
         await asyncio.to_thread(get_store().save_diagnosis, diagnosis)
         return {"diagnosis_id": str(diagnosis.diagnosis_id)}
 
-    @app.post("/reviews", status_code=201)
-    async def post_review(decision: ReviewDecision) -> ReviewAck:
-        """Save a developer's decision and forward it to the expert that wrote the diagnosis."""
-        db = get_store()
-        diagnosis = await asyncio.to_thread(db.get_diagnosis, decision.diagnosis_id)
-        if diagnosis is None:
-            raise HTTPException(404, "diagnosis not found")
-        await asyncio.to_thread(db.save_review, decision)
-        forwarded = await forward_review(cfg, diagnosis.expert, decision)
-        return ReviewAck(decision_id=decision.decision_id, forwarded=forwarded)
-
     @app.get("/failures")
     async def get_failures(repo: str | None = None, limit: int = 50) -> list[FailureItem]:
         """Failure list for the dashboard (replay failures are left out)."""
@@ -380,6 +369,21 @@ def create_app(
         response = Response(status_code=204)
         response.delete_cookie(session_cookie, path="/")
         return response
+
+    @app.post("/reviews", status_code=201)
+    async def post_review(
+        decision: ReviewDecision, user: Annotated[dict[str, Any], Depends(current_user)]
+    ) -> ReviewAck:
+        """Save a signed-in developer's decision and forward it to the diagnosing expert."""
+        # The reviewer is whoever holds the session, never what the body claims.
+        decision = decision.model_copy(update={"reviewer_hash": user["user_hash"]})
+        db = get_store()
+        diagnosis = await asyncio.to_thread(db.get_diagnosis, decision.diagnosis_id)
+        if diagnosis is None:
+            raise HTTPException(404, "diagnosis not found")
+        await asyncio.to_thread(db.save_review, decision)
+        forwarded = await forward_review(cfg, diagnosis.expert, decision)
+        return ReviewAck(decision_id=decision.decision_id, forwarded=forwarded)
 
     # ------------------------------------------- self-service API keys (session cookie)
 

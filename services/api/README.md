@@ -186,7 +186,7 @@ The host also needs `DATABASE_URL` and `REDIS_URL`. All three variables are list
 |---|---|---|---|
 | `POST /predict` | Pre-push hook | Bearer API key | Builds the context, asks four experts, saves, returns four results |
 | `POST /diagnoses` | Expert workers | None (see Limits) | Saves a finished `Diagnosis` |
-| `POST /reviews` | Dashboard | None (see Limits) | Saves a `ReviewDecision` and forwards it to the diagnosing expert |
+| `POST /reviews` | Dashboard | Session cookie (P3.5) | Saves a `ReviewDecision` and forwards it to the diagnosing expert |
 | `GET /commits/{sha}/risks` | Dashboard | None (see Limits) | Stored risks for a commit. Replay results only with `include_replay=true` |
 | `GET /runs` | Dashboard | None (see Limits) | History: predictions next to the run outcome. Newest first |
 | `GET /failures/{id}` | Dashboard | None (see Limits) | A routed failure with its diagnoses and reviews |
@@ -558,7 +558,7 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 **Authentication gaps (on purpose, until Phase 3):**
 
-- `GET /runs`, `GET /commits/{sha}/risks`, `GET /failures/{id}` and `POST /reviews` have no authentication. Anyone who can reach the port can read them or post a review. They stay open until the GitHub sign-in (P3.1) and the dashboard (P3.5) add real checks.
+- `GET /runs`, `GET /commits/{sha}/risks`, and `GET /failures/{id}` have no authentication. Anyone who can reach the port can read them. (`POST /reviews` needs a sign-in session since P3.5.) They stay open until the GitHub sign-in (P3.1) and the dashboard (P3.5) add real checks.
 - `POST /diagnoses` has no authentication. It is meant for expert workers on the internal network, like the LLM gateway. Add a shared worker token before any public deployment.
 - The first API key is made by hand. Call `POST /api-keys` with `API_ADMIN_TOKEN` as the Bearer token and a `user_hash`. The `user_hash` must be 64 lowercase hex characters: the salted hash of the developer's GitHub login, made the same way the sanitiser hashes logins (see `shared/sanitise/README.md`). This stays until GitHub sign-in exists.
 - A key is shown once, in the response to `POST /api-keys`. Only its SHA-256 hash is stored. A lost key cannot be recovered; issue a new one and revoke the old.
@@ -668,7 +668,11 @@ With a session, a developer manages their own pre-push keys: `GET /me/api-keys` 
 
 `GET /failures?repo=&limit=50` (max 200) lists routed failures, newest first (replay failures are left out): `failure_id`, `repo`, `head_sha`, `run_id`, `job_name`, `expert` (the first expert it was routed to), `created_at`, `diagnosis_count`, `latest_review` (`accept`, `reject`, `modify`, `request_revision` or `null`).
 
+`POST /reviews` needs the session cookie (401 without it). The saved `reviewer_hash` is always the session's `user_hash`; a `reviewer_hash` in the request body is ignored, so nobody can post a review as someone else.
+
 The dashboard calls the API through `/api/*` (the proxy removes the prefix), so the cookies are same-origin and no CORS setup is needed.
+
+`API_PUBLIC_URL` must be the base of the API as the browser sees it. With the Vite dev server use `http://localhost:8000` (cookies are shared across ports on `localhost`). Behind the Docker dashboard (nginx on port 3000, API under `/api/`) use `http://localhost:3000/api`. The GitHub App callback URL must equal `{API_PUBLIC_URL}/auth/github/callback`. For local dev put `SESSION_COOKIE_SECURE=false` and `IDENTITY_SALT` in `.env`.
 
 New settings: `SESSION_SECRET`, `API_PUBLIC_URL` (default `http://localhost:8000`), `DASHBOARD_URL` (default `http://localhost:5173`), `SESSION_COOKIE_SECURE` (default `true`; set `false` for plain-http localhost), `SESSION_TTL_SECONDS` (default 7 days).
 

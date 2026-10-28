@@ -34,11 +34,10 @@ export interface FailureItem {
   head_sha: string;
   run_id: number;
   job_name: string;
-  expert: Expert | null;
+  expert: Expert;
   created_at: string;
   diagnosis_count: number;
-  // DEFAULT: backend spec does not give the shape; accept a decision name or an object with `decision`.
-  latest_review: string | { decision?: string } | null;
+  latest_review: "accept" | "reject" | "modify" | "request_revision" | null;
 }
 
 export interface ReviewAck {

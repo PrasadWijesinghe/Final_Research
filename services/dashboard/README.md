@@ -69,8 +69,7 @@ are written by hand in `src/types/api.ts`.
 - Risk level (`low` / `medium` / `high`): `high` means the expert raised an alert; `medium` means at least half
   of the expert's threshold. This is a display choice only.
 - The review form is shown only for diagnoses with status `diagnosed`.
-- After sending a review the page does not reload; past reviews update on the next visit.
-- `GET /failures` `latest_review` has no agreed shape yet; the list accepts a string or `{decision}`.
+- After sending a review the failure view reloads, so the new review shows under "Past reviews".
 - No pagination: lists ask for the newest 25 to 100 items.
 
 ---
