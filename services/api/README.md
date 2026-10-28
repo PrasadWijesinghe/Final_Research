@@ -613,6 +613,28 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 | `.env.example` line 86 | `ROUTER_RULES_PATH` unset means `config/router_rules.yaml` | The rules file lives at the repo root |
 | `services/api/src/api/replay.py` (5 choices) | Listed in full in the "Replay CLI (P2.8)" section | Replay is the only caller of the router so far |
 
+## Dashboard sign-in, own keys and failure list (P3.5)
+
+People sign in with GitHub so the dashboard can show their data.
+
+1. `GET /auth/github/login` sends the browser to GitHub. It also sets a short-lived signed cookie holding a random `state`, so the callback can tell the request really started here.
+2. GitHub sends the browser back to `GET /auth/github/callback`. The API checks the `state`, trades the code for a GitHub token, reads the profile once (`GET https://api.github.com/user`) and throws the token away. It is never stored or logged.
+3. The API then sets the `piq_session` cookie: a signed (HMAC-SHA256 with `SESSION_SECRET`), HttpOnly, SameSite=Lax cookie that lasts 7 days and holds the GitHub id, login, avatar and `user_hash` (`sha256(IDENTITY_SALT + login)`, the same hash the rest of the platform uses). The browser goes on to `DASHBOARD_URL`.
+4. `GET /auth/me` returns `{login, avatar_url, user_hash}` or 401. `POST /auth/logout` returns 204 and clears the cookie.
+
+If `GITHUB_APP_CLIENT_ID`, `GITHUB_APP_CLIENT_SECRET` or `SESSION_SECRET` is empty, sign-in answers 503. It is never open.
+
+With a session, a developer manages their own pre-push keys: `GET /me/api-keys` (ids and dates only), `POST /me/api-keys` (201 with the plain key, shown once) and `DELETE /me/api-keys/{id}` (204; 404 for someone else's key). The admin `/api-keys` endpoints are unchanged.
+
+`GET /failures?repo=&limit=50` (max 200) lists routed failures, newest first (replay failures are left out): `failure_id`, `repo`, `head_sha`, `run_id`, `job_name`, `expert` (the first expert it was routed to), `created_at`, `diagnosis_count`, `latest_review` (`accept`, `reject`, `modify`, `request_revision` or `null`).
+
+The dashboard calls the API through `/api/*` (the proxy removes the prefix), so the cookies are same-origin and no CORS setup is needed.
+
+New settings: `SESSION_SECRET`, `API_PUBLIC_URL` (default `http://localhost:8000`), `DASHBOARD_URL` (default `http://localhost:5173`), `SESSION_COOKIE_SECURE` (default `true`; set `false` for plain-http localhost), `SESSION_TTL_SECONDS` (default 7 days).
+
+Choices not in the docs: stdlib HMAC cookie instead of a new dependency; the `state` cookie lasts 10 minutes; `/failures` hides replay failures. Tests: `services/api/tests/test_sign_in.py`.
+
+
 ## Related
 
 - `docs/ARCHITECTURE.md` section 4 (the endpoint list) and section 3 (the budgets)

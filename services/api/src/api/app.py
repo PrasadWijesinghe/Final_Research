@@ -7,30 +7,37 @@ import asyncio
 import json
 import logging
 import os
+import secrets
 import time
 import uuid
 from functools import lru_cache
 from typing import Annotated, Any
 
+import httpx
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import RedirectResponse
 from features.pre_push import PrePushPayload, build_pre_push_context
 from sqlalchemy import create_engine
 
 from shared.contracts import Diagnosis, ReviewDecision
 from shared.db.session import get_database_url
 from shared.github import InstallationTokenCache, verify_signature
+from shared.sanitise import hash_identity
 
-from .auth import generate_key, hash_key, parse_bearer, tokens_equal
+from .auth import generate_key, hash_key, parse_bearer, sign_payload, tokens_equal, verify_payload
 from .config import Settings
 from .experts import fan_out_predict, forward_review, probe_health
 from .raw_store import SqlRawStore
 from .router import FailedJob, route_failed_job
 from .schemas import (
     ApiKeyIssued,
+    ApiKeyItem,
     ApiKeyRequest,
     CommitRisks,
+    FailureItem,
     FailureView,
     HealthResponse,
+    MeResponse,
     PredictResponse,
     ReviewAck,
     RunItem,
@@ -157,6 +164,13 @@ def create_app(
         forwarded = await forward_review(cfg, diagnosis.expert, decision)
         return ReviewAck(decision_id=decision.decision_id, forwarded=forwarded)
 
+    @app.get("/failures")
+    async def get_failures(repo: str | None = None, limit: int = 50) -> list[FailureItem]:
+        """Failure list for the dashboard (replay failures are left out)."""
+        # DEFAULT: newest 50, hard cap 200 per request (same as /runs).
+        limit = max(1, min(limit, 200))
+        return await asyncio.to_thread(get_store().list_failures, repo=repo, limit=limit)
+
     @app.get("/failures/{failure_id}")
     async def get_failure(failure_id: uuid.UUID) -> FailureView:
         """A routed failure with its diagnoses and reviews."""
@@ -238,10 +252,167 @@ def create_app(
         background.add_task(run_webhook, event, x_github_delivery or "", payload)
         return {"status": "accepted", "event": event}
 
-    @app.api_route("/auth/github/{rest:path}", methods=["GET", "POST"], status_code=501)
-    async def auth_github(rest: str) -> dict[str, str]:
-        """Not built yet (OAuth sign-in is left to the dashboard task, P3.5)."""
-        return {"detail": "GitHub sign-in is not implemented yet (Phase 3)"}
+    # ------------------------------------------------- GitHub sign-in and sessions (P3.5)
+
+    state_cookie = "piq_oauth_state"
+    session_cookie = "piq_session"
+
+    def require_sign_in_config() -> None:
+        if not (cfg.github_client_id and cfg.github_client_secret and cfg.session_secret):
+            raise HTTPException(
+                503,
+                "GitHub sign-in is disabled: set GITHUB_APP_CLIENT_ID, "
+                "GITHUB_APP_CLIENT_SECRET and SESSION_SECRET",
+            )
+
+    def set_cookie(response: Response, name: str, value: str, max_age: int) -> None:
+        response.set_cookie(
+            name,
+            value,
+            max_age=max_age,
+            httponly=True,
+            samesite="lax",
+            secure=cfg.session_cookie_secure,
+            path="/",
+        )
+
+    async def current_user(request: Request) -> dict[str, Any]:
+        data = verify_payload(request.cookies.get(session_cookie), cfg.session_secret)
+        if data is None or data.get("typ") != "session":
+            raise HTTPException(401, "not signed in")
+        return data
+
+    @app.get("/auth/github/login")
+    async def github_login() -> Response:
+        """Send the browser to GitHub's authorize page (state kept in a signed cookie)."""
+        require_sign_in_config()
+        state = secrets.token_urlsafe(24)
+        query = httpx.QueryParams(
+            {
+                "client_id": cfg.github_client_id,
+                "redirect_uri": f"{cfg.api_public_url}/auth/github/callback",
+                "state": state,
+            }
+        )
+        response = RedirectResponse(
+            f"https://github.com/login/oauth/authorize?{query}", status_code=302
+        )
+        # DEFAULT: state cookie lives 10 minutes.
+        token = sign_payload(
+            {"typ": "state", "state": state, "exp": time.time() + 600}, cfg.session_secret
+        )
+        set_cookie(response, state_cookie, token, 600)
+        return response
+
+    @app.get("/auth/github/callback")
+    async def github_callback(request: Request, code: str = "", state: str = "") -> Response:
+        """Check state, swap the code for a user token, read the profile, start a session."""
+        require_sign_in_config()
+        saved = verify_payload(request.cookies.get(state_cookie), cfg.session_secret)
+        if (
+            saved is None
+            or saved.get("typ") != "state"
+            or not state
+            or not tokens_equal(str(saved.get("state", "")), state)
+            or not code
+        ):
+            raise HTTPException(400, "invalid OAuth state or missing code")
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as http:
+                tok = await http.post(
+                    "https://github.com/login/oauth/access_token",
+                    headers={"Accept": "application/json"},
+                    data={
+                        "client_id": cfg.github_client_id,
+                        "client_secret": cfg.github_client_secret,
+                        "code": code,
+                        "redirect_uri": f"{cfg.api_public_url}/auth/github/callback",
+                    },
+                )
+                access = tok.json().get("access_token") if tok.status_code == 200 else None
+                if not access:
+                    raise HTTPException(400, "GitHub did not accept the code")
+                me = await http.get(
+                    "https://api.github.com/user",
+                    headers={
+                        "Authorization": f"Bearer {access}",
+                        "Accept": "application/vnd.github+json",
+                    },
+                )
+                del access  # DEFAULT: the user token is used once here and never stored or logged.
+        except httpx.HTTPError:
+            logger.warning("github sign-in: GitHub unreachable")
+            raise HTTPException(502, "could not reach GitHub") from None
+        profile = me.json() if me.status_code == 200 else {}
+        if not isinstance(profile, dict) or "id" not in profile or "login" not in profile:
+            raise HTTPException(502, "GitHub did not return a profile")
+        try:
+            # Same hash as the rest of the platform: sha256(IDENTITY_SALT + login).
+            user_hash = hash_identity(str(profile["login"]))
+        except RuntimeError:
+            raise HTTPException(503, "sign-in is disabled: IDENTITY_SALT is not set") from None
+        session = sign_payload(
+            {
+                "typ": "session",
+                "github_id": profile["id"],
+                "login": profile["login"],
+                "avatar_url": profile.get("avatar_url") or "",
+                "user_hash": user_hash,
+                "exp": int(time.time()) + cfg.session_ttl_s,
+            },
+            cfg.session_secret,
+        )
+        response = RedirectResponse(cfg.dashboard_url, status_code=302)
+        set_cookie(response, session_cookie, session, cfg.session_ttl_s)
+        response.delete_cookie(state_cookie, path="/")
+        return response
+
+    @app.get("/auth/me")
+    async def auth_me(user: Annotated[dict[str, Any], Depends(current_user)]) -> MeResponse:
+        """Who is signed in (401 when nobody)."""
+        return MeResponse(
+            login=user["login"], avatar_url=user["avatar_url"], user_hash=user["user_hash"]
+        )
+
+    @app.post("/auth/logout", status_code=204)
+    async def auth_logout() -> Response:
+        """Clear the session cookie."""
+        response = Response(status_code=204)
+        response.delete_cookie(session_cookie, path="/")
+        return response
+
+    # ------------------------------------------- self-service API keys (session cookie)
+
+    @app.get("/me/api-keys")
+    async def list_my_keys(
+        user: Annotated[dict[str, Any], Depends(current_user)],
+    ) -> list[ApiKeyItem]:
+        """The signed-in user's keys (ids and dates only)."""
+        records = await asyncio.to_thread(get_store().list_keys, user["user_hash"])
+        return [
+            ApiKeyItem(id=r.id, created_at=r.created_at, revoked_at=r.revoked_at) for r in records
+        ]
+
+    @app.post("/me/api-keys", status_code=201)
+    async def create_my_key(
+        user: Annotated[dict[str, Any], Depends(current_user)],
+    ) -> ApiKeyIssued:
+        """Issue a key for the signed-in user. The plain key is returned once."""
+        plain = generate_key()
+        record = await asyncio.to_thread(get_store().add_key, user["user_hash"], hash_key(plain))
+        return ApiKeyIssued(id=record.id, key=plain, created_at=record.created_at)
+
+    @app.delete("/me/api-keys/{key_id}", status_code=204)
+    async def revoke_my_key(
+        key_id: uuid.UUID, user: Annotated[dict[str, Any], Depends(current_user)]
+    ) -> Response:
+        """Revoke one of the user's own keys (404 for anyone else's)."""
+        db = get_store()
+        own = await asyncio.to_thread(db.list_keys, user["user_hash"])
+        if key_id not in {k.id for k in own}:
+            raise HTTPException(404, "key not found")
+        await asyncio.to_thread(db.revoke_key, key_id)
+        return Response(status_code=204)
 
     # ------------------------------------------------------------------------ health
 
