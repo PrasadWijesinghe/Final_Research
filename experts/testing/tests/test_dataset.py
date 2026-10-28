@@ -127,7 +127,7 @@ def _tiny_table() -> pa.Table:
 def test_manifest_checksum_and_overwrite_guard(tmp_path: Path) -> None:
     out = tmp_path / "v1"
     m = write_dataset(_tiny_table(), out, "v1")
-    assert m["n_rows"] == 1 and m["feature_names"] == feature_names()
+    assert m["n_rows"] == 1 and m["feature_names"] == list(feature_names())
     assert json.loads((out / "manifest.json").read_text())["files"]["rows.parquet"]["sha256"]
     assert verify_manifest(out)
     with pytest.raises(FileExistsError):
@@ -135,3 +135,19 @@ def test_manifest_checksum_and_overwrite_guard(tmp_path: Path) -> None:
     write_dataset(_tiny_table(), out, "v1", force=True)
     (out / "rows.parquet").write_bytes(b"tampered")
     assert not verify_manifest(out)
+
+
+def test_dataset_feature_names_by_version_and_v2_manifest(tmp_path: Path) -> None:
+    from testing_expert.dataset import V2_FROZEN_NOTE, dataset_feature_names
+
+    v1, v2 = dataset_feature_names("v1"), dataset_feature_names("v2")
+    assert v2 == list(feature_names()) and len(v2) == len(v1) + 27
+    assert not any(n.startswith(("tw_", "h_os_")) for n in v1)
+    assert sum(n.startswith("tw_") for n in v2) == 14
+    m1 = write_dataset(_tiny_table(), tmp_path / "v1", "v1")
+    assert "frozen" not in m1 and "v1_cuts" in m1
+    m2 = write_dataset(_tiny_table(), tmp_path / "v2", "v2")
+    assert m2["frozen"] is False and m2["frozen_note"] == V2_FROZEN_NOTE
+    assert m2["feature_groups_added"] and any("no daily collector" in c for c in m2["cuts"])
+    assert m2["rows_per_label"] == {"pass": 1} and m2["git_commit"]
+    assert verify_manifest(tmp_path / "v2")
