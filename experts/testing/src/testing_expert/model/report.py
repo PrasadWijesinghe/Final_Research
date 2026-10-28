@@ -232,9 +232,9 @@ precision {_f(thr["test"]["precision"])}, recall {_f(thr["test"]["recall"])}.
 Full tables (all variants, leave-one-repo-out, calibration): `data/reports/testing_model_{manifest.get("version", "v1")}.md`.
 
 ## Limitations
-- v1 cuts: only failed test-job logs plus every attempt of the same job on the same head_sha were parsed;
-  passing logs in general come in v2. History is at job-key granularity, no per-test history,
-  no code vector or tree-sitter group.
+- Cuts: only failed test-job logs plus every attempt of the same job on the same head_sha were parsed.
+  History is at job-key granularity (v2 adds per-runner-OS history), no per-test history, no code vector.
+  {"v2 adds the tree-sitter test-change group (tw_*); the dataset is not frozen until the human kappa round is done." if manifest.get("version") != "v1" else "No tree-sitter group in v1."}
 - Label caveats: `flaky` = pass after fail on the same SHA (reliable) or a silent-flaky rule (low confidence);
   `genuine` can include failures nobody retried. Rule labels are not validated by a human yet (kappa pending).
 - Selection bias: only runs that failed or share a SHA with a failed attempt have rich labels.
