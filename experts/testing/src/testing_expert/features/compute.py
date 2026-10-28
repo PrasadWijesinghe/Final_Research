@@ -14,8 +14,17 @@ from typing import Any
 
 import psycopg
 
-from . import change_size, config_change, dependencies, history, repo, run_setup, source_test_link
-from ._types import FeatureDict, FileChange, JobTarget
+from . import (
+    change_size,
+    config_change,
+    dependencies,
+    history,
+    repo,
+    run_setup,
+    source_test_link,
+    test_changes,
+)
+from ._types import ChangedTestFile, FeatureDict, FileChange, JobTarget
 from .history import EMPTY_SERIES, SeriesIndex
 from .repo import EMPTY_DURATIONS, EMPTY_TIMELINE, DurationIndex, FrameworkTimeline
 from .settings import FeatureSettings, get_settings
@@ -30,6 +39,8 @@ FEATURE_GROUPS = (
     "test_config",
     "test_deps",
     "history",
+    "history_by_os",
+    "test_changes",
     "run_setup",
     "repo",
 )
@@ -44,6 +55,8 @@ def feature_names(settings: FeatureSettings | None = None) -> tuple[str, ...]:
         *config_change.FEATURE_NAMES,
         *dependencies.FEATURE_NAMES,
         *history.history_feature_names(s),
+        *history.history_feature_names(s, history.OS_PREFIX),
+        *test_changes.FEATURE_NAMES,
         *run_setup.FEATURE_NAMES,
         *repo.FEATURE_NAMES,
     )
@@ -56,8 +69,14 @@ def build_row(
     durations: DurationIndex,
     timeline: FrameworkTimeline,
     settings: FeatureSettings,
+    os_series: SeriesIndex = EMPTY_SERIES,
+    test_files: Sequence[ChangedTestFile] = (),
+    test_change_row: FeatureDict | None = None,
 ) -> FeatureDict:
-    """Pure: combine every group for one job attempt. No I/O."""
+    """Pure: combine every group for one job attempt. No I/O.
+
+    `test_change_row` lets a caller reuse the (slow) tree-sitter result for jobs of one commit.
+    """
     framework = timeline.at(target.cutoff) or repo.framework_from_name(
         target.series_key, settings.frameworks
     )
@@ -67,6 +86,12 @@ def build_row(
     row.update(config_change.config_features(files))
     row.update(dependencies.dependency_features(files, settings))
     row.update(series.features(target.cutoff, settings))
+    row.update(os_series.features(target.cutoff, settings, history.OS_PREFIX))
+    row.update(
+        test_change_row
+        if test_change_row is not None
+        else test_changes.what_changed_in_tests(test_files)
+    )
     row.update(run_setup.run_setup(target))
     row.update(repo.repo_features(durations, target.cutoff, framework, settings))
     return row
@@ -94,10 +119,17 @@ def compute_features_batch(
     if len(targets) <= 50:  # serving path: avoid scanning the whole repo history
         only = sorted({(t.repo_id, t.workflow_path, t.series_key) for t in targets})
     series = loader.load_series(conn, repo_ids, before, only)
+    os_only = None if only is None else sorted({(r, p, k) for r, p, k in only})
+    os_series = loader.load_series_by_os(conn, repo_ids, before, os_only)
+    test_files = loader.load_test_files(conn, {(t.repo_id, t.head_sha) for t in targets})
+    tw_cache: dict[tuple[int, str], FeatureDict] = {}  # one parse per commit, not per job
     durations = loader.load_durations(conn, repo_ids, before, s)
     timelines = loader.load_frameworks(conn, repo_ids, s)
     out: dict[JobKey, FeatureDict] = {}
     for t in targets:
+        sha_key = (t.repo_id, t.head_sha)
+        if sha_key not in tw_cache:
+            tw_cache[sha_key] = test_changes.what_changed_in_tests(test_files.get(sha_key, []))
         out[(t.run_id, t.attempt, t.job_id)] = build_row(
             t,
             files.get((t.repo_id, t.head_sha), []),
@@ -105,6 +137,8 @@ def compute_features_batch(
             durations.get(t.repo_id, EMPTY_DURATIONS),
             timelines.get(t.repo_id, EMPTY_TIMELINE),
             s,
+            os_series.get(loader.os_series_key_of(t), EMPTY_SERIES),
+            test_change_row=tw_cache[sha_key],
         )
     logger.info(
         "features computed",

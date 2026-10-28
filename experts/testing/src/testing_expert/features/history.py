@@ -17,19 +17,23 @@ from .settings import FeatureSettings
 DAY = 86_400.0
 
 
-def history_feature_names(settings: FeatureSettings) -> tuple[str, ...]:
+OS_PREFIX = "h_os_"  # same stats, but only attempts on the same runner OS as the target job
+
+
+def history_feature_names(settings: FeatureSettings, prefix: str = "h_") -> tuple[str, ...]:
     """Names produced by `SeriesIndex.features` for these settings."""
+    p = prefix
     names: list[str] = []
     for d in settings.windows_days:
-        names += [f"h_runs_{d}d", f"h_fail_rate_{d}d"]
+        names += [f"{p}runs_{d}d", f"{p}fail_rate_{d}d"]
     names += [
-        "h_n_prior",
-        "h_fail_rate_all",
-        "h_weighted_flip_rate",
-        "h_consecutive_failures",
-        f"h_reruns_{settings.rerun_window_days}d",
-        "h_days_since_last_failure",
-        "h_last_failed",
+        f"{p}n_prior",
+        f"{p}fail_rate_all",
+        f"{p}weighted_flip_rate",
+        f"{p}consecutive_failures",
+        f"{p}reruns_{settings.rerun_window_days}d",
+        f"{p}days_since_last_failure",
+        f"{p}last_failed",
     ]
     return tuple(names)
 
@@ -47,28 +51,29 @@ class SeriesIndex:
         self._cum_fail = [0, *accumulate(self.fail)]
         self._cum_rerun = [0, *accumulate(e[2] for e in ordered)]
 
-    def features(self, cutoff: float, settings: FeatureSettings) -> FeatureDict:
+    def features(self, cutoff: float, settings: FeatureSettings, prefix: str = "h_") -> FeatureDict:
         """Feature values from events with completed_at strictly before `cutoff`."""
+        p = prefix
         n = bisect_left(self.ts, cutoff)
         out: FeatureDict = {}
         for d in settings.windows_days:
             lo = bisect_left(self.ts, cutoff - d * DAY, 0, n)
             runs = n - lo
-            out[f"h_runs_{d}d"] = runs
-            out[f"h_fail_rate_{d}d"] = (
+            out[f"{p}runs_{d}d"] = runs
+            out[f"{p}fail_rate_{d}d"] = (
                 (self._cum_fail[n] - self._cum_fail[lo]) / runs if runs else None
             )
-        out["h_n_prior"] = n
-        out["h_fail_rate_all"] = self._cum_fail[n] / n if n else None
-        out["h_weighted_flip_rate"] = self._flip_rate(n, settings)
-        out["h_consecutive_failures"] = self._consecutive(n, settings.max_consecutive_scan)
+        out[f"{p}n_prior"] = n
+        out[f"{p}fail_rate_all"] = self._cum_fail[n] / n if n else None
+        out[f"{p}weighted_flip_rate"] = self._flip_rate(n, settings)
+        out[f"{p}consecutive_failures"] = self._consecutive(n, settings.max_consecutive_scan)
         lo = bisect_left(self.ts, cutoff - settings.rerun_window_days * DAY, 0, n)
-        out[f"h_reruns_{settings.rerun_window_days}d"] = self._cum_rerun[n] - self._cum_rerun[lo]
+        out[f"{p}reruns_{settings.rerun_window_days}d"] = self._cum_rerun[n] - self._cum_rerun[lo]
         last_fail = next((i for i in range(n - 1, -1, -1) if self.fail[i]), None)
-        out["h_days_since_last_failure"] = (
+        out[f"{p}days_since_last_failure"] = (
             None if last_fail is None else (cutoff - self.ts[last_fail]) / DAY
         )
-        out["h_last_failed"] = self.fail[n - 1] if n else None
+        out[f"{p}last_failed"] = self.fail[n - 1] if n else None
         return out
 
     def _consecutive(self, n: int, cap: int) -> int:

@@ -37,3 +37,12 @@ class JobTarget:
     series_key: str  # job_key, else the job name without its "(matrix)" suffix
     matrix_size: int
     jobs_in_run: int
+    os_name: str = "unknown"  # linux / windows / macos / unknown, see loader.OS_SQL
+
+
+@dataclass(frozen=True, slots=True)
+class ChangedTestFile:
+    """One changed JS/TS test file of a commit with its diff (None when GitHub gave none)."""
+
+    path: str
+    patch: str | None
