@@ -52,21 +52,21 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 - [x] **★ P2.1 Expert template and stubs.** `experts/_template` per `docs/experts/README.md`, then the four stub experts (`dependency`, `build`, `testing`, `infra`) with the stub behaviour described there, each with Dockerfile and tests. Add them to Docker Compose.
   *Accept:* each stub's `/predict` returns a valid list of `RiskOutput`s for a fixture `CommitContext`; each worker turns a fixture `RoutedFailure` into a valid `Diagnosis`.
-- [ ] **P2.2 File tagger.** `services/features` reads `config/file_tags.yaml` and tags files per `docs/DATA.md` §5, including size limits.
+- [x] **P2.2 File tagger.** `services/features` reads `config/file_tags.yaml` and tags files per `docs/DATA.md` §5, including size limits.
   *Accept:* table-driven tests for every tag, multi-tag files and truncation.
-- [ ] **P2.3 CommitContext builders.** Three builders producing identical structures: **live** (GitHub API), **replay** (raw tables, `history_cutoff` = the run's `created_at`) and **pre-push** (a local diff payload from the hook). Includes the workflow YAML parser → `WorkflowJob` (job key, runs-on, Node versions, permissions, container, `run:` commands).
+- [x] **P2.3 CommitContext builders.** Three builders producing identical structures: **live** (GitHub API), **replay** (raw tables, `history_cutoff` = the run's `created_at`) and **pre-push** (a local diff payload from the hook). Includes the workflow YAML parser → `WorkflowJob` (job key, runs-on, Node versions, permissions, container, `run:` commands).
   *Accept:* the same commit built live and by replay gives equal contexts, apart from `event` and `history_cutoff`.
-- [ ] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
+- [x] **P2.4 LLM gateway.** `services/llm_gateway`: provider interface; mock provider returning schema-valid fixtures; request cache; per-expert monthly spending cap; `platform.llm_calls` logging; JSON-schema output with one validation retry.
   *Accept:* all behaviour tested with the mock; a call over the cap is refused.
-- [ ] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
+- [x] **P2.5 Embeddings and hybrid search.** `shared/embeddings`: granite small via sentence-transformers (lazy-loaded), log normalisation, per-expert pgvector collections, and hybrid search (full-text + vector, reciprocal rank fusion).
   *Accept:* top-k results on a small fixture set; embedding dimension is checked against the table.
-- [ ] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
+- [x] **P2.6 Backend API.** `services/api` with the endpoints in `docs/ARCHITECTURE.md` §4 (webhook and auth endpoints may return 501 until Phase 3). Parallel fan-out to experts with the 10 s / 2 min budgets and `X-Deadline-Ms`; saves contracts to `platform`.
   *Accept:* `POST /predict` with a fixture pre-push payload returns four experts' results within budget, using the stubs.
-- [ ] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
+- [x] **P2.7 Router.** Rules engine in `services/api` reading `config/router_rules.yaml` (patterns on the failed step name and log lines, with weights), top-2 routing when the score margin is small, enqueueing `RoutedFailure`s on `diagnose:<expert>`.
   *Accept:* routes 20 fixture failures (5 per category) correctly; close cases go to two experts.
-- [ ] **P2.8 Replay CLI.** `uv run replay --member test --from … --to …`: builds contexts from raw data, calls the experts, stores results flagged as replay, and never touches GitHub.
+- [x] **P2.8 Replay CLI.** `uv run replay --member test --from … --to …`: builds contexts from raw data, calls the experts, stores results flagged as replay, and never touches GitHub.
   *Accept:* a replay run produces stored predictions and diagnoses with replay flags set.
-- [ ] **P2.9 End-to-end test.** Fixture failure → router → queue → stub worker → `/diagnoses` → visible through `GET /failures/{id}`.
+- [x] **P2.9 End-to-end test.** Fixture failure → router → queue → stub worker → `/diagnoses` → visible through `GET /failures/{id}`.
   *Accept:* runs in CI with Docker Compose.
 
 ## Phase 3 — User-facing

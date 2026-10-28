@@ -54,7 +54,7 @@ The script writes the answers to two files: a Markdown table you can read, and a
 ```mermaid
 flowchart LR
     A[config/repos/test.yaml] --> B[Keep enabled repos]
-    B --> C[About 5 REST calls per repo]
+    B --> C[About 30 REST calls per repo]
     C --> D[Workflow files from raw.githubusercontent.com]
     D --> E[Find test workflows]
     E --> F[Write .md and .csv to data/reports]
@@ -144,10 +144,10 @@ The Markdown file starts with a summary: how many repos were checked, how many w
 |---|---|
 | Repo | The GitHub name, `owner/name`. |
 | Enabled | `yes` or `no`, from the `enabled` flag in the config. Disabled repos only appear with `--all`. |
-| Runs 90d | Workflow runs created in the last 90 days. The exact count from GitHub. |
-| Failed 90d | Runs in that window that ended as `failure`. The exact count from GitHub. |
-| Failure rate 90d | Failed 90d divided by Runs 90d. This is the true rate, not an estimate. |
-| Sample n | How many runs are in the sample for the next two columns. This is the newest 100 runs of the window, or fewer if the repo has fewer. |
+| Runs 90d | Workflow runs created in the last 90 days: the sum of 13 seven-day counts. `≥N` means at least N (GitHub stops counting at 2,500). |
+| Failed 90d | Runs in that window that ended as `failure` (sum of 7-day counts, `≥N` = at least N). |
+| Failure rate 90d | Failed 90d divided by Runs 90d. Empty when either number is `≥N` or the counts disagree. |
+| Sample n | How many runs are in the sample for the next two columns. This is the newest 100 runs of the repo, or fewer if it has fewer. |
 | Failure rate (sample) | The failure rate on the sample only. It favours recent runs. |
 | Re-run share (sample) | The share of sample runs that were re-run at least once. A run counts as re-run when its `run_attempt` is above 1. A high value is a flaky-test signal. Sample only. |
 | Oldest run | The creation date of the oldest run GitHub still lists. If the repo has more than 1,000 runs, the script cannot read that far back. The cell then says `older than <date>`. That date is only the 1,000th newest run. |
@@ -157,7 +157,7 @@ The Markdown file starts with a summary: how many repos were checked, how many w
 | Licence (config) | The `licence` value in the config file. |
 | Licence (GitHub) | The licence id GitHub reports for the repo. `NOASSERTION` means GitHub could not tell. `none` means GitHub reports no licence. |
 | Licence check | `match`: config and GitHub agree. `MISMATCH`: they disagree, so fix the config. `unknown`: GitHub gave no usable id, so check by hand. |
-| API calls | REST calls spent on this repo, including retries. The target is about 5. |
+| API calls | REST calls spent on this repo, including retries and empty-window checks. About 30. |
 | Raw calls | Workflow files fetched from `raw.githubusercontent.com`. These do not use the REST limit. |
 | Notes | Errors and warnings for the repo. Multiple notes are separated by `;`. |
 
@@ -173,13 +173,13 @@ When a repo has an `ERROR`, the cells that come after the failing call are empty
 
 ## Example
 
-The test suite has a happy-path case with a made-up repo called `acme/widgets`. The fake GitHub answers 50 runs in 90 days, 10 of them failures, a sample of 4 runs with 2 failures and 1 re-run, an oldest run from 25 July 2026, and two workflow files. Only `test.yml` contains a test command. The check on 19 October 2026 makes 5 REST calls and 2 raw calls.
+The test suite has a happy-path case with a made-up repo called `acme/widgets`. The fake GitHub holds 50 runs spread over 90 days, 25 of them failures, one of them a re-run, with the oldest on 22 July 2026, and two workflow files. Only `test.yml` contains a test command. The check on 19 October 2026 makes 30 REST calls (when every week has runs and failures) and 2 raw calls.
 
 The row the script writes (the cells that matter here):
 
 | Runs 90d | Failed 90d | Failure rate 90d | Sample n | Failure rate (sample) | Re-run share (sample) | Oldest run | Retention (days) | Workflows | Relevant workflows | Licence check | API calls | Raw calls |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 50 | 10 | 20.0% | 4 | 50.0% | 25.0% | 2026-07-25 | 86 | 2 | `.github/workflows/test.yml` | match | 5 | 2 |
+| 50 | 25 | 50.0% | 50 | 50.0% | 2.0% | 2026-07-22 | 89 | 2 | `.github/workflows/test.yml` | match | 30 | 2 |
 
 ## Settings
 
@@ -191,19 +191,19 @@ The row the script writes (the cells that matter here):
 | `--out-dir` | command line | `data/reports/` in the repo | Where the reports are written. |
 | `--config-dir` | command line | the repo's `config/` | Where to read the config files. |
 | `GITHUB_RATE_LIMIT_THRESHOLD` | `.env` | `200` | When fewer REST calls than this remain, the client waits until GitHub resets the limit. |
-| `GITHUB_MIN_WINDOW_HOURS` | `.env` | `1` | Read by the GitHub client, but this script never splits run windows, so it has no effect here. |
+| `GITHUB_MIN_WINDOW_HOURS` | `.env` | `1` | Read by the GitHub client: the smallest window an empty-window check will split down to. |
 
 The script does not read `MEMBER` from `.env`. It always takes the member from `--member`.
 
 ## REST budget
 
-GitHub allows 5,000 REST calls per hour per token. The check fits well inside that.
+GitHub allows 5,000 REST calls per hour per token. GitHub returns a silent `0` for big filtered run queries (see Limitations), so the script no longer asks for one 90-day count. It sums 13 seven-day windows instead, through the hardened client in `shared/github`.
 
-- A typical repo uses **5 REST calls**: repo details, the run sample and total, the failed-run count, the oldest run, and the workflow list.
-- **6 calls** if the oldest run is not on the guessed page. This happens when runs older than 90 days are still listed. The script then makes one more call.
-- **More than 6 calls** if the repo has more than 100 workflow files, because the list is read 100 at a time. Retries after a rate-limit or server error also count.
-- Workflow files come from `raw.githubusercontent.com`. They do not use the REST quota. The script uses one raw call per workflow file.
-- `config/repos/test.yaml` has **25 enabled repos**. The full run therefore uses about **125 to 150 REST calls**, against the 5,000 per hour limit. That is roughly 3% of one hour's quota.
+- A typical repo uses **30 REST calls**: 1 repo details, 1 newest-100 runs sample (also gives the unfiltered total), 13 run counts, 13 failed-run counts, 1 oldest run, 1 workflow list.
+- Every window that comes back with 0 is checked again (2 retries and 2 half-windows), so it costs **5 calls instead of 1**. A quiet repo with, say, 6 empty run windows and 8 empty failure windows uses about 30 + 4 x 14 = **86 calls**. Worst case (every window empty) is 1 + 1 + 26 x 5 + 1 + 1 = **134 calls**.
+- **More** if the repo has more than 100 workflow files, and for retries after a rate-limit or server error.
+- Workflow files come from `raw.githubusercontent.com`. They do not use the REST quota.
+- `config/repos/test.yaml` has **25 enabled repos**. A full run therefore uses about **750 calls** if every repo is busy (25 x 30), and at most about **3,350** if every window of every repo is empty. Busy repos with empty failure weeks sit in between. That is about 15% of one hour's quota in the normal case, so run the check once, not in a loop.
 
 ## Limitations and known issues
 
@@ -214,7 +214,9 @@ GitHub allows 5,000 REST calls per hour per token. The check fits well inside th
 - **Workflow files are downloaded at the default branch name, not at a commit.** If the default branch moves while the script runs, the files can change. The collector later uses commit ids, so results can differ from what it sees.
 - **Only GitHub errors are caught per repo.** Any other crash, such as an unexpected response shape, stops the whole run with exit code 1 and writes no report. Re-run after the fix.
 - **Long waits are possible.** If the token is nearly out of REST calls, the client sleeps until GitHub resets the limit. The console may look stuck. Warning lines are printed while it waits.
-- **Counts are taken as exact.** `docs/DATA.md` section 1 says GitHub shows counts above 2,500 as `2500+`. The script does not handle that wording. Check any repo with very many runs by hand. This has not been tested against a real repo.
+- **GitHub returns empty results for slow filtered queries.** Seen on a busy repo: a 90-day `created` range returned 0 runs while a one-week range returned 40, and `status=failure` returned 113 and then 0 an hour later. Because of this the script never uses a single 90-day filtered count. It sums 7-day windows, and any window that says 0 is asked again and split in halves before it is believed (a warning is logged if GitHub contradicts itself). If failed would still be larger than runs for a window, the run count is shown as `≥failed` and no rate is printed.
+- **Counts stop at 2,500.** GitHub reports 2,500 for "2,500 or more" (`docs/DATA.md` section 1). A capped window makes the cell show `≥N` (a sum of lower bounds) and the failure rate stays empty, since a rate from capped numbers would be wrong. A week with 2,500 or more runs also means the repo is very busy.
+- **The sample is the newest 100 runs, not the last 90 days.** The `(sample)` columns use the newest page of the unfiltered list, which on a busy repo covers only the last few days.
 - **Runs over 1,000 are cut off.** When the list has more than 1,000 runs, the oldest run is read from the 1,000th newest run. The cell says `older than <date>` and the retention shows `>N`.
 - **Renames are noticed only when the name changes.** A change of letter case alone is not reported.
 - **Archived repos** show a note. No new runs appear for them.
@@ -223,6 +225,7 @@ GitHub allows 5,000 REST calls per hour per token. The check fits well inside th
 `# DEFAULT:` choices made in this component:
 
 - `scripts/rerun_check.py`, `DEFAULT_OUT_DIR`: reports go to `<repo>/data/reports`, which is git-ignored. Override with `--out-dir`.
+- `scripts/rerun_check.py`, `COUNT_WINDOW_DAYS = 7` and `SAMPLE_SIZE = 100`: counts are summed over 7-day windows (small enough for GitHub to answer) and the sample is one page of the newest runs.
 - `scripts/rerun_check.py`, `WINDOW_DAYS = 90`: the look-back is 90 days, GitHub's retention cap.
 - `scripts/rerun_check.py`, `UNKNOWN_LICENCES`: the SPDX values `""`, `NOASSERTION`, `NONE` and `OTHER` mean GitHub could not tell, so the licence check says `unknown`.
 - `pyproject.toml`, `[tool.pytest.ini_options] pythonpath`: `scripts/` is put on the test path so the tests can import `rerun_check`. `scripts/` is not a package.
