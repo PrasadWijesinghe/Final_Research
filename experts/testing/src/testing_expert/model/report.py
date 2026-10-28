@@ -26,8 +26,8 @@ KEYS = [
 ]
 
 
-def _f(v: Any) -> str:
-    return "n/a" if v is None or (isinstance(v, float) and np.isnan(v)) else f"{v:.3f}"
+def _f(v: Any, digits: int = 3) -> str:
+    return "n/a" if v is None or (isinstance(v, float) and np.isnan(v)) else f"{v:.{digits}f}"
 
 
 def _table(header: list[str], rows: list[list[str]]) -> str:
