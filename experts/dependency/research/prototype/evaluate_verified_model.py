@@ -37,11 +37,15 @@ DEFAULT_REPORT = REPOSITORY_ROOT / "data/datasets/dependency/evaluation_report_v
 DEFAULT_MISCLASSIFIED = (
     REPOSITORY_ROOT / "data/datasets/dependency/misclassified_records_best_model.csv"
 )
-FEATURE_COLUMNS = (
+FEATURE_COLUMNS_WITH_DIAGNOSTICS = (
     "total_dependency_files_changed",
     "has_package_json_change",
     "has_lockfile_change",
     *LOG_FEATURE_COLUMNS,
+)
+CACHE_MISS_DIAGNOSTIC = "has_package_manager_cache_miss"
+FEATURE_COLUMNS = tuple(
+    column for column in FEATURE_COLUMNS_WITH_DIAGNOSTICS if column != CACHE_MISS_DIAGNOSTIC
 )
 LABELS = {"dependency_failure": 1, "other_failure": 0}
 DEFAULT_FOLDS = 5
@@ -162,7 +166,10 @@ def evaluate_verified_dataset(
     observed_labels = set(frame["verified_label"].dropna().astype(str))
     if observed_labels != set(LABELS):
         raise ValueError("master CSV must contain only dependency_failure and other_failure labels")
-    features = frame.loc[:, FEATURE_COLUMNS].apply(pd.to_numeric, errors="raise")
+    all_features = frame.loc[:, FEATURE_COLUMNS_WITH_DIAGNOSTICS].apply(
+        pd.to_numeric, errors="raise"
+    )
+    features = all_features.loc[:, FEATURE_COLUMNS]
     if not np.isfinite(features.to_numpy(dtype=float)).all():
         raise ValueError("feature columns must contain finite numeric values")
     if (features["total_dependency_files_changed"] < 0).any():
@@ -198,12 +205,23 @@ def evaluate_verified_dataset(
         name: _evaluate_grouped(name, factory, features, target, repositories, folds, seed)
         for name, factory in models.items()
     }
-    features_without_cache_miss = features.drop(columns=["has_package_manager_cache_miss"])
+    model_results_with_cache_miss = {
+        name: _evaluate_grouped(
+            f"{name}_with_cache_miss",
+            factory,
+            all_features,
+            target,
+            repositories,
+            folds,
+            seed,
+        )
+        for name, factory in models.items()
+    }
     model_results_without_cache_miss = {
         name: _evaluate_grouped(
             f"{name}_without_cache_miss",
             factory,
-            features_without_cache_miss,
+            features,
             target,
             repositories,
             folds,
@@ -267,6 +285,7 @@ def evaluate_verified_dataset(
             "majority_class": majority_name,
             "majority_class_share": float(max(np.mean(target == 0), np.mean(target == 1))),
             "features": list(FEATURE_COLUMNS),
+            "diagnostic_only_columns": [CACHE_MISS_DIAGNOSTIC],
             "excluded_columns": [
                 "repository",
                 "run_id",
@@ -283,6 +302,7 @@ def evaluate_verified_dataset(
                 "transport_failure_count",
                 "redaction_count",
                 "request_statuses",
+                CACHE_MISS_DIAGNOSTIC,
             ],
             "raw_logs_used": False,
             "verified_reason_used": False,
@@ -317,7 +337,7 @@ def evaluate_verified_dataset(
             "fold_strategy": f"{folds}-fold GroupKFold grouped by repository",
             "models": {
                 name: {
-                    "with_cache_miss_feature": model_results[name]["metrics"],
+                    "with_cache_miss_feature": model_results_with_cache_miss[name]["metrics"],
                     "without_cache_miss_feature": model_results_without_cache_miss[name][
                         "metrics"
                     ],
