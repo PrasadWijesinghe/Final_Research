@@ -243,7 +243,7 @@ def run(root: Path, dataset: str = "v4", loro: bool = True, workers: int = 5) ->
 
 
 def export(folder: Path, res: dict[str, Any]) -> None:
-    """models/testing/v5/: same layout as v4 (two boosters, calibrators, thresholds, card)."""
+    """models/testing_candidates/v5/: same layout as v4 (two boosters, calibrators, thresholds, card)."""
     ex = res["_export"]
     m = ex["m"]
     folder.mkdir(parents=True, exist_ok=True)
@@ -428,7 +428,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="testing_expert.model.compare_v5", description=__doc__)
     ap.add_argument("--workers", type=int, default=5)
     ap.add_argument("--no-loro", action="store_true")
-    ap.add_argument("--export", action="store_true", help="write models/testing/v5/")
+    ap.add_argument(
+        "--export", action="store_true", help="write models/testing_candidates/v5/ (not served)"
+    )
     ap.add_argument("--json", type=Path, default=None)
     ap.add_argument(
         "--loro-only", action="store_true", help="re-run only leave-one-repo-out into --from-json"
@@ -449,7 +451,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     else:
         res = run(root, loro=not args.no_loro, workers=args.workers)
         if args.export:
-            export(root / "models" / "testing" / "v5", res)
+            export(root / "models" / "testing_candidates" / "v5", res)
         res.pop("_export")
         if args.json:
             args.json.write_text(json.dumps(res, default=float))
