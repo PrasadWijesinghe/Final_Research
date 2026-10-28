@@ -1,0 +1,27 @@
+{
+  "framework": "jest",
+  "repo": "babel/babel",
+  "job_id": 120538224369,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 32699,
+    "failed": 1,
+    "skipped": 23,
+    "total": 32723,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "babel-cli [3/8] > babel dir --out-dir --watch --verbose with external dependencies"
+  ],
+  "failed_files": [
+    "packages/babel-cli/test/batch-test-runner/3.js"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "packages/babel-helper-transform-fixture-test-runner/src/index.ts",
+  "note": "Trimmed. Babel's reporter form (bare name line under `FAIL file`); macOS paths (/Users/runner/work)."
+}

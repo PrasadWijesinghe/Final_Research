@@ -1,0 +1,144 @@
+# Settings for the Test expert's log parsers (experts/testing/src/testing_expert/parsing/).
+# Read by parsing/settings.py. Override the location with TEST_LOG_PARSING_FILE.
+# Every value here is a team default (DEFAULT) that can be changed without touching code.
+# Regexes must run in linear time on one long line (logs can be tens of megabytes and lines up
+# to 32 KB): no nested quantifiers, and no lazy `.*?` followed by `\s*$`. The parsers also cut every
+# line at `parse.max_line_chars` and strip its trailing whitespace before matching.
+
+# --- Reading a log (parsing/clean.py)
+clean:
+  # DEFAULT: 64 MiB. Logs p99 are 1.4 MB, but a few reach hundreds of MB; past this size only the
+  # head and the tail are kept (the summary and the failures are at the end).
+  max_input_bytes: 67108864
+  # DEFAULT: 8 MiB of the budget is the head (setup, first tests); the rest is the tail.
+  head_bytes: 8388608
+  # DEFAULT: 32 KiB. Longer lines (minified bundles, base64) are cut; the longest real line seen
+  # was about 32.9 KB.
+  max_line_bytes: 32768
+  # DEFAULT: 512 MiB. The reader stops decompressing here, so a corrupt or hostile archive cannot
+  # keep the process busy.
+  max_scan_bytes: 536870912
+  # DEFAULT: a `Run` group header is followed by the script and `env:` lines up to
+  # `##[endgroup]`. If no endgroup arrives within this many lines, treat the rest as output.
+  max_script_lines: 400
+
+# --- Parsers (parsing/jest.py, mocha.py, vitest.py, parse.py)
+parse:
+  # DEFAULT: the parsers look at the first 2048 characters of a line. The cleaner keeps lines up to
+  # 32 KB (`clean.max_line_bytes`) for storage; real test output fits in 2 KB, and the cap bounds
+  # the time any pattern can spend on a hostile line (minified bundles, base64, fuzz).
+  max_line_chars: 2048
+  # DEFAULT: a failure keeps at most 8192 characters of its raw error block, so one giant diff
+  # cannot bloat the result.
+  failure_raw_max_chars: 8192
+  # DEFAULT: the message part of a failure (text before the stack, code frame and diff) is cut at
+  # this many characters.
+  message_max_chars: 4000
+  # DEFAULT: one error block is read for at most this many lines; a runaway block (a missing
+  # terminator) cannot swallow the whole log.
+  max_body_lines: 400
+  # DEFAULT: at most this many failure blocks are built (a log with thousands of failing tests
+  # keeps the first ones). Building one parses its stack, so the parser stops reading failures
+  # at this number, adds a warning and sets `truncated`.
+  max_failures: 1000
+  # DEFAULT: at most this many per-test results are returned (a verbose log of a big repo can list
+  # hundreds of thousands of tests).
+  max_results: 50000
+  # DEFAULT: Mocha does not print file names, so its failures take a file from the stack. A frame
+  # in a file named *.test.* or *.spec.* wins; failing that, one in a tests/specs folder; failing
+  # that, the first project frame.
+  test_file_pattern: '\.(?:test|spec)\.[cm]?[jt]sx?$'
+  test_path_pattern: '(?:^|/)(?:tests?|__tests__|specs?|e2e)/'
+  # DEFAULT: a framework parser is run only when the detector scores it at least this high
+  # (a summary line scores 5, a failure header 3-4, a lone PASS/FAIL line 1-2).
+  detect_min_score: 3
+
+# --- Stack frames (parsing/stack.py)
+stack:
+  # DEFAULT: lines longer than this are not stack frames (minified code, JSON dumps).
+  max_line_chars: 1000
+  # DEFAULT: keep at most this much of the original frame text in StackFrame.raw.
+  max_raw_chars: 300
+  # Path forms after `file://`, `webpack://name/./`, `?query` are removed and `\` becomes `/`.
+  # DEFAULT: a path under any of these temp locations is not project code (path becomes None).
+  temp_paths:
+    - '^/(?:tmp|private/tmp|var/tmp)/'
+    - '^/(?:private/)?var/folders/'
+    - '^/(?:home|Users)/runner/work/_temp/'
+    - '^[A-Za-z]:/(?:a/_temp/|Users/[^/]+/AppData/Local/Temp/|Windows/Temp/)'
+  # DEFAULT: the runner's checkout directory, where the repo name appears twice (the GitHub
+  # Actions default). It is cut off so a path is relative to the repo root.
+  workspace_prefixes:
+    - '^(?:/home|/Users)/runner/work/(?P<repo>[^/]+)/(?P=repo)/'
+    - '^[A-Za-z]:/a/(?P<repo>[^/]+)/(?P=repo)/'
+    - '^/__w/(?P<repo>[^/]+)/(?P=repo)/'
+  # DEFAULT: a path containing this folder is a third-party package.
+  dependency_marker: 'node_modules/'
+  # DEFAULT: older Node versions print core modules as `internal/...` or `node:...`.
+  # DEFAULT: Deno's built-in modules (mongoose runs its tests under Deno in CI) print as `ext:...`.
+  node_internal_patterns:
+    - '^node:'
+    - '^internal/'
+    - '^ext:'
+  # DEFAULT: elided paths (`.../file.js`) carry no usable location.
+  elided_path: '^\.{3}'
+
+# --- Normalising text for retrieval (parsing/normalise.py)
+# Rules run in this order; the order matters (UUIDs and temp paths go before the generic hex rule).
+normalise:
+  # DEFAULT: how many project frames go into signature().
+  signature_frames: 3
+  # DEFAULT: the signature keeps this many characters of the first message line.
+  signature_message_chars: 200
+  rules:
+    # DEFAULT: all rules below follow plan P4.1; the placeholders are <uuid> <ts> <dur> <port>
+    # <addr> <tmp> <hex>.
+    - name: uuid
+      pattern: '\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b'
+      replace: '<uuid>'
+    - name: temp_path
+      pattern: '(?:/(?:private/)?(?:tmp|var/tmp|var/folders)|/(?:home|Users)/runner/work/_temp|[A-Za-z]:[\\/](?:a[\\/]_temp|Users[\\/][^\\/\s]+[\\/]AppData[\\/]Local[\\/]Temp|Windows[\\/]Temp))(?:[\\/][^\s''"`)\]:,;]*)?'
+      replace: '<tmp>'
+    - name: iso_timestamp
+      pattern: '\b\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:[.,]\d+)?(?:Z|[+-]\d{2}:?\d{2})?'
+      replace: '<ts>'
+    - name: clock_time
+      pattern: '(?<![\d:.])\d{1,2}:\d{2}:\d{2}(?:\.\d+)?(?![\d:])'
+      replace: '<ts>'
+    - name: epoch_millis
+      pattern: '(?<![\d.])1\d{12}(?![\d])'
+      replace: '<ts>'
+    - name: host_port
+      pattern: '(?P<host>localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|(?:\d{1,3}\.){3}\d{1,3}|(?<=://)[A-Za-z0-9_.-]+):\d{2,5}\b'
+      replace: '\g<host>:<port>'
+    - name: port_word
+      pattern: '\b(?P<word>[Pp]ort[ =:]+)\d{2,5}\b'
+      replace: '\g<word><port>'
+    - name: duration
+      pattern: '(?<![\w.])\d+(?:\.\d+)?(?:\s?(?:milliseconds?|seconds?|minutes?|secs?|mins?|ms)|ms|s|m|h)(?!\w)'
+      replace: '<dur>'
+    - name: address
+      pattern: '\b0x[0-9a-fA-F]{6,}\b'
+      replace: '<addr>'
+    - name: long_hex
+      pattern: '\b(?=[0-9a-fA-F]*\d)[0-9a-fA-F]{16,}\b'
+      replace: '<hex>'
+    - name: spaces
+      pattern: '[ \t]+'
+      replace: ' '
+
+# --- Fixture tooling (parsing/make_fixtures.py and tests/test_fixtures_clean.py)
+fixtures:
+  # DEFAULT: 42, so a re-run of `make_fixtures --suggest` picks the same candidates.
+  seed: 42
+  # DEFAULT: 64 KiB per fixture keeps about 45 fixtures under 3 MB in git.
+  max_bytes: 65536
+  # DEFAULT: 4 KiB. Lines longer than this are dropped (minified bundles also trigger false
+  # secret hits).
+  max_line_bytes: 4096
+  # DEFAULT: the .invalid top-level domain is reserved (RFC 2606), so it can never be a real address.
+  email_replacement: 'user@example.invalid'
+  # DEFAULT: the first lines kept when a log is over the cap (setup, first test output).
+  keep_head_lines: 200
+  # DEFAULT: minimum fixtures per framework (docs/experts/test.md section 8).
+  min_per_framework: 10

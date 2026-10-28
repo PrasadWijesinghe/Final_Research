@@ -1,0 +1,579 @@
+﻿2026-09-16T05:30:16.3775190Z Current runner version: '2.337.0'
+2026-09-16T05:30:16.3800167Z ##[group]Runner Image Provisioner
+2026-09-16T05:30:16.3801411Z Hosted Compute Agent
+2026-09-16T05:30:16.3802032Z Version: 20260828.587
+2026-09-16T05:30:16.3802828Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-16T05:30:16.3803597Z Build Date: 2026-08-28T16:44:25Z
+2026-09-16T05:30:16.3804280Z Worker ID: {f0e0f080-f277-4e5d-931b-d883a24176cc}
+2026-09-16T05:30:16.3805100Z Azure Region: northcentralus
+2026-09-16T05:30:16.3805739Z ##[endgroup]
+2026-09-16T05:30:16.3807304Z ##[group]Operating System
+2026-09-16T05:30:16.3807942Z Ubuntu
+2026-09-16T05:30:16.3808472Z 24.04.5
+2026-09-16T05:30:16.3809076Z LTS
+2026-09-16T05:30:16.3809620Z ##[endgroup]
+2026-09-16T05:30:16.3810249Z ##[group]Runner Image
+2026-09-16T05:30:16.3811111Z Image: ubuntu-24.04
+2026-09-16T05:30:16.3811706Z Version: 20260907.300.1
+2026-09-16T05:30:16.3813057Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-16T05:30:16.3814764Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-16T05:30:16.3815773Z ##[endgroup]
+2026-09-16T05:30:16.3816857Z ##[group]GITHUB_TOKEN Permissions
+2026-09-16T05:30:16.3818727Z Metadata: read
+2026-09-16T05:30:16.3819378Z ##[endgroup]
+2026-09-16T05:30:16.3821857Z Secret source: None
+2026-09-16T05:30:16.3822856Z Cache mode: write
+2026-09-16T05:30:16.3823675Z Prepare workflow directory
+2026-09-16T05:30:16.4343041Z Prepare all required actions
+2026-09-16T05:30:16.4409543Z Getting action download info
+2026-09-16T05:30:16.7345237Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-16T05:30:16.8277437Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-09-16T05:30:17.0783214Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-16T05:30:17.1619452Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-09-16T05:30:17.4879856Z Complete job name: Build&Test: node-24, ubuntu-latest
+2026-09-16T05:30:17.5750257Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-16T05:30:17.5751956Z with:
+2026-09-16T05:30:17.5752503Z   persist-credentials: false
+2026-09-16T05:30:17.5753198Z   repository: vitejs/vite
+2026-09-16T05:30:17.5761485Z   token: ***
+2026-09-16T05:30:17.5762018Z   ssh-strict: true
+2026-09-16T05:30:17.5762557Z   ssh-user: git
+2026-09-16T05:30:17.5763080Z   clean: true
+2026-09-16T05:30:17.5763639Z   sparse-checkout-cone-mode: true
+2026-09-16T05:30:17.5764341Z   fetch-depth: 1
+2026-09-16T05:30:17.5764894Z   fetch-tags: false
+2026-09-16T05:30:17.5765452Z   show-progress: true
+2026-09-16T05:30:17.5766009Z   lfs: false
+2026-09-16T05:30:17.5766509Z   submodules: false
+2026-09-16T05:30:17.5767096Z   set-safe-directory: true
+2026-09-16T05:30:17.5767765Z   allow-unsafe-pr-checkout: false
+2026-09-16T05:30:17.5768680Z env:
+2026-09-16T05:30:17.5769231Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:17.5770065Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:17.5771144Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:17.5771762Z ##[endgroup]
+2026-09-16T05:30:17.6807492Z Syncing repository: vitejs/vite
+2026-09-16T05:30:17.6809750Z ##[group]Getting Git version info
+2026-09-16T05:30:17.6810999Z Working directory is '/home/runner/work/vite/vite'
+2026-09-16T05:30:17.6812559Z [command]/usr/bin/git version
+2026-09-16T05:30:17.6834236Z git version 2.55.0
+2026-09-16T05:30:17.6853448Z ##[endgroup]
+2026-09-16T05:30:17.6864180Z Temporarily overriding HOME='/home/runner/work/_temp/12e8e082-6390-4f1d-9f1f-2f58750b79ec' before making global git config changes
+2026-09-16T05:30:17.6866639Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-16T05:30:17.6869091Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vite/vite
+2026-09-16T05:30:17.6908866Z Deleting the contents of '/home/runner/work/vite/vite'
+2026-09-16T05:30:17.6912499Z ##[group]Determining repository object format
+2026-09-16T05:30:17.6914056Z ##[endgroup]
+2026-09-16T05:30:17.6914985Z ##[group]Initializing the repository
+2026-09-16T05:30:17.6918351Z [command]/usr/bin/git init /home/runner/work/vite/vite
+2026-09-16T05:30:17.7005053Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-16T05:30:17.7007434Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-16T05:30:17.7009741Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-16T05:30:17.7011747Z hint: call:
+2026-09-16T05:30:17.7012511Z hint:
+2026-09-16T05:30:17.7013546Z hint: 	git config --global init.defaultBranch <name>
+2026-09-16T05:30:17.7014923Z hint:
+2026-09-16T05:30:17.7016164Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-16T05:30:17.7018464Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-16T05:30:17.7020294Z hint:
+2026-09-16T05:30:17.7021263Z hint: 	git branch -m <name>
+2026-09-16T05:30:17.7022183Z hint:
+2026-09-16T05:30:17.7023558Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-16T05:30:17.7026101Z Initialized empty Git repository in /home/runner/work/vite/vite/.git/
+2026-09-16T05:30:17.7028503Z [command]/usr/bin/git remote add origin https://github.com/vitejs/vite
+2026-09-16T05:30:17.7061453Z ##[endgroup]
+2026-09-16T05:30:17.7062956Z ##[group]Disabling automatic garbage collection
+2026-09-16T05:30:17.7065003Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-16T05:30:17.7123592Z ##[endgroup]
+2026-09-16T05:30:17.7125967Z ##[group]Setting up auth
+2026-09-16T05:30:17.7127513Z Removing SSH command configuration
+2026-09-16T05:30:17.7129707Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-16T05:30:17.7146821Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-16T05:30:17.7462038Z Removing HTTP extra header
+2026-09-16T05:30:17.7467065Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-16T05:30:17.7498832Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-16T05:30:17.7730548Z Removing includeIf entries pointing to credentials config files
+2026-09-16T05:30:17.7735305Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-16T05:30:17.7775684Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-16T05:30:17.8011206Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-16T05:30:17.8048862Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vite/vite/.git.path /home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:17.8081861Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vite/vite/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:17.8115785Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:17.8147932Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:17.8175307Z ##[endgroup]
+2026-09-16T05:30:17.8176766Z ##[group]Fetching the repository
+2026-09-16T05:30:17.8184054Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b8347a2eea8738322da88cd5a268d840caef5ebe:refs/remotes/pull/23497/merge
+2026-09-16T05:30:18.6563307Z From https://github.com/vitejs/vite
+2026-09-16T05:30:18.6565532Z  * [new ref]         b8347a2eea8738322da88cd5a268d840caef5ebe -> pull/23497/merge
+2026-09-16T05:30:18.6571077Z ##[endgroup]
+2026-09-16T05:30:18.6573146Z ##[group]Determining the checkout info
+2026-09-16T05:30:18.6575561Z ##[endgroup]
+2026-09-16T05:30:18.6577193Z [command]/usr/bin/git sparse-checkout disable
+2026-09-16T05:30:18.6623841Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-16T05:30:18.6654381Z ##[group]Checking out the ref
+2026-09-16T05:30:18.6656972Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/23497/merge
+2026-09-16T05:30:18.8294797Z Note: switching to 'refs/remotes/pull/23497/merge'.
+2026-09-16T05:30:18.8296228Z 
+2026-09-16T05:30:18.8297402Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-16T05:30:18.8300355Z changes and commit them, and you can discard any commits you make in this
+2026-09-16T05:30:18.8303512Z state without impacting any branches by switching back to a branch.
+2026-09-16T05:30:18.8304837Z 
+2026-09-16T05:30:18.8305665Z If you want to create a new branch to retain commits you create, you may
+2026-09-16T05:30:18.8307959Z do so (now or later) by using -c with the switch command. Example:
+2026-09-16T05:30:18.8309297Z 
+2026-09-16T05:30:18.8309842Z   git switch -c <new-branch-name>
+2026-09-16T05:30:18.8310645Z 
+2026-09-16T05:30:18.8311531Z Or undo this operation with:
+2026-09-16T05:30:18.8312308Z 
+2026-09-16T05:30:18.8312787Z   git switch -
+2026-09-16T05:30:18.8313394Z 
+2026-09-16T05:30:18.8314276Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-16T05:30:18.8315574Z 
+2026-09-16T05:30:18.8316960Z HEAD is now at b8347a2 Merge 240f3bfb47bb23184efec54ff47f1268dcfd0298 into bd3a3a96552a900f31c56b0d8be229dcd20618f4
+2026-09-16T05:30:18.8321827Z ##[endgroup]
+2026-09-16T05:30:18.8354898Z [command]/usr/bin/git log -1 --format=%H
+2026-09-16T05:30:18.8381766Z b8347a2eea8738322da88cd5a268d840caef5ebe
+2026-09-16T05:30:18.8395452Z ##[group]Removing auth
+2026-09-16T05:30:18.8396657Z Removing SSH command configuration
+2026-09-16T05:30:18.8398363Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-16T05:30:18.8433628Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-16T05:30:18.8667303Z Removing HTTP extra header
+2026-09-16T05:30:18.8670389Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-16T05:30:18.8705154Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-16T05:30:18.8939492Z Removing includeIf entries pointing to credentials config files
+2026-09-16T05:30:18.8942442Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-16T05:30:18.8969280Z includeif.gitdir:/home/runner/work/vite/vite/.git.path
+2026-09-16T05:30:18.8972128Z includeif.gitdir:/home/runner/work/vite/vite/.git/worktrees/*.path
+2026-09-16T05:30:18.8974635Z includeif.gitdir:/github/workspace/.git.path
+2026-09-16T05:30:18.8976877Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-16T05:30:18.8982230Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vite/vite/.git.path
+2026-09-16T05:30:18.9005101Z /home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:18.9015417Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vite/vite/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0b4fa8d8\-979f\-4a0d\-815e\-adf3e12b1587\.config
+2026-09-16T05:30:18.9048081Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vite/vite/.git/worktrees/*.path
+2026-09-16T05:30:18.9071682Z /home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:18.9080202Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vite/vite/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0b4fa8d8\-979f\-4a0d\-815e\-adf3e12b1587\.config
+2026-09-16T05:30:18.9111526Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-16T05:30:18.9138014Z /github/runner_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:18.9146119Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0b4fa8d8\-979f\-4a0d\-815e\-adf3e12b1587\.config
+2026-09-16T05:30:18.9178999Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-16T05:30:18.9202764Z /github/runner_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config
+2026-09-16T05:30:18.9215534Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0b4fa8d8\-979f\-4a0d\-815e\-adf3e12b1587\.config
+2026-09-16T05:30:18.9247859Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-16T05:30:18.9478983Z Removing credentials config '/home/runner/work/_temp/git-credentials-0b4fa8d8-979f-4a0d-815e-adf3e12b1587.config'
+2026-09-16T05:30:18.9486781Z ##[endgroup]
+2026-09-16T05:30:18.9776200Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-16T05:30:18.9777649Z with:
+2026-09-16T05:30:18.9778458Z   dest: ~/setup-pnpm
+2026-09-16T05:30:18.9779350Z   run_install: null
+2026-09-16T05:30:18.9780214Z   cache: false
+2026-09-16T05:30:18.9781259Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-16T05:30:18.9782392Z   package_json_file: package.json
+2026-09-16T05:30:18.9783419Z   standalone: false
+2026-09-16T05:30:18.9784285Z env:
+2026-09-16T05:30:18.9785157Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:18.9786309Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:18.9787386Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:18.9788308Z ##[endgroup]
+2026-09-16T05:30:19.1325059Z ##[group]Running self-installer...
+2026-09-16T05:30:22.3277601Z 
+2026-09-16T05:30:22.3278258Z added 2 packages, and audited 3 packages in 3s
+2026-09-16T05:30:22.3301895Z 
+2026-09-16T05:30:22.3302214Z found 0 vulnerabilities
+2026-09-16T05:30:22.3867963Z Checking for updates...
+2026-09-16T05:30:22.6585289Z Switching pnpm from v12.3.4 to v12.4.1...
+2026-09-16T05:30:23.2997888Z Downloading @pnpm/exe.linux-x64@12.4.1: 0.00 B/20.97 MB
+2026-09-16T05:30:23.3595019Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-09-16T05:30:23.3597277Z   Content-addressable store is at: /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-09-16T05:30:23.3600457Z   Virtual store is at:             node_modules/.bin/global/v11/966-18d5b613d39c4479-0/node_modules/.pnpm
+2026-09-16T05:30:23.5803216Z .../global/v11/966-18d5b613d39c4479-0    | Progress: resolved 2, reused 0, downloaded 2, added 2, done
+2026-09-16T05:30:23.6002622Z Successfully updated pnpm to v12.4.1
+2026-09-16T05:30:23.6049755Z ##[endgroup]
+2026-09-16T05:30:23.6052776Z Installation Completed!
+2026-09-16T05:30:23.6291251Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-16T05:30:23.6291688Z with:
+2026-09-16T05:30:23.6291907Z   node-version: 24
+2026-09-16T05:30:23.6292143Z   cache: pnpm
+2026-09-16T05:30:23.6292377Z   check-latest: false
+2026-09-16T05:30:23.6294950Z   token: ***
+2026-09-16T05:30:23.6295367Z   package-manager-cache: true
+2026-09-16T05:30:23.6295631Z env:
+2026-09-16T05:30:23.6295871Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:23.6296195Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:23.6296486Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:23.6296812Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:23.6297143Z ##[endgroup]
+2026-09-16T05:30:23.7602581Z Found in cache @ /opt/hostedtoolcache/node/24.20.0/x64
+2026-09-16T05:30:23.7605566Z ##[group]Environment details
+2026-09-16T05:30:24.1109920Z node: v24.20.0
+2026-09-16T05:30:24.1110415Z npm: 11.19.0
+2026-09-16T05:30:24.1110945Z yarn: 1.22.22
+2026-09-16T05:30:24.1111801Z ##[endgroup]
+2026-09-16T05:30:24.1130223Z [command]/home/runner/setup-pnpm/node_modules/.bin/bin/pnpm store path --silent
+2026-09-16T05:30:24.1303304Z /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-09-16T05:30:24.2514736Z Cache hit for: node-cache-Linux-x64-pnpm-f6fc84994edce965a3af5c53a81aac3a8b140a4179a2a02a6310267a41cd2aea
+2026-09-16T05:30:25.3652264Z Received 159383552 of 190365065 (83.7%), 152.0 MBs/sec
+2026-09-16T05:30:25.5083670Z Received 190365065 of 190365065 (100.0%), 158.7 MBs/sec
+2026-09-16T05:30:25.5084527Z Cache Size: ~182 MB (190365065 B)
+2026-09-16T05:30:25.5197431Z [command]/usr/bin/tar -xf /home/runner/work/_temp/9843dc0e-61b7-4151-8a48-4ec4dfe9bed1/cache.tzst -P -C /home/runner/work/vite/vite --use-compress-program unzstd
+2026-09-16T05:30:27.3683138Z Cache restored successfully
+2026-09-16T05:30:27.3813170Z Cache restored from key: node-cache-Linux-x64-pnpm-f6fc84994edce965a3af5c53a81aac3a8b140a4179a2a02a6310267a41cd2aea
+2026-09-16T05:30:27.4031770Z ##[group]Run pnpm install
+2026-09-16T05:30:27.4032141Z [36;1mpnpm install[0m
+2026-09-16T05:30:27.5113156Z shell: /usr/bin/bash -e {0}
+2026-09-16T05:30:27.5113470Z env:
+2026-09-16T05:30:27.5113755Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:27.5114097Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:27.5114447Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:27.5114765Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:27.5115098Z ##[endgroup]
+2026-09-16T05:30:27.6485457Z Scope: all 283 workspace projects
+2026-09-16T05:30:27.6967924Z ? Verifying lockfile against supply-chain policies (1411 entries)...
+2026-09-16T05:30:27.8984654Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-09-16T05:30:27.8986140Z   Content-addressable store is at: /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-09-16T05:30:27.8987386Z   Virtual store is at:             node_modules/.pnpm
+2026-09-16T05:30:38.3227931Z ✓ Lockfile passes supply-chain policies (1411 entries in 10.6s)
+2026-09-16T05:30:38.3228992Z Lockfile is up to date, resolution step is skipped
+2026-09-16T05:30:38.3422194Z Packages: +1145
+2026-09-16T05:30:38.3422958Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-09-16T05:30:38.4092215Z Progress: resolved 1145, reused 1035, downloaded 0, added 1145, done
+2026-09-16T05:30:38.4257952Z .../node_modules/playwright-chromium install$ node install.js
+2026-09-16T05:30:38.4282460Z .../node_modules/@parcel/watcher install$ node scripts/build-from-source.js
+2026-09-16T05:30:38.4315133Z .../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver 1.11.1 check
+2026-09-16T05:30:38.4341286Z .../node_modules/simple-git-hooks postinstall$ node ./postinstall.js
+2026-09-16T05:30:38.4885665Z .../node_modules/simple-git-hooks postinstall: [INFO] Successfully set the pre-commit with command: pnpm exec lint-staged --concurrent false
+2026-09-16T05:30:38.4989541Z .../node_modules/@parcel/watcher install: Done
+2026-09-16T05:30:38.5202588Z .../node_modules/unrs-resolver postinstall: [napi-postinstall@0.3.4] Failed to find package "@unrs/resolver-binding-linux-x64-gnu" on the file system
+2026-09-16T05:30:38.5204209Z .../node_modules/unrs-resolver postinstall: 
+2026-09-16T05:30:38.5232271Z .../node_modules/unrs-resolver postinstall: This can happen if you use the "--no-optional" flag. The "optionalDependencies"
+2026-09-16T05:30:38.5262166Z .../node_modules/unrs-resolver postinstall: package.json feature is used by unrs-resolver to install the correct napi binary
+2026-09-16T05:30:38.5282427Z .../node_modules/unrs-resolver postinstall: for your current platform. This install script will now attempt to work around
+2026-09-16T05:30:38.5292314Z .../node_modules/unrs-resolver postinstall: this. If that fails, you need to remove the "--no-optional" flag to use unrs-resolver.
+2026-09-16T05:30:38.5293596Z .../node_modules/unrs-resolver postinstall: 
+2026-09-16T05:30:38.5295166Z .../node_modules/unrs-resolver postinstall: [napi-postinstall@0.3.4] Trying to install package "@unrs/resolver-binding-linux-x64-gnu" using npm
+2026-09-16T05:30:38.5297435Z .../node_modules/unrs-resolver postinstall: [napi-postinstall@0.3.4] Failed to install package "@unrs/resolver-binding-linux-x64-gnu" using npm Cannot find module 'unrs-resolver/package.json'
+2026-09-16T05:30:38.5299078Z .../node_modules/unrs-resolver postinstall: Require stack:
+2026-09-16T05:30:38.5301103Z .../node_modules/unrs-resolver postinstall: - /home/runner/work/vite/vite/node_modules/.pnpm/napi-postinstall@0.3.4/node_modules/napi-postinstall/lib/index.js
+2026-09-16T05:30:38.5303236Z .../node_modules/unrs-resolver postinstall: - /home/runner/work/vite/vite/node_modules/.pnpm/napi-postinstall@0.3.4/node_modules/napi-postinstall/lib/cli.js
+2026-09-16T05:30:38.6122253Z .../node_modules/simple-git-hooks postinstall: Done
+2026-09-16T05:30:38.7734308Z .../node_modules/unrs-resolver postinstall: [napi-postinstall@0.3.4] Trying to download "https://registry.npmjs.org/@unrs/resolver-binding-linux-x64-gnu/-/resolver-binding-linux-x64-gnu-1.11.1.tgz"
+2026-09-16T05:30:38.8408116Z .../node_modules/playwright-chromium install: Skipping browsers download because `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` env variable is set
+2026-09-16T05:30:38.8530984Z .../node_modules/playwright-chromium install: Done
+2026-09-16T05:30:38.8753121Z .../node_modules/unrs-resolver postinstall: Done
+2026-09-16T05:30:39.1475217Z . postinstall$ simple-git-hooks
+2026-09-16T05:30:39.2781195Z . postinstall: Done
+2026-09-16T05:30:39.2809382Z 
+2026-09-16T05:30:39.2809625Z devDependencies:
+2026-09-16T05:30:39.2809979Z + @e18e/eslint-plugin 0.8.0
+2026-09-16T05:30:39.2810300Z + @eslint/js 9.39.5
+2026-09-16T05:30:39.2810612Z + @type-challenges/utils 0.1.1
+2026-09-16T05:30:39.2811152Z + @types/babel__core 7.20.5
+2026-09-16T05:30:39.2811466Z + @types/babel__preset-env 7.10.0
+2026-09-16T05:30:39.2811793Z + @types/convert-source-map 2.0.3
+2026-09-16T05:30:39.2812310Z + @types/cross-spawn 6.0.6
+2026-09-16T05:30:39.2812885Z + @types/etag 1.8.4
+2026-09-16T05:30:39.2813303Z + @types/less 3.0.8
+2026-09-16T05:30:39.2813739Z + @types/node 24.13.3
+2026-09-16T05:30:39.2814202Z + @types/picomatch 4.0.3
+2026-09-16T05:30:39.2814673Z + @types/stylus 0.48.43
+2026-09-16T05:30:39.2815118Z + @types/ws 8.18.1
+2026-09-16T05:30:39.2815625Z + @vitejs/release-scripts 1.10.0
+2026-09-16T05:30:39.2816166Z + eslint 9.39.5
+2026-09-16T05:30:39.2816453Z + eslint-plugin-import-x 4.17.1
+2026-09-16T05:30:39.2816778Z + eslint-plugin-n 18.3.0
+2026-09-16T05:30:39.2817062Z + eslint-plugin-regexp 3.3.0
+2026-09-16T05:30:39.2817333Z + execa 9.6.1
+2026-09-16T05:30:39.2817568Z + globals 17.12.0
+2026-09-16T05:30:39.2817822Z + lint-staged 17.5.0
+2026-09-16T05:30:39.2818254Z + oxfmt 0.66.0
+2026-09-16T05:30:39.2818569Z + picocolors 1.1.1
+2026-09-16T05:30:39.2818922Z + playwright-chromium 1.63.0
+2026-09-16T05:30:39.2819289Z + rolldown 1.2.6
+2026-09-16T05:30:39.2819714Z + rollup 4.59.0
+2026-09-16T05:30:39.2820062Z + simple-git-hooks 2.14.0
+2026-09-16T05:30:39.2820419Z + tsx 4.23.13
+2026-09-16T05:30:39.2821466Z + typescript 6.0.3
+2026-09-16T05:30:39.2821851Z + typescript-eslint 8.69.0
+2026-09-16T05:30:39.2822232Z + vite link:packages/vite
+2026-09-16T05:30:39.2822601Z + vitest 4.1.11
+2026-09-16T05:30:39.2822796Z 
+2026-09-16T05:30:39.3183946Z Done in 11.7s using pnpm v12.4.1
+2026-09-16T05:30:39.3719158Z ##[group]Run echo "PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright-bin" >> $GITHUB_ENV
+2026-09-16T05:30:39.3720001Z [36;1mecho "PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright-bin" >> $GITHUB_ENV[0m
+2026-09-16T05:30:39.3721098Z [36;1mPLAYWRIGHT_VERSION="$(pnpm ls --depth 0 --json -w playwright-chromium | jq --raw-output '.[0].devDependencies["playwright-chromium"].version')"[0m
+2026-09-16T05:30:39.3721827Z [36;1mecho "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV[0m
+2026-09-16T05:30:39.3762438Z shell: /usr/bin/bash -e {0}
+2026-09-16T05:30:39.3762717Z env:
+2026-09-16T05:30:39.3762968Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:39.3763295Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:39.3763593Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:39.3763907Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:39.3764246Z ##[endgroup]
+2026-09-16T05:30:39.5041952Z ##[group]Run actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+2026-09-16T05:30:39.5042354Z with:
+2026-09-16T05:30:39.5042621Z   key: Linux-playwright-bin-v1-1.63.0
+2026-09-16T05:30:39.5042951Z   path: /home/runner/.cache/playwright-bin
+2026-09-16T05:30:39.5043282Z   restore-keys: Linux-playwright-bin-v1-
+
+2026-09-16T05:30:39.5043595Z   enableCrossOsArchive: false
+2026-09-16T05:30:39.5043873Z   fail-on-cache-miss: false
+2026-09-16T05:30:39.5044155Z   lookup-only: false
+2026-09-16T05:30:39.5044385Z   save-always: false
+2026-09-16T05:30:39.5044606Z env:
+2026-09-16T05:30:39.5044857Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:39.5045198Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:39.5045481Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:39.5045784Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:39.5046196Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/playwright-bin
+2026-09-16T05:30:39.5046568Z   PLAYWRIGHT_VERSION: 1.63.0
+2026-09-16T05:30:39.5046849Z ##[endgroup]
+2026-09-16T05:30:39.7235303Z Cache hit for: Linux-playwright-bin-v1-1.63.0
+2026-09-16T05:30:40.8267328Z Received 138412032 of 283923762 (48.7%), 131.7 MBs/sec
+2026-09-16T05:30:41.4118883Z Received 283923762 of 283923762 (100.0%), 171.0 MBs/sec
+2026-09-16T05:30:41.4120523Z Cache Size: ~271 MB (283923762 B)
+2026-09-16T05:30:41.4169763Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c4bf7aec-540d-4633-a895-174cc148ef8a/cache.tzst -P -C /home/runner/work/vite/vite --use-compress-program unzstd
+2026-09-16T05:30:42.5033075Z Cache restored successfully
+2026-09-16T05:30:42.5249242Z Cache restored from key: Linux-playwright-bin-v1-1.63.0
+2026-09-16T05:30:42.5404027Z ##[group]Run pnpm playwright install chromium
+2026-09-16T05:30:42.5404682Z [36;1mpnpm playwright install chromium[0m
+2026-09-16T05:30:42.5448804Z shell: /usr/bin/bash -e {0}
+2026-09-16T05:30:42.5449106Z env:
+2026-09-16T05:30:42.5449365Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:42.5449715Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:42.5450023Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:42.5450338Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:42.5450993Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/playwright-bin
+2026-09-16T05:30:42.5451395Z   PLAYWRIGHT_VERSION: 1.63.0
+2026-09-16T05:30:42.5451662Z ##[endgroup]
+2026-09-16T05:30:42.9877790Z ##[group]Run pnpm run build
+2026-09-16T05:30:42.9878128Z [36;1mpnpm run build[0m
+2026-09-16T05:30:42.9917427Z shell: /usr/bin/bash -e {0}
+2026-09-16T05:30:42.9917707Z env:
+2026-09-16T05:30:42.9917966Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:42.9918304Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:42.9918613Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:42.9918927Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:42.9919350Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/playwright-bin
+2026-09-16T05:30:42.9919732Z   PLAYWRIGHT_VERSION: 1.63.0
+2026-09-16T05:30:42.9919999Z ##[endgroup]
+2026-09-16T05:30:43.0452255Z $ pnpm -r --filter='./packages/*' run build
+2026-09-16T05:30:43.0892028Z Scope: 3 of 283 workspace projects
+2026-09-16T05:30:43.0932724Z packages/create-vite build$ tsdown
+2026-09-16T05:30:43.0933616Z packages/vite build$ premove dist && pnpm build-bundle && pnpm build-types
+2026-09-16T05:30:43.1429100Z packages/vite build: $ rolldown --config rolldown.config.ts
+2026-09-16T05:30:43.1896727Z packages/create-vite build: [34mℹ[39m [34mtsdown v0.22.14[39m powered by [38;2;255;126;23mrolldown v1.2.6[39m
+2026-09-16T05:30:43.3284269Z packages/create-vite build: [34mℹ[39m config file: [4m/home/runner/work/vite/vite/packages/create-vite/tsdown.config.ts[24m 
+2026-09-16T05:30:43.3399533Z packages/create-vite build: [34mℹ[39m entry: [34msrc/index.ts[39m
+2026-09-16T05:30:43.3401352Z packages/create-vite build: [34mℹ[39m target: [34mnode20[39m
+2026-09-16T05:30:43.3404092Z packages/create-vite build: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+2026-09-16T05:30:43.3462004Z packages/create-vite build: [34mℹ[39m Build start
+2026-09-16T05:30:43.3715162Z packages/vite build: shimmed: postcss-import/index.js
+2026-09-16T05:30:43.3922065Z packages/vite build: shimmed: postcss-import/lib/parse-styles.js
+2026-09-16T05:30:43.4364848Z packages/vite build: shimmed: postcss-load-config/src/req.js
+2026-09-16T05:30:43.4449938Z packages/create-vite build: [34mℹ[39m [2mdist/[22m[1mindex.js[22m  [2m46.37 kB[22m [2m│ gzip: 16.57 kB[22m
+2026-09-16T05:30:43.4471836Z packages/create-vite build: [34mℹ[39m 1 files, total: 46.37 kB
+2026-09-16T05:30:43.4479384Z packages/create-vite build: [32m✔[39m Build complete in [32m100ms[39m
+2026-09-16T05:30:43.4752670Z packages/create-vite build: Done
+2026-09-16T05:30:43.5952905Z packages/vite build: [log] <DIR>/client/env.mjs  chunk │ size: 0.61 kB
+2026-09-16T05:30:43.5954010Z packages/vite build: [log] <DIR>/client/client.mjs  chunk │ size: 39.81 kB
+2026-09-16T05:30:43.5956406Z packages/vite build: [log] <DIR>/client/bundledDevClient.mjs  chunk │ size: 58.55 kB
+2026-09-16T05:30:43.6005569Z packages/vite build: [log] <DIR>/node/internal.js               chunk │ size:     0.14 kB
+2026-09-16T05:30:43.6007797Z packages/vite build: [log] <DIR>/node/index.js                  chunk │ size:     2.67 kB
+2026-09-16T05:30:43.6009600Z packages/vite build: [log] <DIR>/node/chunks/lib.js             chunk │ size:    11.71 kB
+2026-09-16T05:30:43.6011285Z packages/vite build: [log] <DIR>/node/chunks/postcss-import.js  chunk │ size:    18.32 kB
+2026-09-16T05:30:43.6012528Z packages/vite build: [log] <DIR>/node/cli.js                    chunk │ size:    30.10 kB
+2026-09-16T05:30:43.6013739Z packages/vite build: [log] <DIR>/node/chunks/build.js           chunk │ size:   205.75 kB
+2026-09-16T05:30:43.6014881Z packages/vite build: [log] <DIR>/node/chunks/dist.js            chunk │ size:   246.66 kB
+2026-09-16T05:30:43.6015962Z packages/vite build: [log] <DIR>/node/chunks/node.js            chunk │ size: 1,379.75 kB
+2026-09-16T05:30:43.6017039Z packages/vite build: [log] <DIR>/node/module-runner.js  chunk │ size: 54.26 kB
+2026-09-16T05:30:43.6017696Z packages/vite build: [log]
+2026-09-16T05:30:43.6018408Z packages/vite build: [success] rolldown v1.2.6 Finished in 284.52 ms
+2026-09-16T05:30:43.6344744Z packages/vite build: $ pnpm build-types-roll && pnpm build-types-check
+2026-09-16T05:30:43.6511925Z packages/vite build: $ rolldown --config rolldown.dts.config.ts
+2026-09-16T05:30:44.3920629Z packages/vite build: [log] <DIR>/internal.d.ts                      chunk │ size:   0.14 kB
+2026-09-16T05:30:44.3922349Z packages/vite build: [log] <DIR>/chunks/moduleRunnerTransport.d.ts  chunk │ size:   3.09 kB
+2026-09-16T05:30:44.3923576Z packages/vite build: [log] <DIR>/module-runner.d.ts                 chunk │ size:  11.36 kB
+2026-09-16T05:30:44.3924771Z packages/vite build: [log] <DIR>/index.d.ts                         chunk │ size: 165.45 kB
+2026-09-16T05:30:44.3925318Z packages/vite build: [log]
+2026-09-16T05:30:44.3925785Z packages/vite build: [success] rolldown v1.2.6 Finished in 597.97 ms
+2026-09-16T05:30:44.4331906Z packages/vite build: $ tsc --project tsconfig.check.json
+2026-09-16T05:30:49.9234363Z packages/vite build: Done
+2026-09-16T05:30:49.9235751Z packages/plugin-legacy build$ tsdown
+2026-09-16T05:30:50.0171210Z packages/plugin-legacy build: [34mℹ[39m [34mtsdown v0.22.14[39m powered by [38;2;255;126;23mrolldown v1.2.6[39m
+2026-09-16T05:30:50.0873087Z packages/plugin-legacy build: [34mℹ[39m config file: [4m/home/runner/work/vite/vite/packages/plugin-legacy/tsdown.config.ts[24m 
+2026-09-16T05:30:50.0888654Z packages/plugin-legacy build: [34mℹ[39m entry: [34msrc/index.ts[39m
+2026-09-16T05:30:50.0889869Z packages/plugin-legacy build: [34mℹ[39m target: [34mnode20[39m
+2026-09-16T05:30:50.0899559Z packages/plugin-legacy build: [34mℹ[39m Build start
+2026-09-16T05:30:51.7203255Z packages/plugin-legacy build: [34mℹ[39m [2mdist/[22m[1mindex.js[22m    [2m30.32 kB[22m [2m│ gzip: 8.60 kB[22m
+2026-09-16T05:30:51.7205362Z packages/plugin-legacy build: [34mℹ[39m [2mdist/[22m[32m[1mindex.d.ts[22m[39m  [2m 1.39 kB[22m [2m│ gzip: 0.55 kB[22m
+2026-09-16T05:30:51.7206922Z packages/plugin-legacy build: [34mℹ[39m 2 files, total: 31.70 kB
+2026-09-16T05:30:51.7215858Z packages/plugin-legacy build: [32m✔[39m Build complete in [32m1630ms[39m
+2026-09-16T05:30:51.7629026Z packages/plugin-legacy build: Done
+2026-09-16T05:30:51.7759939Z ##[group]Run pnpm run test-unit
+2026-09-16T05:30:51.7760450Z [36;1mpnpm run test-unit[0m
+2026-09-16T05:30:51.7813178Z shell: /usr/bin/bash -e {0}
+2026-09-16T05:30:51.7813605Z env:
+2026-09-16T05:30:51.7813980Z   NODE_OPTIONS: --max-old-space-size=6144
+2026-09-16T05:30:51.7814507Z   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+2026-09-16T05:30:51.7814985Z   VITEST_SEGFAULT_RETRY: 3
+2026-09-16T05:30:51.7815477Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-16T05:30:51.7816161Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/playwright-bin
+2026-09-16T05:30:51.7816776Z   PLAYWRIGHT_VERSION: 1.63.0
+2026-09-16T05:30:51.7817196Z ##[endgroup]
+2026-09-16T05:30:51.8432435Z $ vitest run
+2026-09-16T05:30:52.1365039Z 
+2026-09-16T05:30:52.1368735Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/home/runner/work/vite/vite[39m
+2026-09-16T05:30:52.1369581Z 
+2026-09-16T05:30:52.9581393Z  [32m✓[39m packages/vite/src/node/__tests__/utils.spec.ts [2m([22m[2m130 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+2026-09-16T05:30:53.9656112Z [90mstderr[2m | packages/vite/src/node/__tests__/config.spec.ts[2m > [22m[2mmergeConfig[2m > [22m[2msyncs `build.rollupOptions` and `build.rolldownOptions`
+2026-09-16T05:30:53.9666383Z [22m[39m`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.
+2026-09-16T05:30:53.9668675Z 
+2026-09-16T05:30:53.9852037Z [90mstderr[2m | packages/vite/src/node/__tests__/config.spec.ts[2m > [22m[2mmergeConfig[2m > [22m[2msyncs `server.hmr.*` to `server.ws.*`
+2026-09-16T05:30:53.9855549Z [22m[39m`server.hmr.protocol/host/port/path/clientPort/timeout/server` is deprecated. Use `server.ws.*` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.
+2026-09-16T05:30:53.9858854Z 
+2026-09-16T05:30:54.4460396Z  [32m✓[39m packages/vite/src/node/ssr/__tests__/ssrTransform.spec.ts [2m([22m[2m78 tests[22m[2m)[22m[33m 529[2mms[22m[39m
+2026-09-16T05:30:54.4462043Z    [33m[2m✓[22m[39m combine mappings [33m 350[2mms[22m[39m
+2026-09-16T05:30:54.6549545Z  [32m✓[39m packages/vite/src/node/__tests__/config.spec.ts [2m([22m[2m118 tests[22m[2m)[22m[33m 765[2mms[22m[39m
+2026-09-16T05:30:54.9403874Z [90mstderr[2m | packages/vite/src/node/__tests__/plugins/css.spec.ts[2m > [22m[2mcss modules[2m > [22m[2mcss module compose/from path resolutions
+2026-09-16T05:30:54.9405231Z [22m[39m
+2026-09-16T05:30:54.9407323Z A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+2026-09-16T05:30:54.9409446Z 
+2026-09-16T05:30:55.1709303Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/css.spec.ts [2m([22m[2m50 tests[22m[2m)[22m[33m 493[2mms[22m[39m
+2026-09-16T05:30:55.3497046Z transforming...
+2026-09-16T05:30:55.3537666Z ✓ 4 modules transformed.
+2026-09-16T05:30:55.3667911Z rendering chunks...
+2026-09-16T05:30:55.3799719Z transforming...
+2026-09-16T05:30:55.3839425Z ✓ 4 modules transformed.
+2026-09-16T05:30:55.3856897Z rendering chunks...
+2026-09-16T05:30:55.3987943Z transforming...
+2026-09-16T05:30:55.4035802Z ✓ 4 modules transformed.
+2026-09-16T05:30:55.4064133Z rendering chunks...
+2026-09-16T05:30:55.4194042Z transforming...
+2026-09-16T05:30:55.4241844Z ✓ 4 modules transformed.
+2026-09-16T05:30:55.4269496Z rendering chunks...
+2026-09-16T05:30:55.5294273Z  [32m✓[39m packages/vite/src/node/__tests__/build.spec.ts [2m([22m[2m68 tests[22m[2m)[22m[33m 1636[2mms[22m[39m
+2026-09-16T05:30:55.7015958Z  [32m✓[39m packages/vite/src/node/server/__tests__/pluginContainer.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+2026-09-16T05:30:55.7824132Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-runtime.spec.ts [2m([22m[2m41 tests[22m[2m)[22m[33m 1084[2mms[22m[39m
+2026-09-16T05:30:55.8191002Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/hooks.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 613[2mms[22m[39m
+2026-09-16T05:30:55.8213674Z [90mstderr[2m | packages/vite/src/node/__tests__/plugins/esbuild.spec.ts
+2026-09-16T05:30:55.8215646Z [22m[39m[33m`transformWithEsbuild` is deprecated and will be removed in the future. Please migrate to `transformWithOxc`.[39m
+2026-09-16T05:30:55.8216400Z 
+2026-09-16T05:30:55.8503461Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/esbuild.spec.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+2026-09-16T05:30:56.0715950Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-source-maps.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 229[2mms[22m[39m
+2026-09-16T05:30:56.3963419Z  [32m✓[39m packages/vite/src/node/ssr/__tests__/ssrLoadModule.spec.ts [2m([22m[2m15 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 679[2mms[22m[39m
+2026-09-16T05:30:56.5856640Z  [32m✓[39m packages/vite/src/node/__tests__/http.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+2026-09-16T05:30:56.6723207Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/importGlob/parse.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+2026-09-16T05:30:56.7090140Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/pluginFilter.spec.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-09-16T05:30:56.7650145Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/workerImportMetaUrl.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+2026-09-16T05:30:57.2415111Z  [32m✓[39m packages/vite/src/node/__tests__/resolve.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 462[2mms[22m[39m
+2026-09-16T05:30:57.2511474Z  [32m✓[39m packages/vite/src/node/__tests__/scan.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1384[2mms[22m[39m
+2026-09-16T05:30:57.2512771Z    [33m[2m✓[22m[39m scan jsx-runtime [33m 1251[2mms[22m[39m
+2026-09-16T05:30:57.2800093Z  [32m✓[39m packages/vite/src/node/__tests__/html.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-16T05:30:57.3049196Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/import.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+2026-09-16T05:30:57.3162718Z  [32m✓[39m packages/vite/src/node/__tests__/assetSource.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+2026-09-16T05:30:57.5393203Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-hmr.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 206[2mms[22m[39m
+2026-09-16T05:30:57.6001588Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/define.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+2026-09-16T05:30:57.6442540Z  [32m✓[39m packages/vite/src/node/__tests__/dev.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+2026-09-16T05:30:57.6639416Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/oxc.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+2026-09-16T05:30:57.8262060Z  [32m✓[39m packages/create-vite/__tests__/cli.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1638[2mms[22m[39m
+2026-09-16T05:30:57.8903281Z [90mstdout[2m | packages/vite/src/node/__tests__/shortcuts.spec.ts[2m > [22m[2mbindCLIShortcuts[2m > [22m[2mrebinds shortcuts after server restart
+2026-09-16T05:30:57.8917395Z [22m[39m[2m5:30:57 AM[22m [36m[1m[vite][22m[39m server restarted.
+2026-09-16T05:30:57.8919642Z 
+2026-09-16T05:30:57.9100269Z  [32m✓[39m packages/vite/src/node/__tests__/shortcuts.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+2026-09-16T05:30:58.0621153Z  [32m✓[39m packages/vite/src/node/__tests__/environment.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 387[2mms[22m[39m
+2026-09-16T05:30:58.0739962Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-worker-runner.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 154[2mms[22m[39m
+2026-09-16T05:30:58.0882247Z  [32m✓[39m packages/vite/src/node/__tests__/optimizer/rolldownDepPlugin.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-16T05:30:58.1374013Z  [32m✓[39m packages/vite/src/node/server/middlewares/__tests__/indexHtml.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+2026-09-16T05:30:58.1595715Z  [32m✓[39m packages/vite/src/node/server/__tests__/moduleGraph.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-09-16T05:30:58.1752715Z  [32m✓[39m packages/vite/src/node/__tests__/packages.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-16T05:30:58.2868337Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-worker-runner.invoke.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+2026-09-16T05:30:58.4638594Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/index.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+2026-09-16T05:30:58.5779041Z  [32m✓[39m packages/vite/src/shared/__tests__/forwardConsole.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+2026-09-16T05:30:58.6064158Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/importGlob/fixture.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+2026-09-16T05:30:58.6209407Z  [32m✓[39m packages/vite/src/node/__tests__/optimizer/discoverBeforeListen.spec.ts [2m([22m[2m1 test[22m[2m)[22m[33m 327[2mms[22m[39m
+2026-09-16T05:30:58.6211349Z    [33m[2m✓[22m[39m does not crash when a dep is discovered before the server starts listening [33m 327[2mms[22m[39m
+2026-09-16T05:30:58.6294171Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/importAnalysisBuild.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+2026-09-16T05:30:58.6518593Z  [32m✓[39m packages/vite/src/node/__tests__/runnerImport.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+2026-09-16T05:30:58.6677269Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/assetImportMetaUrl.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-16T05:30:58.6809324Z  [32m✓[39m packages/vite/src/node/__tests__/optimizer/customExtensionBundleClose.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 17[2mms[22m[39m
+2026-09-16T05:30:58.6869416Z  [32m✓[39m packages/vite/src/node/__tests__/env.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+2026-09-16T05:30:58.6981228Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/dynamicImportVar/parse.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-16T05:30:58.7058001Z  [32m✓[39m packages/vite/src/node/server/__tests__/sourcemap.spec.ts [2m([22m[2m11 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 1[2mms[22m[39m
+2026-09-16T05:30:58.7327613Z  [32m✓[39m packages/plugin-legacy/src/__tests__/snippets.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+2026-09-16T05:30:58.7423520Z  [32m✓[39m packages/vite/src/node/__tests__/logger.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+2026-09-16T05:30:58.7476535Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/worker.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+2026-09-16T05:30:58.7516957Z  [32m✓[39m packages/vite/src/node/server/middlewares/__tests__/static.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+2026-09-16T05:30:58.8842244Z  [32m✓[39m packages/vite/src/node/server/__tests__/watcher.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 124[2mms[22m[39m
+2026-09-16T05:30:59.0384908Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/terser.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 280[2mms[22m[39m
+2026-09-16T05:30:59.0961630Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/cssPreprocessorTeardown.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 205[2mms[22m[39m
+2026-09-16T05:30:59.1093175Z  [32m✓[39m packages/plugin-legacy/src/__tests__/index.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+2026-09-16T05:30:59.1308955Z  [32m✓[39m packages/vite/src/node/server/__tests__/search-root.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-09-16T05:30:59.1754311Z  [32m✓[39m packages/vite/src/node/ssr/__tests__/ssrStacktrace.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+2026-09-16T05:30:59.1933183Z  [32m✓[39m packages/vite/src/node/server/__tests__/hmr.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+2026-09-16T05:30:59.2045712Z  [32m✓[39m packages/vite/src/node/__tests__/filterRegex.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-09-16T05:30:59.2135499Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/importGlob/utils.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 1[2mms[22m[39m
+2026-09-16T05:30:59.2236801Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/modulePreloadPolyfill/modulePreloadPolyfill.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+2026-09-16T05:30:59.2302293Z  [32m✓[39m packages/vite/src/node/__tests__/optimizer/pluginConverter.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 1[2mms[22m[39m
+2026-09-16T05:30:59.2421985Z  [32m✓[39m packages/vite/src/node/__tests__/external.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-16T05:30:59.2519866Z  [32m✓[39m packages/vite/src/node/__tests__/optimizer/resolve.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 1[2mms[22m[39m
+2026-09-16T05:30:59.2607535Z  [32m✓[39m packages/vite/src/node/__tests__/plugins/license.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+2026-09-16T05:30:59.2612563Z  [32m✓[39m packages/vite/src/node/__tests__/constants.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 1[2mms[22m[39m
+2026-09-16T05:30:59.2678844Z  [32m✓[39m packages/vite/src/node/server/middlewares/__tests__/hostCheck.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 0[2mms[22m[39m
+2026-09-16T05:30:59.2680505Z  [32m✓[39m packages/vite/src/node/__tests__/oxc.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 0[2mms[22m[39m
+2026-09-16T05:30:59.2737141Z  [32m✓[39m packages/vite/src/node/server/__tests__/transformRequest.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 0[2mms[22m[39m
+2026-09-16T05:30:59.2787381Z  [32m✓[39m packages/plugin-legacy/src/__tests__/readme.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 0[2mms[22m[39m
+2026-09-16T05:30:59.2847359Z  [32m✓[39m packages/vite/src/node/ssr/runtime/__tests__/server-no-hmr.spec.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+2026-09-16T05:31:03.2594200Z  [31m❯[39m packages/vite/src/node/__tests__/watch.spec.ts [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 5936[2mms[22m[39m
+2026-09-16T05:31:03.2595587Z      [32m✓[39m keeps the default ignore list when the option is disabled[32m 1[2mms[22m[39m
+2026-09-16T05:31:03.2596323Z      [32m✓[39m ignores paths matched by the root .gitignore[32m 4[2mms[22m[39m
+2026-09-16T05:31:03.2596969Z      [32m✓[39m supports negation patterns[32m 1[2mms[22m[39m
+2026-09-16T05:31:03.2597593Z      [32m✓[39m never ignores protected paths, even when matched[32m 1[2mms[22m[39m
+2026-09-16T05:31:03.2598225Z      [32m✓[39m never ignores paths outside of the root[32m 1[2mms[22m[39m
+2026-09-16T05:31:03.2598841Z      [32m✓[39m is a no-op when no .gitignore exists[32m 0[2mms[22m[39m
+2026-09-16T05:31:03.2599584Z      [33m[2m✓[22m[39m does not pick up gitignored directories created after startup [33m 918[2mms[22m[39m
+2026-09-16T05:31:03.2600499Z [31m     [31m×[31m emits no events for gitignored files, but keeps HMR working[39m[33m 5011[2mms[22m[39m
+2026-09-16T05:31:03.2634573Z 
+2026-09-16T05:31:03.2635182Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-09-16T05:31:03.2635503Z 
+2026-09-16T05:31:03.2642448Z [41m[1m FAIL [22m[49m packages/vite/src/node/__tests__/watch.spec.ts[2m > [22mdev server watch.ignoredFromGitignore[2m > [22memits no events for gitignored files, but keeps HMR working
+2026-09-16T05:31:03.2651621Z [31m[1mError[22m: no event received for "control.js", got: [39m
+2026-09-16T05:31:03.2654867Z [36m [2m❯[22m Timeout._onTimeout packages/vite/src/node/__tests__/watch.spec.ts:[2m208:11[22m[39m
+2026-09-16T05:31:03.2710237Z     [90m206|[39m       () [33m=>[39m
+2026-09-16T05:31:03.2727839Z     [90m207|[39m         [34mreject[39m(
+2026-09-16T05:31:03.2728215Z 
+2026-09-16T05:31:03.2734209Z     [90m208|[39m           [35mnew[39m [33mError[39m(
+2026-09-16T05:31:03.2735361Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m68 passed[39m[22m[90m (69)[39m
+2026-09-16T05:31:03.2736991Z     [90m   |[39m           [31m^[39m
+2026-09-16T05:31:03.2738294Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m997 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (1001)[39m
+2026-09-16T05:31:03.2739881Z     [90m209|[39m             `no event received for "${substring}", got: ${events.join(…
+2026-09-16T05:31:03.2740929Z [2m   Start at [22m 05:30:52
+2026-09-16T05:31:03.2741893Z     [90m210|[39m           )[33m,[39m
+2026-09-16T05:31:03.2743092Z [2m   Duration [22m 11.09s[2m (transform 3.36s, setup 0ms, import 5.69s, tests 18.66s, environment 10ms)[22m
+2026-09-16T05:31:03.2744184Z 
+2026-09-16T05:31:03.2744200Z 
+2026-09-16T05:31:03.2745286Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-09-16T05:31:03.2745856Z 
+2026-09-16T05:31:03.2746053Z 
+2026-09-16T05:31:03.2769558Z ##[error]Error: no event received for "control.js", got: 
+ ❯ Timeout._onTimeout packages/vite/src/node/__tests__/watch.spec.ts:208:11
+
+
+2026-09-16T05:31:03.3210586Z [ELIFECYCLE] Command failed with exit code 1.
+2026-09-16T05:31:03.3231476Z ##[error]Process completed with exit code 1.
+2026-09-16T05:31:03.3338944Z Post job cleanup.
+2026-09-16T05:31:03.4848608Z Pruning is unnecessary.
+2026-09-16T05:31:03.5001894Z Post job cleanup.
+2026-09-16T05:31:03.5933006Z [command]/usr/bin/git version
+2026-09-16T05:31:03.5976818Z git version 2.55.0
+2026-09-16T05:31:03.6008706Z Temporarily overriding HOME='/home/runner/work/_temp/7ce0fedd-4fbc-4cee-92ac-747aaf0900f3' before making global git config changes
+2026-09-16T05:31:03.6009606Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-16T05:31:03.6014871Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vite/vite
+2026-09-16T05:31:03.6045116Z Removing SSH command configuration
+2026-09-16T05:31:03.6051208Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-16T05:31:03.6085357Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-16T05:31:03.6322637Z Removing HTTP extra header
+2026-09-16T05:31:03.6327921Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-16T05:31:03.6362449Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-16T05:31:03.6592423Z Removing includeIf entries pointing to credentials config files
+2026-09-16T05:31:03.6598653Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-16T05:31:03.6630182Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-16T05:31:03.7003813Z Cleaning up orphan processes

@@ -192,9 +192,51 @@ The host also needs `DATABASE_URL` and `REDIS_URL`. All three variables are list
 | `GET /failures/{id}` | Dashboard | None (see Limits) | A routed failure with its diagnoses and reviews |
 | `POST /api-keys` | Admin | Admin token | Issues a key. The plain key is returned once |
 | `DELETE /api-keys/{id}` | Admin | Admin token | Revokes a key (204, or 404 if unknown) |
-| `POST /webhooks/github` | GitHub (later) | None | Returns 501 until P3.1 |
-| `GET` or `POST /auth/github/...` | Dashboard (later) | None | Returns 501 until P3.1 |
+| `POST /webhooks/github` | GitHub App | `X-Hub-Signature-256` | Checks the signature (401 if wrong, 503 if no secret is set), answers 202 and handles the event in the background. See "GitHub App webhooks (P3.1)" |
+| `GET` or `POST /auth/github/...` | Dashboard (later) | None | Returns 501 (GitHub sign-in is left for the dashboard task, P3.5) |
 | `GET /health` | Anyone | None | Backend status plus each expert's health |
+
+## GitHub App webhooks (P3.1)
+
+### What it does
+
+GitHub sends an event to `POST /webhooks/github` each time something happens in a repo where the
+PipelineIQ App is installed. The API proves the event is from GitHub, answers at once, and does the
+real work afterwards (GitHub gives up after 10 seconds).
+
+### How it works
+
+1. **Signature.** GitHub signs the raw body with the webhook secret and sends the result in
+   `X-Hub-Signature-256`. The API recomputes it and compares in constant time. A wrong or missing
+   signature gets 401 and nothing else happens. The body and the secret are never logged.
+2. **Installation token.** To read the repo, the API signs a short-lived JWT with the App's private
+   key (RS256), swaps it for an installation access token, and keeps that token until two minutes
+   before it expires (`shared/github/app_auth.py`).
+3. **Per event:**
+   - `push` (a branch, not a delete or tag) and `pull_request` (opened, synchronize, reopened,
+     ready_for_review): builds the `CommitContext` with the live builder, saves it, asks the four
+     experts with the 2 minute budget and saves their predictions. The PR check run comes in P3.3.
+   - `workflow_run` and `workflow_job`: stored in `raw.workflow_runs`, `raw.jobs` and `raw.steps`
+     with `source="app"`. Like the collector, the actor is hashed, `actor`/`head_commit`/repository
+     blocks are dropped from the stored JSON, and the run title is passed through the sanitiser.
+   - A `workflow_job` that completed with `failure`: the API fetches the job log, sanitises it,
+     writes it under `DATA_DIR/logs/...`, adds a `raw.logs` row, and hands the failed job to the
+     router, which queues it for the experts.
+4. Errors in the background step are logged and never returned: a failing GitHub call must not make
+   GitHub retry the delivery.
+
+### Limits
+
+- `job_key` is left empty for App-sourced jobs (the collector fills it from the workflow file).
+- Duplicate deliveries are not detected. A repeated push predicts again; stored rows are upserted.
+- Sign in with GitHub (`/auth/github/*`) still returns 501.
+
+### Tests
+
+`tests/test_webhooks.py` sends fake payloads signed with a fake secret, with GitHub mocked by
+respx. `tests/test_backend_sql.py::test_sql_raw_store_writes_app_rows` checks `source="app"` on a
+real database. `shared/tests/test_github_app_auth.py` covers the JWT, the token cache and the
+signature check. To try it for real, see `docs/ONBOARDING.md` step 10.
 
 ## Router (P2.7)
 
@@ -446,13 +488,16 @@ The test expects these results:
 | `REDIS_URL` | `.env` or environment | `redis://127.0.0.1:6379/0` | Redis for the router's expert queues. See the Router section |
 | `ROUTER_RULES_PATH` | `.env` or environment | Unset: `config/router_rules.yaml` | Another rules file for the router. See the Router section |
 | `PREDICT_BUDGET_PRE_PUSH_MS` | `.env` | `10000` | Total time for one `/predict` (10 s). Also sent to experts as `X-Deadline-Ms` |
-| `PREDICT_BUDGET_PR_MS` | `.env` | `120000` | The total time for the experts on one replayed run (the replay CLI uses it). Not yet used by the webhook (P3.1) |
+| `PREDICT_BUDGET_PR_MS` | `.env` | `120000` | The total time for the experts on one replayed run (the replay CLI uses it). Also the budget for the experts on a push or pull request webhook |
 | `EXPERT_CALL_TIMEOUT_SECONDS` | `.env` | `2` | Timeout for `/health` probes and `/review` forwarding |
 | `EXPERT_DEPENDENCY_URL` | `.env` | `http://127.0.0.1:8101` | Where the Dependency expert listens |
 | `EXPERT_BUILD_URL` | `.env` | `http://127.0.0.1:8102` | Where the Build expert listens |
 | `EXPERT_TEST_URL` | `.env` | `http://127.0.0.1:8103` | Where the Test expert listens |
 | `EXPERT_INFRA_URL` | `.env` | `http://127.0.0.1:8104` | Where the Infra expert listens |
 | `API_ADMIN_TOKEN` | `.env` | Empty | Protects `/api-keys`. Empty means key management is off (503) |
+| `GITHUB_WEBHOOK_SECRET` | `.env` | Empty | Secret that signs GitHub webhooks. Empty means `/webhooks/github` answers 503 |
+| `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY_PATH` | `.env` | Empty | The App id and the path of its `.pem`. Needed to get installation tokens |
+| `DATA_DIR` | `.env` | `./data` | Where logs fetched by webhooks are written (same as the collector) |
 | `API_PORT` | `.env.example` only | `8000` | Documents the port. No code reads it; the port comes from the uvicorn command |
 
 Settings are read once, when the app module is imported. Change `.env` and restart the process.

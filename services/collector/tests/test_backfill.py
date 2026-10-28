@@ -186,11 +186,13 @@ def test_forbidden_log_is_recorded_missing_and_the_repo_continues(
     assert "log not available" in caplog.text
 
 
-def test_server_error_on_a_log_still_aborts_for_resume(
+def test_server_error_on_a_log_leaves_it_pending_and_the_repo_finishes(
     fake_github: FakeGitHub, tmp_path: Path
 ) -> None:
-    from shared.github import GitHubError
-
     fake_github.log_status = {5002: 500}
-    with pytest.raises(GitHubError):
-        make_backfiller(MemoryStore(), tmp_path).backfill_repo(ENTRY)
+    store = MemoryStore()
+    summary = make_backfiller(store, tmp_path).backfill_repo(ENTRY)
+    dump = store.dump()
+    assert 5002 not in {r["job_id"] for r in dump["logs"]}  # no row: still pending
+    assert summary.logs_failed == 1
+    assert dump["sync_state"][0]["backfill_cursor"] is None  # the repo finished

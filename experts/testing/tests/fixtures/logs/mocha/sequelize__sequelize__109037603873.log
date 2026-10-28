@@ -1,0 +1,439 @@
+﻿2026-09-28T17:09:49.5592623Z Current runner version: '2.337.0'
+2026-09-28T17:09:49.5621459Z ##[group]Runner Image Provisioner
+2026-09-28T17:09:49.5622501Z Hosted Compute Agent
+2026-09-28T17:09:49.5623222Z Version: 20260828.587
+2026-09-28T17:09:49.5624209Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-28T17:09:49.5625139Z Build Date: 2026-08-28T16:44:25Z
+2026-09-28T17:09:49.5626012Z Worker ID: {14e81c6b-522e-420f-bb96-ed373ce7e76d}
+2026-09-28T17:09:49.5627056Z Azure Region: eastus
+2026-09-28T17:09:49.5627741Z ##[endgroup]
+2026-09-28T17:09:49.5629385Z ##[group]Operating System
+2026-09-28T17:09:49.5630169Z Ubuntu
+2026-09-28T17:09:49.5630838Z 24.04.5
+2026-09-28T17:09:49.5631522Z LTS
+2026-09-28T17:09:49.5632138Z ##[endgroup]
+2026-09-28T17:09:49.5632769Z ##[group]Runner Image
+2026-09-28T17:09:49.5633553Z Image: ubuntu-24.04
+2026-09-28T17:09:49.5634487Z Version: 20260920.314.1
+2026-09-28T17:09:49.5636148Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-28T17:09:49.5638101Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+2026-09-28T17:09:49.5639463Z ##[endgroup]
+2026-09-28T17:09:49.5643498Z ##[group]GITHUB_TOKEN Permissions
+2026-09-28T17:09:49.5646278Z Actions: write
+2026-09-28T17:09:49.5647016Z ArtifactMetadata: write
+2026-09-28T17:09:49.5647843Z Attestations: write
+2026-09-28T17:09:49.5648574Z Checks: write
+2026-09-28T17:09:49.5649236Z CodeQuality: write
+2026-09-28T17:09:49.5650040Z Contents: write
+2026-09-28T17:09:49.5650815Z CopilotRequests: write
+2026-09-28T17:09:49.5651602Z Deployments: write
+2026-09-28T17:09:49.5652318Z Discussions: write
+2026-09-28T17:09:49.5652962Z Drives: write
+2026-09-28T17:09:49.5653849Z Issues: write
+2026-09-28T17:09:49.5654504Z Metadata: read
+2026-09-28T17:09:49.5655378Z Models: read
+2026-09-28T17:09:49.5656121Z Packages: write
+2026-09-28T17:09:49.5656852Z Pages: write
+2026-09-28T17:09:49.5657758Z PullRequests: write
+2026-09-28T17:09:49.5658472Z RepositoryProjects: write
+2026-09-28T17:09:49.5659250Z SecurityEvents: write
+2026-09-28T17:09:49.5660004Z Statuses: write
+2026-09-28T17:09:49.5660678Z VulnerabilityAlerts: read
+2026-09-28T17:09:49.5661375Z ##[endgroup]
+2026-09-28T17:09:49.5663802Z Secret source: Actions
+2026-09-28T17:09:49.5665051Z Cache mode: write
+2026-09-28T17:09:49.5666092Z Prepare workflow directory
+2026-09-28T17:09:49.6237022Z Prepare all required actions
+2026-09-28T17:09:49.6293065Z Getting action download info
+2026-09-28T17:09:49.8641603Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-28T17:09:50.0296809Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-28T17:09:50.2236076Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-09-28T17:09:50.4846560Z Complete job name: postgres oldest (Node 24) (minified aliases)
+2026-09-28T17:09:50.5399304Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-28T17:09:50.5400072Z with:
+2026-09-28T17:09:50.5400418Z   repository: sequelize/sequelize
+2026-09-28T17:09:50.5403277Z   token: ***
+2026-09-28T17:09:50.5403618Z   ssh-strict: true
+2026-09-28T17:09:50.5404136Z   ssh-user: git
+2026-09-28T17:09:50.5404490Z   persist-credentials: true
+2026-09-28T17:09:50.5404871Z   clean: true
+2026-09-28T17:09:50.5405220Z   sparse-checkout-cone-mode: true
+2026-09-28T17:09:50.5405618Z   fetch-depth: 1
+2026-09-28T17:09:50.5405952Z   fetch-tags: false
+2026-09-28T17:09:50.5406290Z   show-progress: true
+2026-09-28T17:09:50.5406631Z   lfs: false
+2026-09-28T17:09:50.5406952Z   submodules: false
+2026-09-28T17:09:50.5407301Z   set-safe-directory: true
+2026-09-28T17:09:50.5407690Z   allow-unsafe-pr-checkout: false
+2026-09-28T17:09:50.5408239Z env:
+2026-09-28T17:09:50.5408553Z   DIALECT: postgres
+2026-09-28T17:09:50.5408899Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:09:50.5409517Z ##[endgroup]
+2026-09-28T17:09:50.6305448Z Syncing repository: sequelize/sequelize
+2026-09-28T17:09:50.6306982Z ##[group]Getting Git version info
+2026-09-28T17:09:50.6307553Z Working directory is '/home/runner/work/sequelize/sequelize'
+2026-09-28T17:09:50.6308378Z [command]/usr/bin/git version
+2026-09-28T17:09:50.6383964Z git version 2.55.0
+2026-09-28T17:09:50.6400312Z ##[endgroup]
+2026-09-28T17:09:50.6410477Z Temporarily overriding HOME='/home/runner/work/_temp/1d9bd448-9c9f-4a45-b086-e9121763d094' before making global git config changes
+2026-09-28T17:09:50.6412164Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-28T17:09:50.6415934Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-09-28T17:09:50.6458023Z Deleting the contents of '/home/runner/work/sequelize/sequelize'
+2026-09-28T17:09:50.6460847Z ##[group]Determining repository object format
+2026-09-28T17:09:50.6462056Z ##[endgroup]
+2026-09-28T17:09:50.6463020Z ##[group]Initializing the repository
+2026-09-28T17:09:50.6466760Z [command]/usr/bin/git init /home/runner/work/sequelize/sequelize
+2026-09-28T17:09:50.8273300Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-28T17:09:50.8274690Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-28T17:09:50.8275770Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-28T17:09:50.8276581Z hint: call:
+2026-09-28T17:09:50.8277045Z hint:
+2026-09-28T17:09:50.8277666Z hint: 	git config --global init.defaultBranch <name>
+2026-09-28T17:09:50.8278401Z hint:
+2026-09-28T17:09:50.8278928Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-28T17:09:50.8279675Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-28T17:09:50.8280236Z hint:
+2026-09-28T17:09:50.8280565Z hint: 	git branch -m <name>
+2026-09-28T17:09:50.8280935Z hint:
+2026-09-28T17:09:50.8345393Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-28T17:09:50.8346926Z Initialized empty Git repository in /home/runner/work/sequelize/sequelize/.git/
+2026-09-28T17:09:50.8348866Z [command]/usr/bin/git remote add origin https://github.com/sequelize/sequelize
+2026-09-28T17:09:50.8350108Z ##[endgroup]
+2026-09-28T17:09:50.8350694Z ##[group]Disabling automatic garbage collection
+2026-09-28T17:09:50.8351199Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-28T17:09:50.8359211Z ##[endgroup]
+2026-09-28T17:09:50.8360056Z ##[group]Setting up auth
+2026-09-28T17:09:50.8360704Z Removing SSH command configuration
+2026-09-28T17:09:50.8365207Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-28T17:09:50.8390540Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-28T17:09:50.8683571Z Removing HTTP extra header
+2026-09-28T17:09:50.8688314Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-28T17:09:50.8712949Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-28T17:09:50.8888712Z Removing includeIf entries pointing to credentials config files
+2026-09-28T17:09:50.8892627Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-28T17:09:50.8916836Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-28T17:09:50.9098402Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-28T17:09:50.9127758Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git.path /home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:09:50.9152317Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:09:50.9179300Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:09:50.9219174Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:09:50.9242561Z ##[endgroup]
+2026-09-28T17:09:50.9243429Z ##[group]Fetching the repository
+2026-09-28T17:09:50.9249062Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d8722417669e78bcb77bdc795c9025b62c534d91:refs/remotes/pull/18340/merge
+2026-09-28T17:09:51.3323168Z From https://github.com/sequelize/sequelize
+2026-09-28T17:09:51.3324985Z  * [new ref]         d8722417669e78bcb77bdc795c9025b62c534d91 -> pull/18340/merge
+2026-09-28T17:09:51.3327906Z ##[endgroup]
+2026-09-28T17:09:51.3328800Z ##[group]Determining the checkout info
+2026-09-28T17:09:51.3329771Z ##[endgroup]
+2026-09-28T17:09:51.3331316Z [command]/usr/bin/git sparse-checkout disable
+2026-09-28T17:09:51.3372901Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-28T17:09:51.3396614Z ##[group]Checking out the ref
+2026-09-28T17:09:51.3398992Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18340/merge
+2026-09-28T17:09:51.4004967Z Note: switching to 'refs/remotes/pull/18340/merge'.
+2026-09-28T17:09:51.4005737Z 
+2026-09-28T17:09:51.4006321Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-28T17:09:51.4007799Z changes and commit them, and you can discard any commits you make in this
+2026-09-28T17:09:51.4009138Z state without impacting any branches by switching back to a branch.
+2026-09-28T17:09:51.4009921Z 
+2026-09-28T17:09:51.4010443Z If you want to create a new branch to retain commits you create, you may
+2026-09-28T17:09:51.4011607Z do so (now or later) by using -c with the switch command. Example:
+2026-09-28T17:09:51.4012273Z 
+2026-09-28T17:09:51.4012575Z   git switch -c <new-branch-name>
+2026-09-28T17:09:51.4013162Z 
+2026-09-28T17:09:51.4013589Z Or undo this operation with:
+2026-09-28T17:09:51.4014356Z 
+2026-09-28T17:09:51.4014675Z   git switch -
+2026-09-28T17:09:51.4015122Z 
+2026-09-28T17:09:51.4015797Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-28T17:09:51.4016815Z 
+2026-09-28T17:09:51.4018029Z HEAD is now at d872241 Merge 4c462ef289f9d7bca6ad1594d5b2da416d6ffc2b into 68c226cefe4e7807a6c81ca38c77382d43034010
+2026-09-28T17:09:51.4021725Z ##[endgroup]
+2026-09-28T17:09:51.4052832Z [command]/usr/bin/git log -1 --format=%H
+2026-09-28T17:09:51.4072284Z d8722417669e78bcb77bdc795c9025b62c534d91
+2026-09-28T17:09:51.4373952Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-28T17:09:51.4375146Z with:
+2026-09-28T17:09:51.4375774Z   node-version: 24
+2026-09-28T17:09:51.4376420Z   cache: yarn
+2026-09-28T17:09:51.4377046Z   check-latest: false
+2026-09-28T17:09:51.4383991Z   token: ***
+2026-09-28T17:09:51.4384684Z   package-manager-cache: true
+2026-09-28T17:09:51.4385489Z env:
+2026-09-28T17:09:51.4386093Z   DIALECT: postgres
+2026-09-28T17:09:51.4386784Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:09:51.4387508Z ##[endgroup]
+2026-09-28T17:09:51.5425464Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-09-28T17:09:51.5428381Z ##[group]Environment details
+2026-09-28T17:09:55.7156355Z node: v24.21.0
+2026-09-28T17:09:55.7157683Z npm: 11.19.0
+2026-09-28T17:09:55.7158025Z yarn: 4.18.1
+2026-09-28T17:09:55.7159359Z ##[endgroup]
+2026-09-28T17:09:55.7170882Z [command]/usr/local/bin/yarn --version
+2026-09-28T17:09:56.0031916Z 4.18.1
+2026-09-28T17:09:56.0940144Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-09-28T17:09:56.3788669Z /home/runner/.yarn/berry/cache
+2026-09-28T17:09:56.4047484Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-09-28T17:09:56.7051379Z [33mtrue[39m
+2026-09-28T17:09:56.8428266Z Cache hit for: node-cache-Linux-x64-yarn-b9a7cd98f1850a68408b043fb95f68ef0ab5abb5b10e8789dcad416d3cba417e
+2026-09-28T17:09:57.3265395Z Received 88349241 of 88349241 (100.0%), 196.4 MBs/sec
+2026-09-28T17:09:57.3265972Z Cache Size: ~84 MB (88349241 B)
+2026-09-28T17:09:57.3292833Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ca18f494-a82e-47ee-81e4-7c28d8dbd73a/cache.tzst -P -C /home/runner/work/sequelize/sequelize --use-compress-program unzstd
+2026-09-28T17:09:57.8456334Z Cache restored successfully
+2026-09-28T17:09:57.8498149Z Cache restored from key: node-cache-Linux-x64-yarn-b9a7cd98f1850a68408b043fb95f68ef0ab5abb5b10e8789dcad416d3cba417e
+2026-09-28T17:09:57.8675984Z ##[group]Run actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+2026-09-28T17:09:57.8676333Z with:
+2026-09-28T17:09:57.8676534Z   name: install-build-artifact-node-24
+2026-09-28T17:09:57.8676777Z   merge-multiple: false
+2026-09-28T17:09:57.8676981Z   repository: sequelize/sequelize
+2026-09-28T17:09:57.8677185Z   run-id: 36453717391
+2026-09-28T17:09:57.8677375Z   skip-decompress: false
+2026-09-28T17:09:57.8677581Z   digest-mismatch: error
+2026-09-28T17:09:57.8677761Z env:
+2026-09-28T17:09:57.8677935Z   DIALECT: postgres
+2026-09-28T17:09:57.8678121Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:09:57.8678327Z ##[endgroup]
+2026-09-28T17:09:57.9797385Z Downloading single artifact
+2026-09-28T17:09:58.0896390Z Preparing to download the following artifacts:
+2026-09-28T17:09:58.0897347Z - install-build-artifact-node-24 (ID: 10984696107, Size: 140718208, Expected Digest: sha256:b42f7d82a2612233bedac89a950766d1948537fe2318cf73f4862a2d7271f71c)
+2026-09-28T17:09:58.2543424Z Redirecting to blob download url: https://productionresultssa12.blob.core.windows.net/actions-results/1e30d3e9-c11d-4d1b-a72a-81db91fe6350/workflow-job-run-1535a7a1-8608-5875-acb8-223d01d6d813/artifacts/c4318b289cb4f347830d768135bca43ef7ac2e66ed52fd89bedecab2421c1846.zip
+2026-09-28T17:09:58.2545076Z Starting download of artifact to: /home/runner/work/sequelize/sequelize
+2026-09-28T17:09:58.3310364Z (node:2239) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-09-28T17:09:58.3311282Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-28T17:10:01.1567895Z SHA256 digest of downloaded artifact is b42f7d82a2612233bedac89a950766d1948537fe2318cf73f4862a2d7271f71c
+2026-09-28T17:10:01.1568783Z Artifact download completed successfully.
+2026-09-28T17:10:01.1569269Z Total of 1 artifact(s) downloaded
+2026-09-28T17:10:01.1573368Z Download artifact has finished successfully
+2026-09-28T17:10:01.1694454Z ##[group]Run tar -xf install-build-node-24.tar
+2026-09-28T17:10:01.1694816Z [36;1mtar -xf install-build-node-24.tar[0m
+2026-09-28T17:10:01.2243171Z shell: /usr/bin/bash -e {0}
+2026-09-28T17:10:01.2243427Z env:
+2026-09-28T17:10:01.2243614Z   DIALECT: postgres
+2026-09-28T17:10:01.2244034Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:10:01.2244239Z ##[endgroup]
+2026-09-28T17:10:04.5138849Z ##[group]Run yarn start-postgres-oldest
+2026-09-28T17:10:04.5139149Z [36;1myarn start-postgres-oldest[0m
+2026-09-28T17:10:04.5195760Z shell: /usr/bin/bash -e {0}
+2026-09-28T17:10:04.5195982Z env:
+2026-09-28T17:10:04.5196163Z   DIALECT: postgres
+2026-09-28T17:10:04.5196359Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:10:04.5196562Z ##[endgroup]
+2026-09-28T17:10:05.2316997Z ++ dirname -- dev/postgres/oldest/start.sh
+2026-09-28T17:10:05.2324795Z + cd -P -- dev/postgres/oldest
+2026-09-28T17:10:05.2325408Z + docker compose -p sequelize-postgres-oldest down --remove-orphans
+2026-09-28T17:10:10.3257522Z time="2026-09-28T17:10:10Z" level=warning msg="Warning: No resource found to remove for project \"sequelize-postgres-oldest\"."
+2026-09-28T17:10:10.3324642Z + ./../../pull-images.sh sequelize-postgres-oldest
+2026-09-28T17:10:10.4026753Z  postgres-oldest Pulling 
+2026-09-28T17:10:24.2378837Z  postgres-oldest Pulled 
+2026-09-28T17:10:24.2415263Z + docker compose -p sequelize-postgres-oldest up -d
+2026-09-28T17:10:24.3046587Z  Network sequelize-postgres-oldest-network  Creating
+2026-09-28T17:10:24.3351733Z  Network sequelize-postgres-oldest-network  Created
+2026-09-28T17:10:24.3399590Z  Volume "sequelize-postgres-oldest-volume"  Creating
+2026-09-28T17:10:24.3410677Z  Volume "sequelize-postgres-oldest-volume"  Created
+2026-09-28T17:10:24.3414025Z  Container sequelize-postgres-oldest  Creating
+2026-09-28T17:10:24.3614893Z  Container sequelize-postgres-oldest  Created
+2026-09-28T17:10:24.3620415Z  Container sequelize-postgres-oldest  Starting
+2026-09-28T17:10:25.5445024Z  Container sequelize-postgres-oldest  Started
+2026-09-28T17:10:25.5471709Z + ./../../wait-until-healthy.sh sequelize-postgres-oldest
+2026-09-28T17:10:25.6122082Z waiting for sequelize-postgres-oldest to become healthy (currently: starting)
+2026-09-28T17:10:35.9203443Z sequelize-postgres-oldest is healthy!
+2026-09-28T17:10:35.9205495Z + DIALECT=postgres
+2026-09-28T17:10:35.9205895Z + ts-node ../../check-connection.ts
+2026-09-28T17:10:37.3990826Z Connected to postgres 11.16.0 successfully
+2026-09-28T17:10:37.4178267Z + docker exec sequelize-postgres-oldest bash -c 'export PGPASSWORD=sequelize_test && psql -h localhost -p 5432 -U sequelize_test sequelize_test -c '\''CREATE EXTENSION IF NOT EXISTS btree_gist; CREATE EXTENSION IF NOT EXISTS hstore; CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'\'''
+2026-09-28T17:10:37.5209358Z CREATE EXTENSION
+2026-09-28T17:10:37.5826970Z ##[group]Run yarn lerna run test-integration --scope=@sequelize/core
+2026-09-28T17:10:37.5827428Z [36;1myarn lerna run test-integration --scope=@sequelize/core[0m
+2026-09-28T17:10:37.5883815Z shell: /usr/bin/bash -e {0}
+2026-09-28T17:10:37.5884075Z env:
+2026-09-28T17:10:37.5884258Z   DIALECT: postgres
+2026-09-28T17:10:37.5884453Z   SEQ_PG_MINIFY_ALIASES: 1
+2026-09-28T17:10:37.5884670Z ##[endgroup]
+2026-09-28T17:10:38.9251334Z lerna notice cli v10.0.1
+2026-09-28T17:10:39.2241795Z lerna info ci enabled
+2026-09-28T17:10:39.2244177Z lerna notice filter including "@sequelize/core"
+2026-09-28T17:10:39.2249391Z lerna info filter [ '@sequelize/core' ]
+2026-09-28T17:10:39.4084415Z 
+2026-09-28T17:10:39.4085825Z [2m> [22m@sequelize/core:test-integration
+2026-09-28T17:10:39.4086189Z 
+2026-09-28T17:10:40.6122393Z (node:3146) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+2026-09-28T17:10:40.6124159Z --import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-node/esm", pathToFileURL("./"));'
+2026-09-28T17:10:40.6125282Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-09-28T17:10:42.3875319Z (node:3146) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+2026-09-28T17:10:42.3892136Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-28T17:10:42.3892985Z [0m[0m
+2026-09-28T17:10:42.4336089Z [0m  [POSTGRES] Alias[0m
+2026-09-28T17:10:42.5032497Z   [32m  [32m✔[39m[0m[90m should uppercase the first letter in alias getter, but not in eager loading[0m[33m (69ms)[0m
+2026-09-28T17:10:42.5606925Z   [32m  [32m✔[39m[0m[90m shouldnt touch the passed alias[0m[33m (39ms)[0m
+2026-09-28T17:10:42.6039987Z   [32m  [32m✔[39m[0m[90m should allow me to pass my own plural and singular forms to hasMany[0m
+2026-09-28T17:10:42.6385051Z   [32m  [32m✔[39m[0m[90m should allow me to define plural and singular forms on the model[0m
+2026-09-28T17:10:42.6532594Z [0m  belongsToMany Mixins[0m
+2026-09-28T17:10:42.6866659Z [0m    setAssociations[0m
+2026-09-28T17:10:42.6977142Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m
+2026-09-28T17:10:42.7062912Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-09-28T17:10:42.7208017Z     [32m  [32m✔[39m[0m[90m unlinks the previous associations[0m
+2026-09-28T17:10:42.7294311Z     [32m  [32m✔[39m[0m[90m clears associations when the parameter is null[0m
+2026-09-28T17:10:42.7360876Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:42.7379793Z [0m    addAssociations[0m
+2026-09-28T17:10:42.7431653Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m
+2026-09-28T17:10:42.7503270Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-09-28T17:10:42.7871602Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:42.7921059Z [0m    removeAssociations[0m
+2026-09-28T17:10:42.7997210Z     [32m  [32m✔[39m[0m[90m unlinks the target models from the source model[0m
+2026-09-28T17:10:42.8066464Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-09-28T17:10:42.8131577Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:42.8149464Z [0m    hasAssociations[0m
+2026-09-28T17:10:42.8208771Z     [32m  [32m✔[39m[0m[90m returns true if the target model is associated to the source model[0m
+2026-09-28T17:10:42.8264470Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-09-28T17:10:42.8321867Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:42.8537846Z [0m  [POSTGRES] BelongsToMany[0m
+2026-09-28T17:10:42.8538696Z [0m    getAssociations[0m
+2026-09-28T17:10:42.9651528Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (79ms)[0m
+2026-09-28T17:10:43.0619343Z     [32m  [32m✔[39m[0m[90m gets all associated objects with all fields[0m
+2026-09-28T17:10:43.1373208Z     [32m  [32m✔[39m[0m[90m gets all associated objects when no options are passed[0m
+2026-09-28T17:10:43.1900602Z     [32m  [32m✔[39m[0m[90m only get objects that fulfill the options[0m
+2026-09-28T17:10:43.2424080Z     [32m  [32m✔[39m[0m[90m supports a where not in[0m
+2026-09-28T17:10:43.2893108Z     [32m  [32m✔[39m[0m[90m supports a where not in on the primary key[0m
+2026-09-28T17:10:43.3401369Z     [32m  [32m✔[39m[0m[90m only gets objects that fulfill options with a formatted value[0m
+2026-09-28T17:10:43.3864299Z     [32m  [32m✔[39m[0m[90m get associated objects with an eager load[0m
+2026-09-28T17:10:43.4495382Z     [32m  [32m✔[39m[0m[90m get associated objects with an eager load with conditions but not required[0m
+2026-09-28T17:10:43.5421796Z     [32m  [32m✔[39m[0m[90m should support schemas[0m[33m (38ms)[0m
+2026-09-28T17:10:43.6612280Z     [32m  [32m✔[39m[0m[90m supports custom primary keys and foreign keys[0m[33m (72ms)[0m
+2026-09-28T17:10:43.7237843Z (node:3146) [SEQUELIZE0018] DeprecationWarning: The "field" option in attribute definitions has been renamed to "columnName".
+2026-09-28T17:10:43.7878799Z     [32m  [32m✔[39m[0m[90m supports primary key attributes with different field and attribute names[0m[33m (66ms)[0m
+2026-09-28T17:10:43.9061188Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (sourceKey only)[0m[33m (51ms)[0m
+2026-09-28T17:10:44.0584887Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (targetKey only)[0m[31m (83ms)[0m
+2026-09-28T17:10:44.3351161Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (sourceKey and targetKey)[0m[31m (198ms)[0m
+2026-09-28T17:10:44.5154156Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom through model)[0m[31m (79ms)[0m
+2026-09-28T17:10:44.7040130Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins for getting associations (sourceKey/targetKey)[0m[33m (49ms)[0m
+2026-09-28T17:10:44.8881251Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom foreignKey)[0m[33m (47ms)[0m
+2026-09-28T17:10:49.7496159Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom foreignKey, custom through model)[0m[31m (82ms)[0m
+2026-09-28T17:10:50.3915218Z     [32m  [32m✔[39m[0m[90m supports primary key attributes with different field names where parent include is required[0m[31m (90ms)[0m
+2026-09-28T17:10:50.4702189Z [0m    hasAssociations[0m
+2026-09-28T17:10:50.5175148Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[33m (47ms)[0m
+2026-09-28T17:10:50.6638373Z     [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned[0m[31m (114ms)[0m
+2026-09-28T17:10:50.7689074Z     [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned when passing a primary key instead of an object[0m[31m (86ms)[0m
+2026-09-28T17:10:50.8204085Z     [32m  [32m✔[39m[0m[90m answers true if all label have been assigned[0m
+2026-09-28T17:10:50.8720639Z     [32m  [32m✔[39m[0m[90m answers true if all label have been assigned when passing a primary key instead of an object[0m
+2026-09-28T17:10:50.9697745Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned multitple times[0m[31m (76ms)[0m
+2026-09-28T17:10:51.0880016Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned multitple times when passing a primary key instead of an object[0m[33m (67ms)[0m
+2026-09-28T17:10:51.1087059Z [0m    hasAssociations with binary key[0m
+2026-09-28T17:10:51.1091032Z (sequelize) Warning: postgres does not support BLOB (BYTEA) with options. Plain BYTEA will be used instead. 
+2026-09-28T17:10:51.1092094Z >> Check: https://www.postgresql.org/docs/current/datatype.html
+2026-09-28T17:10:51.1375573Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned[0m
+2026-09-28T17:10:51.1927677Z     [32m  [32m✔[39m[0m[90m answer false for labels that have not been assigned[0m
+2026-09-28T17:10:51.2137586Z [0m    countAssociations[0m
+2026-09-28T17:10:51.2968495Z     [32m  [32m✔[39m[0m[90m should count all associations[0m
+2026-09-28T17:10:51.4616045Z     [32m  [32m✔[39m[0m[90m should count filtered associations[0m
+2026-09-28T17:10:51.5404482Z     [32m  [32m✔[39m[0m[90m should count scoped associations[0m
+2026-09-28T17:10:51.6903065Z     [32m  [32m✔[39m[0m[90m should count scoped through associations[0m
+2026-09-28T17:10:51.7094846Z [0m    setAssociations[0m
+2026-09-28T17:10:51.7390990Z     [32m  [32m✔[39m[0m[90m clears associations when passing null to the set-method[0m
+2026-09-28T17:10:51.7863297Z     [32m  [32m✔[39m[0m[90m should be able to set twice with custom primary keys[0m
+2026-09-28T17:10:52.1061894Z     [32m  [32m✔[39m[0m[90m joins an association with custom primary keys[0m
+2026-09-28T17:10:52.1532676Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:52.2100172Z     [32m  [32m✔[39m[0m[90m using scope to set associations[0m[33m (38ms)[0m
+2026-09-28T17:10:52.2734789Z     [32m  [32m✔[39m[0m[90m updating association via set associations with scope[0m[33m (40ms)[0m
+2026-09-28T17:10:52.3296189Z     [32m  [32m✔[39m[0m[90m should catch EmptyResultError when rejectOnEmpty is set[0m
+2026-09-28T17:10:52.3483780Z [0m    createAssociations[0m
+2026-09-28T17:10:52.3835443Z     [32m  [32m✔[39m[0m[90m creates a new associated object[0m
+2026-09-28T17:10:52.4468596Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[33m (46ms)[0m
+2026-09-28T17:10:52.5270759Z     [32m  [32m✔[39m[0m[90m supports setting through table attributes[0m
+2026-09-28T17:10:52.6178023Z     [32m  [32m✔[39m[0m[90m supports using the field parameter[0m
+2026-09-28T17:10:52.6369510Z [0m    addAssociations[0m
+2026-09-28T17:10:52.7005429Z     [32m  [32m✔[39m[0m[90m supports both single instance and array[0m[33m (63ms)[0m
+2026-09-28T17:10:52.7678720Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[33m (49ms)[0m
+2026-09-28T17:10:52.8567979Z     [32m  [32m✔[39m[0m[90m supports transactions when updating a through model[0m[33m (61ms)[0m
+2026-09-28T17:10:52.9206829Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-09-28T17:10:52.9925240Z     [32m  [32m✔[39m[0m[90m should not pass indexes to the join table[0m[33m (48ms)[0m
+2026-09-28T17:10:53.1006783Z     [32m  [32m✔[39m[0m[90m should catch EmptyResultError when rejectOnEmpty is set[0m
+2026-09-28T17:10:53.1571425Z [0m    addMultipleAssociations[0m
+2026-09-28T17:10:53.3164928Z     [32m  [32m✔[39m[0m[90m supports both single instance and array[0m[31m (159ms)[0m
+2026-09-28T17:10:53.5341901Z     [32m  [32m✔[39m[0m[90m adds associations without removing the current ones[0m
+2026-09-28T17:10:53.5541141Z [0m    through model validations[0m
+2026-09-28T17:10:53.5800041Z     [32m  [32m✔[39m[0m[90m runs on add[0m
+2026-09-28T17:10:53.6265359Z     [32m  [32m✔[39m[0m[90m runs on set[0m
+2026-09-28T17:10:53.6695438Z     [32m  [32m✔[39m[0m[90m runs on create[0m
+2026-09-28T17:10:53.6947479Z [0m    optimizations using bulk create, destroy and update[0m
+2026-09-28T17:10:53.7443449Z     [32m  [32m✔[39m[0m[90m uses one insert into statement[0m
+2026-09-28T17:10:53.8433602Z     [32m  [32m✔[39m[0m[90m uses one delete from statement[0m
+2026-09-28T17:10:53.8612457Z [0m    join table creation[0m
+2026-09-28T17:10:53.9808136Z     [32m  [32m✔[39m[0m[90m should work with non integer primary keys[0m[31m (87ms)[0m
+2026-09-28T17:10:54.0410944Z     [32m  [32m✔[39m[0m[90m makes join table non-paranoid by default[0m
+2026-09-28T17:10:54.1007691Z     [32m  [32m✔[39m[0m[90m should allow creation of a paranoid join table[0m
+2026-09-28T17:10:54.1573576Z [0m    foreign keys[0m
+2026-09-28T17:10:54.1593287Z     [32m  [32m✔[39m[0m[90m generates camelCase foreign keys if underscored is not set on the through model[0m
+2026-09-28T17:10:54.1632688Z     [32m  [32m✔[39m[0m[90m generates snake_case foreign keys if underscored is set on the through model[0m
+2026-09-28T17:10:54.1675901Z     [32m  [32m✔[39m[0m[90m should infer otherKey from paired BTM relationship with a through string defined[0m
+2026-09-28T17:10:54.1698763Z [0m    foreign key with fields specified[0m
+2026-09-28T17:10:54.2218644Z     [32m  [32m✔[39m[0m[90m should correctly get associations even after a child instance is deleted[0m[33m (49ms)[0m
+2026-09-28T17:10:54.2828608Z     [32m  [32m✔[39m[0m[90m should correctly get associations when doubly linked[0m
+2026-09-28T17:10:54.4373304Z     [32m  [32m✔[39m[0m[90m should be able to handle nested includes properly[0m[31m (128ms)[0m
+2026-09-28T17:10:54.5995438Z [0m    primary key handling for join table[0m
+2026-09-28T17:10:54.6006361Z     [32m  [32m✔[39m[0m[90m removes the primary key if it was added by sequelize[0m
+2026-09-28T17:10:54.6065221Z     [32m  [32m✔[39m[0m[90m keeps the primary key if it was added by the user[0m
+2026-09-28T17:10:54.6087209Z [0m      without sync[0m
+2026-09-28T17:10:54.6514738Z       [32m  [32m✔[39m[0m[90m removes all associations[0m
+2026-09-28T17:10:54.6703290Z [0m    through[0m
+2026-09-28T17:10:54.6705552Z [0m      paranoid[0m
+2026-09-28T17:10:54.6914409Z       [32m  [32m✔[39m[0m[90m gets only non-deleted records by default[0m
+2026-09-28T17:10:54.7354508Z       [32m  [32m✔[39m[0m[90m returns both deleted and non-deleted records with paranoid=false[0m
+2026-09-28T17:10:54.7779037Z       [32m  [32m✔[39m[0m[90m hasAssociation also respects paranoid option[0m
+2026-09-28T17:10:54.7995774Z [0m      fetching from join table[0m
+2026-09-28T17:10:54.8155058Z       [32m  [32m✔[39m[0m[90m should contain the data from the join table on .UserProjects a DAO[0m
+2026-09-28T17:10:54.8940736Z       [32m  [32m✔[39m[0m[90m should be able to alias the default name of the join table[0m
+2026-09-28T17:11:04.8990610Z       [31m  1) "after each" hook: database reset for "should be able to alias the default name of the join table"[0m
+2026-09-28T17:11:07.7903342Z [92m [0m[32m 92 passing[0m[90m (25s)[0m
+2026-09-28T17:11:07.7903929Z [31m  1 failing[0m
+2026-09-28T17:11:07.7908772Z [0m  1) "after each" hook: database reset for "should be able to alias the default name of the join table":
+2026-09-28T17:11:07.7910023Z [0m[31m     TimeoutError: Could not clear database after this test in less than 10000ms. This test crashed the DB, and testing cannot continue. Aborting.[0m[90m
+2026-09-28T17:11:07.7911272Z       at Timeout.<anonymous> (/home/runner/work/sequelize/sequelize/node_modules/p-timeout/index.js:39:64)
+2026-09-28T17:11:07.7912007Z       at listOnTimeout (node:internal/timers:685:17)
+2026-09-28T17:11:07.7912571Z       at processTimers (node:internal/timers:618:7)
+2026-09-28T17:11:07.7913007Z [0m
+2026-09-28T17:11:07.8544237Z 
+2026-09-28T17:11:07.8545247Z [2m[31m[39m[22m
+2026-09-28T17:11:07.8546274Z 
+2026-09-28T17:11:07.8547779Z [7m[1m[31m Lerna (powered by Nx) [39m[22m[27m  [31mRunning target [1mtest-integration[22m for project @sequelize/core failed[39m
+2026-09-28T17:11:07.8554799Z 
+2026-09-28T17:11:07.8555088Z [2mFailed tasks:[22m
+2026-09-28T17:11:07.8555279Z 
+2026-09-28T17:11:07.8555479Z [2m-[22m @sequelize/core:test-integration
+2026-09-28T17:11:07.8555667Z 
+2026-09-28T17:11:07.8555950Z [2mHint: run the command with[22m --verbose [2mfor more details.[22m
+2026-09-28T17:11:07.8556178Z 
+2026-09-28T17:11:07.8566860Z   Run duration:      28.5s
+2026-09-28T17:11:07.8567263Z   Critical path:     28.4s (1 task)
+2026-09-28T17:11:07.8567559Z   Recoverable time:  <1ms
+2026-09-28T17:11:07.9000223Z ##[error]Process completed with exit code 1.
+2026-09-28T17:11:07.9109050Z Post job cleanup.
+2026-09-28T17:11:07.9846002Z [command]/usr/bin/git version
+2026-09-28T17:11:07.9879023Z git version 2.55.0
+2026-09-28T17:11:07.9906668Z Temporarily overriding HOME='/home/runner/work/_temp/87d13f42-b076-4c36-8b07-c8e8cd856a3f' before making global git config changes
+2026-09-28T17:11:07.9908152Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-28T17:11:07.9911272Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-09-28T17:11:07.9939801Z Removing SSH command configuration
+2026-09-28T17:11:07.9963914Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-28T17:11:07.9975218Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-28T17:11:08.0160354Z Removing HTTP extra header
+2026-09-28T17:11:08.0165426Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-28T17:11:08.0192822Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-28T17:11:08.0373983Z Removing includeIf entries pointing to credentials config files
+2026-09-28T17:11:08.0379114Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-28T17:11:08.0403899Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-09-28T17:11:08.0404463Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-09-28T17:11:08.0404891Z includeif.gitdir:/github/workspace/.git.path
+2026-09-28T17:11:08.0405241Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-28T17:11:08.0410900Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-09-28T17:11:08.0430933Z /home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:11:08.0439467Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-d0895435\-cf79\-4d1c\-89b0\-54057eca9de5\.config
+2026-09-28T17:11:08.0468156Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-09-28T17:11:08.0493890Z /home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:11:08.0501362Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-d0895435\-cf79\-4d1c\-89b0\-54057eca9de5\.config
+2026-09-28T17:11:08.0529197Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-28T17:11:08.0546680Z /github/runner_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:11:08.0553004Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-d0895435\-cf79\-4d1c\-89b0\-54057eca9de5\.config
+2026-09-28T17:11:08.0579801Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-28T17:11:08.0596761Z /github/runner_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config
+2026-09-28T17:11:08.0603952Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-d0895435\-cf79\-4d1c\-89b0\-54057eca9de5\.config
+2026-09-28T17:11:08.0631715Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-28T17:11:08.0814135Z Removing credentials config '/home/runner/work/_temp/git-credentials-d0895435-cf79-4d1c-89b0-54057eca9de5.config'
+2026-09-28T17:11:08.0962060Z Cleaning up orphan processes

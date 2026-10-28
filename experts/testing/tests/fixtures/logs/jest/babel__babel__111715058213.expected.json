@@ -1,0 +1,23 @@
+{
+  "framework": "jest",
+  "repo": "babel/babel",
+  "job_id": 111715058213,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 31752,
+    "failed": 0,
+    "skipped": 64,
+    "total": 31818,
+    "todo": 2,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Trimmed. Two `● name` blocks sit under PASS lines (a skipped suite's hook warning); they are not failures."
+}

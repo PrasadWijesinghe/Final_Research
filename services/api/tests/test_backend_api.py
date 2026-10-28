@@ -350,10 +350,9 @@ async def test_health_reports_each_expert(
 @pytest.mark.parametrize(
     ("method", "path"),
     [
-        ("POST", "/webhooks/github"),
         ("GET", "/auth/github/login"),
         ("GET", "/auth/github/callback"),
     ],
 )
-async def test_github_endpoints_are_501(client: httpx.AsyncClient, method: str, path: str) -> None:
+async def test_github_sign_in_is_501(client: httpx.AsyncClient, method: str, path: str) -> None:
     assert (await client.request(method, path)).status_code == 501

@@ -1,0 +1,458 @@
+﻿2026-10-16T22:51:31.3657311Z Current runner version: '2.337.0'
+2026-10-16T22:51:31.3681627Z ##[group]Runner Image Provisioner
+2026-10-16T22:51:31.3682591Z Hosted Compute Agent
+2026-10-16T22:51:31.3683267Z Version: 20261012.601
+2026-10-16T22:51:31.3683892Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-16T22:51:31.3684714Z Build Date: 2026-10-12T17:48:21Z
+2026-10-16T22:51:31.3685420Z Worker ID: {6ed75c1e-56f1-4210-b655-1c6580b60474}
+2026-10-16T22:51:31.3686203Z Region: westus
+2026-10-16T22:51:31.3686811Z Cloud: Azure
+2026-10-16T22:51:31.3687325Z ##[endgroup]
+2026-10-16T22:51:31.3689611Z ##[group]Operating System
+2026-10-16T22:51:31.3690318Z Ubuntu
+2026-10-16T22:51:31.3690918Z 24.04.5
+2026-10-16T22:51:31.3691462Z LTS
+2026-10-16T22:51:31.3692061Z ##[endgroup]
+2026-10-16T22:51:31.3692703Z ##[group]Runner Image
+2026-10-16T22:51:31.3693344Z Image: ubuntu-24.04
+2026-10-16T22:51:31.3693952Z Version: 20261012.334.1
+2026-10-16T22:51:31.3695250Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-16T22:51:31.3696910Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-16T22:51:31.3697918Z ##[endgroup]
+2026-10-16T22:51:31.3699414Z ##[group]GITHUB_TOKEN Permissions
+2026-10-16T22:51:31.3701529Z Contents: read
+2026-10-16T22:51:31.3702234Z Metadata: read
+2026-10-16T22:51:31.3702841Z ##[endgroup]
+2026-10-16T22:51:31.3704881Z Secret source: Actions
+2026-10-16T22:51:31.3705976Z Cache mode: write
+2026-10-16T22:51:31.3706850Z Prepare workflow directory
+2026-10-16T22:51:31.4289986Z Prepare all required actions
+2026-10-16T22:51:31.4347909Z Getting action download info
+2026-10-16T22:51:31.7734134Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-16T22:51:31.9538879Z Complete job name: Run integration tests on primary Node.js version
+2026-10-16T22:51:32.0244625Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-16T22:51:32.0245713Z with:
+2026-10-16T22:51:32.0246191Z   persist-credentials: false
+2026-10-16T22:51:32.0246809Z   repository: typescript-eslint/typescript-eslint
+2026-10-16T22:51:32.0250733Z   token: ***
+2026-10-16T22:51:32.0251181Z   ssh-strict: true
+2026-10-16T22:51:32.0251626Z   ssh-user: git
+2026-10-16T22:51:32.0252062Z   clean: true
+2026-10-16T22:51:32.0252525Z   sparse-checkout-cone-mode: true
+2026-10-16T22:51:32.0253053Z   fetch-depth: 1
+2026-10-16T22:51:32.0253502Z   fetch-tags: false
+2026-10-16T22:51:32.0253957Z   show-progress: true
+2026-10-16T22:51:32.0254416Z   lfs: false
+2026-10-16T22:51:32.0254855Z   submodules: false
+2026-10-16T22:51:32.0255323Z   set-safe-directory: true
+2026-10-16T22:51:32.0255846Z   allow-unsafe-pr-checkout: false
+2026-10-16T22:51:32.0256612Z env:
+2026-10-16T22:51:32.0257046Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:32.0257884Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:32.0258606Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:32.0259145Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:32.0259688Z ##[endgroup]
+2026-10-16T22:51:32.1236902Z Syncing repository: typescript-eslint/typescript-eslint
+2026-10-16T22:51:32.1239292Z ##[group]Getting Git version info
+2026-10-16T22:51:32.1240197Z Working directory is '/home/runner/work/typescript-eslint/typescript-eslint'
+2026-10-16T22:51:32.1241389Z [command]/usr/bin/git version
+2026-10-16T22:51:32.1328904Z git version 2.55.0
+2026-10-16T22:51:32.1349819Z ##[endgroup]
+2026-10-16T22:51:32.1365170Z Temporarily overriding HOME='/home/runner/work/_temp/9280e7c5-769c-436a-ae0a-c357ddce6aaa' before making global git config changes
+2026-10-16T22:51:32.1367657Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-16T22:51:32.1372156Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-16T22:51:32.1420355Z Deleting the contents of '/home/runner/work/typescript-eslint/typescript-eslint'
+2026-10-16T22:51:32.1424192Z ##[group]Initializing the repository
+2026-10-16T22:51:32.1427855Z [command]/usr/bin/git init /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-16T22:51:32.1545681Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-16T22:51:32.1547412Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-16T22:51:32.1548897Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-16T22:51:32.1550417Z hint: call:
+2026-10-16T22:51:32.1551202Z hint:
+2026-10-16T22:51:32.1552203Z hint: 	git config --global init.defaultBranch <name>
+2026-10-16T22:51:32.1553451Z hint:
+2026-10-16T22:51:32.1554628Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-16T22:51:32.1556500Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-16T22:51:32.1558316Z hint:
+2026-10-16T22:51:32.1559192Z hint: 	git branch -m <name>
+2026-10-16T22:51:32.1560093Z hint:
+2026-10-16T22:51:32.1561315Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-16T22:51:32.1563500Z Initialized empty Git repository in /home/runner/work/typescript-eslint/typescript-eslint/.git/
+2026-10-16T22:51:32.1566662Z [command]/usr/bin/git remote add origin https://github.com/typescript-eslint/typescript-eslint
+2026-10-16T22:51:32.1615490Z ##[endgroup]
+2026-10-16T22:51:32.1616858Z ##[group]Disabling automatic garbage collection
+2026-10-16T22:51:32.1620206Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-16T22:51:32.1650162Z ##[endgroup]
+2026-10-16T22:51:32.1650917Z ##[group]Setting up auth
+2026-10-16T22:51:32.1656280Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-16T22:51:32.1686207Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-16T22:51:32.2042663Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-16T22:51:32.2074566Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-16T22:51:32.2292670Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-16T22:51:32.2323452Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-16T22:51:32.2543867Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-16T22:51:32.2580288Z ##[endgroup]
+2026-10-16T22:51:32.2581381Z ##[group]Fetching the repository
+2026-10-16T22:51:32.2588948Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5f8fabf1fe268055baff81a6cd88f6330e3b5e4c:refs/remotes/origin/main
+2026-10-16T22:51:33.3340053Z From https://github.com/typescript-eslint/typescript-eslint
+2026-10-16T22:51:33.3342013Z  * [new ref]         5f8fabf1fe268055baff81a6cd88f6330e3b5e4c -> origin/main
+2026-10-16T22:51:33.3345296Z ##[endgroup]
+2026-10-16T22:51:33.3346555Z ##[group]Determining the checkout info
+2026-10-16T22:51:33.3348788Z ##[endgroup]
+2026-10-16T22:51:33.3356593Z [command]/usr/bin/git sparse-checkout disable
+2026-10-16T22:51:33.3412975Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-16T22:51:33.3446285Z ##[group]Checking out the ref
+2026-10-16T22:51:33.3451038Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-16T22:51:33.7410531Z Switched to a new branch 'main'
+2026-10-16T22:51:33.7429506Z branch 'main' set up to track 'origin/main'.
+2026-10-16T22:51:33.7432968Z ##[endgroup]
+2026-10-16T22:51:33.7479901Z [command]/usr/bin/git log -1 --format=%H
+2026-10-16T22:51:33.7503530Z 5f8fabf1fe268055baff81a6cd88f6330e3b5e4c
+2026-10-16T22:51:33.7517560Z ##[group]Removing auth
+2026-10-16T22:51:33.7518828Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-16T22:51:33.7549524Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-16T22:51:33.7779186Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-16T22:51:33.7804733Z http.https://github.com/.extraheader
+2026-10-16T22:51:33.7812216Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-16T22:51:33.7845266Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-16T22:51:33.8072408Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-16T22:51:33.8100057Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-16T22:51:33.8322582Z ##[endgroup]
+2026-10-16T22:51:33.8616295Z Prepare all required actions
+2026-10-16T22:51:33.8617023Z Getting action download info
+2026-10-16T22:51:34.0009465Z Download action repository 'pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b' (SHA:703c52620218391530e48b9e8870d5c0082e1b9b)
+2026-10-16T22:51:34.3039651Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-16T22:51:34.4237545Z ##[group]Run ./.github/actions/prepare-install
+2026-10-16T22:51:34.4237977Z with:
+2026-10-16T22:51:34.4238579Z   node-version: 24
+2026-10-16T22:51:34.4238867Z   working-directory: .
+2026-10-16T22:51:34.4239135Z env:
+2026-10-16T22:51:34.4239381Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:34.4240101Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:34.4240418Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:34.4240744Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:34.4241058Z ##[endgroup]
+2026-10-16T22:51:34.4297616Z ##[start-action display=echo github.ref;id=__self.__run]
+2026-10-16T22:51:34.4337342Z ##[group]Run echo "$GITHUB_REF"
+2026-10-16T22:51:34.4337756Z [36;1mecho "$GITHUB_REF"[0m
+2026-10-16T22:51:34.4617908Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-16T22:51:34.4618719Z env:
+2026-10-16T22:51:34.4619048Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:34.4619814Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:34.4620213Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:34.4620611Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:34.4621019Z ##[endgroup]
+2026-10-16T22:51:34.4719481Z refs/heads/main
+2026-10-16T22:51:34.4735916Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=43]
+2026-10-16T22:51:34.4738871Z ##[start-action display=Install pnpm;id=__self.__pnpm_setup]
+2026-10-16T22:51:34.4806484Z ##[group]Run pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
+2026-10-16T22:51:34.4806935Z with:
+2026-10-16T22:51:34.4807181Z   cache: true
+2026-10-16T22:51:34.4807437Z   install: false
+2026-10-16T22:51:34.4807720Z   working-directory: .
+2026-10-16T22:51:34.4808006Z   dest: ~/setup-pnpm
+2026-10-16T22:51:34.4808645Z   require-lockfile: false
+2026-10-16T22:51:34.4808943Z env:
+2026-10-16T22:51:34.4809197Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:34.4809797Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:34.4810110Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:34.4810422Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:34.4810741Z ##[endgroup]
+2026-10-16T22:51:34.6012525Z ##[group]Installing pnpm...
+2026-10-16T22:51:34.6018151Z Downloading pnpm 12.11.2 from the npm registry
+2026-10-16T22:51:34.7365528Z ==> Downloading pnpm 12.11.2
+2026-10-16T22:51:35.5290514Z ##[endgroup]
+2026-10-16T22:51:35.5291496Z Installation Completed!
+2026-10-16T22:51:35.5296124Z ##[group]Restoring cache...
+2026-10-16T22:51:35.7904995Z Lockfile verification cache is not found
+2026-10-16T22:51:35.7926277Z [command]/home/runner/setup-pnpm/pnpm store path
+2026-10-16T22:51:35.8061191Z /home/runner/setup-pnpm/store/v11
+2026-10-16T22:51:36.0546205Z Cache hit for: pnpm-cache-Linux-x64-no-runtime-792e2758ebc454374ed4188f9c122b0e07ecd3d5413ddbceb86a09ccd2c42f7e
+2026-10-16T22:51:37.3412132Z Received 0 of 186860391 (0.0%), 0.0 MBs/sec
+2026-10-16T22:51:38.3776715Z Received 134217728 of 186860391 (71.8%), 62.8 MBs/sec
+2026-10-16T22:51:39.3854793Z Received 186860391 of 186860391 (100.0%), 58.5 MBs/sec
+2026-10-16T22:51:39.3855900Z Cache Size: ~178 MB (186860391 B)
+2026-10-16T22:51:39.3898555Z [command]/usr/bin/tar -xf /home/runner/work/_temp/b01d6ffa-1e82-4a3b-aa43-f7f7d63ac612/cache.tzst -P -C /home/runner/work/typescript-eslint/typescript-eslint --use-compress-program unzstd
+2026-10-16T22:51:41.9720928Z Cache restored successfully
+2026-10-16T22:51:41.9806533Z Cache restored from key: pnpm-cache-Linux-x64-no-runtime-792e2758ebc454374ed4188f9c122b0e07ecd3d5413ddbceb86a09ccd2c42f7e
+2026-10-16T22:51:41.9807700Z ##[endgroup]
+2026-10-16T22:51:41.9808798Z No runtime requested (no `runtime` input and no `devEngines.runtime` in package.json). Skipping runtime install.
+2026-10-16T22:51:41.9976409Z ##[end-action id=__self.__pnpm_setup;outcome=success;conclusion=success;duration_ms=7523]
+2026-10-16T22:51:42.0014328Z ##[start-action display=Use Node.js 24;id=__self.__actions_setup-node]
+2026-10-16T22:51:42.0102814Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-16T22:51:42.0103221Z with:
+2026-10-16T22:51:42.0103434Z   node-version: 24
+2026-10-16T22:51:42.0103674Z   always-auth: false
+2026-10-16T22:51:42.0103913Z   check-latest: false
+2026-10-16T22:51:42.0106309Z   token: ***
+2026-10-16T22:51:42.0106539Z env:
+2026-10-16T22:51:42.0106756Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:42.0107247Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:42.0107520Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:42.0107790Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:42.0108413Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-16T22:51:42.0108776Z ##[endgroup]
+2026-10-16T22:51:42.1516932Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-16T22:51:42.1521243Z (node:2446) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-16T22:51:42.1522619Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:51:42.1524701Z ##[group]Environment details
+2026-10-16T22:51:42.5730975Z node: v24.21.0
+2026-10-16T22:51:42.5731356Z npm: 11.19.0
+2026-10-16T22:51:42.5731720Z yarn: 1.22.22
+2026-10-16T22:51:42.5732207Z ##[endgroup]
+2026-10-16T22:51:42.5827125Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=581]
+2026-10-16T22:51:42.5830611Z ##[start-action display=Install dependencies;id=__self.__run_2]
+2026-10-16T22:51:42.5850291Z ##[group]Run pnpm install --frozen-lockfile --trust-lockfile
+2026-10-16T22:51:42.5850793Z [36;1mpnpm install --frozen-lockfile --trust-lockfile[0m
+2026-10-16T22:51:42.5851247Z [36;1mpnpm run check-clean-workspace-after-install[0m
+2026-10-16T22:51:42.5922373Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-16T22:51:42.5922761Z env:
+2026-10-16T22:51:42.5922982Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:42.5923562Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:42.5923846Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:42.5924128Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:42.5924439Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-16T22:51:42.5924719Z   HUSKY: 0
+2026-10-16T22:51:42.5924930Z   SKIP_POSTINSTALL: true
+2026-10-16T22:51:42.5925177Z ##[endgroup]
+2026-10-16T22:51:42.6196376Z Scope: all 20 workspace projects
+2026-10-16T22:51:42.8669687Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-10-16T22:51:42.8679290Z   Content-addressable store is at: /home/runner/setup-pnpm/store/v11
+2026-10-16T22:51:42.8679947Z   Virtual store is at:             node_modules/.pnpm
+2026-10-16T22:51:43.8739723Z Progress: resolved 1729, reused 1729, downloaded 0, added 1722
+2026-10-16T22:51:44.5463591Z Packages: +1938
+2026-10-16T22:51:44.5464260Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-10-16T22:51:44.7801520Z Progress: resolved 1938, reused 1934, downloaded 4, added 1938, done
+2026-10-16T22:51:45.1045193Z . postinstall$ tsx tools/scripts/postinstall.mts
+2026-10-16T22:51:45.3499280Z . postinstall: 
+2026-10-16T22:51:45.3539523Z . postinstall: Skipping postinstall script because $SKIP_POSTINSTALL is set...
+2026-10-16T22:51:45.3554431Z . postinstall: 
+2026-10-16T22:51:45.3660625Z . postinstall: Done
+2026-10-16T22:51:45.3680246Z Lockfile is up to date, resolution step is skipped
+2026-10-16T22:51:45.3680600Z 
+2026-10-16T22:51:45.3680728Z devDependencies:
+2026-10-16T22:51:45.3681018Z + @actions/github 9.1.1
+2026-10-16T22:51:45.3681415Z + @arethetypeswrong/cli 0.18.3
+2026-10-16T22:51:45.3681913Z + @eslint-community/eslint-plugin-eslint-comments 4.8.0
+2026-10-16T22:51:45.3682358Z + @eslint/compat 2.1.0
+2026-10-16T22:51:45.3682670Z + @eslint/config-helpers 0.7.0
+2026-10-16T22:51:45.3682960Z + @eslint/js 10.0.1
+2026-10-16T22:51:45.3683515Z + @nx/devkit 23.2.0
+2026-10-16T22:51:45.3683761Z + @nx/js 23.2.0
+2026-10-16T22:51:45.3684003Z + @nx/vitest 23.2.0
+2026-10-16T22:51:45.3684256Z + @nx/workspace 23.2.0
+2026-10-16T22:51:45.3684523Z + @swc/core 1.16.1
+2026-10-16T22:51:45.3684782Z + @types/debug 4.1.13
+2026-10-16T22:51:45.3685078Z + @types/natural-compare 1.4.3
+2026-10-16T22:51:45.3685371Z + @types/node 24.19.0
+2026-10-16T22:51:45.3685633Z + @types/semver 7.8.0
+2026-10-16T22:51:45.3686102Z + @typescript-eslint/eslint-plugin <- packages/eslint-plugin
+2026-10-16T22:51:45.3687130Z + @typescript-eslint/eslint-plugin-internal <- packages/eslint-plugin-internal
+2026-10-16T22:51:45.3687949Z + @typescript-eslint/parser <- packages/parser
+2026-10-16T22:51:45.3689338Z + @typescript-eslint/scope-manager <- packages/scope-manager
+2026-10-16T22:51:45.3689856Z + @typescript-eslint/types <- packages/types
+2026-10-16T22:51:45.3690363Z + @typescript-eslint/typescript-estree <- packages/typescript-estree
+2026-10-16T22:51:45.3690875Z + @typescript-eslint/utils <- packages/utils
+2026-10-16T22:51:45.3691260Z + @typescript/native <- typescript 7.0.2
+2026-10-16T22:51:45.3691596Z + @vitest/coverage-v8 4.1.10
+2026-10-16T22:51:45.3691916Z + @vitest/eslint-plugin 1.6.16
+2026-10-16T22:51:45.3692210Z + console-fail-test 0.10.0
+2026-10-16T22:51:45.3692467Z + cspell 10.3.0
+2026-10-16T22:51:45.3692701Z + eslint 10.12.0
+2026-10-16T22:51:45.3693001Z + eslint-plugin-eslint-plugin 7.6.2
+2026-10-16T22:51:45.3693337Z + eslint-plugin-import 2.32.0
+2026-10-16T22:51:45.3693645Z + eslint-plugin-jsdoc 50.8.0
+2026-10-16T22:51:45.3693965Z + eslint-plugin-jsx-a11y 6.10.2
+2026-10-16T22:51:45.3694277Z + eslint-plugin-n 17.24.0
+2026-10-16T22:51:45.3694609Z + eslint-plugin-perfectionist 5.12.0
+2026-10-16T22:51:45.3694934Z + eslint-plugin-react 7.37.5
+2026-10-16T22:51:45.3695270Z + eslint-plugin-react-hooks 5.2.0
+2026-10-16T22:51:45.3695594Z + eslint-plugin-regexp 2.10.0
+2026-10-16T22:51:45.3695920Z + eslint-plugin-unicorn 59.0.1
+2026-10-16T22:51:45.3696197Z + execa 7.2.0
+2026-10-16T22:51:45.3696450Z + get-github-auth-token 0.2.0
+2026-10-16T22:51:45.3696717Z + globals 16.5.0
+2026-10-16T22:51:45.3696934Z + husky 9.1.7
+2026-10-16T22:51:45.3697144Z + knip 6.40.0
+2026-10-16T22:51:45.3697384Z + lint-staged 15.5.2
+2026-10-16T22:51:45.3697651Z + markdownlint-cli 0.49.1
+2026-10-16T22:51:45.3697903Z + nx 23.2.0
+2026-10-16T22:51:45.3698335Z + prettier 3.9.5
+2026-10-16T22:51:45.3698686Z + rimraf 5.0.10
+2026-10-16T22:51:45.3699079Z + semver 7.8.0
+2026-10-16T22:51:45.3699417Z + tsx 4.23.12
+2026-10-16T22:51:45.3699883Z + typescript <- @typescript/typescript6 6.0.2
+2026-10-16T22:51:45.3700551Z + typescript-eslint <- packages/typescript-eslint
+2026-10-16T22:51:45.3701059Z + vite 7.3.6
+2026-10-16T22:51:45.3701388Z + vitest 4.1.10
+2026-10-16T22:51:45.3701586Z 
+2026-10-16T22:51:45.3716957Z Done in 2.8s using pnpm v12.11.2
+2026-10-16T22:51:45.3999952Z $ git diff --quiet --exit-code
+2026-10-16T22:51:45.6477512Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=3064]
+2026-10-16T22:51:45.6516772Z ##[group]Run pnpm run test-integration
+2026-10-16T22:51:45.6517146Z [36;1mpnpm run test-integration[0m
+2026-10-16T22:51:45.6601496Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-16T22:51:45.6601881Z env:
+2026-10-16T22:51:45.6602102Z   PRIMARY_NODE_VERSION: 24
+2026-10-16T22:51:45.6602686Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-16T22:51:45.6602958Z   NX_VERBOSE_LOGGING: false
+2026-10-16T22:51:45.6603228Z   NX_CI_EXECUTION_ENV: ubuntu-latest
+2026-10-16T22:51:45.6603536Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-16T22:51:45.6603815Z   CI: true
+2026-10-16T22:51:45.6604020Z ##[endgroup]
+2026-10-16T22:51:45.6854599Z $ nx run integration-tests:test
+2026-10-16T22:51:49.5999181Z 
+2026-10-16T22:51:49.6001728Z [7m[1m[36m NX [39m[22m[27m  [36mRunning target [1mtest[22m for project integration-tests and [1m15[22m tasks it depends on:[39m
+2026-10-16T22:51:49.6002737Z 
+2026-10-16T22:51:49.6003044Z [2m[36m[39m[22m
+2026-10-16T22:51:50.2512620Z [32m✔[39m  [2mnx run[22m tsconfig-utils:build  [2m[remote cache][22m
+2026-10-16T22:51:50.2513534Z [32m✔[39m  [2mnx run[22m ast-spec:build  [2m[remote cache][22m
+2026-10-16T22:51:50.5689166Z [32m✔[39m  [2mnx run[22m types:copy-ast-spec
+2026-10-16T22:51:50.9067103Z [32m✔[39m  [2mnx run[22m types:build  [2m[remote cache][22m
+2026-10-16T22:51:51.2149720Z [32m✔[39m  [2mnx run[22m visitor-keys:build  [2m[remote cache][22m
+2026-10-16T22:51:51.2151193Z [32m✔[39m  [2mnx run[22m project-service:build  [2m[remote cache][22m
+2026-10-16T22:51:51.6644315Z [32m✔[39m  [2mnx run[22m typescript-estree:build  [2m[remote cache][22m
+2026-10-16T22:51:52.1778672Z [32m✔[39m  [2mnx run[22m scope-manager:build  [2m[remote cache][22m
+2026-10-16T22:51:52.5613890Z [32m✔[39m  [2mnx run[22m utils:build  [2m[remote cache][22m
+2026-10-16T22:51:52.5614659Z [32m✔[39m  [2mnx run[22m parser:build  [2m[remote cache][22m
+2026-10-16T22:51:53.0046717Z [32m✔[39m  [2mnx run[22m type-utils:build  [2m[remote cache][22m
+2026-10-16T22:51:53.0048355Z [32m✔[39m  [2mnx run[22m rule-tester:build  [2m[remote cache][22m
+2026-10-16T22:51:53.3610194Z [32m✔[39m  [2mnx run[22m rule-schema-to-typescript-types:build  [2m[remote cache][22m
+2026-10-16T22:51:54.0041631Z [32m✔[39m  [2mnx run[22m eslint-plugin:build  [2m[remote cache][22m
+2026-10-16T22:51:54.3180888Z [32m✔[39m  [2mnx run[22m typescript-eslint:build  [2m[remote cache][22m
+2026-10-16T22:51:54.3186948Z 
+2026-10-16T22:51:54.3187533Z [2m> [22m[2mnx run[22m integration-tests:test
+2026-10-16T22:51:54.3187849Z 
+2026-10-16T22:51:54.3197286Z [2m> [22mvitest --config=vitest.config.mts
+2026-10-16T22:51:54.3197646Z 
+2026-10-16T22:51:54.6682683Z 
+2026-10-16T22:51:54.6684931Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/typescript-eslint/typescript-eslint/packages/integration-tests[39m
+2026-10-16T22:51:54.6685565Z 
+2026-10-16T22:51:54.7985045Z (node:3153) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-16T22:51:54.7987207Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:28.2320852Z Finished packing local packages.
+2026-10-16T22:52:28.5200983Z (node:4235) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-16T22:52:28.5209019Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:28.5300574Z (node:4236) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-16T22:52:28.5303113Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:28.6786470Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/ts7.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+2026-10-16T22:52:30.0536664Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/plugin-config-identity.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1364[2mms[22m[39m
+2026-10-16T22:52:30.0539132Z        [33m[2m✓[22m[39m should work successfully [33m 1364[2mms[22m[39m
+2026-10-16T22:52:30.0732139Z (node:4237) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-16T22:52:30.0734571Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:32.2547682Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/vue-jsx.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 2185[2mms[22m[39m
+2026-10-16T22:52:32.2616243Z        [33m[2m✓[22m[39m should work successfully [33m 2185[2mms[22m[39m
+2026-10-16T22:52:35.3710594Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/flat-config-types-@types__eslint-v8.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 6852[2mms[22m[39m
+2026-10-16T22:52:35.3714186Z        [33m[2m✓[22m[39m should work successfully [33m 1645[2mms[22m[39m
+2026-10-16T22:52:35.3722927Z        [33m[2m✓[22m[39m should work successfully [33m 1579[2mms[22m[39m
+2026-10-16T22:52:35.3726086Z        [33m[2m✓[22m[39m should work successfully [33m 1567[2mms[22m[39m
+2026-10-16T22:52:35.3732592Z        [33m[2m✓[22m[39m should work successfully [33m 2058[2mms[22m[39m
+2026-10-16T22:52:35.5078891Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/flat-config-types-@types__eslint-v9.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 6997[2mms[22m[39m
+2026-10-16T22:52:35.5082742Z        [33m[2m✓[22m[39m should work successfully [33m 1696[2mms[22m[39m
+2026-10-16T22:52:35.5084650Z        [33m[2m✓[22m[39m should work successfully [33m 1495[2mms[22m[39m
+2026-10-16T22:52:35.5099991Z        [33m[2m✓[22m[39m should work successfully [33m 1555[2mms[22m[39m
+2026-10-16T22:52:35.5101445Z        [33m[2m✓[22m[39m should work successfully [33m 2248[2mms[22m[39m
+2026-10-16T22:52:35.6985535Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/vue-sfc.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 3428[2mms[22m[39m
+2026-10-16T22:52:35.6987255Z        [33m[2m✓[22m[39m should work successfully [33m 3428[2mms[22m[39m
+2026-10-16T22:52:36.7752720Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/eslint-v8.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1392[2mms[22m[39m
+2026-10-16T22:52:36.7757439Z        [33m[2m✓[22m[39m should work successfully [33m 1392[2mms[22m[39m
+2026-10-16T22:52:37.0413833Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/eslint-v9.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1524[2mms[22m[39m
+2026-10-16T22:52:37.0430236Z        [33m[2m✓[22m[39m should work successfully [33m 1524[2mms[22m[39m
+2026-10-16T22:52:37.3123456Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/markdown.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1589[2mms[22m[39m
+2026-10-16T22:52:37.3143973Z        [33m[2m✓[22m[39m should work successfully [33m 1589[2mms[22m[39m
+2026-10-16T22:52:38.5587500Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/recommended-does-not-require-program.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1506[2mms[22m[39m
+2026-10-16T22:52:38.5590137Z        [33m[2m✓[22m[39m should work successfully [33m 1506[2mms[22m[39m
+2026-10-16T22:52:38.7406563Z  [32m✓[39m [30m[43m integration-tests [49m[39m tests/no-useless-default-assignment-unbound-method.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1955[2mms[22m[39m
+2026-10-16T22:52:38.7408869Z        [33m[2m✓[22m[39m should work successfully [33m 1954[2mms[22m[39m
+2026-10-16T22:52:38.7430953Z 
+2026-10-16T22:52:38.7435362Z [2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+2026-10-16T22:52:38.7436616Z [2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+2026-10-16T22:52:38.7437141Z [2m   Start at [22m 22:51:54
+2026-10-16T22:52:38.7438928Z [2m   Duration [22m 44.06s[2m (transform 183ms, setup 70ms, import 325ms, tests 28.95s, environment 2ms)[22m
+2026-10-16T22:52:38.7440717Z 
+2026-10-16T22:52:39.9527079Z 
+2026-10-16T22:52:39.9527887Z [2m[32m[39m[22m
+2026-10-16T22:52:39.9529758Z 
+2026-10-16T22:52:39.9531145Z [7m[1m[32m NX [39m[22m[27m  [32mSuccessfully ran target [1mtest[22m for project integration-tests and [1m15[22m tasks it depends on[39m
+2026-10-16T22:52:39.9532101Z 
+2026-10-16T22:52:39.9533011Z [2mNx read the output from the cache instead of running the command for 14 out of 16 tasks.[22m
+2026-10-16T22:52:39.9533629Z 
+2026-10-16T22:52:39.9534650Z [2mOutput of 15 successful tasks were not shown. Run with[22m --verbose [2mor[22m --output-style=static [2mto see it.[22m
+2026-10-16T22:52:39.9535632Z 
+2026-10-16T22:52:41.1430427Z 
+2026-10-16T22:52:41.1436867Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-16T22:52:41.1438816Z │                       Tasks run for command: nx run integration-tests:test                       │
+2026-10-16T22:52:41.1440510Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-16T22:52:41.1441964Z ├────────┬─────────────────────────────────────────────────────────┬──────────┬────────────────────┤
+2026-10-16T22:52:41.1443335Z │ Status │                          Task                           │ Duration │    Cache Status    │
+2026-10-16T22:52:41.1444796Z ├────────┼─────────────────────────────────────────────────────────┼──────────┼────────────────────┤
+2026-10-16T22:52:41.1446247Z │   ✔    │ tsconfig-utils:build                                    │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1447713Z │   ✔    │ ast-spec:build                                          │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1449402Z │   ✔    │ types:copy-ast-spec                                     │    0s    │     Cache Miss     │
+2026-10-16T22:52:41.1450753Z │   ✔    │ types:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1452108Z │   ✔    │ visitor-keys:build                                      │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1453535Z │   ✔    │ project-service:build                                   │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1460003Z │   ✔    │ typescript-estree:build                                 │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1461484Z │   ✔    │ scope-manager:build                                     │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1462861Z │   ✔    │ utils:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1464223Z │   ✔    │ parser:build                                            │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1465602Z │   ✔    │ type-utils:build                                        │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1466994Z │   ✔    │ rule-tester:build                                       │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1468689Z │   ✔    │ rule-schema-to-typescript-types:build                   │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1470146Z │   ✔    │ eslint-plugin:build                                     │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1471598Z │   ✔    │ typescript-eslint:build                                 │    0s    │  Remote Cache Hit  │
+2026-10-16T22:52:41.1473063Z │   ✔    │ integration-tests:test                                  │   45s    │     Cache Miss     │
+2026-10-16T22:52:41.1474527Z └────────┴─────────────────────────────────────────────────────────┴──────────┴────────────────────┘
+2026-10-16T22:52:41.1476815Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-16T22:52:41.1478430Z │                                   Nx Cloud Task Runner Report                                    │
+2026-10-16T22:52:41.1479910Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-16T22:52:41.1481375Z ├────────┬────────────────────────────────────────┬────────┬───────────────────────────────────────┤
+2026-10-16T22:52:41.1482797Z │ 16     │ Successful Tasks                       │ 100%   │ Success Percentage                    │
+2026-10-16T22:52:41.1484142Z │ 0      │ Failed Tasks                           │ 0%     │ Failure Percentage                    │
+2026-10-16T22:52:41.1485555Z ├────────┼────────────────────────────────────────┼────────┼───────────────────────────────────────┤
+2026-10-16T22:52:41.1486928Z │ 14     │ Cached Tasks                           │ 87.50% │ Cache Hit Percentage                  │
+2026-10-16T22:52:41.1488646Z │ 16     │ Total Executed Tasks                   │ 49s    │ Run Duration                          │
+2026-10-16T22:52:41.1490173Z └────────┴────────────────────────────────────────┴────────┴───────────────────────────────────────┘
+2026-10-16T22:52:41.1491274Z  See more details at: https://cloud.nx.app/cipes/6ad2aa66b5c14c7ba57a80b0 
+2026-10-16T22:52:41.1491906Z 
+2026-10-16T22:52:41.1492169Z   Run duration:      49.5s
+2026-10-16T22:52:41.1492703Z   Cache:             14/16 hit (88%)
+2026-10-16T22:52:41.1493261Z   Critical path:     45.7s (8 tasks)
+2026-10-16T22:52:41.1493788Z   Recoverable time:  <1ms
+2026-10-16T22:52:41.1494094Z 
+2026-10-16T22:52:41.1494272Z   Recommendations:
+2026-10-16T22:52:41.1494932Z     - Speed up or split the longest tasks on the critical path:
+2026-10-16T22:52:41.1495661Z         integration-tests:test    45.4s
+2026-10-16T22:52:41.3255338Z Post job cleanup.
+2026-10-16T22:52:41.3261161Z ##[start-action display=Use Node.js 24;id=__112b2ca9-33b2-42c3-8a8f-898ddb0f2a7d.__actions_setup-node]
+2026-10-16T22:52:41.3303985Z Post job cleanup.
+2026-10-16T22:52:41.4526879Z (node:4803) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-16T22:52:41.4527884Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:41.4602708Z ##[end-action id=__112b2ca9-33b2-42c3-8a8f-898ddb0f2a7d.__actions_setup-node;outcome=success;conclusion=success;duration_ms=134]
+2026-10-16T22:52:41.4605709Z ##[start-action display=Install pnpm;id=__112b2ca9-33b2-42c3-8a8f-898ddb0f2a7d.__pnpm_setup]
+2026-10-16T22:52:41.4647155Z Post job cleanup.
+2026-10-16T22:52:41.6067960Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/typescript-eslint/typescript-eslint --files-from manifest.txt --use-compress-program zstdmt
+2026-10-16T22:52:41.8500463Z ##[warning]Failed to save: Unable to reserve cache with key pnpm-lockfile-verified-Linux-x64-792e2758ebc454374ed4188f9c122b0e07ecd3d5413ddbceb86a09ccd2c42f7e, another job may be creating this cache.
+2026-10-16T22:52:41.8501742Z ##[group]Running pnpm store prune...
+2026-10-16T22:52:42.9619367Z Removed 8206 files (76880162 bytes)
+2026-10-16T22:52:42.9619929Z Removed 138 packages
+2026-10-16T22:52:42.9648001Z ##[endgroup]
+2026-10-16T22:52:42.9651064Z Cache hit occurred on the primary key pnpm-cache-Linux-x64-no-runtime-792e2758ebc454374ed4188f9c122b0e07ecd3d5413ddbceb86a09ccd2c42f7e, not saving cache.
+2026-10-16T22:52:42.9653771Z (node:4811) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-16T22:52:42.9655416Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-16T22:52:42.9732564Z ##[end-action id=__112b2ca9-33b2-42c3-8a8f-898ddb0f2a7d.__pnpm_setup;outcome=success;conclusion=success;duration_ms=1512]
+2026-10-16T22:52:42.9835395Z Post job cleanup.
+2026-10-16T22:52:43.0657337Z [command]/usr/bin/git version
+2026-10-16T22:52:43.0695467Z git version 2.55.0
+2026-10-16T22:52:43.0733476Z Temporarily overriding HOME='/home/runner/work/_temp/40d8533f-258e-4778-aeb5-7954dc1145f8' before making global git config changes
+2026-10-16T22:52:43.0734551Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-16T22:52:43.0738806Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-16T22:52:43.0779133Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-16T22:52:43.0812312Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-16T22:52:43.1048932Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-16T22:52:43.1082961Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-16T22:52:43.1315104Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-16T22:52:43.1344016Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-16T22:52:43.1710003Z Cleaning up orphan processes
+2026-10-16T22:52:43.2034102Z Terminate orphan process: pid (2737) (MainThread)
+2026-10-16T22:52:43.2042491Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

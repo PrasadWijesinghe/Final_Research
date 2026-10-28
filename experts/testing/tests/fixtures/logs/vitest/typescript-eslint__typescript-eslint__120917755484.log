@@ -1,0 +1,686 @@
+﻿2026-10-24T15:58:59.4119573Z Current runner version: '2.338.0'
+2026-10-24T15:58:59.4322682Z ##[group]Runner Image Provisioner
+2026-10-24T15:58:59.4323570Z Hosted Compute Agent
+2026-10-24T15:58:59.4324185Z Version: 20261021.618
+2026-10-24T15:58:59.4324777Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-24T15:58:59.4325497Z Build Date: 2026-10-21T00:45:21Z
+2026-10-24T15:58:59.4326164Z Worker ID: {3fddaa58-9a53-431e-b867-54aaac809b3e}
+2026-10-24T15:58:59.4326838Z Region: eastus2
+2026-10-24T15:58:59.4327406Z Cloud: Azure
+2026-10-24T15:58:59.4327908Z ##[endgroup]
+2026-10-24T15:58:59.4329250Z ##[group]Operating System
+2026-10-24T15:58:59.4329926Z Microsoft Windows Server 2025
+2026-10-24T15:58:59.4330616Z 10.0.26100
+2026-10-24T15:58:59.4331362Z Datacenter
+2026-10-24T15:58:59.4332293Z ##[endgroup]
+2026-10-24T15:58:59.4332887Z ##[group]Runner Image
+2026-10-24T15:58:59.4333485Z Image: windows-2025-vs2026
+2026-10-24T15:58:59.4334059Z Version: 20261021.278.1
+2026-10-24T15:58:59.4335623Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261021.278/images/windows/Windows2025-VS2026-Readme.md
+2026-10-24T15:58:59.4337276Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261021.278
+2026-10-24T15:58:59.4338247Z ##[endgroup]
+2026-10-24T15:58:59.4339310Z ##[group]GITHUB_TOKEN Permissions
+2026-10-24T15:58:59.4341258Z Contents: read
+2026-10-24T15:58:59.4341846Z Metadata: read
+2026-10-24T15:58:59.4342395Z ##[endgroup]
+2026-10-24T15:58:59.4344554Z Secret source: None
+2026-10-24T15:58:59.4345487Z Cache mode: write
+2026-10-24T15:58:59.4346150Z Prepare workflow directory
+2026-10-24T15:58:59.5421938Z Prepare all required actions
+2026-10-24T15:58:59.5480213Z Getting action download info
+2026-10-24T15:58:59.7351112Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-24T15:58:59.9174006Z Download action repository 'codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de' (SHA:671740ac38dd9b0130fbe1cec585b89eea48d3de)
+2026-10-24T15:59:00.3117950Z Getting action download info
+2026-10-24T15:59:00.3975207Z Download action repository 'actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea' (SHA:60a0d83039c74a4aee543508d2ffcb1c3799cdea)
+2026-10-24T15:59:00.7962282Z Complete job name: Run Unit Tests (windows-latest, typescript-estree, rule-tester)
+2026-10-24T15:59:01.4028174Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-24T15:59:01.4029505Z with:
+2026-10-24T15:59:01.4029968Z   fetch-depth: 2
+2026-10-24T15:59:01.4030450Z   persist-credentials: false
+2026-10-24T15:59:01.4031084Z   repository: typescript-eslint/typescript-eslint
+2026-10-24T15:59:01.4035908Z   token: ***
+2026-10-24T15:59:01.4036567Z   ssh-strict: true
+2026-10-24T15:59:01.4037041Z   ssh-user: git
+2026-10-24T15:59:01.4037486Z   clean: true
+2026-10-24T15:59:01.4037945Z   sparse-checkout-cone-mode: true
+2026-10-24T15:59:01.4038490Z   fetch-tags: false
+2026-10-24T15:59:01.4038972Z   show-progress: true
+2026-10-24T15:59:01.4039426Z   lfs: false
+2026-10-24T15:59:01.4039860Z   submodules: false
+2026-10-24T15:59:01.4040335Z   set-safe-directory: true
+2026-10-24T15:59:01.4040854Z   allow-unsafe-pr-checkout: false
+2026-10-24T15:59:01.4041664Z env:
+2026-10-24T15:59:01.4042100Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:01.4042673Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:01.4043227Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:01.4043715Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:01.4044407Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:01.4045174Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:01.4045650Z ##[endgroup]
+2026-10-24T15:59:01.5967141Z Syncing repository: typescript-eslint/typescript-eslint
+2026-10-24T15:59:01.5969078Z ##[group]Getting Git version info
+2026-10-24T15:59:01.5969862Z Working directory is 'D:\a\typescript-eslint\typescript-eslint'
+2026-10-24T15:59:01.6879134Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-24T15:59:02.0196261Z git version 2.56.0.windows.2
+2026-10-24T15:59:02.0247188Z ##[endgroup]
+2026-10-24T15:59:02.0281234Z Temporarily overriding HOME='D:\a\_temp\a9909086-0261-4fbe-9e20-0d1e88f881db' before making global git config changes
+2026-10-24T15:59:02.0283283Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-24T15:59:02.0285116Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\typescript-eslint\typescript-eslint
+2026-10-24T15:59:02.0952422Z Deleting the contents of 'D:\a\typescript-eslint\typescript-eslint'
+2026-10-24T15:59:02.0959024Z ##[group]Initializing the repository
+2026-10-24T15:59:02.0968486Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\typescript-eslint\typescript-eslint
+2026-10-24T15:59:02.1971517Z Initialized empty Git repository in D:/a/typescript-eslint/typescript-eslint/.git/
+2026-10-24T15:59:02.2024119Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/typescript-eslint/typescript-eslint
+2026-10-24T15:59:02.2709711Z ##[endgroup]
+2026-10-24T15:59:02.2712033Z ##[group]Disabling automatic garbage collection
+2026-10-24T15:59:02.2714468Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-10-24T15:59:02.3107753Z ##[endgroup]
+2026-10-24T15:59:02.3109564Z ##[group]Setting up auth
+2026-10-24T15:59:02.3111593Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-24T15:59:02.3539076Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-24T15:59:03.7741629Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-24T15:59:03.8116549Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-24T15:59:04.3813963Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-24T15:59:04.4275963Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-24T15:59:04.9899902Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-10-24T15:59:05.0286174Z ##[endgroup]
+2026-10-24T15:59:05.0286717Z ##[group]Fetching the repository
+2026-10-24T15:59:05.0305232Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=2 origin +52ad5bb02154010f61292dc738c0da2ee626f1b5:refs/remotes/pull/12988/merge
+2026-10-24T15:59:06.7850656Z From https://github.com/typescript-eslint/typescript-eslint
+2026-10-24T15:59:06.7856742Z  * [new ref]         52ad5bb02154010f61292dc738c0da2ee626f1b5 -> pull/12988/merge
+2026-10-24T15:59:06.7903385Z ##[endgroup]
+2026-10-24T15:59:06.7904560Z ##[group]Determining the checkout info
+2026-10-24T15:59:06.7906685Z ##[endgroup]
+2026-10-24T15:59:06.7922662Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-10-24T15:59:06.8466682Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-10-24T15:59:06.8856980Z ##[group]Checking out the ref
+2026-10-24T15:59:06.8865625Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/12988/merge
+2026-10-24T15:59:07.9610726Z Updating files:  48% (3554/7339)
+2026-10-24T15:59:07.9816332Z Updating files:  49% (3597/7339)
+2026-10-24T15:59:07.9999539Z Updating files:  50% (3670/7339)
+2026-10-24T15:59:08.0278321Z Updating files:  51% (3743/7339)
+2026-10-24T15:59:08.0474889Z Updating files:  52% (3817/7339)
+2026-10-24T15:59:08.0668686Z Updating files:  53% (3890/7339)
+2026-10-24T15:59:08.0884802Z Updating files:  54% (3964/7339)
+2026-10-24T15:59:08.1084826Z Updating files:  55% (4037/7339)
+2026-10-24T15:59:08.1288464Z Updating files:  56% (4110/7339)
+2026-10-24T15:59:08.1490332Z Updating files:  57% (4184/7339)
+2026-10-24T15:59:08.1699491Z Updating files:  58% (4257/7339)
+2026-10-24T15:59:08.1874680Z Updating files:  59% (4331/7339)
+2026-10-24T15:59:08.2070403Z Updating files:  60% (4404/7339)
+2026-10-24T15:59:08.2355862Z Updating files:  61% (4477/7339)
+2026-10-24T15:59:08.2594787Z Updating files:  62% (4551/7339)
+2026-10-24T15:59:08.2795262Z Updating files:  63% (4624/7339)
+2026-10-24T15:59:08.2977904Z Updating files:  64% (4697/7339)
+2026-10-24T15:59:08.3162992Z Updating files:  65% (4771/7339)
+2026-10-24T15:59:08.3360598Z Updating files:  66% (4844/7339)
+2026-10-24T15:59:08.3557383Z Updating files:  67% (4918/7339)
+2026-10-24T15:59:08.3760744Z Updating files:  68% (4991/7339)
+2026-10-24T15:59:08.3977567Z Updating files:  69% (5064/7339)
+2026-10-24T15:59:08.4157148Z Updating files:  70% (5138/7339)
+2026-10-24T15:59:08.4340504Z Updating files:  71% (5211/7339)
+2026-10-24T15:59:08.4522803Z Updating files:  72% (5285/7339)
+2026-10-24T15:59:08.4766945Z Updating files:  73% (5358/7339)
+2026-10-24T15:59:08.6330347Z Updating files:  74% (5431/7339)
+2026-10-24T15:59:08.6516130Z Updating files:  75% (5505/7339)
+2026-10-24T15:59:08.6684829Z Updating files:  76% (5578/7339)
+2026-10-24T15:59:08.6885926Z Updating files:  77% (5652/7339)
+2026-10-24T15:59:08.7051011Z Updating files:  78% (5725/7339)
+2026-10-24T15:59:08.7239136Z Updating files:  79% (5798/7339)
+2026-10-24T15:59:08.7430812Z Updating files:  80% (5872/7339)
+2026-10-24T15:59:08.7589506Z Updating files:  81% (5945/7339)
+2026-10-24T15:59:08.7749927Z Updating files:  82% (6018/7339)
+2026-10-24T15:59:08.7950253Z Updating files:  83% (6092/7339)
+2026-10-24T15:59:08.8111382Z Updating files:  84% (6165/7339)
+2026-10-24T15:59:08.8274216Z Updating files:  85% (6239/7339)
+2026-10-24T15:59:08.8430968Z Updating files:  86% (6312/7339)
+2026-10-24T15:59:08.8594856Z Updating files:  87% (6385/7339)
+2026-10-24T15:59:08.8750220Z Updating files:  88% (6459/7339)
+2026-10-24T15:59:08.8919930Z Updating files:  89% (6532/7339)
+2026-10-24T15:59:08.9084999Z Updating files:  90% (6606/7339)
+2026-10-24T15:59:08.9247872Z Updating files:  91% (6679/7339)
+2026-10-24T15:59:08.9440772Z Updating files:  92% (6752/7339)
+2026-10-24T15:59:08.9593721Z Updating files:  93% (6826/7339)
+2026-10-24T15:59:08.9636394Z Updating files:  93% (6883/7339)
+2026-10-24T15:59:08.9835183Z Updating files:  94% (6899/7339)
+2026-10-24T15:59:09.0043773Z Updating files:  95% (6973/7339)
+2026-10-24T15:59:09.0319651Z Updating files:  96% (7046/7339)
+2026-10-24T15:59:09.0521986Z Updating files:  97% (7119/7339)
+2026-10-24T15:59:09.0713916Z Updating files:  98% (7193/7339)
+2026-10-24T15:59:09.0932600Z Updating files:  99% (7266/7339)
+2026-10-24T15:59:09.0933136Z Updating files: 100% (7339/7339)
+2026-10-24T15:59:09.0933657Z Updating files: 100% (7339/7339), done.
+2026-10-24T15:59:09.1181873Z Note: switching to 'refs/remotes/pull/12988/merge'.
+2026-10-24T15:59:09.1182294Z 
+2026-10-24T15:59:09.1182605Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-24T15:59:09.1183863Z changes and commit them, and you can discard any commits you make in this
+2026-10-24T15:59:09.1184680Z state without impacting any branches by switching back to a branch.
+2026-10-24T15:59:09.1185149Z 
+2026-10-24T15:59:09.1185452Z If you want to create a new branch to retain commits you create, you may
+2026-10-24T15:59:09.1186182Z do so (now or later) by using -c with the switch command. Example:
+2026-10-24T15:59:09.1186608Z 
+2026-10-24T15:59:09.1186791Z   git switch -c <new-branch-name>
+2026-10-24T15:59:09.1187085Z 
+2026-10-24T15:59:09.1187226Z Or undo this operation with:
+2026-10-24T15:59:09.1187482Z 
+2026-10-24T15:59:09.1187596Z   git switch -
+2026-10-24T15:59:09.1188187Z 
+2026-10-24T15:59:09.1188532Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-24T15:59:09.1189067Z 
+2026-10-24T15:59:09.1653578Z HEAD is now at 52ad5bb Merge 2fb1665658e07efc93eb7b09caa9e227c136c1f1 into 74b603ec94ae593b7b7b8bb34a82efa3bd21e0fe
+2026-10-24T15:59:09.1816335Z ##[endgroup]
+2026-10-24T15:59:09.2480616Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-10-24T15:59:09.2841030Z 52ad5bb02154010f61292dc738c0da2ee626f1b5
+2026-10-24T15:59:09.2891658Z ##[group]Removing auth
+2026-10-24T15:59:09.2900336Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-24T15:59:09.3306729Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-24T15:59:09.9481059Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-24T15:59:09.9822958Z http.https://github.com/.extraheader
+2026-10-24T15:59:09.9869736Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2026-10-24T15:59:10.0263112Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-24T15:59:10.6028747Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-24T15:59:10.6423365Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-24T15:59:11.1994856Z ##[endgroup]
+2026-10-24T15:59:11.2579088Z Prepare all required actions
+2026-10-24T15:59:11.2579959Z Getting action download info
+2026-10-24T15:59:11.3494638Z Download action repository 'pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b' (SHA:703c52620218391530e48b9e8870d5c0082e1b9b)
+2026-10-24T15:59:11.5086848Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-24T15:59:11.6906802Z ##[group]Run ./.github/actions/prepare-install
+2026-10-24T15:59:11.6907101Z with:
+2026-10-24T15:59:11.6907268Z   node-version: 24
+2026-10-24T15:59:11.6907458Z   working-directory: .
+2026-10-24T15:59:11.6907641Z env:
+2026-10-24T15:59:11.6907802Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:11.6908037Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:11.6908274Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:11.6908477Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:11.6908820Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:11.6909171Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:11.6909364Z ##[endgroup]
+2026-10-24T15:59:11.6968367Z ##[start-action display=echo github.ref;id=__self.__run]
+2026-10-24T15:59:11.7133058Z ##[group]Run echo "$GITHUB_REF"
+2026-10-24T15:59:11.7133361Z [36;1mecho "$GITHUB_REF"[0m
+2026-10-24T15:59:11.7152824Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-10-24T15:59:11.7153233Z env:
+2026-10-24T15:59:11.7153406Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:11.7153644Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:11.7153888Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:11.7154095Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:11.7154411Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:11.7154769Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:11.7154963Z ##[endgroup]
+2026-10-24T15:59:11.8837173Z refs/pull/12988/merge
+2026-10-24T15:59:11.8891393Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=192]
+2026-10-24T15:59:11.8894066Z ##[start-action display=Install pnpm;id=__self.__pnpm_setup]
+2026-10-24T15:59:11.9079679Z ##[group]Run pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
+2026-10-24T15:59:11.9080015Z with:
+2026-10-24T15:59:11.9080585Z   cache: true
+2026-10-24T15:59:11.9080813Z   install: false
+2026-10-24T15:59:11.9081000Z   working-directory: .
+2026-10-24T15:59:11.9081196Z   dest: ~/setup-pnpm
+2026-10-24T15:59:11.9081389Z   require-lockfile: false
+2026-10-24T15:59:11.9081594Z env:
+2026-10-24T15:59:11.9081756Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:11.9081974Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:11.9082202Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:11.9082411Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:11.9082726Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:11.9083081Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:11.9083269Z ##[endgroup]
+2026-10-24T15:59:12.0665537Z ##[group]Installing pnpm...
+2026-10-24T15:59:12.0673895Z Downloading pnpm 12.13.0 from the npm registry
+2026-10-24T15:59:12.2313886Z ==> Downloading pnpm 12.13.0
+2026-10-24T15:59:13.6601326Z ##[endgroup]
+2026-10-24T15:59:13.6601602Z Installation Completed!
+2026-10-24T15:59:13.6607479Z ##[group]Restoring cache...
+2026-10-24T15:59:13.9824436Z Lockfile verification cache is not found
+2026-10-24T15:59:14.0696398Z [command]C:\Users\runneradmin\setup-pnpm\pnpm.exe store path
+2026-10-24T15:59:14.0954944Z D:\.pnpm-store\v11
+2026-10-24T15:59:14.2264899Z Cache hit for: pnpm-cache-Windows-x64-no-runtime-a8f2d37bad7f0672ebaa9e9b9b78584377bff7140465a05f2492d7ee70cf2467
+2026-10-24T15:59:15.2596384Z Received 171966464 of 186722840 (92.1%), 162.9 MBs/sec
+2026-10-24T15:59:15.3609843Z Received 186722840 of 186722840 (100.0%), 160.7 MBs/sec
+2026-10-24T15:59:15.3613732Z Cache Size: ~178 MB (186722840 B)
+2026-10-24T15:59:15.3704450Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/a9e3936c-22fa-4f4c-b35e-5b2c4306efe6/cache.tzst -P -C D:/a/typescript-eslint/typescript-eslint --force-local --use-compress-program "zstd -d"
+2026-10-24T15:59:31.0132416Z Cache restored successfully
+2026-10-24T15:59:31.0230945Z Cache restored from key: pnpm-cache-Windows-x64-no-runtime-a8f2d37bad7f0672ebaa9e9b9b78584377bff7140465a05f2492d7ee70cf2467
+2026-10-24T15:59:31.0232842Z ##[endgroup]
+2026-10-24T15:59:31.0233440Z No runtime requested (no `runtime` input and no `devEngines.runtime` in package.json). Skipping runtime install.
+2026-10-24T15:59:31.0415793Z ##[end-action id=__self.__pnpm_setup;outcome=success;conclusion=success;duration_ms=19151]
+2026-10-24T15:59:31.0427819Z ##[start-action display=Use Node.js 24;id=__self.__actions_setup-node]
+2026-10-24T15:59:31.0612389Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-24T15:59:31.0630278Z with:
+2026-10-24T15:59:31.0630489Z   node-version: 24
+2026-10-24T15:59:31.0630702Z   always-auth: false
+2026-10-24T15:59:31.0630914Z   check-latest: false
+2026-10-24T15:59:31.0634084Z   token: ***
+2026-10-24T15:59:31.0634283Z env:
+2026-10-24T15:59:31.0634455Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:31.0634702Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:31.0634948Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:31.0635154Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:31.0635471Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:31.0635831Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:31.0636107Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm
+2026-10-24T15:59:31.0636375Z ##[endgroup]
+2026-10-24T15:59:31.2452416Z Found in cache @ C:\hostedtoolcache\windows\node\24.22.1\x64
+2026-10-24T15:59:31.2460593Z (node:2868) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-24T15:59:31.2461788Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-24T15:59:31.2464429Z ##[group]Environment details
+2026-10-24T15:59:35.6021453Z node: v24.22.1
+2026-10-24T15:59:35.6021810Z npm: 11.19.1
+2026-10-24T15:59:35.6021994Z yarn: 1.22.22
+2026-10-24T15:59:35.6023672Z ##[endgroup]
+2026-10-24T15:59:35.6162899Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=4573]
+2026-10-24T15:59:35.6165555Z ##[start-action display=Install dependencies;id=__self.__run_2]
+2026-10-24T15:59:35.6329691Z ##[group]Run pnpm install --frozen-lockfile --trust-lockfile
+2026-10-24T15:59:35.6330131Z [36;1mpnpm install --frozen-lockfile --trust-lockfile[0m
+2026-10-24T15:59:35.6330512Z [36;1mpnpm run check-clean-workspace-after-install[0m
+2026-10-24T15:59:35.6347407Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-10-24T15:59:35.6347801Z env:
+2026-10-24T15:59:35.6347979Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:35.6348219Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:35.6348463Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:35.6348684Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:35.6349014Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:35.6349377Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:35.6349630Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm
+2026-10-24T15:59:35.6349888Z   HUSKY: 0
+2026-10-24T15:59:35.6350055Z   SKIP_POSTINSTALL: true
+2026-10-24T15:59:35.6350255Z ##[endgroup]
+2026-10-24T15:59:35.7202464Z Scope: all 20 workspace projects
+2026-10-24T15:59:36.4259850Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-10-24T15:59:36.4260943Z   Content-addressable store is at: D:\.pnpm-store\v11
+2026-10-24T15:59:36.4261645Z   Virtual store is at:             node_modules/.pnpm
+2026-10-24T15:59:37.5157899Z Progress: resolved 214, reused 214, downloaded 0, added 211
+2026-10-24T15:59:38.5972697Z Progress: resolved 408, reused 408, downloaded 0, added 405
+2026-10-24T15:59:39.5998361Z Progress: resolved 642, reused 642, downloaded 0, added 639
+2026-10-24T15:59:40.6004100Z Progress: resolved 821, reused 821, downloaded 0, added 818
+2026-10-24T15:59:41.7945143Z Progress: resolved 932, reused 932, downloaded 0, added 929
+2026-10-24T15:59:42.7985095Z Progress: resolved 1080, reused 1080, downloaded 0, added 1077
+2026-10-24T15:59:43.7944191Z Progress: resolved 1263, reused 1263, downloaded 0, added 1260
+2026-10-24T15:59:44.7991255Z Progress: resolved 1486, reused 1486, downloaded 0, added 1483
+2026-10-24T15:59:45.8002989Z Progress: resolved 1697, reused 1697, downloaded 0, added 1694
+2026-10-24T15:59:46.8053989Z Progress: resolved 1881, reused 1881, downloaded 0, added 1878
+2026-10-24T15:59:47.6895796Z Downloading nx@23.3.0: 0.00 B/5.72 MB
+2026-10-24T15:59:48.8225450Z Progress: resolved 1918, reused 1914, downloaded 4, added 1917
+2026-10-24T15:59:48.9104326Z Packages: +1918
+2026-10-24T15:59:48.9104850Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-10-24T15:59:49.9539684Z Progress: resolved 1918, reused 1914, downloaded 4, added 1918, done
+2026-10-24T15:59:50.1174816Z . postinstall$ tsx tools/scripts/postinstall.mts
+2026-10-24T15:59:50.8463858Z . postinstall: 
+2026-10-24T15:59:50.8465072Z . postinstall: Skipping postinstall script because $SKIP_POSTINSTALL is set...
+2026-10-24T15:59:50.8466147Z . postinstall: 
+2026-10-24T15:59:50.8700174Z . postinstall: Done
+2026-10-24T15:59:50.8741849Z Lockfile is up to date, resolution step is skipped
+2026-10-24T15:59:50.8742853Z 
+2026-10-24T15:59:50.8743227Z devDependencies:
+2026-10-24T15:59:50.8744784Z + @actions/github 9.1.1
+2026-10-24T15:59:50.8745317Z + @arethetypeswrong/cli 0.18.3
+2026-10-24T15:59:50.8746401Z + @eslint-community/eslint-plugin-eslint-comments 4.8.0
+2026-10-24T15:59:50.8749106Z + @eslint/compat 2.1.0
+2026-10-24T15:59:50.8750282Z + @eslint/config-helpers 0.7.0
+2026-10-24T15:59:50.8750730Z + @eslint/js 10.0.1
+2026-10-24T15:59:50.8751063Z + @nx/devkit 23.3.0
+2026-10-24T15:59:50.8751369Z + @nx/js 23.3.0
+2026-10-24T15:59:50.8751668Z + @nx/vitest 23.3.0
+2026-10-24T15:59:50.8752014Z + @nx/workspace 23.3.0
+2026-10-24T15:59:50.8752356Z + @swc/core 1.16.1
+2026-10-24T15:59:50.8752672Z + @types/debug 4.1.13
+2026-10-24T15:59:50.8753413Z + @types/natural-compare 1.4.3
+2026-10-24T15:59:50.8753789Z + @types/node 24.19.0
+2026-10-24T15:59:50.8754120Z + @types/semver 7.8.0
+2026-10-24T15:59:50.8754689Z + @typescript-eslint/eslint-plugin <- packages/eslint-plugin
+2026-10-24T15:59:50.8755584Z + @typescript-eslint/eslint-plugin-internal <- packages/eslint-plugin-internal
+2026-10-24T15:59:50.8756389Z + @typescript-eslint/parser <- packages/parser
+2026-10-24T15:59:50.8757046Z + @typescript-eslint/scope-manager <- packages/scope-manager
+2026-10-24T15:59:50.8757690Z + @typescript-eslint/types <- packages/types
+2026-10-24T15:59:50.8758400Z + @typescript-eslint/typescript-estree <- packages/typescript-estree
+2026-10-24T15:59:50.8759118Z + @typescript-eslint/utils <- packages/utils
+2026-10-24T15:59:50.8759633Z + @typescript/native <- typescript 7.0.2
+2026-10-24T15:59:50.8760079Z + @vitest/coverage-v8 5.0.3
+2026-10-24T15:59:50.8760504Z + @vitest/eslint-plugin 1.6.16
+2026-10-24T15:59:50.8760927Z + console-fail-test 0.10.0
+2026-10-24T15:59:50.8761278Z + cspell 10.4.0
+2026-10-24T15:59:50.8761655Z + eslint 10.12.0
+2026-10-24T15:59:50.8762087Z + eslint-plugin-eslint-plugin 7.6.2
+2026-10-24T15:59:50.8762628Z + eslint-plugin-import 2.32.0
+2026-10-24T15:59:50.8763045Z + eslint-plugin-jsdoc 50.8.0
+2026-10-24T15:59:50.8763483Z + eslint-plugin-jsx-a11y 6.10.2
+2026-10-24T15:59:50.8763886Z + eslint-plugin-n 17.24.0
+2026-10-24T15:59:50.8764375Z + eslint-plugin-perfectionist 5.12.0
+2026-10-24T15:59:50.8764868Z + eslint-plugin-react 7.37.5
+2026-10-24T15:59:50.8765365Z + eslint-plugin-react-hooks 5.2.0
+2026-10-24T15:59:50.8767355Z + eslint-plugin-regexp 2.10.0
+2026-10-24T15:59:50.8768232Z + eslint-plugin-unicorn 59.0.1
+2026-10-24T15:59:50.8768661Z + execa 7.2.0
+2026-10-24T15:59:50.8769030Z + get-github-auth-token 0.2.0
+2026-10-24T15:59:50.8769911Z + globals 16.5.0
+2026-10-24T15:59:50.8770252Z + husky 9.1.7
+2026-10-24T15:59:50.8770832Z + knip 6.41.0
+2026-10-24T15:59:50.8771170Z + lint-staged 15.5.2
+2026-10-24T15:59:50.8771548Z + markdownlint-cli 0.49.1
+2026-10-24T15:59:50.8771897Z + nx 23.3.0
+2026-10-24T15:59:50.8772186Z + prettier 3.9.5
+2026-10-24T15:59:50.8772508Z + rimraf 5.0.10
+2026-10-24T15:59:50.8773057Z + semver 7.8.0
+2026-10-24T15:59:50.8773753Z + tsx 4.23.12
+2026-10-24T15:59:50.8774240Z + typescript <- @typescript/typescript6 6.0.2
+2026-10-24T15:59:50.8775106Z + typescript-eslint <- packages/typescript-eslint
+2026-10-24T15:59:50.8775594Z + vite 7.3.6
+2026-10-24T15:59:50.8775873Z + vitest 5.0.3
+2026-10-24T15:59:50.8776046Z 
+2026-10-24T15:59:50.8784542Z Done in 15.2s using pnpm v12.13.0
+2026-10-24T15:59:50.9351324Z $ git diff --quiet --exit-code
+2026-10-24T15:59:51.1043529Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=15487]
+2026-10-24T15:59:51.1230019Z ##[group]Run pnpm exec nx run-many -t test --projects="$PROJECTS"
+2026-10-24T15:59:51.1230569Z [36;1mpnpm exec nx run-many -t test --projects="$PROJECTS"[0m
+2026-10-24T15:59:51.1248083Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-10-24T15:59:51.1248504Z env:
+2026-10-24T15:59:51.1248682Z   PRIMARY_NODE_VERSION: 24
+2026-10-24T15:59:51.1248916Z   OLDEST_TYPESCRIPT_VERSION: 4.8.4
+2026-10-24T15:59:51.1249160Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-10-24T15:59:51.1249377Z   NX_VERBOSE_LOGGING: false
+2026-10-24T15:59:51.1249698Z   NX_CI_EXECUTION_ENV: windows-latest - typescript-estree, rule-tester
+2026-10-24T15:59:51.1250057Z   COLLECT_COVERAGE: false
+2026-10-24T15:59:51.1250303Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm
+2026-10-24T15:59:51.1250562Z   CI: true
+2026-10-24T15:59:51.1250755Z   PROJECTS: typescript-estree,rule-tester
+2026-10-24T15:59:51.1251012Z ##[endgroup]
+2026-10-24T15:59:59.1153509Z 
+2026-10-24T15:59:59.1158001Z [7m[1m[36m NX [39m[22m[27m  [36mRunning target [1mtest[22m for 2 projects and [1m10[22m tasks they depend on:[39m
+2026-10-24T15:59:59.1158837Z 
+2026-10-24T15:59:59.1159199Z [2m-[22m typescript-estree
+2026-10-24T15:59:59.1159731Z [2m-[22m rule-tester
+2026-10-24T15:59:59.1160281Z 
+2026-10-24T15:59:59.1160473Z [2m[36m[39m[22m
+2026-10-24T16:00:00.6362524Z [32m√[39m  [2mnx run[22m tsconfig-utils:build  [2m[remote cache][22m
+2026-10-24T16:00:00.6364013Z [32m√[39m  [2mnx run[22m ast-spec:build  [2m[remote cache][22m
+2026-10-24T16:00:01.1751774Z [32m√[39m  [2mnx run[22m types:copy-ast-spec
+2026-10-24T16:00:01.3763981Z [32m√[39m  [2mnx run[22m types:build  [2m[remote cache][22m
+2026-10-24T16:00:01.5919002Z [32m√[39m  [2mnx run[22m visitor-keys:build  [2m[remote cache][22m
+2026-10-24T16:00:01.5920837Z [32m√[39m  [2mnx run[22m project-service:build  [2m[remote cache][22m
+2026-10-24T16:00:02.0240347Z [32m√[39m  [2mnx run[22m typescript-estree:build  [2m[remote cache][22m
+2026-10-24T16:00:03.3110603Z [32m√[39m  [2mnx run[22m scope-manager:build  [2m[remote cache][22m
+2026-10-24T16:00:03.6674081Z [32m√[39m  [2mnx run[22m parser:build  [2m[remote cache][22m
+2026-10-24T16:00:03.6675780Z [32m√[39m  [2mnx run[22m utils:build  [2m[remote cache][22m
+2026-10-24T16:00:03.8085040Z [32m√[39m  [2mnx run[22m rule-tester:test  [2m[remote cache][22m
+2026-10-24T16:00:36.2247077Z 
+2026-10-24T16:00:36.2248147Z ##[group]❌ [2m> [22m[2mnx run[22m typescript-estree:test
+2026-10-24T16:00:36.2248442Z 
+2026-10-24T16:00:36.2249183Z [2m> [22mvitest --config=vitest.config.mts
+2026-10-24T16:00:36.2249604Z 
+2026-10-24T16:00:36.2249614Z 
+2026-10-24T16:00:36.2250634Z [1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mD:/a/typescript-eslint/typescript-eslint/packages/typescript-estree[39m
+2026-10-24T16:00:36.2251274Z 
+2026-10-24T16:00:36.2252063Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/useProgramFromProjectService.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+2026-10-24T16:00:36.2253561Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/convert.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+2026-10-24T16:00:36.2254699Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/semanticInfo-singleRun.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1958[2mms[22m[39m
+2026-10-24T16:00:36.2255446Z    [32m✓[39m semanticInfo - singleRun [2m(7)[22m
+2026-10-24T16:00:36.2257851Z      [33m[2m✓[22m[39m should not trigger createIsolatedProgram fallback when projectService is used with multiple parseAndGenerateServices calls[33m 1896[2mms[22m[39m
+2026-10-24T16:00:36.2259936Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/getProjectConfigFiles.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+2026-10-24T16:00:36.2264245Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/node-utils.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+2026-10-24T16:00:36.2265515Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/parse.test.ts [2m([22m[2m79 tests[22m[2m)[22m[33m 5682[2mms[22m[39m
+2026-10-24T16:00:36.2266272Z    [32m✓[39m parseAndGenerateServices [2m(79)[22m
+2026-10-24T16:00:36.2266698Z      [32m✓[39m preserveNodeMaps [2m(6)[22m
+2026-10-24T16:00:36.2267375Z        [33m[2m✓[22m[39m should preserve node maps by default for parseAndGenerateServices()[33m 1069[2mms[22m[39m
+2026-10-24T16:00:36.2268004Z      [32m✓[39m invalid file error messages [2m(14)[22m
+2026-10-24T16:00:36.2269001Z        [32m✓[39m project includes [2m(2)[22m
+2026-10-24T16:00:36.2269903Z          [33m[2m✓[22m[39m doesn't error for matched files[33m 774[2mms[22m[39m
+2026-10-24T16:00:36.2271265Z        [32m✓[39m "parserOptions.extraFileExtensions" is non-empty and projectService is true [2m(5)[22m
+2026-10-24T16:00:36.2272440Z          [32m✓[39m the extension matches [2m(3)[22m
+2026-10-24T16:00:36.2273686Z            [33m[2m✓[22m[39m the file is included[33m 847[2mms[22m[39m
+2026-10-24T16:00:36.2274592Z      [32m✓[39m invalid project error messages [2m(1)[22m
+2026-10-24T16:00:36.2275712Z        [33m[2m✓[22m[39m throws when none of multiple projects include the file[33m 535[2mms[22m[39m
+2026-10-24T16:00:36.2277106Z      [32m✓[39m projectFolderIgnoreList [2m(2)[22m
+2026-10-24T16:00:36.2278029Z        [33m[2m✓[22m[39m ignores nothing when given nothing[33m 942[2mms[22m[39m
+2026-10-24T16:00:36.2279171Z        [33m[2m✓[22m[39m ignores a folder when given a string glob[33m 424[2mms[22m[39m
+2026-10-24T16:00:36.2280091Z      [32m✓[39m cacheLifetime [2m(4)[22m
+2026-10-24T16:00:36.2280674Z        [32m✓[39m glob [2m(4)[22m
+2026-10-24T16:00:36.2281588Z          [33m[2m✓[22m[39m should cache globs if the lifetime is non-zero[33m 388[2mms[22m[39m
+2026-10-24T16:00:36.2283343Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/createParseSettings.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+2026-10-24T16:00:36.2285347Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/inferSingleRun.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+2026-10-24T16:00:36.2287371Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/parse.symlinks.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 4016[2mms[22m[39m
+2026-10-24T16:00:36.2288616Z    [32m✓[39m symlinked directories [2m(7)[22m
+2026-10-24T16:00:36.2289809Z      [33m[2m✓[22m[39m returns a program when the file is only in the project under a symlinked path[33m 852[2mms[22m[39m
+2026-10-24T16:00:36.2292674Z      [33m[2m✓[22m[39m returns a program when the file is linted through the symlinked path[33m 574[2mms[22m[39m
+2026-10-24T16:00:36.2294369Z      [33m[2m✓[22m[39m returns a program when the file is linted through a symlinked project directory[33m 442[2mms[22m[39m
+2026-10-24T16:00:36.2296027Z      [33m[2m✓[22m[39m returns a program for a symlinked file when another file created the program[33m 488[2mms[22m[39m
+2026-10-24T16:00:36.2297511Z      [33m[2m✓[22m[39m rechecks a symlinked file after deletion invalidation[33m 667[2mms[22m[39m
+2026-10-24T16:00:36.2299320Z      [33m[2m✓[22m[39m returns a program when the project service is enabled and the file is only in the project under a symlinked path[33m 516[2mms[22m[39m
+2026-10-24T16:00:36.2301318Z      [33m[2m✓[22m[39m returns a program when project is true and the file is only in the project under a symlinked path[33m 436[2mms[22m[39m
+2026-10-24T16:00:36.2303378Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/warn-on-unsupported-ts.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 179[2mms[22m[39m
+2026-10-24T16:00:36.2306870Z  [31m❯[39m [30m[43m typescript-estree [49m[39m tests/lib/parse.projectService-singleRun.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 3431[2mms[22m[39m
+2026-10-24T16:00:36.2308874Z    [31m❯[39m parseAndGenerateServices with projectService in single-run mode [2m(6)[22m
+2026-10-24T16:00:36.2310036Z      [33m[2m✓[22m[39m uses one Program per tsconfig instead of the project service[33m 794[2mms[22m[39m
+2026-10-24T16:00:36.2310937Z [31m     [31m×[31m prefers a nearer jsconfig.json over a farther tsconfig.json[39m[33m 616[2mms[22m[39m
+2026-10-24T16:00:36.2312243Z      [33m[2m✓[22m[39m uses the project service when the file text differs from disk[33m 790[2mms[22m[39m
+2026-10-24T16:00:36.2313072Z      [33m[2m✓[22m[39m uses the project service when the tsconfig has project references[33m 495[2mms[22m[39m
+2026-10-24T16:00:36.2313866Z      [33m[2m✓[22m[39m uses the project service when allowDefaultProject is set[33m 367[2mms[22m[39m
+2026-10-24T16:00:36.2314609Z      [33m[2m✓[22m[39m uses the project service when extraFileExtensions are set[33m 367[2mms[22m[39m
+2026-10-24T16:00:36.2315631Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/parse.project-true.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 934[2mms[22m[39m
+2026-10-24T16:00:36.2316353Z    [32m✓[39m parseAndGenerateServices [2m(3)[22m
+2026-10-24T16:00:36.2317619Z      [32m✓[39m when project is true [2m(3)[22m
+2026-10-24T16:00:36.2318233Z        [33m[2m✓[22m[39m finds a parent project when it exists in the project[33m 928[2mms[22m[39m
+2026-10-24T16:00:36.2319169Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/describeFilePath.test.ts [2m([22m[2m84 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+2026-10-24T16:00:36.2320273Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/candidateTSConfigRootDirs.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+2026-10-24T16:00:36.2321613Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/source-files.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-10-24T16:00:36.2322632Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/semanticInfo.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 14120[2mms[22m[39m
+2026-10-24T16:00:36.2323290Z    [32m✓[39m semanticInfo [2m(24)[22m
+2026-10-24T16:00:36.2323778Z      [33m[2m✓[22m[39m should cache the created ts.program[33m 1415[2mms[22m[39m
+2026-10-24T16:00:36.2324598Z      [33m[2m✓[22m[39m should handle "project": "./tsconfig.json" and "project": ["./tsconfig.json"] the same[33m 947[2mms[22m[39m
+2026-10-24T16:00:36.2325513Z      [33m[2m✓[22m[39m should resolve absolute and relative tsconfig paths the same[33m 870[2mms[22m[39m
+2026-10-24T16:00:36.2326127Z      [33m[2m✓[22m[39m isolated-file tests[33m 1260[2mms[22m[39m
+2026-10-24T16:00:36.2326626Z      [33m[2m✓[22m[39m isolated-vue-file tests[33m 973[2mms[22m[39m
+2026-10-24T16:00:36.2327167Z      [33m[2m✓[22m[39m non-existent-estree-nodes tests[33m 1265[2mms[22m[39m
+2026-10-24T16:00:36.2327697Z      [33m[2m✓[22m[39m imported-file tests[33m 1045[2mms[22m[39m
+2026-10-24T16:00:36.2328328Z      [33m[2m✓[22m[39m non-existent file should throw error when project provided[33m 1028[2mms[22m[39m
+2026-10-24T16:00:36.2329131Z      [33m[2m✓[22m[39m first matching provided program instance is returned in result[33m 2347[2mms[22m[39m
+2026-10-24T16:00:36.2330513Z      [33m[2m✓[22m[39m file not in single provided project instance in single-run mode should throw[33m 696[2mms[22m[39m
+2026-10-24T16:00:36.2332354Z      [33m[2m✓[22m[39m file not in single provided program instance should throw[33m 603[2mms[22m[39m
+2026-10-24T16:00:36.2333956Z      [33m[2m✓[22m[39m file not in multiple provided program instances should throw a program instance error[33m 1332[2mms[22m[39m
+2026-10-24T16:00:36.2335952Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/validateDefaultProjectForFilesGlob.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+2026-10-24T16:00:36.2338405Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/withoutProjectParserOptions.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+2026-10-24T16:00:36.2340540Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/tsVersionRangeSync.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 25[2mms[22m[39m
+2026-10-24T16:00:36.2342621Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/persistent-parse/no-includes.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 7099[2mms[22m[39m
+2026-10-24T16:00:36.2343871Z    [32m✓[39m persistent parse [2m(11)[22m
+2026-10-24T16:00:36.2344542Z      [32m✓[39m tsconfig with no includes / files [2m(11)[22m
+2026-10-24T16:00:36.2345514Z        [33m[2m✓[22m[39m parses both files successfully when included[33m 802[2mms[22m[39m
+2026-10-24T16:00:36.2346708Z        [33m[2m✓[22m[39m parses included files, and throws on excluded files[33m 696[2mms[22m[39m
+2026-10-24T16:00:36.2347934Z        [33m[2m✓[22m[39m allows parsing of new files[33m 625[2mms[22m[39m
+2026-10-24T16:00:36.2349878Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files[33m 469[2mms[22m[39m
+2026-10-24T16:00:36.2351234Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files in new folder[33m 485[2mms[22m[39m
+2026-10-24T16:00:36.2353355Z        [33m[2m✓[22m[39m allows renaming of files[33m 434[2mms[22m[39m
+2026-10-24T16:00:36.2354916Z        [33m[2m✓[22m[39m reacts to changes in the tsconfig[33m 855[2mms[22m[39m
+2026-10-24T16:00:36.2355931Z        [33m[2m✓[22m[39m should work with relative paths[33m 366[2mms[22m[39m
+2026-10-24T16:00:36.2356976Z        [33m[2m✓[22m[39m should work with relative paths without tsconfig root[33m 470[2mms[22m[39m
+2026-10-24T16:00:36.2357966Z        [33m[2m✓[22m[39m handles tsconfigs with no includes/excludes (single level)[33m 942[2mms[22m[39m
+2026-10-24T16:00:36.2359364Z        [33m[2m✓[22m[39m handles tsconfigs with no includes/excludes (nested)[33m 931[2mms[22m[39m
+2026-10-24T16:00:36.2360881Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/persistent-parse/includes-trailing-slash.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 5317[2mms[22m[39m
+2026-10-24T16:00:36.2362842Z    [32m✓[39m persistent parse [2m(9)[22m
+2026-10-24T16:00:36.2363837Z      [32m✓[39m includes ending in a slash [2m(9)[22m
+2026-10-24T16:00:36.2365098Z        [33m[2m✓[22m[39m parses both files successfully when included[33m 928[2mms[22m[39m
+2026-10-24T16:00:36.2366387Z        [33m[2m✓[22m[39m parses included files, and throws on excluded files[33m 731[2mms[22m[39m
+2026-10-24T16:00:36.2367677Z        [33m[2m✓[22m[39m allows parsing of new files[33m 552[2mms[22m[39m
+2026-10-24T16:00:36.2368872Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files[33m 540[2mms[22m[39m
+2026-10-24T16:00:36.2370138Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files in new folder[33m 445[2mms[22m[39m
+2026-10-24T16:00:36.2371108Z        [33m[2m✓[22m[39m allows renaming of files[33m 467[2mms[22m[39m
+2026-10-24T16:00:36.2372227Z        [33m[2m✓[22m[39m reacts to changes in the tsconfig[33m 810[2mms[22m[39m
+2026-10-24T16:00:36.2374095Z        [33m[2m✓[22m[39m should work with relative paths[33m 380[2mms[22m[39m
+2026-10-24T16:00:36.2375139Z        [33m[2m✓[22m[39m should work with relative paths without tsconfig root[33m 410[2mms[22m[39m
+2026-10-24T16:00:36.2377081Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/persistent-parse/overlapping-globs.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 5208[2mms[22m[39m
+2026-10-24T16:00:36.2378482Z    [32m✓[39m persistent parse [2m(9)[22m
+2026-10-24T16:00:36.2379236Z      [32m✓[39m tsconfig with overlapping globs [2m(9)[22m
+2026-10-24T16:00:36.2380190Z        [33m[2m✓[22m[39m parses both files successfully when included[33m 919[2mms[22m[39m
+2026-10-24T16:00:36.2381475Z        [33m[2m✓[22m[39m parses included files, and throws on excluded files[33m 569[2mms[22m[39m
+2026-10-24T16:00:36.2382741Z        [33m[2m✓[22m[39m allows parsing of new files[33m 541[2mms[22m[39m
+2026-10-24T16:00:36.2383551Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files[33m 521[2mms[22m[39m
+2026-10-24T16:00:36.2385118Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files in new folder[33m 431[2mms[22m[39m
+2026-10-24T16:00:36.2386247Z        [33m[2m✓[22m[39m allows renaming of files[33m 431[2mms[22m[39m
+2026-10-24T16:00:36.2387167Z        [33m[2m✓[22m[39m reacts to changes in the tsconfig[33m 871[2mms[22m[39m
+2026-10-24T16:00:36.2388386Z        [33m[2m✓[22m[39m should work with relative paths[33m 470[2mms[22m[39m
+2026-10-24T16:00:36.2389780Z        [33m[2m✓[22m[39m should work with relative paths without tsconfig root[33m 439[2mms[22m[39m
+2026-10-24T16:00:36.2391382Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/create-program.shared.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+2026-10-24T16:00:36.2394631Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/persistent-parse/includes.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 3844[2mms[22m[39m
+2026-10-24T16:00:36.2395569Z    [32m✓[39m persistent parse [2m(9)[22m
+2026-10-24T16:00:36.2396823Z      [32m✓[39m includes not ending in a slash [2m(9)[22m
+2026-10-24T16:00:36.2398037Z        [33m[2m✓[22m[39m parses both files successfully when included[33m 698[2mms[22m[39m
+2026-10-24T16:00:36.2399158Z        [33m[2m✓[22m[39m parses included files, and throws on excluded files[33m 396[2mms[22m[39m
+2026-10-24T16:00:36.2399819Z 
+2026-10-24T16:00:36.2401022Z [7m[1m[31m NX [39m[22m[27m  [31mRunning target [1mtest[22m for 2 projects and [1m10[22m tasks they depend on failed[39m
+2026-10-24T16:00:36.2401469Z 
+2026-10-24T16:00:36.2402566Z [2mFailed tasks:[22m
+2026-10-24T16:00:36.2402714Z 
+2026-10-24T16:00:36.2402890Z [2m-[22m typescript-estree:test
+2026-10-24T16:00:36.2403496Z 
+2026-10-24T16:00:36.2404225Z [2mOutput of 11 successful tasks were not shown. Run with[22m --verbose [2mor[22m --output-style=static [2mto see it.[22m
+2026-10-24T16:00:36.2406168Z 
+2026-10-24T16:00:36.2406635Z        [33m[2m✓[22m[39m allows parsing of new files[33m 398[2mms[22m[39m
+2026-10-24T16:00:36.2407998Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files[33m 363[2mms[22m[39m
+2026-10-24T16:00:36.2409174Z        [33m[2m✓[22m[39m allows parsing of deeply nested new files in new folder[33m 359[2mms[22m[39m
+2026-10-24T16:00:36.2410054Z        [33m[2m✓[22m[39m allows renaming of files[33m 314[2mms[22m[39m
+2026-10-24T16:00:36.2411455Z        [33m[2m✓[22m[39m reacts to changes in the tsconfig[33m 613[2mms[22m[39m
+2026-10-24T16:00:36.2413379Z        [33m[2m✓[22m[39m should work with relative paths[33m 317[2mms[22m[39m
+2026-10-24T16:00:36.2414094Z        [33m[2m✓[22m[39m should work with relative paths without tsconfig root[33m 368[2mms[22m[39m
+2026-10-24T16:00:36.2415601Z  [32m✓[39m [30m[43m typescript-estree [49m[39m tests/lib/persistent-parse/module.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 12950[2mms[22m[39m
+2026-10-24T16:00:36.2416404Z    [32m✓[39m persistent parse [2m(32)[22m
+2026-10-24T16:00:36.2417292Z      [32m✓[39m tsconfig with module set [2m(32)[22m
+2026-10-24T16:00:36.2418105Z        [32m✓[39m module None [2m(4)[22m
+2026-10-24T16:00:36.2419220Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 828[2mms[22m[39m
+2026-10-24T16:00:36.2420447Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 528[2mms[22m[39m
+2026-10-24T16:00:36.2421589Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 578[2mms[22m[39m
+2026-10-24T16:00:36.2423606Z          [33m[2m✓[22m[39m first parse of foo should not throw[33m 545[2mms[22m[39m
+2026-10-24T16:00:36.2424576Z        [32m✓[39m module CommonJS [2m(4)[22m
+2026-10-24T16:00:36.2425570Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 626[2mms[22m[39m
+2026-10-24T16:00:36.2426856Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 602[2mms[22m[39m
+2026-10-24T16:00:36.2428080Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 490[2mms[22m[39m
+2026-10-24T16:00:36.2429249Z          [33m[2m✓[22m[39m first parse of foo should not throw[33m 490[2mms[22m[39m
+2026-10-24T16:00:36.2430062Z        [32m✓[39m module AMD [2m(4)[22m
+2026-10-24T16:00:36.2430922Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 442[2mms[22m[39m
+2026-10-24T16:00:36.2432044Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 419[2mms[22m[39m
+2026-10-24T16:00:36.2433676Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 402[2mms[22m[39m
+2026-10-24T16:00:36.2435272Z          [33m[2m✓[22m[39m first parse of foo should not throw[33m 448[2mms[22m[39m
+2026-10-24T16:00:36.2436741Z        [32m✓[39m module System [2m(4)[22m
+2026-10-24T16:00:36.2438553Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 410[2mms[22m[39m
+2026-10-24T16:00:36.2439251Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 519[2mms[22m[39m
+2026-10-24T16:00:36.2439929Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 406[2mms[22m[39m
+2026-10-24T16:00:36.2441201Z        [32m✓[39m module UMD [2m(4)[22m
+2026-10-24T16:00:36.2442795Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 461[2mms[22m[39m
+2026-10-24T16:00:36.2444592Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 377[2mms[22m[39m
+2026-10-24T16:00:36.2445279Z          [33m[2m✓[22m[39m first parse of foo should not throw[33m 312[2mms[22m[39m
+2026-10-24T16:00:36.2445854Z        [32m✓[39m module ES6 [2m(4)[22m
+2026-10-24T16:00:36.2447043Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 336[2mms[22m[39m
+2026-10-24T16:00:36.2448466Z          [33m[2m✓[22m[39m first parse of foo should not throw[33m 362[2mms[22m[39m
+2026-10-24T16:00:36.2449420Z        [32m✓[39m module ES2015 [2m(4)[22m
+2026-10-24T16:00:36.2452663Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 305[2mms[22m[39m
+2026-10-24T16:00:36.2453876Z          [33m[2m✓[22m[39m first parse of number should not throw[33m 308[2mms[22m[39m
+2026-10-24T16:00:36.2454947Z          [33m[2m✓[22m[39m first parse of string should not throw[33m 311[2mms[22m[39m
+2026-10-24T16:00:36.2455790Z        [32m✓[39m module ESNext [2m(4)[22m
+2026-10-24T16:00:36.2456726Z          [33m[2m✓[22m[39m first parse of object should not throw[33m 340[2mms[22m[39m
+2026-10-24T16:00:36.2475023Z 
+2026-10-24T16:00:36.2475595Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-10-24T16:00:36.2476032Z 
+2026-10-24T16:00:36.2478023Z [41m[1m FAIL [22m[49m [30m[43m typescript-estree [49m[39m tests/lib/parse.projectService-singleRun.test.ts[2m > [22mparseAndGenerateServices with projectService in single-run mode[2m > [22mprefers a nearer jsconfig.json over a farther tsconfig.json
+2026-10-24T16:00:36.2480394Z [31m[1mAssertionError[22m: expected 'D:/a/typescript-eslint/typescript-esl…' to be 'D:\a\typescript-eslint\typescript-esl…' // Object.is equality[39m
+2026-10-24T16:00:36.2481627Z 
+2026-10-24T16:00:36.2483239Z Expected: [32m"D:[7m\a\[27mtypescript-eslint[7m\[27mtypescript-eslint[7m\[27mpackages[7m\[27mtypescript-estree[7m\[27mtests[7m\[27mfixtures[7m\[27mjsconfigProject[7m\[27msub[7m\[27mjsconfig.json"[39m
+2026-10-24T16:00:36.2486396Z Received: [31m"D:[7m/a/[27mtypescript-eslint[7m/[27mtypescript-eslint[7m/[27mpackages[7m/[27mtypescript-estree[7m/[27mtests[7m/[27mfixtures[7m/[27mjsconfigProject[7m/[27msub[7m/[27mjsconfig.json"[39m
+2026-10-24T16:00:36.2488520Z 
+2026-10-24T16:00:36.2489132Z [36m [2m❯[22m tests/lib/parse.projectService-singleRun.test.ts:[2m63:67[22m[39m
+2026-10-24T16:00:36.2490303Z     [90m 61|[39m     const { services } = parse('jsconfigProject', 'sub/file.js');
+2026-10-24T16:00:36.2490776Z     [90m 62|[39m
+2026-10-24T16:00:36.2491494Z     [90m 63|[39m     expect(services.program?.getCompilerOptions().configFilePath).toBe(
+2026-10-24T16:00:36.2492778Z     [90m   |[39m                                                                   [31m^[39m
+2026-10-24T16:00:36.2493794Z     [90m 64|[39m       path.join(fixturesDir, 'jsconfigProject', 'sub', 'jsconfig.json'…
+2026-10-24T16:00:36.2494305Z     [90m 65|[39m     );
+2026-10-24T16:00:36.2494895Z 
+2026-10-24T16:00:36.2495248Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-10-24T16:00:36.2495479Z 
+2026-10-24T16:00:36.2495499Z 
+2026-10-24T16:00:36.2496336Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (25)[39m
+2026-10-24T16:00:36.2497634Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m416 passed[39m[22m[90m (417)[39m
+2026-10-24T16:00:36.2498447Z [2m   Start at [22m 16:00:04
+2026-10-24T16:00:36.2499305Z [2m   Duration [22m 31.70s[2m (tests 79%, setup 13%, import 6%, transform 2%)[22m
+2026-10-24T16:00:36.2499812Z 
+2026-10-24T16:00:36.2499820Z 
+2026-10-24T16:00:36.2534026Z ##[error]AssertionError: expected 'D:/a/typescript-eslint/typescript-esl…' to be 'D:\a\typescript-eslint\typescript-esl…' // Object.is equality
+
+Expected: "D:\a\typescript-eslint\typescript-eslint\packages\typescript-estree\tests\fixtures\jsconfigProject\sub\jsconfig.json"
+Received: "D:/a/typescript-eslint/typescript-eslint/packages/typescript-estree/tests/fixtures/jsconfigProject/sub/jsconfig.json"
+
+ ❯ tests/lib/parse.projectService-singleRun.test.ts:63:67
+
+
+2026-10-24T16:00:36.2547609Z Warning: command "vitest --config=vitest.config.mts" exited with non-zero status code
+2026-10-24T16:00:36.2548802Z ##[endgroup]
+2026-10-24T16:00:36.2548989Z 
+2026-10-24T16:00:36.2549178Z [2m[31m[39m[22m
+2026-10-24T16:00:36.6751473Z 
+2026-10-24T16:00:36.6757876Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-24T16:00:36.6760354Z │       Tasks run for command: nx run-many -t test --projects=typescript-estree,rule-tester        │
+2026-10-24T16:00:36.6761899Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-24T16:00:36.6763045Z ├────────┬─────────────────────────────────────────────────────────┬──────────┬────────────────────┤
+2026-10-24T16:00:36.6764059Z │ Status │                          Task                           │ Duration │    Cache Status    │
+2026-10-24T16:00:36.6765668Z ├────────┼─────────────────────────────────────────────────────────┼──────────┼────────────────────┤
+2026-10-24T16:00:36.6766836Z │   ✔    │ tsconfig-utils:build                                    │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6768001Z │   ✔    │ ast-spec:build                                          │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6769172Z │   ✔    │ types:copy-ast-spec                                     │    0s    │     Cache Miss     │
+2026-10-24T16:00:36.6770595Z │   ✔    │ types:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6771754Z │   ✔    │ visitor-keys:build                                      │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6772915Z │   ✔    │ project-service:build                                   │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6774099Z │   ✔    │ typescript-estree:build                                 │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6775288Z │   ✔    │ scope-manager:build                                     │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6776405Z │   ✔    │ parser:build                                            │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6777458Z │   ✔    │ utils:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6778823Z │   ✔    │ rule-tester:test                                        │    0s    │  Remote Cache Hit  │
+2026-10-24T16:00:36.6779957Z │        └─────────────────────────────────────────────────────────┴──────────┴────────────────────┤
+2026-10-24T16:00:36.6781060Z │   ✖      typescript-estree:test                                      32s          Cache Miss     │
+2026-10-24T16:00:36.6782376Z │           > Logs: https://cloud.nx.app/runs/5HBlCe2Yy0/task/typescript-estree%3Atest             │
+2026-10-24T16:00:36.6783619Z └──────────────────────────────────────────────────────────────────────────────────────────────────┘
+2026-10-24T16:00:36.6784789Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-24T16:00:36.6785887Z │                                   Nx Cloud Task Runner Report                                    │
+2026-10-24T16:00:36.6787011Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-24T16:00:36.6788145Z ├────────┬────────────────────────────────────────┬────────┬───────────────────────────────────────┤
+2026-10-24T16:00:36.6789235Z │ 11     │ Successful Tasks                       │ 91.67% │ Success Percentage                    │
+2026-10-24T16:00:36.6790616Z │ 1      │ Failed Tasks                           │ 8.33%  │ Failure Percentage                    │
+2026-10-24T16:00:36.6791760Z ├────────┼────────────────────────────────────────┼────────┼───────────────────────────────────────┤
+2026-10-24T16:00:36.6792814Z │ 10     │ Cached Tasks                           │ 83.33% │ Cache Hit Percentage                  │
+2026-10-24T16:00:36.6794181Z │ 12     │ Total Executed Tasks                   │ 35s    │ Run Duration                          │
+2026-10-24T16:00:36.6795363Z └────────┴────────────────────────────────────────┴────────┴───────────────────────────────────────┘
+2026-10-24T16:00:36.6796285Z  See more details at: https://cloud.nx.app/cipes/6adcd59ac7b25e0219857683 
+2026-10-24T16:00:36.6796804Z 
+2026-10-24T16:00:36.6815209Z   Run duration:      35.6s
+2026-10-24T16:00:36.6815667Z   Cache:             10/11 hit (91%)
+2026-10-24T16:00:36.6816131Z   Critical path:     33.0s (5 tasks)
+2026-10-24T16:00:36.6816575Z   Recoverable time:  <1ms
+2026-10-24T16:00:36.6816811Z 
+2026-10-24T16:00:36.6816954Z   Recommendations:
+2026-10-24T16:00:36.6817459Z     - Speed up or split the longest tasks on the critical path:
+2026-10-24T16:00:36.6818091Z         typescript-estree:test    32.4s
+2026-10-24T16:00:37.9201218Z ##[error]Process completed with exit code 1.
+2026-10-24T16:00:37.9458523Z Post job cleanup.
+2026-10-24T16:00:37.9463442Z ##[start-action display=Use Node.js 24;id=__7d09bf12-d0f6-4dc3-bdb7-b4db949cbee5.__actions_setup-node]
+2026-10-24T16:00:37.9466681Z ##[end-action id=__7d09bf12-d0f6-4dc3-bdb7-b4db949cbee5.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-24T16:00:37.9469574Z ##[start-action display=Install pnpm;id=__7d09bf12-d0f6-4dc3-bdb7-b4db949cbee5.__pnpm_setup]
+2026-10-24T16:00:37.9617637Z Post job cleanup.
+2026-10-24T16:00:38.1285556Z ##[group]Running pnpm store prune...
+2026-10-24T16:00:40.7857903Z Removed 5098 files (22563565 bytes)
+2026-10-24T16:00:40.7858459Z Removed 4 packages
+2026-10-24T16:00:40.7938339Z ##[endgroup]
+2026-10-24T16:00:40.7940754Z Cache hit occurred on the primary key pnpm-cache-Windows-x64-no-runtime-a8f2d37bad7f0672ebaa9e9b9b78584377bff7140465a05f2492d7ee70cf2467, not saving cache.
+2026-10-24T16:00:40.7942986Z (node:8) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-24T16:00:40.7943988Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-24T16:00:40.8059286Z ##[end-action id=__7d09bf12-d0f6-4dc3-bdb7-b4db949cbee5.__pnpm_setup;outcome=success;conclusion=success;duration_ms=2858]
+2026-10-24T16:00:40.8256789Z Post job cleanup.
+2026-10-24T16:00:41.0223578Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-24T16:00:41.0569644Z git version 2.56.0.windows.2
+2026-10-24T16:00:41.0634765Z Temporarily overriding HOME='D:\a\_temp\a1bd80e5-56ca-4d65-a581-2e98efa4d7a2' before making global git config changes
+2026-10-24T16:00:41.0635860Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-24T16:00:41.0646033Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\typescript-eslint\typescript-eslint
+2026-10-24T16:00:41.1023530Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-24T16:00:41.1402222Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-24T16:00:41.7372280Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-24T16:00:41.7751108Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-24T16:00:42.3547801Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-24T16:00:42.3923410Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-24T16:00:42.9669097Z Cleaning up orphan processes
+2026-10-24T16:00:43.0183594Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

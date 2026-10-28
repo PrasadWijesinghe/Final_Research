@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import logging
 import os
 import time
@@ -27,18 +28,29 @@ class GitHubError(Exception):
         super().__init__(message)
         self.status_code = status_code
 
+    @property
+    def is_server_error(self) -> bool:
+        """True for a 5xx answer (GitHub is failing on this request); False for network errors."""
+        return self.status_code is not None and self.status_code >= 500
+
 
 class GitHubNotFoundError(GitHubError):
     """The resource does not exist (404), or is not visible to the token."""
 
 
-class GitHubResponseTooLargeError(GitHubError):
-    """A streamed response exceeded the caller's maximum byte limit."""
+class GitHubTooLargeError(GitHubError):
+    """A body was larger than the caller's `max_bytes`; it was not read into memory."""
 
-    def __init__(self, max_bytes: int, content_length: int | None = None) -> None:
-        super().__init__(f"response exceeds {max_bytes} bytes", 413)
+    def __init__(
+        self, message: str, *, max_bytes: int | None = None, content_length: int | None = None
+    ) -> None:
+        super().__init__(message)
         self.max_bytes = max_bytes
         self.content_length = content_length
+
+
+# Older name used by the Dependency research scripts on main; same error.
+GitHubResponseTooLargeError = GitHubTooLargeError
 
 
 @dataclass(frozen=True)
@@ -68,6 +80,9 @@ class GitHubConfig:
     empty_retries: int = 2
     # DEFAULT: 30 s request timeout.
     timeout: float = 30.0
+    # DEFAULT: after a 5xx on a listing, ask again with 30, then 10 items per page (big runs make
+    # GitHub time out on 100 jobs per page).
+    fallback_page_sizes: tuple[int, ...] = (30, 10)
     base_url: str = API_URL
     raw_url: str = RAW_URL
 
@@ -156,13 +171,19 @@ class GitHubClient:
             self._reset = None
 
     def _record_rate_limit(self, response: httpx.Response) -> None:
-        remaining = response.headers.get("x-ratelimit-remaining")
-        reset = response.headers.get("x-ratelimit-reset")
-        if remaining is not None and reset is not None:
+        # DEFAULT: read the final answer's headers first. After a redirect to blob storage (job
+        # and run logs) the final answer has none, so fall back to the last earlier answer in the
+        # chain that has them (the API's own 302), which carries the quota.
+        for answer in (response, *reversed(response.history)):
+            remaining = answer.headers.get("x-ratelimit-remaining")
+            reset = answer.headers.get("x-ratelimit-reset")
+            if remaining is None or reset is None:
+                continue
             try:
                 self._remaining, self._reset = int(remaining), float(reset)
             except ValueError:
-                pass
+                continue
+            return
 
     @staticmethod
     def _retry_after(response: httpx.Response) -> float | None:
@@ -194,7 +215,54 @@ class GitHubClient:
             return self._backoff(attempt, floor=self.config.secondary_backoff)
         return None
 
-    def _send(self, url: str, params: dict[str, Any] | None, *, rest: bool) -> httpx.Response:
+    def _get_capped(
+        self, url: str, params: dict[str, Any] | None, max_bytes: int
+    ) -> httpx.Response:
+        """GET that holds at most `max_bytes` of a successful body, plus one decoded chunk."""
+        request = self._http.build_request("GET", url, params=params)
+        response = self._http.send(request, stream=True)  # follows redirects like `get`
+        try:
+            if not response.is_success:
+                response.read()  # error bodies are small and the callers look at them
+                return response
+            declared = response.headers.get("content-length", "")
+            if declared.isdigit() and int(declared) > max_bytes:
+                raise GitHubTooLargeError(
+                    f"body is {declared} bytes, over {max_bytes}",
+                    max_bytes=max_bytes,
+                    content_length=int(declared),
+                )
+            # BytesIO.getvalue() hands out its buffer without a copy, and httpx keeps that same
+            # object, so the body is held once (a bytearray plus bytes() would hold it twice).
+            body = io.BytesIO()
+            for chunk in response.iter_bytes():  # already decoded, so no content-encoding is left
+                body.write(chunk)
+                if body.tell() > max_bytes:
+                    raise GitHubTooLargeError(
+                        f"body is over {max_bytes} bytes", max_bytes=max_bytes
+                    )
+            return httpx.Response(
+                response.status_code,
+                headers={
+                    k: v
+                    for k, v in response.headers.items()
+                    if k.lower() not in ("content-encoding", "content-length", "transfer-encoding")
+                },
+                content=body.getvalue(),
+                request=request,
+                history=response.history,
+            )
+        finally:
+            response.close()
+
+    def _send(
+        self,
+        url: str,
+        params: dict[str, Any] | None,
+        *,
+        rest: bool,
+        max_bytes: int | None = None,
+    ) -> httpx.Response:
         """GET with rate-limit awareness and retries. Returns any non-retryable response."""
         kind = "rest" if rest else "raw"
         for attempt in range(self.config.max_retries + 1):
@@ -204,7 +272,10 @@ class GitHubClient:
             else:
                 self.raw_calls += 1
             try:
-                response = self._http.get(url, params=params)
+                if max_bytes is None:
+                    response = self._http.get(url, params=params)
+                else:
+                    response = self._get_capped(url, params, max_bytes)
             except httpx.TransportError as exc:
                 if attempt == self.config.max_retries:
                     raise GitHubError(f"transport error: {type(exc).__name__}") from exc
@@ -265,82 +336,17 @@ class GitHubClient:
         return self.get(path, params).json()
 
     def get_bytes(
-        self,
-        path: str,
-        params: dict[str, Any] | None = None,
-        *,
-        max_bytes: int | None = None,
+        self, path: str, params: dict[str, Any] | None = None, *, max_bytes: int | None = None
     ) -> bytes | None:
-        """GET a body such as a job log (follows redirects); None on 404."""
-        if max_bytes is not None:
-            if max_bytes < 1:
-                raise ValueError("max_bytes must be positive")
-            return self._get_bytes_limited(self._url(path), params, max_bytes)
-        response = self._send(self._url(path), params, rest=True)
+        """GET a body such as a job log (follows redirects); None on 404.
+
+        With `max_bytes`, a larger body raises `GitHubTooLargeError` without being read fully.
+        """
+        response = self._send(self._url(path), params, rest=True, max_bytes=max_bytes)
         if response.status_code == 404:
             return None
         self._check(response)
         return response.content
-
-    def _get_bytes_limited(
-        self,
-        url: str,
-        params: dict[str, Any] | None,
-        max_bytes: int,
-    ) -> bytes | None:
-        """Stream a response and stop as soon as it exceeds a byte limit."""
-        for attempt in range(self.config.max_retries + 1):
-            self._wait_for_quota()
-            self.api_calls += 1
-            retry_wait: float | None = None
-            retry_status_code: int | None = None
-            try:
-                with self._http.stream("GET", url, params=params) as response:
-                    if response.status_code == 404:
-                        return None
-                    self._record_rate_limit(response)
-                    if response.is_error:
-                        response.read()
-                        retry_wait = self._wait_for(response, attempt, rest=True)
-                        if retry_wait is None:
-                            self._check(response)
-                        retry_status_code = response.status_code
-                    else:
-                        content_length_value = response.headers.get("content-length")
-                        try:
-                            content_length = (
-                                int(content_length_value)
-                                if content_length_value is not None
-                                else None
-                            )
-                        except ValueError:
-                            content_length = None
-                        if content_length is not None and content_length > max_bytes:
-                            raise GitHubResponseTooLargeError(max_bytes, content_length)
-                        body = bytearray()
-                        for chunk in response.iter_bytes():
-                            if len(body) + len(chunk) > max_bytes:
-                                raise GitHubResponseTooLargeError(max_bytes)
-                            body.extend(chunk)
-                        return bytes(body)
-            except httpx.TransportError as exc:
-                if attempt == self.config.max_retries:
-                    raise GitHubError(f"transport error: {type(exc).__name__}") from exc
-                retry_wait = self._backoff(attempt)
-                logger.warning(
-                    "transport error, retrying",
-                    extra={
-                        "kind": "rest",
-                        "error": type(exc).__name__,
-                        "sleep_s": retry_wait,
-                    },
-                )
-            if retry_wait is None:
-                raise GitHubError("unreachable")  # pragma: no cover
-            if attempt == self.config.max_retries:
-                raise GitHubError("gave up after retries", retry_status_code)
-            self._sleep(retry_wait)
-        raise GitHubError("unreachable")  # pragma: no cover
 
     def get_rate_limit(self) -> dict[str, Any]:
         """Return the `GET /rate_limit` body (this call does not use quota)."""
@@ -362,6 +368,38 @@ class GitHubClient:
             yield from (body[items_key] if items_key else body)
             next_url = response.links.get("next", {}).get("url")
             response = self.get(next_url) if next_url else None
+
+    def list_shrinking(
+        self,
+        path: str,
+        params: dict[str, Any] | None = None,
+        *,
+        items_key: str | None = None,
+    ) -> list[Any]:
+        """Return all items like `paginate`, retrying with smaller pages after a 5xx.
+
+        A listing that GitHub cannot serve at 100 per page (HTTP 5xx after the normal retries, on
+        any page) is restarted from page 1 with each of `fallback_page_sizes`. The result is a
+        complete list from one attempt, so nothing is missing or duplicated. Other errors, and a
+        5xx at the smallest size, are raised.
+        """
+        base = dict(params or {})
+        sizes = [int(base.pop("per_page", 100)), *self.config.fallback_page_sizes]
+        for index, size in enumerate(sizes):
+            try:
+                return list(self.paginate(path, {**base, "per_page": size}, items_key=items_key))
+            except GitHubError as exc:
+                if not exc.is_server_error or index == len(sizes) - 1:
+                    raise
+                logger.warning(
+                    "listing failed with a server error; retrying with smaller pages",
+                    extra={
+                        "path": path,
+                        "status": exc.status_code,
+                        "next_per_page": sizes[index + 1],
+                    },
+                )
+        raise GitHubError("unreachable")  # pragma: no cover
 
     def iter_workflow_runs(
         self,

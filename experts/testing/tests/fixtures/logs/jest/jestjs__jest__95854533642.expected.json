@@ -1,0 +1,27 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 95854533642,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 3,
+  "summary": {
+    "passed": 4056,
+    "failed": 3,
+    "skipped": 36,
+    "total": 4095,
+    "todo": 0,
+    "files_failed": 3
+  },
+  "failed_test_names": [
+    "SearchSource > findRelatedTests > finds tests that depend directly on the path"
+  ],
+  "failed_files": [
+    "packages/jest-core/src/__tests__/SearchSource.test.ts"
+  ],
+  "first_error_type": null,
+  "first_project_path": "packages/jest-core/src/__tests__/SearchSource.test.ts",
+  "note": "Three attempts, same failure each time. A jasmine2-style run: a diff with `/home/runner/work/jest/jest/...` paths."
+}

@@ -1,0 +1,23 @@
+{
+  "framework": "mocha",
+  "repo": "Automattic/mongoose",
+  "job_id": 106123375785,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 74,
+    "failed": 1,
+    "skipped": 0,
+    "total": 75
+  },
+  "failed_test_names": [
+    "encryption integration tests > Tests that fields of valid schema types can be declared as encrypted schemas > array encrypted fields > document array fields for CSFLE > encrypts and decrypts"
+  ],
+  "failed_files": [],
+  "first_error_type": "Error",
+  "first_project_path": null,
+  "note": "Five-line title. The stack holds only node:internal frames, so no file is known."
+}

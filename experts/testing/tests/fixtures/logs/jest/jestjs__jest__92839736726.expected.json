@@ -1,0 +1,36 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 92839736726,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "total": 0,
+    "todo": 0,
+    "files_failed": 4
+  },
+  "failed_test_names": [
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run"
+  ],
+  "failed_files": [
+    "packages/jest-environment-node/src/__tests__/node_environment.test.ts",
+    "packages/jest-environment-node/src/__tests__/globals_cleanup_2.test.ts",
+    "packages/jest-environment-node/src/__tests__/globals_cleanup_1.test.ts",
+    "packages/jest-environment-node/src/__tests__/globals_cleanup_3.test.ts"
+  ],
+  "failure_kinds": {
+    "suite": 4
+  },
+  "first_error_type": "SyntaxError",
+  "first_project_path": "packages/jest-runtime/build/index.js",
+  "note": "`Tests: 0 total` but `Test Suites: 4 failed`: suite failures are not failed tests. Windows paths (D:\\a\\jest\\jest)."
+}

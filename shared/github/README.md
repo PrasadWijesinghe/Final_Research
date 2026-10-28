@@ -2,7 +2,7 @@
 
 **In one sentence:** A Python class that asks GitHub for data (runs, jobs, logs, files) and handles the waiting, retrying and splitting that GitHub's limits require, so the collector does not have to.
 
-**Status:** working · **Owner:** shared · **Plan tasks:** P1.1
+**Status:** working · **Owner:** shared · **Plan tasks:** P1.1 · **Decision:** D41 (size limit for downloads, rate-limit headers after a redirect)
 
 ## What it does
 
@@ -64,15 +64,41 @@ A genuinely empty window costs 5 calls (1 + 2 retries + 2 halves) and never loop
 
 Counts follow the same rule. `count_workflow_runs(repo, start, end, params)` makes one `per_page=1` call and returns a `RunCount(count, capped)`. A non-zero `total_count` is trusted, a zero is retried and cross-checked as above. GitHub stops counting at 2,500: a `total_count` of 2,500 or more is returned with `capped=True`, which means "at least this many", never an exact number. Whether a window is complete is decided by walking its pages (Link headers), not by `total_count`, except for the 1,000-result split above.
 
+### Smaller pages after a 5xx
+
+`GitHubError.is_server_error` is true for a 5xx answer that survived the retries (and false for network errors, which have no status). `list_shrinking(path, params, items_key=...)` returns all items like `paginate`, but if any page fails with a 5xx it starts again from page 1 with a smaller `per_page`: first the requested size (100 by default), then each size in `GitHubConfig.fallback_page_sizes` (default 30, then 10). The result comes from one complete attempt, so it is the same list a normal listing gives, with no duplicates. Other errors are raised at once, and so is a 5xx at the smallest size. The collector uses it for a run's jobs, because big runs make GitHub time out on 100 jobs per page.
+
 ### Raw file fetcher
 
 `fetch_raw_file` asks `raw.githubusercontent.com` for one file at one commit. It uses the same retry path, but it does not read or count the REST rate-limit headers. If the file does not exist (404), it returns `None` and does not raise.
 
 ### Job logs
 
-`get_bytes` fetches a body such as a job log. GitHub answers the log request with a redirect to a storage address. The client follows the redirect. The token is not sent to the storage address, because `httpx` (the HTTP library used here) drops the `Authorization` header when a redirect goes to a different host. Callers may pass `max_bytes` to stream the response with a hard size limit; the client stops reading and raises `GitHubResponseTooLargeError` if the response is too large.
+`get_bytes` fetches a body such as a job log, or a whole run attempt's log archive (a zip). GitHub answers the log request with a redirect to a storage address. The client follows the redirect. The token is not sent to the storage address, because `httpx` (the HTTP library used here) drops the `Authorization` header when a redirect goes to a different host.
 
 If the log has expired, GitHub answers 410. `get_bytes` does not treat 410 as "missing". It raises `GitHubError` with `status_code` 410. The caller must catch that error. When `max_bytes` is used, the client rejects a declared oversized body before downloading it, or stops streaming when received bytes exceed the limit.
+
+### Size limit for a download (D41)
+
+`get_bytes(path, max_bytes=N)` refuses a body bigger than `N` bytes. The collector uses it for log archives, which can be large. Without `max_bytes` the body is read in full, as before.
+
+1. If GitHub sends a `Content-Length` header that is bigger than `N`, the client raises `GitHubTooLargeError` before it reads the body.
+2. Otherwise it reads the body in chunks. As soon as the total passes `N`, it stops and raises `GitHubTooLargeError`. So a large body is never held in memory in full.
+3. A body within the limit comes back as ordinary bytes, the same as without `max_bytes`.
+4. Error answers are read in full, because they are small. They are handled as before: `get_bytes` returns `None` on 404, and other errors raise `GitHubError`.
+5. `GitHubTooLargeError` is a kind of `GitHubError`, but it is not retried. Its `status_code` is `None`, so `is_server_error` is false. Catch it before the general `GitHubError`.
+
+### Quota headers after a redirect (D41)
+
+GitHub sends the quota in two headers, `x-ratelimit-remaining` and `x-ratelimit-reset`. The client reads them from each answer and keeps the last values. Before D41 it read them from the last answer of the request. After a redirect, the last answer is the storage server's, which has no quota headers. So log downloads never updated the client's view of the quota.
+
+Now the client reads the headers of the final answer first. If it has none (the storage answer after a redirect), it uses the last earlier answer in the redirect chain that has them, which is the API's own redirect answer. This means:
+
+1. A process that only downloads logs also learns how much quota it has left.
+2. When fewer calls than the threshold (200 by default) remain, the client sleeps until the reset, plus one second, before its next call. It does this before the count reaches 0, so it avoids the 403 "API rate limit exceeded".
+3. Before this change, such a process could use up the quota without knowing it, and then see 403s.
+
+The tests for this are offline (`test_rate_limit_final_answer_wins_over_an_earlier_redirect`, `test_rate_limit_without_headers_on_the_first_hop_reads_the_final_answer`, `test_rate_limit_falls_back_to_the_api_answer_when_storage_sends_no_headers` and `test_rate_limit_without_a_redirect_is_unchanged`). That the redirect answer carries the quota headers while the storage answer does not has not been measured live.
 
 ## How to run it
 
@@ -102,8 +128,8 @@ make check   # runs ruff, mypy and all tests
 | In | Tuning values | `GITHUB_RATE_LIMIT_THRESHOLD` and `GITHUB_MIN_WINDOW_HOURS` in `.env`, or a `GitHubConfig` object |
 | In | Requests | Paths such as `/repos/<owner>/<repo>/actions/runs`, or a repo name, a commit SHA and a file path |
 | Out | JSON answers | Python dictionaries and lists (`get_json`, `paginate`, `iter_workflow_runs`) |
-| Out | Raw bytes | Job logs and file contents, as `bytes` (`get_bytes`, `fetch_raw_file`) |
-| Out | Errors | `GitHubError` (with `status_code`), or subclasses `GitHubNotFoundError` for 404 and `GitHubResponseTooLargeError` for bounded downloads |
+| Out | Raw bytes | Job logs, log archives and file contents, as `bytes` (`get_bytes`, `fetch_raw_file`). `get_bytes` takes an optional `max_bytes` |
+| Out | Errors | `GitHubError` (with `status_code`), its subclass `GitHubNotFoundError` for 404, and `GitHubTooLargeError` (no status code; carries `max_bytes` and, when GitHub sent it, `content_length`) for a body over `max_bytes`. `GitHubResponseTooLargeError` is the same error under the older name used by the Dependency research scripts |
 | Out | Counters | `client.api_calls` and `client.raw_calls` |
 | Out | Log lines | Standard `logging` warnings for retries, sleeps and truncation. The token is not in them |
 
@@ -136,7 +162,10 @@ From `test_retry_after_is_honoured` in `shared/tests/test_github_client.py`.
 - **Waits are not capped for `Retry-After`.** If GitHub sends a large `Retry-After`, the client sleeps that long.
 - **`Retry-After` is ignored for 5xx errors.** Those always use the backoff.
 - **The 60-second cap is never reached with default settings.** With 5 retries the 5xx waits are 1, 2, 4, 8 and 16 seconds. The 60-second cap only matters if the retry count is raised.
-- **410 (expired log) has no special handling.** It raises a plain `GitHubError` with `status_code` 410. No test covers this. Callers must catch it.
+- **410 (expired log) has no special handling.** It raises a plain `GitHubError` with `status_code` 410. Callers must catch it. A test (`test_get_bytes_max_bytes_keeps_error_handling`) checks 410 on the `max_bytes` path. I did not find a test for 410 on the plain path.
+- **A refused download sends no quota headers to the client.** `GitHubTooLargeError` is raised while the body streams, before the headers are recorded. So a too-large archive does not update the client's view of the quota. Its request is still counted in `api_calls`.
+- **`max_bytes` is for `get_bytes` only.** `fetch_raw_file` has no size limit.
+- **A download up to `max_bytes` is held in memory.** With `max_bytes` set to 150 MiB (the collector's `ARCHIVE_MAX_BYTES`), the collector can hold up to 150 MiB (plus at most one decoded chunk) at once. The body is held once: it is gathered in a `BytesIO` and handed on without a second copy.
 - **GitHub can still be wrong in a way we cannot see.** The empty-window check catches a silent `0`. It cannot catch a window that returns only some of its runs with a non-zero count. The cross-check only goes one level deep.
 - **Truncated windows lose runs.** A window at the minimum size that still has 1,000 or more runs is cut short. Only a warning in the log shows this.
 - **`api_calls` counts everything.** That includes retries and the `/rate_limit` call. The `get_rate_limit` docstring says that call does not use quota, but the counter still goes up.
@@ -149,13 +178,16 @@ From `test_retry_after_is_honoured` in `shared/tests/test_github_client.py`.
 
 **Every `# DEFAULT:` in this component** (all in `shared/github/client.py`)
 
-1. `GitHubConfig.rate_limit_threshold`: 200, the threshold named in `docs/DATA.md` section 3.3.
-2. `GitHubConfig.max_retries`, `backoff_base`, `backoff_cap`: 5 retries, 1 s doubling to a 60 s cap, bounded in time and with no jitter (no random spread), so the behaviour is repeatable.
-3. `GitHubConfig.secondary_backoff`: a limit-related 403 or a 429 with no `Retry-After` waits at least 60 s, which is GitHub's advice.
-4. `GitHubConfig.min_window`: stop halving date windows at one hour. Below that the client accepts truncation and warns.
-5. `GitHubConfig.empty_retries`: an empty run window is asked again twice (1 s, 2 s backoff), then cross-checked by its two halves (one level only, so a quiet window costs at most 5 calls).
-6. `GitHubConfig.timeout`: 30 s per request.
-7. `GitHubClient.__init__`: a synchronous `httpx.Client` that follows redirects. The collector is a sequential command-line tool, and `httpx` drops the token on cross-host redirects.
+1. `GitHubConfig.rate_limit_threshold` (line 57): 200, the threshold named in `docs/DATA.md` section 3.3.
+2. `GitHubConfig.max_retries`, `backoff_base`, `backoff_cap` (line 59): 5 retries, 1 s doubling to a 60 s cap, bounded in time and with no jitter (no random spread), so the behaviour is repeatable.
+3. `GitHubConfig.secondary_backoff` (line 63): a limit-related 403 or a 429 with no `Retry-After` waits at least 60 s, which is GitHub's advice.
+4. `GitHubConfig.min_window` (line 65): stop halving date windows at one hour. Below that the client accepts truncation and warns.
+5. `GitHubConfig.empty_retries` (line 67): an empty run window is asked again twice (1 s, 2 s backoff), then cross-checked by its two halves (one level only, so a quiet window costs at most 5 calls).
+6. `GitHubConfig.timeout` (line 70): 30 s per request.
+7. `GitHubConfig.fallback_page_sizes` (line 72): after a 5xx on a listing, the listing is asked again with 30, then 10 items per page. Big runs make GitHub time out on 100 per page. This default was missing from the earlier list.
+8. `GitHubClient.__init__` (line 115): a synchronous `httpx.Client` that follows redirects. The collector is a sequential command-line tool, and `httpx` drops the token on cross-host redirects.
+9. `GitHubClient._record_rate_limit` (line 163): the final answer's quota headers are read first; if it has none (the storage answer after a redirect), the last earlier answer in the chain that has them is used (D41).
+10. `GitHubClient._confirm_empty` (line 500): one level only, so a genuinely quiet window costs at most 1 + `empty_retries` + 2 calls and never loops.
 
 The environment defaults are also marked in `.env.example`: the threshold (200) and the minimum window (1 hour).
 
@@ -166,3 +198,11 @@ The environment defaults are also marked in `.env.example`: the threshold (200) 
 - `shared/tests/test_github_client.py`: the tests, with recorded responses in `shared/tests/fixtures/github/`.
 - `.env.example`: the environment variables this client reads.
 - `docs/CONVENTIONS.md`: the rules for tests (no network) and secrets (never logged).
+
+## GitHub App authentication (P3.1)
+
+`shared/github/app_auth.py` holds what the backend needs to act as the GitHub App: `create_app_jwt`
+(RS256 JWT from the `.pem`, 9 minutes of life), `InstallationTokenCache` (exchanges the JWT for an
+installation token and reuses it until 2 minutes before expiry; pass the token to `GitHubClient`)
+and `verify_signature` (constant-time check of `X-Hub-Signature-256`). Keys and tokens are never
+logged. Uses the `cryptography` package.

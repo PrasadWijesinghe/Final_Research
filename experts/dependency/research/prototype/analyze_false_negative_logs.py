@@ -115,9 +115,7 @@ def analyze_false_negatives(
     ]
     with master_csv.open(encoding="utf-8", newline="") as input_file:
         master_rows = list(csv.DictReader(input_file))
-    master_by_key = {
-        (row["repository"], row["run_id"], row["attempt"]): row for row in master_rows
-    }
+    master_by_key = {(row["repository"], row["run_id"], row["attempt"]): row for row in master_rows}
 
     sources: dict[str, dict[tuple[str, str, str], dict[str, Any]]] = {}
     failed_ids: set[tuple[str, int]] = set()

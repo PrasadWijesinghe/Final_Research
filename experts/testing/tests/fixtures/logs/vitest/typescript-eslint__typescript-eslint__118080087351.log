@@ -1,0 +1,552 @@
+﻿2026-10-19T13:15:47.2497217Z Current runner version: '2.337.0'
+2026-10-19T13:15:47.2526893Z ##[group]Runner Image Provisioner
+2026-10-19T13:15:47.2527975Z Hosted Compute Agent
+2026-10-19T13:15:47.2528617Z Version: 20261012.601
+2026-10-19T13:15:47.2529361Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-19T13:15:47.2530181Z Build Date: 2026-10-12T17:48:21Z
+2026-10-19T13:15:47.2531070Z Worker ID: {9c3db1a9-f627-41a7-9048-0a0687004fc6}
+2026-10-19T13:15:47.2531840Z Region: westus
+2026-10-19T13:15:47.2532392Z Cloud: Azure
+2026-10-19T13:15:47.2533268Z ##[endgroup]
+2026-10-19T13:15:47.2535119Z ##[group]Operating System
+2026-10-19T13:15:47.2535878Z Ubuntu
+2026-10-19T13:15:47.2536435Z 24.04.5
+2026-10-19T13:15:47.2536960Z LTS
+2026-10-19T13:15:47.2537604Z ##[endgroup]
+2026-10-19T13:15:47.2538217Z ##[group]Runner Image
+2026-10-19T13:15:47.2538894Z Image: ubuntu-24.04
+2026-10-19T13:15:47.2539487Z Version: 20261012.334.1
+2026-10-19T13:15:47.2540981Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-19T13:15:47.2542601Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-19T13:15:47.2543885Z ##[endgroup]
+2026-10-19T13:15:47.2545056Z ##[group]GITHUB_TOKEN Permissions
+2026-10-19T13:15:47.2547342Z Contents: read
+2026-10-19T13:15:47.2547986Z Metadata: read
+2026-10-19T13:15:47.2548667Z ##[endgroup]
+2026-10-19T13:15:47.2550967Z Secret source: Actions
+2026-10-19T13:15:47.2552012Z Cache mode: write
+2026-10-19T13:15:47.2553269Z Prepare workflow directory
+2026-10-19T13:15:47.3187522Z Prepare all required actions
+2026-10-19T13:15:47.3239929Z Getting action download info
+2026-10-19T13:15:47.6812505Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-19T13:15:47.7898271Z Download action repository 'codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de' (SHA:671740ac38dd9b0130fbe1cec585b89eea48d3de)
+2026-10-19T13:15:48.1621173Z Getting action download info
+2026-10-19T13:15:48.3001614Z Download action repository 'actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea' (SHA:60a0d83039c74a4aee543508d2ffcb1c3799cdea)
+2026-10-19T13:15:48.6625957Z Complete job name: Run Unit Tests (ubuntu-latest, project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils)
+2026-10-19T13:15:48.7542518Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-19T13:15:48.7544166Z with:
+2026-10-19T13:15:48.7544675Z   fetch-depth: 2
+2026-10-19T13:15:48.7545199Z   persist-credentials: false
+2026-10-19T13:15:48.7545857Z   repository: typescript-eslint/typescript-eslint
+2026-10-19T13:15:48.7550047Z   token: ***
+2026-10-19T13:15:48.7550540Z   ssh-strict: true
+2026-10-19T13:15:48.7551017Z   ssh-user: git
+2026-10-19T13:15:48.7551478Z   clean: true
+2026-10-19T13:15:48.7551976Z   sparse-checkout-cone-mode: true
+2026-10-19T13:15:48.7552556Z   fetch-tags: false
+2026-10-19T13:15:48.7553364Z   show-progress: true
+2026-10-19T13:15:48.7553893Z   lfs: false
+2026-10-19T13:15:48.7554367Z   submodules: false
+2026-10-19T13:15:48.7554874Z   set-safe-directory: true
+2026-10-19T13:15:48.7555430Z   allow-unsafe-pr-checkout: false
+2026-10-19T13:15:48.7556340Z env:
+2026-10-19T13:15:48.7556827Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:15:48.7557836Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:15:48.7558463Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:15:48.7559703Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:15:48.7560986Z   COLLECT_COVERAGE: false
+2026-10-19T13:15:48.7561514Z ##[endgroup]
+2026-10-19T13:15:48.8641571Z Syncing repository: typescript-eslint/typescript-eslint
+2026-10-19T13:15:48.8644302Z ##[group]Getting Git version info
+2026-10-19T13:15:48.8645463Z Working directory is '/home/runner/work/typescript-eslint/typescript-eslint'
+2026-10-19T13:15:48.8646872Z [command]/usr/bin/git version
+2026-10-19T13:15:48.8723745Z git version 2.55.0
+2026-10-19T13:15:48.8783080Z ##[endgroup]
+2026-10-19T13:15:48.8798195Z Temporarily overriding HOME='/home/runner/work/_temp/abedc4af-f887-4777-807d-2ea4769a01a0' before making global git config changes
+2026-10-19T13:15:48.8801043Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T13:15:48.8806006Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-19T13:15:48.8860519Z Deleting the contents of '/home/runner/work/typescript-eslint/typescript-eslint'
+2026-10-19T13:15:48.8865539Z ##[group]Initializing the repository
+2026-10-19T13:15:48.8870388Z [command]/usr/bin/git init /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-19T13:15:48.8982255Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-19T13:15:48.8984938Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-19T13:15:48.8986718Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-19T13:15:48.8988102Z hint: call:
+2026-10-19T13:15:48.8989038Z hint:
+2026-10-19T13:15:48.8990075Z hint: 	git config --global init.defaultBranch <name>
+2026-10-19T13:15:48.8991341Z hint:
+2026-10-19T13:15:48.8992534Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-19T13:15:48.8994661Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-19T13:15:48.8995785Z hint:
+2026-10-19T13:15:48.8996407Z hint: 	git branch -m <name>
+2026-10-19T13:15:48.8997070Z hint:
+2026-10-19T13:15:48.8997858Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-19T13:15:48.8999228Z Initialized empty Git repository in /home/runner/work/typescript-eslint/typescript-eslint/.git/
+2026-10-19T13:15:48.9001734Z [command]/usr/bin/git remote add origin https://github.com/typescript-eslint/typescript-eslint
+2026-10-19T13:15:48.9053104Z ##[endgroup]
+2026-10-19T13:15:48.9054157Z ##[group]Disabling automatic garbage collection
+2026-10-19T13:15:48.9057151Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-19T13:15:48.9093050Z ##[endgroup]
+2026-10-19T13:15:48.9094116Z ##[group]Setting up auth
+2026-10-19T13:15:48.9100809Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T13:15:48.9139151Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T13:15:48.9586770Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T13:15:48.9597920Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T13:15:48.9790754Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T13:15:48.9826546Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T13:15:49.0061583Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-19T13:15:49.0101520Z ##[endgroup]
+2026-10-19T13:15:49.0102902Z ##[group]Fetching the repository
+2026-10-19T13:15:49.0111661Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=2 origin +b382b74579e5514c247ed54d0dfc428f3a173f3a:refs/remotes/origin/main
+2026-10-19T13:15:50.2077905Z From https://github.com/typescript-eslint/typescript-eslint
+2026-10-19T13:15:50.2080687Z  * [new ref]         b382b74579e5514c247ed54d0dfc428f3a173f3a -> origin/main
+2026-10-19T13:15:50.2086308Z ##[endgroup]
+2026-10-19T13:15:50.2088231Z ##[group]Determining the checkout info
+2026-10-19T13:15:50.2090727Z ##[endgroup]
+2026-10-19T13:15:50.2093432Z [command]/usr/bin/git sparse-checkout disable
+2026-10-19T13:15:50.2147878Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-19T13:15:50.2182612Z ##[group]Checking out the ref
+2026-10-19T13:15:50.2187139Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-19T13:15:50.6274756Z Switched to a new branch 'main'
+2026-10-19T13:15:50.6288879Z branch 'main' set up to track 'origin/main'.
+2026-10-19T13:15:50.6295201Z ##[endgroup]
+2026-10-19T13:15:50.6349022Z [command]/usr/bin/git log -1 --format=%H
+2026-10-19T13:15:50.6380793Z b382b74579e5514c247ed54d0dfc428f3a173f3a
+2026-10-19T13:15:50.6414376Z ##[group]Removing auth
+2026-10-19T13:15:50.6417658Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T13:15:50.6448009Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T13:15:50.6737415Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T13:15:50.6771690Z http.https://github.com/.extraheader
+2026-10-19T13:15:50.6784417Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-19T13:15:50.6833306Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T13:15:50.7122125Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T13:15:50.7164273Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T13:15:50.7445809Z ##[endgroup]
+2026-10-19T13:15:50.7829136Z Prepare all required actions
+2026-10-19T13:15:50.7831326Z Getting action download info
+2026-10-19T13:15:50.9215551Z Download action repository 'pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b' (SHA:703c52620218391530e48b9e8870d5c0082e1b9b)
+2026-10-19T13:15:51.2480855Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-19T13:15:51.3626314Z ##[group]Run ./.github/actions/prepare-install
+2026-10-19T13:15:51.3626680Z with:
+2026-10-19T13:15:51.3626895Z   node-version: 24
+2026-10-19T13:15:51.3627132Z   working-directory: .
+2026-10-19T13:15:51.3627388Z env:
+2026-10-19T13:15:51.3627606Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:15:51.3628343Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:15:51.3628631Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:15:51.3629347Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:15:51.3630063Z   COLLECT_COVERAGE: false
+2026-10-19T13:15:51.3630321Z ##[endgroup]
+2026-10-19T13:15:51.3693936Z ##[start-action display=echo github.ref;id=__self.__run]
+2026-10-19T13:15:51.3739849Z ##[group]Run echo "$GITHUB_REF"
+2026-10-19T13:15:51.3740255Z [36;1mecho "$GITHUB_REF"[0m
+2026-10-19T13:15:51.4003210Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-19T13:15:51.4003935Z env:
+2026-10-19T13:15:51.4004338Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:15:51.4005383Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:15:51.4005901Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:15:51.4007171Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:15:51.4008214Z   COLLECT_COVERAGE: false
+2026-10-19T13:15:51.4008562Z ##[endgroup]
+2026-10-19T13:15:51.4136152Z refs/heads/main
+2026-10-19T13:15:51.4155155Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=45]
+2026-10-19T13:15:51.4158301Z ##[start-action display=Install pnpm;id=__self.__pnpm_setup]
+2026-10-19T13:15:51.4232555Z ##[group]Run pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b
+2026-10-19T13:15:51.4233523Z with:
+2026-10-19T13:15:51.4233740Z   cache: true
+2026-10-19T13:15:51.4233955Z   install: false
+2026-10-19T13:15:51.4234191Z   working-directory: .
+2026-10-19T13:15:51.4234440Z   dest: ~/setup-pnpm
+2026-10-19T13:15:51.4234690Z   require-lockfile: false
+2026-10-19T13:15:51.4234936Z env:
+2026-10-19T13:15:51.4235150Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:15:51.4235746Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:15:51.4236020Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:15:51.4236702Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:15:51.4237673Z   COLLECT_COVERAGE: false
+2026-10-19T13:15:51.4237946Z ##[endgroup]
+2026-10-19T13:15:51.5579188Z ##[group]Installing pnpm...
+2026-10-19T13:15:51.5585977Z Downloading pnpm 12.12.0 from the npm registry
+2026-10-19T13:15:51.7237814Z ==> Downloading pnpm 12.12.0
+2026-10-19T13:15:52.5955168Z ##[endgroup]
+2026-10-19T13:15:52.5955938Z Installation Completed!
+2026-10-19T13:15:52.5984069Z ##[group]Restoring cache...
+2026-10-19T13:15:52.8746930Z Cache hit for: pnpm-lockfile-verified-Linux-x64-9d45015eaad96f96edcfb17ad4682a5632abdebd822d31c2657b6979c82ebf44
+2026-10-19T13:15:53.4578382Z Received 877 of 877 (100.0%), 0.0 MBs/sec
+2026-10-19T13:15:53.4579194Z Cache Size: ~0 MB (877 B)
+2026-10-19T13:15:53.4611364Z [command]/usr/bin/tar -xf /home/runner/work/_temp/81a7308d-c8bb-40a0-8c4e-195cfd4c90e1/cache.tzst -P -C /home/runner/work/typescript-eslint/typescript-eslint --use-compress-program unzstd
+2026-10-19T13:15:53.4694962Z Cache restored successfully
+2026-10-19T13:15:53.4699533Z Lockfile verification cache restored from key: pnpm-lockfile-verified-Linux-x64-9d45015eaad96f96edcfb17ad4682a5632abdebd822d31c2657b6979c82ebf44
+2026-10-19T13:15:53.4714636Z [command]/home/runner/setup-pnpm/pnpm store path
+2026-10-19T13:15:53.4865664Z /home/runner/setup-pnpm/store/v11
+2026-10-19T13:15:53.7540683Z Cache hit for: pnpm-cache-Linux-x64-no-runtime-9d45015eaad96f96edcfb17ad4682a5632abdebd822d31c2657b6979c82ebf44
+2026-10-19T13:15:55.0329500Z Received 0 of 188324218 (0.0%), 0.0 MBs/sec
+2026-10-19T13:15:56.0339659Z Received 92274688 of 188324218 (49.0%), 44.0 MBs/sec
+2026-10-19T13:15:56.8759541Z Received 188324218 of 188324218 (100.0%), 63.2 MBs/sec
+2026-10-19T13:15:56.8760841Z Cache Size: ~180 MB (188324218 B)
+2026-10-19T13:15:56.8894096Z [command]/usr/bin/tar -xf /home/runner/work/_temp/36263d6c-317b-4b78-b2aa-48760f23a4c1/cache.tzst -P -C /home/runner/work/typescript-eslint/typescript-eslint --use-compress-program unzstd
+2026-10-19T13:15:59.4924311Z Cache restored successfully
+2026-10-19T13:15:59.5019233Z Cache restored from key: pnpm-cache-Linux-x64-no-runtime-9d45015eaad96f96edcfb17ad4682a5632abdebd822d31c2657b6979c82ebf44
+2026-10-19T13:15:59.5020844Z ##[endgroup]
+2026-10-19T13:15:59.5022156Z No runtime requested (no `runtime` input and no `devEngines.runtime` in package.json). Skipping runtime install.
+2026-10-19T13:15:59.5187338Z ##[end-action id=__self.__pnpm_setup;outcome=success;conclusion=success;duration_ms=8102]
+2026-10-19T13:15:59.5200726Z ##[start-action display=Use Node.js 24;id=__self.__actions_setup-node]
+2026-10-19T13:15:59.5324272Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-19T13:15:59.5324732Z with:
+2026-10-19T13:15:59.5324976Z   node-version: 24
+2026-10-19T13:15:59.5325235Z   always-auth: false
+2026-10-19T13:15:59.5325506Z   check-latest: false
+2026-10-19T13:15:59.5328348Z   token: ***
+2026-10-19T13:15:59.5328588Z env:
+2026-10-19T13:15:59.5328829Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:15:59.5329389Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:15:59.5329702Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:15:59.5330487Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:15:59.5331279Z   COLLECT_COVERAGE: false
+2026-10-19T13:15:59.5331595Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-19T13:15:59.5332134Z ##[endgroup]
+2026-10-19T13:15:59.6902948Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-19T13:15:59.6908474Z (node:2463) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-19T13:15:59.6909847Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T13:15:59.6921159Z ##[group]Environment details
+2026-10-19T13:16:00.1023580Z node: v24.21.0
+2026-10-19T13:16:00.1024059Z npm: 11.19.0
+2026-10-19T13:16:00.1024446Z yarn: 1.22.22
+2026-10-19T13:16:00.1025174Z ##[endgroup]
+2026-10-19T13:16:00.1127160Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=592]
+2026-10-19T13:16:00.1130711Z ##[start-action display=Install dependencies;id=__self.__run_2]
+2026-10-19T13:16:00.1155290Z ##[group]Run pnpm install --frozen-lockfile --trust-lockfile
+2026-10-19T13:16:00.1155937Z [36;1mpnpm install --frozen-lockfile --trust-lockfile[0m
+2026-10-19T13:16:00.1156475Z [36;1mpnpm run check-clean-workspace-after-install[0m
+2026-10-19T13:16:00.1227994Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-19T13:16:00.1228531Z env:
+2026-10-19T13:16:00.1228838Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:16:00.1229730Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:16:00.1230106Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:16:00.1231114Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:16:00.1232244Z   COLLECT_COVERAGE: false
+2026-10-19T13:16:00.1232942Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-19T13:16:00.1233413Z   HUSKY: 0
+2026-10-19T13:16:00.1233747Z   SKIP_POSTINSTALL: true
+2026-10-19T13:16:00.1234139Z ##[endgroup]
+2026-10-19T13:16:00.1540967Z Scope: all 20 workspace projects
+2026-10-19T13:16:00.4534005Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-10-19T13:16:00.4535368Z   Content-addressable store is at: /home/runner/setup-pnpm/store/v11
+2026-10-19T13:16:00.4536276Z   Virtual store is at:             node_modules/.pnpm
+2026-10-19T13:16:01.4528000Z Progress: resolved 1800, reused 1800, downloaded 0, added 1793
+2026-10-19T13:16:01.6024586Z Downloading nx@23.3.0: 0.00 B/5.72 MB
+2026-10-19T13:16:02.1947593Z Packages: +1926
+2026-10-19T13:16:02.1948438Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-10-19T13:16:02.3977815Z Progress: resolved 1926, reused 1922, downloaded 4, added 1926, done
+2026-10-19T13:16:02.5055209Z . postinstall$ tsx tools/scripts/postinstall.mts
+2026-10-19T13:16:02.7686482Z . postinstall: 
+2026-10-19T13:16:02.7688438Z . postinstall: Skipping postinstall script because $SKIP_POSTINSTALL is set...
+2026-10-19T13:16:02.7698613Z . postinstall: 
+2026-10-19T13:16:02.7837659Z . postinstall: Done
+2026-10-19T13:16:02.7863689Z Lockfile is up to date, resolution step is skipped
+2026-10-19T13:16:02.7864643Z 
+2026-10-19T13:16:02.7865146Z devDependencies:
+2026-10-19T13:16:02.7865844Z + @actions/github 9.1.1
+2026-10-19T13:16:02.7866604Z + @arethetypeswrong/cli 0.18.3
+2026-10-19T13:16:02.7867543Z + @eslint-community/eslint-plugin-eslint-comments 4.8.0
+2026-10-19T13:16:02.7868476Z + @eslint/compat 2.1.0
+2026-10-19T13:16:02.7869232Z + @eslint/config-helpers 0.7.0
+2026-10-19T13:16:02.7869950Z + @eslint/js 10.0.1
+2026-10-19T13:16:02.7870574Z + @nx/devkit 23.3.0
+2026-10-19T13:16:02.7871164Z + @nx/js 23.3.0
+2026-10-19T13:16:02.7871751Z + @nx/vitest 23.3.0
+2026-10-19T13:16:02.7872343Z + @nx/workspace 23.3.0
+2026-10-19T13:16:02.7873312Z + @swc/core 1.16.1
+2026-10-19T13:16:02.7873923Z + @types/debug 4.1.13
+2026-10-19T13:16:02.7874653Z + @types/natural-compare 1.4.3
+2026-10-19T13:16:02.7875381Z + @types/node 24.19.0
+2026-10-19T13:16:02.7876146Z + @types/semver 7.8.0
+2026-10-19T13:16:02.7877205Z + @typescript-eslint/eslint-plugin <- packages/eslint-plugin
+2026-10-19T13:16:02.7878844Z + @typescript-eslint/eslint-plugin-internal <- packages/eslint-plugin-internal
+2026-10-19T13:16:02.7880034Z + @typescript-eslint/parser <- packages/parser
+2026-10-19T13:16:02.7881437Z + @typescript-eslint/scope-manager <- packages/scope-manager
+2026-10-19T13:16:02.7882344Z + @typescript-eslint/types <- packages/types
+2026-10-19T13:16:02.7884097Z + @typescript-eslint/typescript-estree <- packages/typescript-estree
+2026-10-19T13:16:02.7885044Z + @typescript-eslint/utils <- packages/utils
+2026-10-19T13:16:02.7885905Z + @typescript/native <- typescript 7.0.2
+2026-10-19T13:16:02.7886597Z + @vitest/coverage-v8 4.1.10
+2026-10-19T13:16:02.7887237Z + @vitest/eslint-plugin 1.6.16
+2026-10-19T13:16:02.7887849Z + console-fail-test 0.10.0
+2026-10-19T13:16:02.7888419Z + cspell 10.3.0
+2026-10-19T13:16:02.7888941Z + eslint 10.12.0
+2026-10-19T13:16:02.7889563Z + eslint-plugin-eslint-plugin 7.6.2
+2026-10-19T13:16:02.7890245Z + eslint-plugin-import 2.32.0
+2026-10-19T13:16:02.7890910Z + eslint-plugin-jsdoc 50.8.0
+2026-10-19T13:16:02.7891567Z + eslint-plugin-jsx-a11y 6.10.2
+2026-10-19T13:16:02.7892181Z + eslint-plugin-n 17.24.0
+2026-10-19T13:16:02.7893096Z + eslint-plugin-perfectionist 5.12.0
+2026-10-19T13:16:02.7893783Z + eslint-plugin-react 7.37.5
+2026-10-19T13:16:02.7894456Z + eslint-plugin-react-hooks 5.2.0
+2026-10-19T13:16:02.7895114Z + eslint-plugin-regexp 2.10.0
+2026-10-19T13:16:02.7895799Z + eslint-plugin-unicorn 59.0.1
+2026-10-19T13:16:02.7896413Z + execa 7.2.0
+2026-10-19T13:16:02.7896989Z + get-github-auth-token 0.2.0
+2026-10-19T13:16:02.7897555Z + globals 16.5.0
+2026-10-19T13:16:02.7898051Z + husky 9.1.7
+2026-10-19T13:16:02.7898517Z + knip 6.41.0
+2026-10-19T13:16:02.7899030Z + lint-staged 15.5.2
+2026-10-19T13:16:02.7899575Z + markdownlint-cli 0.49.1
+2026-10-19T13:16:02.7900110Z + nx 23.3.0
+2026-10-19T13:16:02.7900583Z + prettier 3.9.5
+2026-10-19T13:16:02.7901076Z + rimraf 5.0.10
+2026-10-19T13:16:02.7901580Z + semver 7.8.0
+2026-10-19T13:16:02.7902405Z + tsx 4.23.12
+2026-10-19T13:16:02.7903361Z + typescript <- @typescript/typescript6 6.0.2
+2026-10-19T13:16:02.7904238Z + typescript-eslint <- packages/typescript-eslint
+2026-10-19T13:16:02.7904951Z + vite 7.3.6
+2026-10-19T13:16:02.7905451Z + vitest 4.1.10
+2026-10-19T13:16:02.7905821Z 
+2026-10-19T13:16:02.7935186Z Done in 2.6s using pnpm v12.12.0
+2026-10-19T13:16:02.8207577Z $ git diff --quiet --exit-code
+2026-10-19T13:16:03.0749177Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=2961]
+2026-10-19T13:16:03.0802179Z ##[group]Run pnpm exec nx run-many -t test --projects="$PROJECTS" --coverage
+2026-10-19T13:16:03.0803388Z [36;1mpnpm exec nx run-many -t test --projects="$PROJECTS" --coverage[0m
+2026-10-19T13:16:03.0867270Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-19T13:16:03.0867749Z env:
+2026-10-19T13:16:03.0868036Z   PRIMARY_NODE_VERSION: 24
+2026-10-19T13:16:03.0869189Z   NX_CLOUD_ACCESS_TOKEN: ***
+2026-10-19T13:16:03.0869533Z   NX_VERBOSE_LOGGING: false
+2026-10-19T13:16:03.0870391Z   NX_CI_EXECUTION_ENV: ubuntu-latest - project-service, repo, rule-schema-to-typescript-types, tsconfig-utils, type-utils, typescript-eslint, utils
+2026-10-19T13:16:03.0871322Z   COLLECT_COVERAGE: false
+2026-10-19T13:16:03.0871663Z   PNPM_HOME: /home/runner/setup-pnpm
+2026-10-19T13:16:03.0872024Z   CI: true
+2026-10-19T13:16:03.0873078Z   PROJECTS: project-service,repo,rule-schema-to-typescript-types,tsconfig-utils,type-utils,typescript-eslint,utils
+2026-10-19T13:16:03.0873987Z ##[endgroup]
+2026-10-19T13:16:07.0478571Z 
+2026-10-19T13:16:07.0481488Z [7m[1m[36m NX [39m[22m[27m  [36mRunning target [1mtest[22m for 7 projects and [1m30[22m tasks they depend on:[39m
+2026-10-19T13:16:07.0482620Z 
+2026-10-19T13:16:07.0483312Z [2m-[22m project-service
+2026-10-19T13:16:07.0483914Z [2m-[22m repo
+2026-10-19T13:16:07.0484636Z [2m-[22m rule-schema-to-typescript-types
+2026-10-19T13:16:07.0485303Z [2m-[22m tsconfig-utils
+2026-10-19T13:16:07.0485883Z [2m-[22m type-utils
+2026-10-19T13:16:07.0486471Z [2m-[22m typescript-eslint
+2026-10-19T13:16:07.0487065Z [2m-[22m utils
+2026-10-19T13:16:07.0487329Z 
+2026-10-19T13:16:07.0487686Z [2mWith additional flags:[22m
+2026-10-19T13:16:07.0488774Z   --coverage=true
+2026-10-19T13:16:07.0489068Z 
+2026-10-19T13:16:07.0489390Z [2m[36m[39m[22m
+2026-10-19T13:16:07.6123536Z [32m✔[39m  [2mnx run[22m tsconfig-utils:build  [2m[remote cache][22m
+2026-10-19T13:16:07.6125290Z [32m✔[39m  [2mnx run[22m ast-spec:build  [2m[remote cache][22m
+2026-10-19T13:16:07.6126678Z [32m✔[39m  [2mnx run[22m tsconfig-utils:test --coverage  [2m[remote cache][22m
+2026-10-19T13:16:07.9249103Z [32m✔[39m  [2mnx run[22m tsconfig-utils:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:08.2771577Z [32m✔[39m  [2mnx run[22m types:copy-ast-spec
+2026-10-19T13:16:08.6353411Z [32m✔[39m  [2mnx run[22m types:build  [2m[remote cache][22m
+2026-10-19T13:16:08.9588423Z [32m✔[39m  [2mnx run[22m visitor-keys:build  [2m[remote cache][22m
+2026-10-19T13:16:08.9590532Z [32m✔[39m  [2mnx run[22m project-service:build  [2m[remote cache][22m
+2026-10-19T13:16:08.9592460Z [32m✔[39m  [2mnx run[22m project-service:test --coverage  [2m[remote cache][22m
+2026-10-19T13:16:09.5152480Z [32m✔[39m  [2mnx run[22m typescript-estree:build
+2026-10-19T13:16:10.7347514Z [32m✔[39m  [2mnx run[22m scope-manager:build  [2m[remote cache][22m
+2026-10-19T13:16:10.7349435Z [32m✔[39m  [2mnx run[22m ast-spec:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:11.2191541Z [32m✔[39m  [2mnx run[22m utils:build  [2m[remote cache][22m
+2026-10-19T13:16:11.2193082Z [32m✔[39m  [2mnx run[22m parser:build  [2m[remote cache][22m
+2026-10-19T13:16:11.2194706Z [32m✔[39m  [2mnx run[22m types:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:11.6664104Z [32m✔[39m  [2mnx run[22m visitor-keys:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:11.6665858Z [32m✔[39m  [2mnx run[22m project-service:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:12.0153180Z [32m✔[39m  [2mnx run[22m typescript-estree:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:12.4573196Z [32m✔[39m  [2mnx run[22m scope-manager:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:13.1162619Z [32m✔[39m  [2mnx run[22m utils:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:13.1164721Z [32m✔[39m  [2mnx run[22m parser:typecheck  [2m[remote cache][22m
+2026-10-19T13:16:13.6320175Z [32m✔[39m  [2mnx run[22m utils:test --coverage  [2m[remote cache][22m
+2026-10-19T13:16:26.5302987Z 
+2026-10-19T13:16:26.5304520Z ##[group]❌ [2m> [22m[2mnx run[22m rule-tester:build
+2026-10-19T13:16:26.5323807Z 
+2026-10-19T13:16:26.5334062Z [2m> [22mtsc --build tsconfig.build.json
+2026-10-19T13:16:26.5334696Z 
+2026-10-19T13:16:26.5337100Z [96msrc/utils/getRuleOptionsSchema.ts[0m:[93m3[0m:[93m34[0m - [91merror[0m[90m TS2306: [0mFile '/home/runner/work/typescript-eslint/typescript-eslint/packages/utils/dist/json-schema.d.ts' is not a module.
+2026-10-19T13:16:26.5338876Z 
+2026-10-19T13:16:26.5339821Z [7m3[0m import type { JSONSchema4 } from '@typescript-eslint/utils/json-schema';
+2026-10-19T13:16:26.5341341Z [7m [0m [91m                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+2026-10-19T13:16:26.5342078Z 
+2026-10-19T13:16:26.5342252Z 
+2026-10-19T13:16:26.5343279Z Found 1 error in src/utils/getRuleOptionsSchema.ts[90m:3[0m
+2026-10-19T13:16:26.5344094Z 
+2026-10-19T13:16:26.5344971Z Warning: command "tsc --build tsconfig.build.json" exited with non-zero status code
+2026-10-19T13:16:26.5346367Z ##[endgroup]
+2026-10-19T13:16:26.6164342Z [32m✔[39m  [2mnx run[22m type-utils:build
+2026-10-19T13:16:27.3365633Z [32m✔[39m  [2mnx run[22m rule-schema-to-typescript-types:build  [2m[remote cache][22m
+2026-10-19T13:16:27.3425196Z [32m✔[39m  [2mnx run[22m rule-schema-to-typescript-types:test --coverage  [2m[remote cache][22m
+2026-10-19T13:16:34.6326458Z 
+2026-10-19T13:16:34.6328080Z ##[group]❌ [2m> [22m[2mnx run[22m type-utils:test --coverage
+2026-10-19T13:16:34.6328563Z 
+2026-10-19T13:16:34.6329052Z [2m> [22mvitest --config=vitest.config.mts --coverage
+2026-10-19T13:16:34.6332972Z 
+2026-10-19T13:16:34.6333195Z 
+2026-10-19T13:16:34.6335078Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/typescript-eslint/typescript-eslint/packages/type-utils[39m
+2026-10-19T13:16:34.6336737Z       [2mCoverage enabled with [22m[33mv8[39m
+2026-10-19T13:16:34.6337187Z 
+2026-10-19T13:16:34.6338140Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/builtinSymbolLikes.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6339953Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/getConstrainedTypeAtLocation.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6341738Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/discriminateAnyType.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6343699Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/isUnsafeAssignment.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6345267Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/typeFlagUtils.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6346789Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/requiresQuoting.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6348416Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/containsAllTypesByName.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6349978Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/getTypeName.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6351598Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/isSymbolFromDefaultLibrary.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6353446Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/getDeclaration.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6354977Z  [31m❯[39m [30m[46m type-utils [49m[39m tests/isTypeLiteralType.test.ts [2m([22m[2m0 test[22m[2m)[22m
+2026-10-19T13:16:34.6356696Z  [32m✓[39m [30m[46m type-utils [49m[39m tests/isTypeReadonly.test.ts [2m([22m[2m61 tests[22m[2m)[22m[33m 11725[2mms[22m[39m
+2026-10-19T13:16:34.6358468Z              [33m[2m✓[22m[39m handles fully readonly records: type Test = { readonly bar: string; }; [33m 10776[2mms[22m[39m
+2026-10-19T13:16:34.6360355Z  [32m✓[39m [30m[46m type-utils [49m[39m tests/TypeOrValueSpecifier.test.ts [2m([22m[2m180 tests[22m[2m)[22m[33m 16926[2mms[22m[39m
+2026-10-19T13:16:34.6362525Z        [33m[2m✓[22m[39m matches a matching universal string specifier: interface Foo {prop: string}; type Test = Foo;
+2026-10-19T13:16:34.6363865Z 	Foo [33m 9953[2mms[22m[39m
+2026-10-19T13:16:34.6365082Z        [33m[2m✓[22m[39m matches a matching package specifier: import type {Node} from "typescript"; type Test = Node;
+2026-10-19T13:16:34.6366467Z 	{ from: 'package', name: 'Node', package: 'typescript' } [33m 843[2mms[22m[39m
+2026-10-19T13:16:34.6368225Z        [33m[2m✓[22m[39m matches a matching package specifier: import type { ParserOptions } from "@typescript-eslint/types"; type Test = ParserOptions;
+2026-10-19T13:16:34.6370027Z 	{ from: 'package', name: 'ParserOptions', package: '@typescript-eslint/types' } [33m 889[2mms[22m[39m
+2026-10-19T13:16:34.6371751Z        [33m[2m✓[22m[39m doesn't match a mismatched package specifier: import type {Node} from "typescript"; type Test = Node;
+2026-10-19T13:16:34.6373492Z 	{ from: 'package', name: 'Symbol', package: 'typescript' } [33m 657[2mms[22m[39m
+2026-10-19T13:16:34.6375122Z        [33m[2m✓[22m[39m doesn't match a mismatched package specifier: import type {Node as TsNode} from "typescript"; type Test = TsNode;
+2026-10-19T13:16:34.6376600Z 	{ from: 'package', name: 'TsNode', package: 'typescript' } [33m 699[2mms[22m[39m
+2026-10-19T13:16:34.6378390Z        [33m[2m✓[22m[39m doesn't match a mismatched package specifier: import type { ParserOptions } from "@typescript-eslint/types"; type Test = ParserOptions;
+2026-10-19T13:16:34.6380222Z 	{ from: 'package', name: 'ParserOptions', package: '@typescript-eslint/type' } [33m 842[2mms[22m[39m
+2026-10-19T13:16:34.6380947Z 
+2026-10-19T13:16:34.6381532Z [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 11 [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+2026-10-19T13:16:34.6382301Z 
+2026-10-19T13:16:34.6383735Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/builtinSymbolLikes.test.ts[2m [ tests/builtinSymbolLikes.test.ts ][22m
+2026-10-19T13:16:34.6385909Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/containsAllTypesByName.test.ts[2m [ tests/containsAllTypesByName.test.ts ][22m
+2026-10-19T13:16:34.6388013Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/discriminateAnyType.test.ts[2m [ tests/discriminateAnyType.test.ts ][22m
+2026-10-19T13:16:34.6390261Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/getConstrainedTypeAtLocation.test.ts[2m [ tests/getConstrainedTypeAtLocation.test.ts ][22m
+2026-10-19T13:16:34.6392370Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/getDeclaration.test.ts[2m [ tests/getDeclaration.test.ts ][22m
+2026-10-19T13:16:34.6394546Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/getTypeName.test.ts[2m [ tests/getTypeName.test.ts ][22m
+2026-10-19T13:16:34.6396683Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/isSymbolFromDefaultLibrary.test.ts[2m [ tests/isSymbolFromDefaultLibrary.test.ts ][22m
+2026-10-19T13:16:34.6398826Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/isTypeLiteralType.test.ts[2m [ tests/isTypeLiteralType.test.ts ][22m
+2026-10-19T13:16:34.6400851Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/isUnsafeAssignment.test.ts[2m [ tests/isUnsafeAssignment.test.ts ][22m
+2026-10-19T13:16:34.6402951Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/requiresQuoting.test.ts[2m [ tests/requiresQuoting.test.ts ][22m
+2026-10-19T13:16:34.6405042Z [41m[1m FAIL [22m[49m [30m[46m type-utils [49m[39m tests/typeFlagUtils.test.ts[2m [ tests/typeFlagUtils.test.ts ][22m
+2026-10-19T13:16:34.6406595Z [31m[1mTypeError[22m: Class extends value undefined is not a constructor or null[39m
+2026-10-19T13:16:34.6408242Z [90m [2m❯[22m Object.<anonymous> ../scope-manager/src/definition/CatchClauseDefinition.ts:[2m6:43[22m[39m
+2026-10-19T13:16:34.6409882Z [90m [2m❯[22m Object.<anonymous> ../scope-manager/src/definition/index.ts:[2m1:0[22m[39m
+2026-10-19T13:16:34.6410541Z 
+2026-10-19T13:16:34.6411251Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯[22m[39m
+2026-10-19T13:16:34.6411653Z 
+2026-10-19T13:16:34.6411662Z 
+2026-10-19T13:16:34.6412503Z [2m Test Files [22m [1m[31m11 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (13)[39m
+2026-10-19T13:16:34.6413932Z [2m      Tests [22m [1m[32m241 passed[39m[22m[90m (241)[39m
+2026-10-19T13:16:34.6414721Z [2m   Start at [22m 13:16:14
+2026-10-19T13:16:34.6415946Z [2m   Duration [22m 20.09s[2m (transform 1.05s, setup 4.21s, import 414ms, tests 28.65s, environment 2ms)[22m
+2026-10-19T13:16:34.6416671Z 
+2026-10-19T13:16:34.6417398Z Warning: command "vitest --config=vitest.config.mts --coverage" exited with non-zero status code
+2026-10-19T13:16:34.6418693Z ##[endgroup]
+2026-10-19T13:16:44.8257361Z [32m✔[39m  [2mnx run[22m type-utils:typecheck
+2026-10-19T13:16:46.6459727Z [32m✔[39m  [2mnx run[22m rule-schema-to-typescript-types:typecheck
+2026-10-19T13:16:46.8952747Z 
+2026-10-19T13:16:46.8954128Z [2m[31m[39m[22m
+2026-10-19T13:16:46.8957679Z 
+2026-10-19T13:16:46.8959211Z [7m[1m[31m NX [39m[22m[27m  [31mRunning target [1mtest[22m for 7 projects and [1m30[22m tasks they depend on failed[39m
+2026-10-19T13:16:46.8960301Z 
+2026-10-19T13:16:46.8961420Z [2mTasks not run because their dependencies failed or --nx-bail=true:[22m
+2026-10-19T13:16:46.8962327Z 
+2026-10-19T13:16:46.8962923Z [2m-[22m repo:test
+2026-10-19T13:16:46.8963689Z [2m-[22m typescript-eslint:test
+2026-10-19T13:16:46.8964522Z [2m-[22m eslint-plugin-internal:build
+2026-10-19T13:16:46.8965286Z [2m-[22m typescript-eslint:build
+2026-10-19T13:16:46.8966065Z [2m-[22m eslint-plugin:build
+2026-10-19T13:16:46.8966868Z [2m-[22m typescript-eslint:typecheck
+2026-10-19T13:16:46.8968036Z [2m-[22m eslint-plugin:typecheck
+2026-10-19T13:16:46.8968742Z [2m-[22m rule-tester:typecheck
+2026-10-19T13:16:46.8969161Z 
+2026-10-19T13:16:46.8969463Z [2mFailed tasks:[22m
+2026-10-19T13:16:46.8969783Z 
+2026-10-19T13:16:46.8970132Z [2m-[22m rule-tester:build
+2026-10-19T13:16:46.8970800Z [2m-[22m type-utils:test
+2026-10-19T13:16:46.8971134Z 
+2026-10-19T13:16:46.8972387Z [2mOutput of 27 successful tasks were not shown. Run with[22m --verbose [2mor[22m --output-style=static [2mto see it.[22m
+2026-10-19T13:16:46.8973556Z 
+2026-10-19T13:16:48.4534361Z 
+2026-10-19T13:16:48.4541875Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-19T13:16:48.4544594Z │ Tasks run for command: nx run-many -t test --projects=project-service,repo,rule-schema-to-types… │
+2026-10-19T13:16:48.4547295Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-19T13:16:48.4549689Z ├────────┬─────────────────────────────────────────────────────────┬──────────┬────────────────────┤
+2026-10-19T13:16:48.4551807Z │ Status │                          Task                           │ Duration │    Cache Status    │
+2026-10-19T13:16:48.4554347Z ├────────┼─────────────────────────────────────────────────────────┼──────────┼────────────────────┤
+2026-10-19T13:16:48.4556595Z │   ✔    │ tsconfig-utils:build                                    │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4558781Z │   ✔    │ ast-spec:build                                          │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4560976Z │   ✔    │ tsconfig-utils:test                                     │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4562599Z │   ✔    │ tsconfig-utils:typecheck                                │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4564210Z │   ✔    │ types:copy-ast-spec                                     │    0s    │     Cache Miss     │
+2026-10-19T13:16:48.4565620Z │   ✔    │ types:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4566939Z │   ✔    │ visitor-keys:build                                      │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4569017Z │   ✔    │ project-service:build                                   │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4570434Z │   ✔    │ project-service:test                                    │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4571781Z │   ✔    │ typescript-estree:build                                 │    0s    │     Cache Miss     │
+2026-10-19T13:16:48.4572987Z │   ✔    │ scope-manager:build                                     │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4573751Z │   ✔    │ ast-spec:typecheck                                      │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4574470Z │   ✔    │ utils:build                                             │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4576183Z │   ✔    │ parser:build                                            │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4576921Z │   ✔    │ types:typecheck                                         │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4577721Z │   ✔    │ visitor-keys:typecheck                                  │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4578510Z │   ✔    │ project-service:typecheck                               │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4579297Z │   ✔    │ typescript-estree:typecheck                             │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4580085Z │   ✔    │ scope-manager:typecheck                                 │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4580856Z │   ✔    │ utils:typecheck                                         │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4581858Z │   ✔    │ parser:typecheck                                        │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4582557Z │   ✔    │ utils:test                                              │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4583414Z │   ✔    │ type-utils:build                                        │   12s    │     Cache Miss     │
+2026-10-19T13:16:48.4584154Z │   ✔    │ rule-schema-to-typescript-types:build                   │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4584949Z │   ✔    │ rule-schema-to-typescript-types:test                    │    0s    │  Remote Cache Hit  │
+2026-10-19T13:16:48.4585687Z │   ✔    │ type-utils:typecheck                                    │   17s    │     Cache Miss     │
+2026-10-19T13:16:48.4586433Z │   ✔    │ rule-schema-to-typescript-types:typecheck               │    1s    │     Cache Miss     │
+2026-10-19T13:16:48.4587200Z │        └─────────────────────────────────────────────────────────┴──────────┴────────────────────┤
+2026-10-19T13:16:48.4587851Z │   ✖      rule-tester:build                                           12s          Cache Miss     │
+2026-10-19T13:16:48.4588620Z │           > Logs: https://cloud.nx.app/runs/RH8B5Nowr3/task/rule-tester%3Abuild                  │
+2026-10-19T13:16:48.4589362Z │   ✖      type-utils:test                                             21s          Cache Miss     │
+2026-10-19T13:16:48.4590290Z │           > Logs: https://cloud.nx.app/runs/RH8B5Nowr3/task/type-utils%3Atest                    │
+2026-10-19T13:16:48.4591093Z └──────────────────────────────────────────────────────────────────────────────────────────────────┘
+2026-10-19T13:16:48.4592304Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-10-19T13:16:48.4593494Z │                                   Nx Cloud Task Runner Report                                    │
+2026-10-19T13:16:48.4594585Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-10-19T13:16:48.4595442Z ├────────┬────────────────────────────────────────┬────────┬───────────────────────────────────────┤
+2026-10-19T13:16:48.4596524Z │ 27     │ Successful Tasks                       │ 93.10% │ Success Percentage                    │
+2026-10-19T13:16:48.4597369Z │ 2      │ Failed Tasks                           │ 6.90%  │ Failure Percentage                    │
+2026-10-19T13:16:48.4598192Z ├────────┼────────────────────────────────────────┼────────┼───────────────────────────────────────┤
+2026-10-19T13:16:48.4599095Z │ 22     │ Cached Tasks                           │ 75.86% │ Cache Hit Percentage                  │
+2026-10-19T13:16:48.4599897Z │ 29     │ Total Executed Tasks                   │ 39s    │ Run Duration                          │
+2026-10-19T13:16:48.4601084Z └────────┴────────────────────────────────────────┴────────┴───────────────────────────────────────┘
+2026-10-19T13:16:48.4613824Z  See more details at: https://cloud.nx.app/cipes/6ad617e4a5acecb84cd0ab71 
+2026-10-19T13:16:48.4614339Z 
+2026-10-19T13:16:48.4614488Z   Run duration:      39.0s
+2026-10-19T13:16:48.4614818Z   Cache:             22/27 hit (81%)
+2026-10-19T13:16:48.4615150Z   Critical path:     32.8s (10 tasks)
+2026-10-19T13:16:48.4615625Z   Recoverable time:  1ms (0% of the run)
+2026-10-19T13:16:48.4615985Z 
+2026-10-19T13:16:48.4616201Z   Recommendations:
+2026-10-19T13:16:48.4616794Z     - Speed up or split the longest tasks on the critical path:
+2026-10-19T13:16:48.4617476Z         type-utils:typecheck    17.5s
+2026-10-19T13:16:48.4618022Z         type-utils:build        13.0s
+2026-10-19T13:16:48.5940913Z ##[error]Process completed with exit code 130.
+2026-10-19T13:16:48.6089505Z Post job cleanup.
+2026-10-19T13:16:48.6095462Z ##[start-action display=Use Node.js 24;id=__5860e826-5759-4b37-bdc0-d41ff6fe67e0.__actions_setup-node]
+2026-10-19T13:16:48.6099134Z ##[end-action id=__5860e826-5759-4b37-bdc0-d41ff6fe67e0.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-19T13:16:48.6101377Z ##[start-action display=Install pnpm;id=__5860e826-5759-4b37-bdc0-d41ff6fe67e0.__pnpm_setup]
+2026-10-19T13:16:48.6141251Z Post job cleanup.
+2026-10-19T13:16:48.7450785Z ##[group]Running pnpm store prune...
+2026-10-19T13:16:49.5220548Z Removed 5110 files (22596345 bytes)
+2026-10-19T13:16:49.5221609Z Removed 4 packages
+2026-10-19T13:16:49.5253836Z ##[endgroup]
+2026-10-19T13:16:49.5256373Z Cache hit occurred on the primary key pnpm-cache-Linux-x64-no-runtime-9d45015eaad96f96edcfb17ad4682a5632abdebd822d31c2657b6979c82ebf44, not saving cache.
+2026-10-19T13:16:49.5259666Z (node:3259) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-10-19T13:16:49.5261654Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T13:16:49.5358420Z ##[end-action id=__5860e826-5759-4b37-bdc0-d41ff6fe67e0.__pnpm_setup;outcome=success;conclusion=success;duration_ms=925]
+2026-10-19T13:16:49.5437017Z Post job cleanup.
+2026-10-19T13:16:49.6356641Z [command]/usr/bin/git version
+2026-10-19T13:16:49.6397689Z git version 2.55.0
+2026-10-19T13:16:49.6439322Z Temporarily overriding HOME='/home/runner/work/_temp/e24b1b20-4f0f-455c-9adf-1cc96ddf47a2' before making global git config changes
+2026-10-19T13:16:49.6441782Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T13:16:49.6446926Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/typescript-eslint/typescript-eslint
+2026-10-19T13:16:49.6486854Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T13:16:49.6525854Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-19T13:16:49.6789807Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-19T13:16:49.6825508Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-19T13:16:49.7071516Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-19T13:16:49.7108367Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-19T13:16:49.7500963Z Cleaning up orphan processes
+2026-10-19T13:16:49.7825034Z Terminate orphan process: pid (2766) (MainThread)
+2026-10-19T13:16:49.7878321Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

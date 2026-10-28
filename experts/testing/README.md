@@ -1,8 +1,8 @@
 # Test expert (testing)
 
-**In one sentence:** the Test and App Behaviour expert. It will predict and explain failures in test runs. Today it is a stub with fake answers. Its prediction works per test job, not per commit.
+**In one sentence:** the Test and App Behaviour expert. It will predict and explain failures in test runs. Today its endpoints are a stub with fake answers; the log parsers (P4.1) are real. Its prediction works per test job, not per commit.
 
-**Status:** stub · **Owner:** Member 3 · **Plan tasks:** P2.1
+**Status:** endpoints are a stub, log parsers built · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1
 
 ## What it does
 
@@ -54,6 +54,136 @@ uv run pytest experts/testing/tests
 
 **Expected:** all tests pass. To start the stub in Docker, run `make up-experts`. That was not run in P2.1.
 
+## Test results extraction (P4.2, v1)
+
+What it does: reads job logs from `data/logs/`, runs the log parsers, and stores which tests ran
+and how they ended in `testing.test_results` (with a stable id per test in `testing.test_ids`).
+
+Which logs (the v1 cut): failed job attempts, plus every other attempt or run of the same job
+(same repo, same commit, same job name) that has a log. A failed job only counts as a test job when
+the parsers recognise Jest, Mocha or Vitest in its log. Passing logs in general come in v2.
+
+Rows are `test` granularity (one test) or `file` granularity (the reporter only printed files, or
+a whole file failed to run). Each row says which. A Jest log usually gives both: file rows from the
+reporter and test rows from the failure details.
+
+Run it (database and logs must be present; safe to run again, it skips jobs already done):
+
+```
+make migrate-testing    # creates the testing tables (also part of `make migrate`)
+uv run --env-file .env python -m testing_expert.extract --member test
+```
+
+`testing.log_parses` has one row per log read, with the framework, whether parsing worked, and a
+short failure reason, so you can see what was tried and what went wrong.
+
+First run on the real data (2026-10-28, 2.5 minutes): 15,553 failed jobs plus 1,213 same-commit
+sibling jobs read, 10,856 of them test jobs, no parse failures, 2.79M test rows and 223k file rows.
+
+## Pre-run features (P4.4, v1)
+
+What it does: turns one test job attempt into a row of numbers the model can read, using only what
+was known before the run started (`history_cutoff` = the run's `created_at`). Code in
+`src/testing_expert/features/`, one module per group:
+
+| Group | Module | Examples |
+|---|---|---|
+| Change size | `change_size.py` | files, lines added and deleted, source / test / config split |
+| Source-test link | `source_test_link.py` | source changed with no test changed |
+| Test config | `config_change.py` | jest / vitest / mocha / playwright config changed |
+| Test dependencies | `dependencies.py` | package.json or lockfile changed, test-library version bumped |
+| History | `history.py` | fail rate over 7 / 30 / 90 days, recency-weighted flip rate, failures in a row, re-runs |
+| Run setup | `run_setup.py` | runner OS, matrix size, pull request or push, default branch |
+| Repo | `repo.py` | average test-job duration, test framework |
+
+History is kept per job key (the workflow's YAML key, or the job name without its `(matrix)` part),
+not per test (v1 cut). A past job only counts if it finished strictly before the cutoff. Tunables
+are in `config/test_features.yaml`. `features/descriptions.yaml` has one plain-language sentence
+per feature for the later SHAP explanations. Not in v1: the tree-sitter group and the code vector.
+
+Two entry points, same code underneath: `compute_features(conn, run_id, attempt, job_id)` for one
+job (serving) and `compute_features_batch(conn, keys)` for many (the dataset builder). Both read
+the `raw` tables only.
+
+Try it on one real repo (read-only):
+
+```
+uv run --env-file .env python -m testing_expert.features --repo vitest-dev/vitest
+```
+
+**Expected:** a line like `31587 rows in 3.8s`, then one sample row. All test-like job attempts
+of all repos (285,665 rows) take about 28 seconds.
+
+Known limits: matrix cells of one job key share one history (a Windows cell sees Linux outcomes);
+"test job" for the repo-level duration is a name match (`test|spec|jest|mocha|vitest|e2e|unit`);
+the matrix size is the number of jobs with the same key in the run, not the parsed YAML matrix;
+the framework comes from sparse `package.json` snapshots, else a word in the job key.
+
+## Labelling (P4.3, v1)
+
+What it does: gives every test job attempt one label, following `docs/experts/test.md` section 3. Labels go to
+`testing.labels` and, for failed attempts, are copied into `platform.failure_labels` as `FailureLabel` rows
+(category `test`).
+
+Which attempts: a job counts as a test job when its series (repo, workflow file, job name) had at least one
+attempt that the P4.2 parsers recognised as a test job. This is needed because passing logs were not parsed in v1.
+Skipped jobs are left out.
+
+| Label | Rule |
+|---|---|
+| `pass` (high) | attempt 1 passed and no attempt of that job on the same commit failed |
+| `flaky` (high) | failed, and another attempt or run of the same job passed on the same commit |
+| `flaky` silent (low) | failed, never passed on that commit, and a child commit that changed only docs passed |
+| `genuine` (high) | failed, never passed on that commit, and a commit within 7 days on the same branch that touched the failing test file made the job pass |
+| `unclear` | anything else, or the failed job has no log |
+| `not_test` | cancelled, or the failed job's log shows no test runner |
+
+A pass that follows a failure on the same commit is a rerun pass and gets no label. Failed attempts that
+another category also claimed get `is_final = false`. `pass` and `not_test` are not copied to
+`platform.failure_labels`, which is for failed jobs.
+
+Run it (safe to run again; it replaces the earlier rule labels in one transaction, about 30 seconds):
+
+```
+make migrate-testing    # adds the unique index (migration t0002)
+uv run --env-file .env python -m testing_expert.labels --member test
+```
+
+It prints the label counts per rule and per repo and writes the manual-review sample to `data/reports/`:
+`test_labels_sample.csv` (what the reviewer sees: repo, commit, job, failing tests, log path, empty
+`human_label` and `ai_prelabel` columns) and `test_labels_sample_key.csv` (the rule labels, kept apart so the
+reviewer is blind). About 50 rows per label (flaky split by confidence), fixed seed. After the reviewer fills
+`human_label` (pass, flaky, genuine, unclear, not_test):
+
+```
+uv run python -m testing_expert.labels --kappa data/reports/test_labels_sample.csv   # Cohen's kappa
+uv run python -m testing_expert.labels --kappa FILE --rater ai_prelabel               # same for the AI column
+```
+
+Known limits: only the failing test file is used for the genuine rule, because P4.2 did not store stack frames.
+A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
+7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
+
+## Dataset builder (P4.5, v1)
+
+What it does: freezes the labelled attempts and their pre-run features into one table that the baselines and
+the model train on. Output: `data/datasets/testing/<version>/rows.parquet` and `manifest.json` (build date,
+git commit, repos, row counts per label, feature list, the v1 cuts, sha256 of the parquet file).
+
+One row per attempt labelled `pass`, `flaky` or `genuine` (unclear and not_test are left out). Columns: keys
+(`run_id`, `attempt`, `job_id`, `repo`, `created_at`, `series_key`), target (`label` = `pass` / `genuine_fail` /
+`flaky_fail`, `label_confidence`, `rule_name`, `genuine_strict`) and every feature from `feature_names()`.
+`genuine_strict` is true when the job failed in at least two attempts on that commit.
+Train variants: all rows, "high" (drop low confidence), "strict" (genuine only if `genuine_strict`).
+
+How: the builder reads `raw` and `testing.labels` directly and calls the same feature code the live expert
+uses, with each row's history cutoff set to its run's `created_at`. It does not go through the replay CLI;
+the features are the same. A finished version is frozen: the command refuses to overwrite it without `--force`.
+
+```
+uv run --env-file .env python -m testing_expert.dataset --version v1    # about 45 seconds
+```
+
 ## Limitations and known issues
 
 - Stub only. See `experts/_template/README.md` for the limits that all four experts share.
@@ -62,6 +192,25 @@ uv run pytest experts/testing/tests
 - `# DEFAULT:` in `src/testing_expert/predict.py`: every job in one commit gets the same stub probability.
 - `# DEFAULT:` in `src/testing_expert/config.py`: `DEFAULT_PORT = 8103`, from the port table in `docs/experts/README.md`.
 - The other `# DEFAULT:` choices (the Dockerfile versions, the 0.5 threshold, the 0.01 to 0.2 probability range, the confidence of 0.0, the 10 second backend timeout and the Redis fallback) are the same as in the template. They are listed in `experts/_template/README.md`.
+
+## Log parsing
+
+The package `testing_expert.parsing` reads the log of a failed job. For Jest, Mocha and Vitest logs it returns the failing tests (full name, file, error, stack frames), the per-test results the reporter printed, and the runner's summary. Any other log, such as a build error or a `node:test`, TAP or Playwright run, gets framework `other`.
+
+- Full guide: `src/testing_expert/parsing/README.md`.
+- Fixtures: real, sanitised logs in `tests/fixtures/logs/`, one folder per framework, each with a hand-checked expected result.
+- Rebuild the fixtures from the local database (read-only): `uv run --env-file .env python -m testing_expert.parsing.make_fixtures [--suggest]`
+- Check the parsers on about 2,000 real failed-job logs (read-only, not part of `make check`): `uv run --env-file .env python -m testing_expert.parsing.survey`
+
+## Baselines and model training (P4.6 and P4.7, v1)
+
+The package `testing_expert.model` trains the pre-run model on `data/datasets/testing/v1/` and compares it with three simple baselines: always "pass", "same as the series' previous run", and a re-run heuristic ("flaky when 20% or more of the last 30 days' runs were re-runs"). Models are logistic regression and LightGBM, both with class weights. Probabilities are calibrated with isotonic regression on a calibration slice. A P(fail) threshold is chosen for precision 0.8 with the most recall.
+
+- Run everything (about 8 minutes on the full data): `uv run --env-file .env python -m testing_expert.model train --dataset v1` (`--no-loro`, `--variants all`, `--no-mlflow` make it faster).
+- Splits: temporal (earliest 70% train, 10% calibration, last 20% test) and leave-one-repo-out (repos with at least 20 non-pass rows). Variants: all, high (no low-confidence labels), strict (genuine only if failed 2 or more times on the SHA).
+- Outputs: `models/testing/v1/` (model, calibrator, features, threshold, card), `data/reports/testing_model_v1.md`, MLflow runs in `mlruns/mlflow.db` (view with `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db`). All are git-ignored.
+- On macOS LightGBM needs `brew install libomp`.
+- Calibration: the calibration slice is split in time order. The first half fits the isotonic maps, the second half picks the P(fail) threshold (precision 0.8 with the most recall, else best F0.5). The second half holds few failures, so the threshold is noisy; read the test-slice precision and recall in the report.
 
 ## Related
 

@@ -1,0 +1,97 @@
+# One plain-language template per feature. `{value}` is the feature value; formats like
+# {value:.0%} are allowed. `missing` is used when the value is unknown (None).
+cs_files_changed:
+  template: "The commit changes {value} files"
+cs_lines_added:
+  template: "The commit adds {value} lines"
+cs_lines_deleted:
+  template: "The commit deletes {value} lines"
+cs_source_files:
+  template: "The commit changes {value} source files"
+cs_test_files:
+  template: "The commit changes {value} test files"
+cs_config_files:
+  template: "The commit changes {value} configuration files"
+cs_source_lines:
+  template: "{value} changed lines are in source files"
+cs_test_lines:
+  template: "{value} changed lines are in test files"
+cs_config_lines:
+  template: "{value} changed lines are in configuration files"
+stl_source_without_tests:
+  template: "Source code changed (flag {value}: 1 = yes) with no test file changed alongside it"
+stl_only_tests_changed:
+  template: "Only test files changed, no source (flag {value}: 1 = yes)"
+stl_test_to_source_ratio:
+  template: "There are {value:.1f} changed test files per changed source file"
+  missing: "No source files changed, so there is no test-to-source ratio"
+tc_test_config_changed:
+  template: "The test runner configuration changed (flag {value}: 1 = yes)"
+tc_test_config_files:
+  template: "{value} test configuration files changed"
+td_manifest_changed:
+  template: "package.json changed (flag {value}: 1 = yes)"
+td_lockfile_changed:
+  template: "The lockfile changed (flag {value}: 1 = yes)"
+td_test_lib_bumped:
+  template: "{value} test, mock or assertion libraries changed version"
+td_test_lib_added_or_removed:
+  template: "{value} test, mock or assertion libraries were added or removed"
+h_runs_7d:
+  template: "This job ran {value} times in the last 7 days"
+h_fail_rate_7d:
+  template: "This job failed in {value:.0%} of its runs in the last 7 days"
+  missing: "This job has no runs in the last 7 days"
+h_runs_30d:
+  template: "This job ran {value} times in the last 30 days"
+h_fail_rate_30d:
+  template: "This job failed in {value:.0%} of its runs in the last 30 days"
+  missing: "This job has no runs in the last 30 days"
+h_runs_90d:
+  template: "This job ran {value} times in the last 90 days"
+h_fail_rate_90d:
+  template: "This job failed in {value:.0%} of its runs in the last 90 days"
+  missing: "This job has no runs in the last 90 days"
+h_n_prior:
+  template: "This job has {value} earlier runs on record"
+h_fail_rate_all:
+  template: "This job failed in {value:.0%} of all its earlier runs"
+  missing: "This job has no earlier runs"
+h_weighted_flip_rate:
+  template: "This job flips between pass and fail often (recency-weighted flip rate {value:.2f})"
+  missing: "This job has too little history to measure flipping"
+h_consecutive_failures:
+  template: "This job failed {value} times in a row just before this run"
+h_reruns_30d:
+  template: "{value} runs of this job were re-runs in the last 30 days"
+h_days_since_last_failure:
+  template: "This job last failed {value:.1f} days ago"
+  missing: "This job has never failed in the recorded history"
+h_last_failed:
+  template: "The previous run of this job failed (flag {value}: 1 = yes)"
+  missing: "This job has no previous run"
+rs_runner_os:
+  template: "The job runs on {value}"
+  missing: "The runner operating system is unknown"
+rs_matrix_size:
+  template: "The job is one of {value} matrix variants in this run"
+rs_jobs_in_run:
+  template: "The workflow run has {value} jobs"
+rs_is_pull_request:
+  template: "The run was triggered by a pull request (flag {value}: 1 = yes)"
+rs_event:
+  template: "The run was triggered by a {value} event"
+  missing: "The trigger event is unknown"
+rs_on_default_branch:
+  template: "The run is on the default branch (flag {value}: 1 = yes)"
+  missing: "The branch is unknown"
+rs_attempt:
+  template: "This is attempt number {value} of the run"
+rp_avg_test_job_minutes:
+  template: "Test jobs in this repository take {value:.0f} minutes on average"
+  missing: "No recent test-job durations for this repository"
+rp_test_jobs_in_window:
+  template: "{value} test jobs finished in this repository in the last 90 days"
+rp_framework:
+  template: "The repository uses {value} for tests"
+  missing: "The test framework is unknown"

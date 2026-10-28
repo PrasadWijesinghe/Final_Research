@@ -1,0 +1,23 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 96906427970,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 4,
+  "summary": {
+    "passed": 1440,
+    "failed": 0,
+    "skipped": 10,
+    "total": 1450,
+    "todo": 0,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Passing. Four summaries (three 4-suite runs and the big one), `● Console` blocks, nested output."
+}

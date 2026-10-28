@@ -73,3 +73,39 @@ def test_sql_store_round_trip(engine: Engine) -> None:
                 delete(CommitContextRow).where(CommitContextRow.context_id == ctx.context_id)
             )
             conn.execute(delete(ApiKey).where(ApiKey.id == key.id))
+
+
+def test_sql_raw_store_writes_app_rows(engine: Engine) -> None:
+    """App-sourced rows land in raw with source="app"; an existing row keeps its source."""
+    from api.raw_store import AppJob, AppRun, SqlRawStore
+    from sqlalchemy import select
+    from sqlalchemy.orm import Session
+
+    from shared.db.models import Job, Step, WorkflowRun
+
+    raw = SqlRawStore(engine)
+    raw.upsert_repo(990001, "acme/app-test", "main")
+    run = AppRun(
+        run_id=990002, attempt=1, repo_id=990001, workflow_path="ci.yml", head_sha="c" * 40,
+        head_branch="main", event="push", status="in_progress", conclusion=None,
+        created_at=None, run_started_at=None, updated_at=None, actor_hash=None,
+        pr_numbers=[3], raw={"id": 990002},
+    )  # fmt: skip
+    raw.upsert_run(run)
+    raw.upsert_run(AppRun(**{**run.__dict__, "status": "completed", "conclusion": "failure"}))
+    job = AppJob(
+        job_id=990003, run_id=990002, attempt=1, name="test", status="completed",
+        conclusion="failure", started_at=None, completed_at=None, runner_os="Linux",
+        labels=["ubuntu-latest"], raw={"id": 990003},
+        steps=[{"number": 1, "name": "npm test", "status": "completed", "conclusion": "failure",
+                "started_at": None, "completed_at": None}],
+    )  # fmt: skip
+    raw.upsert_job(job)
+    raw.upsert_job(job)  # idempotent
+    with Session(engine) as s:
+        row = s.execute(select(WorkflowRun).where(WorkflowRun.run_id == 990002)).scalar_one()
+        assert (row.source, row.status, row.conclusion, row.pr_numbers) == (
+            "app", "completed", "failure", [3]
+        )  # fmt: skip
+        assert s.execute(select(Job).where(Job.job_id == 990003)).scalar_one().runner_os == "Linux"
+        assert len(s.execute(select(Step).where(Step.job_id == 990003)).all()) == 1

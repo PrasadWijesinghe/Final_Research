@@ -114,7 +114,7 @@ class MonitorController:
                     stdin=subprocess.DEVNULL,
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
-                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+                    creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),  # Windows-only flag
                 )
             except OSError as exc:
                 raise HTTPException(503, "Could not start the local Git monitor.") from exc

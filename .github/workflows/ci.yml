@@ -23,6 +23,7 @@ jobs:
       REDIS_URL: redis://127.0.0.1:6379/0
       IDENTITY_SALT: ci-test-salt
       LLM_PROVIDER: mock
+      REQUIRE_NODE: "1"
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +31,11 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
+
+      # Node 22 for the pre-push hook tests (P3.4); `make check` runs them via `check-hook`.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       # Same stack as local development (`make up`), so the init script is tested too.
       - name: Start Postgres and Redis

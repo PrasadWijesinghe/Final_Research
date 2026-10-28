@@ -1,0 +1,605 @@
+﻿2026-10-03T21:19:23.6967237Z Current runner version: '2.337.0'
+2026-10-03T21:19:23.6988608Z ##[group]Runner Image Provisioner
+2026-10-03T21:19:23.6989311Z Hosted Compute Agent
+2026-10-03T21:19:23.6989913Z Version: 20260901.588
+2026-10-03T21:19:23.6990489Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-03T21:19:23.6991080Z Build Date: 2026-09-01T19:56:44Z
+2026-10-03T21:19:23.6991700Z Worker ID: {2fe5a337-e191-4ac8-ae84-1077a0ac8c5d}
+2026-10-03T21:19:23.6992288Z Azure Region: westus3
+2026-10-03T21:19:23.6992844Z ##[endgroup]
+2026-10-03T21:19:23.6994482Z ##[group]Operating System
+2026-10-03T21:19:23.6995015Z Ubuntu
+2026-10-03T21:19:23.6995517Z 24.04.5
+2026-10-03T21:19:23.6995948Z LTS
+2026-10-03T21:19:23.6996396Z ##[endgroup]
+2026-10-03T21:19:23.6996950Z ##[group]Runner Image
+2026-10-03T21:19:23.6997461Z Image: ubuntu-24.04
+2026-10-03T21:19:23.6997968Z Version: 20260927.320.1
+2026-10-03T21:19:23.6999035Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-03T21:19:23.7000370Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-03T21:19:23.7001178Z ##[endgroup]
+2026-10-03T21:19:23.7003634Z ##[group]GITHUB_TOKEN Permissions
+2026-10-03T21:19:23.7005570Z Actions: write
+2026-10-03T21:19:23.7006149Z ArtifactMetadata: write
+2026-10-03T21:19:23.7006712Z Attestations: write
+2026-10-03T21:19:23.7007215Z Checks: write
+2026-10-03T21:19:23.7007680Z CodeQuality: write
+2026-10-03T21:19:23.7008172Z Contents: write
+2026-10-03T21:19:23.7008687Z CopilotRequests: write
+2026-10-03T21:19:23.7009183Z Deployments: write
+2026-10-03T21:19:23.7009637Z Discussions: write
+2026-10-03T21:19:23.7010150Z Drives: write
+2026-10-03T21:19:23.7010626Z Issues: write
+2026-10-03T21:19:23.7011104Z Metadata: read
+2026-10-03T21:19:23.7011659Z Models: read
+2026-10-03T21:19:23.7012090Z Packages: write
+2026-10-03T21:19:23.7012589Z Pages: write
+2026-10-03T21:19:23.7013063Z PullRequests: write
+2026-10-03T21:19:23.7013658Z RepositoryProjects: write
+2026-10-03T21:19:23.7014336Z SecurityEvents: write
+2026-10-03T21:19:23.7014818Z Statuses: write
+2026-10-03T21:19:23.7015319Z VulnerabilityAlerts: read
+2026-10-03T21:19:23.7015842Z ##[endgroup]
+2026-10-03T21:19:23.7017677Z Secret source: Actions
+2026-10-03T21:19:23.7018414Z Cache mode: write
+2026-10-03T21:19:23.7018963Z Prepare workflow directory
+2026-10-03T21:19:23.7411882Z Prepare all required actions
+2026-10-03T21:19:23.7450293Z Getting action download info
+2026-10-03T21:19:24.0367640Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-03T21:19:24.3230419Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-03T21:19:24.9405050Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-10-03T21:19:25.7982603Z Complete job name: mssql latest (Node 26)
+2026-10-03T21:19:25.8693543Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-03T21:19:25.8695107Z with:
+2026-10-03T21:19:25.8695815Z   repository: sequelize/sequelize
+2026-10-03T21:19:25.8702688Z   token: ***
+2026-10-03T21:19:25.8703375Z   ssh-strict: true
+2026-10-03T21:19:25.8704180Z   ssh-user: git
+2026-10-03T21:19:25.8704896Z   persist-credentials: true
+2026-10-03T21:19:25.8705674Z   clean: true
+2026-10-03T21:19:25.8706398Z   sparse-checkout-cone-mode: true
+2026-10-03T21:19:25.8707238Z   fetch-depth: 1
+2026-10-03T21:19:25.8707924Z   fetch-tags: false
+2026-10-03T21:19:25.8708633Z   show-progress: true
+2026-10-03T21:19:25.8709359Z   lfs: false
+2026-10-03T21:19:25.8710026Z   submodules: false
+2026-10-03T21:19:25.8710749Z   set-safe-directory: true
+2026-10-03T21:19:25.8711561Z   allow-unsafe-pr-checkout: false
+2026-10-03T21:19:25.8712556Z env:
+2026-10-03T21:19:25.8713184Z   DIALECT: mssql
+2026-10-03T21:19:25.8714018Z ##[endgroup]
+2026-10-03T21:19:25.9491543Z Syncing repository: sequelize/sequelize
+2026-10-03T21:19:25.9494260Z ##[group]Getting Git version info
+2026-10-03T21:19:25.9495418Z Working directory is '/home/runner/work/sequelize/sequelize'
+2026-10-03T21:19:25.9497047Z [command]/usr/bin/git version
+2026-10-03T21:19:25.9550915Z git version 2.55.0
+2026-10-03T21:19:25.9567611Z ##[endgroup]
+2026-10-03T21:19:25.9576597Z Temporarily overriding HOME='/home/runner/work/_temp/76488476-fa5c-4397-8f08-7eb4b5c97e4c' before making global git config changes
+2026-10-03T21:19:25.9579959Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T21:19:25.9582793Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-10-03T21:19:25.9727451Z Deleting the contents of '/home/runner/work/sequelize/sequelize'
+2026-10-03T21:19:25.9730705Z ##[group]Determining repository object format
+2026-10-03T21:19:25.9732868Z ##[endgroup]
+2026-10-03T21:19:25.9734767Z ##[group]Initializing the repository
+2026-10-03T21:19:25.9736586Z [command]/usr/bin/git init /home/runner/work/sequelize/sequelize
+2026-10-03T21:19:25.9863739Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-03T21:19:25.9866041Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-03T21:19:25.9868027Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-03T21:19:25.9869868Z hint: call:
+2026-10-03T21:19:25.9870862Z hint:
+2026-10-03T21:19:25.9872036Z hint: 	git config --global init.defaultBranch <name>
+2026-10-03T21:19:25.9873466Z hint:
+2026-10-03T21:19:25.9875111Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-03T21:19:25.9877397Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-03T21:19:25.9879202Z hint:
+2026-10-03T21:19:25.9880135Z hint: 	git branch -m <name>
+2026-10-03T21:19:25.9881417Z hint:
+2026-10-03T21:19:25.9882468Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-03T21:19:25.9884311Z Initialized empty Git repository in /home/runner/work/sequelize/sequelize/.git/
+2026-10-03T21:19:25.9887494Z [command]/usr/bin/git remote add origin https://github.com/sequelize/sequelize
+2026-10-03T21:19:25.9917857Z ##[endgroup]
+2026-10-03T21:19:25.9919732Z ##[group]Disabling automatic garbage collection
+2026-10-03T21:19:25.9921366Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-03T21:19:25.9946203Z ##[endgroup]
+2026-10-03T21:19:25.9947885Z ##[group]Setting up auth
+2026-10-03T21:19:25.9949117Z Removing SSH command configuration
+2026-10-03T21:19:25.9951013Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T21:19:25.9978279Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T21:19:26.0272195Z Removing HTTP extra header
+2026-10-03T21:19:26.0276682Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T21:19:26.0303493Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T21:19:26.0480412Z Removing includeIf entries pointing to credentials config files
+2026-10-03T21:19:26.0484344Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T21:19:26.0509438Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T21:19:26.0693089Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-03T21:19:26.0722519Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git.path /home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:19:26.0747832Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:19:26.0775241Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:19:26.0800405Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:19:26.0822815Z ##[endgroup]
+2026-10-03T21:19:26.0884749Z ##[group]Fetching the repository
+2026-10-03T21:19:26.0887136Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3dc1c59358b75fdf5f6efab320202f54b410e48b:refs/remotes/pull/18340/merge
+2026-10-03T21:19:27.3078555Z From https://github.com/sequelize/sequelize
+2026-10-03T21:19:27.3079147Z  * [new ref]         3dc1c59358b75fdf5f6efab320202f54b410e48b -> pull/18340/merge
+2026-10-03T21:19:27.3082830Z ##[endgroup]
+2026-10-03T21:19:27.3083236Z ##[group]Determining the checkout info
+2026-10-03T21:19:27.3084358Z ##[endgroup]
+2026-10-03T21:19:27.3090109Z [command]/usr/bin/git sparse-checkout disable
+2026-10-03T21:19:27.3161113Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-03T21:19:27.3188442Z ##[group]Checking out the ref
+2026-10-03T21:19:27.3214709Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18340/merge
+2026-10-03T21:19:27.3803697Z Note: switching to 'refs/remotes/pull/18340/merge'.
+2026-10-03T21:19:27.3804273Z 
+2026-10-03T21:19:27.3804529Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-03T21:19:27.3805114Z changes and commit them, and you can discard any commits you make in this
+2026-10-03T21:19:27.3805793Z state without impacting any branches by switching back to a branch.
+2026-10-03T21:19:27.3806219Z 
+2026-10-03T21:19:27.3806483Z If you want to create a new branch to retain commits you create, you may
+2026-10-03T21:19:27.3807033Z do so (now or later) by using -c with the switch command. Example:
+2026-10-03T21:19:27.3807358Z 
+2026-10-03T21:19:27.3807498Z   git switch -c <new-branch-name>
+2026-10-03T21:19:27.3807738Z 
+2026-10-03T21:19:27.3807881Z Or undo this operation with:
+2026-10-03T21:19:27.3808077Z 
+2026-10-03T21:19:27.3808198Z   git switch -
+2026-10-03T21:19:27.3808370Z 
+2026-10-03T21:19:27.3808639Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-03T21:19:27.3809022Z 
+2026-10-03T21:19:27.3809330Z HEAD is now at 3dc1c59 Merge 3fd43bd747dfd49bc0e76ff73c4fda71578fec39 into 5ae08e1879389cea4ab7128b690f840af7bbf256
+2026-10-03T21:19:27.3820686Z ##[endgroup]
+2026-10-03T21:19:27.3865114Z [command]/usr/bin/git log -1 --format=%H
+2026-10-03T21:19:27.3890135Z 3dc1c59358b75fdf5f6efab320202f54b410e48b
+2026-10-03T21:19:27.4112935Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-03T21:19:27.4113256Z with:
+2026-10-03T21:19:27.4113431Z   node-version: 26
+2026-10-03T21:19:27.4113609Z   cache: yarn
+2026-10-03T21:19:27.4113910Z   check-latest: false
+2026-10-03T21:19:27.4115861Z   token: ***
+2026-10-03T21:19:27.4116055Z   package-manager-cache: true
+2026-10-03T21:19:27.4116285Z env:
+2026-10-03T21:19:27.4116450Z   DIALECT: mssql
+2026-10-03T21:19:27.4116619Z ##[endgroup]
+2026-10-03T21:19:27.5118517Z Attempting to download 26...
+2026-10-03T21:19:28.4878534Z Acquiring 26.10.0 - x64 from https://github.com/actions/node-versions/releases/download/26.10.0-35737674515/node-26.10.0-linux-x64.tar.gz
+2026-10-03T21:19:29.0396782Z Extracting ...
+2026-10-03T21:19:29.0481401Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/4bf2f406-2e4e-48b0-b4f5-efa735f6d74f -f /home/runner/work/_temp/f602ba8c-06d3-4e71-aee7-c8e2797e1636
+2026-10-03T21:19:30.1943002Z Adding to the cache ...
+2026-10-03T21:19:32.3313201Z ##[group]Environment details
+2026-10-03T21:19:32.7161727Z node: v26.10.0
+2026-10-03T21:19:32.7162036Z npm: 11.19.1
+2026-10-03T21:19:32.7162272Z yarn: 4.18.1
+2026-10-03T21:19:32.7162881Z ##[endgroup]
+2026-10-03T21:19:32.7175997Z [command]/usr/local/bin/yarn --version
+2026-10-03T21:19:33.0021604Z 4.18.1
+2026-10-03T21:19:33.0157808Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-10-03T21:19:33.3034146Z /home/runner/.yarn/berry/cache
+2026-10-03T21:19:33.3265063Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-10-03T21:19:33.6153011Z [33mtrue[39m
+2026-10-03T21:19:33.8304255Z Cache hit for: node-cache-Linux-x64-yarn-c1605e955e88dc80ce1434fbe7ba06b058bedbceea791ad831fb51192acfd5de
+2026-10-03T21:19:35.0709328Z Received 33554432 of 87426095 (38.4%), 32.0 MBs/sec
+2026-10-03T21:19:35.4180502Z Received 87426095 of 87426095 (100.0%), 61.9 MBs/sec
+2026-10-03T21:19:35.4180861Z Cache Size: ~83 MB (87426095 B)
+2026-10-03T21:19:35.4225025Z [command]/usr/bin/tar -xf /home/runner/work/_temp/acd86f2a-a565-4e7b-a3ec-5543edaf284b/cache.tzst -P -C /home/runner/work/sequelize/sequelize --use-compress-program unzstd
+2026-10-03T21:19:36.1010993Z Cache restored successfully
+2026-10-03T21:19:36.1059465Z Cache restored from key: node-cache-Linux-x64-yarn-c1605e955e88dc80ce1434fbe7ba06b058bedbceea791ad831fb51192acfd5de
+2026-10-03T21:19:36.1251762Z ##[group]Run actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+2026-10-03T21:19:36.1252397Z with:
+2026-10-03T21:19:36.1252663Z   name: install-build-artifact-node-26
+2026-10-03T21:19:36.1252991Z   merge-multiple: false
+2026-10-03T21:19:36.1253286Z   repository: sequelize/sequelize
+2026-10-03T21:19:36.1253592Z   run-id: 37154252427
+2026-10-03T21:19:36.1253999Z   skip-decompress: false
+2026-10-03T21:19:36.1254277Z   digest-mismatch: error
+2026-10-03T21:19:36.1254549Z env:
+2026-10-03T21:19:36.1254781Z   DIALECT: mssql
+2026-10-03T21:19:36.1255321Z ##[endgroup]
+2026-10-03T21:19:36.2326374Z Downloading single artifact
+2026-10-03T21:19:36.4485349Z Preparing to download the following artifacts:
+2026-10-03T21:19:36.4486508Z - install-build-artifact-node-26 (ID: 11284843976, Size: 137955940, Expected Digest: sha256:356c42c095e9d6e4b6c8fd2668b0d71ef1c20e46604741cba23a4518779797a5)
+2026-10-03T21:19:36.8758756Z Redirecting to blob download url: https://productionresultssa5.blob.core.windows.net/actions-results/bbad5bfa-7bff-841a-8055-939c473d9823/workflow-job-run-420b27bb-46ac-556d-82b1-4ca30e8387ca/artifacts/86abe584999668ac0de98a729c93f0fc96737bc52495bcaa8be3d9ef845a6abe.zip
+2026-10-03T21:19:36.8760462Z Starting download of artifact to: /home/runner/work/sequelize/sequelize
+2026-10-03T21:19:37.1360600Z (node:2189) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-03T21:19:37.1361736Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-03T21:19:41.0712600Z SHA256 digest of downloaded artifact is 356c42c095e9d6e4b6c8fd2668b0d71ef1c20e46604741cba23a4518779797a5
+2026-10-03T21:19:41.0713472Z Artifact download completed successfully.
+2026-10-03T21:19:41.0714142Z Total of 1 artifact(s) downloaded
+2026-10-03T21:19:41.0725088Z Download artifact has finished successfully
+2026-10-03T21:19:41.1389059Z ##[group]Run tar -xf install-build-node-26.tar
+2026-10-03T21:19:41.1389422Z [36;1mtar -xf install-build-node-26.tar[0m
+2026-10-03T21:19:41.2567874Z shell: /usr/bin/bash -e {0}
+2026-10-03T21:19:41.2568257Z env:
+2026-10-03T21:19:41.2568528Z   DIALECT: mssql
+2026-10-03T21:19:41.2568807Z ##[endgroup]
+2026-10-03T21:19:43.2839297Z ##[group]Run yarn start-mssql-latest
+2026-10-03T21:19:43.2839595Z [36;1myarn start-mssql-latest[0m
+2026-10-03T21:19:43.2898194Z shell: /usr/bin/bash -e {0}
+2026-10-03T21:19:43.2898407Z env:
+2026-10-03T21:19:43.2898583Z   DIALECT: mssql
+2026-10-03T21:19:43.2898763Z ##[endgroup]
+2026-10-03T21:19:44.2421937Z ++ dirname -- dev/mssql/latest/start.sh
+2026-10-03T21:19:44.2429930Z + cd -P -- dev/mssql/latest
+2026-10-03T21:19:44.2430335Z + docker compose -p sequelize-mssql-latest down --remove-orphans
+2026-10-03T21:19:44.6246667Z time="2026-10-03T21:19:44Z" level=warning msg="Warning: No resource found to remove for project \"sequelize-mssql-latest\"."
+2026-10-03T21:19:44.6273062Z + ./../../pull-images.sh sequelize-mssql-latest
+2026-10-03T21:19:44.6860225Z  mssql-latest Pulling 
+2026-10-03T21:20:08.0328880Z  mssql-latest Pulled 
+2026-10-03T21:20:08.0364477Z + docker compose -p sequelize-mssql-latest up -d
+2026-10-03T21:20:08.0985530Z  Network sequelize-mssql-latest-network  Creating
+2026-10-03T21:20:08.1288226Z  Network sequelize-mssql-latest-network  Created
+2026-10-03T21:20:08.1304750Z  Volume "sequelize-mssql-latest-volume"  Creating
+2026-10-03T21:20:08.1306649Z  Volume "sequelize-mssql-latest-volume"  Created
+2026-10-03T21:20:08.1307322Z  Container sequelize-mssql-latest  Creating
+2026-10-03T21:20:08.1489760Z  Container sequelize-mssql-latest  Created
+2026-10-03T21:20:08.1501824Z  Container sequelize-mssql-latest  Starting
+2026-10-03T21:20:08.3271121Z  Container sequelize-mssql-latest  Started
+2026-10-03T21:20:08.3296849Z + ./../../wait-until-healthy.sh sequelize-mssql-latest
+2026-10-03T21:20:08.3589359Z waiting for sequelize-mssql-latest to become healthy (currently: starting)
+2026-10-03T21:20:15.5326966Z sequelize-mssql-latest is healthy!
+2026-10-03T21:20:15.5330047Z + docker exec sequelize-mssql-latest /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P 'Password12!' -Q 'CREATE DATABASE sequelize_test; ALTER DATABASE sequelize_test SET READ_COMMITTED_SNAPSHOT ON;'
+2026-10-03T21:20:16.0203250Z + DIALECT=mssql
+2026-10-03T21:20:16.0205691Z + ts-node ../../check-connection.ts
+2026-10-03T21:20:17.0375860Z Connected to mssql 17.0.5005 successfully
+2026-10-03T21:20:17.1087319Z ##[group]Run yarn lerna run test-integration --scope=@sequelize/core
+2026-10-03T21:20:17.1087748Z [36;1myarn lerna run test-integration --scope=@sequelize/core[0m
+2026-10-03T21:20:17.1142432Z shell: /usr/bin/bash -e {0}
+2026-10-03T21:20:17.1142666Z env:
+2026-10-03T21:20:17.1142833Z   DIALECT: mssql
+2026-10-03T21:20:17.1143017Z ##[endgroup]
+2026-10-03T21:20:18.2016147Z lerna notice cli v10.0.1
+2026-10-03T21:20:18.4927265Z lerna info ci enabled
+2026-10-03T21:20:18.4929443Z lerna notice filter including "@sequelize/core"
+2026-10-03T21:20:18.4936649Z lerna info filter [ '@sequelize/core' ]
+2026-10-03T21:20:18.6551436Z 
+2026-10-03T21:20:18.6552390Z [2m> [22m@sequelize/core:test-integration
+2026-10-03T21:20:18.6552731Z 
+2026-10-03T21:20:19.8228322Z (node:2949) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+2026-10-03T21:20:19.8229821Z --import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-node/esm", pathToFileURL("./"));'
+2026-10-03T21:20:19.8231072Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-03T21:20:21.5435336Z (node:2949) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+2026-10-03T21:20:21.5465024Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-03T21:20:21.5474562Z [0m[0m
+2026-10-03T21:20:21.8719461Z [0m  [MSSQL] Alias[0m
+2026-10-03T21:20:22.3484320Z (node:2949) [SEQUELIZE0019] DeprecationWarning: Model.tableName has been replaced with the more complete Model.modelDefinition.table, or Model.table
+2026-10-03T21:20:22.4066014Z   [32m  [32m✔[39m[0m[90m should uppercase the first letter in alias getter, but not in eager loading[0m[31m (534ms)[0m
+2026-10-03T21:20:22.4775055Z   [32m  [32m✔[39m[0m[90m shouldnt touch the passed alias[0m[33m (50ms)[0m
+2026-10-03T21:20:22.5152419Z   [32m  [32m✔[39m[0m[90m should allow me to pass my own plural and singular forms to hasMany[0m
+2026-10-03T21:20:22.7638481Z   [32m  [32m✔[39m[0m[90m should allow me to define plural and singular forms on the model[0m[31m (234ms)[0m
+2026-10-03T21:20:22.7795557Z [0m  belongsToMany Mixins[0m
+2026-10-03T21:20:23.3701386Z [0m    setAssociations[0m
+2026-10-03T21:20:23.4004775Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m
+2026-10-03T21:20:23.4184205Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:20:23.4926041Z     [32m  [32m✔[39m[0m[90m unlinks the previous associations[0m[33m (70ms)[0m
+2026-10-03T21:20:23.5301475Z     [32m  [32m✔[39m[0m[90m clears associations when the parameter is null[0m
+2026-10-03T21:20:23.5606105Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:20:23.5647817Z [0m    addAssociations[0m
+2026-10-03T21:20:23.5759416Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m
+2026-10-03T21:20:23.5900717Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:20:23.6541750Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:20:23.6593432Z [0m    removeAssociations[0m
+2026-10-03T21:20:23.6798926Z     [32m  [32m✔[39m[0m[90m unlinks the target models from the source model[0m
+2026-10-03T21:20:23.7028224Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:20:23.7203082Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:20:23.7280361Z [0m    hasAssociations[0m
+2026-10-03T21:20:23.7429156Z     [32m  [32m✔[39m[0m[90m returns true if the target model is associated to the source model[0m
+2026-10-03T21:20:23.7544630Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:20:23.7666950Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:20:23.8112370Z [0m  [MSSQL] BelongsToMany[0m
+2026-10-03T21:20:23.8113584Z [0m    getAssociations[0m
+2026-10-03T21:20:24.8740441Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (633ms)[0m
+2026-10-03T21:20:24.9685691Z     [32m  [32m✔[39m[0m[90m gets all associated objects with all fields[0m
+2026-10-03T21:20:25.0401695Z     [32m  [32m✔[39m[0m[90m gets all associated objects when no options are passed[0m
+2026-10-03T21:20:25.1545407Z     [32m  [32m✔[39m[0m[90m only get objects that fulfill the options[0m
+2026-10-03T21:20:25.2626537Z     [32m  [32m✔[39m[0m[90m supports a where not in[0m
+2026-10-03T21:20:25.8951965Z     [32m  [32m✔[39m[0m[90m supports a where not in on the primary key[0m
+2026-10-03T21:20:25.9569309Z     [32m  [32m✔[39m[0m[90m only gets objects that fulfill options with a formatted value[0m
+2026-10-03T21:20:26.0550094Z     [32m  [32m✔[39m[0m[90m get associated objects with an eager load[0m
+2026-10-03T21:20:26.1415920Z     [32m  [32m✔[39m[0m[90m get associated objects with an eager load with conditions but not required[0m
+2026-10-03T21:20:27.5767219Z     [32m  [32m✔[39m[0m[90m should support schemas[0m[31m (637ms)[0m
+2026-10-03T21:20:28.3265125Z     [32m  [32m✔[39m[0m[90m supports custom primary keys and foreign keys[0m[31m (680ms)[0m
+2026-10-03T21:20:28.3963422Z (node:2949) [SEQUELIZE0018] DeprecationWarning: The "field" option in attribute definitions has been renamed to "columnName".
+2026-10-03T21:20:29.4360838Z     [32m  [32m✔[39m[0m[90m supports primary key attributes with different field and attribute names[0m[31m (1042ms)[0m
+2026-10-03T21:20:30.6291223Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (sourceKey only)[0m[31m (589ms)[0m
+2026-10-03T21:20:30.8303300Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (targetKey only)[0m[31m (100ms)[0m
+2026-10-03T21:20:32.0339576Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (sourceKey and targetKey)[0m[31m (569ms)[0m
+2026-10-03T21:20:32.4692484Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom through model)[0m[31m (311ms)[0m
+2026-10-03T21:20:32.6768618Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins for getting associations (sourceKey/targetKey)[0m[31m (139ms)[0m
+2026-10-03T21:20:32.9025614Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom foreignKey)[0m[31m (153ms)[0m
+2026-10-03T21:20:33.1229411Z     [32m  [32m✔[39m[0m[90m supports non primary key attributes for joins (custom foreignKey, custom through model)[0m[31m (128ms)[0m
+2026-10-03T21:20:34.2573377Z     [32m  [32m✔[39m[0m[90m supports primary key attributes with different field names where parent include is required[0m[31m (946ms)[0m
+2026-10-03T21:20:34.2992031Z [0m    hasAssociations[0m
+2026-10-03T21:20:35.0898250Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (790ms)[0m
+2026-10-03T21:20:35.1880138Z     [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned[0m[33m (73ms)[0m
+2026-10-03T21:20:35.8318947Z     [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned when passing a primary key instead of an object[0m[31m (231ms)[0m
+2026-10-03T21:20:35.9447457Z     [32m  [32m✔[39m[0m[90m answers true if all label have been assigned[0m[33m (42ms)[0m
+2026-10-03T21:20:36.6644787Z     [32m  [32m✔[39m[0m[90m answers true if all label have been assigned when passing a primary key instead of an object[0m[31m (676ms)[0m
+2026-10-03T21:20:36.7242439Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned multitple times[0m[33m (39ms)[0m
+2026-10-03T21:20:36.7836090Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned multitple times when passing a primary key instead of an object[0m[33m (39ms)[0m
+2026-10-03T21:20:36.8165284Z [0m    hasAssociations with binary key[0m
+2026-10-03T21:20:36.9277595Z     [32m  [32m✔[39m[0m[90m answers true for labels that have been assigned[0m
+2026-10-03T21:20:38.2327930Z     [32m  [32m✔[39m[0m[90m answer false for labels that have not been assigned[0m[33m (43ms)[0m
+2026-10-03T21:20:38.6096257Z [0m    countAssociations[0m
+2026-10-03T21:20:39.2533341Z     [32m  [32m✔[39m[0m[90m should count all associations[0m
+2026-10-03T21:20:39.5577641Z     [32m  [32m✔[39m[0m[90m should count filtered associations[0m
+2026-10-03T21:20:39.6188639Z     [32m  [32m✔[39m[0m[90m should count scoped associations[0m
+2026-10-03T21:20:39.7052035Z     [32m  [32m✔[39m[0m[90m should count scoped through associations[0m
+2026-10-03T21:20:39.7231304Z [0m    setAssociations[0m
+2026-10-03T21:20:40.5438094Z     [32m  [32m✔[39m[0m[90m clears associations when passing null to the set-method[0m[31m (821ms)[0m
+2026-10-03T21:20:41.5032928Z     [32m  [32m✔[39m[0m[90m should be able to set twice with custom primary keys[0m[31m (723ms)[0m
+2026-10-03T21:20:42.5556627Z     [32m  [32m✔[39m[0m[90m joins an association with custom primary keys[0m[31m (750ms)[0m
+2026-10-03T21:20:42.7283197Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m[31m (127ms)[0m
+2026-10-03T21:20:44.4698501Z     [32m  [32m✔[39m[0m[90m using scope to set associations[0m[31m (839ms)[0m
+2026-10-03T21:20:44.6921567Z     [32m  [32m✔[39m[0m[90m updating association via set associations with scope[0m[31m (90ms)[0m
+2026-10-03T21:20:45.0426982Z     [32m  [32m✔[39m[0m[90m should catch EmptyResultError when rejectOnEmpty is set[0m[31m (86ms)[0m
+2026-10-03T21:20:45.2545231Z [0m    createAssociations[0m
+2026-10-03T21:20:45.3931567Z     [32m  [32m✔[39m[0m[90m creates a new associated object[0m[31m (138ms)[0m
+2026-10-03T21:20:45.9429344Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (333ms)[0m
+2026-10-03T21:20:46.6409284Z     [32m  [32m✔[39m[0m[90m supports setting through table attributes[0m[31m (669ms)[0m
+2026-10-03T21:20:46.7536808Z     [32m  [32m✔[39m[0m[90m supports using the field parameter[0m[31m (87ms)[0m
+2026-10-03T21:20:46.7799745Z [0m    addAssociations[0m
+2026-10-03T21:20:46.8273069Z     [32m  [32m✔[39m[0m[90m supports both single instance and array[0m[33m (48ms)[0m
+2026-10-03T21:20:47.0524342Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (204ms)[0m
+2026-10-03T21:20:47.2552908Z     [32m  [32m✔[39m[0m[90m supports transactions when updating a through model[0m[31m (177ms)[0m
+2026-10-03T21:20:47.8990279Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m[31m (86ms)[0m
+2026-10-03T21:20:48.2648177Z     [32m  [32m✔[39m[0m[90m should not pass indexes to the join table[0m[31m (335ms)[0m
+2026-10-03T21:20:49.0109365Z     [32m  [32m✔[39m[0m[90m should catch EmptyResultError when rejectOnEmpty is set[0m[31m (716ms)[0m
+2026-10-03T21:20:49.0483111Z [0m    addMultipleAssociations[0m
+2026-10-03T21:20:49.1132799Z     [32m  [32m✔[39m[0m[90m supports both single instance and array[0m[33m (65ms)[0m
+2026-10-03T21:20:50.1287838Z     [32m  [32m✔[39m[0m[90m adds associations without removing the current ones[0m[31m (181ms)[0m
+2026-10-03T21:20:50.1463723Z [0m    through model validations[0m
+2026-10-03T21:20:50.7946004Z     [32m  [32m✔[39m[0m[90m runs on add[0m
+2026-10-03T21:20:50.8536580Z     [32m  [32m✔[39m[0m[90m runs on set[0m
+2026-10-03T21:20:50.9035980Z     [32m  [32m✔[39m[0m[90m runs on create[0m
+2026-10-03T21:20:50.9529062Z [0m    optimizations using bulk create, destroy and update[0m
+2026-10-03T21:20:50.9988630Z     [32m  [32m✔[39m[0m[90m uses one insert into statement[0m
+2026-10-03T21:20:51.5988368Z     [32m  [32m✔[39m[0m[90m uses one delete from statement[0m
+2026-10-03T21:20:51.7428640Z [0m    join table creation[0m
+2026-10-03T21:20:53.0669429Z     [32m  [32m✔[39m[0m[90m should work with non integer primary keys[0m[31m (689ms)[0m
+2026-10-03T21:20:53.1395311Z     [32m  [32m✔[39m[0m[90m makes join table non-paranoid by default[0m
+2026-10-03T21:20:53.2447929Z     [32m  [32m✔[39m[0m[90m should allow creation of a paranoid join table[0m
+2026-10-03T21:20:53.3229632Z [0m    foreign keys[0m
+2026-10-03T21:20:53.3247803Z     [32m  [32m✔[39m[0m[90m generates camelCase foreign keys if underscored is not set on the through model[0m
+2026-10-03T21:20:53.3292291Z     [32m  [32m✔[39m[0m[90m generates snake_case foreign keys if underscored is set on the through model[0m
+2026-10-03T21:20:53.3337981Z     [32m  [32m✔[39m[0m[90m should infer otherKey from paired BTM relationship with a through string defined[0m
+2026-10-03T21:20:53.3368325Z [0m    foreign key with fields specified[0m
+2026-10-03T21:20:53.9921547Z     [32m  [32m✔[39m[0m[90m should correctly get associations even after a child instance is deleted[0m[31m (653ms)[0m
+2026-10-03T21:20:54.0612909Z     [32m  [32m✔[39m[0m[90m should correctly get associations when doubly linked[0m[33m (43ms)[0m
+2026-10-03T21:20:54.8873250Z     [32m  [32m✔[39m[0m[90m should be able to handle nested includes properly[0m[31m (789ms)[0m
+2026-10-03T21:20:54.9226122Z [0m    primary key handling for join table[0m
+2026-10-03T21:20:54.9246599Z     [32m  [32m✔[39m[0m[90m removes the primary key if it was added by sequelize[0m
+2026-10-03T21:20:54.9318634Z     [32m  [32m✔[39m[0m[90m keeps the primary key if it was added by the user[0m
+2026-10-03T21:20:54.9356312Z [0m      without sync[0m
+2026-10-03T21:20:54.9633069Z       [32m  [32m✔[39m[0m[90m removes all associations[0m
+2026-10-03T21:20:55.1710465Z [0m    through[0m
+2026-10-03T21:20:55.1710858Z [0m      paranoid[0m
+2026-10-03T21:20:55.3825874Z       [32m  [32m✔[39m[0m[90m gets only non-deleted records by default[0m
+2026-10-03T21:20:55.6340071Z       [32m  [32m✔[39m[0m[90m returns both deleted and non-deleted records with paranoid=false[0m
+2026-10-03T21:20:55.8340403Z       [32m  [32m✔[39m[0m[90m hasAssociation also respects paranoid option[0m
+2026-10-03T21:20:55.8543406Z [0m      fetching from join table[0m
+2026-10-03T21:20:55.8933942Z       [32m  [32m✔[39m[0m[90m should contain the data from the join table on .UserProjects a DAO[0m
+2026-10-03T21:20:55.9429468Z       [32m  [32m✔[39m[0m[90m should be able to alias the default name of the join table[0m
+2026-10-03T21:20:56.0028997Z       [32m  [32m✔[39m[0m[90m should be able to limit the join table attributes returned[0m
+2026-10-03T21:20:56.0801806Z [0m      inserting in join table[0m
+2026-10-03T21:20:56.0802160Z [0m        add[0m
+2026-10-03T21:20:56.1428677Z         [32m  [32m✔[39m[0m[90m should insert data provided on the object into the join table[0m
+2026-10-03T21:20:56.8457410Z         [32m  [32m✔[39m[0m[90m should insert data provided as a second argument into the join table[0m
+2026-10-03T21:20:57.6035933Z         [32m  [32m✔[39m[0m[90m should be able to add twice (second call result in UPDATE call) without any attributes (and timestamps off) on the through model[0m[31m (721ms)[0m
+2026-10-03T21:20:58.8545098Z         [32m  [32m✔[39m[0m[90m should be able to add twice (second call result in UPDATE call) with custom primary keys and without any attributes (and timestamps off) on the through model[0m[31m (618ms)[0m
+2026-10-03T21:20:59.8113468Z         [32m  [32m✔[39m[0m[90m should be able to create an instance along with its many-to-many association which has an extra column in the junction table[0m[31m (862ms)[0m
+2026-10-03T21:21:01.1356882Z [0m        set[0m
+2026-10-03T21:21:01.1663178Z         [32m  [32m✔[39m[0m[90m should be able to combine properties on the associated objects, and default values[0m
+2026-10-03T21:21:03.3472188Z         [32m  [32m✔[39m[0m[90m should be able to set twice (second call result in UPDATE calls) without any attributes (and timestamps off) on the through model[0m[31m (1431ms)[0m
+2026-10-03T21:21:03.4389471Z [0m        query with through.where[0m
+2026-10-03T21:21:03.6689366Z         [32m  [32m✔[39m[0m[90m should support query the through model[0m[31m (218ms)[0m
+2026-10-03T21:21:03.6928385Z [0m      removing from the join table[0m
+2026-10-03T21:21:03.7443259Z       [32m  [32m✔[39m[0m[90m should remove a single entry without any attributes (and timestamps off) on the through model[0m[33m (51ms)[0m
+2026-10-03T21:21:04.6018857Z       [32m  [32m✔[39m[0m[90m should remove multiple entries without any attributes (and timestamps off) on the through model[0m[31m (835ms)[0m
+2026-10-03T21:21:04.6266729Z [0m    multiple hasMany[0m
+2026-10-03T21:21:04.6269934Z [0m      project has owners and users and owners and users have projects[0m
+2026-10-03T21:21:05.7247705Z       [32m  [32m✔[39m[0m[90m correctly sets user and owner[0m[31m (92ms)[0m
+2026-10-03T21:21:05.7556464Z [0m    Foreign key constraints[0m
+2026-10-03T21:21:06.3536641Z     [32m  [32m✔[39m[0m[90m can cascade deletes both ways by default[0m[31m (597ms)[0m
+2026-10-03T21:21:06.6048305Z     [32m  [32m✔[39m[0m[90m should be possible to remove all constraints[0m[31m (142ms)[0m
+2026-10-03T21:21:06.7215515Z [0m    Association options[0m
+2026-10-03T21:21:06.7228362Z     [32m  [32m✔[39m[0m[90m should throw an error if foreignKey and as result in a name clash[0m
+2026-10-03T21:21:06.7272460Z [0m      allows the user to provide an attribute definition object as foreignKey[0m
+2026-10-03T21:21:06.7293098Z       [32m  [32m✔[39m[0m[90m works when taking a column directly from the object[0m
+2026-10-03T21:21:06.7334729Z [0m    thisAssociations[0m
+2026-10-03T21:21:07.1879374Z     [32m  [32m✔[39m[0m[90m should work with this reference[0m[31m (454ms)[0m
+2026-10-03T21:21:07.6633161Z     [32m  [32m✔[39m[0m[90m should work with custom this reference[0m[31m (457ms)[0m
+2026-10-03T21:21:07.6870307Z [0m    Eager loading[0m
+2026-10-03T21:21:08.3675343Z     [32m  [32m✔[39m[0m[90m should load with an alias[0m[31m (678ms)[0m
+2026-10-03T21:21:08.4506521Z     [32m  [32m✔[39m[0m[90m should load all[0m[33m (62ms)[0m
+2026-10-03T21:21:08.4830478Z [0m    Disabling default unique constraint[0m
+2026-10-03T21:21:09.1535300Z     [32m  [32m✔[39m[0m[90m should create new relations in parallel[0m[31m (668ms)[0m
+2026-10-03T21:21:09.8105965Z     [32m  [32m✔[39m[0m[90m should create new relations sequentialy[0m[31m (85ms)[0m
+2026-10-03T21:21:09.8337218Z [0m  [MSSQL] BelongsTo[0m
+2026-10-03T21:21:09.8337941Z [0m    Model.associations[0m
+2026-10-03T21:21:09.8350631Z     [32m  [32m✔[39m[0m[90m should store all associations when associating to the same table multiple times[0m
+2026-10-03T21:21:09.8387996Z [0m    get[0m
+2026-10-03T21:21:09.8388472Z [0m      multiple[0m
+2026-10-03T21:21:10.2599527Z       [32m  [32m✔[39m[0m[90m should fetch associations for multiple instances[0m[31m (421ms)[0m
+2026-10-03T21:21:10.2736034Z [0m    getAssociation[0m
+2026-10-03T21:21:10.6668855Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (393ms)[0m
+2026-10-03T21:21:10.7987337Z     [32m  [32m✔[39m[0m[90m should be able to handle a where object that's a first class citizen.[0m[31m (113ms)[0m
+2026-10-03T21:21:11.8225853Z     [32m  [32m✔[39m[0m[90m supports schemas[0m[31m (604ms)[0m
+2026-10-03T21:21:11.8553028Z     [32m  [32m✔[39m[0m[90m supports schemas when defining custom foreign key attribute #9029[0m
+2026-10-03T21:21:11.9075837Z [0m    setAssociation[0m
+2026-10-03T21:21:12.5696903Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (662ms)[0m
+2026-10-03T21:21:13.1209202Z     [32m  [32m✔[39m[0m[90m can set the association with declared primary keys...[0m[31m (493ms)[0m
+2026-10-03T21:21:13.2940861Z     [32m  [32m✔[39m[0m[90m clears the association if null is passed[0m[31m (158ms)[0m
+2026-10-03T21:21:13.8799988Z     [32m  [32m✔[39m[0m[90m should throw a ForeignKeyConstraintError if the associated record does not exist[0m[31m (570ms)[0m
+2026-10-03T21:21:13.9390458Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:14.0084450Z     [32m  [32m✔[39m[0m[90m should support logging[0m[33m (54ms)[0m
+2026-10-03T21:21:14.1101258Z     [32m  [32m✔[39m[0m[90m should not clobber atributes[0m[31m (87ms)[0m
+2026-10-03T21:21:14.5114406Z     [32m  [32m✔[39m[0m[90m should set the foreign key value without saving when using save: false[0m
+2026-10-03T21:21:15.0013036Z     [32m  [32m✔[39m[0m[90m supports setting same association twice[0m[31m (472ms)[0m
+2026-10-03T21:21:15.0167604Z [0m    createAssociation[0m
+2026-10-03T21:21:15.4172106Z     [32m  [32m✔[39m[0m[90m creates an associated model instance[0m[31m (400ms)[0m
+2026-10-03T21:21:15.7569776Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (325ms)[0m
+2026-10-03T21:21:15.7762599Z [0m    foreign key[0m
+2026-10-03T21:21:15.7773545Z     [32m  [32m✔[39m[0m[90m should setup underscored field with foreign keys when using underscored[0m
+2026-10-03T21:21:15.7826051Z     [32m  [32m✔[39m[0m[90m should use model name when using camelcase[0m
+2026-10-03T21:21:15.8471561Z     [32m  [32m✔[39m[0m[90m should support specifying the field of a foreign key[0m[33m (61ms)[0m
+2026-10-03T21:21:16.9171024Z     [32m  [32m✔[39m[0m[90m should set foreignKey on foreign table[0m[31m (642ms)[0m
+2026-10-03T21:21:16.9432577Z [0m    foreign key constraints[0m
+2026-10-03T21:21:16.9736072Z     [32m  [32m✔[39m[0m[90m are enabled by default[0m
+2026-10-03T21:21:17.9243705Z     [32m  [32m✔[39m[0m[90m should be possible to disable them[0m[31m (446ms)[0m
+2026-10-03T21:21:17.9879693Z     [32m  [32m✔[39m[0m[90m can cascade deletes[0m
+2026-10-03T21:21:18.0024156Z [0m    association column[0m
+2026-10-03T21:21:18.4191048Z     [32m  [32m✔[39m[0m[90m has correct type and name for non-id primary keys with non-integer type[0m[31m (416ms)[0m
+2026-10-03T21:21:18.4750580Z     [32m  [32m✔[39m[0m[90m should support a non-primary key as the association column on a target without a primary key[0m[33m (41ms)[0m
+2026-10-03T21:21:18.5763528Z     [32m  [32m✔[39m[0m[90m should support a non-primary unique key as the association column[0m[31m (86ms)[0m
+2026-10-03T21:21:18.6262863Z     [32m  [32m✔[39m[0m[90m should support a non-primary key as the association column with a field option[0m
+2026-10-03T21:21:19.0897896Z     [32m  [32m✔[39m[0m[90m should support a non-primary key as the association column in a table with a composite primary key[0m[31m (450ms)[0m
+2026-10-03T21:21:19.1234704Z [0m    association options[0m
+2026-10-03T21:21:19.9705324Z     [32m  [32m✔[39m[0m[90m can specify data type for auto-generated relational keys[0m[31m (847ms)[0m
+2026-10-03T21:21:19.9916057Z [0m      allows the user to provide an attribute definition object as foreignKey[0m
+2026-10-03T21:21:19.9924871Z       [32m  [32m✔[39m[0m[90m works with a column that hasnt been defined before[0m
+2026-10-03T21:21:19.9969709Z       [32m  [32m✔[39m[0m[90m works when taking a column directly from the object[0m
+2026-10-03T21:21:20.0014736Z       [32m  [32m✔[39m[0m[90m works when merging with an existing definition[0m
+2026-10-03T21:21:20.0052884Z [0m    Eager loading[0m
+2026-10-03T21:21:20.5662252Z     [32m  [32m✔[39m[0m[90m should load with an alias[0m[31m (560ms)[0m
+2026-10-03T21:21:20.7721868Z     [32m  [32m✔[39m[0m[90m should load all[0m[31m (189ms)[0m
+2026-10-03T21:21:20.7861834Z [0m  hasMany Mixins[0m
+2026-10-03T21:21:21.4154692Z [0m    setAssociations[0m
+2026-10-03T21:21:21.6437521Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m[31m (228ms)[0m
+2026-10-03T21:21:21.6576409Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:21:21.6737657Z     [32m  [32m✔[39m[0m[90m unlinks the previous associations[0m
+2026-10-03T21:21:21.6848202Z     [32m  [32m✔[39m[0m[90m clears associations when the parameter is null[0m
+2026-10-03T21:21:21.6958175Z     [32m  [32m✔[39m[0m[90m destroys the previous associations if `destroyPrevious` is true[0m
+2026-10-03T21:21:21.7108563Z     [32m  [32m✔[39m[0m[90m destroys the previous associations if the foreign key is not nullable[0m
+2026-10-03T21:21:21.7204402Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:21.7239793Z [0m    addAssociations[0m
+2026-10-03T21:21:21.7300705Z     [32m  [32m✔[39m[0m[90m associates target models to the source model[0m
+2026-10-03T21:21:21.7392580Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:21:21.7506584Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:21.7540950Z [0m    removeAssociations[0m
+2026-10-03T21:21:21.7870188Z     [32m  [32m✔[39m[0m[90m unlinks the target models from the source model[0m
+2026-10-03T21:21:21.7969456Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m
+2026-10-03T21:21:21.8068021Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:21.8166680Z     [32m  [32m✔[39m[0m[90m destroys the target models if `destroy` is true[0m
+2026-10-03T21:21:21.8256400Z     [32m  [32m✔[39m[0m[90m destroys the target models if the foreign key is not nullable[0m
+2026-10-03T21:21:21.8286951Z [0m    hasAssociations[0m
+2026-10-03T21:21:21.8338264Z     [32m  [32m✔[39m[0m[90m returns true if the target model is associated to the source model[0m
+2026-10-03T21:21:22.1198628Z     [32m  [32m✔[39m[0m[90m supports any iterable[0m[31m (282ms)[0m
+2026-10-03T21:21:22.1282061Z     [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:22.1520711Z [0m  hasMany Mixins + transaction[0m
+2026-10-03T21:21:22.2269334Z [0m    setAssociations[0m
+2026-10-03T21:21:22.3221277Z     [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (95ms)[0m
+2026-10-03T21:21:22.3402136Z     [32m  [32m✔[39m[0m[90m uses the transaction when destroying the previous associations[0m
+2026-10-03T21:21:22.3556713Z     [32m  [32m✔[39m[0m[90m uses the transaction when unsetting the previous associations[0m
+2026-10-03T21:21:22.3595517Z [0m    removeAssociations[0m
+2026-10-03T21:21:22.6519491Z     [32m  [32m✔[39m[0m[90m uses the transaction when updating the foreign key[0m[31m (292ms)[0m
+2026-10-03T21:21:22.6624670Z     [32m  [32m✔[39m[0m[90m uses the transaction when deleting the target models[0m
+2026-10-03T21:21:22.6795094Z [0m  HasMany[0m
+2026-10-03T21:21:22.6795860Z [0m    Model.associations[0m
+2026-10-03T21:21:22.6813508Z     [32m  [32m✔[39m[0m[90m should store all assocations when associting to the same table multiple times[0m
+2026-10-03T21:21:22.6846516Z [0m    count[0m
+2026-10-03T21:21:22.7179560Z     [32m  [32m✔[39m[0m[90m should not fail due to ambiguous field[0m
+2026-10-03T21:21:22.7334684Z [0m    get[0m
+2026-10-03T21:21:22.7335368Z [0m      multiple[0m
+2026-10-03T21:21:22.8169271Z       [32m  [32m✔[39m[0m[90m should fetch associations for multiple instances[0m[31m (83ms)[0m
+2026-10-03T21:21:22.8626767Z       [32m  [32m✔[39m[0m[90m should fetch associations for multiple instances with limit and order[0m
+2026-10-03T21:21:23.1467464Z       [32m  [32m✔[39m[0m[90m should fetch multiple layers of associations with limit and order with separate=true[0m[31m (271ms)[0m
+2026-10-03T21:21:23.5800589Z       [32m  [32m✔[39m[0m[90m should fetch associations for multiple instances with limit and order and a belongsTo relation[0m[31m (411ms)[0m
+2026-10-03T21:21:24.4363967Z       [32m  [32m✔[39m[0m[90m supports schemas[0m[31m (835ms)[0m
+2026-10-03T21:21:24.4405788Z [0m    (1:N)[0m
+2026-10-03T21:21:24.5355384Z     [32m  [32m✔[39m[0m[90m clears associations when passing null to the set-method with omitNull set to true[0m[31m (93ms)[0m
+2026-10-03T21:21:24.5531090Z [0m      hasAssociation[0m
+2026-10-03T21:21:24.5704529Z       [32m  [32m✔[39m[0m[90m should only generate one set of foreignKeys[0m
+2026-10-03T21:21:24.7405702Z       [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (141ms)[0m
+2026-10-03T21:21:24.7852730Z       [32m  [32m✔[39m[0m[90m does not have any labels assigned to it initially[0m
+2026-10-03T21:21:25.2397115Z       [32m  [32m✔[39m[0m[90m answers true if the label has been assigned[0m
+2026-10-03T21:21:25.2795139Z       [32m  [32m✔[39m[0m[90m answers correctly if the label has been assigned when passing a primary key instead of an object[0m
+2026-10-03T21:21:25.2930608Z [0m      hasAssociations[0m
+2026-10-03T21:21:25.4884917Z       [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (135ms)[0m
+2026-10-03T21:21:25.5348104Z       [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned[0m
+2026-10-03T21:21:25.5788502Z       [32m  [32m✔[39m[0m[90m answers false if only some labels have been assigned when passing a primary key instead of an object[0m
+2026-10-03T21:21:25.6247253Z       [32m  [32m✔[39m[0m[90m answers true if all label have been assigned[0m
+2026-10-03T21:21:25.6800563Z       [32m  [32m✔[39m[0m[90m answers true if all label have been assigned when passing a primary key instead of an object[0m
+2026-10-03T21:21:25.6955477Z [0m      addAssociations[0m
+2026-10-03T21:21:25.8782104Z       [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (183ms)[0m
+2026-10-03T21:21:25.9306895Z       [32m  [32m✔[39m[0m[90m supports passing the primary key instead of an object[0m
+2026-10-03T21:21:25.9443078Z [0m      addMultipleAssociations[0m
+2026-10-03T21:21:26.3775043Z       [32m  [32m✔[39m[0m[90m adds associations without removing the current ones[0m[31m (434ms)[0m
+2026-10-03T21:21:27.1225989Z       [32m  [32m✔[39m[0m[90m handles decent sized bulk creates[0m[31m (356ms)[0m
+2026-10-03T21:21:27.1405883Z [0m      createAssociations[0m
+2026-10-03T21:21:27.8018011Z       [32m  [32m✔[39m[0m[90m creates a new associated object[0m[31m (661ms)[0m
+2026-10-03T21:21:27.8364566Z       [32m  [32m✔[39m[0m[90m creates the object with the association directly[0m
+2026-10-03T21:21:27.9944535Z       [32m  [32m✔[39m[0m[90m supports transactions[0m[31m (141ms)[0m
+2026-10-03T21:21:28.0635020Z       [32m  [32m✔[39m[0m[90m supports passing the field option[0m[33m (41ms)[0m
+2026-10-03T21:21:28.0781099Z [0m      getting assocations with options[0m
+2026-10-03T21:21:29.1549668Z       [32m  [32m✔[39m[0m[90m should treat the where object of associations as a first class citizen[0m[31m (975ms)[0m
+2026-10-03T21:21:59.1830595Z       [31m  1) "before each" hook for "gets all associated objects when no options are passed"[0m
+2026-10-03T21:22:09.2419474Z       [31m  2) "after each" hook: database reset for "gets all associated objects when no options are passed"[0m
+2026-10-03T21:22:09.2429870Z [92m [0m[32m 199 passing[0m[90m (2m)[0m
+2026-10-03T21:22:09.2430508Z [31m  2 failing[0m
+2026-10-03T21:22:09.2437720Z [0m  1) HasMany
+2026-10-03T21:22:09.2438125Z        (1:N)
+2026-10-03T21:22:09.2438528Z          getting assocations with options
+2026-10-03T21:22:09.2439193Z            "before each" hook for "gets all associated objects when no options are passed":
+2026-10-03T21:22:09.2443141Z [0m[31m     Error: Timeout of 30000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/sequelize/sequelize/packages/core/test/integration/associations/has-many.test.js)[0m[90m
+2026-10-03T21:22:09.2444821Z       at createTimeoutError (file:///home/runner/work/sequelize/sequelize/node_modules/mocha/lib/errors.js:329:15)
+2026-10-03T21:22:09.2445845Z       at Hook._timeoutError (file:///home/runner/work/sequelize/sequelize/node_modules/mocha/lib/runnable.js:429:12)
+2026-10-03T21:22:09.2446831Z       at Timeout.<anonymous> (file:///home/runner/work/sequelize/sequelize/node_modules/mocha/lib/runnable.js:240:26)
+2026-10-03T21:22:09.2447619Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-03T21:22:09.2448620Z       at processTimers (node:internal/timers:618:7)
+2026-10-03T21:22:09.2449103Z [0m
+2026-10-03T21:22:09.2449873Z [0m  2) "after each" hook: database reset for "gets all associated objects when no options are passed":
+2026-10-03T21:22:09.2451378Z [0m[31m     TimeoutError: Could not clear database after this test in less than 10000ms. This test crashed the DB, and testing cannot continue. Aborting.[0m[90m
+2026-10-03T21:22:09.2452623Z       at Timeout._onTimeout (/home/runner/work/sequelize/sequelize/node_modules/p-timeout/index.js:39:64)
+2026-10-03T21:22:09.2453223Z       at listOnTimeout (node:internal/timers:685:17)
+2026-10-03T21:22:09.2453526Z       at processTimers (node:internal/timers:618:7)
+2026-10-03T21:22:09.2453990Z [0m
+2026-10-03T21:22:09.2965636Z 
+2026-10-03T21:22:09.2966372Z [2m[31m[39m[22m
+2026-10-03T21:22:09.2966635Z 
+2026-10-03T21:22:09.2967583Z [7m[1m[31m Lerna (powered by Nx) [39m[22m[27m  [31mRunning target [1mtest-integration[22m for project @sequelize/core failed[39m
+2026-10-03T21:22:09.2968179Z 
+2026-10-03T21:22:09.2968350Z [2mFailed tasks:[22m
+2026-10-03T21:22:09.2968532Z 
+2026-10-03T21:22:09.2968794Z [2m-[22m @sequelize/core:test-integration
+2026-10-03T21:22:09.2969059Z 
+2026-10-03T21:22:09.2969439Z [2mHint: run the command with[22m --verbose [2mfor more details.[22m
+2026-10-03T21:22:09.2969768Z 
+2026-10-03T21:22:09.2990953Z   Run duration:      1m 51s
+2026-10-03T21:22:09.2991357Z   Critical path:     1m 51s (1 task)
+2026-10-03T21:22:09.2991698Z   Recoverable time:  <1ms
+2026-10-03T21:22:09.2991837Z 
+2026-10-03T21:22:09.2991918Z   Recommendations:
+2026-10-03T21:22:09.2992203Z     - Speed up or split the longest tasks on the critical path:
+2026-10-03T21:22:09.2992542Z         @sequelize/core:test-integration    1m 51s
+2026-10-03T21:22:09.3309856Z ##[error]Process completed with exit code 1.
+2026-10-03T21:22:09.3432831Z Post job cleanup.
+2026-10-03T21:22:09.4158585Z [command]/usr/bin/git version
+2026-10-03T21:22:09.4191241Z git version 2.55.0
+2026-10-03T21:22:09.4218222Z Temporarily overriding HOME='/home/runner/work/_temp/fb7710cc-2272-4a72-beb8-c765e8efaa67' before making global git config changes
+2026-10-03T21:22:09.4219275Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-03T21:22:09.4222451Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/sequelize/sequelize
+2026-10-03T21:22:09.4250080Z Removing SSH command configuration
+2026-10-03T21:22:09.4255316Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-03T21:22:09.4284305Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-03T21:22:09.4477631Z Removing HTTP extra header
+2026-10-03T21:22:09.4482406Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-03T21:22:09.4512172Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-03T21:22:09.4704239Z Removing includeIf entries pointing to credentials config files
+2026-10-03T21:22:09.4709954Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-03T21:22:09.4734989Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-10-03T21:22:09.4735759Z includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-10-03T21:22:09.4736387Z includeif.gitdir:/github/workspace/.git.path
+2026-10-03T21:22:09.4736932Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T21:22:09.4742269Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path
+2026-10-03T21:22:09.4761047Z /home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:22:09.4769650Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-aeb2c7f6\-7acf\-4bfd\-8ed4\-862f109c1ebf\.config
+2026-10-03T21:22:09.4805823Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path
+2026-10-03T21:22:09.4824498Z /home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:22:09.4832268Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/sequelize/sequelize/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-aeb2c7f6\-7acf\-4bfd\-8ed4\-862f109c1ebf\.config
+2026-10-03T21:22:09.4860516Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-03T21:22:09.4879050Z /github/runner_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:22:09.4884858Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-aeb2c7f6\-7acf\-4bfd\-8ed4\-862f109c1ebf\.config
+2026-10-03T21:22:09.4911827Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-03T21:22:09.4929443Z /github/runner_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config
+2026-10-03T21:22:09.4935650Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-aeb2c7f6\-7acf\-4bfd\-8ed4\-862f109c1ebf\.config
+2026-10-03T21:22:09.4964689Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-03T21:22:09.5152534Z Removing credentials config '/home/runner/work/_temp/git-credentials-aeb2c7f6-7acf-4bfd-8ed4-862f109c1ebf.config'
+2026-10-03T21:22:09.5296678Z Cleaning up orphan processes

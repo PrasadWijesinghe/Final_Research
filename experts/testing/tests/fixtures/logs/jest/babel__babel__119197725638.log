@@ -1,0 +1,577 @@
+﻿2026-10-21T11:33:23.3110437Z Current runner version: '2.338.0'
+2026-10-21T11:33:23.3134018Z ##[group]Runner Image Provisioner
+2026-10-21T11:33:23.3134930Z Hosted Compute Agent
+2026-10-21T11:33:23.3135523Z Version: 20261015.610
+2026-10-21T11:33:23.3136232Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T11:33:23.3137247Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T11:33:23.3138030Z Worker ID: {0ebd808b-ff67-4779-bf4e-2a33e5bb4fa8}
+2026-10-21T11:33:23.3138724Z Region: centralus
+2026-10-21T11:33:23.3139245Z Cloud: Azure
+2026-10-21T11:33:23.3139795Z ##[endgroup]
+2026-10-21T11:33:23.3141225Z ##[group]Operating System
+2026-10-21T11:33:23.3141812Z Ubuntu
+2026-10-21T11:33:23.3142315Z 24.04.5
+2026-10-21T11:33:23.3142853Z LTS
+2026-10-21T11:33:23.3143350Z ##[endgroup]
+2026-10-21T11:33:23.3143906Z ##[group]Runner Image
+2026-10-21T11:33:23.3144527Z Image: ubuntu-24.04
+2026-10-21T11:33:23.3145076Z Version: 20261018.339.1
+2026-10-21T11:33:23.3146275Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T11:33:23.3148053Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T11:33:23.3148964Z ##[endgroup]
+2026-10-21T11:33:23.3150055Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T11:33:23.3152281Z Contents: read
+2026-10-21T11:33:23.3152952Z Metadata: read
+2026-10-21T11:33:23.3153498Z ##[endgroup]
+2026-10-21T11:33:23.3155416Z Secret source: None
+2026-10-21T11:33:23.3156317Z Cache mode: write
+2026-10-21T11:33:23.3157413Z Prepare workflow directory
+2026-10-21T11:33:23.3505546Z Prepare all required actions
+2026-10-21T11:33:23.3552795Z Getting action download info
+2026-10-21T11:33:23.6035488Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-21T11:33:23.6979131Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-10-21T11:33:23.8262083Z Download action repository 'actions/download-artifact@v8' (SHA:9000827ccba6bdab643e8b6fd33ac0654aef8333)
+2026-10-21T11:33:24.3108244Z Complete job name: Test on Node.js 24
+2026-10-21T11:33:24.3730543Z ##[group]Run actions/checkout@v6
+2026-10-21T11:33:24.3731385Z with:
+2026-10-21T11:33:24.3731862Z   repository: babel/babel
+2026-10-21T11:33:24.3735451Z   token: ***
+2026-10-21T11:33:24.3735968Z   ssh-strict: true
+2026-10-21T11:33:24.3736477Z   ssh-user: git
+2026-10-21T11:33:24.3736477Z [fixture trimmed: 209 lines omitted]
+2026-10-21T11:33:51.6453074Z ##[group]Run node ./node_modules/.bin/jest --ci
+2026-10-21T11:33:51.6453551Z [36;1mnode ./node_modules/.bin/jest --ci[0m
+2026-10-21T11:33:51.6488948Z shell: /usr/bin/bash -e {0}
+2026-10-21T11:33:51.6489333Z env:
+2026-10-21T11:33:51.6489650Z   BABEL_ENV: test
+2026-10-21T11:33:51.6490022Z   TEST_FUZZ: true
+2026-10-21T11:33:51.6490317Z ##[endgroup]
+2026-10-21T11:33:53.1178908Z PASS packages/babel-traverse/test/scope.js
+2026-10-21T11:33:53.4918954Z PASS packages/babel-core/test/config-chain.js
+2026-10-21T11:33:53.6081004Z PASS packages/babel-helper-module-imports/test/index.js
+2026-10-21T11:33:53.9358974Z PASS packages/babel-generator/test/index.js
+2026-10-21T11:33:54.0158716Z PASS packages/babel-core/test/api.js
+2026-10-21T11:33:54.0158716Z [fixture trimmed: 173 lines omitted]
+2026-10-21T11:33:58.1664716Z     [32m✓[39m [2mshould work when yield is in an array spread (0 ms)[22m
+2026-10-21T11:33:58.1665773Z     [32m✓[39m [2mshould work when yield is in a sparse array (0 ms)[22m
+2026-10-21T11:33:58.1666326Z 
+2026-10-21T11:33:58.1666916Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:33:58.1668084Z [1mTests:       [22m[1m[32m115 passed[39m[22m, 115 total
+2026-10-21T11:33:58.1668852Z [1mSnapshots:   [22m0 total
+2026-10-21T11:33:58.1669498Z [1mTime:[22m        0.716 s
+2026-10-21T11:33:58.1670244Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:33:58.3089355Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3129548Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3159122Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3174837Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3177710Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3179926Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3182652Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3185334Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3205277Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3208049Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3210653Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3212982Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3215263Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3218744Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3234148Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3236748Z @babel/plugin-transform-modules-commonjs: The 'loose' option has been deprecated, use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3239948Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3242230Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3244919Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3255160Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3267403Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3270103Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3272182Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3274820Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3285542Z @babel/plugin-transform-modules-commonjs: The 'loose' option has been deprecated, use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3288471Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3290987Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3293470Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3306342Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3309411Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3311527Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3313763Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3315951Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3318698Z @babel/plugin-transform-modules-commonjs: The 'loose' option has been deprecated, use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3321383Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3323706Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3334599Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3337452Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3339888Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3341894Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3343997Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3346343Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3349015Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3351630Z @babel/plugin-transform-template-literals: The 'loose' option has been deprecated, use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3353972Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3369378Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3377713Z @babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3380488Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3382632Z @babel/plugin-transform-spread: The 'loose' option has been deprecated, use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3384746Z @babel/plugin-transform-parameters: The 'loose' option has been deprecated, use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3394363Z @babel/plugin-transform-destructuring: The 'loose' option has been deprecated, use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3414564Z @babel/plugin-transform-modules-commonjs: The 'loose' option has been deprecated, use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:33:58.3416127Z PASS packages/babel-standalone/test/babel.js
+2026-10-21T11:33:58.8620575Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mtests.es5-old.js[22m
+2026-10-21T11:33:58.8652851Z   simple argument yielder
+2026-10-21T11:33:58.8654412Z     [32m✓[39m [2mshould yield only its first argument (2 ms)[22m
+2026-10-21T11:33:58.8655618Z     [32m✓[39m [2mshould support multiple yields in expression (0 ms)[22m
+2026-10-21T11:33:58.8655618Z [fixture trimmed: 148 lines omitted]
+2026-10-21T11:33:58.8828112Z     [32m✓[39m [2mshould work when yield is in an array spread (0 ms)[22m
+2026-10-21T11:33:58.8829285Z     [32m✓[39m [2mshould work when yield is in a sparse array (0 ms)[22m
+2026-10-21T11:33:58.8829864Z 
+2026-10-21T11:33:58.9117874Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:33:58.9128157Z [1mTests:       [22m[1m[32m115 passed[39m[22m, 115 total
+2026-10-21T11:33:58.9129111Z [1mSnapshots:   [22m0 total
+2026-10-21T11:33:58.9130107Z [1mTime:[22m        0.81 s
+2026-10-21T11:33:58.9131050Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:33:59.6430234Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mtests-node4.es5.js[22m
+2026-10-21T11:33:59.6488263Z   object properties
+2026-10-21T11:33:59.6538817Z     [32m✓[39m [2mshould work if the generator is a simple object property (2 ms)[22m
+2026-10-21T11:33:59.6718917Z     [32m✓[39m [2mshould work if the generator is a shorthand object method (0 ms)[22m
+2026-10-21T11:33:59.6720455Z     [32m✓[39m [2mshould work if the generator is a shorthand computed object method (0 ms)[22m
+2026-10-21T11:33:59.6866716Z 
+2026-10-21T11:33:59.7280978Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:33:59.7294723Z [1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+2026-10-21T11:33:59.7296505Z [1mSnapshots:   [22m0 total
+2026-10-21T11:33:59.7297457Z [1mTime:[22m        0.766 s
+2026-10-21T11:33:59.7299448Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:00.4778653Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mnon-native.es5.js[22m
+2026-10-21T11:34:00.4779876Z   @@iterator
+2026-10-21T11:34:00.4780739Z     [32m✓[39m [2mis defined on Generator.prototype and returns this (2 ms)[22m
+2026-10-21T11:34:00.4781772Z   throw
+2026-10-21T11:34:00.4880853Z     [32m✓[39m [2mshould complete throwing generator (1 ms)[22m
+2026-10-21T11:34:00.4934568Z     [32m✓[39m [2mshould complete yielding/throwing generator (0 ms)[22m
+2026-10-21T11:34:00.5058075Z   completed generator
+2026-10-21T11:34:00.5088685Z     [32m✓[39m [2mshould refuse to resume (0 ms)[22m
+2026-10-21T11:34:00.5098126Z   delegate yield
+2026-10-21T11:34:00.5128573Z     [32m✓[39m [2mshould support any iterable argument (1 ms)[22m
+2026-10-21T11:34:00.5142289Z   newborn generators
+2026-10-21T11:34:00.5143466Z     [32m✓[39m [2mshould be able to access function.sent (0 ms)[22m
+2026-10-21T11:34:00.5144450Z 
+2026-10-21T11:34:00.5281144Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:00.5282441Z [1mTests:       [22m[1m[32m6 passed[39m[22m, 6 total
+2026-10-21T11:34:00.5296674Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:00.5298842Z [1mTime:[22m        0.721 s
+2026-10-21T11:34:00.5299885Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:01.0108988Z PASS packages/babel-generator/test/preserve-format.js
+2026-10-21T11:34:01.0655215Z PASS packages/babel-types/test/retrievers.js
+2026-10-21T11:34:01.1100957Z PASS packages/babel-types/test/converters.js
+2026-10-21T11:34:01.1278304Z PASS packages/babel-traverse/test/introspection.js
+2026-10-21T11:34:01.3401790Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1masync.es5.js[22m
+2026-10-21T11:34:01.3403316Z   async functions and await expressions
+2026-10-21T11:34:01.3404073Z     no-await async function
+2026-10-21T11:34:01.3405156Z       [32m✓[39m [2mshould return a Promise (6 ms)[22m
+2026-10-21T11:34:01.3405888Z     one-await async function
+2026-10-21T11:34:01.3406817Z       [32m✓[39m [2mshould finish asynchronously (0 ms)[22m
+2026-10-21T11:34:01.3407757Z     nested async function calls
+2026-10-21T11:34:01.3482773Z       [32m✓[39m [2mshould evaluate in the right order (1 ms)[22m
+2026-10-21T11:34:01.3603855Z     dependent promises
+2026-10-21T11:34:01.3709058Z       [32m✓[39m [2mshould be awaitable out of order (3 ms)[22m
+2026-10-21T11:34:01.3788037Z     rejected promises
+2026-10-21T11:34:01.3821218Z       [32m✓[39m [2mshould cause await expressions to throw (0 ms)[22m
+2026-10-21T11:34:01.3830725Z       [32m✓[39m [2mshould be returned by exceptional async functions (0 ms)[22m
+2026-10-21T11:34:01.3858582Z       [32m✓[39m [2mshould propagate failure when returned (0 ms)[22m
+2026-10-21T11:34:01.3878680Z     async function expressions
+2026-10-21T11:34:01.3879941Z       [32m✓[39m [2mshould be allowed (0 ms)[22m
+2026-10-21T11:34:01.3880846Z     the this object
+2026-10-21T11:34:01.3881817Z       [32m✓[39m [2mshould default to undefined (strict) (0 ms)[22m
+2026-10-21T11:34:01.3882998Z       [32m✓[39m [2mshould respect .call's this (0 ms)[22m
+2026-10-21T11:34:01.3884303Z       [32m✓[39m [2mshouldn't capture this when not needed (0 ms)[22m
+2026-10-21T11:34:01.3885276Z   async generator functions
+2026-10-21T11:34:01.3886350Z     [32m✓[39m [2mshould keep results in order (6 ms)[22m
+2026-10-21T11:34:01.3887629Z     [32m✓[39m [2mshould be able to handle many awaits (0 ms)[22m
+2026-10-21T11:34:01.3889198Z     [32m✓[39m [2mshould not propagate exceptions between iterations (0 ms)[22m
+2026-10-21T11:34:01.3890392Z     [32m✓[39m [2mshould allow yielding a rejected Promise (0 ms)[22m
+2026-10-21T11:34:01.3891543Z     [32m✓[39m [2mshould work with nested arrow functions (0 ms)[22m
+2026-10-21T11:34:01.3892645Z     [32m✓[39m [2mshould support super.method(...) in async methods (0 ms)[22m
+2026-10-21T11:34:01.3893820Z     [33m○[39m [2mskipped should return a working AsyncIterator[22m
+2026-10-21T11:34:01.3894609Z   update operators
+2026-10-21T11:34:01.3895545Z     [32m✓[39m [2mshould read left side before yielding (0 ms)[22m
+2026-10-21T11:34:01.3898379Z     [32m✓[39m [2mshould explode left side before yielding (0 ms)[22m
+2026-10-21T11:34:01.3899500Z     [32m✓[39m [2mshould read left side before awaiting (0 ms)[22m
+2026-10-21T11:34:01.3900139Z 
+2026-10-21T11:34:01.3923107Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:01.3961168Z [1mTests:       [22m[1m[33m1 skipped[39m[22m, [1m[32m20 passed[39m[22m, 21 total
+2026-10-21T11:34:01.3966576Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:01.3970640Z [1mTime:[22m        0.79 s
+2026-10-21T11:34:01.3971820Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:02.1572118Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1masync.es5-old.js[22m
+2026-10-21T11:34:02.1628472Z   async functions and await expressions
+2026-10-21T11:34:02.1649749Z     no-await async function
+2026-10-21T11:34:02.1770610Z       [32m✓[39m [2mshould return a Promise (1 ms)[22m
+2026-10-21T11:34:02.1877222Z     one-await async function
+2026-10-21T11:34:02.1941936Z       [32m✓[39m [2mshould finish asynchronously (0 ms)[22m
+2026-10-21T11:34:02.1948007Z     nested async function calls
+2026-10-21T11:34:02.1979346Z       [32m✓[39m [2mshould evaluate in the right order (2 ms)[22m
+2026-10-21T11:34:02.2007737Z     dependent promises
+2026-10-21T11:34:02.2048256Z       [32m✓[39m [2mshould be awaitable out of order (0 ms)[22m
+2026-10-21T11:34:02.2049231Z     rejected promises
+2026-10-21T11:34:02.2078120Z       [32m✓[39m [2mshould cause await expressions to throw (0 ms)[22m
+2026-10-21T11:34:02.2088973Z       [32m✓[39m [2mshould be returned by exceptional async functions (0 ms)[22m
+2026-10-21T11:34:02.2090548Z       [32m✓[39m [2mshould propagate failure when returned (0 ms)[22m
+2026-10-21T11:34:02.2091456Z     async function expressions
+2026-10-21T11:34:02.2092342Z       [32m✓[39m [2mshould be allowed (0 ms)[22m
+2026-10-21T11:34:02.2093077Z     the this object
+2026-10-21T11:34:02.2093940Z       [32m✓[39m [2mshould default to undefined (strict) (0 ms)[22m
+2026-10-21T11:34:02.2094934Z       [32m✓[39m [2mshould respect .call's this (0 ms)[22m
+2026-10-21T11:34:02.2095882Z       [32m✓[39m [2mshouldn't capture this when not needed (0 ms)[22m
+2026-10-21T11:34:02.2096838Z   async generator functions
+2026-10-21T11:34:02.2098791Z     [32m✓[39m [2mshould keep results in order (0 ms)[22m
+2026-10-21T11:34:02.2099925Z     [32m✓[39m [2mshould be able to handle many awaits (0 ms)[22m
+2026-10-21T11:34:02.2101060Z     [32m✓[39m [2mshould not propagate exceptions between iterations (0 ms)[22m
+2026-10-21T11:34:02.2102273Z     [32m✓[39m [2mshould allow yielding a rejected Promise (13 ms)[22m
+2026-10-21T11:34:02.2103357Z     [32m✓[39m [2mshould work with nested arrow functions (0 ms)[22m
+2026-10-21T11:34:02.2104554Z     [32m✓[39m [2mshould support super.method(...) in async methods (1 ms)[22m
+2026-10-21T11:34:02.2105719Z     [33m○[39m [2mskipped should return a working AsyncIterator[22m
+2026-10-21T11:34:02.2106541Z   update operators
+2026-10-21T11:34:02.2107632Z     [32m✓[39m [2mshould read left side before yielding (0 ms)[22m
+2026-10-21T11:34:02.2108769Z     [32m✓[39m [2mshould explode left side before yielding (0 ms)[22m
+2026-10-21T11:34:02.2109857Z     [32m✓[39m [2mshould read left side before awaiting (0 ms)[22m
+2026-10-21T11:34:02.2110800Z 
+2026-10-21T11:34:02.2111470Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:02.2112783Z [1mTests:       [22m[1m[33m1 skipped[39m[22m, [1m[32m20 passed[39m[22m, 21 total
+2026-10-21T11:34:02.2113778Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:02.2114519Z [1mTime:[22m        0.794 s
+2026-10-21T11:34:02.2115322Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:02.6082395Z PASS packages/babel-register/test/index.js (6.549 s)
+2026-10-21T11:34:02.6345376Z PASS packages/babel-traverse/test/family.js
+2026-10-21T11:34:02.6968671Z PASS packages/babel-core/test/external-dependencies.js
+2026-10-21T11:34:02.8009545Z PASS packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/test/util.skip-bundled.js
+2026-10-21T11:34:02.8137475Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1masync-custom-promise.es5.js[22m
+2026-10-21T11:34:02.8185790Z   custom Promise polyfills
+2026-10-21T11:34:02.8188858Z     [32m✓[39m [2mshould work with async functions (1 ms)[22m
+2026-10-21T11:34:02.8189957Z     [32m✓[39m [2mshould correctly handle rejections (0 ms)[22m
+2026-10-21T11:34:02.8191159Z     [32m✓[39m [2mshould work with async generators (1 ms)[22m
+2026-10-21T11:34:02.8197302Z 
+2026-10-21T11:34:02.8519091Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:02.8520421Z [1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+2026-10-21T11:34:02.8521252Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:02.8522074Z [1mTime:[22m        0.616 s
+2026-10-21T11:34:02.8522809Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:02.8918629Z PASS packages/babel-core/test/option-manager.js
+2026-10-21T11:34:02.9492526Z PASS packages/babel-core/test/assumptions.js
+2026-10-21T11:34:03.2114113Z PASS packages/babel-types/test/fields.js
+2026-10-21T11:34:03.2939210Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mregression.es5.js[22m
+2026-10-21T11:34:03.2940629Z   regressions
+2026-10-21T11:34:03.2941761Z     [32m✓[39m [2mshould correctly hoist arguments (2 ms)[22m
+2026-10-21T11:34:03.2942280Z 
+2026-10-21T11:34:03.3371804Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:03.3400021Z [1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:03.3416915Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:03.3417840Z [1mTime:[22m        0.481 s
+2026-10-21T11:34:03.3810550Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:03.3844430Z PASS eslint/babel-eslint-plugin-development/test/rules/no-deprecated-clone.js
+2026-10-21T11:34:03.4154492Z PASS packages/babel-preset-env/test/normalize-options.skip-bundled.js
+2026-10-21T11:34:04.6104537Z PASS packages/babel-core/test/config-ts-integration-ts-node.js
+2026-10-21T11:34:04.6208212Z PASS packages/babel-types/test/cloning.js
+2026-10-21T11:34:04.6318362Z PASS packages/babel-code-frame/test/color-detection.js
+2026-10-21T11:34:04.6398210Z PASS packages/babel-types/test/misc.js
+2026-10-21T11:34:04.6551452Z PASS packages/babel-core/test/targets.js
+2026-10-21T11:34:04.6688169Z PASS packages/babel-core/test/path.js
+2026-10-21T11:34:04.8946881Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/[22m[1mtests.transform.js[22m
+2026-10-21T11:34:04.9009043Z   _blockHoist nodes
+2026-10-21T11:34:04.9069546Z     [32m✓[39m [2mshould be hoisted to the outer body (463 ms)[22m
+2026-10-21T11:34:04.9117912Z   uglifyjs dead code removal
+2026-10-21T11:34:04.9138234Z     [32m✓[39m [2mworks with function expressions (249 ms)[22m
+2026-10-21T11:34:04.9178379Z     [32m✓[39m [2mworks with function declarations (99 ms)[22m
+2026-10-21T11:34:04.9227773Z   functions
+2026-10-21T11:34:04.9260003Z     function declarations
+2026-10-21T11:34:04.9306459Z       [32m✓[39m [2mshould work with a single function (20 ms)[22m
+2026-10-21T11:34:04.9338112Z       [32m✓[39m [2mshould work with multiple functions (18 ms)[22m
+2026-10-21T11:34:04.9338882Z     function expressions
+2026-10-21T11:34:04.9368229Z       [32m✓[39m [2mshould work with a named function (11 ms)[22m
+2026-10-21T11:34:04.9383242Z       [32m✓[39m [2mshould work with an anonymous function (25 ms)[22m
+2026-10-21T11:34:04.9383892Z     class methods
+2026-10-21T11:34:04.9384537Z       [32m✓[39m [2mshould be correctly wrapped (12 ms)[22m
+2026-10-21T11:34:04.9385139Z     variables hoisting
+2026-10-21T11:34:04.9385805Z       [32m✓[39m [2mshouldn't throw about duplicate bindings (14 ms)[22m
+2026-10-21T11:34:04.9386742Z       [32m✓[39m [2mshould register hoisted variable bindings (30 ms)[22m
+2026-10-21T11:34:04.9387563Z   ast serialization
+2026-10-21T11:34:04.9419224Z     [32m✓[39m [2mproduces an ast that is JSON serializable (18 ms)[22m
+2026-10-21T11:34:04.9429323Z     [32m✓[39m [2mproduces an ast that is serializable with v8's serializer (9 ms)[22m
+2026-10-21T11:34:04.9430083Z 
+2026-10-21T11:34:04.9495493Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:04.9496588Z [1mTests:       [22m[1m[32m12 passed[39m[22m, 12 total
+2026-10-21T11:34:04.9498339Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:04.9499021Z [1mTime:[22m        1.602 s
+2026-10-21T11:34:04.9499703Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:05.0042564Z You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+2026-10-21T11:34:05.0862701Z PASS packages/babel-runtime/test/unittests/wrapRegExp.test.js
+2026-10-21T11:34:05.0931092Z PASS packages/babel-traverse/test/path/index.js
+2026-10-21T11:34:05.1503940Z PASS packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array/test/util.skip-bundled.js
+2026-10-21T11:34:05.1581204Z (node:2521) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+2026-10-21T11:34:05.1582541Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T11:34:05.1849287Z (node:2521) ExperimentalWarning: Module._stat is an experimental feature and might change at any time
+2026-10-21T11:34:05.1863678Z (node:2521) ExperimentalWarning: Module._readPackage is an experimental feature and might change at any time
+2026-10-21T11:34:05.2658585Z PASS eslint/babel-eslint-tests/test/integration/eslint/rules/strict.js
+2026-10-21T11:34:05.3039800Z PASS packages/babel-preset-env/test/index.skip-bundled.js
+2026-10-21T11:34:05.3468763Z PASS packages/babel-helper-optimise-call-expression/test/index.js
+2026-10-21T11:34:05.4018765Z PASS packages/babel-helpers/test/unittests/tsRewriteRelativeImportExtensions.js
+2026-10-21T11:34:05.4047591Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mclass.regenerator.js[22m
+2026-10-21T11:34:05.4257661Z   class methods
+2026-10-21T11:34:05.4318363Z     [32m✓[39m [2mshould work if the generator is a class method (1 ms)[22m
+2026-10-21T11:34:05.4348393Z     [32m✓[39m [2mshould work if the generator is a computed class method (0 ms)[22m
+2026-10-21T11:34:05.4368486Z     [32m✓[39m [2mshould work with this (0 ms)[22m
+2026-10-21T11:34:05.4395560Z     [32m✓[39m [2mshould work with super (0 ms)[22m
+2026-10-21T11:34:05.4396202Z     [32m✓[39m [2mshould work with arguments (0 ms)[22m
+2026-10-21T11:34:05.4396794Z     [32m✓[39m [2mshould allow yield as super expression (0 ms)[22m
+2026-10-21T11:34:05.4397809Z     [32m✓[39m [2mshould allow yield as super expression with argument (3 ms)[22m
+2026-10-21T11:34:05.4398489Z     [32m✓[39m [2mshould allow yield as computed key (0 ms)[22m
+2026-10-21T11:34:05.4398850Z 
+2026-10-21T11:34:05.4538917Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:05.4557913Z [1mTests:       [22m[1m[32m8 passed[39m[22m, 8 total
+2026-10-21T11:34:05.4558656Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:05.4559641Z [1mTime:[22m        0.492 s
+2026-10-21T11:34:05.4560962Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:05.9969394Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/[22m[1mtests-node4.es6.js[22m
+2026-10-21T11:34:06.0094884Z   object properties
+2026-10-21T11:34:06.0150894Z     [32m✓[39m [2mshould work if the generator is a simple object property (1 ms)[22m
+2026-10-21T11:34:06.0178417Z     [32m✓[39m [2mshould work if the generator is a shorthand object method (0 ms)[22m
+2026-10-21T11:34:06.0279708Z     [32m✓[39m [2mshould work if the generator is a shorthand computed object method (0 ms)[22m
+2026-10-21T11:34:06.0280105Z 
+2026-10-21T11:34:06.0424646Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:06.0425699Z [1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+2026-10-21T11:34:06.0426547Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:06.0427446Z [1mTime:[22m        0.58 s
+2026-10-21T11:34:06.0428169Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:06.4956730Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/[22m[1mnon-writable-tostringtag-property.js[22m
+2026-10-21T11:34:06.5019759Z   Symbol.toStringTag safety (#399, #400)
+2026-10-21T11:34:06.5069324Z     [32m✓[39m [2mregenerator-runtime doesn't fail to initialize when native iterator prototype has a non-writable @@toStringTag property (2 ms)[22m
+2026-10-21T11:34:06.5112073Z     [32m✓[39m [2mregenerator-runtime's polyfilled generator prototype has the correct @@toStringTag value (0 ms)[22m
+2026-10-21T11:34:06.5137514Z 
+2026-10-21T11:34:06.5369532Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:06.5370672Z [1mTests:       [22m[1m[32m2 passed[39m[22m, 2 total
+2026-10-21T11:34:06.5371567Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:06.5372164Z [1mTime:[22m        0.485 s
+2026-10-21T11:34:06.5372854Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:07.0875783Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/[22m[1mfrozen-intrinsics.js[22m
+2026-10-21T11:34:07.0998136Z   Frozen intrinsics test
+2026-10-21T11:34:07.1078918Z     [32m✓[39m [2mregenerator-runtime doesn't fail to initialize when Object prototype is frozen (3 ms)[22m
+2026-10-21T11:34:07.1088416Z 
+2026-10-21T11:34:07.1528786Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:07.1538962Z [1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:07.1557867Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:07.1559865Z [1mTime:[22m        0.606 s
+2026-10-21T11:34:07.1561132Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:07.6344927Z [0m[7m[1m[32m PASS [39m[22m[27m[0m [2mpackages/babel-plugin-transform-regenerator/test/regenerator-fixtures/tmp/[22m[1mno-symbol.es5.js[22m
+2026-10-21T11:34:07.6368192Z   @@iterator
+2026-10-21T11:34:07.6396644Z     [32m✓[39m [2mis defined on Generator.prototype and returns this (0 ms)[22m
+2026-10-21T11:34:07.6417901Z   delegate yield
+2026-10-21T11:34:07.6440774Z     [32m✓[39m [2mshould support any iterable argument (1 ms)[22m
+2026-10-21T11:34:07.6441513Z 
+2026-10-21T11:34:07.6749485Z [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+2026-10-21T11:34:07.6785907Z [1mTests:       [22m[1m[32m2 passed[39m[22m, 2 total
+2026-10-21T11:34:07.6792678Z [1mSnapshots:   [22m0 total
+2026-10-21T11:34:07.6793364Z [1mTime:[22m        0.516 s
+2026-10-21T11:34:07.6794108Z [2mRan all test suites[22m[2m.[22m
+2026-10-21T11:34:07.6795138Z PASS packages/babel-plugin-transform-regenerator/test/regenerator.js (11.895 s)
+2026-10-21T11:34:07.6877767Z PASS packages/babel-types/test/validate.js
+2026-10-21T11:34:07.7093046Z PASS packages/babel-core/test/evaluation.js
+2026-10-21T11:34:07.7539633Z PASS packages/babel-core/test/config-ts.js
+2026-10-21T11:34:07.7623804Z PASS packages/babel-preset-react/test/normalize-options.skip-bundled.js
+2026-10-21T11:34:07.7691078Z PASS packages/babel-parser/test/options.js
+2026-10-21T11:34:07.8836482Z PASS packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/test/util.skip-bundled.js
+2026-10-21T11:34:07.8975438Z PASS packages/babel-traverse/test/path/isPure.js
+2026-10-21T11:34:08.0154559Z PASS packages/babel-register/test/cache.skip-bundled.js
+2026-10-21T11:34:08.0218367Z PASS packages/babel-traverse/test/visitors.js
+2026-10-21T11:34:08.0255670Z PASS packages/babel-node/test/split-args.skip-bundled.js
+2026-10-21T11:34:08.0474371Z PASS packages/babel-plugin-transform-modules-umd/test/importInterop-function.js
+2026-10-21T11:34:08.0518420Z PASS packages/babel-traverse/test/conversion.js
+2026-10-21T11:34:08.0568418Z PASS packages/babel-parser/test/plugin-options.js
+2026-10-21T11:34:08.0658198Z PASS packages/babel-traverse/test/path/virtual-types-validators.js
+2026-10-21T11:34:08.1639936Z PASS eslint/babel-eslint-plugin-development/test/rules/no-undefined-identifier.js
+2026-10-21T11:34:08.1678947Z PASS packages/babel-types/test/builders/typescript/tsLiteralType.js
+2026-10-21T11:34:08.2038415Z PASS packages/babel-plugin-transform-optional-chaining/test/util.skip-bundled.js
+2026-10-21T11:34:08.2116802Z PASS packages/babel-generator/test/arrow-functions.js
+2026-10-21T11:34:08.2219136Z PASS packages/babel-plugin-transform-object-rest-spread/test/hasMoreThanOneBinding.skip-bundled.js
+2026-10-21T11:34:08.2263455Z PASS packages/babel-helper-validator-option/test/validator.spec.js
+2026-10-21T11:34:08.2324716Z PASS packages/babel-helper-builder-react-jsx/test/index.js
+2026-10-21T11:34:08.3451173Z PASS packages/babel-core/test/config-ts-integration-tsx.js
+2026-10-21T11:34:08.3584991Z PASS packages/babel-plugin-transform-modules-commonjs/test/importInterop-function.js
+2026-10-21T11:34:08.3679258Z PASS packages/babel-plugin-transform-modules-amd/test/importInterop-function.js
+2026-10-21T11:34:08.3716752Z PASS packages/babel-types/test/builders/core/templateElement.js
+2026-10-21T11:34:08.3782929Z PASS packages/babel-plugin-proposal-destructuring-private/test/util.skip-bundled.js
+2026-10-21T11:34:08.3860701Z PASS packages/babel-preset-typescript/test/normalize-options.skip-bundled.js
+2026-10-21T11:34:08.4223501Z PASS eslint/babel-eslint-plugin-development/test/rules/plugin-name.js
+2026-10-21T11:34:08.4252732Z PASS packages/babel-helper-compilation-targets/test/targets-supported.skip-bundled.js
+2026-10-21T11:34:08.4355014Z PASS packages/babel-traverse/test/ancestry.js
+2026-10-21T11:34:08.5773287Z PASS eslint/babel-eslint-plugin-development-internal/test/rules/report-error-message-formtat.js
+2026-10-21T11:34:08.6238854Z PASS eslint/babel-eslint-tests/test/integration/config-files.js
+2026-10-21T11:34:08.6305034Z PASS packages/babel-core/test/parse.js
+2026-10-21T11:34:08.6342071Z PASS packages/babel-helper-check-duplicate-nodes/test/index.js
+2026-10-21T11:34:08.6385988Z PASS packages/babel-parser/test/error-codes.js
+2026-10-21T11:34:08.9524658Z You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+2026-10-21T11:34:08.9528205Z You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+2026-10-21T11:34:08.9530074Z You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+2026-10-21T11:34:08.9531828Z You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+2026-10-21T11:34:08.9668724Z PASS packages/babel-standalone/test/transform-script-tags.test.js (5.536 s)
+2026-10-21T11:34:09.0383697Z PASS packages/babel-standalone/test/preset-stage-1.test.js
+2026-10-21T11:34:09.0858403Z PASS packages/babel-parser/test/misc.js
+2026-10-21T11:34:09.1127247Z PASS packages/babel-preset-react/test/index.js
+2026-10-21T11:34:09.6292059Z PASS packages/babel-core/test/esm-cjs-integration.js
+2026-10-21T11:34:09.6478695Z PASS packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/test/util.skip-bundled.js
+2026-10-21T11:34:09.6507916Z PASS packages/babel-preset-flow/test/normalize-options.skip-bundled.js
+2026-10-21T11:34:09.6840577Z PASS eslint/babel-eslint-tests/test/integration/duplicated-babel-parser.js
+2026-10-21T11:34:09.7078135Z PASS packages/babel-helper-transform-fixture-test-runner/test/index.js
+2026-10-21T11:34:09.7113274Z PASS packages/babel-plugin-transform-typeof-symbol/test/helper.spec.js
+2026-10-21T11:34:09.7181523Z Usage of builders starting with an uppercase letter such as `ThisTypeAnnotation` has been deprecated, please migrate to `thisTypeAnnotation`
+2026-10-21T11:34:09.7182480Z     at Module.<anonymous> (file:///home/runner/work/babel/babel/packages/babel-types/lib/builders/generated/uppercase.js:5:5)
+2026-10-21T11:34:09.7183274Z     at file:///home/runner/work/babel/babel/packages/babel-types/test/builders/core.js?1792582449711:20:14
+2026-10-21T11:34:09.7320677Z PASS packages/babel-plugin-syntax-decorators/test/index.js
+2026-10-21T11:34:09.7321355Z PASS packages/babel-traverse/test/hub.js
+2026-10-21T11:34:09.7403459Z PASS packages/babel-helper-fixtures/test/index.js
+2026-10-21T11:34:09.7436375Z @babel/plugin-transform-modules-commonjs: The 'loose' option has been deprecated, use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:09.7436375Z [fixture trimmed: 472 lines omitted]
+2026-10-21T11:34:48.5999562Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:48.6029308Z @babel/plugin-transform-for-of: The 'loose' option has been deprecated, use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:48.6244498Z FAIL packages/babel-plugin-transform-block-scoping/test/index.js
+2026-10-21T11:34:48.6268352Z babel-plugin-transform-block-scoping/tdz > for head closure
+2026-10-21T11:34:48.6298893Z     Error: Expected /home/runner/work/babel/babel/packages/babel-plugin-transform-block-scoping/test/fixtures/tdz/for-head-closure/output.js to match transform output.
+2026-10-21T11:34:48.6313132Z     To autogenerate a passing version of this file, delete  the file and re-run the tests.
+2026-10-21T11:34:48.6314151Z     
+2026-10-21T11:34:48.6314676Z     Diff:
+2026-10-21T11:34:48.6315230Z     
+2026-10-21T11:34:48.6315961Z     [32m- Expected[39m
+2026-10-21T11:34:48.6316507Z     [31m+ Received[39m
+2026-10-21T11:34:48.6317071Z     
+2026-10-21T11:34:48.6317614Z     [33m@@ -1,11 +1,10 @@[39m
+2026-10-21T11:34:48.6318150Z     [2m  function t() {[22m
+2026-10-21T11:34:48.6336039Z     [32m-   var f = babelHelpers.temporalUndefined;[39m
+2026-10-21T11:34:48.6337107Z     [2m    var _loop = function (i) {[22m
+2026-10-21T11:34:48.6337797Z     [2m        () => i;[22m
+2026-10-21T11:34:48.6338367Z     [2m        if (i > 1) return {[22m
+2026-10-21T11:34:48.6339081Z     [32m-         v: babelHelpers.temporalRef(f, "f")()[39m
+2026-10-21T11:34:48.6339793Z     [31m+         v: f()[39m
+2026-10-21T11:34:48.6340318Z     [2m        };[22m
+2026-10-21T11:34:48.6340798Z     [2m      },[22m
+2026-10-21T11:34:48.6341287Z     [2m      _ret;[22m
+2026-10-21T11:34:48.6341967Z     [2m    for (var _i = 0, f = () => _i, i = _i;; i++) {[22m
+2026-10-21T11:34:48.6342640Z     [2m      _ret = _loop(i);[22m
+2026-10-21T11:34:48.6343775Z         at validateFile (file:///home/runner/work/babel/babel/packages/babel-helper-transform-fixture-test-runner/lib/index.js:272:11)
+2026-10-21T11:34:48.6345316Z         at run (file:///home/runner/work/babel/babel/packages/babel-helper-transform-fixture-test-runner/lib/index.js:223:9)
+2026-10-21T11:34:48.6346687Z         at async file:///home/runner/work/babel/babel/node_modules/tinypool/dist/esm/entry/worker.js:72:20
+2026-10-21T11:34:48.6347513Z 
+2026-10-21T11:34:48.7700631Z PASS packages/babel-plugin-transform-block-scoped-functions/test/index.js
+2026-10-21T11:34:48.7700631Z [fixture trimmed: 90 lines omitted]
+2026-10-21T11:34:49.0464739Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.0467399Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.0469914Z @babel/plugin-transform-classes: The 'loose' option has been deprecated, use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.0471431Z PASS packages/babel-plugin-transform-classes/test/index.js
+2026-10-21T11:34:49.0486641Z PASS packages/babel-plugin-transform-async-to-generator/test/index.js
+2026-10-21T11:34:49.0929822Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.1291326Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: false' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.1299643Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: false' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.1320373Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: true' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.1322429Z @babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, use the 'noNewArrows: false' assumption instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:49.1323815Z PASS packages/babel-plugin-transform-arrow-functions/test/index.js
+2026-10-21T11:34:49.1362996Z PASS packages/babel-plugin-syntax-typescript/test/index.js
+2026-10-21T11:34:49.1558414Z PASS packages/babel-plugin-proposal-throw-expressions/test/index.js
+2026-10-21T11:34:49.2486411Z PASS packages/babel-plugin-proposal-partial-application/test/index.js
+2026-10-21T11:34:50.0543107Z PASS packages/babel-plugin-proposal-pipeline-operator/test/index.js
+2026-10-21T11:34:50.1212974Z PASS packages/babel-plugin-proposal-optional-chaining-assign/test/index.js
+2026-10-21T11:34:50.1678373Z PASS packages/babel-plugin-proposal-import-defer/test/index.js
+2026-10-21T11:34:50.2401134Z PASS packages/babel-plugin-proposal-import-wasm-source/test/index.js
+2026-10-21T11:34:50.2633008Z PASS packages/babel-plugin-proposal-function-bind/test/index.js
+2026-10-21T11:34:50.2848781Z PASS packages/babel-plugin-transform-async-generator-functions/test/index.js
+2026-10-21T11:34:50.2929399Z PASS packages/babel-plugin-proposal-export-default-from/test/index.js
+2026-10-21T11:34:50.3019043Z PASS packages/babel-plugin-proposal-function-sent/test/index.js
+2026-10-21T11:34:50.6652669Z PASS packages/babel-plugin-proposal-discard-binding/test/index.js
+2026-10-21T11:34:50.9719050Z PASS packages/babel-plugin-proposal-destructuring-private/test/index.js
+2026-10-21T11:34:50.9848732Z PASS packages/babel-plugin-proposal-do-expressions/test/index.js
+2026-10-21T11:34:51.0111475Z PASS packages/babel-plugin-proposal-async-do-expressions/test/index.js
+2026-10-21T11:34:51.0158326Z PASS packages/babel-plugin-external-helpers/test/index.js
+2026-10-21T11:34:51.0528822Z PASS packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/test/index.js
+2026-10-21T11:34:51.0828903Z PASS packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/test/index.js
+2026-10-21T11:34:51.0946284Z PASS packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array/test/index.js
+2026-10-21T11:34:51.1037501Z PASS packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/test/index.js
+2026-10-21T11:34:51.1078950Z PASS packages/babel-plugin-bugfix-safari-class-field-initializer-scope/test/index.js
+2026-10-21T11:34:51.1268641Z PASS packages/babel-plugin-bugfix-firefox-class-in-computed-class-key/test/index.js
+2026-10-21T11:34:51.1500867Z PASS packages/babel-helpers/test/index.js
+2026-10-21T11:34:51.1579222Z PASS packages/babel-helper-create-regexp-features-plugin/test/index.js
+2026-10-21T11:34:51.2335936Z @babel/plugin-transform-private-methods: The 'loose' option has been deprecated, use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.2552066Z @babel/plugin-transform-private-methods: The 'loose' option has been deprecated, use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.2565168Z PASS packages/babel-helper-create-class-features-plugin/test/index.js
+2026-10-21T11:34:51.2806312Z PASS codemods/babel-plugin-codemod-optional-catch-binding/test/index.js
+2026-10-21T11:34:51.2896207Z PASS codemods/babel-plugin-codemod-object-assign-to-object-spread/test/index.js
+2026-10-21T11:34:51.2901497Z PASS packages/babel-parser/test/commonjs.bundled.js
+2026-10-21T11:34:51.7905177Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7911846Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7914385Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7923799Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7926172Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7928817Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7931177Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7933540Z @babel/plugin-transform-optional-chaining: The 'loose' option has been deprecated, use the `noDocumentAll` and `pureGetters` assumptions instead (https://babeljs.io/assumptions).
+2026-10-21T11:34:51.7935254Z PASS packages/babel-plugin-transform-class-properties/test/index.js
+2026-10-21T11:34:54.3916089Z PASS packages/babel-plugin-proposal-decorators/test/index.js
+2026-10-21T11:34:54.5202190Z 
+2026-10-21T11:34:54.5202865Z Summary of all failing tests
+2026-10-21T11:34:54.5205999Z FAIL packages/babel-plugin-transform-block-scoping/test/index.js
+2026-10-21T11:34:54.5206732Z babel-plugin-transform-block-scoping/tdz > for head closure
+2026-10-21T11:34:54.5210434Z     Error: Expected /home/runner/work/babel/babel/packages/babel-plugin-transform-block-scoping/test/fixtures/tdz/for-head-closure/output.js to match transform output.
+2026-10-21T11:34:54.5211915Z     To autogenerate a passing version of this file, delete  the file and re-run the tests.
+2026-10-21T11:34:54.5212564Z     
+2026-10-21T11:34:54.5212862Z     Diff:
+2026-10-21T11:34:54.5213157Z     
+2026-10-21T11:34:54.5213728Z     [32m- Expected[39m
+2026-10-21T11:34:54.5214140Z     [31m+ Received[39m
+2026-10-21T11:34:54.5214436Z     
+2026-10-21T11:34:54.5214902Z     [33m@@ -1,11 +1,10 @@[39m
+2026-10-21T11:34:54.5215369Z     [2m  function t() {[22m
+2026-10-21T11:34:54.5216017Z     [32m-   var f = babelHelpers.temporalUndefined;[39m
+2026-10-21T11:34:54.5216628Z     [2m    var _loop = function (i) {[22m
+2026-10-21T11:34:54.5217275Z     [2m        () => i;[22m
+2026-10-21T11:34:54.5218473Z     [2m        if (i > 1) return {[22m
+2026-10-21T11:34:54.5219515Z     [32m-         v: babelHelpers.temporalRef(f, "f")()[39m
+2026-10-21T11:34:54.5220539Z     [31m+         v: f()[39m
+2026-10-21T11:34:54.5221163Z     [2m        };[22m
+2026-10-21T11:34:54.5221801Z     [2m      },[22m
+2026-10-21T11:34:54.5222779Z     [2m      _ret;[22m
+2026-10-21T11:34:54.5223569Z     [2m    for (var _i = 0, f = () => _i, i = _i;; i++) {[22m
+2026-10-21T11:34:54.5224377Z     [2m      _ret = _loop(i);[22m
+2026-10-21T11:34:54.5225858Z         at validateFile (file:///home/runner/work/babel/babel/packages/babel-helper-transform-fixture-test-runner/lib/index.js:272:11)
+2026-10-21T11:34:54.5227705Z         at run (file:///home/runner/work/babel/babel/packages/babel-helper-transform-fixture-test-runner/lib/index.js:223:9)
+2026-10-21T11:34:54.5229247Z         at async file:///home/runner/work/babel/babel/node_modules/tinypool/dist/esm/entry/worker.js:72:20
+2026-10-21T11:34:54.5229992Z 
+2026-10-21T11:34:54.5230210Z 
+2026-10-21T11:34:54.5231204Z Test Suites: 1 failed, 275 passed, 276 total
+2026-10-21T11:34:54.5232039Z Tests:       1 failed, 52 skipped, 173395 passed, 173448 total
+2026-10-21T11:34:54.5232756Z Snapshots:   280 passed, 280 total
+2026-10-21T11:34:54.5233364Z Time:        62.271 s
+2026-10-21T11:34:54.5233883Z Ran all test suites.
+2026-10-21T11:34:54.7010807Z ##[error]Process completed with exit code 1.
+2026-10-21T11:34:54.7128918Z Post job cleanup.
+2026-10-21T11:34:54.7933250Z [command]/usr/bin/git version
+2026-10-21T11:34:54.7969169Z git version 2.55.0
+2026-10-21T11:34:54.8002365Z Temporarily overriding HOME='/home/runner/work/_temp/7acd2a7b-56fd-44d5-b033-2db5896afe6e' before making global git config changes
+2026-10-21T11:34:54.8003645Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T11:34:54.8008037Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-21T11:34:54.8037237Z Removing SSH command configuration
+2026-10-21T11:34:54.8042838Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T11:34:54.8073579Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T11:34:54.8326812Z Removing HTTP extra header
+2026-10-21T11:34:54.8332348Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T11:34:54.8363766Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T11:34:54.8610181Z Removing includeIf entries pointing to credentials config files
+2026-10-21T11:34:54.8617919Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T11:34:54.8643670Z includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-21T11:34:54.8644685Z includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-21T11:34:54.8645435Z includeif.gitdir:/github/workspace/.git.path
+2026-10-21T11:34:54.8646169Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-21T11:34:54.8652059Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-21T11:34:54.8672131Z /home/runner/work/_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8682970Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8719526Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-21T11:34:54.8739708Z /home/runner/work/_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8749277Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8780882Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-21T11:34:54.8799966Z /github/runner_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8807989Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8839250Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-21T11:34:54.8857530Z /github/runner_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8863845Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config
+2026-10-21T11:34:54.8898589Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T11:34:54.9161466Z Removing credentials config '/home/runner/work/_temp/git-credentials-11c53179-cf70-4263-acf6-613a9967d7b3.config'
+2026-10-21T11:34:54.9327335Z Cleaning up orphan processes
