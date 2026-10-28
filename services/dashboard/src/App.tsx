@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import DependencyDashboardPage from "./dependency/DependencyDashboardPage";
 
 type RiskOutput = {
   prediction_id: string;
@@ -222,7 +223,7 @@ function Toggle({
   );
 }
 
-function App() {
+function InfraExpertDashboard() {
   const [form, setForm] = useState(initialForm);
   const [result, setResult] = useState<RiskOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -526,6 +527,43 @@ function App() {
         <span>v4 · no-history profile</span>
       </footer>
     </main>
+  );
+}
+
+function App() {
+  const [activeExpert, setActiveExpert] = useState<"dependency" | "infra">("dependency");
+
+  return (
+    <>
+      <nav className="expert-switcher" aria-label="Select PipelineIQ expert">
+        <span className="expert-switcher-brand">PipelineIQ</span>
+        <div className="expert-switcher-options">
+          <button
+            type="button"
+            className={activeExpert === "dependency" ? "active" : ""}
+            aria-pressed={activeExpert === "dependency"}
+            onClick={() => setActiveExpert("dependency")}
+          >
+            Dependency Expert
+          </button>
+          <button
+            type="button"
+            className={activeExpert === "infra" ? "active" : ""}
+            aria-pressed={activeExpert === "infra"}
+            onClick={() => setActiveExpert("infra")}
+          >
+            Infra Expert
+          </button>
+        </div>
+        <span className="expert-switcher-tag">Research demo</span>
+        {activeExpert === "dependency" ? (
+          <span className="expert-metrics-badge" title="Exploratory 5-fold repository-held-out evaluation on complete logs">
+            XGBoost 66.4% Acc (N=140)
+          </span>
+        ) : null}
+      </nav>
+      {activeExpert === "dependency" ? <DependencyDashboardPage /> : <InfraExpertDashboard />}
+    </>
   );
 }
 
