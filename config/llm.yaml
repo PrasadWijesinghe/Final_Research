@@ -1,0 +1,20 @@
+# LLM gateway settings (services/llm_gateway). All values are DEFAULT: placeholders until the
+# provider is chosen (decision O5); the mock prices exist so spending caps can be tested.
+default_model: mock-1
+
+# USD per 1,000 tokens, by model name.
+models:
+  mock-1:
+    input_per_1k_usd: 0.001
+    output_per_1k_usd: 0.002
+
+# Monthly spending cap per expert (calendar month, UTC). Calls from an expert whose spend this
+# month has reached its cap are refused with HTTP 429.
+monthly_cap_usd:
+  dependency: 25.0
+  build: 25.0
+  test: 25.0
+  infra: 25.0
+
+# How long an identical request is answered from the cache (seconds; 7 days).
+cache_ttl_seconds: 604800

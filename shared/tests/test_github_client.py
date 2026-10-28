@@ -363,3 +363,102 @@ def test_token_never_logged(client: GitHubClient, caplog: pytest.LogCaptureFixtu
         client.get_json("/a")
     assert caplog.records
     assert FAKE_TOKEN not in caplog.text
+
+
+# ---- empty windows: GitHub sometimes says "0 runs" for a busy window -------------------------
+
+WIN_START = datetime(2026, 9, 1, tzinfo=UTC)
+WIN_END = datetime(2026, 9, 8, tzinfo=UTC)
+EMPTY = {"total_count": 0, "workflow_runs": []}
+
+
+def test_empty_window_is_asked_again_and_real_results_win(
+    client: GitHubClient, sleeper: Sleeper
+) -> None:
+    with respx.mock:
+        route = respx.get(RUNS).mock(
+            side_effect=[
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json={"total_count": 2, "workflow_runs": [_run(1), _run(2)]}),
+            ]
+        )
+        ids = [r["id"] for r in client.iter_workflow_runs("acme/widgets", WIN_START, WIN_END)]
+    assert ids == [1, 2]
+    assert route.call_count == 2
+    assert sleeper.calls == [1.0]
+
+
+def test_contradictory_window_warns_and_uses_the_halves(
+    client: GitHubClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    mid = "2026-09-04T12:00:00Z"
+    with respx.mock:
+        route = respx.get(RUNS).mock(
+            side_effect=[
+                httpx.Response(200, json=EMPTY),  # the window, asked 3 times in all
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json={"total_count": 1, "workflow_runs": [_run(1)]}),  # left
+                httpx.Response(200, json={"total_count": 1, "workflow_runs": [_run(2)]}),  # right
+            ]
+        )
+        with caplog.at_level(logging.WARNING):
+            ids = [r["id"] for r in client.iter_workflow_runs("acme/widgets", WIN_START, WIN_END)]
+    assert ids == [1, 2]
+    assert route.call_count == 5
+    assert "halves have runs" in caplog.text
+    created = [c.request.url.params["created"] for c in route.calls]
+    assert created[3] == f"2026-09-01T00:00:00Z..{mid}"
+    assert created[4].startswith("2026-09-04T12:00:01Z..")
+
+
+def test_window_empty_everywhere_is_accepted_with_bounded_calls(
+    client: GitHubClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    with respx.mock:
+        route = respx.get(RUNS).respond(200, json=EMPTY)
+        with caplog.at_level(logging.WARNING):
+            ids = list(client.iter_workflow_runs("acme/widgets", WIN_START, WIN_END))
+    assert ids == []
+    assert route.call_count == 5  # 1 + 2 retries + 2 halves, then it stops
+    assert "halves have runs" not in caplog.text
+
+
+def test_tiny_empty_window_is_only_retried_not_split(client: GitHubClient) -> None:
+    with respx.mock:
+        route = respx.get(RUNS).respond(200, json=EMPTY)
+        list(client.iter_workflow_runs("acme/widgets", WIN_START, WIN_START + timedelta(minutes=5)))
+    assert route.call_count == 3
+
+
+def test_count_window_trusts_non_zero_and_marks_cap_as_at_least(client: GitHubClient) -> None:
+    with respx.mock:
+        respx.get(RUNS).mock(
+            side_effect=[
+                httpx.Response(200, json={"total_count": 614, "workflow_runs": [_run(1)]}),
+                httpx.Response(200, json={"total_count": 2500, "workflow_runs": [_run(1)]}),
+            ]
+        )
+        exact = client.count_workflow_runs("acme/widgets", WIN_START, WIN_END)
+        capped = client.count_workflow_runs("acme/widgets", WIN_START, WIN_END)
+    assert (exact.count, exact.capped) == (614, False)
+    assert (capped.count, capped.capped) == (2500, True)
+
+
+def test_count_window_zero_is_retried_then_cross_checked(
+    client: GitHubClient, caplog: pytest.LogCaptureFixture
+) -> None:
+    with respx.mock:
+        respx.get(RUNS).mock(
+            side_effect=[
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json=EMPTY),
+                httpx.Response(200, json={"total_count": 40, "workflow_runs": [_run(1)]}),
+                httpx.Response(200, json={"total_count": 2, "workflow_runs": [_run(2)]}),
+            ]
+        )
+        with caplog.at_level(logging.WARNING):
+            result = client.count_workflow_runs("acme/widgets", WIN_START, WIN_END)
+    assert (result.count, result.capped) == (42, False)
+    assert "halves have runs" in caplog.text
