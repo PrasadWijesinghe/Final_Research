@@ -133,6 +133,10 @@ def test_metrics_calibration_threshold() -> None:
     assert np.allclose(out.sum(axis=1), 1)
     thr = pick_threshold(y, proba[:, 1] + proba[:, 2])
     assert thr["precision"] >= 0.8 and "precision>=0.8" in thr["rule"]
+    # A threshold must flag at least 20 rows even if a tiny top group is perfectly precise.
+    sc = np.concatenate([np.ones(3), np.linspace(0.9, 0.0, 297)])
+    yy = np.concatenate([np.ones(3, int), (np.random.default_rng(2).random(297) < 0.1).astype(int)])
+    assert pick_threshold(yy, sc)["threshold"] < 1.0
     # Unreachable precision falls back to F0.5.
     assert "f0.5" in pick_threshold(y, np.zeros(600))["rule"]
 

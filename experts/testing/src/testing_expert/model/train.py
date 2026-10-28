@@ -89,7 +89,10 @@ def run_variant(
         # Isotonic calibration on the calibration slice; Brier before/after on the test slice.
         pcal = fitted.predict_proba(cal)
         ycal = cal["y"].to_numpy()
-        calibrator = fit_calibrator(ycal, pcal)
+        # DEFAULT: calibration slice split in time order: first half fits the isotonic maps,
+        # second half picks the threshold on calibrated scores (no in-sample optimism).
+        half = len(cal) // 2
+        calibrator = fit_calibrator(ycal[:half], pcal[:half])
         res.calibrators[name] = calibrator
         proba_c = apply_calibrator(calibrator, proba)
         res.calibration[name] = {
@@ -98,9 +101,7 @@ def run_variant(
             "brier_fail_before": brier_fail(ytest, proba),
             "brier_fail_after": brier_fail(ytest, proba_c),
         }
-        # DEFAULT: threshold picked on the calibration slice (in-sample for the isotonic fit,
-        # optimistic); reported precision/recall on the untouched test slice show the real value.
-        thr = pick_threshold(ycal, p_fail(apply_calibrator(calibrator, pcal)))
+        thr = pick_threshold(ycal[half:], p_fail(apply_calibrator(calibrator, pcal[half:])))
         thr["test"] = threshold_metrics(ytest, p_fail(proba_c), float(thr["threshold"]))
         res.threshold[name] = thr
     if loro:

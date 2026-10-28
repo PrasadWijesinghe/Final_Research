@@ -18,6 +18,7 @@ from .data import CLASSES
 GENUINE, FLAKY = 1, 2
 # DEFAULT: precision target 0.8 for the P(fail) threshold (brief), F0.5 fallback when unreachable.
 PRECISION_TARGET = 0.8
+MIN_FLAGGED = 20
 NAN = float("nan")
 
 
@@ -110,12 +111,19 @@ def pick_threshold(y: np.ndarray, score: np.ndarray) -> dict[str, Any]:
         return {"threshold": 0.5, "rule": "no_positives_default", "precision": NAN, "recall": NAN}
     prec, rec, thr = precision_recall_curve(yf, score)
     prec, rec = prec[:-1], rec[:-1]
-    ok = prec >= PRECISION_TARGET
+    # DEFAULT: a threshold must flag >= 20 validation rows, else precision 0.8 on a handful of
+    # top-scored rows is a fluke (this gave a useless threshold of 1.0 before).
+    flagged = len(score) - np.searchsorted(np.sort(score), thr, side="left")
+    support = flagged >= MIN_FLAGGED
+    if not support.any():
+        support = np.ones_like(support)
+    ok = (prec >= PRECISION_TARGET) & support
     if ok.any():
         idx = int(np.flatnonzero(ok)[np.argmax(rec[ok])])
         rule = "precision>=0.8_max_recall"
     else:
         f05 = 1.25 * prec * rec / np.maximum(0.25 * prec + rec, 1e-12)
+        f05 = np.where(support, f05, -1.0)
         idx = int(np.argmax(f05))
         rule = "best_f0.5 (precision 0.8 unreachable)"
     return {
