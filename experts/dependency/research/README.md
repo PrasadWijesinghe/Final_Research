@@ -249,7 +249,9 @@ the best-accuracy model to `data/datasets/dependency/misclassified_records_best_
 manual inspection. Treat metrics as exploratory given the small manually labeled sample; this
 evaluation does not establish that dependency changes caused the failures or show production
 performance. The report includes a same-fold ablation with `has_package_manager_cache_miss`
-removed, to show whether that potentially noisy signal helps either model.
+removed, to show whether that potentially noisy signal helps either model. Cache misses are kept in
+the extracted audit table but excluded from model inputs because they represent ordinary CI cache
+restores and the ablation showed no metric change.
 
 `analyze_false_negative_logs.py` cross-references the best model's out-of-fold false negatives with
 their failed-job IDs, sanitizes fetched logs in memory, and prints candidate diagnostic patterns.
