@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 from sklearn.isotonic import IsotonicRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     average_precision_score,
     precision_recall_curve,
@@ -76,32 +77,99 @@ def brier_fail(y: np.ndarray, proba: np.ndarray) -> float:
     return float(((p_fail(proba) - (y > 0)) ** 2).mean())
 
 
-def fit_calibrator(y: np.ndarray, proba: np.ndarray) -> dict[str, Any]:
-    """One isotonic regression per class (one-vs-rest); a one-outcome class stays raw."""
-    models: list[IsotonicRegression | None] = []
+CALIBRATORS = ("isotonic", "sigmoid", "beta", "isotonic_floor")
+# DEFAULT: no calibrated class probability goes below this, so a risk score is never a hard 0.0
+# (isotonic regression maps every low raw score to exactly 0 when the fit slice has no failure
+# there, which a user reads as "impossible").
+MIN_PROB = 1e-4
+_EPS = 1e-6
+
+
+def _logit_features(p: np.ndarray, kind: str) -> np.ndarray:
+    """Platt uses logit(p); beta calibration (Kull et al. 2017) uses ln p and -ln(1-p)."""
+    p = np.clip(p, _EPS, 1 - _EPS)
+    if kind == "sigmoid":
+        return np.log(p / (1 - p))[:, None]
+    return np.column_stack([np.log(p), -np.log(1 - p)])
+
+
+def fit_calibrator(y: np.ndarray, proba: np.ndarray, kind: str = "isotonic") -> dict[str, Any]:
+    """One calibration map per class (one-vs-rest); a one-outcome class stays raw.
+
+    kind: isotonic (step function), sigmoid (Platt), beta (3-parameter, can bend both tails) or
+    isotonic_floor (isotonic, but never below the class's own base rate times FLOOR_SHARE).
+    """
+    if kind not in CALIBRATORS:
+        raise ValueError(f"unknown calibrator {kind!r}")
+    models: list[Any] = []
     for i in range(len(CLASSES)):
         yi = (y == i).astype(float)
         if yi.min() == yi.max():
             models.append(None)
-            continue
-        iso = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
-        iso.fit(proba[:, i], yi)
-        models.append(iso)
-    return {"isotonic": models, "classes": list(CLASSES)}
+        elif kind in ("sigmoid", "beta"):
+            # DEFAULT: C=1e4, i.e. almost unregularised, so the map follows the data.
+            lr = LogisticRegression(C=1e4, max_iter=1000)
+            lr.fit(_logit_features(proba[:, i], kind), yi.astype(int))
+            models.append(lr)
+        else:
+            iso = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
+            iso.fit(proba[:, i], yi)
+            models.append(iso)
+    # DEFAULT: the isotonic floor is 20% of the class base rate in the fit slice.
+    floors = [FLOOR_SHARE * float((y == i).mean()) for i in range(len(CLASSES))]
+    return {"kind": kind, "models": models, "floors": floors, "classes": list(CLASSES)}
+
+
+FLOOR_SHARE = 0.2
 
 
 def apply_calibrator(cal: dict[str, Any], proba: np.ndarray) -> np.ndarray:
-    """Calibrate each class, then renormalise rows to sum to 1."""
+    """Calibrate each class, then renormalise rows to sum to 1.
+
+    Reads old bundles too (v1 / v2 stored {"isotonic": [...]} with no "kind").
+    """
+    kind = cal.get("kind", "isotonic")
+    models = cal["models"] if "models" in cal else cal["isotonic"]
     out = proba.copy()
-    for i, iso in enumerate(cal["isotonic"]):
-        if iso is not None:
-            out[:, i] = iso.predict(proba[:, i])
+    for i, m in enumerate(models):
+        if m is None:
+            continue
+        if kind in ("sigmoid", "beta"):
+            out[:, i] = m.predict_proba(_logit_features(proba[:, i], kind))[:, 1]
+        else:
+            out[:, i] = m.predict(proba[:, i])
+            if kind == "isotonic_floor":
+                out[:, i] = np.maximum(out[:, i], cal["floors"][i])
+    if kind != "isotonic":  # new calibrators never emit a hard zero; v1/v2 bundles keep old maths
+        out[:, 1:] = np.maximum(out[:, 1:], MIN_PROB)
     total = out.sum(axis=1, keepdims=True)
     # DEFAULT: a row where every isotonic output is 0 falls back to the uncalibrated row.
     bad = total[:, 0] <= 0
     out[bad] = proba[bad]
     total = out.sum(axis=1, keepdims=True)
     return out / total
+
+
+def ece(y: np.ndarray, score: np.ndarray, bins: int = 10) -> float:
+    """Expected calibration error of P(fail): equal-count bins, weighted |mean score - rate|."""
+    yf = (y > 0).astype(float)
+    order = np.argsort(score, kind="stable")
+    total = 0.0
+    for chunk in np.array_split(order, bins):
+        if len(chunk):
+            total += len(chunk) * abs(float(score[chunk].mean()) - float(yf[chunk].mean()))
+    return total / len(y)
+
+
+def reliability(y: np.ndarray, score: np.ndarray, bins: int = 10) -> list[dict[str, float]]:
+    """Per equal-count bin: n, mean predicted P(fail), observed fail rate (rare-event friendly)."""
+    yf = (y > 0).astype(float)
+    order = np.argsort(score, kind="stable")
+    return [
+        {"n": float(len(c)), "pred": float(score[c].mean()), "obs": float(yf[c].mean())}
+        for c in np.array_split(order, bins)
+        if len(c)
+    ]
 
 
 def pick_threshold(y: np.ndarray, score: np.ndarray) -> dict[str, Any]:

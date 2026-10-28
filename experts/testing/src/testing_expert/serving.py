@@ -35,6 +35,7 @@ from .features.repo import EMPTY_DURATIONS, EMPTY_TIMELINE
 from .features.settings import get_settings
 from .model.data import CLASSES, Encoder
 from .model.metrics import apply_calibrator, p_fail
+from .model.models import TwoStageBooster
 from .predict import is_test_job
 
 logger = logging.getLogger(__name__)
@@ -55,7 +56,7 @@ class Bundle:
     version: str
     threshold: float
     encoder: Encoder
-    booster: lgb.Booster
+    booster: lgb.Booster | TwoStageBooster
     calibrator: dict[str, Any]
     path: Path
 
@@ -107,7 +108,10 @@ def load_bundle(path: Path) -> Bundle:
         version=f"lightgbm-{path.name}",
         threshold=threshold,
         encoder=Encoder(numeric=list(meta["numeric"]), categorical=dict(meta["categorical"])),
-        booster=lgb.Booster(model_file=str(path / "model.txt")),
+        # v3+ bundles are two-stage (fail-vs-pass booster + genuine-vs-flaky booster)
+        booster=TwoStageBooster.load(path)
+        if (path / "split_model.txt").exists()
+        else lgb.Booster(model_file=str(path / "model.txt")),
         calibrator=joblib.load(path / "calibrator.joblib"),
         path=path,
     )
