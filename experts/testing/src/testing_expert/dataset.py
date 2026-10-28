@@ -60,6 +60,14 @@ V2_CUTS = [
     "built directly from raw + testing.labels, history_cutoff = run created_at (no replay)",
     "genuine_strict = genuine with >= 2 failing (run, attempt) pairs of the same job on the SHA",
 ]
+V3_LABEL_CHANGES = [
+    "P4.3 v3 rule persistent_failure_streak: failed test job, never passed on its commit, "
+    "failing on "
+    ">= 3 consecutive earlier attempts over >= 2 other commits, is genuine (low confidence); "
+    "before, those attempts were `unclear` and left out",
+    "same 68 features and the same pass / flaky / fix-commit-genuine rows as v2; only the extra "
+    "genuine rows are new",
+]
 V2_FROZEN_NOTE = "labels pending the human kappa round (P4.3); not frozen until it completes"
 
 # One row per labelled attempt. genuine_strict counts distinct failing (run, attempt) pairs of the
@@ -217,6 +225,8 @@ def write_dataset(
                 "cuts": V2_CUTS,
             }
         )
+        if version != "v2":
+            manifest["label_changes"] = V3_LABEL_CHANGES
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     return manifest
 
