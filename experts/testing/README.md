@@ -158,8 +158,16 @@ Skipped jobs are left out.
 | `flaky` (high) | failed, and another attempt or run of the same job passed on the same commit |
 | `flaky` silent (low) | failed, never passed on that commit, and a child commit that changed only docs passed |
 | `genuine` (high) | failed, never passed on that commit, and a commit within 7 days on the same branch that touched the failing test file made the job pass |
+| `genuine` low (v3, `persistent_failure_streak`) | failed, never passed on that commit, the log shows a test runner, and the job had failed on 3 or more consecutive earlier attempts spread over 2 or more other commits |
 | `unclear` | anything else, or the failed job has no log |
 | `not_test` | cancelled, or the failed job's log shows no test runner |
+
+The streak rule (added for dataset v3) exists because a job that is simply broken, failing commit after commit with no
+fix that touches the failing test file, used to land in `unclear` and drop out of training. It is low confidence
+(nothing confirmed a fix), so the "high" training variant leaves it out. `# DEFAULT:` in `labels/rules.py` explains
+the reading of "kept failing" (constants `STREAK_MIN`, `STREAK_MIN_OTHER_SHAS`). Real data: 492 attempts moved from
+`unclear` to `genuine`. Most long failure "streaks" in the data are matrix legs or re-runs of one commit, not
+consecutive commits, so only streaks over 2 or more other commits count.
 
 A pass that follows a failure on the same commit is a rerun pass and gets no label. Failed attempts that
 another category also claimed get `is_final = false`. `pass` and `not_test` are not copied to
@@ -183,7 +191,8 @@ uv run python -m testing_expert.labels --kappa data/reports/test_labels_sample.c
 uv run python -m testing_expert.labels --kappa FILE --rater ai_prelabel               # same for the AI column
 ```
 
-Known limits: only the failing test file is used for the genuine rule, because P4.2 did not store stack frames.
+Known limits: a failed job whose log shows no Jest, Mocha or Vitest (for example `node:test` or Playwright) is `not_test`, so
+a broken job on an unparsed runner is still left out. Only the failing test file is used for the genuine rule, because P4.2 did not store stack frames.
 A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
 7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
 
@@ -206,13 +215,16 @@ the features are the same. A finished version is frozen: the command refuses to 
 ```
 uv run --env-file .env python -m testing_expert.dataset --version v1    # about 45 seconds
 uv run --env-file .env python -m testing_expert.dataset --version v2    # about 90 seconds
+uv run --env-file .env python -m testing_expert.dataset --version v3    # about 3 minutes
 ```
 
 The version is an argument. `v1` keeps its original 41 features (so it stays reproducible after new feature
 groups were added). `v2` has the same rows and labels plus two new feature groups, 68 features in all:
 `tw_*` (14, the tree-sitter test-change group; empty means unknown, 0 means the commit changes no test) and
 `h_os_*` (13, job history counted only on the same runner OS). Its manifest says `"frozen": false`: labels are
-still rule labels, so v2 is not frozen until the human kappa round (P4.3) is done. Remaining cuts, listed in the
+still rule labels, so v2 is not frozen until the human kappa round (P4.3) is done. `v3` has the same 68 features and
+rows as v2 plus the 492 streak rows (212,000 rows; genuine 2,324, flaky 823), after the P4.3 streak rule; it is also
+`"frozen": false`, with a `label_changes` note in the manifest. v1 and v2 files are untouched. Remaining cuts, listed in the
 manifest: no daily collector (one-off data, no newer runs), no new repos (same 16), P4.2 and P4.3 still at v1 scope.
 
 ## Serving the trained model (P4.12, partial)
@@ -233,6 +245,33 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 **Known limits.** A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
 
 Code: `src/testing_expert/serving.py`. Tests: `tests/test_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
+
+## Model v3: label fix, new calibration, monotone constraints (P4.7 v3)
+
+Three fixes on top of v2, measured one by one in `reports/v3_vs_v2.md` (run: `uv run --env-file .env python -m testing_expert.model.compare_v3`,
+about 10 minutes; it also writes the bundle `models/testing/v3/`, v1 and v2 stay as they are).
+
+1. **Labels** (dataset v3, above). Long failure streaks are now genuine failures instead of dropped rows.
+2. **Calibration.** v2 used isotonic regression, which turns every low raw score into exactly 0.0 when no failure fell
+   in that score range of the fit slice (5,579 of 42,300 test rows had P(fail) = 0.0). `model/metrics.py` now fits four
+   calibrators per class: `isotonic`, `sigmoid` (Platt), `beta` (3-parameter) and `isotonic_floor`, and the new ones never
+   output below 0.0001 per fail class (`MIN_PROB`, `# DEFAULT:`). The comparison picks by Brier score and ECE (the
+   average gap between predicted and observed fail rate), not PR-AUC; v3 uses `beta`. Old bundles (v1, v2) still load: the
+   calibrator file has a `kind` field, and old files without it are read as isotonic.
+3. **Monotone constraints.** `MONOTONE_FEATURES` in `model/models.py` lists the features whose direction is obvious
+   (more recent failures, a longer failure streak, a higher fail rate or flip rate, more re-runs, more `setTimeout`,
+   real timers, `Math.random`, `Date.now`, unmocked network, unawaited promises, `.only` added, missing cleanup never
+   lower the risk; more days since the last failure never raise it), each with a `# DEFAULT:` comment. LightGBM gives all
+   classes of a multiclass model the same constraint, which would also push P(pass) up, so v3 is two-stage: a
+   fail-vs-pass booster with the constraints (`model.txt`) and an unconstrained genuine-vs-flaky booster
+   (`split_model.txt`). `serving.py` loads `split_model.txt` when it is there (the only serving change). The "top
+   factors" of a v3 answer are the fail booster's contributions.
+
+Result in short: the calibration fix removes the hard zeros at the same Brier score; the constraints give a tested
+guarantee but no clear accuracy gain; the label fix gives more training signal. **Streaks are still under-scored**
+(the model says about 2% where 13% fail, and "same as last outcome" beats it on those rows), because the calibration
+slice contains streak rows that rarely failed. Read the report before trusting v3 over v2. Tests: `tests/test_model_v3.py`,
+streak cases in `tests/test_labels.py`.
 
 ## Limitations and known issues
 
