@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: check-hook setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
+.PHONY: webhooks check-hook setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -53,6 +53,12 @@ check-hook:
 	@if command -v node >/dev/null 2>&1; then cd tools/pre-push-hook && node --test "test/*.test.mjs"; \
 	elif [ -n "$(REQUIRE_NODE)" ]; then echo "check-hook: node is required"; exit 1; \
 	else echo "check-hook: node not found, skipping hook tests"; fi
+
+# DEFAULT (P3.2): relay GitHub App webhooks from smee.io to the local API. Needs Node (npx); leave it
+# running in its own terminal next to the API. SMEE_URL comes from .env.
+webhooks:
+	@test -n "$(SMEE_URL)" || { echo "webhooks: set SMEE_URL in .env (see docs/GITHUB_APP.md)"; exit 1; }
+	npx --yes smee-client --url "$(SMEE_URL)" --target "http://127.0.0.1:$(or $(API_PORT),8000)/webhooks/github"
 
 # DEFAULT: alembic config lives with the migrations in shared/db; the URL is read from DATABASE_URL.
 migrate:

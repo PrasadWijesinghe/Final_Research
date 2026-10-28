@@ -313,6 +313,55 @@ In short:
    stubs in Docker, run `make up-experts`. Plain `make up` starts only Postgres and Redis. Never
    edit `shared/contracts/`. If you need a change there, raise it with the team.
 
+## 10. Receive GitHub webhooks on your laptop (optional, P3.2)
+
+Do this only if you registered the GitHub App (`docs/GITHUB_APP.md`). GitHub cannot reach
+`localhost`, so a relay forwards each webhook from the internet to your API.
+
+You need three things running, each in its own terminal, from the repo folder:
+
+1. **Postgres and Redis:** `make up`
+2. **The API.** It reads `GITHUB_WEBHOOK_SECRET`, `GITHUB_APP_ID` and `GITHUB_APP_PRIVATE_KEY_PATH`
+   from `.env`:
+
+   ```bash
+   uv run --env-file .env uvicorn api.app:app --host 127.0.0.1 --port 8000
+   ```
+
+3. **The smee relay.** It needs Node 22 (`node --version`). `SMEE_URL` in `.env` is the channel
+   URL you used as the App's webhook URL:
+
+   ```bash
+   make webhooks
+   ```
+
+   This runs `npx smee-client --url $SMEE_URL --target http://127.0.0.1:8000/webhooks/github`.
+   On the first run npx asks to download `smee-client`; answer yes (`make webhooks` already adds
+   `--yes`). Leave it running. It prints `Forwarding ... to http://127.0.0.1:8000/webhooks/github`.
+
+**Expected:** push a commit to the test repo where the App is installed. The smee terminal prints a
+`POST` line, the API terminal logs `webhook handled`, and on GitHub, App settings, **Advanced**,
+**Recent Deliveries** shows the delivery with a green tick and status 202. A 401 means
+`GITHUB_WEBHOOK_SECRET` in `.env` differs from the secret in the App settings. A 503 means the
+secret is empty. Restart the API after editing `.env`.
+
+**Fallback: Cloudflare Tunnel.** Use it if smee.io is down or blocked on your network.
+
+1. Install `cloudflared`: `brew install cloudflared` (macOS) or `winget install Cloudflare.cloudflared`
+   (Windows). Linux: see Cloudflare's install page.
+2. Start a quick tunnel to the API (no account needed):
+
+   ```bash
+   cloudflared tunnel --url http://127.0.0.1:8000
+   ```
+
+3. It prints a URL like `https://random-words.trycloudflare.com`. In the App's settings, set
+   **Webhook URL** to that URL plus `/webhooks/github`. The address changes every time you restart
+   the tunnel, so update the App each time. Do not run smee and the tunnel together.
+
+Webhook payloads are untrusted until the signature check passes, and the API never logs a payload
+or the secret. Never paste `SMEE_URL`, the secret or the `.pem` into chat or issues.
+
 ## If something goes wrong
 
 - **`make up` fails with "Cannot connect to the Docker daemon", or it hangs.** Docker Desktop is
