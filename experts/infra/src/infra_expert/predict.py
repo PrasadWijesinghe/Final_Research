@@ -1,55 +1,34 @@
-"""Infrastructure failure prediction backed by the packaged research model."""
+"""Stub prediction: a stable low probability from a hash of head_sha. Replace with the model."""
 
-from __future__ import annotations
-
+import hashlib
 import logging
 import time
 
-from shared.contracts import CommitContext, RiskFactor, RiskOutput
+from shared.contracts import CommitContext, RiskOutput
 
 from .config import EXPERT, MODEL_VERSION
-from .model import load_model
 
 logger = logging.getLogger(__name__)
 
-RESEARCH_WARNING = (
-    "Research estimate only: this model has not passed unseen-repository validation. "
-    "A low score does not establish that the workflow is safe."
-)
+# DEFAULT: docs/experts/README.md fixes the stub operating threshold at 0.5.
+THRESHOLD = 0.5
 
 
-def _threshold_factor(probability: float, threshold: float) -> RiskFactor:
-    """Satisfy the alert contract without presenting the score as a root cause."""
-    return RiskFactor(
-        feature="research_model_score",
-        value=round(probability, 6),
-        shap_value=max(probability - threshold, 1e-9),
-        direction="raises",
-        reason="The research score exceeded its validation threshold; this is not a cause.",
-    )
+def stub_probability(head_sha: str) -> float:
+    """Deterministic probability in [0.01, 0.2) derived from the SHA-256 of head_sha."""
+    digest = hashlib.sha256(head_sha.encode("ascii")).digest()
+    fraction = int.from_bytes(digest[:8], "big") / 2**64
+    # DEFAULT: 0.01..0.2 keeps stubs far below the 0.5 threshold so they never alert.
+    return round(0.01 + 0.19 * fraction, 4)
 
 
 def predict(context: CommitContext, deadline_ms: int | None = None) -> list[RiskOutput]:
-    """Return one calibrated commit-level Infra risk estimate."""
+    """Return the stub RiskOutput list for a commit (one commit-scoped item)."""
     started = time.perf_counter()
-    model = load_model()
-    probability = model.predict_probability(context)
-    threshold = model.threshold
-    alert = probability >= threshold
-    warning = RESEARCH_WARNING
-    workflows = {job.workflow_path for job in context.workflow_jobs}
-    if len(workflows) > 1:
-        warning += (
-            f" Inputs combine {len(workflows)} workflows, but training examples represent "
-            "individual workflow runs; this is not a calibrated commit failure probability."
-        )
+    probability = stub_probability(context.head_sha)
     logger.info(
-        "research model prediction",
-        extra={
-            "context_id": str(context.context_id),
-            "deadline_ms": deadline_ms,
-            "model_version": MODEL_VERSION,
-        },
+        "stub prediction",
+        extra={"context_id": str(context.context_id), "deadline_ms": deadline_ms},
     )
     return [
         RiskOutput(
@@ -57,12 +36,10 @@ def predict(context: CommitContext, deadline_ms: int | None = None) -> list[Risk
             expert=EXPERT,
             model_version=MODEL_VERSION,
             scope="commit",
-            status="degraded",
-            error_message=warning,
+            status="ok",
             probability=probability,
-            threshold=threshold,
-            alert=alert,
-            top_factors=[_threshold_factor(probability, threshold)] if alert else [],
+            threshold=THRESHOLD,
+            alert=probability >= THRESHOLD,
             latency_ms=int((time.perf_counter() - started) * 1000),
         )
     ]

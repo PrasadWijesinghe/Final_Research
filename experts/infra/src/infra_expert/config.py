@@ -18,9 +18,7 @@ def make_details(failure: RoutedFailure) -> ExpertDetails:
 
 # --------------------------------------------------------------------------------------------
 
-# DEFAULT: the live path uses the no-history research artifact because CommitContext has no
-# embedded history. Keep the research qualifier until unseen-repository validation passes.
-MODEL_VERSION = os.environ.get("INFRA_MODEL_VERSION", "v6-public-dataset-research")
+MODEL_VERSION = "stub"
 QUEUE_NAME = f"diagnose:{EXPERT.value}"
 
 

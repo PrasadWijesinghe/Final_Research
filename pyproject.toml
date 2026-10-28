@@ -116,11 +116,6 @@ disable_error_code = ["attr-defined"]
 module = ["sentence_transformers", "sentence_transformers.*"]
 ignore_missing_imports = true
 
-# The model runtime depends on scientific packages that do not publish complete type metadata.
-[[tool.mypy.overrides]]
-module = ["joblib", "pandas", "pandas.*", "sklearn", "sklearn.*"]
-ignore_missing_imports = true
-
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
