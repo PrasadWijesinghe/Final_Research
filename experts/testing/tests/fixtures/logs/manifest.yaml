@@ -1,0 +1,110 @@
+# Log fixtures for the Test expert's parsers (P4.1). Written by hand, read by make_fixtures.py.
+#   fixtures: the jobs that become fixture files (framework folder -> list of jobs).
+#   suggest:  search rules for `make_fixtures --suggest`; they sample the local database
+#             (seed from config/test_log_parsing.yaml) and print candidates to add above.
+# Regenerate:  uv run --env-file .env python -m testing_expert.parsing.make_fixtures
+fixtures:
+  jest:
+    - {job_id: 95854533642, repo: jestjs/jest, reason: "failure, 1 failed; run with jest-jasmine2 (dot reporter, failures printed inline too), three attempts (Linux)"}
+    - {job_id: 95634536799, repo: jestjs/jest, reason: "failure on Windows: D:\\a\\jest\\jest paths, 1 failed"}
+    - {job_id: 92726590162, repo: jestjs/jest, reason: "a failed test plus a suite that failed to run, three identical attempts"}
+    - {job_id: 92860575299, repo: jestjs/jest, reason: "failure, 2 failed, a snapshot mismatch whose text holds a nested jest summary; three attempts (macOS)"}
+    - {job_id: 92839736726, repo: jestjs/jest, reason: "'Test suite failed to run', Tests: 0 total (Windows)"}
+    - {job_id: 93498764273, repo: jestjs/jest, reason: "'Test suite failed to run' next to passing tests"}
+    - {job_id: 96906427970, repo: jestjs/jest, reason: "passing; `● Console` blocks and four summaries (three small runs and the big one)"}
+    - {job_id: 101445896209, repo: jestjs/jest, reason: "passing, small (Tests: 2 passed)"}
+    - {job_id: 120538224369, repo: babel/babel, reason: "failure with 'Summary of all failing tests' (macOS)"}
+    - {job_id: 119197725638, repo: babel/babel, reason: "failure, verbose reporter, several Tests: summaries (trimmed)"}
+    - {job_id: 111715058213, repo: babel/babel, reason: "passing, console output, skipped and todo counts (trimmed)"}
+    - {job_id: 112004571662, repo: babel/babel, reason: "passing, small"}
+    - {job_id: 95000086464, repo: mikro-orm/mikro-orm, reason: "jest job that failed with every test passing (trimmed)"}
+  mocha:
+    - {job_id: 106123375785, repo: Automattic/mongoose, reason: "min reporter (no per-test lines), 1 failing, a timeout"}
+    - {job_id: 90072734983, repo: Automattic/mongoose, reason: "min reporter (no per-test lines), run under Deno, 2 failing and 51 pending"}
+    - {job_id: 100222815707, repo: Automattic/mongoose, reason: "min reporter (no per-test lines), passing, 9 pending"}
+    - {job_id: 109037603873, repo: sequelize/sequelize, reason: "spec reporter, 1 failing"}
+    - {job_id: 111295568293, repo: sequelize/sequelize, reason: "spec reporter, 2 failing"}
+    - {job_id: 111571454489, repo: sequelize/sequelize, reason: "passing, several mocha summaries (trimmed)"}
+    - {job_id: 105845875030, repo: typeorm/typeorm, reason: "failure in a 'before all' hook"}
+    - {job_id: 99948886612, repo: typeorm/typeorm, reason: "failure on Windows"}
+    - {job_id: 92611261356, repo: puppeteer/puppeteer, reason: "Windows failure with file:///D:/a/... frames, 2 failing"}
+    - {job_id: 114773307456, repo: puppeteer/puppeteer, reason: "successful job that prints '10 failing' (expected failures; trimmed)"}
+    - {job_id: 90296815212, repo: redis/node-redis, reason: "failure with a timeout error (trimmed)"}
+    - {job_id: 112349519907, repo: eslint/eslint, reason: "failure with webpack:// frames (mocha run through Cypress)"}
+    - {job_id: 93679660477, repo: eslint/eslint, reason: "no per-test lines, 1 failing, a timeout (Windows, started by Makefile.js)"}
+    - {job_id: 103025966448, repo: brianc/node-postgres, reason: "two mocha runs in one log, a timeout in the second (trimmed)"}
+    - {job_id: 103219432652, repo: socketio/socket.io, reason: "failure, 1 failing"}
+    - {job_id: 116716747205, repo: knex/knex, reason: "passing with many pending (trimmed)"}
+  vitest:
+    - {job_id: 104677402692, repo: vitejs/vite, reason: "default reporter, 1 failed test (Linux)"}
+    - {job_id: 94017927800, repo: vitejs/vite, reason: "default reporter, 1 failed test; stdout and stderr interleaved (Windows)"}
+    - {job_id: 91913223721, repo: vitejs/vite, reason: "default reporter, passing, four summaries (trimmed)"}
+    - {job_id: 120268840053, repo: vitest-dev/vitest, reason: "failure with a `main` project badge and a line number after the file"}
+    - {job_id: 108920945375, repo: vitest-dev/vitest, reason: "no tests ran: the job died in `pnpm install` (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH)"}
+    - {job_id: 120184157286, repo: vitest-dev/vitest, reason: "passing, skipped files"}
+    - {job_id: 112798946537, repo: sveltejs/svelte, reason: "failure, 1 failed test (a CompileError) among 1841 tests in one file"}
+    - {job_id: 100130188949, repo: sveltejs/svelte, reason: "failure, 1 failed test (a 30 s timeout) next to 7816 passing ones"}
+    - {job_id: 99433455738, repo: sveltejs/svelte, reason: "passing"}
+    - {job_id: 90666683133, repo: mikro-orm/mikro-orm, reason: "failure with a project badge (Windows)"}
+    - {job_id: 94992812438, repo: mikro-orm/mikro-orm, reason: "failure with '(retry x1)' on its result line; the same FAIL line twice (trimmed)"}
+    - {job_id: 96469500837, repo: TanStack/query, reason: "failure with 'Unhandled Errors' (trimmed)"}
+    - {job_id: 118080087351, repo: typescript-eslint/typescript-eslint, reason: "failure, 11 failed files"}
+    - {job_id: 120917755484, repo: typescript-eslint/typescript-eslint, reason: "failure on Windows"}
+    - {job_id: 117232585738, repo: typescript-eslint/typescript-eslint, reason: "passing"}
+  other:
+    - {job_id: 121025524778, repo: puppeteer/puppeteer, reason: "node:test output (ℹ tests 30), passing"}
+    - {job_id: 109920856101, repo: babel/babel, reason: "TAP output with 'not ok' test262 results"}
+    - {job_id: 99920810134, repo: typeorm/typeorm, reason: "node-gyp build failure while installing (Windows)"}
+    - {job_id: 111996819068, repo: babel/babel, reason: "failed with exit 1 from yarn dedupe --check; no tests"}
+    - {job_id: 99127407281, repo: jestjs/jest, reason: "TypeScript build failure before any test ran"}
+    - {job_id: 90504646282, repo: puppeteer/puppeteer, reason: "npm ci postinstall failed to download a browser; file:/// frames, no tests (Windows)"}
+suggest:
+  # ---- jest
+  - {id: jest-jasmine2, framework: jest, repo: jestjs/jest, conclusion: failure, max_gz_bytes: 30000, patterns: ['Tests:\s', 'jasmine2']}
+  - {id: jest-windows-fail, framework: jest, repo: jestjs/jest, conclusion: failure, runner_os: Windows, max_gz_bytes: 30000, patterns: ['Tests:\s.*failed']}
+  - {id: jest-snapshot-diff, framework: jest, repo: jestjs/jest, conclusion: failure, max_gz_bytes: 30000, patterns: ['Tests:\s', 'Snapshot name:|toMatchSnapshot']}
+  - {id: jest-suite-failed-to-run, framework: jest, repo: jestjs/jest, conclusion: failure, max_gz_bytes: 30000, patterns: ['Test Suites:', 'Test suite failed to run']}
+  - {id: jest-nested-output, framework: jest, repo: jestjs/jest, conclusion: success, patterns: ['(?s)Test Suites:.*Test Suites:']}
+  - {id: jest-console-noise, framework: jest, repo: jestjs/jest, conclusion: success, patterns: ['Tests:\s', '● Console']}
+  - {id: jest-pass, framework: jest, repo: jestjs/jest, conclusion: success, patterns: ['Tests:\s+\d+ passed']}
+  - {id: babel-summary, framework: jest, repo: babel/babel, conclusion: failure, max_gz_bytes: 60000, patterns: ['Summary of all failing tests']}
+  - {id: babel-verbose, framework: jest, repo: babel/babel, conclusion: failure, max_gz_bytes: 60000, patterns: ['Tests:\s', '✓']}
+  - {id: babel-pass-console, framework: jest, repo: babel/babel, conclusion: success, max_gz_bytes: 40000, patterns: ['Tests:\s', '● Console|console\.']}
+  - {id: babel-pass, framework: jest, repo: babel/babel, conclusion: success, patterns: ['Tests:\s+\d+ passed']}
+  - {id: mikro-jest, framework: jest, repo: mikro-orm/mikro-orm, conclusion: failure, max_gz_bytes: 60000, patterns: ['Test Suites:']}
+  - {id: mikro-jest-pass, framework: jest, repo: mikro-orm/mikro-orm, conclusion: success, max_gz_bytes: 80000, patterns: ['Test Suites:']}
+  # ---- mocha
+  - {id: mongoose-min-fail, framework: mocha, repo: Automattic/mongoose, conclusion: failure, patterns: ['\d+ failing']}
+  - {id: mongoose-min-pass, framework: mocha, repo: Automattic/mongoose, conclusion: success, patterns: ['\d+ passing']}
+  - {id: sequelize-fail, framework: mocha, repo: sequelize/sequelize, conclusion: failure, max_gz_bytes: 60000, patterns: ['\d+ failing']}
+  - {id: sequelize-pass, framework: mocha, repo: sequelize/sequelize, conclusion: success, max_gz_bytes: 60000, patterns: ['\d+ passing']}
+  - {id: typeorm-hook, framework: mocha, repo: typeorm/typeorm, conclusion: failure, patterns: ['\d+ failing', 'hook']}
+  - {id: typeorm-fail, framework: mocha, repo: typeorm/typeorm, conclusion: failure, patterns: ['\d+ failing']}
+  - {id: puppeteer-windows-fail, framework: mocha, repo: puppeteer/puppeteer, conclusion: failure, patterns: ['file:///D:']}
+  - {id: puppeteer-expected-failures, framework: mocha, repo: puppeteer/puppeteer, conclusion: success, max_gz_bytes: 40000, patterns: ['\d+ failing']}
+  - {id: node-redis-timeout, framework: mocha, repo: redis/node-redis, conclusion: failure, max_gz_bytes: 100000, patterns: ['Timeout of \d+ms exceeded']}
+  - {id: eslint-webpack, framework: mocha, repo: eslint/eslint, conclusion: failure, patterns: ['webpack://']}
+  - {id: eslint-fail, framework: mocha, repo: eslint/eslint, conclusion: failure, patterns: ['\d+ failing']}
+  - {id: node-postgres-diff, framework: mocha, repo: brianc/node-postgres, conclusion: failure, max_gz_bytes: 60000, patterns: ['\d+ failing']}
+  - {id: socketio-fail, framework: mocha, repo: socketio/socket.io, conclusion: failure, patterns: ['\d+ failing']}
+  - {id: knex-pass, framework: mocha, repo: knex/knex, conclusion: success, max_gz_bytes: 60000, patterns: ['\d+ passing']}
+  # ---- vitest
+  - {id: vite-default-fail, framework: vitest, repo: vitejs/vite, conclusion: failure, patterns: ['Test Files']}
+  - {id: vite-default-pass, framework: vitest, repo: vitejs/vite, conclusion: success, patterns: ['Test Files']}
+  - {id: vitest-projects, framework: vitest, repo: vitest-dev/vitest, conclusion: failure, patterns: ['Test Files']}
+  - {id: vitest-merge-reports, framework: vitest, repo: vitest-dev/vitest, conclusion: failure, patterns: ['Merge Reports|merge-reports']}
+  - {id: vitest-pass, framework: vitest, repo: vitest-dev/vitest, conclusion: success, patterns: ['Test Files']}
+  - {id: svelte-fail, framework: vitest, repo: sveltejs/svelte, conclusion: failure, patterns: ['FAIL ']}
+  - {id: svelte-pass, framework: vitest, repo: sveltejs/svelte, conclusion: success, patterns: ['Test Files']}
+  - {id: mikro-vitest-badge, framework: vitest, repo: mikro-orm/mikro-orm, conclusion: failure, max_gz_bytes: 60000, patterns: ['Test Files']}
+  - {id: mikro-vitest-retry, framework: vitest, repo: mikro-orm/mikro-orm, conclusion: failure, max_gz_bytes: 80000, patterns: ['retry x\d']}
+  - {id: tanstack-unhandled, framework: vitest, repo: TanStack/query, conclusion: failure, max_gz_bytes: 100000, patterns: ['Unhandled']}
+  - {id: tanstack-fail, framework: vitest, repo: TanStack/query, conclusion: failure, max_gz_bytes: 100000, patterns: ['Test Files', 'FAIL ']}
+  - {id: tseslint-fail, framework: vitest, repo: typescript-eslint/typescript-eslint, conclusion: failure, patterns: ['Test Files']}
+  - {id: tseslint-pass, framework: vitest, repo: typescript-eslint/typescript-eslint, conclusion: success, patterns: ['Test Files']}
+  # ---- other
+  - {id: other-node-test, framework: other, repo: '*', conclusion: failure, max_gz_bytes: 60000, patterns: ['ℹ tests \d|^# tests \d']}
+  - {id: other-tap, framework: other, repo: '*', conclusion: failure, patterns: ['TAP version']}
+  - {id: other-gyp, framework: other, repo: '*', conclusion: failure, max_gz_bytes: 60000, patterns: ['gyp ERR!']}
+  - {id: other-exit1, framework: other, repo: babel/babel, conclusion: failure, patterns: ['Process completed with exit code 1'], excludes: ['Tests:\s', 'Test Files', '\d+ (passing|failing)']}
+  - {id: other-build-fail, framework: other, repo: jestjs/jest, conclusion: failure, max_gz_bytes: 30000, patterns: ['error TS\d+'], excludes: ['Tests:\s']}

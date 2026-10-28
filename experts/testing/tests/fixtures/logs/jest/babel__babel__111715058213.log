@@ -1,0 +1,416 @@
+﻿2026-10-05T10:14:45.3562048Z Current runner version: '2.337.0'
+2026-10-05T10:14:45.3586315Z ##[group]Runner Image Provisioner
+2026-10-05T10:14:45.3587176Z Hosted Compute Agent
+2026-10-05T10:14:45.3587726Z Version: 20260901.588
+2026-10-05T10:14:45.3588343Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-05T10:14:45.3589010Z Build Date: 2026-09-01T19:56:44Z
+2026-10-05T10:14:45.3589643Z Worker ID: {5c9fbf2d-c674-47f0-ac04-c8b3c58fc620}
+2026-10-05T10:14:45.3590866Z Azure Region: westus3
+2026-10-05T10:14:45.3591397Z ##[endgroup]
+2026-10-05T10:14:45.3592880Z ##[group]Operating System
+2026-10-05T10:14:45.3593556Z Ubuntu
+2026-10-05T10:14:45.3594046Z 24.04.5
+2026-10-05T10:14:45.3594524Z LTS
+2026-10-05T10:14:45.3595001Z ##[endgroup]
+2026-10-05T10:14:45.3595506Z ##[group]Runner Image
+2026-10-05T10:14:45.3596070Z Image: ubuntu-24.04
+2026-10-05T10:14:45.3596600Z Version: 20260927.320.1
+2026-10-05T10:14:45.3597802Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-05T10:14:45.3599184Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-05T10:14:45.3600097Z ##[endgroup]
+2026-10-05T10:14:45.3601229Z ##[group]GITHUB_TOKEN Permissions
+2026-10-05T10:14:45.3603279Z Contents: read
+2026-10-05T10:14:45.3603825Z Metadata: read
+2026-10-05T10:14:45.3604362Z ##[endgroup]
+2026-10-05T10:14:45.3606442Z Secret source: Actions
+2026-10-05T10:14:45.3607328Z Cache mode: write
+2026-10-05T10:14:45.3607965Z Prepare workflow directory
+2026-10-05T10:14:45.3986974Z Prepare all required actions
+2026-10-05T10:14:45.4037795Z Getting action download info
+2026-10-05T10:14:45.7701788Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-05T10:14:45.8741957Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-10-05T10:14:45.9450968Z Download action repository 'actions/download-artifact@v8' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-10-05T10:14:46.7906534Z Complete job name: Test on Node.js 8
+2026-10-05T10:14:46.8724565Z ##[group]Run actions/checkout@v6
+2026-10-05T10:14:46.8725457Z with:
+2026-10-05T10:14:46.8725950Z   repository: babel/babel
+2026-10-05T10:14:46.8730262Z   token: ***
+2026-10-05T10:14:46.8730899Z   ssh-strict: true
+2026-10-05T10:14:46.8731395Z   ssh-user: git
+2026-10-05T10:14:46.8731908Z   persist-credentials: true
+2026-10-05T10:14:46.8732450Z   clean: true
+2026-10-05T10:14:46.8732951Z   sparse-checkout-cone-mode: true
+2026-10-05T10:14:46.8733522Z   fetch-depth: 1
+2026-10-05T10:14:46.8734001Z   fetch-tags: false
+2026-10-05T10:14:46.8734486Z   show-progress: true
+2026-10-05T10:14:46.8734988Z   lfs: false
+2026-10-05T10:14:46.8735464Z   submodules: false
+2026-10-05T10:14:46.8735973Z   set-safe-directory: true
+2026-10-05T10:14:46.8736544Z   allow-unsafe-pr-checkout: false
+2026-10-05T10:14:46.8737377Z ##[endgroup]
+2026-10-05T10:14:46.9758078Z Syncing repository: babel/babel
+2026-10-05T10:14:46.9760853Z ##[group]Getting Git version info
+2026-10-05T10:14:46.9761937Z Working directory is '/home/runner/work/babel/babel'
+2026-10-05T10:14:46.9763075Z [command]/usr/bin/git version
+2026-10-05T10:14:46.9801293Z git version 2.55.0
+2026-10-05T10:14:46.9823681Z ##[endgroup]
+2026-10-05T10:14:46.9839720Z Temporarily overriding HOME='/home/runner/work/_temp/9b13b370-5b8c-43db-8514-25df4a657b7f' before making global git config changes
+2026-10-05T10:14:46.9842681Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T10:14:46.9846489Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-05T10:14:46.9902797Z Deleting the contents of '/home/runner/work/babel/babel'
+2026-10-05T10:14:46.9907906Z ##[group]Determining repository object format
+2026-10-05T10:14:46.9910078Z ##[endgroup]
+2026-10-05T10:14:46.9911893Z ##[group]Initializing the repository
+2026-10-05T10:14:46.9916451Z [command]/usr/bin/git init /home/runner/work/babel/babel
+2026-10-05T10:14:47.0012769Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-05T10:14:47.0015818Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-05T10:14:47.0017862Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-05T10:14:47.0019648Z hint: call:
+2026-10-05T10:14:47.0020494Z hint:
+2026-10-05T10:14:47.0021740Z hint: 	git config --global init.defaultBranch <name>
+2026-10-05T10:14:47.0022944Z hint:
+2026-10-05T10:14:47.0024012Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-05T10:14:47.0025771Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-05T10:14:47.0027221Z hint:
+2026-10-05T10:14:47.0028052Z hint: 	git branch -m <name>
+2026-10-05T10:14:47.0028907Z hint:
+2026-10-05T10:14:47.0029982Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-05T10:14:47.0031945Z Initialized empty Git repository in /home/runner/work/babel/babel/.git/
+2026-10-05T10:14:47.0035042Z [command]/usr/bin/git remote add origin https://github.com/babel/babel
+2026-10-05T10:14:47.0071993Z ##[endgroup]
+2026-10-05T10:14:47.0073507Z ##[group]Disabling automatic garbage collection
+2026-10-05T10:14:47.0076758Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-05T10:14:47.0105714Z ##[endgroup]
+2026-10-05T10:14:47.0107569Z ##[group]Setting up auth
+2026-10-05T10:14:47.0108712Z Removing SSH command configuration
+2026-10-05T10:14:47.0114452Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T10:14:47.0146244Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T10:14:47.0467878Z Removing HTTP extra header
+2026-10-05T10:14:47.0473674Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T10:14:47.0504804Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T10:14:47.0685290Z Removing includeIf entries pointing to credentials config files
+2026-10-05T10:14:47.0690824Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T10:14:47.0718270Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T10:14:47.0905466Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-05T10:14:47.0938958Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:14:47.0972543Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:14:47.1003620Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:14:47.1032280Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:14:47.1065925Z ##[endgroup]
+2026-10-05T10:14:47.1066805Z ##[group]Fetching the repository
+2026-10-05T10:14:47.1074436Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +85fd787e870a632e1333dde671e1feecdd6f34a1:refs/remotes/origin/automation/backport-18256
+2026-10-05T10:14:48.5161476Z From https://github.com/babel/babel
+2026-10-05T10:14:48.5164386Z  * [new ref]           85fd787e870a632e1333dde671e1feecdd6f34a1 -> origin/automation/backport-18256
+2026-10-05T10:14:48.5177768Z [command]/usr/bin/git branch --list --remote origin/automation/backport-18256
+2026-10-05T10:14:48.5193099Z   origin/automation/backport-18256
+2026-10-05T10:14:48.5201191Z [command]/usr/bin/git rev-parse refs/remotes/origin/automation/backport-18256
+2026-10-05T10:14:48.5220064Z 85fd787e870a632e1333dde671e1feecdd6f34a1
+2026-10-05T10:14:48.5224196Z ##[endgroup]
+2026-10-05T10:14:48.5225752Z ##[group]Determining the checkout info
+2026-10-05T10:14:48.5227561Z ##[endgroup]
+2026-10-05T10:14:48.5229022Z [command]/usr/bin/git sparse-checkout disable
+2026-10-05T10:14:48.5273022Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-05T10:14:48.5298426Z ##[group]Checking out the ref
+2026-10-05T10:14:48.5302470Z [command]/usr/bin/git checkout --progress --force -B automation/backport-18256 refs/remotes/origin/automation/backport-18256
+2026-10-05T10:14:49.6829436Z Updating files:  89% (28425/31625)
+2026-10-05T10:14:49.6908117Z Updating files:  90% (28463/31625)
+2026-10-05T10:14:49.6986608Z Updating files:  91% (28779/31625)
+2026-10-05T10:14:49.7063621Z Updating files:  92% (29095/31625)
+2026-10-05T10:14:49.7137558Z Updating files:  93% (29412/31625)
+2026-10-05T10:14:49.7208088Z Updating files:  94% (29728/31625)
+2026-10-05T10:14:49.7291551Z Updating files:  95% (30044/31625)
+2026-10-05T10:14:49.7398398Z Updating files:  96% (30360/31625)
+2026-10-05T10:14:49.7489775Z Updating files:  97% (30677/31625)
+2026-10-05T10:14:49.7579251Z Updating files:  98% (30993/31625)
+2026-10-05T10:14:49.7710305Z Updating files:  99% (31309/31625)
+2026-10-05T10:14:49.7711259Z Updating files: 100% (31625/31625)
+2026-10-05T10:14:49.7711721Z Updating files: 100% (31625/31625), done.
+2026-10-05T10:14:49.8279834Z Switched to a new branch 'automation/backport-18256'
+2026-10-05T10:14:49.8284134Z branch 'automation/backport-18256' set up to track 'origin/automation/backport-18256'.
+2026-10-05T10:14:49.8303605Z ##[endgroup]
+2026-10-05T10:14:49.8349188Z [command]/usr/bin/git log -1 --format=%H
+2026-10-05T10:14:49.8382659Z 85fd787e870a632e1333dde671e1feecdd6f34a1
+2026-10-05T10:14:49.8636149Z ##[group]Run actions/setup-node@v6
+2026-10-05T10:14:49.8636439Z with:
+2026-10-05T10:14:49.8636638Z   node-version: latest
+2026-10-05T10:14:49.8636855Z   check-latest: true
+2026-10-05T10:14:49.8637056Z   cache: yarn
+2026-10-05T10:14:49.8639649Z   token: ***
+2026-10-05T10:14:49.8639866Z   package-manager-cache: true
+2026-10-05T10:14:49.8640107Z ##[endgroup]
+2026-10-05T10:14:50.1141000Z getting latest node version...
+2026-10-05T10:14:50.1141562Z getting latest node version...
+2026-10-05T10:14:50.1142160Z Attempt to resolve the latest version from manifest...
+2026-10-05T10:14:51.1592603Z Resolved as '26.10.0'
+2026-10-05T10:14:51.1601712Z Attempting to download 26.10.0...
+2026-10-05T10:14:52.1653576Z Acquiring 26.10.0 - x64 from https://github.com/actions/node-versions/releases/download/26.10.0-35737674515/node-26.10.0-linux-x64.tar.gz
+2026-10-05T10:14:52.8150848Z Extracting ...
+2026-10-05T10:14:52.8286760Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/375d2d88-027a-45c3-bbed-9a96ae869122 -f /home/runner/work/_temp/030aa231-464c-4904-93e0-579db9d204d4
+2026-10-05T10:14:54.1186911Z Adding to the cache ...
+2026-10-05T10:14:55.6423511Z ##[group]Environment details
+2026-10-05T10:14:56.1370122Z node: v26.10.0
+2026-10-05T10:14:56.1370510Z npm: 11.19.1
+2026-10-05T10:14:56.1370943Z yarn: 4.10.3
+2026-10-05T10:14:56.1371780Z ##[endgroup]
+2026-10-05T10:14:56.1389229Z [command]/usr/local/bin/yarn --version
+2026-10-05T10:14:56.5229335Z 4.10.3
+2026-10-05T10:14:56.5411875Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-10-05T10:14:56.9391874Z /home/runner/.yarn/berry/cache
+2026-10-05T10:14:56.9717012Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-10-05T10:14:57.3671947Z [33mtrue[39m
+2026-10-05T10:14:57.5867540Z Cache hit for: node-cache-Linux-x64-yarn-d83a159e8c3ac0ec24dec1552a2dce2240416d8573933b7332be53e0f27181d3
+2026-10-05T10:14:58.8277290Z Received 46137344 of 65665217 (70.3%), 43.9 MBs/sec
+2026-10-05T10:14:58.9720941Z Received 65665217 of 65665217 (100.0%), 54.6 MBs/sec
+2026-10-05T10:14:58.9721426Z Cache Size: ~63 MB (65665217 B)
+2026-10-05T10:14:58.9750887Z [command]/usr/bin/tar -xf /home/runner/work/_temp/4d9b4320-f055-4b9e-b6ba-be247f1fbec4/cache.tzst -P -C /home/runner/work/babel/babel --use-compress-program unzstd
+2026-10-05T10:14:59.1736390Z Cache restored successfully
+2026-10-05T10:14:59.1775311Z Cache restored from key: node-cache-Linux-x64-yarn-d83a159e8c3ac0ec24dec1552a2dce2240416d8573933b7332be53e0f27181d3
+2026-10-05T10:14:59.1937370Z ##[group]Run yarn install
+2026-10-05T10:14:59.1937738Z [36;1myarn install[0m
+2026-10-05T10:14:59.4320013Z shell: /usr/bin/bash -e {0}
+2026-10-05T10:14:59.4320541Z ##[endgroup]
+2026-10-05T10:15:00.0019095Z [94m➤[39m YN0000: · Yarn 4.10.3
+2026-10-05T10:15:00.0199302Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-10-05T10:15:00.0200156Z ##[group]Resolution step
+2026-10-05T10:15:00.3335101Z ##[endgroup]
+2026-10-05T10:15:00.3336833Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 314ms
+2026-10-05T10:15:00.3353187Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-10-05T10:15:00.3353825Z ##[group]Post-resolution validation
+2026-10-05T10:15:00.3356662Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.0-beta.3[39m ([38;5;111mp5fada6[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173meslint-parser[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T10:15:00.3359462Z [93m➤[39m YN0060: │ [38;5;173mrollup[39m is listed by your project with version [38;5;111m4.22.4[39m ([38;5;111mp32d0c0[39m), which doesn't satisfy what [38;5;173mrollup-plugin-dts[39m and other dependencies request ([38;5;37m^3.29.4[39m).
+2026-10-05T10:15:00.3361744Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp7ceb2b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T10:15:00.3364389Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mp53120b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T10:15:00.3367307Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [2c186][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpc924fa[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T10:15:00.3370898Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [9548c][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpd92711[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T10:15:00.3374414Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpe26c8b[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T10:15:00.3377783Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mparser[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-parser[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa72274[39m), requested by [38;5;166m@babel/[39m[38;5;173mhelper-fixtures[39m.
+2026-10-05T10:15:00.3381604Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mtypes[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-types[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpf627ae[39m), requested by [38;5;166m@babel/[39m[38;5;173mhelper-fixtures[39m.
+2026-10-05T10:15:00.3384945Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-10-05T10:15:00.3387950Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-10-05T10:15:00.3994514Z ##[endgroup]
+2026-10-05T10:15:00.3995453Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-10-05T10:15:00.3996324Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-10-05T10:15:00.3997095Z ##[group]Fetch step
+2026-10-05T10:15:00.7216837Z ##[endgroup]
+2026-10-05T10:15:00.7218256Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 322ms
+2026-10-05T10:15:00.7781058Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-10-05T10:15:00.7781659Z ##[group]Link step
+2026-10-05T10:15:09.8785435Z [93m➤[39m YN0004: │ [38;5;173mcore-js-pure[39m[38;5;111m@[39m[38;5;111mnpm:3.48.0[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T10:15:09.8787087Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:2.6.12[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T10:15:09.8788390Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.48.0[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T10:15:09.8788390Z [fixture trimmed: 222 lines omitted]
+2026-10-05T10:15:29.9039960Z ##[group]Run node ./node_modules/.bin/jest --ci
+2026-10-05T10:15:29.9040355Z [36;1mnode ./node_modules/.bin/jest --ci[0m
+2026-10-05T10:15:29.9076825Z shell: /usr/bin/bash -e {0}
+2026-10-05T10:15:29.9077124Z env:
+2026-10-05T10:15:29.9077332Z   BABEL_ENV: test
+2026-10-05T10:15:29.9077547Z   TEST_FUZZ: false
+2026-10-05T10:15:29.9077755Z ##[endgroup]
+2026-10-05T10:15:30.0957817Z ● Validation Warning:
+2026-10-05T10:15:30.0958180Z 
+2026-10-05T10:15:30.0958921Z   Unknown option "snapshotFormat" with value {"escapeString": true, "printBasicPrototype": true} was found.
+2026-10-05T10:15:30.0960088Z   This is probably a typing mistake. Fixing it will remove this message.
+2026-10-05T10:15:30.0960742Z 
+2026-10-05T10:15:30.0960742Z [fixture trimmed: 163 lines omitted]
+2026-10-05T10:16:00.1568919Z PASS packages/babel-helper-builder-react-jsx/test/index.js
+2026-10-05T10:16:00.3257819Z PASS packages/babel-core/test/config-ts-integration-tsx.js
+2026-10-05T10:16:00.3286451Z   ● @babel/core config tsx integration › should work with tsx
+2026-10-05T10:16:00.3311516Z 
+2026-10-05T10:16:00.3312404Z     Cannot find module 'tsx/cjs/api' from 'config-ts-integration-tsx.js'
+2026-10-05T10:16:00.3313138Z 
+2026-10-05T10:16:00.3314029Z     [0m [90m 29 |[39m       [90m// tsx/cjs/api is a defined sub-export[39m
+2026-10-05T10:16:00.3315195Z      [90m 30 |[39m       [90m// eslint-disable-next-line import/extensions[39m
+2026-10-05T10:16:00.3316566Z     [31m[1m>[22m[39m[90m 31 |[39m       [36mconst[39m tsx [33m=[39m require([32m"tsx/cjs/api"[39m)[33m;[39m
+2026-10-05T10:16:00.3318207Z      [90m    |[39m                   [31m[1m^[22m[39m
+2026-10-05T10:16:00.3319686Z      [90m 32 |[39m       [90m// Provide a dummy tsconfig.json to avoid tsx resolving @babel/* from the `src` directory, where[39m
+2026-10-05T10:16:00.3322074Z      [90m 33 |[39m       [90m// undeclared globals such as the PACKAGE_JSON macro will break[39m
+2026-10-05T10:16:00.3323711Z      [90m 34 |[39m       process[33m.[39menv[33m.[39m[33mTSX_TSCONFIG_PATH[39m [33m=[39m path[33m.[39mjoin([0m
+2026-10-05T10:16:00.3324565Z 
+2026-10-05T10:16:00.3325170Z       at Resolver.resolveModule (node_modules/jest-resolve/build/index.js:259:17)
+2026-10-05T10:16:00.3327454Z       at Object.beforeAll (packages/babel-core/test/config-ts-integration-tsx.js:31:19)
+2026-10-05T10:16:00.3328214Z 
+2026-10-05T10:16:00.3624555Z PASS packages/babel-plugin-transform-modules-commonjs/test/importInterop-function.js
+2026-10-05T10:16:00.5787983Z PASS packages/babel-types/test/builders/core/templateElement.js
+2026-10-05T10:16:00.6588101Z PASS packages/babel-plugin-proposal-destructuring-private/test/util.skip-bundled.js
+2026-10-05T10:16:00.8079649Z PASS packages/babel-traverse/test/ancestry.js
+2026-10-05T10:16:00.9265261Z PASS packages/babel-plugin-transform-modules-amd/test/importInterop-function.js
+2026-10-05T10:16:00.9971915Z PASS packages/babel-parser/test/error-codes.js
+2026-10-05T10:16:01.1661752Z PASS packages/babel-helper-compilation-targets/test/targets-supported.skip-bundled.js
+2026-10-05T10:16:01.1987984Z PASS packages/babel-types/test/builders/typescript/tsTypeParameter.js
+2026-10-05T10:16:01.2596222Z PASS packages/babel-core/test/config-ts-integration-ts-node.js
+2026-10-05T10:16:01.2597829Z   ● @babel/core config ts-node integration › should work with ts-node
+2026-10-05T10:16:01.2599145Z 
+2026-10-05T10:16:01.2599535Z     Jest encountered an unexpected token
+2026-10-05T10:16:01.2600033Z 
+2026-10-05T10:16:01.2601051Z     This usually means that you are trying to import a file which Jest cannot parse, e.g. it's not plain JavaScript.
+2026-10-05T10:16:01.2602027Z 
+2026-10-05T10:16:01.2602864Z     By default, if Jest sees a Babel config, it will use that to transform your files, ignoring "node_modules".
+2026-10-05T10:16:01.2603717Z 
+2026-10-05T10:16:01.2604021Z     Here's what you can do:
+2026-10-05T10:16:01.2605481Z      • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+2026-10-05T10:16:01.2607101Z      • If you need a custom transformation specify a "transform" option in your config.
+2026-10-05T10:16:01.2608890Z      • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+2026-10-05T10:16:01.2609890Z 
+2026-10-05T10:16:01.2610477Z     You'll find more details and examples of these config options in the docs:
+2026-10-05T10:16:01.2611601Z     https://jestjs.io/docs/en/configuration.html
+2026-10-05T10:16:01.2612130Z 
+2026-10-05T10:16:01.2612414Z     Details:
+2026-10-05T10:16:01.2612756Z 
+2026-10-05T10:16:01.2613323Z     /home/runner/work/babel/babel/node_modules/ts-node/dist/index.js:58
+2026-10-05T10:16:01.2614325Z         cwd: exports.env.TS_NODE_CWD ?? exports.env.TS_NODE_DIR,
+2026-10-05T10:16:01.2615127Z                                       ^
+2026-10-05T10:16:01.2616077Z 
+2026-10-05T10:16:01.2616429Z     SyntaxError: Unexpected token ?
+2026-10-05T10:16:01.2616882Z 
+2026-10-05T10:16:01.2617456Z     [0m [90m 27 |[39m     [36mlet[39m service[33m;[39m
+2026-10-05T10:16:01.2618361Z      [90m 28 |[39m     beforeAll(() [33m=>[39m {
+2026-10-05T10:16:01.2619618Z     [31m[1m>[22m[39m[90m 29 |[39m       service [33m=[39m require([32m"ts-node"[39m)[33m.[39mregister({
+2026-10-05T10:16:01.2620923Z      [90m    |[39m                 [31m[1m^[22m[39m
+2026-10-05T10:16:01.2622036Z      [90m 30 |[39m         experimentalResolver[33m:[39m [36mtrue[39m[33m,[39m
+2026-10-05T10:16:01.2623107Z      [90m 31 |[39m         compilerOptions[33m:[39m {
+2026-10-05T10:16:01.2624332Z      [90m 32 |[39m           module[33m:[39m [32m"CommonJS"[39m[33m,[39m[0m
+2026-10-05T10:16:01.2624964Z 
+2026-10-05T10:16:01.2625909Z       at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:537:17)
+2026-10-05T10:16:01.2627104Z       at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:579:25)
+2026-10-05T10:16:01.2628411Z       at Object.beforeAll (packages/babel-core/test/config-ts-integration-ts-node.js:29:17)
+2026-10-05T10:16:01.2629149Z 
+2026-10-05T10:16:01.4002297Z PASS packages/babel-preset-react/test/index.js
+2026-10-05T10:16:01.4742093Z PASS packages/babel-helper-check-duplicate-nodes/test/index.js
+2026-10-05T10:16:01.5762178Z PASS packages/babel-core/test/parse.js
+2026-10-05T10:16:01.7833453Z PASS packages/babel-helper-validator-identifier/test/identifier.spec.js
+2026-10-05T10:16:01.8894225Z PASS packages/babel-parser/test/options.js
+2026-10-05T10:16:02.0092970Z PASS packages/babel-parser/test/misc.js
+2026-10-05T10:16:02.1303962Z PASS packages/babel-types/test/builders/core.js
+2026-10-05T10:16:02.5517032Z PASS packages/babel-plugin-transform-typeof-symbol/test/helper.spec.js
+2026-10-05T10:16:02.8786306Z PASS packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/test/util.skip-bundled.js
+2026-10-05T10:16:03.3799965Z PASS packages/babel-helper-transform-fixture-test-runner/test/index.js
+2026-10-05T10:16:03.4912880Z PASS packages/babel-core/test/transformation.js
+2026-10-05T10:16:03.6722064Z PASS packages/babel-traverse/test/hub.js
+2026-10-05T10:16:03.6722064Z [fixture trimmed: 87 lines omitted]
+2026-10-05T10:16:50.4752823Z PASS packages/babel-plugin-transform-react-jsx-source/test/index.js
+2026-10-05T10:16:50.4823455Z PASS packages/babel-plugin-proposal-import-defer/test/index.js
+2026-10-05T10:16:50.8052521Z PASS packages/babel-plugin-proposal-async-do-expressions/test/index.js
+2026-10-05T10:16:52.3328820Z PASS packages/babel-plugin-transform-destructuring/test/index.js
+2026-10-05T10:16:52.6932280Z PASS packages/babel-plugin-transform-react-jsx-compat/test/index.js
+2026-10-05T10:16:53.2023264Z PASS packages/babel-plugin-transform-for-of/test/index.js
+2026-10-05T10:16:54.2101130Z PASS packages/babel-plugin-transform-numeric-separator/test/index.js
+2026-10-05T10:16:55.9536773Z PASS packages/babel-plugin-transform-async-generator-functions/test/index.js (5.474s)
+2026-10-05T10:16:56.6573767Z PASS packages/babel-preset-typescript/test/index.js
+2026-10-05T10:16:56.7012391Z PASS packages/babel-plugin-transform-explicit-resource-management/test/index.js
+2026-10-05T10:16:57.1001412Z PASS packages/babel-plugin-transform-duplicate-keys/test/index.js
+2026-10-05T10:16:57.5432118Z PASS packages/babel-plugin-transform-private-methods/test/index.js
+2026-10-05T10:16:58.0398948Z PASS packages/babel-plugin-transform-logical-assignment-operators/test/index.js
+2026-10-05T10:16:59.0400823Z PASS packages/babel-plugin-transform-object-rest-spread/test/index.js
+2026-10-05T10:16:59.8232173Z PASS packages/babel-plugin-transform-private-property-in-object/test/index.js
+2026-10-05T10:16:59.9762281Z PASS packages/babel-plugin-transform-flow-comments/test/index.js
+2026-10-05T10:17:00.3472331Z PASS packages/babel-plugin-transform-react-jsx-development/test/index.js
+2026-10-05T10:17:00.4965979Z PASS packages/babel-plugin-proposal-destructuring-private/test/index.js
+2026-10-05T10:17:00.5419920Z PASS packages/babel-plugin-bugfix-firefox-class-in-computed-class-key/test/index.js
+2026-10-05T10:17:01.0771730Z PASS packages/babel-plugin-transform-unicode-regex/test/index.js
+2026-10-05T10:17:01.3716334Z PASS packages/babel-plugin-transform-exponentiation-operator/test/index.js
+2026-10-05T10:17:01.9212479Z PASS packages/babel-plugin-transform-react-inline-elements/test/index.js
+2026-10-05T10:17:02.1577268Z PASS packages/babel-plugin-transform-async-to-generator/test/index.js
+2026-10-05T10:17:02.3203846Z PASS packages/babel-plugin-transform-react-pure-annotations/test/index.js
+2026-10-05T10:17:02.7038572Z PASS packages/babel-preset-flow/test/flow.js
+2026-10-05T10:17:03.1247871Z PASS packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/test/index.js
+2026-10-05T10:17:07.3376537Z PASS packages/babel-plugin-transform-regenerator/test/index.js
+2026-10-05T10:17:07.7675956Z PASS packages/babel-plugin-transform-reserved-words/test/index.js
+2026-10-05T10:17:07.9395137Z PASS packages/babel-plugin-transform-classes/test/index.js (5.231s)
+2026-10-05T10:17:08.6152226Z PASS packages/babel-plugin-transform-json-modules/test/index.js
+2026-10-05T10:17:10.3002117Z PASS packages/babel-plugin-proposal-discard-binding/test/index.js
+2026-10-05T10:17:11.4415984Z PASS packages/babel-plugin-transform-unicode-property-regex/test/index.js
+2026-10-05T10:17:12.0287346Z PASS packages/babel-plugin-transform-parameters/test/index.js
+2026-10-05T10:17:12.3708939Z PASS packages/babel-plugin-transform-duplicate-named-capturing-groups-regex/test/index.js
+2026-10-05T10:17:13.0391765Z PASS packages/babel-plugin-transform-computed-properties/test/index.js
+2026-10-05T10:17:13.2922307Z PASS packages/babel-plugin-transform-optional-catch-binding/test/index.js
+2026-10-05T10:17:13.8932232Z PASS packages/babel-traverse/test/index.js
+2026-10-05T10:17:15.8912556Z PASS packages/babel-plugin-transform-optional-chaining/test/index.js
+2026-10-05T10:17:16.3463094Z PASS packages/babel-plugin-transform-shorthand-properties/test/index.js
+2026-10-05T10:17:17.8738321Z PASS packages/babel-plugin-transform-named-capturing-groups-regex/test/index.js
+2026-10-05T10:17:18.3052911Z PASS packages/babel-plugin-transform-member-expression-literals/test/index.js
+2026-10-05T10:17:18.7114856Z PASS packages/babel-plugin-transform-strict-mode/test/index.js
+2026-10-05T10:17:19.5030304Z PASS packages/babel-plugin-transform-regexp-modifiers/test/index.js
+2026-10-05T10:17:19.8422800Z PASS packages/babel-plugin-transform-unicode-sets-regex/test/index.js
+2026-10-05T10:17:21.0432101Z PASS packages/babel-plugin-transform-react-constant-elements/test/index.js
+2026-10-05T10:17:21.5696415Z PASS packages/babel-plugin-transform-export-namespace-from/test/index.js
+2026-10-05T10:17:21.9768706Z PASS packages/babel-plugin-transform-sticky-regex/test/index.js
+2026-10-05T10:17:22.5816468Z PASS packages/babel-plugin-proposal-export-default-from/test/index.js
+2026-10-05T10:17:23.8898870Z PASS packages/babel-plugin-transform-unicode-escapes/test/index.js
+2026-10-05T10:17:24.3073472Z PASS packages/babel-plugin-transform-react-jsx-self/test/index.js
+2026-10-05T10:17:25.3486404Z PASS packages/babel-plugin-transform-jscript/test/index.js
+2026-10-05T10:17:26.7232462Z PASS packages/babel-plugin-transform-spread/test/index.js
+2026-10-05T10:17:27.5426488Z PASS packages/babel-plugin-transform-instanceof/test/index.js
+2026-10-05T10:17:29.1023342Z PASS packages/babel-plugin-transform-class-static-block/test/index.js
+2026-10-05T10:17:29.1066175Z PASS packages/babel-plugin-transform-class-properties/test/index.js (16.061s)
+2026-10-05T10:17:30.6138523Z PASS packages/babel-plugin-proposal-optional-chaining-assign/test/index.js
+2026-10-05T10:17:31.3528983Z PASS packages/babel-plugin-transform-runtime/test/index.js
+2026-10-05T10:17:31.3896077Z PASS packages/babel-plugin-proposal-decorators/test/index.js (30.236s)
+2026-10-05T10:17:31.7671972Z PASS packages/babel-plugin-transform-dotall-regex/test/index.js
+2026-10-05T10:17:32.3197777Z PASS packages/babel-plugin-transform-function-name/test/index.js
+2026-10-05T10:17:32.4072268Z PASS packages/babel-plugin-transform-nullish-coalescing-operator/test/index.js
+2026-10-05T10:17:32.9212393Z PASS packages/babel-helper-create-regexp-features-plugin/test/index.js
+2026-10-05T10:17:33.1572487Z PASS packages/babel-helper-create-class-features-plugin/test/index.js
+2026-10-05T10:17:34.0200932Z PASS packages/babel-plugin-proposal-function-bind/test/index.js
+2026-10-05T10:17:35.0742751Z PASS packages/babel-plugin-transform-flow-strip-types/test/index.js
+2026-10-05T10:17:35.1131467Z PASS packages/babel-plugin-transform-typescript/test/index.js
+2026-10-05T10:17:35.1152030Z   ● Console
+2026-10-05T10:17:35.1191017Z 
+2026-10-05T10:17:35.1221921Z     console.warn packages/babel-plugin-transform-typescript/lib/global-types.js:15
+2026-10-05T10:17:35.1251704Z       The exported identifier "foo" is not declared in Babel's scope tracker
+2026-10-05T10:17:35.1281666Z       as a JavaScript value binding, and "@babel/plugin-transform-typescript"
+2026-10-05T10:17:35.1311663Z       never encountered it as a TypeScript type declaration.
+2026-10-05T10:17:35.1312492Z       It will be treated as a JavaScript value.
+2026-10-05T10:17:35.1341242Z       
+2026-10-05T10:17:35.1371613Z       This problem is likely caused by another plugin injecting
+2026-10-05T10:17:35.1401681Z       "foo" without registering it in the scope tracker. If you are the author
+2026-10-05T10:17:35.1431919Z        of that plugin, please use "scope.registerDeclaration(declarationPath)".
+2026-10-05T10:17:35.1461818Z     console.warn packages/babel-plugin-transform-typescript/lib/global-types.js:15
+2026-10-05T10:17:35.1522006Z       The exported identifier "foo" is not declared in Babel's scope tracker
+2026-10-05T10:17:35.1523118Z       as a JavaScript value binding, and "@babel/plugin-transform-typescript"
+2026-10-05T10:17:35.1551619Z       never encountered it as a TypeScript type declaration.
+2026-10-05T10:17:35.1581420Z       It will be treated as a JavaScript value.
+2026-10-05T10:17:35.1611227Z       
+2026-10-05T10:17:35.1641477Z       This problem is likely caused by another plugin injecting
+2026-10-05T10:17:35.1671660Z       "foo" without registering it in the scope tracker. If you are the author
+2026-10-05T10:17:35.1705031Z        of that plugin, please use "scope.registerDeclaration(declarationPath)".
+2026-10-05T10:17:35.1750211Z 
+2026-10-05T10:17:36.7516868Z PASS packages/babel-plugin-transform-json-strings/test/index.js
+2026-10-05T10:17:37.1029876Z PASS packages/babel-plugin-transform-dynamic-import/test/index.js
+2026-10-05T10:17:37.5832351Z PASS packages/babel-plugin-transform-block-scoped-functions/test/index.js
+2026-10-05T10:17:37.6936137Z PASS packages/babel-plugin-syntax-typescript/test/index.js
+2026-10-05T10:17:38.2968710Z PASS packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array/test/index.js
+2026-10-05T10:17:38.4427287Z PASS packages/babel-preset-react/test/preset-options.js
+2026-10-05T10:17:39.2589922Z PASS packages/babel-plugin-transform-template-literals/test/index.js
+2026-10-05T10:17:39.8702038Z PASS packages/babel-plugin-transform-new-target/test/index.js
+2026-10-05T10:17:40.7394592Z PASS packages/babel-plugin-transform-react-jsx/test/index.js
+2026-10-05T10:17:41.8792427Z PASS packages/babel-plugin-proposal-partial-application/test/index.js
+2026-10-05T10:17:44.0427120Z PASS packages/babel-plugin-transform-modules-umd/test/index.js
+2026-10-05T10:17:44.2445065Z PASS packages/babel-plugin-transform-modules-commonjs/test/index.js
+2026-10-05T10:17:45.2728042Z PASS packages/babel-plugin-transform-arrow-functions/test/index.js
+2026-10-05T10:17:45.7538608Z PASS packages/babel-plugin-external-helpers/test/index.js
+2026-10-05T10:17:46.2093741Z PASS packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/test/index.js
+2026-10-05T10:17:46.7276914Z PASS packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/test/index.js
+2026-10-05T10:17:47.0527799Z PASS packages/babel-preset-env/test/fixtures.js (14.128s)
+2026-10-05T10:17:47.2056186Z PASS packages/babel-plugin-transform-react-display-name/test/index.js
+2026-10-05T10:17:47.4426648Z PASS packages/babel-plugin-proposal-pipeline-operator/test/index.js
+2026-10-05T10:17:47.5919002Z PASS packages/babel-plugin-proposal-throw-expressions/test/index.js
+2026-10-05T10:17:48.3952260Z PASS packages/babel-plugin-transform-typeof-symbol/test/index.js
+2026-10-05T10:17:49.4402709Z PASS packages/babel-plugin-transform-modules-amd/test/index.js
+2026-10-05T10:17:49.9466276Z PASS codemods/babel-plugin-codemod-optional-catch-binding/test/index.js
+2026-10-05T10:17:50.2512944Z PASS packages/babel-plugin-transform-block-scoping/test/index.js
+2026-10-05T10:17:50.4466544Z PASS codemods/babel-plugin-codemod-object-assign-to-object-spread/test/index.js
+2026-10-05T10:17:50.5357522Z PASS packages/babel-plugin-proposal-do-expressions/test/index.js
+2026-10-05T10:17:50.5983669Z PASS packages/babel-plugin-transform-property-literals/test/index.js
+2026-10-05T10:17:50.6986970Z 
+2026-10-05T10:17:50.6993324Z Test Suites: 1 skipped, 253 passed, 253 of 254 total
+2026-10-05T10:17:50.6994287Z Tests:       64 skipped, 2 todo, 31752 passed, 31818 total
+2026-10-05T10:17:50.6995076Z Snapshots:   228 passed, 228 total
+2026-10-05T10:17:50.6995655Z Time:        139.457s
+2026-10-05T10:17:50.6996188Z Ran all test suites.
+2026-10-05T10:17:50.6996188Z [fixture trimmed: 50 lines omitted]
+2026-10-05T10:17:57.0260190Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T10:17:57.0278583Z /github/runner_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:17:57.0286292Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config
+2026-10-05T10:17:57.0317255Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T10:17:57.0572085Z Removing credentials config '/home/runner/work/_temp/git-credentials-1fc74deb-4b23-414d-af1e-078cf1c17c0a.config'
+2026-10-05T10:17:57.0713320Z Cleaning up orphan processes

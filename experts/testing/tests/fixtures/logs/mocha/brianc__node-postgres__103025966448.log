@@ -1,0 +1,488 @@
+﻿2026-09-10T19:56:08.2498955Z Current runner version: '2.337.0'
+2026-09-10T19:56:08.2520223Z ##[group]Runner Image Provisioner
+2026-09-10T19:56:08.2520994Z Hosted Compute Agent
+2026-09-10T19:56:08.2521864Z Version: 20260828.587
+2026-09-10T19:56:08.2522416Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-10T19:56:08.2523038Z Build Date: 2026-08-28T16:44:25Z
+2026-09-10T19:56:08.2523646Z Worker ID: {c0c9121f-922f-4be6-9d5d-636129524081}
+2026-09-10T19:56:08.2524260Z Azure Region: westus3
+2026-09-10T19:56:08.2524902Z ##[endgroup]
+2026-09-10T19:56:08.2526161Z ##[group]Operating System
+2026-09-10T19:56:08.2526675Z Ubuntu
+2026-09-10T19:56:08.2527159Z 24.04.5
+2026-09-10T19:56:08.2527614Z LTS
+2026-09-10T19:56:08.2528022Z ##[endgroup]
+2026-09-10T19:56:08.2528535Z ##[group]Runner Image
+2026-09-10T19:56:08.2529085Z Image: ubuntu-24.04
+2026-09-10T19:56:08.2529606Z Version: 20260907.300.1
+2026-09-10T19:56:08.2530720Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-10T19:56:08.2532055Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-10T19:56:08.2532848Z ##[endgroup]
+2026-09-10T19:56:08.2533833Z ##[group]GITHUB_TOKEN Permissions
+2026-09-10T19:56:08.2535628Z Contents: read
+2026-09-10T19:56:08.2536205Z Metadata: read
+2026-09-10T19:56:08.2536673Z ##[endgroup]
+2026-09-10T19:56:08.2538364Z Secret source: Actions
+2026-09-10T19:56:08.2539283Z Cache mode: write
+2026-09-10T19:56:08.2539848Z Prepare workflow directory
+2026-09-10T19:56:08.3044071Z Prepare all required actions
+2026-09-10T19:56:08.3083741Z Getting action download info
+2026-09-10T19:56:08.5900120Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-09-10T19:56:08.7250182Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-09-10T19:56:08.9397578Z Complete job name: Node.js 22 x PostgreSQL 18
+2026-09-10T19:56:08.9749974Z ##[group]Checking docker version
+2026-09-10T19:56:08.9760202Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2026-09-10T19:56:09.0359682Z '1.48'
+2026-09-10T19:56:09.0370786Z Docker daemon API version: '1.48'
+2026-09-10T19:56:09.0371396Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2026-09-10T19:56:09.0499612Z '1.48'
+2026-09-10T19:56:09.0509449Z Docker client API version: '1.48'
+2026-09-10T19:56:09.0513385Z ##[endgroup]
+2026-09-10T19:56:09.0515868Z ##[group]Clean up resources from previous jobs
+2026-09-10T19:56:09.0519859Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=c4a799"
+2026-09-10T19:56:09.0635664Z ##[command]/usr/bin/docker network prune --force --filter "label=c4a799"
+2026-09-10T19:56:09.0735424Z ##[endgroup]
+2026-09-10T19:56:09.0735845Z ##[group]Create local container network
+2026-09-10T19:56:09.0743412Z ##[command]/usr/bin/docker network create --label c4a799 github_network_cab5cff8a13b4c8185c85ceaf80f2dba
+2026-09-10T19:56:09.1776046Z 6e32c2ab0bb73e6e4174543b1a90d0dbcc3ed7ef321af295950edc22151e1146
+2026-09-10T19:56:09.1792519Z ##[endgroup]
+2026-09-10T19:56:09.1813535Z ##[group]Starting postgres service container
+2026-09-10T19:56:09.1831961Z ##[command]/usr/bin/docker --config /home/runner/work/_temp/.docker_92f80365-8f16-46db-8ee8-6f636285dc97 login ghcr.io -u brianc --password-stdin
+2026-09-10T19:56:09.7762269Z ##[command]/usr/bin/docker --config /home/runner/work/_temp/.docker_92f80365-8f16-46db-8ee8-6f636285dc97 pull ghcr.io/railwayapp-templates/postgres-ssl:18
+2026-09-10T19:56:10.6964373Z 18: Pulling from railwayapp-templates/postgres-ssl
+2026-09-10T19:56:10.9546352Z 6310eb16bf42: Pulling fs layer
+2026-09-10T19:56:10.9547026Z 6463c6b5c703: Pulling fs layer
+2026-09-10T19:56:10.9547396Z 8d6422da287d: Pulling fs layer
+2026-09-10T19:56:10.9547709Z 2fc0e69f8d7d: Pulling fs layer
+2026-09-10T19:56:10.9548008Z 5fa29c524b4e: Pulling fs layer
+2026-09-10T19:56:10.9548328Z ace4b5b96a91: Pulling fs layer
+2026-09-10T19:56:10.9548703Z af2a6480a058: Pulling fs layer
+2026-09-10T19:56:10.9549361Z 5ee6c6ca7fd9: Pulling fs layer
+2026-09-10T19:56:10.9549660Z c5694bff1357: Pulling fs layer
+2026-09-10T19:56:10.9549976Z aedab7177504: Pulling fs layer
+2026-09-10T19:56:10.9550310Z a4635eaec9b8: Pulling fs layer
+2026-09-10T19:56:10.9550635Z 46e663abc8f5: Pulling fs layer
+2026-09-10T19:56:10.9550938Z 1bb54e8f7727: Pulling fs layer
+2026-09-10T19:56:10.9551274Z ace4b5b96a91: Waiting
+2026-09-10T19:56:10.9551608Z 4e8b4a637a1b: Pulling fs layer
+2026-09-10T19:56:10.9551902Z af2a6480a058: Waiting
+2026-09-10T19:56:10.9552178Z 45aa87e6c459: Pulling fs layer
+2026-09-10T19:56:10.9552473Z 2fc0e69f8d7d: Waiting
+2026-09-10T19:56:10.9552741Z 1d6f191acaf1: Pulling fs layer
+2026-09-10T19:56:10.9553026Z 5fa29c524b4e: Waiting
+2026-09-10T19:56:10.9553296Z a1d09468e782: Pulling fs layer
+2026-09-10T19:56:10.9553621Z 9f5b5d647f4d: Pulling fs layer
+2026-09-10T19:56:10.9554026Z 5ee6c6ca7fd9: Waiting
+2026-09-10T19:56:10.9554412Z 815221c34987: Pulling fs layer
+2026-09-10T19:56:10.9554945Z 13192716b11f: Pulling fs layer
+2026-09-10T19:56:10.9555394Z fa1b7728787a: Pulling fs layer
+2026-09-10T19:56:10.9555793Z c5694bff1357: Waiting
+2026-09-10T19:56:10.9556208Z 46e663abc8f5: Waiting
+2026-09-10T19:56:10.9556679Z aedab7177504: Waiting
+2026-09-10T19:56:10.9557088Z 1bb54e8f7727: Waiting
+2026-09-10T19:56:10.9557458Z a4635eaec9b8: Waiting
+2026-09-10T19:56:10.9557854Z 4e8b4a637a1b: Waiting
+2026-09-10T19:56:10.9558327Z 45aa87e6c459: Waiting
+2026-09-10T19:56:10.9559096Z 1d6f191acaf1: Waiting
+2026-09-10T19:56:10.9559636Z a1d09468e782: Waiting
+2026-09-10T19:56:10.9560262Z 9f5b5d647f4d: Waiting
+2026-09-10T19:56:10.9560825Z 815221c34987: Waiting
+2026-09-10T19:56:10.9561333Z 13192716b11f: Waiting
+2026-09-10T19:56:10.9561785Z fa1b7728787a: Waiting
+2026-09-10T19:56:11.1871529Z 6463c6b5c703: Verifying Checksum
+2026-09-10T19:56:11.1872162Z 6463c6b5c703: Download complete
+2026-09-10T19:56:11.2398461Z 6310eb16bf42: Verifying Checksum
+2026-09-10T19:56:11.2402345Z 6310eb16bf42: Download complete
+2026-09-10T19:56:11.3885957Z 8d6422da287d: Verifying Checksum
+2026-09-10T19:56:11.3886639Z 8d6422da287d: Download complete
+2026-09-10T19:56:11.5238299Z 2fc0e69f8d7d: Verifying Checksum
+2026-09-10T19:56:11.5238843Z 2fc0e69f8d7d: Download complete
+2026-09-10T19:56:11.5548278Z 5fa29c524b4e: Verifying Checksum
+2026-09-10T19:56:11.5548801Z 5fa29c524b4e: Download complete
+2026-09-10T19:56:11.6737102Z ace4b5b96a91: Verifying Checksum
+2026-09-10T19:56:11.6737652Z ace4b5b96a91: Download complete
+2026-09-10T19:56:11.7910240Z af2a6480a058: Download complete
+2026-09-10T19:56:11.8400718Z 5ee6c6ca7fd9: Verifying Checksum
+2026-09-10T19:56:11.8405313Z 5ee6c6ca7fd9: Download complete
+2026-09-10T19:56:12.0917275Z aedab7177504: Verifying Checksum
+2026-09-10T19:56:12.0917769Z aedab7177504: Download complete
+2026-09-10T19:56:12.1167660Z a4635eaec9b8: Verifying Checksum
+2026-09-10T19:56:12.1168289Z a4635eaec9b8: Download complete
+2026-09-10T19:56:12.1390589Z 6310eb16bf42: Pull complete
+2026-09-10T19:56:12.3290247Z 1bb54e8f7727: Verifying Checksum
+2026-09-10T19:56:12.3290609Z 1bb54e8f7727: Download complete
+2026-09-10T19:56:12.3795375Z 46e663abc8f5: Verifying Checksum
+2026-09-10T19:56:12.3795778Z 46e663abc8f5: Download complete
+2026-09-10T19:56:12.6570643Z 45aa87e6c459: Download complete
+2026-09-10T19:56:12.7075201Z 4e8b4a637a1b: Verifying Checksum
+2026-09-10T19:56:12.7078860Z 4e8b4a637a1b: Download complete
+2026-09-10T19:56:12.9361526Z 1d6f191acaf1: Verifying Checksum
+2026-09-10T19:56:12.9361949Z 1d6f191acaf1: Download complete
+2026-09-10T19:56:12.9673578Z a1d09468e782: Verifying Checksum
+2026-09-10T19:56:12.9674059Z a1d09468e782: Download complete
+2026-09-10T19:56:12.9949018Z 6463c6b5c703: Pull complete
+2026-09-10T19:56:13.1903478Z 9f5b5d647f4d: Verifying Checksum
+2026-09-10T19:56:13.1904168Z 9f5b5d647f4d: Download complete
+2026-09-10T19:56:13.2553063Z 815221c34987: Verifying Checksum
+2026-09-10T19:56:13.2553843Z 815221c34987: Download complete
+2026-09-10T19:56:13.4879300Z 13192716b11f: Verifying Checksum
+2026-09-10T19:56:13.4879705Z 13192716b11f: Download complete
+2026-09-10T19:56:13.5381060Z 8d6422da287d: Pull complete
+2026-09-10T19:56:13.5485664Z fa1b7728787a: Download complete
+2026-09-10T19:56:13.6025359Z 2fc0e69f8d7d: Pull complete
+2026-09-10T19:56:14.0508160Z 5fa29c524b4e: Pull complete
+2026-09-10T19:56:14.1893601Z ace4b5b96a91: Pull complete
+2026-09-10T19:56:14.2114239Z af2a6480a058: Pull complete
+2026-09-10T19:56:14.2205180Z 5ee6c6ca7fd9: Pull complete
+2026-09-10T19:56:14.2381233Z c5694bff1357: Verifying Checksum
+2026-09-10T19:56:14.2381585Z c5694bff1357: Download complete
+2026-09-10T19:56:17.9932919Z c5694bff1357: Pull complete
+2026-09-10T19:56:18.1940524Z aedab7177504: Pull complete
+2026-09-10T19:56:18.2040604Z a4635eaec9b8: Pull complete
+2026-09-10T19:56:18.2137964Z 46e663abc8f5: Pull complete
+2026-09-10T19:56:18.2226339Z 1bb54e8f7727: Pull complete
+2026-09-10T19:56:18.9336786Z 4e8b4a637a1b: Pull complete
+2026-09-10T19:56:18.9414063Z 45aa87e6c459: Pull complete
+2026-09-10T19:56:18.9544246Z 1d6f191acaf1: Pull complete
+2026-09-10T19:56:18.9615334Z a1d09468e782: Pull complete
+2026-09-10T19:56:18.9678714Z 9f5b5d647f4d: Pull complete
+2026-09-10T19:56:18.9762280Z 815221c34987: Pull complete
+2026-09-10T19:56:19.1826575Z 13192716b11f: Pull complete
+2026-09-10T19:56:19.1953439Z fa1b7728787a: Pull complete
+2026-09-10T19:56:19.1989411Z Digest: sha256:469c779c7c57ec6bad4670a0a3cb5a830aa6e0ce4f3707137608de5223a5041c
+2026-09-10T19:56:19.2003374Z Status: Downloaded newer image for ghcr.io/railwayapp-templates/postgres-ssl:18
+2026-09-10T19:56:19.2009922Z ghcr.io/railwayapp-templates/postgres-ssl:18
+2026-09-10T19:56:19.2061679Z ##[command]/usr/bin/docker create --name 56ee669cd52a45efb112ff92c2e343b6_ghcriorailwayapptemplatespostgresssl18_cc478d --label c4a799 --network github_network_cab5cff8a13b4c8185c85ceaf80f2dba --network-alias postgres -p 5432:5432 --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5 -e "POSTGRES_USER=postgres" -e "POSTGRES_PASSWORD=postgres" -e "POSTGRES_HOST_AUTH_METHOD=md5" -e "POSTGRES_DB=ci_db_test" -e "PGDATA=/var/lib/postgresql/data" -e GITHUB_ACTIONS=true -e CI=true ghcr.io/railwayapp-templates/postgres-ssl:18
+2026-09-10T19:56:19.3718967Z adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:19.3738870Z ##[command]/usr/bin/docker start adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:19.6453581Z adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:19.6473159Z ##[command]/usr/bin/docker ps --all --filter id=adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2026-09-10T19:56:19.6600865Z adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8 Up Less than a second (health: starting)
+2026-09-10T19:56:19.6621664Z ##[command]/usr/bin/docker port adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:19.6784802Z 5432/tcp -> 0.0.0.0:5432
+2026-09-10T19:56:19.6785274Z 5432/tcp -> [::]:5432
+2026-09-10T19:56:19.6835939Z ##[endgroup]
+2026-09-10T19:56:19.6845780Z ##[group]Waiting for all services to be ready
+2026-09-10T19:56:19.6861864Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:19.8327617Z starting
+2026-09-10T19:56:19.8349245Z postgres service is starting, waiting 2 seconds before checking again.
+2026-09-10T19:56:21.8352488Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:21.8454071Z starting
+2026-09-10T19:56:21.8464266Z postgres service is starting, waiting 4 seconds before checking again.
+2026-09-10T19:56:26.1723395Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:26.1826189Z starting
+2026-09-10T19:56:26.1838829Z postgres service is starting, waiting 8 seconds before checking again.
+2026-09-10T19:56:34.9368045Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:56:34.9467132Z healthy
+2026-09-10T19:56:34.9480538Z postgres service is healthy.
+2026-09-10T19:56:34.9481104Z ##[endgroup]
+2026-09-10T19:56:34.9637242Z ##[group]Run uname -a
+2026-09-10T19:56:34.9637495Z [36;1muname -a[0m
+2026-09-10T19:56:34.9671508Z shell: /usr/bin/bash -e {0}
+2026-09-10T19:56:34.9671944Z env:
+2026-09-10T19:56:34.9672109Z   PGUSER: postgres
+2026-09-10T19:56:34.9672294Z   PGPASSWORD: postgres
+2026-09-10T19:56:34.9730414Z   PGHOST: localhost
+2026-09-10T19:56:34.9730619Z   PGDATABASE: ci_db_test
+2026-09-10T19:56:34.9730809Z   PGTESTNOSSL: true
+2026-09-10T19:56:34.9730979Z   SCRAM_TEST_PGUSER: scram_test
+2026-09-10T19:56:34.9731184Z   SCRAM_TEST_PGPASSWORD: test4scram
+2026-09-10T19:56:34.9731414Z   SCRAM_TEST_PGUSER_UNICODE: scram_unicode_test
+2026-09-10T19:56:34.9731673Z   SCRAM_TEST_PGPASSWORD_UNICODE: IX-Ⅸ
+2026-09-10T19:56:34.9731879Z ##[endgroup]
+2026-09-10T19:56:34.9839115Z Linux runnervmlun5p 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+2026-09-10T19:56:34.9900428Z ##[group]Run psql \
+2026-09-10T19:56:34.9900625Z [36;1mpsql \[0m
+2026-09-10T19:56:34.9900892Z [36;1m  -c "SET password_encryption = 'scram-sha-256'" \[0m
+2026-09-10T19:56:34.9901237Z [36;1m  -c "CREATE ROLE scram_test LOGIN PASSWORD 'test4scram'" \[0m
+2026-09-10T19:56:34.9901575Z [36;1m  -c "CREATE ROLE scram_unicode_test LOGIN PASSWORD U&'IX-\2168'"[0m
+2026-09-10T19:56:34.9930153Z shell: /usr/bin/bash -e {0}
+2026-09-10T19:56:34.9930359Z env:
+2026-09-10T19:56:34.9930359Z [fixture trimmed: 184 lines omitted]
+2026-09-10T19:57:20.1864516Z ##[group]Run yarn test
+2026-09-10T19:57:20.1865093Z [36;1myarn test[0m
+2026-09-10T19:57:20.1897569Z shell: /usr/bin/bash -e {0}
+2026-09-10T19:57:20.1897941Z env:
+2026-09-10T19:57:20.1898112Z   PGUSER: postgres
+2026-09-10T19:57:20.1898297Z   PGPASSWORD: postgres
+2026-09-10T19:57:20.1898476Z   PGHOST: localhost
+2026-09-10T19:57:20.1898645Z   PGDATABASE: ci_db_test
+2026-09-10T19:57:20.1898835Z   PGTESTNOSSL: true
+2026-09-10T19:57:20.1899007Z   SCRAM_TEST_PGUSER: scram_test
+2026-09-10T19:57:20.1899217Z   SCRAM_TEST_PGPASSWORD: test4scram
+2026-09-10T19:57:20.1899455Z   SCRAM_TEST_PGUSER_UNICODE: scram_unicode_test
+2026-09-10T19:57:20.1899455Z [fixture trimmed: 109 lines omitted]
+2026-09-10T19:57:22.1953879Z       ✔ multiple dangerous query parameters are handled safely
+2026-09-10T19:57:22.1954199Z 
+2026-09-10T19:57:22.1955811Z 
+2026-09-10T19:57:22.1956790Z   79 passing (22ms)
+2026-09-10T19:57:22.1956963Z 
+2026-09-10T19:57:22.3507549Z 
+2026-09-10T19:57:22.3508285Z > pg-connection-string@2.14.0 check-coverage
+2026-09-10T19:57:22.3508883Z > nyc check-coverage --statements 100 --branches 100 --lines 100 --functions 100
+2026-09-10T19:57:22.3509161Z 
+2026-09-10T19:57:22.5947398Z $ mocha
+2026-09-10T19:57:22.7336580Z 
+2026-09-10T19:57:22.7339556Z 
+2026-09-10T19:57:22.7343251Z   client with arrayMode
+2026-09-10T19:57:22.7477777Z     ✔ returns result as array
+2026-09-10T19:57:22.7480030Z 
+2026-09-10T19:57:22.7481883Z   async workflow
+2026-09-10T19:57:22.7562718Z     ✔ sends async query
+2026-09-10T19:57:22.7570685Z     ✔ sends multiple async queries
+2026-09-10T19:57:22.7619646Z     ✔ sends an async query, copies in, copies out, and sends another query
+2026-09-10T19:57:22.7623020Z 
+2026-09-10T19:57:22.7623324Z   cancel query
+2026-09-10T19:57:22.8719647Z     ✔ works (109ms)
+2026-09-10T19:57:22.8806775Z     ✔ does not raise error if no active query
+2026-09-10T19:57:22.8809218Z     ✔ raises error if client is not connected
+2026-09-10T19:57:22.8809522Z 
+2026-09-10T19:57:22.8810005Z   connection errors
+2026-09-10T19:57:22.8880838Z     ✔ raise error events
+2026-09-10T19:57:22.8881097Z 
+2026-09-10T19:57:22.8881358Z   connection error
+2026-09-10T19:57:22.8884190Z     ✔ doesnt segfault
+2026-09-10T19:57:22.8885408Z 
+2026-09-10T19:57:22.8885896Z   reading while not connected
+2026-09-10T19:57:22.8894498Z     ✔ does not seg fault but does throw execption
+2026-09-10T19:57:22.8894887Z 
+2026-09-10T19:57:22.8895972Z   COPY FROM
+2026-09-10T19:57:22.8985848Z     ✔ works
+2026-09-10T19:57:22.9003490Z     ✔ works with a callback passed to end
+2026-09-10T19:57:22.9005744Z 
+2026-09-10T19:57:22.9006118Z   COPY TO
+2026-09-10T19:57:22.9253963Z     ✔ works - basic check
+2026-09-10T19:57:22.9256329Z 
+2026-09-10T19:57:22.9256604Z   Custom type parser
+2026-09-10T19:57:22.9337313Z     ✔ is used by client
+2026-09-10T19:57:22.9337592Z 
+2026-09-10T19:57:22.9337825Z   domains
+2026-09-10T19:57:22.9429083Z     ✔ remains bound after a query
+2026-09-10T19:57:22.9430309Z 
+2026-09-10T19:57:22.9430936Z   empty query
+2026-09-10T19:57:22.9502762Z     ✔ has field metadata in result
+2026-09-10T19:57:22.9503651Z 
+2026-09-10T19:57:22.9504183Z   huge async query
+2026-09-10T19:57:22.9614299Z     ✔ works
+2026-09-10T19:57:22.9616755Z 
+2026-09-10T19:57:22.9617235Z   connection
+2026-09-10T19:57:22.9683978Z     ✔ works
+2026-09-10T19:57:22.9747512Z     ✔ connects with args
+2026-09-10T19:57:22.9795020Z     ✔ errors out with bad connection args
+2026-09-10T19:57:22.9795684Z 
+2026-09-10T19:57:22.9796192Z   connectSync
+2026-09-10T19:57:22.9859533Z     ✔ works without args
+2026-09-10T19:57:22.9921564Z     ✔ works with args
+2026-09-10T19:57:38.0102264Z     1) throws if bad host
+2026-09-10T19:57:38.0135116Z 
+2026-09-10T19:57:38.0136132Z   Load tests
+2026-09-10T19:57:38.0249389Z     ✔ single client and many queries
+2026-09-10T19:57:38.1715944Z     ✔ multiple client and many queries (144ms)
+2026-09-10T19:57:38.1716809Z 
+2026-09-10T19:57:38.1716944Z   many connections
+2026-09-10T19:57:38.1717217Z     async
+2026-09-10T19:57:38.1844326Z       ✔ connecting 1 clients 1 times
+2026-09-10T19:57:38.2831819Z       ✔ connecting 5 clients 5 times (99ms)
+2026-09-10T19:57:38.6476580Z       ✔ connecting 10 clients 10 times (364ms)
+2026-09-10T19:57:40.0655461Z       ✔ connecting 20 clients 20 times (1418ms)
+2026-09-10T19:57:41.1387673Z       ✔ connecting 30 clients 10 times (1073ms)
+2026-09-10T19:57:41.1399251Z 
+2026-09-10T19:57:41.1399988Z   many errors
+2026-09-10T19:57:41.2163202Z     ✔ functions properly without segfault (76ms)
+2026-09-10T19:57:41.2163927Z 
+2026-09-10T19:57:41.2164134Z   multiple commands in a single query
+2026-09-10T19:57:41.2238917Z     ✔ all execute to completion
+2026-09-10T19:57:41.2255042Z     ✔ inserts and reads at once
+2026-09-10T19:57:41.2256928Z 
+2026-09-10T19:57:41.2257290Z   multiple statements
+2026-09-10T19:57:41.2331614Z     ✔ works with multiple queries
+2026-09-10T19:57:41.2333279Z 
+2026-09-10T19:57:41.2333960Z   simple LISTEN/NOTIFY
+2026-09-10T19:57:41.2472491Z     ✔ works
+2026-09-10T19:57:41.2472491Z [fixture trimmed: 56 lines omitted]
+2026-09-10T19:57:42.2531481Z     ✔ is exported
+2026-09-10T19:57:42.2531888Z 
+2026-09-10T19:57:42.2533495Z 
+2026-09-10T19:57:42.2534852Z   76 passing (20s)
+2026-09-10T19:57:42.2535130Z   1 failing
+2026-09-10T19:57:42.2535547Z 
+2026-09-10T19:57:42.2538461Z   1) connectSync
+2026-09-10T19:57:42.2538744Z        throws if bad host:
+2026-09-10T19:57:42.2540083Z      Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/node-postgres/node-postgres/packages/pg-native/test/index.js)
+2026-09-10T19:57:42.2541368Z       at process.processImmediate (node:internal/timers:484:21)
+2026-09-10T19:57:42.2542021Z       at process.topLevelDomainCallback (node:domain:161:15)
+2026-09-10T19:57:42.2542678Z       at process.callbackTrampoline (node:internal/async_hooks:128:24)
+2026-09-10T19:57:42.2543095Z 
+2026-09-10T19:57:42.2543243Z 
+2026-09-10T19:57:42.2543257Z 
+2026-09-10T19:57:51.4959091Z error Command failed with exit code 1.
+2026-09-10T19:57:51.4965350Z info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2026-09-10T19:57:51.5161266Z lerna ERR! yarn test exited 1 in 'pg-native'
+2026-09-10T19:57:51.5165648Z lerna ERR! yarn test exited 1 in 'pg-native'
+2026-09-10T19:57:51.5166863Z lerna WARN complete Waiting for 1 child process to exit. CTRL-C to exit immediately.
+2026-09-10T19:57:51.5322935Z error Command failed with exit code 1.
+2026-09-10T19:57:51.5325539Z info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2026-09-10T19:57:51.5626058Z error Command failed with exit code 1.
+2026-09-10T19:57:51.5627799Z info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+2026-09-10T19:57:51.7158941Z $  node_modules/.bin/mocha
+2026-09-10T19:57:51.8363789Z 
+2026-09-10T19:57:51.8366953Z 
+2026-09-10T19:57:51.8377567Z   Connection strings
+2026-09-10T19:57:51.8391822Z     ✔ pool delegates connectionString property to client
+2026-09-10T19:57:51.8394295Z 
+2026-09-10T19:57:51.8396279Z   connection timeout
+2026-09-10T19:57:51.8601194Z     ✔ should callback with an error if timeout is passed
+2026-09-10T19:57:51.8710065Z     ✔ should reject promise with an error if timeout is passed
+2026-09-10T19:57:51.8926310Z     ✔ should handle multiple timeouts
+2026-09-10T19:57:52.0007374Z     ✔ should timeout on checkout of used connection (108ms)
+2026-09-10T19:57:52.2062200Z     ✔ should not break further pending checkouts on a timeout (205ms)
+2026-09-10T19:57:52.3120746Z     ✔ should timeout on query if all clients are busy (105ms)
+2026-09-10T19:57:52.4197986Z     ✔ should recover from timeout errors (107ms)
+2026-09-10T19:57:52.5260972Z     ✔ continues processing after a connection failure (106ms)
+2026-09-10T19:57:53.8331862Z     ✔ releases newly connected clients if the queued already timed out (1306ms)
+2026-09-10T19:57:54.0413675Z     ✔ should connect if timeout is passed, but native client in connected state (208ms)
+2026-09-10T19:57:54.0415822Z 
+2026-09-10T19:57:54.0416537Z   pool ending
+2026-09-10T19:57:54.0418557Z     ✔ ends without being used
+2026-09-10T19:57:54.0419918Z     ✔ ends with a promise
+2026-09-10T19:57:54.0472563Z     ✔ ends with clients
+2026-09-10T19:57:54.0531882Z     ✔ allows client to finish
+2026-09-10T19:57:54.0946372Z     ✔ pool.end() - finish pending queries (40ms)
+2026-09-10T19:57:54.0947441Z 
+2026-09-10T19:57:54.0947798Z   pool error handling
+2026-09-10T19:57:54.1057810Z     ✔ Should complete these queries without dying
+2026-09-10T19:57:54.1099006Z     ✔ Catches errors in client.query
+2026-09-10T19:57:54.1116876Z     ✔ should continue with queued items after a connection failure
+2026-09-10T19:57:55.1132806Z     ✔ handles post-checkout client failures in pool.query (1001ms)
+2026-09-10T19:57:55.1133384Z     calling release more than once
+2026-09-10T19:57:55.1182760Z       ✔ should throw each time
+2026-09-10T19:57:55.1230121Z       ✔ should throw each time with callbacks
+2026-09-10T19:57:55.1231268Z     using an ended pool
+2026-09-10T19:57:55.1238277Z       ✔ rejects all additional promises
+2026-09-10T19:57:55.1245288Z       ✔ returns an error on all additional callbacks
+2026-09-10T19:57:55.1245828Z     error from idle client
+2026-09-10T19:57:55.1291296Z       ✔ removes client from pool
+2026-09-10T19:57:55.1303625Z     error from in-use client
+2026-09-10T19:57:55.1343314Z       ✔ keeps the client in the pool
+2026-09-10T19:57:55.1344699Z     passing a function to pool.query
+2026-09-10T19:57:55.1344699Z [fixture trimmed: 390 lines omitted]
+2026-09-10T19:57:56.7636000Z  2026-09-10 19:57:55.160 UTC [1276] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7636311Z  2026-09-10 19:57:55.164 UTC [1277] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7636638Z  2026-09-10 19:57:55.164 UTC [1277] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7636956Z  2026-09-10 19:57:55.168 UTC [1278] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7637279Z  2026-09-10 19:57:55.168 UTC [1278] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7637589Z  2026-09-10 19:57:55.172 UTC [1279] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7637904Z  2026-09-10 19:57:55.172 UTC [1279] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7638215Z  2026-09-10 19:57:55.175 UTC [1280] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7638531Z  2026-09-10 19:57:55.175 UTC [1280] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7638865Z  2026-09-10 19:57:55.179 UTC [1281] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7639217Z  2026-09-10 19:57:55.179 UTC [1281] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7639535Z  2026-09-10 19:57:55.183 UTC [1282] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7639865Z  2026-09-10 19:57:55.183 UTC [1282] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7640289Z  2026-09-10 19:57:55.186 UTC [1283] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7640632Z  2026-09-10 19:57:55.186 UTC [1283] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7640941Z  2026-09-10 19:57:55.190 UTC [1284] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7641264Z  2026-09-10 19:57:55.190 UTC [1284] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7641569Z  2026-09-10 19:57:55.194 UTC [1285] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7641888Z  2026-09-10 19:57:55.194 UTC [1285] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7642199Z  2026-09-10 19:57:55.197 UTC [1286] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7642515Z  2026-09-10 19:57:55.197 UTC [1286] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7642836Z  2026-09-10 19:57:55.201 UTC [1287] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7643178Z  2026-09-10 19:57:55.201 UTC [1287] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7643504Z  2026-09-10 19:57:55.205 UTC [1288] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7643830Z  2026-09-10 19:57:55.205 UTC [1288] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7644146Z  2026-09-10 19:57:55.208 UTC [1289] ERROR:  syntax error at or near "invalid" at character 1
+2026-09-10T19:57:56.7644462Z  2026-09-10 19:57:55.208 UTC [1289] STATEMENT:  invalid sql
+2026-09-10T19:57:56.7644956Z  2026-09-10 19:57:56.254 UTC [1371] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7645333Z  2026-09-10 19:57:56.254 UTC [1371] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7645688Z  2026-09-10 19:57:56.255 UTC [1372] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7646036Z  2026-09-10 19:57:56.255 UTC [1372] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7646496Z  2026-09-10 19:57:56.255 UTC [1374] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7646853Z  2026-09-10 19:57:56.255 UTC [1374] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7647199Z  2026-09-10 19:57:56.258 UTC [1373] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7647546Z  2026-09-10 19:57:56.258 UTC [1373] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7647882Z  2026-09-10 19:57:56.260 UTC [1376] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7648244Z  2026-09-10 19:57:56.260 UTC [1376] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7648608Z  2026-09-10 19:57:56.262 UTC [1377] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7648958Z  2026-09-10 19:57:56.262 UTC [1377] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7649298Z  2026-09-10 19:57:56.262 UTC [1378] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7649657Z  2026-09-10 19:57:56.262 UTC [1378] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7649999Z  2026-09-10 19:57:56.263 UTC [1375] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7650347Z  2026-09-10 19:57:56.263 UTC [1375] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7650696Z  2026-09-10 19:57:56.266 UTC [1379] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7651039Z  2026-09-10 19:57:56.266 UTC [1379] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7651376Z  2026-09-10 19:57:56.266 UTC [1380] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7651725Z  2026-09-10 19:57:56.266 UTC [1380] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7652088Z  2026-09-10 19:57:56.277 UTC [1381] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7652434Z  2026-09-10 19:57:56.277 UTC [1381] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7652784Z  2026-09-10 19:57:56.279 UTC [1382] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7653234Z  2026-09-10 19:57:56.279 UTC [1382] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7653604Z  2026-09-10 19:57:56.282 UTC [1383] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7653973Z  2026-09-10 19:57:56.282 UTC [1383] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7654328Z  2026-09-10 19:57:56.282 UTC [1385] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7654840Z  2026-09-10 19:57:56.282 UTC [1385] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7655191Z  2026-09-10 19:57:56.282 UTC [1384] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7655534Z  2026-09-10 19:57:56.282 UTC [1384] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7655868Z  2026-09-10 19:57:56.282 UTC [1386] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7656231Z  2026-09-10 19:57:56.282 UTC [1386] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7656569Z  2026-09-10 19:57:56.283 UTC [1387] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7656920Z  2026-09-10 19:57:56.283 UTC [1387] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7657263Z  2026-09-10 19:57:56.288 UTC [1388] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7657604Z  2026-09-10 19:57:56.288 UTC [1388] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7657940Z  2026-09-10 19:57:56.289 UTC [1389] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7658285Z  2026-09-10 19:57:56.289 UTC [1389] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7658621Z  2026-09-10 19:57:56.295 UTC [1390] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7658962Z  2026-09-10 19:57:56.295 UTC [1390] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7659416Z  2026-09-10 19:57:56.298 UTC [1391] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7659769Z  2026-09-10 19:57:56.298 UTC [1391] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7660110Z  2026-09-10 19:57:56.302 UTC [1392] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7660456Z  2026-09-10 19:57:56.302 UTC [1392] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7660790Z  2026-09-10 19:57:56.302 UTC [1394] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7661131Z  2026-09-10 19:57:56.302 UTC [1394] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7661476Z  2026-09-10 19:57:56.302 UTC [1396] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7661818Z  2026-09-10 19:57:56.302 UTC [1396] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7662155Z  2026-09-10 19:57:56.302 UTC [1393] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7662496Z  2026-09-10 19:57:56.302 UTC [1393] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7662847Z  2026-09-10 19:57:56.304 UTC [1397] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7663229Z  2026-09-10 19:57:56.304 UTC [1397] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7663566Z  2026-09-10 19:57:56.305 UTC [1395] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7663922Z  2026-09-10 19:57:56.305 UTC [1395] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7664259Z  2026-09-10 19:57:56.307 UTC [1399] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7664775Z  2026-09-10 19:57:56.307 UTC [1399] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7665122Z  2026-09-10 19:57:56.307 UTC [1398] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7665466Z  2026-09-10 19:57:56.307 UTC [1398] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7665803Z  2026-09-10 19:57:56.310 UTC [1400] ERROR:  column "asldkfjasldkf" does not exist at character 8
+2026-09-10T19:57:56.7666289Z  2026-09-10 19:57:56.310 UTC [1400] STATEMENT:  SELECT asldkfjasldkf
+2026-09-10T19:57:56.7666642Z  2026-09-10 19:57:56.328 UTC [1404] ERROR:  column "invalid" does not exist at character 8
+2026-09-10T19:57:56.7666985Z  2026-09-10 19:57:56.328 UTC [1404] STATEMENT:  SELECT INVALID HERE
+2026-09-10T19:57:56.7667242Z  CREATE DATABASE
+2026-09-10T19:57:56.7667399Z  
+2026-09-10T19:57:56.7667536Z  
+2026-09-10T19:57:56.7667840Z  /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/99-pgbackrest-init.sh
+2026-09-10T19:57:56.7668188Z  
+2026-09-10T19:57:56.7668445Z  /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/init-ssl.sh
+2026-09-10T19:57:56.7669013Z  init-ssl: certificates absent, incomplete, expiring within 30 days, or missing the x509v3 SAN in /var/lib/postgresql/data/certs; generating
+2026-09-10T19:57:56.7669447Z  
+2026-09-10T19:57:56.7669723Z  waiting for server to shut down...2026-09-10 19:56:21.144 UTC [73] LOG:  received fast shutdown request
+2026-09-10T19:57:56.7670137Z  .2026-09-10 19:56:21.145 UTC [73] LOG:  aborting any active transactions
+2026-09-10T19:57:56.7670576Z  2026-09-10 19:56:21.146 UTC [73] LOG:  background worker "logical replication launcher" (PID 82) exited with exit code 1
+2026-09-10T19:57:56.7670977Z  2026-09-10 19:56:21.148 UTC [77] LOG:  shutting down
+2026-09-10T19:57:56.7671275Z  2026-09-10 19:56:21.148 UTC [77] LOG:  checkpoint starting: shutdown immediate
+2026-09-10T19:57:56.7672136Z  2026-09-10 19:56:21.229 UTC [77] LOG:  checkpoint complete: wrote 943 buffers (5.8%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.052 s, sync=0.028 s, total=0.082 s; sync files=303, longest=0.009 s, average=0.001 s; distance=4352 kB, estimate=4352 kB; lsn=0/1BA1BE8, redo lsn=0/1BA1BE8
+2026-09-10T19:57:56.7672987Z  2026-09-10 19:56:21.238 UTC [73] LOG:  database system is shut down
+2026-09-10T19:57:56.7673250Z   done
+2026-09-10T19:57:56.7673503Z  server stopped
+2026-09-10T19:57:56.7673659Z  
+2026-09-10T19:57:56.7673853Z  PostgreSQL init process complete; ready for start up.
+2026-09-10T19:57:56.7674093Z  
+2026-09-10T19:57:56.7674393Z  collation-refresh: psql:/tmp/collation-refresh.ZqquwI.sql:16: NOTICE:  version has not changed
+2026-09-10T19:57:56.7675030Z  collation-refresh: psql:/tmp/collation-refresh.ZqquwI.sql:16: NOTICE:  version has not changed
+2026-09-10T19:57:56.7675510Z  collation-refresh: psql:/tmp/collation-refresh.ZqquwI.sql:16: NOTICE:  version has not changed
+2026-09-10T19:57:56.7680366Z Stop and remove container: 56ee669cd52a45efb112ff92c2e343b6_ghcriorailwayapptemplatespostgresssl18_cc478d
+2026-09-10T19:57:56.7684282Z ##[command]/usr/bin/docker rm --force adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:57:56.8964092Z adb15a10ca677b37a707ef1ea6ff34e7b2b639b598d8867f9b3d0d85ec5cb2c8
+2026-09-10T19:57:56.9002254Z Remove container network: github_network_cab5cff8a13b4c8185c85ceaf80f2dba
+2026-09-10T19:57:56.9051469Z ##[command]/usr/bin/docker network rm github_network_cab5cff8a13b4c8185c85ceaf80f2dba
+2026-09-10T19:57:56.9857051Z github_network_cab5cff8a13b4c8185c85ceaf80f2dba
+2026-09-10T19:57:56.9925000Z Cleaning up orphan processes
+2026-09-10T19:57:57.0234051Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

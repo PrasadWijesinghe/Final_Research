@@ -1,0 +1,29 @@
+{
+  "framework": "jest",
+  "repo": "jestjs/jest",
+  "job_id": 92860575299,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 3,
+  "summary": {
+    "passed": 5071,
+    "failed": 5,
+    "skipped": 183,
+    "total": 5259,
+    "todo": 0,
+    "files_failed": 5
+  },
+  "failed_test_names": [
+    "runs test with native ESM",
+    "notify > does not report --notify flag"
+  ],
+  "failed_files": [
+    "e2e/__tests__/nativeEsm.test.ts",
+    "e2e/__tests__/detectOpenHandles.ts"
+  ],
+  "first_error_type": null,
+  "first_project_path": "e2e/__tests__/nativeEsm.test.ts",
+  "note": "Trimmed. Three attempts with 2, 1 and 2 failed tests (summaries added). The error body holds a nested jest summary with deeper indentation; it is not counted. macOS."
+}

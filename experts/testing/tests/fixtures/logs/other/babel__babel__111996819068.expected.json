@@ -1,0 +1,16 @@
+{
+  "framework": "other",
+  "repo": "babel/babel",
+  "job_id": 111996819068,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 0.0,
+  "granularity": "none",
+  "summaries_found": 0,
+  "summary": null,
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "`yarn dedupe --check` failed with exit 1; no tests ran."
+}

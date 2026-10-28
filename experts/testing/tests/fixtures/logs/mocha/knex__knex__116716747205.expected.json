@@ -1,0 +1,21 @@
+{
+  "framework": "mocha",
+  "repo": "knex/knex",
+  "job_id": 116716747205,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 447,
+    "failed": 0,
+    "skipped": 126,
+    "total": 573
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Trimmed. Passing, 126 pending (`- name` lines)."
+}

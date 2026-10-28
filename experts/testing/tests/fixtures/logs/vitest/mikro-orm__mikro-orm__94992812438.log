@@ -1,0 +1,394 @@
+﻿2026-08-15T09:23:59.5803633Z Current runner version: '2.336.0'
+2026-08-15T09:23:59.5823917Z ##[group]Runner Image Provisioner
+2026-08-15T09:23:59.5824707Z Hosted Compute Agent
+2026-08-15T09:23:59.5825459Z Version: 20260729.566
+2026-08-15T09:23:59.5826136Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-15T09:23:59.5826784Z Build Date: 2026-07-29T19:17:02Z
+2026-08-15T09:23:59.5827353Z Worker ID: {7dd71e33-6de5-4cab-95ef-02fc548bc767}
+2026-08-15T09:23:59.5827927Z Azure Region: westus3
+2026-08-15T09:23:59.5828433Z ##[endgroup]
+2026-08-15T09:23:59.5829558Z ##[group]Operating System
+2026-08-15T09:23:59.5830085Z Ubuntu
+2026-08-15T09:23:59.5830527Z 24.04.4
+2026-08-15T09:23:59.5831156Z LTS
+2026-08-15T09:23:59.5831612Z ##[endgroup]
+2026-08-15T09:23:59.5832235Z ##[group]Runner Image
+2026-08-15T09:23:59.5832866Z Image: ubuntu-24.04
+2026-08-15T09:23:59.5833636Z Version: 20260810.271.1
+2026-08-15T09:23:59.5834816Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-15T09:23:59.5837164Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+2026-08-15T09:23:59.5838819Z ##[endgroup]
+2026-08-15T09:23:59.5842660Z ##[group]GITHUB_TOKEN Permissions
+2026-08-15T09:23:59.5846111Z Actions: write
+2026-08-15T09:23:59.5846741Z ArtifactMetadata: write
+2026-08-15T09:23:59.5847353Z Attestations: write
+2026-08-15T09:23:59.5848057Z Checks: write
+2026-08-15T09:23:59.5848928Z CodeQuality: write
+2026-08-15T09:23:59.5849715Z Contents: write
+2026-08-15T09:23:59.5850624Z CopilotRequests: write
+2026-08-15T09:23:59.5851463Z Deployments: write
+2026-08-15T09:23:59.5852383Z Discussions: write
+2026-08-15T09:23:59.5853272Z Drives: write
+2026-08-15T09:23:59.5853955Z Issues: write
+2026-08-15T09:23:59.5854535Z Metadata: read
+2026-08-15T09:23:59.5855475Z Models: read
+2026-08-15T09:23:59.5856317Z Packages: write
+2026-08-15T09:23:59.5857171Z Pages: write
+2026-08-15T09:23:59.5858049Z PullRequests: write
+2026-08-15T09:23:59.5858685Z RepositoryProjects: write
+2026-08-15T09:23:59.5859397Z SecurityEvents: write
+2026-08-15T09:23:59.5860291Z Statuses: write
+2026-08-15T09:23:59.5861166Z VulnerabilityAlerts: read
+2026-08-15T09:23:59.5861947Z ##[endgroup]
+2026-08-15T09:23:59.5864765Z Secret source: Actions
+2026-08-15T09:23:59.5866169Z Prepare workflow directory
+2026-08-15T09:23:59.6172999Z Prepare all required actions
+2026-08-15T09:23:59.6226591Z Getting action download info
+2026-08-15T09:23:59.9400547Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-15T09:24:00.1639032Z Download action repository 'actions/setup-node@v7' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-15T09:24:00.3338496Z Download action repository 'SimenB/github-actions-cpu-cores@v3' (SHA:97330871fe1b7d3529392ea000e3d2c4b357e403)
+2026-08-15T09:24:00.7689655Z Download action repository 'codecov/codecov-action@v7' (SHA:fb8b3582c8e4def4969c97caa2f19720cb33a72f)
+2026-08-15T09:24:01.2337908Z Getting action download info
+2026-08-15T09:24:01.3601507Z Download action repository 'actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd' (SHA:ed597411d8f924073f98dfc5c65a23a2325f34cd)
+2026-08-15T09:24:01.9938521Z Complete job name: Tests (node 26, 2/4)
+2026-08-15T09:24:02.0475735Z ##[group]Run actions/checkout@v7
+2026-08-15T09:24:02.0476306Z with:
+2026-08-15T09:24:02.0476596Z   repository: mikro-orm/mikro-orm
+2026-08-15T09:24:02.0478778Z   token: ***
+2026-08-15T09:24:02.0479106Z   ssh-strict: true
+2026-08-15T09:24:02.0479376Z   ssh-user: git
+2026-08-15T09:24:02.0479673Z   persist-credentials: true
+2026-08-15T09:24:02.0479975Z   clean: true
+2026-08-15T09:24:02.0480246Z   sparse-checkout-cone-mode: true
+2026-08-15T09:24:02.0480595Z   fetch-depth: 1
+2026-08-15T09:24:02.0480859Z   fetch-tags: false
+2026-08-15T09:24:02.0481119Z   show-progress: true
+2026-08-15T09:24:02.0481410Z   lfs: false
+2026-08-15T09:24:02.0481652Z   submodules: false
+2026-08-15T09:24:02.0482241Z   set-safe-directory: true
+2026-08-15T09:24:02.0482544Z   allow-unsafe-pr-checkout: false
+2026-08-15T09:24:02.0483171Z ##[endgroup]
+2026-08-15T09:24:02.1442437Z Syncing repository: mikro-orm/mikro-orm
+2026-08-15T09:24:02.1444499Z ##[group]Getting Git version info
+2026-08-15T09:24:02.1445623Z Working directory is '/home/runner/work/mikro-orm/mikro-orm'
+2026-08-15T09:24:02.1446789Z [command]/usr/bin/git version
+2026-08-15T09:24:02.1447292Z git version 2.54.0
+2026-08-15T09:24:02.1454505Z ##[endgroup]
+2026-08-15T09:24:02.1462603Z Temporarily overriding HOME='/home/runner/work/_temp/69a7c538-d026-4f0e-af21-8c5b14068266' before making global git config changes
+2026-08-15T09:24:02.1464060Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-15T09:24:02.1467397Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mikro-orm/mikro-orm
+2026-08-15T09:24:02.1496164Z Deleting the contents of '/home/runner/work/mikro-orm/mikro-orm'
+2026-08-15T09:24:02.1499532Z ##[group]Determining repository object format
+2026-08-15T09:24:02.1500903Z ##[endgroup]
+2026-08-15T09:24:02.1501681Z ##[group]Initializing the repository
+2026-08-15T09:24:02.1504936Z [command]/usr/bin/git init /home/runner/work/mikro-orm/mikro-orm
+2026-08-15T09:24:02.1972805Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-15T09:24:02.1973816Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-15T09:24:02.1974871Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-15T09:24:02.1975825Z hint: call:
+2026-08-15T09:24:02.1976144Z hint:
+2026-08-15T09:24:02.1976584Z hint: 	git config --global init.defaultBranch <name>
+2026-08-15T09:24:02.1977083Z hint:
+2026-08-15T09:24:02.1977430Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-15T09:24:02.1977916Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-15T09:24:02.1978311Z hint:
+2026-08-15T09:24:02.1978571Z hint: 	git branch -m <name>
+2026-08-15T09:24:02.1978838Z hint:
+2026-08-15T09:24:02.1979287Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-15T09:24:02.1979834Z Initialized empty Git repository in /home/runner/work/mikro-orm/mikro-orm/.git/
+2026-08-15T09:24:02.1982660Z [command]/usr/bin/git remote add origin https://github.com/mikro-orm/mikro-orm
+2026-08-15T09:24:02.2008034Z ##[endgroup]
+2026-08-15T09:24:02.2008519Z ##[group]Disabling automatic garbage collection
+2026-08-15T09:24:02.2011321Z [command]/usr/bin/git config --local gc.auto 0
+2026-08-15T09:24:02.2035297Z ##[endgroup]
+2026-08-15T09:24:02.2036007Z ##[group]Setting up auth
+2026-08-15T09:24:02.2036404Z Removing SSH command configuration
+2026-08-15T09:24:02.2042375Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-15T09:24:02.2070068Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-15T09:24:02.2394132Z Removing HTTP extra header
+2026-08-15T09:24:02.2398909Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-15T09:24:02.2423965Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-15T09:24:02.2585452Z Removing includeIf entries pointing to credentials config files
+2026-08-15T09:24:02.2589248Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-15T09:24:02.2611902Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-15T09:24:02.2767187Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-15T09:24:02.2793497Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path /home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:24:02.2814898Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:24:02.2839465Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:24:02.2864145Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:24:02.2885814Z ##[endgroup]
+2026-08-15T09:24:02.2886279Z ##[group]Fetching the repository
+2026-08-15T09:24:02.2889968Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +526823416799b91d8229324015bd34ce9047e2ef:refs/remotes/pull/8138/merge
+2026-08-15T09:24:09.8316433Z From https://github.com/mikro-orm/mikro-orm
+2026-08-15T09:24:09.8317093Z  * [new ref]         526823416799b91d8229324015bd34ce9047e2ef -> pull/8138/merge
+2026-08-15T09:24:09.8335988Z ##[endgroup]
+2026-08-15T09:24:09.8337030Z ##[group]Determining the checkout info
+2026-08-15T09:24:09.8337930Z ##[endgroup]
+2026-08-15T09:24:09.8343100Z [command]/usr/bin/git sparse-checkout disable
+2026-08-15T09:24:09.8379299Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-15T09:24:09.8403641Z ##[group]Checking out the ref
+2026-08-15T09:24:09.8408010Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/8138/merge
+2026-08-15T09:24:10.2122231Z Note: switching to 'refs/remotes/pull/8138/merge'.
+2026-08-15T09:24:10.2122900Z 
+2026-08-15T09:24:10.2123422Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-15T09:24:10.2124176Z changes and commit them, and you can discard any commits you make in this
+2026-08-15T09:24:10.2124968Z state without impacting any branches by switching back to a branch.
+2026-08-15T09:24:10.2125625Z 
+2026-08-15T09:24:10.2126135Z If you want to create a new branch to retain commits you create, you may
+2026-08-15T09:24:10.2126763Z do so (now or later) by using -c with the switch command. Example:
+2026-08-15T09:24:10.2127059Z 
+2026-08-15T09:24:10.2127349Z   git switch -c <new-branch-name>
+2026-08-15T09:24:10.2127645Z 
+2026-08-15T09:24:10.2127960Z Or undo this operation with:
+2026-08-15T09:24:10.2128243Z 
+2026-08-15T09:24:10.2128392Z   git switch -
+2026-08-15T09:24:10.2130428Z 
+2026-08-15T09:24:10.2136775Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-15T09:24:10.2137640Z 
+2026-08-15T09:24:10.2138502Z HEAD is now at 5268234 Merge 8dfd8e4bbc09a999eb88abe02b7999bb0adf0d2d into 5835d84c93b3115226b6231cad7ec5e7729a73d8
+2026-08-15T09:24:10.2140371Z ##[endgroup]
+2026-08-15T09:24:10.2172556Z [command]/usr/bin/git log -1 --format=%H
+2026-08-15T09:24:10.2193088Z 526823416799b91d8229324015bd34ce9047e2ef
+2026-08-15T09:24:10.2419671Z ##[group]Run actions/setup-node@v7
+2026-08-15T09:24:10.2420075Z with:
+2026-08-15T09:24:10.2420369Z   node-version: 26
+2026-08-15T09:24:10.2420700Z   package-manager-cache: false
+2026-08-15T09:24:10.2421035Z   check-latest: false
+2026-08-15T09:24:10.2423290Z   token: ***
+2026-08-15T09:24:10.2423613Z ##[endgroup]
+2026-08-15T09:24:10.3571152Z Attempting to download 26...
+2026-08-15T09:24:11.4142780Z Acquiring 26.7.0 - x64 from https://github.com/actions/node-versions/releases/download/26.7.0-31064755789/node-26.7.0-linux-x64.tar.gz
+2026-08-15T09:24:11.9974346Z Extracting ...
+2026-08-15T09:24:12.0076584Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/6fd7e84f-2dce-4f4d-b026-d7f718901154 -f /home/runner/work/_temp/2f65321e-b38e-4841-ad5d-04f84e2ff8d7
+2026-08-15T09:24:13.4435816Z Adding to the cache ...
+2026-08-15T09:24:18.4480760Z ##[group]Environment details
+2026-08-15T09:24:18.6510271Z node: v26.7.0
+2026-08-15T09:24:18.6510930Z npm: 11.19.0
+2026-08-15T09:24:18.6511265Z yarn: 1.22.22
+2026-08-15T09:24:18.6512216Z ##[endgroup]
+2026-08-15T09:24:18.6654171Z ##[group]Run npm install -g corepack@latest --force
+2026-08-15T09:24:18.6654773Z [36;1mnpm install -g corepack@latest --force[0m
+2026-08-15T09:24:18.6655722Z [36;1mcorepack enable[0m
+2026-08-15T09:24:18.6656106Z [36;1mcorepack prepare yarn@stable --activate[0m
+2026-08-15T09:24:18.6683123Z shell: /usr/bin/bash -e {0}
+2026-08-15T09:24:18.6683589Z ##[endgroup]
+2026-08-15T09:24:18.7417006Z npm warn using --force Recommended protections disabled.
+2026-08-15T09:24:19.1283525Z 
+2026-08-15T09:24:19.1284244Z added 1 package in 409ms
+2026-08-15T09:24:19.3746192Z Preparing yarn@stable for immediate activation...
+2026-08-15T09:24:19.8529026Z ##[group]Run actions/setup-node@v7
+2026-08-15T09:24:19.8529346Z with:
+2026-08-15T09:24:19.8529598Z   cache: yarn
+2026-08-15T09:24:19.8529866Z   check-latest: false
+2026-08-15T09:24:19.8531756Z   token: ***
+2026-08-15T09:24:19.8532013Z   package-manager-cache: true
+2026-08-15T09:24:19.8532306Z ##[endgroup]
+2026-08-15T09:24:19.9699479Z ##[group]Environment details
+2026-08-15T09:24:20.2869668Z node: v26.7.0
+2026-08-15T09:24:20.2870102Z npm: 11.19.0
+2026-08-15T09:24:20.2870519Z yarn: 4.18.0
+2026-08-15T09:24:20.2871319Z ##[endgroup]
+2026-08-15T09:24:20.2885630Z [command]/opt/hostedtoolcache/node/26.7.0/x64/bin/yarn --version
+2026-08-15T09:24:20.4721655Z 4.18.0
+2026-08-15T09:24:20.5001159Z [command]/opt/hostedtoolcache/node/26.7.0/x64/bin/yarn config get cacheFolder
+2026-08-15T09:24:20.6612983Z /home/runner/work/mikro-orm/mikro-orm/.yarn/cache
+2026-08-15T09:24:20.6763344Z [command]/opt/hostedtoolcache/node/26.7.0/x64/bin/yarn config get enableGlobalCache
+2026-08-15T09:24:20.8565425Z [33mfalse[39m
+2026-08-15T09:24:20.8622054Z All dependencies are managed locally by yarn3, the previous cache can be used
+2026-08-15T09:24:21.1596589Z Cache hit for: node-cache-Linux-x64-yarn-50e5d4583227d415a582e69d87375ba55074abaddda28ac5f8ddd523c17f8fa4
+2026-08-15T09:24:22.4174214Z Received 20971520 of 150535276 (13.9%), 20.0 MBs/sec
+2026-08-15T09:24:23.4175607Z Received 146340972 of 150535276 (97.2%), 69.7 MBs/sec
+2026-08-15T09:24:23.4175607Z [fixture trimmed: 1880 lines omitted]
+2026-08-15T09:27:20.8184350Z ##[group]Run yarn test --max-workers 4 --shard 2/4
+2026-08-15T09:27:20.8184780Z [36;1myarn test --max-workers 4 --shard 2/4[0m
+2026-08-15T09:27:20.8185483Z [36;1mgit status && git diff[0m
+2026-08-15T09:27:20.8208383Z shell: /usr/bin/bash -e {0}
+2026-08-15T09:27:20.8208730Z env:
+2026-08-15T09:27:20.8209008Z   RETRY_TESTS: 1
+2026-08-15T09:27:20.8209307Z ##[endgroup]
+2026-08-15T09:27:21.5524476Z 
+2026-08-15T09:27:21.5527275Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/mikro-orm/mikro-orm[39m
+2026-08-15T09:27:21.5527888Z 
+2026-08-15T09:27:22.0929767Z Downloading MongoDB "8.2.6": 0% (0mb / 122.6mb)
+2026-08-15T09:27:22.4426361Z Downloading MongoDB "8.2.6": 100% (122.6mb / 122.6mb)
+2026-08-15T09:27:22.4426361Z [fixture trimmed: 90 lines omitted]
+2026-08-15T09:28:08.9722271Z      [32m✓[39m #load() should populate the entity[32m 12[2mms[22m[39m
+2026-08-15T09:28:08.9723283Z      [32m✓[39m #load() should refresh the entity if its already loaded[32m 12[2mms[22m[39m
+2026-08-15T09:28:08.9724471Z [31m     [31m×[31m should have string id getter and setter[39m[32m 21[2mms[22m[39m[33m (retry x1)[39m
+2026-08-15T09:28:08.9725878Z      [32m✓[39m wrap helper returns the argument when its falsy[32m 5[2mms[22m[39m
+2026-08-15T09:28:08.9726933Z      [32m✓[39m setting m:1 reference is propagated to 1:m collection[32m 11[2mms[22m[39m
+2026-08-15T09:28:08.9728059Z      [32m✓[39m setting 1:1 reference is propagated to the inverse side[32m 20[2mms[22m[39m
+2026-08-15T09:28:08.9729434Z      [32m✓[39m custom inspect shows get/set props[32m 7[2mms[22m[39m
+2026-08-15T09:28:08.9730620Z      [32m✓[39m explicit serialization with not initialized properties[32m 19[2mms[22m[39m
+2026-08-15T09:28:09.1257055Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/GH1624.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+2026-08-15T09:28:10.2073032Z delete test took 462.7152649999989
+2026-08-15T09:28:10.3814110Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/query-builder/query-builder-type-safety.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1198[2mms[22m[39m
+2026-08-15T09:28:10.5414930Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/fulltext/full-text-search-tsvector.postgres.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+2026-08-15T09:28:10.6450078Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+2026-08-15T09:28:10.7178810Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-generator/advanced-index-options.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 14101[2mms[22m[39m
+2026-08-15T09:28:10.7180704Z      [33m[2m✓[22m[39m generates entities with disabled index [33m 4350[2mms[22m[39m
+2026-08-15T09:28:10.7181974Z      [33m[2m✓[22m[39m generates entities with disabled unique constraint [33m 4370[2mms[22m[39m
+2026-08-15T09:28:10.7183338Z      [33m[2m✓[22m[39m generates entities with clustered index [33m 4172[2mms[22m[39m
+2026-08-15T09:28:10.8114322Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-wrong-order.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+2026-08-15T09:28:10.8757822Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/composite-keys/custom-pivot-entity-auto-discovery.sqlite.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+2026-08-15T09:28:10.9622941Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/concurrency-checks/concurrency-checks.mongo.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+2026-08-15T09:28:10.9757631Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/cli/CompileCommand.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+2026-08-15T09:28:11.0556626Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/balanced-strategy.postgre.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+2026-08-15T09:28:11.1717590Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/filters/control-filters-on-relation-props.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+2026-08-15T09:28:11.2292578Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/sharing-column-in-composite-fk/sharing-column-in-composite-pk-fk.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+2026-08-15T09:28:11.2418123Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/entity-assigner/GH1811.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+2026-08-15T09:28:11.2768599Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/native-query-builder/MsSqlNativeQueryBuilder.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+2026-08-15T09:28:11.3131322Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/native-query-builder/OracleNativeQueryBuilder.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-08-15T09:28:11.3714338Z  [32m✓[39m [30m[43m legacy [49m[39m tests/features/count-by.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+2026-08-15T09:28:11.3714338Z [fixture trimmed: 348 lines omitted]
+2026-08-15T09:28:36.2356263Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-08-15T09:28:36.2356692Z 
+2026-08-15T09:28:36.2359956Z [41m[1m FAIL [22m[49m [30m[43m legacy [49m[39m tests/EntityHelper.mongo.test.ts[2m > [22mEntityHelperMongo[2m > [22mshould have string id getter and setter
+2026-08-15T09:28:36.2361440Z [41m[1m FAIL [22m[49m [30m[43m legacy [49m[39m tests/EntityHelper.mongo.test.ts[2m > [22mEntityHelperMongo[2m > [22mshould have string id getter and setter
+2026-08-15T09:28:36.2365673Z [31m[1mAssertionError[22m: expected ObjectId('5b0d19b28b21c648c2c8a600') to deeply equal { Object (i0, i1, ...) }[39m
+2026-08-15T09:28:36.2366243Z 
+2026-08-15T09:28:36.2366558Z [2mCompared values serialize to the same structure.
+2026-08-15T09:28:36.2367258Z Printing internal object structure without calling `toJSON` instead.[22m
+2026-08-15T09:28:36.2367639Z 
+2026-08-15T09:28:36.2367797Z [32m- Expected[39m
+2026-08-15T09:28:36.2368129Z [31m+ Received[39m
+2026-08-15T09:28:36.2368237Z 
+2026-08-15T09:28:36.2368355Z [2m  ObjectId {[22m
+2026-08-15T09:28:36.2368606Z [32m-   "i0": 5967129,[39m
+2026-08-15T09:28:36.2369065Z [32m-   "i1": 11701025,[39m
+2026-08-15T09:28:36.2369330Z [32m-   "i2": 12994754,[39m
+2026-08-15T09:28:36.2369569Z [32m-   "i3": 13149696,[39m
+2026-08-15T09:28:36.2369837Z [31m+   "buffer": Buffer [[39m
+2026-08-15T09:28:36.2370078Z [31m+     91,[39m
+2026-08-15T09:28:36.2370302Z [31m+     13,[39m
+2026-08-15T09:28:36.2370514Z [31m+     25,[39m
+2026-08-15T09:28:36.2370721Z [31m+     178,[39m
+2026-08-15T09:28:36.2370931Z [31m+     139,[39m
+2026-08-15T09:28:36.2371146Z [31m+     33,[39m
+2026-08-15T09:28:36.2371346Z [31m+     198,[39m
+2026-08-15T09:28:36.2371555Z [31m+     72,[39m
+2026-08-15T09:28:36.2371755Z [31m+     194,[39m
+2026-08-15T09:28:36.2371952Z [31m+     200,[39m
+2026-08-15T09:28:36.2372148Z [31m+     166,[39m
+2026-08-15T09:28:36.2372356Z [31m+     0,[39m
+2026-08-15T09:28:36.2372356Z [fixture trimmed: 4 lines omitted]
+2026-08-15T09:28:36.2422886Z     [90m137|[39m
+2026-08-15T09:28:36.2423797Z     [90m138|[39m     author[33m.[39mid [33m=[39m [32m'5b0d19b28b21c648c2c8a600'[39m[33m;[39m
+2026-08-15T09:28:36.2424821Z     [90m139|[39m     expect(author._id).toEqual(new ObjectId('5b0d19b28b21c648c2c8a600'…
+2026-08-15T09:28:36.2425684Z     [90m   |[39m                        [31m^[39m
+2026-08-15T09:28:36.2428207Z     [90m140|[39m
+2026-08-15T09:28:36.2428396Z 
+2026-08-15T09:28:36.2429113Z     [90m141|[39m     author[33m.[39mid [33m=[39m [32m''[39m[33m;[39m
+2026-08-15T09:28:36.2429595Z 
+2026-08-15T09:28:36.2430026Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+2026-08-15T09:28:36.2430400Z 
+2026-08-15T09:28:36.2437274Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m332 passed[39m[22m[90m (333)[39m
+2026-08-15T09:28:36.2450343Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1847 passed[39m[22m[90m (1848)[39m
+2026-08-15T09:28:36.2451623Z [2m   Start at [22m 09:27:21
+2026-08-15T09:28:36.2455034Z [2m   Duration [22m 74.61s[2m (transform 19.86s, setup 7.40s, import 29.13s, tests 219.44s, environment 31ms)[22m
+2026-08-15T09:28:36.2456589Z 
+2026-08-15T09:28:36.2489655Z 
+2026-08-15T09:28:36.2527316Z ##[error]AssertionError: expected ObjectId('5b0d19b28b21c648c2c8a600') to deeply equal { Object (i0, i1, ...) }
+
+Compared values serialize to the same structure.
+Printing internal object structure without calling `toJSON` instead.
+
+- Expected
++ Received
+
+  ObjectId {
+-   "i0": 5967129,
+-   "i1": 11701025,
+-   "i2": 12994754,
+-   "i3": 13149696,
++   "buffer": Buffer [
++     91,
++     13,
++     25,
++     178,
++     139,
++     33,
++     198,
++     72,
++     194,
++     200,
++     166,
++     0,
++   ],
+  }
+
+ ❯ tests/EntityHelper.mongo.test.ts:139:24
+
+
+2026-08-15T09:28:36.2534441Z 
+2026-08-15T09:28:36.2537623Z ##[error]AssertionError: expected ObjectId('5b0d19b28b21c648c2c8a600') to deeply equal { Object (i0, i1, ...) }
+
+Compared values serialize to the same structure.
+Printing internal object structure without calling `toJSON` instead.
+
+- Expected
++ Received
+
+  ObjectId {
+-   "i0": 5967129,
+-   "i1": 11701025,
+-   "i2": 12994754,
+-   "i3": 13149696,
++   "buffer": Buffer [
++     91,
++     13,
++     25,
++     178,
++     139,
++     33,
++     198,
++     72,
++     194,
++     200,
++     166,
++     0,
++   ],
+  }
+
+ ❯ tests/EntityHelper.mongo.test.ts:139:24
+
+
+2026-08-15T09:28:37.5449638Z [globalTeardown] mariadb:3309 dropped 13 leftover DB(s): batch-insert, date-default-diffing, mikro_4153, ...+10 more
+2026-08-15T09:28:37.5619213Z [globalTeardown] postgis:5433 dropped 2 leftover DB(s): 5176, 5433
+2026-08-15T09:28:37.9166579Z [globalTeardown] postgres:5432 dropped 66 leftover DB(s): mikro_orm_test_nested_embedddables, mikro_orm_clone, mikro_orm_upsert, ...+63 more
+2026-08-15T09:28:37.9640701Z [globalTeardown] mysql:3308 dropped 32 leftover DB(s): 4911, 6434, 6968, ...+29 more
+2026-08-15T09:28:39.0835703Z [globalTeardown] mssql:1433 dropped 10 leftover DB(s): string-escaping, mikro_orm_test_entity_gen_disabled, mikro_orm_test_entity_gen_disabled_unique, ...+7 more
+2026-08-15T09:28:39.1768337Z ##[error]Process completed with exit code 1.
+2026-08-15T09:28:39.2570791Z Post job cleanup.
+2026-08-15T09:28:39.4244531Z [command]/usr/bin/git version
+2026-08-15T09:28:39.4293980Z git version 2.54.0
+2026-08-15T09:28:39.4336658Z Temporarily overriding HOME='/home/runner/work/_temp/85442387-39d0-49ce-b192-2ce3da88ebf0' before making global git config changes
+2026-08-15T09:28:39.4338140Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-15T09:28:39.4341816Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mikro-orm/mikro-orm
+2026-08-15T09:28:39.4452537Z Removing SSH command configuration
+2026-08-15T09:28:39.4457673Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-15T09:28:39.4466102Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-15T09:28:39.5068999Z Removing HTTP extra header
+2026-08-15T09:28:39.5069990Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-15T09:28:39.5104780Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-15T09:28:39.5310113Z Removing includeIf entries pointing to credentials config files
+2026-08-15T09:28:39.5310864Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-15T09:28:39.5357408Z includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path
+2026-08-15T09:28:39.5357898Z includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-08-15T09:28:39.5358302Z includeif.gitdir:/github/workspace/.git.path
+2026-08-15T09:28:39.5358686Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-15T09:28:39.5366215Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path
+2026-08-15T09:28:39.5383173Z /home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:28:39.5397081Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-4921b51b\-2896\-4de5\-811d\-5b0e78849c4e\.config
+2026-08-15T09:28:39.5430519Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-08-15T09:28:39.5451271Z /home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:28:39.5457879Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-4921b51b\-2896\-4de5\-811d\-5b0e78849c4e\.config
+2026-08-15T09:28:39.5486681Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-15T09:28:39.5505508Z /github/runner_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:28:39.5511206Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-4921b51b\-2896\-4de5\-811d\-5b0e78849c4e\.config
+2026-08-15T09:28:39.5537806Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-15T09:28:39.5555534Z /github/runner_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config
+2026-08-15T09:28:39.5561721Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-4921b51b\-2896\-4de5\-811d\-5b0e78849c4e\.config
+2026-08-15T09:28:39.5590643Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-15T09:28:39.5754307Z Removing credentials config '/home/runner/work/_temp/git-credentials-4921b51b-2896-4de5-811d-5b0e78849c4e.config'
+2026-08-15T09:28:39.5877247Z Cleaning up orphan processes

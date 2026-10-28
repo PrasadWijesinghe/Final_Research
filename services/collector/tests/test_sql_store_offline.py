@@ -17,6 +17,7 @@ from collector.store import (
     LogRecord,
     RepoRecord,
     RunRecord,
+    SkippedRunRecord,
     SnapshotRecord,
     SqlStore,
     StepRecord,
@@ -115,11 +116,14 @@ def test_every_statement_compiles_and_conflict_targets_are_primary_keys(
         store.upsert_snapshot(SnapshotRecord(1, "s", "p", "c", None, NOW))
         store.has_log(4)
         store.upsert_log(LogRecord(4, "x", 1, "0" * 64, 0, "ok", NOW))
+        store.add_skipped_run(SkippedRunRecord(1, 2, 3, "HTTP 502", NOW))
+        store.skipped_runs(1)
+        store.clear_skipped_run(1, 2)
 
     assert len(engine.conn.sql) >= 18
     assert {model for model, _, _ in seen} == {
         m.Repo, m.SyncState, m.Workflow, m.WorkflowRun, m.Job, m.Step, m.Commit,
-        m.CommitFile, m.FileSnapshot, m.Log,
+        m.CommitFile, m.FileSnapshot, m.Log, m.SkippedRun,
     }  # fmt: skip
     for model, keys, _ in seen:
         primary = [c.name for c in model.__table__.primary_key.columns]  # type: ignore[attr-defined]
@@ -135,7 +139,7 @@ def test_record_fields_match_table_columns() -> None:
         (RepoRecord, m.Repo), (SyncStateRecord, m.SyncState), (WorkflowRecord, m.Workflow),
         (RunRecord, m.WorkflowRun), (JobRecord, m.Job), (StepRecord, m.Step),
         (CommitRecord, m.Commit), (CommitFileRecord, m.CommitFile),
-        (SnapshotRecord, m.FileSnapshot), (LogRecord, m.Log),
+        (SnapshotRecord, m.FileSnapshot), (LogRecord, m.Log), (SkippedRunRecord, m.SkippedRun),
     ]  # fmt: skip
     for record, model in pairs:
         columns = {c.name for c in model.__table__.columns}  # type: ignore[attr-defined]
@@ -160,3 +164,18 @@ def test_run_upsert_never_overwrites_source_and_none_json_is_sql_null() -> None:
     assert "source" in sql.split("DO UPDATE SET")[0]  # still inserted on first write
     # raw=None is sent as SQL NULL, not the JSON value null
     assert "NULL" in sql.split("VALUES")[1].split("ON CONFLICT")[0]
+
+
+def test_pending_logs_failed_runs_adds_a_correlated_exists_only_when_asked() -> None:
+    engine = _FakeEngine()
+    store = SqlStore(engine)  # type: ignore[arg-type]
+    with store.transaction():
+        store.pending_logs(1, None)
+        store.pending_logs(1, 5, failed_runs_only=True)
+    plain, scoped = engine.conn.sql
+    assert "EXISTS" not in plain  # the default query (and `status` pending counts) is unchanged
+    assert "EXISTS (SELECT *" in scoped and "FROM raw.jobs AS sibling" in scoped
+    assert "sibling.run_id = raw.jobs.run_id" in scoped  # same run, any attempt
+    assert "sibling.conclusion IN" in scoped
+    assert "raw.jobs.conclusion NOT IN" in scoped  # failed jobs never depend on the EXISTS
+    assert "LIMIT" in scoped

@@ -1,0 +1,23 @@
+{
+  "framework": "mocha",
+  "repo": "sequelize/sequelize",
+  "job_id": 109037603873,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 92,
+    "failed": 1,
+    "skipped": 0,
+    "total": 93
+  },
+  "failed_test_names": [
+    "\"after each\" hook: database reset for \"should be able to alias the default name of the join table\""
+  ],
+  "failed_files": [],
+  "first_error_type": "TimeoutError",
+  "first_project_path": null,
+  "note": "A hook failure with a one-line title; the stack has only node_modules and node:internal frames."
+}

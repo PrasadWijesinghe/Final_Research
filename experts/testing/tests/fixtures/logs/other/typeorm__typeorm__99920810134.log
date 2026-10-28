@@ -1,0 +1,319 @@
+﻿2026-09-01T15:40:35.3934311Z Current runner version: '2.337.0'
+2026-09-01T15:40:35.3958388Z ##[group]Runner Image Provisioner
+2026-09-01T15:40:35.3959183Z Hosted Compute Agent
+2026-09-01T15:40:35.3959690Z Version: 20260819.586
+2026-09-01T15:40:35.3960281Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-09-01T15:40:35.3961500Z Build Date: 2026-08-18T23:20:18Z
+2026-09-01T15:40:35.3962152Z Worker ID: {d53d7d53-d3f8-409c-a642-561ca1f72fc4}
+2026-09-01T15:40:35.3962822Z Azure Region: centralus
+2026-09-01T15:40:35.3963335Z ##[endgroup]
+2026-09-01T15:40:35.3964803Z ##[group]Operating System
+2026-09-01T15:40:35.3965398Z Microsoft Windows Server 2025
+2026-09-01T15:40:35.3965935Z 10.0.26100
+2026-09-01T15:40:35.3966404Z Datacenter
+2026-09-01T15:40:35.3966865Z ##[endgroup]
+2026-09-01T15:40:35.3967382Z ##[group]Runner Image
+2026-09-01T15:40:35.3967945Z Image: windows-2025-vs2026
+2026-09-01T15:40:35.3968482Z Version: 20260824.214.3
+2026-09-01T15:40:35.3970085Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260824.214/images/windows/Windows2025-VS2026-Readme.md
+2026-09-01T15:40:35.3971698Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260824.214
+2026-09-01T15:40:35.3972631Z ##[endgroup]
+2026-09-01T15:40:35.3975731Z ##[group]GITHUB_TOKEN Permissions
+2026-09-01T15:40:35.3977969Z Actions: write
+2026-09-01T15:40:35.3978501Z ArtifactMetadata: write
+2026-09-01T15:40:35.3979086Z Attestations: write
+2026-09-01T15:40:35.3979603Z Checks: write
+2026-09-01T15:40:35.3980146Z CodeQuality: write
+2026-09-01T15:40:35.3980662Z Contents: write
+2026-09-01T15:40:35.3981698Z CopilotRequests: write
+2026-09-01T15:40:35.3982357Z Deployments: write
+2026-09-01T15:40:35.3982879Z Discussions: write
+2026-09-01T15:40:35.3983395Z Drives: write
+2026-09-01T15:40:35.3983892Z Issues: write
+2026-09-01T15:40:35.3984365Z Metadata: read
+2026-09-01T15:40:35.3984942Z Models: read
+2026-09-01T15:40:35.3985438Z Packages: write
+2026-09-01T15:40:35.3985955Z Pages: write
+2026-09-01T15:40:35.3986478Z PullRequests: write
+2026-09-01T15:40:35.3987043Z RepositoryProjects: write
+2026-09-01T15:40:35.3987632Z SecurityEvents: write
+2026-09-01T15:40:35.3988158Z Statuses: write
+2026-09-01T15:40:35.3988664Z VulnerabilityAlerts: read
+2026-09-01T15:40:35.3989231Z ##[endgroup]
+2026-09-01T15:40:35.3991357Z Secret source: Actions
+2026-09-01T15:40:35.3992332Z Prepare workflow directory
+2026-09-01T15:40:35.4394143Z Prepare all required actions
+2026-09-01T15:40:35.4461885Z Getting action download info
+2026-09-01T15:40:35.6605039Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-01T15:40:35.9278832Z Uses: typeorm/typeorm/.github/workflows/tests-windows.yml@refs/pull/12821/merge (79a32647ada7164ac23269f163b0a9fe28cfeb28)
+2026-09-01T15:40:35.9283090Z ##[group] Inputs
+2026-09-01T15:40:35.9284101Z   node-version: 22
+2026-09-01T15:40:35.9285035Z ##[endgroup]
+2026-09-01T15:40:35.9285705Z Complete job name: tests-windows / better-sqlite3
+2026-09-01T15:40:36.0641008Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-01T15:40:36.0642551Z with:
+2026-09-01T15:40:36.0643165Z   repository: typeorm/typeorm
+2026-09-01T15:40:36.0647765Z   token: ***
+2026-09-01T15:40:36.0648263Z   ssh-strict: true
+2026-09-01T15:40:36.0648733Z   ssh-user: git
+2026-09-01T15:40:36.0649199Z   persist-credentials: true
+2026-09-01T15:40:36.0649743Z   clean: true
+2026-09-01T15:40:36.0650218Z   sparse-checkout-cone-mode: true
+2026-09-01T15:40:36.0650757Z   fetch-depth: 1
+2026-09-01T15:40:36.0651234Z   fetch-tags: false
+2026-09-01T15:40:36.0651735Z   show-progress: true
+2026-09-01T15:40:36.0652243Z   lfs: false
+2026-09-01T15:40:36.0652671Z   submodules: false
+2026-09-01T15:40:36.0653127Z   set-safe-directory: true
+2026-09-01T15:40:36.0653667Z   allow-unsafe-pr-checkout: false
+2026-09-01T15:40:36.0654526Z ##[endgroup]
+2026-09-01T15:40:36.2179209Z Syncing repository: typeorm/typeorm
+2026-09-01T15:40:36.2184807Z ##[group]Getting Git version info
+2026-09-01T15:40:36.2185765Z Working directory is 'D:\a\typeorm\typeorm'
+2026-09-01T15:40:36.2993720Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-01T15:40:36.8586785Z git version 2.55.0.windows.5
+2026-09-01T15:40:36.8641926Z ##[endgroup]
+2026-09-01T15:40:36.8659048Z Temporarily overriding HOME='D:\a\_temp\9ae26430-2722-4ec6-8814-fddd06fccdf5' before making global git config changes
+2026-09-01T15:40:36.8661321Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-01T15:40:36.8668714Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\typeorm\typeorm
+2026-09-01T15:40:37.4008910Z Deleting the contents of 'D:\a\typeorm\typeorm'
+2026-09-01T15:40:37.4016013Z ##[group]Determining repository object format
+2026-09-01T15:40:37.4018987Z ##[endgroup]
+2026-09-01T15:40:37.4020541Z ##[group]Initializing the repository
+2026-09-01T15:40:37.4026326Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\typeorm\typeorm
+2026-09-01T15:40:37.5552646Z Initialized empty Git repository in D:/a/typeorm/typeorm/.git/
+2026-09-01T15:40:37.5610450Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/typeorm/typeorm
+2026-09-01T15:40:37.6698801Z ##[endgroup]
+2026-09-01T15:40:37.6700487Z ##[group]Disabling automatic garbage collection
+2026-09-01T15:40:37.6706847Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-09-01T15:40:37.7021418Z ##[endgroup]
+2026-09-01T15:40:37.7022882Z ##[group]Setting up auth
+2026-09-01T15:40:37.7023984Z Removing SSH command configuration
+2026-09-01T15:40:37.7030939Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-01T15:40:37.7383397Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-01T15:40:39.3377160Z Removing HTTP extra header
+2026-09-01T15:40:39.3388222Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-01T15:40:39.3690808Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-01T15:40:39.9136089Z Removing includeIf entries pointing to credentials config files
+2026-09-01T15:40:39.9145939Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-01T15:40:39.9428200Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-01T15:40:40.4612351Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-09-01T15:40:40.4907997Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/typeorm/typeorm/.git.path D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:40:40.5201140Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/typeorm/typeorm/.git/worktrees/*.path D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:40:40.5553033Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:40:40.5871505Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:40:40.6206297Z ##[endgroup]
+2026-09-01T15:40:40.6207184Z ##[group]Fetching the repository
+2026-09-01T15:40:40.6218312Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +79a32647ada7164ac23269f163b0a9fe28cfeb28:refs/remotes/pull/12821/merge
+2026-09-01T15:40:42.1954853Z From https://github.com/typeorm/typeorm
+2026-09-01T15:40:42.1956923Z  * [new ref]         79a32647ada7164ac23269f163b0a9fe28cfeb28 -> pull/12821/merge
+2026-09-01T15:40:42.2009451Z ##[endgroup]
+2026-09-01T15:40:42.2010058Z ##[group]Determining the checkout info
+2026-09-01T15:40:42.2011766Z ##[endgroup]
+2026-09-01T15:40:42.2021742Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-09-01T15:40:42.2559317Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-09-01T15:40:42.2875598Z ##[group]Checking out the ref
+2026-09-01T15:40:42.2885950Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/12821/merge
+2026-09-01T15:40:43.1517444Z Note: switching to 'refs/remotes/pull/12821/merge'.
+2026-09-01T15:40:43.1518209Z 
+2026-09-01T15:40:43.1518733Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-01T15:40:43.1519784Z changes and commit them, and you can discard any commits you make in this
+2026-09-01T15:40:43.1520741Z state without impacting any branches by switching back to a branch.
+2026-09-01T15:40:43.1521378Z 
+2026-09-01T15:40:43.1521790Z If you want to create a new branch to retain commits you create, you may
+2026-09-01T15:40:43.1522693Z do so (now or later) by using -c with the switch command. Example:
+2026-09-01T15:40:43.1523206Z 
+2026-09-01T15:40:43.1523579Z   git switch -c <new-branch-name>
+2026-09-01T15:40:43.1523899Z 
+2026-09-01T15:40:43.1524172Z Or undo this operation with:
+2026-09-01T15:40:43.1524630Z 
+2026-09-01T15:40:43.1524810Z   git switch -
+2026-09-01T15:40:43.1525046Z 
+2026-09-01T15:40:43.1525335Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-01T15:40:43.1525827Z 
+2026-09-01T15:40:43.1526312Z HEAD is now at 79a3264 Merge 12c7b138fa970dacc888e0fb99883ebb195698c6 into 3ecf2c8dfccd02dd77f593fd7aa478c25ea9d428
+2026-09-01T15:40:43.1700898Z ##[endgroup]
+2026-09-01T15:40:43.2521931Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-09-01T15:40:43.2787899Z 79a32647ada7164ac23269f163b0a9fe28cfeb28
+2026-09-01T15:40:43.3287031Z Prepare all required actions
+2026-09-01T15:40:43.3287982Z Getting action download info
+2026-09-01T15:40:43.4491899Z Download action repository 'pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86' (SHA:0977fd99725f1db4007ccb2928dbb4e90d06cc86)
+2026-09-01T15:40:43.7992298Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-01T15:40:44.0817312Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-09-01T15:40:44.5469968Z ##[group]Run ./.github/actions/setup-node
+2026-09-01T15:40:44.5470359Z with:
+2026-09-01T15:40:44.5470684Z   node-version: 22
+2026-09-01T15:40:44.5470974Z   download-build: true
+2026-09-01T15:40:44.5471258Z ##[endgroup]
+2026-09-01T15:40:44.5531642Z ##[start-action display=Run pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86;id=__self.__pnpm_action-setup]
+2026-09-01T15:40:44.5710171Z ##[group]Run pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+2026-09-01T15:40:44.5710625Z with:
+2026-09-01T15:40:44.5710895Z   dest: ~/setup-pnpm
+2026-09-01T15:40:44.5711214Z   run_install: null
+2026-09-01T15:40:44.5711497Z   cache: false
+2026-09-01T15:40:44.5711794Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-01T15:40:44.5712258Z   package_json_file: package.json
+2026-09-01T15:40:44.5712572Z   standalone: false
+2026-09-01T15:40:44.5712884Z ##[endgroup]
+2026-09-01T15:40:44.7621714Z ##[group]Running self-installer...
+2026-09-01T15:40:44.7684352Z (node:1228) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-09-01T15:40:44.7686393Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-01T15:41:14.8008091Z 
+2026-09-01T15:41:14.8009196Z added 1 package, and audited 2 packages in 25s
+2026-09-01T15:41:14.8010274Z 
+2026-09-01T15:41:14.8010507Z 1 package is looking for funding
+2026-09-01T15:41:14.8010962Z   run `npm fund` for details
+2026-09-01T15:41:14.8017639Z 
+2026-09-01T15:41:14.8018030Z found 0 vulnerabilities
+2026-09-01T15:41:19.8335524Z Checking for updates...
+2026-09-01T15:41:20.2443288Z Switching pnpm from v11.19.0 to v10.34.5...
+2026-09-01T15:41:21.1781120Z .../22d0-1a05da1d0c7-edc2b2603d700af3    | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-01T15:41:21.1800032Z .../22d0-1a05da1d0c7-edc2b2603d700af3    |   +1 +
+2026-09-01T15:41:26.7304437Z .../22d0-1a05da1d0c7-edc2b2603d700af3    | Progress: resolved 1, reused 0, downloaded 1, added 0
+2026-09-01T15:41:30.3227951Z .../22d0-1a05da1d0c7-edc2b2603d700af3    | Progress: resolved 1, reused 0, downloaded 1, added 1
+2026-09-01T15:41:30.3230681Z .../22d0-1a05da1d0c7-edc2b2603d700af3    | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-09-01T15:41:31.3958916Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-09-01T15:41:31.4007482Z Successfully updated pnpm to v10.34.5
+2026-09-01T15:41:31.8724768Z ##[endgroup]
+2026-09-01T15:41:31.8725483Z Installation Completed!
+2026-09-01T15:41:31.8875634Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=47336]
+2026-09-01T15:41:31.8879272Z ##[start-action display=Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020;id=__self.__actions_setup-node]
+2026-09-01T15:41:31.9073357Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-01T15:41:31.9073831Z with:
+2026-09-01T15:41:31.9074108Z   node-version: 22
+2026-09-01T15:41:31.9074380Z   cache: pnpm
+2026-09-01T15:41:31.9074676Z   check-latest: false
+2026-09-01T15:41:31.9077789Z   token: ***
+2026-09-01T15:41:31.9078147Z   package-manager-cache: true
+2026-09-01T15:41:31.9080385Z env:
+2026-09-01T15:41:31.9080753Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-01T15:41:31.9081185Z ##[endgroup]
+2026-09-01T15:41:32.0918164Z Found in cache @ C:\hostedtoolcache\windows\node\22.23.2\x64
+2026-09-01T15:41:32.0925779Z ##[group]Environment details
+2026-09-01T15:41:43.7201716Z node: v22.23.2
+2026-09-01T15:41:43.7202110Z npm: 10.9.8
+2026-09-01T15:41:43.7202482Z yarn: 1.22.22
+2026-09-01T15:41:43.7203049Z ##[endgroup]
+2026-09-01T15:41:43.7848511Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\Users\runneradmin\setup-pnpm\node_modules\.bin\bin\pnpm.CMD store path --silent"
+2026-09-01T15:41:46.5499775Z D:\.pnpm-store\v10
+2026-09-01T15:41:47.2497998Z pnpm cache is not found
+2026-09-01T15:41:47.2660682Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=15378]
+2026-09-01T15:41:47.2663670Z ##[start-action display=Run pnpm install --frozen-lockfile;id=__self.__run]
+2026-09-01T15:41:47.2811392Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-01T15:41:47.2811845Z [36;1mpnpm install --frozen-lockfile[0m
+2026-09-01T15:41:47.2831911Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-09-01T15:41:47.2832380Z env:
+2026-09-01T15:41:47.2832757Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-01T15:41:47.2833157Z ##[endgroup]
+2026-09-01T15:41:48.4425938Z Lockfile is up to date, resolution step is skipped
+2026-09-01T15:41:48.5435380Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-01T15:41:48.6669149Z Packages: +903
+2026-09-01T15:41:48.6673105Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-09-01T15:41:49.5457294Z Progress: resolved 903, reused 0, downloaded 0, added 0
+2026-09-01T15:41:50.5478724Z Progress: resolved 903, reused 0, downloaded 50, added 15
+2026-09-01T15:41:51.5477166Z Progress: resolved 903, reused 0, downloaded 144, added 60
+2026-09-01T15:41:52.5487083Z Progress: resolved 903, reused 0, downloaded 213, added 91
+2026-09-01T15:41:53.5632238Z Progress: resolved 903, reused 0, downloaded 298, added 131
+2026-09-01T15:41:54.5720592Z Progress: resolved 903, reused 0, downloaded 350, added 155
+2026-09-01T15:41:55.5753852Z Progress: resolved 903, reused 0, downloaded 407, added 178
+2026-09-01T15:41:56.5752444Z Progress: resolved 903, reused 0, downloaded 476, added 213
+2026-09-01T15:41:57.5754916Z Progress: resolved 903, reused 0, downloaded 625, added 297
+2026-09-01T15:41:58.5762327Z Progress: resolved 903, reused 0, downloaded 658, added 311
+2026-09-01T15:41:59.5767790Z Progress: resolved 903, reused 0, downloaded 713, added 334
+2026-09-01T15:42:00.5846660Z Progress: resolved 903, reused 0, downloaded 739, added 344
+2026-09-01T15:42:01.5854661Z Progress: resolved 903, reused 0, downloaded 841, added 388
+2026-09-01T15:42:02.5873334Z Progress: resolved 903, reused 0, downloaded 901, added 524
+2026-09-01T15:42:03.5878084Z Progress: resolved 903, reused 0, downloaded 902, added 753
+2026-09-01T15:42:04.3134011Z Progress: resolved 903, reused 0, downloaded 902, added 903, done
+2026-09-01T15:42:04.9035904Z .../node_modules/better-sqlite3 install$ node-gyp rebuild
+2026-09-01T15:42:04.9237898Z .../node_modules/better-sqlite3 install: D:\a\typeorm\typeorm\node_modules\.pnpm\better-sqlite3@13.0.3\node_modules\better-sqlite3>if not defined npm_config_node_gyp (node "C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node-gyp-bin\\..\node_modules\node-gyp\bin\node-gyp.js" rebuild )  else (node "C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node_modules\node-gyp\bin\node-gyp.js" rebuild ) 
+2026-09-01T15:42:04.9823329Z .../node_modules/better-sqlite3 install: gyp info it worked if it ends with ok
+2026-09-01T15:42:04.9827613Z .../node_modules/better-sqlite3 install: gyp info using node-gyp@11.5.0
+2026-09-01T15:42:04.9830638Z .../node_modules/better-sqlite3 install: gyp info using node@22.23.2 | win32 | x64
+2026-09-01T15:42:07.1743447Z .../node_modules/better-sqlite3 install: gyp info find Python using Python version 3.14.7 found at "C:\hostedtoolcache\windows\Python\3.14.7\x64\python.exe"
+2026-09-01T15:42:07.3276273Z .../node_modules/better-sqlite3 install: gyp http GET https://nodejs.org/download/release/v22.23.2/node-v22.23.2-headers.tar.gz
+2026-09-01T15:42:07.4356794Z .../node_modules/better-sqlite3 install: gyp http 200 https://nodejs.org/download/release/v22.23.2/node-v22.23.2-headers.tar.gz
+2026-09-01T15:43:33.9910799Z .../node_modules/better-sqlite3 install: gyp http GET https://nodejs.org/download/release/v22.23.2/SHASUMS256.txt
+2026-09-01T15:43:33.9923399Z .../node_modules/better-sqlite3 install: gyp http GET https://nodejs.org/download/release/v22.23.2/win-x64/node.lib
+2026-09-01T15:43:34.0239423Z .../node_modules/better-sqlite3 install: gyp http 200 https://nodejs.org/download/release/v22.23.2/SHASUMS256.txt
+2026-09-01T15:43:34.0777890Z .../node_modules/better-sqlite3 install: gyp http 200 https://nodejs.org/download/release/v22.23.2/win-x64/node.lib
+2026-09-01T15:43:49.9576453Z .../node_modules/better-sqlite3 install: gyp ERR! find VS 
+2026-09-01T15:43:49.9580451Z .../node_modules/better-sqlite3 install: gyp ERR! find VS msvs_version not set from command line or npm config
+2026-09-01T15:43:49.9581703Z .../node_modules/better-sqlite3 install: gyp ERR! find VS VCINSTALLDIR not set, not running in VS Command Prompt
+2026-09-01T15:43:49.9583190Z .../node_modules/better-sqlite3 install: gyp ERR! find VS could not use PowerShell to find Visual Studio 2017 or newer, try re-running with '--loglevel silly' for more details.
+2026-09-01T15:43:49.9585583Z .../node_modules/better-sqlite3 install: gyp ERR! find VS 
+2026-09-01T15:43:49.9586513Z .../node_modules/better-sqlite3 install: gyp ERR! find VS Failure details: RangeError [ERR_CHILD_PROCESS_STDIO_MAXB
+2026-09-01T15:43:49.9587744Z .../node_modules/better-sqlite3 install: gyp ERR! find VS unknown version "undefined" found at "C:\Program Files\Microsoft Visual Studio\18\Enterprise"
+2026-09-01T15:43:49.9588775Z .../node_modules/better-sqlite3 install: gyp ERR! find VS could not find a version of Visual Studio 2017 or newer to use
+2026-09-01T15:43:49.9590326Z .../node_modules/better-sqlite3 install: gyp ERR! find VS not looking for VS2017 as it is only supported up to Node.js 21
+2026-09-01T15:43:49.9591502Z .../node_modules/better-sqlite3 install: gyp ERR! find VS not looking for VS2017 as it is only supported up to Node.js 21
+2026-09-01T15:43:49.9592820Z .../node_modules/better-sqlite3 install: gyp ERR! find VS not looking for VS2017 as it is only supported up to Node.js 21
+2026-09-01T15:43:49.9594114Z .../node_modules/better-sqlite3 install: gyp ERR! find VS not looking for VS2015 as it is only supported up to Node.js 18
+2026-09-01T15:43:49.9595400Z .../node_modules/better-sqlite3 install: gyp ERR! find VS not looking for VS2013 as it is only supported up to Node.js 8
+2026-09-01T15:43:49.9596433Z .../node_modules/better-sqlite3 install: gyp ERR! find VS 
+2026-09-01T15:43:49.9597341Z .../node_modules/better-sqlite3 install: gyp ERR! find VS **************************************************************
+2026-09-01T15:43:49.9598374Z .../node_modules/better-sqlite3 install: gyp ERR! find VS You need to install the latest version of Visual Studio
+2026-09-01T15:43:49.9599312Z .../node_modules/better-sqlite3 install: gyp ERR! find VS including the "Desktop development with C++" workload.
+2026-09-01T15:43:49.9600469Z .../node_modules/better-sqlite3 install: gyp ERR! find VS For more information consult the documentation at:
+2026-09-01T15:43:49.9601714Z .../node_modules/better-sqlite3 install: gyp ERR! find VS https://github.com/nodejs/node-gyp#on-windows
+2026-09-01T15:43:49.9602985Z .../node_modules/better-sqlite3 install: gyp ERR! find VS **************************************************************
+2026-09-01T15:43:49.9603763Z .../node_modules/better-sqlite3 install: gyp ERR! find VS 
+2026-09-01T15:43:49.9604380Z .../node_modules/better-sqlite3 install: gyp ERR! configure error 
+2026-09-01T15:43:49.9605221Z .../node_modules/better-sqlite3 install: gyp ERR! stack Error: Could not find any Visual Studio installation to use
+2026-09-01T15:43:49.9606556Z .../node_modules/better-sqlite3 install: gyp ERR! stack at VisualStudioFinder.fail (C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node_modules\node-gyp\lib\find-visualstudio.js:118:11)
+2026-09-01T15:43:49.9609606Z .../node_modules/better-sqlite3 install: gyp ERR! stack at VisualStudioFinder.findVisualStudio (C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node_modules\node-gyp\lib\find-visualstudio.js:74:17)
+2026-09-01T15:43:49.9613515Z .../node_modules/better-sqlite3 install: gyp ERR! stack at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-09-01T15:43:49.9616698Z .../node_modules/better-sqlite3 install: gyp ERR! stack at async createBuildDir (C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node_modules\node-gyp\lib\configure.js:112:18)
+2026-09-01T15:43:49.9619899Z .../node_modules/better-sqlite3 install: gyp ERR! stack at async run (C:\Users\runneradmin\setup-pnpm\node_modules\.bin\store\v11\links\@\pnpm\10.34.5\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\node_modules\pnpm\dist\node_modules\node-gyp\bin\node-gyp.js:81:18)
+2026-09-01T15:43:49.9622082Z .../node_modules/better-sqlite3 install: gyp ERR! System Windows_NT 10.0.26100
+2026-09-01T15:43:49.9624701Z .../node_modules/better-sqlite3 install: gyp ERR! command "C:\\hostedtoolcache\\windows\\node\\22.23.2\\x64\\node.exe" "C:\\Users\\runneradmin\\setup-pnpm\\node_modules\\.bin\\store\\v11\\links\\@\\pnpm\\10.34.5\\5fb44e6255699bf9dc403a0967820c44f56445bf0d82a1d00e75f51d62e858c7\\node_modules\\pnpm\\dist\\node_modules\\node-gyp\\bin\\node-gyp.js" "rebuild"
+2026-09-01T15:43:49.9626997Z .../node_modules/better-sqlite3 install: gyp ERR! cwd D:\a\typeorm\typeorm\node_modules\.pnpm\better-sqlite3@13.0.3\node_modules\better-sqlite3
+2026-09-01T15:43:49.9628380Z .../node_modules/better-sqlite3 install: gyp ERR! node -v v22.23.2
+2026-09-01T15:43:49.9629257Z .../node_modules/better-sqlite3 install: gyp ERR! node-gyp -v v11.5.0
+2026-09-01T15:43:49.9629985Z .../node_modules/better-sqlite3 install: gyp ERR! not ok 
+2026-09-01T15:43:49.9728087Z .../node_modules/better-sqlite3 install: Failed
+2026-09-01T15:43:49.9961339Z  ELIFECYCLE  Command failed with exit code 1.
+2026-09-01T15:43:50.0261973Z ##[error]Process completed with exit code 1.
+2026-09-01T15:43:50.0274976Z ##[end-action id=__self.__run;outcome=failure;conclusion=failure;duration_ms=122766]
+2026-09-01T15:43:50.0281406Z ##[start-action display=Run actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c;id=__self.__actions_download-artifact]
+2026-09-01T15:43:50.0289955Z ##[end-action id=__self.__actions_download-artifact;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-09-01T15:43:50.0556804Z Post job cleanup.
+2026-09-01T15:43:50.0563405Z ##[start-action display=Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020;id=__3e54e50b-bfce-4bf0-944d-c53c9e123ad8.__actions_setup-node]
+2026-09-01T15:43:50.0566294Z ##[end-action id=__3e54e50b-bfce-4bf0-944d-c53c9e123ad8.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-09-01T15:43:50.0568620Z ##[start-action display=Run pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86;id=__3e54e50b-bfce-4bf0-944d-c53c9e123ad8.__pnpm_action-setup]
+2026-09-01T15:43:50.0719200Z Post job cleanup.
+2026-09-01T15:43:50.2548400Z Pruning is unnecessary.
+2026-09-01T15:43:50.2696870Z ##[end-action id=__3e54e50b-bfce-4bf0-944d-c53c9e123ad8.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=212]
+2026-09-01T15:43:50.2892249Z Post job cleanup.
+2026-09-01T15:43:50.4649655Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-01T15:43:50.4918362Z git version 2.55.0.windows.5
+2026-09-01T15:43:50.4981650Z Temporarily overriding HOME='D:\a\_temp\3087d77b-a404-4c65-a7a9-2d4fd69c55d5' before making global git config changes
+2026-09-01T15:43:50.4982534Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-01T15:43:50.4991585Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\typeorm\typeorm
+2026-09-01T15:43:50.5277120Z Removing SSH command configuration
+2026-09-01T15:43:50.5287149Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-01T15:43:50.5583024Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-01T15:43:51.0928962Z Removing HTTP extra header
+2026-09-01T15:43:51.0938485Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-01T15:43:51.1236053Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-01T15:43:51.6617994Z Removing includeIf entries pointing to credentials config files
+2026-09-01T15:43:51.6637559Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-01T15:43:51.6905290Z includeif.gitdir:D:/a/typeorm/typeorm/.git.path
+2026-09-01T15:43:51.6906413Z includeif.gitdir:D:/a/typeorm/typeorm/.git/worktrees/*.path
+2026-09-01T15:43:51.6907272Z includeif.gitdir:/github/workspace/.git.path
+2026-09-01T15:43:51.6907842Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-01T15:43:51.6952403Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/typeorm/typeorm/.git.path
+2026-09-01T15:43:51.7196477Z D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:43:51.7243938Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/typeorm/typeorm/.git.path D\:\\a\\_temp\\git\-credentials\-618f1532\-ad29\-45f2\-9190\-72792f178668\.config
+2026-09-01T15:43:51.7579804Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/typeorm/typeorm/.git/worktrees/*.path
+2026-09-01T15:43:51.7833446Z D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:43:51.7874589Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/typeorm/typeorm/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-618f1532\-ad29\-45f2\-9190\-72792f178668\.config
+2026-09-01T15:43:51.8152823Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-01T15:43:51.8386821Z /github/runner_temp/git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:43:51.8424783Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-618f1532\-ad29\-45f2\-9190\-72792f178668\.config
+2026-09-01T15:43:51.8703504Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-01T15:43:51.8938048Z /github/runner_temp/git-credentials-618f1532-ad29-45f2-9190-72792f178668.config
+2026-09-01T15:43:51.8979508Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-618f1532\-ad29\-45f2\-9190\-72792f178668\.config
+2026-09-01T15:43:51.9274002Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-01T15:43:52.4233888Z Removing credentials config 'D:\a\_temp\git-credentials-618f1532-ad29-45f2-9190-72792f178668.config'
+2026-09-01T15:43:52.4440057Z Cleaning up orphan processes

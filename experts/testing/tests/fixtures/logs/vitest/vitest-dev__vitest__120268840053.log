@@ -1,0 +1,648 @@
+﻿2026-10-23T06:06:04.1415400Z Current runner version: '2.338.0'
+2026-10-23T06:06:04.1448975Z ##[group]Runner Image Provisioner
+2026-10-23T06:06:04.1450493Z Hosted Compute Agent
+2026-10-23T06:06:04.1451470Z Version: 20261012.601
+2026-10-23T06:06:04.1452664Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-23T06:06:04.1454007Z Build Date: 2026-10-12T17:48:21Z
+2026-10-23T06:06:04.1455315Z Worker ID: {bd73ebf9-cd59-4bb1-ba80-6553cd07f1e2}
+2026-10-23T06:06:04.1456809Z Region: northcentralus
+2026-10-23T06:06:04.1458180Z Cloud: Azure
+2026-10-23T06:06:04.1459315Z ##[endgroup]
+2026-10-23T06:06:04.1461731Z ##[group]Operating System
+2026-10-23T06:06:04.1462725Z Ubuntu
+2026-10-23T06:06:04.1463790Z 24.04.5
+2026-10-23T06:06:04.1464762Z LTS
+2026-10-23T06:06:04.1465778Z ##[endgroup]
+2026-10-23T06:06:04.1466768Z ##[group]Runner Image
+2026-10-23T06:06:04.1468069Z Image: ubuntu-24.04
+2026-10-23T06:06:04.1469270Z Version: 20261012.334.1
+2026-10-23T06:06:04.1471483Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-23T06:06:04.1474564Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-23T06:06:04.1476497Z ##[endgroup]
+2026-10-23T06:06:04.1478704Z ##[group]GITHUB_TOKEN Permissions
+2026-10-23T06:06:04.1481675Z Metadata: read
+2026-10-23T06:06:04.1482718Z ##[endgroup]
+2026-10-23T06:06:04.1485949Z Secret source: None
+2026-10-23T06:06:04.1487960Z Cache mode: write
+2026-10-23T06:06:04.1489531Z Prepare workflow directory
+2026-10-23T06:06:04.2192135Z Prepare all required actions
+2026-10-23T06:06:04.2269897Z Getting action download info
+2026-10-23T06:06:04.4643266Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-23T06:06:04.5670587Z Download action repository 'vitest-dev/vitest@94b1adcd06310e8e1e9f59130e9df57bb80602b1' (SHA:94b1adcd06310e8e1e9f59130e9df57bb80602b1)
+2026-10-23T06:06:05.8849210Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-23T06:06:06.3318222Z Getting action download info
+2026-10-23T06:06:06.4204222Z Download action repository 'pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320' (SHA:fc06bc1257f339d1d5d8b3a19a8cae5388b55320)
+2026-10-23T06:06:06.8159818Z Download action repository 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-10-23T06:06:07.2317446Z Getting action download info
+2026-10-23T06:06:07.3135350Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-10-23T06:06:07.5885188Z Complete job name: Test: e2e, node-24, ubuntu-latest
+2026-10-23T06:06:07.6622295Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-23T06:06:07.6623012Z with:
+2026-10-23T06:06:07.6623241Z   persist-credentials: false
+2026-10-23T06:06:07.6623521Z   repository: vitest-dev/vitest
+2026-10-23T06:06:07.6625800Z   token: ***
+2026-10-23T06:06:07.6626026Z   ssh-strict: true
+2026-10-23T06:06:07.6626237Z   ssh-user: git
+2026-10-23T06:06:07.6626438Z   clean: true
+2026-10-23T06:06:07.6626663Z   sparse-checkout-cone-mode: true
+2026-10-23T06:06:07.6626924Z   fetch-depth: 1
+2026-10-23T06:06:07.6627128Z   fetch-tags: false
+2026-10-23T06:06:07.6627354Z   show-progress: true
+2026-10-23T06:06:07.6627568Z   lfs: false
+2026-10-23T06:06:07.6627979Z   submodules: false
+2026-10-23T06:06:07.6628197Z   set-safe-directory: true
+2026-10-23T06:06:07.6628450Z   allow-unsafe-pr-checkout: false
+2026-10-23T06:06:07.6628948Z env:
+2026-10-23T06:06:07.6629296Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:07.6629766Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:07.6630034Z ##[endgroup]
+2026-10-23T06:06:07.7618831Z Syncing repository: vitest-dev/vitest
+2026-10-23T06:06:07.7620166Z ##[group]Getting Git version info
+2026-10-23T06:06:07.7620582Z Working directory is '/home/runner/work/vitest/vitest'
+2026-10-23T06:06:07.7621493Z [command]/usr/bin/git version
+2026-10-23T06:06:07.7704896Z git version 2.55.0
+2026-10-23T06:06:07.7727407Z ##[endgroup]
+2026-10-23T06:06:07.7738871Z Temporarily overriding HOME='/home/runner/work/_temp/4d5a6a55-5504-4d67-99c2-3095605d2fe4' before making global git config changes
+2026-10-23T06:06:07.7739892Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-23T06:06:07.7744859Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vitest/vitest
+2026-10-23T06:06:07.7795621Z Deleting the contents of '/home/runner/work/vitest/vitest'
+2026-10-23T06:06:07.7799276Z ##[group]Determining repository object format
+2026-10-23T06:06:07.7801035Z ##[endgroup]
+2026-10-23T06:06:07.7801986Z ##[group]Initializing the repository
+2026-10-23T06:06:07.7806193Z [command]/usr/bin/git init /home/runner/work/vitest/vitest
+2026-10-23T06:06:07.7926711Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-23T06:06:07.7927418Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-23T06:06:07.7928394Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-23T06:06:07.7929101Z hint: call:
+2026-10-23T06:06:07.7929458Z hint:
+2026-10-23T06:06:07.7929945Z hint: 	git config --global init.defaultBranch <name>
+2026-10-23T06:06:07.7930519Z hint:
+2026-10-23T06:06:07.7931074Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-23T06:06:07.7932032Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-23T06:06:07.7932766Z hint:
+2026-10-23T06:06:07.7933146Z hint: 	git branch -m <name>
+2026-10-23T06:06:07.7933562Z hint:
+2026-10-23T06:06:07.7934154Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-23T06:06:07.7935042Z Initialized empty Git repository in /home/runner/work/vitest/vitest/.git/
+2026-10-23T06:06:07.7942536Z [command]/usr/bin/git remote add origin https://github.com/vitest-dev/vitest
+2026-10-23T06:06:07.7988793Z ##[endgroup]
+2026-10-23T06:06:07.7989364Z ##[group]Disabling automatic garbage collection
+2026-10-23T06:06:07.7992104Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-23T06:06:07.8020955Z ##[endgroup]
+2026-10-23T06:06:07.8021579Z ##[group]Setting up auth
+2026-10-23T06:06:07.8022031Z Removing SSH command configuration
+2026-10-23T06:06:07.8026872Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-23T06:06:07.8056235Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-23T06:06:07.8416763Z Removing HTTP extra header
+2026-10-23T06:06:07.8421607Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-23T06:06:07.8452923Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-23T06:06:07.8692853Z Removing includeIf entries pointing to credentials config files
+2026-10-23T06:06:07.8697317Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-23T06:06:07.8727940Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-23T06:06:07.8944439Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-23T06:06:07.8982340Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vitest/vitest/.git.path /home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:07.9011256Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:07.9043831Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:07.9073560Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:07.9101292Z ##[endgroup]
+2026-10-23T06:06:07.9101736Z ##[group]Fetching the repository
+2026-10-23T06:06:07.9109464Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +94b1adcd06310e8e1e9f59130e9df57bb80602b1:refs/remotes/pull/11698/merge
+2026-10-23T06:06:08.7479121Z From https://github.com/vitest-dev/vitest
+2026-10-23T06:06:08.7479730Z  * [new ref]         94b1adcd06310e8e1e9f59130e9df57bb80602b1 -> pull/11698/merge
+2026-10-23T06:06:08.7486031Z ##[endgroup]
+2026-10-23T06:06:08.7486698Z ##[group]Determining the checkout info
+2026-10-23T06:06:08.7487597Z ##[endgroup]
+2026-10-23T06:06:08.7495685Z [command]/usr/bin/git sparse-checkout disable
+2026-10-23T06:06:08.7564237Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-23T06:06:08.7599345Z ##[group]Checking out the ref
+2026-10-23T06:06:08.7605264Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/11698/merge
+2026-10-23T06:06:09.0092451Z Note: switching to 'refs/remotes/pull/11698/merge'.
+2026-10-23T06:06:09.0092922Z 
+2026-10-23T06:06:09.0093243Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-23T06:06:09.0093795Z changes and commit them, and you can discard any commits you make in this
+2026-10-23T06:06:09.0094311Z state without impacting any branches by switching back to a branch.
+2026-10-23T06:06:09.0094617Z 
+2026-10-23T06:06:09.0094826Z If you want to create a new branch to retain commits you create, you may
+2026-10-23T06:06:09.0095331Z do so (now or later) by using -c with the switch command. Example:
+2026-10-23T06:06:09.0095594Z 
+2026-10-23T06:06:09.0095713Z   git switch -c <new-branch-name>
+2026-10-23T06:06:09.0095891Z 
+2026-10-23T06:06:09.0096007Z Or undo this operation with:
+2026-10-23T06:06:09.0096178Z 
+2026-10-23T06:06:09.0096281Z   git switch -
+2026-10-23T06:06:09.0096438Z 
+2026-10-23T06:06:09.0096686Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-23T06:06:09.0097012Z 
+2026-10-23T06:06:09.0097390Z HEAD is now at 94b1adc Merge 9dc2c7bb4ba0358cd4a236136b6bebd702196720 into 272296e5d67db0d571084a64b244ebc452c33f0c
+2026-10-23T06:06:09.0115569Z ##[endgroup]
+2026-10-23T06:06:09.0169032Z [command]/usr/bin/git log -1 --format=%H
+2026-10-23T06:06:09.0195160Z 94b1adcd06310e8e1e9f59130e9df57bb80602b1
+2026-10-23T06:06:09.0207588Z ##[group]Removing auth
+2026-10-23T06:06:09.0208726Z Removing SSH command configuration
+2026-10-23T06:06:09.0214120Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-23T06:06:09.0248708Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-23T06:06:09.0489227Z Removing HTTP extra header
+2026-10-23T06:06:09.0493897Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-23T06:06:09.0529146Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-23T06:06:09.0770688Z Removing includeIf entries pointing to credentials config files
+2026-10-23T06:06:09.0775241Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-23T06:06:09.0805160Z includeif.gitdir:/home/runner/work/vitest/vitest/.git.path
+2026-10-23T06:06:09.0806550Z includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path
+2026-10-23T06:06:09.0807607Z includeif.gitdir:/github/workspace/.git.path
+2026-10-23T06:06:09.0808737Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-23T06:06:09.0817297Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vitest/vitest/.git.path
+2026-10-23T06:06:09.0841031Z /home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:09.0851225Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vitest/vitest/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-11e78a91\-e82d\-4223\-9063\-35d6d068e04f\.config
+2026-10-23T06:06:09.0892474Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path
+2026-10-23T06:06:09.0914439Z /home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:09.0922665Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/vitest/vitest/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-11e78a91\-e82d\-4223\-9063\-35d6d068e04f\.config
+2026-10-23T06:06:09.0955739Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-23T06:06:09.0979797Z /github/runner_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:09.0995819Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-11e78a91\-e82d\-4223\-9063\-35d6d068e04f\.config
+2026-10-23T06:06:09.1022126Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-23T06:06:09.1044976Z /github/runner_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config
+2026-10-23T06:06:09.1054335Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-11e78a91\-e82d\-4223\-9063\-35d6d068e04f\.config
+2026-10-23T06:06:09.1086381Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-23T06:06:09.1306416Z Removing credentials config '/home/runner/work/_temp/git-credentials-11e78a91-e82d-4223-9063-35d6d068e04f.config'
+2026-10-23T06:06:09.1316298Z ##[endgroup]
+2026-10-23T06:06:09.1526390Z ##[group]Run vitest-dev/vitest/.github/actions/setup-and-cache@94b1adcd06310e8e1e9f59130e9df57bb80602b1
+2026-10-23T06:06:09.1526936Z with:
+2026-10-23T06:06:09.1527146Z   node-version: 24
+2026-10-23T06:06:09.1527348Z env:
+2026-10-23T06:06:09.1528026Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:09.1528484Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:09.1528740Z ##[endgroup]
+2026-10-23T06:06:09.1583447Z ##[start-action display=Install pnpm;id=__self.__pnpm_action-setup]
+2026-10-23T06:06:09.1628250Z ##[group]Run pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+2026-10-23T06:06:09.1628648Z with:
+2026-10-23T06:06:09.1628849Z   dest: ~/setup-pnpm
+2026-10-23T06:06:09.1629065Z   run_install: null
+2026-10-23T06:06:09.1629265Z   cache: false
+2026-10-23T06:06:09.1629481Z   cache_dependency_path: pnpm-lock.yaml
+2026-10-23T06:06:09.1629772Z   package_json_file: package.json
+2026-10-23T06:06:09.1630026Z   standalone: false
+2026-10-23T06:06:09.1630260Z env:
+2026-10-23T06:06:09.1630587Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:09.1631017Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:09.1631268Z ##[endgroup]
+2026-10-23T06:06:09.3080792Z ##[group]Running self-installer...
+2026-10-23T06:06:09.7141171Z (node:2401) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-23T06:06:09.7143494Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-23T06:06:09.8849611Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-10-23T06:06:09.8940683Z Packages: +1
+2026-10-23T06:06:09.8941278Z +
+2026-10-23T06:06:10.2238215Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-10-23T06:06:10.2661225Z 
+2026-10-23T06:06:10.2661728Z dependencies:
+2026-10-23T06:06:10.2662208Z + pnpm 11.28.6 (12.15.0 is available)
+2026-10-23T06:06:10.2662429Z 
+2026-10-23T06:06:10.2689058Z Done in 787ms
+2026-10-23T06:06:10.4902808Z ##[endgroup]
+2026-10-23T06:06:10.4903156Z Installation Completed!
+2026-10-23T06:06:10.5006602Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=1342]
+2026-10-23T06:06:10.5019393Z ##[start-action display=Set node version to 24;id=__self.__actions_setup-node]
+2026-10-23T06:06:10.5084315Z ##[group]Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+2026-10-23T06:06:10.5084688Z with:
+2026-10-23T06:06:10.5084901Z   node-version: 24
+2026-10-23T06:06:10.5085103Z   cache: pnpm
+2026-10-23T06:06:10.5085308Z   check-latest: false
+2026-10-23T06:06:10.5087525Z   token: ***
+2026-10-23T06:06:10.5088028Z   package-manager-cache: true
+2026-10-23T06:06:10.5088335Z env:
+2026-10-23T06:06:10.5088670Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:10.5089096Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:10.5089420Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:10.5089727Z ##[endgroup]
+2026-10-23T06:06:10.6672006Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-23T06:06:11.7762351Z ##[group]Environment details
+2026-10-23T06:06:15.0131018Z node: v24.21.0
+2026-10-23T06:06:15.0131295Z npm: 11.19.0
+2026-10-23T06:06:15.0131500Z yarn: 1.22.22
+2026-10-23T06:06:15.0131974Z ##[endgroup]
+2026-10-23T06:06:15.0151209Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+2026-10-23T06:06:16.1268186Z /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-10-23T06:06:16.2608001Z Cache hit for: node-cache-Linux-x64-pnpm-002f8184f5e3a14a911ee966d2b274c90c417fbc83b3f115b3a60497699daf09
+2026-10-23T06:06:17.3848916Z Received 125829120 of 277408301 (45.4%), 119.9 MBs/sec
+2026-10-23T06:06:18.3879097Z Received 260046848 of 277408301 (93.7%), 123.9 MBs/sec
+2026-10-23T06:06:19.0419282Z Received 277408301 of 277408301 (100.0%), 99.5 MBs/sec
+2026-10-23T06:06:19.0449166Z Cache Size: ~265 MB (277408301 B)
+2026-10-23T06:06:19.0504526Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5c4ba668-f48f-4534-af72-968d4273852e/cache.tzst -P -C /home/runner/work/vitest/vitest --use-compress-program unzstd
+2026-10-23T06:06:21.9985445Z Cache restored successfully
+2026-10-23T06:06:22.0123775Z Cache restored from key: node-cache-Linux-x64-pnpm-002f8184f5e3a14a911ee966d2b274c90c417fbc83b3f115b3a60497699daf09
+2026-10-23T06:06:22.0267463Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=11524]
+2026-10-23T06:06:22.0321951Z ##[group]Run pnpm i --filter '!docs'
+2026-10-23T06:06:22.0322404Z [36;1mpnpm i --filter '!docs'[0m
+2026-10-23T06:06:22.0670346Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:06:22.0670714Z env:
+2026-10-23T06:06:22.0671178Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:22.0671748Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:22.0672158Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:22.0672563Z ##[endgroup]
+2026-10-23T06:06:22.6555353Z Scope: 41 of 42 workspace projects
+2026-10-23T06:06:23.1146781Z Lockfile is up to date, resolution step is skipped
+2026-10-23T06:06:23.2538600Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-10-23T06:06:23.3210421Z .                                        |    +1057 ++++++++++++++++++++++++++++
+2026-10-23T06:06:23.8398811Z Packages are hard linked from the content-addressable store to the virtual store.
+2026-10-23T06:06:23.8400645Z   Content-addressable store is at: /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-10-23T06:06:23.8402026Z   Virtual store is at:             node_modules/.pnpm
+2026-10-23T06:06:24.2550243Z Progress: resolved 1057, reused 1056, downloaded 0, added 341
+2026-10-23T06:06:24.6937866Z Progress: resolved 1057, reused 1056, downloaded 0, added 1057, done
+2026-10-23T06:06:25.5355779Z .../node_modules/protobufjs postinstall$ node scripts/postinstall
+2026-10-23T06:06:25.5618037Z .../node_modules/@parcel/watcher install$ node scripts/build-from-source.js
+2026-10-23T06:06:25.6263451Z .../node_modules/protobufjs postinstall: Done
+2026-10-23T06:06:25.6369900Z .../node_modules/edgedriver install$ test -f ./dist/install.js && node ./dist/install.js || echo "Skipping install, project not build!"
+2026-10-23T06:06:25.6589338Z .../node_modules/@parcel/watcher install: Done
+2026-10-23T06:06:25.6643279Z .../node_modules/@swc/core postinstall$ node postinstall.js
+2026-10-23T06:06:25.6738473Z .../node_modules/geckodriver postinstall$ test -f ./dist/install.js && node ./dist/install.js || echo "Skipping install, project not built!"
+2026-10-23T06:06:25.7221142Z .../node_modules/@swc/core postinstall: Done
+2026-10-23T06:06:25.8070158Z .../node_modules/edgedriver install: Done
+2026-10-23T06:06:25.8142900Z .../node_modules/geckodriver postinstall: Done
+2026-10-23T06:06:26.2330062Z Done in 4.1s using pnpm v11.28.6
+2026-10-23T06:06:26.2942752Z ##[group]Run vitest-dev/vitest/.github/actions/setup-playwright@94b1adcd06310e8e1e9f59130e9df57bb80602b1
+2026-10-23T06:06:26.2943311Z with:
+2026-10-23T06:06:26.2943518Z   browsers: chromium
+2026-10-23T06:06:26.2943735Z env:
+2026-10-23T06:06:26.2944067Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:26.2944508Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:26.2944820Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:26.2945132Z ##[endgroup]
+2026-10-23T06:06:26.2950822Z ##[start-action display=Resolve package versions;id=__self_2.resolve-package-versions]
+2026-10-23T06:06:26.2968419Z ##[group]Run echo "$(
+2026-10-23T06:06:26.2968702Z [36;1mecho "$([0m
+2026-10-23T06:06:26.2968922Z [36;1m  node -e "[0m
+2026-10-23T06:06:26.2969165Z [36;1m    const fs = require('fs');[0m
+2026-10-23T06:06:26.2969583Z [36;1m    const lockfile = fs.readFileSync('./pnpm-lock.yaml', 'utf8');[0m
+2026-10-23T06:06:26.2970268Z [36;1m    const pattern = (name) => new RegExp(name + ':\\\s+specifier: [\\\s\\\w\\\.^]+version: (\\\d+\\\.\\\d+\\\.\\\d+)');[0m
+2026-10-23T06:06:26.2970944Z [36;1m    const playwrightVersion = lockfile.match(pattern('playwright'))[1];[0m
+2026-10-23T06:06:26.2971450Z [36;1m    console.log('PLAYWRIGHT_VERSION=' + playwrightVersion);[0m
+2026-10-23T06:06:26.2971815Z [36;1m  "[0m
+2026-10-23T06:06:26.2972045Z [36;1m)" >> $GITHUB_OUTPUT[0m
+2026-10-23T06:06:26.3036782Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-23T06:06:26.3037144Z env:
+2026-10-23T06:06:26.3037512Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:26.3038332Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:26.3038670Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:26.3038993Z ##[endgroup]
+2026-10-23T06:06:26.3454227Z ##[end-action id=__self_2.resolve-package-versions;outcome=success;conclusion=success;duration_ms=50]
+2026-10-23T06:06:26.3460059Z ##[start-action display=Check resolved package versions;id=__self_2.__run]
+2026-10-23T06:06:26.3496202Z ##[end-action id=__self_2.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-23T06:06:26.3500242Z ##[start-action display=Cache Playwright v1.64.1;id=__self_2.playwright-cache]
+2026-10-23T06:06:26.3542591Z ##[group]Run actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+2026-10-23T06:06:26.3542963Z with:
+2026-10-23T06:06:26.3543247Z   path: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:26.3543619Z   key: Linux-playwright-chromium-1.64.1
+2026-10-23T06:06:26.3543960Z   restore-keys: Linux-playwright-chromium-
+
+2026-10-23T06:06:26.3544475Z   enableCrossOsArchive: false
+2026-10-23T06:06:26.3544744Z   fail-on-cache-miss: false
+2026-10-23T06:06:26.3544986Z   lookup-only: false
+2026-10-23T06:06:26.3545215Z   save-always: false
+2026-10-23T06:06:26.3545427Z env:
+2026-10-23T06:06:26.3545781Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:26.3546214Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:26.3546538Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:26.3546855Z ##[endgroup]
+2026-10-23T06:06:26.5754724Z Cache hit for: Linux-playwright-chromium-1.64.1
+2026-10-23T06:06:27.5388497Z Received 113113744 of 113113744 (100.0%), 129.7 MBs/sec
+2026-10-23T06:06:27.5390588Z Cache Size: ~108 MB (113113744 B)
+2026-10-23T06:06:27.5505026Z [command]/usr/bin/tar -xf /home/runner/work/_temp/16f42986-4e07-4f58-ad39-5ced2bace123/cache.tzst -P -C /home/runner/work/vitest/vitest --use-compress-program unzstd
+2026-10-23T06:06:28.0366112Z Cache restored successfully
+2026-10-23T06:06:28.0545332Z Cache restored from key: Linux-playwright-chromium-1.64.1
+2026-10-23T06:06:28.0667438Z ##[end-action id=__self_2.playwright-cache;outcome=success;conclusion=success;duration_ms=1716]
+2026-10-23T06:06:28.0672614Z ##[start-action display=Install Playwright chromium (cache miss);id=__self_2.__run_2]
+2026-10-23T06:06:28.0688417Z ##[end-action id=__self_2.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-23T06:06:28.0690663Z ##[start-action display=Install Playwright browsers (cache miss);id=__self_2.__run_3]
+2026-10-23T06:06:28.0695215Z ##[end-action id=__self_2.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-23T06:06:28.0738840Z ##[group]Run pnpm run build
+2026-10-23T06:06:28.0739194Z [36;1mpnpm run build[0m
+2026-10-23T06:06:28.0816265Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:06:28.0816562Z env:
+2026-10-23T06:06:28.0816955Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:28.0817439Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:28.0818100Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:28.0818434Z ##[endgroup]
+2026-10-23T06:06:28.7366699Z $ pnpm -r --filter @vitest/ui --filter='./packages/**' run build
+2026-10-23T06:06:29.3473785Z Scope: 14 of 42 workspace projects
+2026-10-23T06:06:29.3526140Z [WARN] The tasks form a dependency cycle and run in an arbitrary order relative to each other because ignoreWorkspaceCycles is set: packages/ui#build → packages/browser-preview#build → packages/browser#build → packages/ui#build; packages/browser-playwright#build → packages/vitest#build → packages/coverage-v8#build → packages/browser-playwright#build
+2026-10-23T06:06:29.7506952Z packages/browser-preview build$ premove dist && pnpm rollup -c
+2026-10-23T06:06:29.7515935Z packages/spy build$ premove dist && rollup -c
+2026-10-23T06:06:29.7519714Z packages/pretty-format build$ premove dist && rollup -c
+2026-10-23T06:06:30.2515154Z packages/spy build: 
+2026-10-23T06:06:30.2529368Z packages/spy build: src/index.ts → dist...
+2026-10-23T06:06:30.2820038Z packages/pretty-format build: 
+2026-10-23T06:06:30.2821520Z packages/pretty-format build: src/index.ts → dist...
+2026-10-23T06:06:30.4244348Z packages/spy build: created dist in 173ms
+2026-10-23T06:06:30.4249923Z packages/spy build: 
+2026-10-23T06:06:30.4251514Z packages/spy build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:30.5860214Z packages/pretty-format build: created dist in 303ms
+2026-10-23T06:06:30.5861737Z packages/pretty-format build: 
+2026-10-23T06:06:30.5864304Z packages/pretty-format build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:30.6129306Z packages/spy build: created dist in 186ms
+2026-10-23T06:06:30.6520366Z packages/spy build: Done
+2026-10-23T06:06:30.6616176Z packages/pretty-format build: created dist in 78ms
+2026-10-23T06:06:30.6776390Z packages/pretty-format build: Done
+2026-10-23T06:06:30.6782575Z packages/utils build$ premove dist && rollup -c
+2026-10-23T06:06:30.9849449Z packages/browser-preview build: 
+2026-10-23T06:06:30.9869702Z packages/browser-preview build: ./src/index.ts, ./src/locators.ts → dist...
+2026-10-23T06:06:31.0604070Z packages/utils build: 
+2026-10-23T06:06:31.0605834Z packages/utils build: src/index.ts, src/helpers.ts, src/diff/index.ts, src/error.ts, src/source-map.ts, src/source-map/node.ts, src/types.ts, src/constants.ts, src/offset.ts, src/timers.ts, src/display.ts, src/resolver.ts, src/serialize.ts → dist...
+2026-10-23T06:06:31.1025052Z packages/browser-preview build: created dist in 118ms
+2026-10-23T06:06:31.1026906Z packages/browser-preview build: 
+2026-10-23T06:06:31.1030082Z packages/browser-preview build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:31.1423700Z packages/browser-preview build: created dist in 39ms
+2026-10-23T06:06:31.1750894Z packages/browser-preview build: Done
+2026-10-23T06:06:31.4766895Z packages/utils build: created dist in 416ms
+2026-10-23T06:06:31.4769404Z packages/utils build: 
+2026-10-23T06:06:31.4774927Z packages/utils build: dist/.types/index.d.ts, dist/.types/helpers.d.ts, dist/.types/diff.d.ts, dist/.types/error.d.ts, dist/.types/source-map.d.ts, dist/.types/source-map/node.d.ts, dist/.types/types.d.ts, dist/.types/constants.d.ts, dist/.types/offset.d.ts, dist/.types/timers.d.ts, dist/.types/display.d.ts, dist/.types/resolver.d.ts, dist/.types/serialize.d.ts → dist...
+2026-10-23T06:06:31.6248913Z packages/utils build: created dist in 148ms
+2026-10-23T06:06:31.6471920Z packages/utils build: Done
+2026-10-23T06:06:31.6480246Z packages/ui build$ premove dist && pnpm build:node && pnpm build:client
+2026-10-23T06:06:31.6488768Z packages/mocker build$ premove dist && rollup -c
+2026-10-23T06:06:31.6489878Z packages/expect build$ premove dist && rollup -c
+2026-10-23T06:06:31.6490808Z packages/snapshot build$ premove dist && rollup -c
+2026-10-23T06:06:32.2069118Z packages/expect build: 
+2026-10-23T06:06:32.2099219Z packages/expect build: src/index.ts → dist...
+2026-10-23T06:06:32.2188637Z packages/mocker build: 
+2026-10-23T06:06:32.2220593Z packages/mocker build: src/index.ts, src/node/index.ts, src/node/redirect.ts, src/node/automock.ts, src/browser/index.ts, src/browser/register.ts, src/browser/auto-register.ts, src/node/transforms.ts → dist...
+2026-10-23T06:06:32.2222575Z packages/snapshot build: 
+2026-10-23T06:06:32.2224106Z packages/snapshot build: src/index.ts, src/environment.ts, src/manager.ts → dist...
+2026-10-23T06:06:32.5951531Z packages/ui build: $ rollup -c
+2026-10-23T06:06:32.6616646Z packages/expect build: created dist in 454ms
+2026-10-23T06:06:32.6648501Z packages/expect build: 
+2026-10-23T06:06:32.6677007Z packages/expect build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:32.6803158Z packages/snapshot build: created dist in 457ms
+2026-10-23T06:06:32.6828471Z packages/snapshot build: 
+2026-10-23T06:06:32.6863019Z packages/snapshot build: dist/.types/index.d.ts, dist/.types/environment.d.ts, dist/.types/manager.d.ts → dist...
+2026-10-23T06:06:32.9203924Z packages/expect build: created dist in 254ms
+2026-10-23T06:06:32.9228818Z packages/snapshot build: {
+2026-10-23T06:06:32.9253631Z packages/snapshot build:   message: '[plugin dts] Entry "environment.d.ts" still references private shared type exports with no public re-export: SnapshotEnvironmentOptions. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.',
+2026-10-23T06:06:32.9257369Z packages/snapshot build:   code: 'PLUGIN_WARNING',
+2026-10-23T06:06:32.9258770Z packages/snapshot build:   plugin: 'dts',
+2026-10-23T06:06:32.9259772Z packages/snapshot build:   Symbol(augmented): true
+2026-10-23T06:06:32.9260695Z packages/snapshot build: }
+2026-10-23T06:06:32.9261688Z packages/snapshot build: {
+2026-10-23T06:06:32.9264355Z packages/snapshot build:   message: '[plugin dts] Entry "index.d.ts" still references private shared type exports with no public re-export: RawSnapshotInfo. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.',
+2026-10-23T06:06:32.9268017Z packages/snapshot build:   code: 'PLUGIN_WARNING',
+2026-10-23T06:06:32.9274159Z packages/snapshot build:   plugin: 'dts',
+2026-10-23T06:06:32.9275993Z packages/snapshot build:   Symbol(augmented): true
+2026-10-23T06:06:32.9287974Z packages/snapshot build: }
+2026-10-23T06:06:32.9295320Z packages/snapshot build: created dist in 245ms
+2026-10-23T06:06:32.9539469Z packages/expect build: Done
+2026-10-23T06:06:32.9747067Z packages/snapshot build: Done
+2026-10-23T06:06:33.0995733Z packages/mocker build: created dist in 881ms
+2026-10-23T06:06:33.0996622Z packages/mocker build: 
+2026-10-23T06:06:33.0999488Z packages/mocker build: dist/.types/index.d.ts, dist/.types/node.d.ts, dist/.types/redirect.d.ts, dist/.types/automock.d.ts, dist/.types/browser.d.ts, dist/.types/register.d.ts, dist/.types/auto-register.d.ts, dist/.types/transforms.d.ts → dist...
+2026-10-23T06:06:33.1923486Z packages/ui build: 
+2026-10-23T06:06:33.1939679Z packages/ui build: ./node/index.ts, ./node/reporter.ts → dist...
+2026-10-23T06:06:33.3280944Z packages/mocker build: created dist in 229ms
+2026-10-23T06:06:33.3562506Z packages/mocker build: Done
+2026-10-23T06:06:33.4289224Z packages/ui build: created dist in 237ms
+2026-10-23T06:06:33.4297575Z packages/ui build: 
+2026-10-23T06:06:33.4302137Z packages/ui build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:33.4642598Z packages/ui build: created dist in 36ms
+2026-10-23T06:06:34.0503475Z packages/ui build: $ vite build
+2026-10-23T06:06:34.6812449Z packages/ui build: vite v8.0.11 building client environment for production...
+2026-10-23T06:06:34.7109274Z packages/ui build: 
+2026-10-23T06:06:35.5413515Z packages/ui build: transforming...✓ 416 modules transformed.
+2026-10-23T06:06:36.2079106Z packages/ui build: rendering chunks...
+2026-10-23T06:06:36.4216062Z packages/ui build: computing gzip size...
+2026-10-23T06:06:36.4348951Z packages/ui build: dist/client/index.html                   1.29 kB │ gzip:   0.65 kB
+2026-10-23T06:06:36.4351751Z packages/ui build: dist/client/assets/index-C2I4MNja.css   91.22 kB │ gzip:  17.76 kB
+2026-10-23T06:06:36.4353240Z packages/ui build: dist/client/assets/index-CwTRaJTO.js   816.54 kB │ gzip: 277.26 kB
+2026-10-23T06:06:36.4354990Z packages/ui build: ✓ built in 1.75s
+2026-10-23T06:06:36.4363812Z packages/ui build: [plugin builtin:vite-reporter] 
+2026-10-23T06:06:36.4365274Z packages/ui build: (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-10-23T06:06:36.4366708Z packages/ui build: - Using dynamic import() to code-split the application
+2026-10-23T06:06:36.4368652Z packages/ui build: - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+2026-10-23T06:06:36.4370347Z packages/ui build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2026-10-23T06:06:36.5279134Z packages/ui build: Done
+2026-10-23T06:06:36.5285757Z packages/browser build$ premove dist && pnpm build:node && pnpm build:client
+2026-10-23T06:06:37.0461439Z packages/browser build: $ rollup -c
+2026-10-23T06:06:37.3949645Z packages/browser build: 
+2026-10-23T06:06:37.3950613Z packages/browser build: ./src/node/index.ts → dist...
+2026-10-23T06:06:37.9282124Z packages/browser build: created dist in 534ms
+2026-10-23T06:06:37.9283205Z packages/browser build: 
+2026-10-23T06:06:37.9286120Z packages/browser build: ./src/client/tester/locators.ts, ./src/client/tester/expect-element.ts → dist...
+2026-10-23T06:06:38.3455933Z packages/browser build: created dist in 417ms
+2026-10-23T06:06:38.3458983Z packages/browser build: 
+2026-10-23T06:06:38.3459789Z packages/browser build: ./src/client/tester/context.ts → dist/context.js...
+2026-10-23T06:06:38.3735214Z packages/browser build: created dist/context.js in 27ms
+2026-10-23T06:06:38.3735938Z packages/browser build: 
+2026-10-23T06:06:38.3738656Z packages/browser build: ./src/client/client.ts → dist/client.js...
+2026-10-23T06:06:38.3958039Z packages/browser build: created dist/client.js in 23ms
+2026-10-23T06:06:38.3966895Z packages/browser build: 
+2026-10-23T06:06:38.3968608Z packages/browser build: ./src/client/tester/state.ts → dist/state.js...
+2026-10-23T06:06:38.4272491Z packages/browser build: created dist/state.js in 31ms
+2026-10-23T06:06:38.4273350Z packages/browser build: 
+2026-10-23T06:06:38.4276958Z packages/browser build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:38.4739193Z packages/browser build: created dist in 47ms
+2026-10-23T06:06:38.4740031Z packages/browser build: 
+2026-10-23T06:06:38.4741874Z packages/browser build: dist/.types-client/tester/locators.d.ts → dist...
+2026-10-23T06:06:38.5650803Z packages/browser build: (!) Unresolved dependencies
+2026-10-23T06:06:38.5652450Z packages/browser build: https://rollupjs.org/troubleshooting/#warning-treating-module-as-external-dependency
+2026-10-23T06:06:38.5654069Z packages/browser build: ivya/aria (imported by "dist/.types-client/utils.d.ts")
+2026-10-23T06:06:38.5655667Z packages/browser build: @rrweb/types (imported by "../../node_modules/.pnpm/rrweb-snapshot@2.1.1_patch_hash=b66b30796877352a5f887f3f4115c4e7265ddc11772af2223da4bd92293716f6/node_modules/rrweb-snapshot/dist/index.d.ts")
+2026-10-23T06:06:38.5656917Z packages/browser build: created dist in 91ms
+2026-10-23T06:06:38.5657577Z packages/browser build: 
+2026-10-23T06:06:38.5659215Z packages/browser build: ./src/vendor-types.ts → dist...
+2026-10-23T06:06:38.5984337Z packages/browser build: (!) Generated an empty chunk
+2026-10-23T06:06:38.5985937Z packages/browser build: "vendor-types"
+2026-10-23T06:06:38.5987253Z packages/browser build: created dist in 33ms
+2026-10-23T06:06:38.5988442Z packages/browser build: 
+2026-10-23T06:06:38.5990311Z packages/browser build: ./dist/.types/vendor-types.d.ts → dist...
+2026-10-23T06:06:38.6402054Z packages/browser build: created dist in 42ms
+2026-10-23T06:06:39.1668895Z packages/browser build: $ vite build src/client
+2026-10-23T06:06:39.3565899Z packages/browser build: vite v8.0.11 building client environment for production...
+2026-10-23T06:06:39.3671515Z packages/browser build: 
+2026-10-23T06:06:39.4165067Z packages/browser build: transforming...✓ 46 modules transformed.
+2026-10-23T06:06:39.4256410Z packages/browser build: rendering chunks...
+2026-10-23T06:06:39.4691385Z packages/browser build: computing gzip size...
+2026-10-23T06:06:39.4718680Z packages/browser build: dist/client/tester/tester.html                               0.48 kB │ gzip:  0.32 kB
+2026-10-23T06:06:39.4720770Z packages/browser build: dist/client/orchestrator.html                                0.96 kB │ gzip:  0.50 kB
+2026-10-23T06:06:39.4722712Z packages/browser build: dist/client/.vite/manifest.json                              1.30 kB │ gzip:  0.37 kB
+2026-10-23T06:06:39.4724721Z packages/browser build: dist/client/__vitest_browser__/defineProperty-B-KFXNh3.js   11.49 kB │ gzip:  3.91 kB
+2026-10-23T06:06:39.4726353Z packages/browser build: dist/client/__vitest_browser__/orchestrator-DpjMvayR.js     16.94 kB │ gzip:  4.91 kB
+2026-10-23T06:06:39.4728180Z packages/browser build: dist/client/__vitest_browser__/tester-CigjwTPA.js           81.54 kB │ gzip: 22.47 kB
+2026-10-23T06:06:39.4729951Z packages/browser build: dist/client/__vitest_browser__/rrweb-snapshot-JG8daYmg.js  151.19 kB │ gzip: 36.47 kB
+2026-10-23T06:06:39.4731119Z packages/browser build: ✓ built in 114ms
+2026-10-23T06:06:39.5341663Z packages/browser build: Done
+2026-10-23T06:06:39.5347094Z packages/browser-playwright build$ premove dist && pnpm rollup -c
+2026-10-23T06:06:40.3862821Z packages/browser-playwright build: 
+2026-10-23T06:06:40.3865675Z packages/browser-playwright build: ./src/index.ts, ./src/locators.ts → dist...
+2026-10-23T06:06:40.6167368Z packages/browser-playwright build: created dist in 230ms
+2026-10-23T06:06:40.6168695Z packages/browser-playwright build: 
+2026-10-23T06:06:40.6170285Z packages/browser-playwright build: dist/.types/index.d.ts → dist...
+2026-10-23T06:06:40.6712876Z packages/browser-playwright build: created dist in 54ms
+2026-10-23T06:06:40.7006107Z packages/browser-playwright build: Done
+2026-10-23T06:06:40.7013655Z packages/vitest build$ premove dist && rollup -c
+2026-10-23T06:06:41.0965969Z packages/vitest build: 
+2026-10-23T06:06:41.0972023Z packages/vitest build: src/paths.ts, src/public/index.ts, src/node/cli.ts, src/public/config.ts, src/public/node.ts, src/public/browser.ts, src/integrations/spy.ts, src/public/runtime.ts, src/public/worker.ts, src/runtime/moduleRunner/moduleEvaluator.ts, src/runtime/nodejsWorkerLoader.ts, src/utils/traces.ts, src/utils/tasks.ts, src/runtime/workers/forks.ts, src/runtime/workers/threads.ts, src/runtime/workers/vmThreads.ts, src/runtime/workers/vmForks.ts, src/runtime/runVmTests.ts → dist...
+2026-10-23T06:06:45.1846995Z packages/vitest build: created dist in 4s
+2026-10-23T06:06:45.1848325Z packages/vitest build: 
+2026-10-23T06:06:45.1849675Z packages/vitest build: src/public/config.ts → dist/config.cjs...
+2026-10-23T06:06:45.1993938Z packages/vitest build: created dist/config.cjs in 14ms
+2026-10-23T06:06:45.1994708Z packages/vitest build: 
+2026-10-23T06:06:45.1996959Z packages/vitest build: dist/.types/index.d.ts, dist/.types/node.d.ts, dist/.types/browser.d.ts, dist/.types/runtime.d.ts, dist/.types/config.d.ts, dist/.types/worker.d.ts, dist/.types/module-evaluator.d.ts → dist...
+2026-10-23T06:06:45.9881884Z packages/vitest build: (!) [plugin dts] Entry "browser.d.ts" still references private shared type exports with no public re-export: RuntimeCoverageModuleLoader, SerializedDiffOptions. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9886642Z packages/vitest build: (!) [plugin dts] Entry "config.d.ts" still references private shared type exports with no public re-export: FieldsWithDefaultValues. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9894341Z packages/vitest build: (!) [plugin dts] Entry "index.d.ts" still references private shared type exports with no public re-export: Awaitable, BirpcReturn, MaybeMocked, MaybeMockedDeep, MaybePartiallyMocked, MaybePartiallyMockedDeep, ModuleDefinitionDiagnostic, ModuleDefinitionDurationsDiagnostic, ModuleDefinitionLocation, Procedure, RuntimeOptions, SourceModuleDiagnostic, SourceModuleLocations, SuiteHooks, TaskPopulated, TemporalTimelike, Traces, UntrackedModuleDefinitionDiagnostic, VitestRunnerImportSource, createChainable, createFileTask, fn, spyOn. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9900339Z packages/vitest build: (!) [plugin dts] Entry "module-evaluator.d.ts" still references private shared type exports with no public re-export: GetterTracker. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9903563Z packages/vitest build: (!) [plugin dts] Entry "node.d.ts" still references private shared type exports with no public re-export: Awaitable, CoverageMap. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9906715Z packages/vitest build: (!) [plugin dts] Entry "runtime.d.ts" still references private shared type exports with no public re-export: SnapshotEnvironmentOptions. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9909860Z packages/vitest build: (!) [plugin dts] Entry "worker.d.ts" still references private shared type exports with no public re-export: Awaitable, BirpcOptions, Traces, WorkerSetupContext. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-10-23T06:06:45.9911231Z packages/vitest build: (!) Unresolved dependencies
+2026-10-23T06:06:45.9911966Z packages/vitest build: https://rollupjs.org/troubleshooting/#warning-treating-module-as-external-dependency
+2026-10-23T06:06:45.9913408Z packages/vitest build: node:path (imported by "../../node_modules/.pnpm/@vitest+istanbul-lib-report@2.0.0/node_modules/@vitest/istanbul-lib-report/dist/path.d.mts")
+2026-10-23T06:06:45.9914223Z packages/vitest build: created dist in 789ms
+2026-10-23T06:06:46.0488383Z packages/vitest build: Done
+2026-10-23T06:06:46.0496081Z packages/coverage-v8 build$ premove dist && rollup -c
+2026-10-23T06:06:46.0499181Z packages/web-worker build$ premove dist && rollup -c
+2026-10-23T06:06:46.0508080Z packages/coverage-istanbul build$ premove dist && rollup -c
+2026-10-23T06:06:46.4302182Z packages/coverage-v8 build: 
+2026-10-23T06:06:46.4304271Z packages/coverage-v8 build: src/index.ts, src/browser.ts, src/provider.ts → dist...
+2026-10-23T06:06:46.5908405Z packages/web-worker build: 
+2026-10-23T06:06:46.5917170Z packages/web-worker build: src/index.ts, src/pure.ts → dist...
+2026-10-23T06:06:46.5942772Z packages/coverage-istanbul build: 
+2026-10-23T06:06:46.5946348Z packages/coverage-istanbul build: src/index.ts, src/browser.ts, src/provider.ts → dist...
+2026-10-23T06:06:46.6362823Z packages/coverage-v8 build: created dist in 205ms
+2026-10-23T06:06:46.6363890Z packages/coverage-v8 build: 
+2026-10-23T06:06:46.6365710Z packages/coverage-v8 build: dist/.types/index.d.ts, dist/.types/browser.d.ts, dist/.types/provider.d.ts → dist...
+2026-10-23T06:06:46.6907240Z packages/coverage-v8 build: created dist in 55ms
+2026-10-23T06:06:46.7100049Z packages/coverage-v8 build: Done
+2026-10-23T06:06:46.7850818Z packages/web-worker build: created dist in 194ms
+2026-10-23T06:06:46.7856546Z packages/web-worker build: 
+2026-10-23T06:06:46.7858066Z packages/web-worker build: dist/.types/pure.d.ts → dist...
+2026-10-23T06:06:46.8121522Z packages/coverage-istanbul build: created dist in 215ms
+2026-10-23T06:06:46.8149016Z packages/coverage-istanbul build: 
+2026-10-23T06:06:46.8169941Z packages/coverage-istanbul build: dist/.types/index.d.ts, dist/.types/browser.d.ts, dist/.types/provider.d.ts → dist...
+2026-10-23T06:06:46.8366060Z packages/web-worker build: created dist in 51ms
+2026-10-23T06:06:46.8523575Z packages/web-worker build: Done
+2026-10-23T06:06:46.8647318Z packages/coverage-istanbul build: created dist in 56ms
+2026-10-23T06:06:46.8778950Z packages/coverage-istanbul build: Done
+2026-10-23T06:06:46.9199291Z ##[group]Run pnpm run test:ci:e2e
+2026-10-23T06:06:46.9199884Z [36;1mpnpm run test:ci:e2e[0m
+2026-10-23T06:06:46.9263680Z shell: /usr/bin/bash -e {0}
+2026-10-23T06:06:46.9263961Z env:
+2026-10-23T06:06:46.9264352Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:06:46.9264814Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:06:46.9265147Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:06:46.9265515Z   VITEST_CI_BLOB_LABEL: ubuntu-latest-node-24
+2026-10-23T06:06:46.9265821Z ##[endgroup]
+2026-10-23T06:06:47.5164193Z $ CI=true pnpm --filter @vitest/test-e2e run test
+2026-10-23T06:06:48.0942890Z $ vitest
+2026-10-23T06:06:48.3912675Z [33mTesting types with tsc and vue-tsc is an experimental feature.
+2026-10-23T06:06:48.3914228Z Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+2026-10-23T06:06:48.4148077Z 
+2026-10-23T06:06:48.4150232Z [1m[30m[46m RUN [49m[39m[22m [36mv5.1.0-beta.1 [39m[90m/home/runner/work/vitest/vitest/test/e2e[39m
+2026-10-23T06:06:48.4150864Z 
+2026-10-23T06:08:32.2576441Z Testing types with tsc and vue-tsc is an experimental feature.
+2026-10-23T06:08:32.2577276Z Breaking changes might not follow SemVer, please pin Vitest's version when using it.
+2026-10-23T06:09:00.2773830Z ----------|---------|----------|---------|---------|-------------------
+2026-10-23T06:09:00.2775118Z File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+2026-10-23T06:09:00.2776093Z ----------|---------|----------|---------|---------|-------------------
+2026-10-23T06:09:00.2777136Z All files |       0 |        0 |       0 |       0 |                   
+2026-10-23T06:09:00.2779144Z ----------|---------|----------|---------|---------|-------------------
+2026-10-23T06:09:28.8182255Z  [31m❯[39m [30m[45m main [49m[39m test/trace-timeline.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2508[2mms[22m[39m
+2026-10-23T06:09:28.8183796Z [31m   [31m×[31m prints the last attempt of a retried test[39m[33m 382[2mms[22m[39m
+2026-10-23T06:11:58.6743307Z 
+2026-10-23T06:11:58.6745001Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-10-23T06:11:58.6745321Z 
+2026-10-23T06:11:58.6751146Z [41m[1m FAIL [22m[49m [30m[45m main [49m[39m test/trace-timeline.test.ts[2m:163[22m[2m > [22mprints the last attempt of a retried test
+2026-10-23T06:11:58.6757261Z [31m[1mError[22m: Snapshot `prints the last attempt of a retried test 1` mismatched[39m
+2026-10-23T06:11:58.6758027Z 
+2026-10-23T06:11:58.6758213Z - Expected
+2026-10-23T06:11:58.6758575Z + Received
+2026-10-23T06:11:58.6758802Z 
+2026-10-23T06:11:58.6758954Z @@ -1,7 +1,7 @@
+2026-10-23T06:11:58.6759283Z   [
+2026-10-23T06:11:58.6759518Z -   "Trace (retry 1):
+2026-10-23T06:11:58.6759777Z +   "Trace:
+2026-10-23T06:11:58.6760057Z   step                  start    duration  location
+2026-10-23T06:11:58.6760516Z   expect.poll().toBe()  +<time>  <time>    basic.test.ts:5:75",
+2026-10-23T06:11:58.6760882Z     "Trace (retry 1):
+2026-10-23T06:11:58.6761170Z   step                  start    duration  location
+2026-10-23T06:11:58.6761576Z   expect.poll().toBe()  +<time>  <time>    basic.test.ts:5:75",
+2026-10-23T06:11:58.6761835Z 
+2026-10-23T06:11:58.6762186Z [36m [2m❯[22m test/trace-timeline.test.ts:[2m174:36[22m[39m
+2026-10-23T06:11:58.6798856Z     [90m172|[39m   })
+2026-10-23T06:11:58.6799170Z 
+2026-10-23T06:11:58.6801285Z     [90m173|[39m
+2026-10-23T06:11:58.6802019Z [2m  Snapshots [22m [1m[31m1 failed[39m[22m
+2026-10-23T06:11:58.6803435Z     [90m174|[39m   expect(extractTimelines(stderr)).toMatchInlineSnapshot(`
+2026-10-23T06:11:58.6804722Z     [90m   |[39m                                    [31m^[39m
+2026-10-23T06:11:58.6805648Z     [90m175|[39m     [
+2026-10-23T06:11:58.6808025Z     [90m176|[39m       "Trace (retry 1):
+2026-10-23T06:11:58.6808644Z 
+2026-10-23T06:11:58.6809350Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-10-23T06:11:58.6810117Z 
+2026-10-23T06:11:58.6815443Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m193 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (196)[39m
+2026-10-23T06:11:58.6822030Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1646 passed[39m[22m[2m | [22m[33m88 skipped[39m[2m | [22m[90m1 todo[39m[90m (1736)[39m
+2026-10-23T06:11:58.6823968Z [2mType Errors [22m [2mno errors[22m
+2026-10-23T06:11:58.6824666Z [2m   Start at [22m 06:06:48
+2026-10-23T06:11:58.6832318Z [2m   Duration [22m 310.24s[2m (tests 98%, import 1%)[22m
+2026-10-23T06:11:58.6849537Z 
+2026-10-23T06:11:58.7204694Z blob report written to /home/runner/work/vitest/vitest/test/e2e/.vitest/blob/blob-ubuntu-latest-node-24.json
+2026-10-23T06:11:58.7704153Z /home/runner/work/vitest/vitest/test/e2e:
+2026-10-23T06:11:58.7704975Z [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @vitest/test-e2e@ test: `vitest`
+2026-10-23T06:11:58.7705491Z Exit status 1
+2026-10-23T06:11:58.8334994Z [ELIFECYCLE] Command failed with exit code 1.
+2026-10-23T06:11:58.8554042Z ##[error]Process completed with exit code 1.
+2026-10-23T06:11:58.8670616Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-10-23T06:11:58.8671072Z with:
+2026-10-23T06:11:58.8671336Z   name: vitest-results-e2e-ubuntu-latest-node-24
+2026-10-23T06:11:58.8671774Z   path: README.md
+test/unit/.vitest
+test/e2e/.vitest
+packages/ui/.vitest
+
+2026-10-23T06:11:58.8672168Z   retention-days: 1
+2026-10-23T06:11:58.8672413Z   include-hidden-files: true
+2026-10-23T06:11:58.8672672Z   if-no-files-found: warn
+2026-10-23T06:11:58.8672915Z   compression-level: 6
+2026-10-23T06:11:58.8673141Z   overwrite: false
+2026-10-23T06:11:58.8673548Z   archive: true
+2026-10-23T06:11:58.8673753Z env:
+2026-10-23T06:11:58.8674086Z   PLAYWRIGHT_BROWSERS_PATH: /home/runner/work/vitest/vitest/.cache/ms-playwright
+2026-10-23T06:11:58.8674516Z   PNPM_CONFIG_TRUST_LOCKFILE: true
+2026-10-23T06:11:58.8674846Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-10-23T06:11:58.8675158Z ##[endgroup]
+2026-10-23T06:11:59.0156133Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-23T06:11:59.0158949Z The least common ancestor is /home/runner/work/vitest/vitest. This will be the root directory of the artifact
+2026-10-23T06:11:59.0160129Z With the provided path, there will be 2 files uploaded
+2026-10-23T06:11:59.0161062Z Artifact name is valid!
+2026-10-23T06:11:59.0161557Z Root directory input is valid!
+2026-10-23T06:11:59.2675706Z Uploading artifact: vitest-results-e2e-ubuntu-latest-node-24.zip
+2026-10-23T06:11:59.2714819Z Beginning upload of artifact content to blob storage
+2026-10-23T06:11:59.5258825Z Uploaded bytes 226663
+2026-10-23T06:11:59.5637685Z Finished uploading artifact content to blob storage!
+2026-10-23T06:11:59.5639489Z SHA256 digest of uploaded artifact is e5a202c06fd1a6d843abcba444d815aa7aaf3993cd295d56acbe83d2ef5f774c
+2026-10-23T06:11:59.5640728Z Finalizing artifact upload
+2026-10-23T06:12:00.0228578Z Artifact vitest-results-e2e-ubuntu-latest-node-24 successfully finalized. Artifact ID 12482746039
+2026-10-23T06:12:00.0230814Z Artifact vitest-results-e2e-ubuntu-latest-node-24 has been successfully uploaded! Final size is 226663 bytes. Artifact ID is 12482746039
+2026-10-23T06:12:00.0232838Z Artifact download URL: https://github.com/vitest-dev/vitest/actions/runs/39909441661/artifacts/12482746039
+2026-10-23T06:12:00.0426250Z Post job cleanup.
+2026-10-23T06:12:00.0431126Z ##[start-action display=Cache Playwright v1.64.1;id=__06feb5d9-0ccf-43d2-97be-2971f7127a19.playwright-cache]
+2026-10-23T06:12:00.0433535Z ##[end-action id=__06feb5d9-0ccf-43d2-97be-2971f7127a19.playwright-cache;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-23T06:12:00.0476138Z Post job cleanup.
+2026-10-23T06:12:00.0480511Z ##[start-action display=Set node version to 24;id=__4328a676-85c4-44fe-823d-dcb3fbb89450.__actions_setup-node]
+2026-10-23T06:12:00.0482611Z ##[end-action id=__4328a676-85c4-44fe-823d-dcb3fbb89450.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-23T06:12:00.0484647Z ##[start-action display=Install pnpm;id=__4328a676-85c4-44fe-823d-dcb3fbb89450.__pnpm_action-setup]
+2026-10-23T06:12:00.0517101Z Post job cleanup.
+2026-10-23T06:12:00.2010423Z Pruning is unnecessary.
+2026-10-23T06:12:00.2085793Z ##[end-action id=__4328a676-85c4-44fe-823d-dcb3fbb89450.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=160]
+2026-10-23T06:12:00.2156483Z Post job cleanup.
+2026-10-23T06:12:00.3157936Z [command]/usr/bin/git version
+2026-10-23T06:12:00.3206723Z git version 2.55.0
+2026-10-23T06:12:00.3245305Z Temporarily overriding HOME='/home/runner/work/_temp/866edcc5-0a5c-4247-be1a-b56d35c3307b' before making global git config changes
+2026-10-23T06:12:00.3246397Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-23T06:12:00.3252500Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/vitest/vitest
+2026-10-23T06:12:00.3285852Z Removing SSH command configuration
+2026-10-23T06:12:00.3292130Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-23T06:12:00.3325738Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-23T06:12:00.3548391Z Removing HTTP extra header
+2026-10-23T06:12:00.3553716Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-23T06:12:00.3588001Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-23T06:12:00.3804850Z Removing includeIf entries pointing to credentials config files
+2026-10-23T06:12:00.3811474Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-23T06:12:00.3846077Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-23T06:12:00.4212641Z Cleaning up orphan processes

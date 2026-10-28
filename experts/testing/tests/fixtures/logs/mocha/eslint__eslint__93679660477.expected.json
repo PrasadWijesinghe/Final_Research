@@ -1,0 +1,23 @@
+{
+  "framework": "mocha",
+  "repo": "eslint/eslint",
+  "job_id": 93679660477,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 38577,
+    "failed": 1,
+    "skipped": 11,
+    "total": 38589
+  },
+  "failed_test_names": [
+    "bin/eslint.js > reading from stdin > has exit code 0 if no linting errors are reported"
+  ],
+  "failed_files": [],
+  "first_error_type": "Error",
+  "first_project_path": null,
+  "note": "Progress reporter, Windows, a timeout; only node:internal frames."
+}

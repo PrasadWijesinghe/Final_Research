@@ -67,8 +67,12 @@ def _run() -> list[str]:
 
 def test_new_statements_compile_for_postgres() -> None:
     sql = _run()
-    assert len(sql) == 2 + 4 + 1  # update, list, counts (runs, jobs, logs, commits), days
-    update, repos, runs, jobs, logs, commits, days = sql
+    # update, list, counts (runs, jobs, logs, commits, pending logs, skipped runs), days
+    assert len(sql) == 2 + 6 + 1
+    update, repos, runs, jobs, logs, commits, pending, skipped, days = sql
+    assert "FROM raw.skipped_runs" in skipped
+    assert "LEFT OUTER JOIN raw.logs ON raw.logs.job_id = raw.jobs.job_id" in pending
+    assert "raw.logs.job_id IS NULL" in pending and "raw.jobs.status =" in pending
     assert update.startswith("UPDATE raw.sync_state SET last_daily_sync_at=")
     assert "WHERE raw.sync_state.repo_id =" in update
     assert "FROM raw.repos" in repos and "raw.repos.member =" in repos and "ORDER BY" in repos

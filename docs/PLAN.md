@@ -45,7 +45,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
   *Accept:* a new attempt of an old run is picked up by the re-scan in tests.
 - [x] **★ P1.7 Export and import.** `make export-data` → `data/exports/<member>-<date>.tar.gz` (pg_dump custom format + logs + `manifest.json` with checksums); `make import-data FILE=…` restores into a running stack.
   *Accept:* export on one database, import into a fresh one, row counts and log checksums match.
-- [ ] **P1.8 Data-quality report.** Per repo: runs, attempts, failed jobs, logs fetched / expired / missing, redaction counts.
+- [x] **P1.8 Data-quality report.** Per repo: runs, attempts, failed jobs, logs fetched / expired / missing, redaction counts.
   *Accept:* report generated from the test fixtures.
 
 ## Phase 2 — Core services
@@ -87,7 +87,7 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 Design: `docs/experts/test.md`.
 
-- [ ] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
+- [x] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
 - [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity.
 - [ ] **P4.3 Labelling** per §3, written as `FailureLabel`s; a manual-review sample exporter; a kappa calculator.
 - [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving.

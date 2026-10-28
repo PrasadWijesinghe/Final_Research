@@ -1,0 +1,295 @@
+﻿2026-09-20T18:06:20.2142632Z Current runner version: '2.337.0'
+2026-09-20T18:06:20.2162713Z ##[group]Runner Image Provisioner
+2026-09-20T18:06:20.2163430Z Hosted Compute Agent
+2026-09-20T18:06:20.2164069Z Version: 20260828.587
+2026-09-20T18:06:20.2164654Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-20T18:06:20.2165308Z Build Date: 2026-08-28T16:44:25Z
+2026-09-20T18:06:20.2165906Z Worker ID: {8673d2ea-de3b-4105-8e1c-1b4fc78e9ae8}
+2026-09-20T18:06:20.2166488Z Azure Region: centralus
+2026-09-20T18:06:20.2167015Z ##[endgroup]
+2026-09-20T18:06:20.2168080Z ##[group]Operating System
+2026-09-20T18:06:20.2168566Z Ubuntu
+2026-09-20T18:06:20.2169019Z 24.04.5
+2026-09-20T18:06:20.2169440Z LTS
+2026-09-20T18:06:20.2170026Z ##[endgroup]
+2026-09-20T18:06:20.2170624Z ##[group]Runner Image
+2026-09-20T18:06:20.2171109Z Image: ubuntu-24.04
+2026-09-20T18:06:20.2171597Z Version: 20260907.300.1
+2026-09-20T18:06:20.2172628Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-20T18:06:20.2173882Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-20T18:06:20.2174635Z ##[endgroup]
+2026-09-20T18:06:20.2175629Z ##[group]GITHUB_TOKEN Permissions
+2026-09-20T18:06:20.2177634Z Contents: write
+2026-09-20T18:06:20.2178329Z Metadata: read
+2026-09-20T18:06:20.2178912Z SecurityEvents: write
+2026-09-20T18:06:20.2179674Z ##[endgroup]
+2026-09-20T18:06:20.2182440Z Secret source: Actions
+2026-09-20T18:06:20.2183583Z Cache mode: write
+2026-09-20T18:06:20.2184579Z Prepare workflow directory
+2026-09-20T18:06:20.2489226Z Prepare all required actions
+2026-09-20T18:06:20.2532479Z Getting action download info
+2026-09-20T18:06:20.5324596Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-20T18:06:20.7748600Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-20T18:06:21.0123509Z Complete job name: Encryption tests
+2026-09-20T18:06:21.0725126Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-20T18:06:21.0726113Z with:
+2026-09-20T18:06:21.0726621Z   repository: Automattic/mongoose
+2026-09-20T18:06:21.0730591Z   token: ***
+2026-09-20T18:06:21.0731155Z   ssh-strict: true
+2026-09-20T18:06:21.0731645Z   ssh-user: git
+2026-09-20T18:06:21.0732164Z   persist-credentials: true
+2026-09-20T18:06:21.0732696Z   clean: true
+2026-09-20T18:06:21.0733183Z   sparse-checkout-cone-mode: true
+2026-09-20T18:06:21.0733771Z   fetch-depth: 1
+2026-09-20T18:06:21.0734247Z   fetch-tags: false
+2026-09-20T18:06:21.0734762Z   show-progress: true
+2026-09-20T18:06:21.0735265Z   lfs: false
+2026-09-20T18:06:21.0735740Z   submodules: false
+2026-09-20T18:06:21.0736274Z   set-safe-directory: true
+2026-09-20T18:06:21.0736816Z   allow-unsafe-pr-checkout: false
+2026-09-20T18:06:21.0737505Z env:
+2026-09-20T18:06:21.0737989Z   FORCE_COLOR: true
+2026-09-20T18:06:21.0738469Z ##[endgroup]
+2026-09-20T18:06:21.1541343Z Syncing repository: Automattic/mongoose
+2026-09-20T18:06:21.1543096Z ##[group]Getting Git version info
+2026-09-20T18:06:21.1543841Z Working directory is '/home/runner/work/mongoose/mongoose'
+2026-09-20T18:06:21.1544981Z [command]/usr/bin/git version
+2026-09-20T18:06:21.1910499Z git version 2.55.0
+2026-09-20T18:06:21.1927172Z ##[endgroup]
+2026-09-20T18:06:21.1936198Z Temporarily overriding HOME='/home/runner/work/_temp/134e8769-d815-47d9-bc5d-3137807e2980' before making global git config changes
+2026-09-20T18:06:21.1938541Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-20T18:06:21.1941290Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mongoose/mongoose
+2026-09-20T18:06:21.1977794Z Deleting the contents of '/home/runner/work/mongoose/mongoose'
+2026-09-20T18:06:21.1981250Z ##[group]Determining repository object format
+2026-09-20T18:06:21.1982368Z ##[endgroup]
+2026-09-20T18:06:21.1983185Z ##[group]Initializing the repository
+2026-09-20T18:06:21.1984796Z [command]/usr/bin/git init /home/runner/work/mongoose/mongoose
+2026-09-20T18:06:21.2061104Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-20T18:06:21.2062789Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-20T18:06:21.2064338Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-20T18:06:21.2065603Z hint: call:
+2026-09-20T18:06:21.2066229Z hint:
+2026-09-20T18:06:21.2067070Z hint: 	git config --global init.defaultBranch <name>
+2026-09-20T18:06:21.2068058Z hint:
+2026-09-20T18:06:21.2068957Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-20T18:06:21.2071068Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-20T18:06:21.2072188Z hint:
+2026-09-20T18:06:21.2072835Z hint: 	git branch -m <name>
+2026-09-20T18:06:21.2073656Z hint:
+2026-09-20T18:06:21.2074564Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-20T18:06:21.2076536Z Initialized empty Git repository in /home/runner/work/mongoose/mongoose/.git/
+2026-09-20T18:06:21.2078330Z [command]/usr/bin/git remote add origin https://github.com/Automattic/mongoose
+2026-09-20T18:06:21.2104863Z ##[endgroup]
+2026-09-20T18:06:21.2106142Z ##[group]Disabling automatic garbage collection
+2026-09-20T18:06:21.2107599Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-20T18:06:21.2129830Z ##[endgroup]
+2026-09-20T18:06:21.2131210Z ##[group]Setting up auth
+2026-09-20T18:06:21.2132091Z Removing SSH command configuration
+2026-09-20T18:06:21.2135233Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-20T18:06:21.2159221Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-20T18:06:21.4559674Z Removing HTTP extra header
+2026-09-20T18:06:21.4566053Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-20T18:06:21.4590561Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-20T18:06:21.4746810Z Removing includeIf entries pointing to credentials config files
+2026-09-20T18:06:21.4751977Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-20T18:06:21.4774986Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-20T18:06:21.4939530Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-20T18:06:21.4960140Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mongoose/mongoose/.git.path /home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:06:21.4980765Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:06:21.5064703Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:06:21.5085805Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:06:21.6356406Z ##[endgroup]
+2026-09-20T18:06:21.6357663Z ##[group]Fetching the repository
+2026-09-20T18:06:21.6363549Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ff141073592e0e3a7b14cd4a5dc79a827406ba99:refs/remotes/pull/16469/merge
+2026-09-20T18:06:22.4310511Z From https://github.com/Automattic/mongoose
+2026-09-20T18:06:22.4313031Z  * [new ref]         ff141073592e0e3a7b14cd4a5dc79a827406ba99 -> pull/16469/merge
+2026-09-20T18:06:22.4317752Z ##[endgroup]
+2026-09-20T18:06:22.4319429Z ##[group]Determining the checkout info
+2026-09-20T18:06:22.4321386Z ##[endgroup]
+2026-09-20T18:06:22.4322489Z [command]/usr/bin/git sparse-checkout disable
+2026-09-20T18:06:22.4358944Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-20T18:06:22.4380108Z ##[group]Checking out the ref
+2026-09-20T18:06:22.4381992Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/16469/merge
+2026-09-20T18:06:22.4788771Z Note: switching to 'refs/remotes/pull/16469/merge'.
+2026-09-20T18:06:22.4790438Z 
+2026-09-20T18:06:22.4791489Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-20T18:06:22.4793942Z changes and commit them, and you can discard any commits you make in this
+2026-09-20T18:06:22.4796382Z state without impacting any branches by switching back to a branch.
+2026-09-20T18:06:22.4797433Z 
+2026-09-20T18:06:22.4798210Z If you want to create a new branch to retain commits you create, you may
+2026-09-20T18:06:22.4800102Z do so (now or later) by using -c with the switch command. Example:
+2026-09-20T18:06:22.4801108Z 
+2026-09-20T18:06:22.4801611Z   git switch -c <new-branch-name>
+2026-09-20T18:06:22.4802456Z 
+2026-09-20T18:06:22.4803003Z Or undo this operation with:
+2026-09-20T18:06:22.4803923Z 
+2026-09-20T18:06:22.4804624Z   git switch -
+2026-09-20T18:06:22.4805338Z 
+2026-09-20T18:06:22.4806356Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-20T18:06:22.4807695Z 
+2026-09-20T18:06:22.4809248Z HEAD is now at ff14107 Merge f48dd6f4828b1e27b2503af6b9750bbdc63ebbc2 into 0538f121237e677a980ab6fc7213d26c5f36966b
+2026-09-20T18:06:22.4814638Z ##[endgroup]
+2026-09-20T18:06:22.4829568Z [command]/usr/bin/git log -1 --format=%H
+2026-09-20T18:06:22.4848465Z ff141073592e0e3a7b14cd4a5dc79a827406ba99
+2026-09-20T18:06:22.5173260Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-20T18:06:22.5174718Z with:
+2026-09-20T18:06:22.5175546Z   node-version: 22
+2026-09-20T18:06:22.5176396Z   check-latest: false
+2026-09-20T18:06:22.5184793Z   token: ***
+2026-09-20T18:06:22.5185680Z   package-manager-cache: true
+2026-09-20T18:06:22.5186672Z env:
+2026-09-20T18:06:22.5187479Z   FORCE_COLOR: true
+2026-09-20T18:06:22.5188358Z ##[endgroup]
+2026-09-20T18:06:22.6306762Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+2026-09-20T18:06:22.6309064Z ##[group]Environment details
+2026-09-20T18:06:23.1341678Z node: v22.23.2
+2026-09-20T18:06:23.1342750Z npm: 10.9.8
+2026-09-20T18:06:23.1343595Z yarn: 1.22.22
+2026-09-20T18:06:23.1344388Z ##[endgroup]
+2026-09-20T18:06:23.1442975Z ##[group]Run npm install
+2026-09-20T18:06:23.1443332Z [36;1mnpm install[0m
+2026-09-20T18:06:23.1474406Z shell: /usr/bin/bash -e {0}
+2026-09-20T18:06:23.1474786Z env:
+2026-09-20T18:06:23.1475071Z   FORCE_COLOR: true
+2026-09-20T18:06:23.1475338Z ##[endgroup]
+2026-09-20T18:06:42.3085442Z npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+2026-09-20T18:06:42.8712315Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-09-20T18:06:43.2738644Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+2026-09-20T18:06:44.2988858Z npm warn deprecated mongodb-runner@6.11.1: This package is not maintained anymore. Please use @mongodb-js/mongodb-runner instead
+2026-09-20T18:06:45.6034369Z 
+2026-09-20T18:06:45.6035865Z added 631 packages, and audited 632 packages in 22s
+2026-09-20T18:06:45.6036738Z 
+2026-09-20T18:06:45.6037321Z 195 packages are looking for funding
+2026-09-20T18:06:45.6038032Z   run `npm fund` for details
+2026-09-20T18:06:45.6068302Z 
+2026-09-20T18:06:45.6069848Z 9 vulnerabilities (4 moderate, 4 high, 1 critical)
+2026-09-20T18:06:45.6070389Z 
+2026-09-20T18:06:45.6070764Z To address issues that do not require attention, run:
+2026-09-20T18:06:45.6071261Z   npm audit fix
+2026-09-20T18:06:45.6071560Z 
+2026-09-20T18:06:45.6071887Z To address all issues (including breaking changes), run:
+2026-09-20T18:06:45.6072479Z   npm audit fix --force
+2026-09-20T18:06:45.6072684Z 
+2026-09-20T18:06:45.6072974Z Run `npm audit` for details.
+2026-09-20T18:06:45.6395748Z ##[group]Run npm install mongodb-client-encryption
+2026-09-20T18:06:45.6396313Z [36;1mnpm install mongodb-client-encryption[0m
+2026-09-20T18:06:45.6425263Z shell: /usr/bin/bash -e {0}
+2026-09-20T18:06:45.6425738Z env:
+2026-09-20T18:06:45.6426056Z   FORCE_COLOR: true
+2026-09-20T18:06:45.6426353Z ##[endgroup]
+2026-09-20T18:06:46.4984203Z 
+2026-09-20T18:06:46.4985203Z up to date, audited 632 packages in 807ms
+2026-09-20T18:06:46.4985549Z 
+2026-09-20T18:06:46.4985802Z 195 packages are looking for funding
+2026-09-20T18:06:46.4986298Z   run `npm fund` for details
+2026-09-20T18:06:46.5027793Z 
+2026-09-20T18:06:46.5061421Z 9 vulnerabilities (4 moderate, 4 high, 1 critical)
+2026-09-20T18:06:46.5061990Z 
+2026-09-20T18:06:46.5062745Z To address issues that do not require attention, run:
+2026-09-20T18:06:46.5063303Z   npm audit fix
+2026-09-20T18:06:46.5063504Z 
+2026-09-20T18:06:46.5063834Z To address all issues (including breaking changes), run:
+2026-09-20T18:06:46.5064632Z   npm audit fix --force
+2026-09-20T18:06:46.5064843Z 
+2026-09-20T18:06:46.5065049Z Run `npm audit` for details.
+2026-09-20T18:06:46.5194590Z ##[group]Run pushd node_modules/mongodb-client-encryption && npm run install && popd
+2026-09-20T18:06:46.5195522Z [36;1mpushd node_modules/mongodb-client-encryption && npm run install && popd[0m
+2026-09-20T18:06:46.5216535Z shell: /usr/bin/bash -e {0}
+2026-09-20T18:06:46.5216827Z env:
+2026-09-20T18:06:46.5217134Z   FORCE_COLOR: true
+2026-09-20T18:06:46.5217392Z ##[endgroup]
+2026-09-20T18:06:46.5257345Z ~/work/mongoose/mongoose/node_modules/mongodb-client-encryption ~/work/mongoose/mongoose
+2026-09-20T18:06:46.5995641Z 
+2026-09-20T18:06:46.5996482Z > mongodb-client-encryption@7.2.1 install
+2026-09-20T18:06:46.9972821Z > prebuild-install --runtime napi || node-gyp rebuild
+2026-09-20T18:06:46.9973263Z 
+2026-09-20T18:06:46.9973706Z ~/work/mongoose/mongoose
+2026-09-20T18:06:47.0005754Z ##[group]Run npm run setup-test-encryption
+2026-09-20T18:06:47.0006145Z [36;1mnpm run setup-test-encryption[0m
+2026-09-20T18:06:47.0027135Z shell: /usr/bin/bash -e {0}
+2026-09-20T18:06:47.0027498Z env:
+2026-09-20T18:06:47.0027746Z   FORCE_COLOR: true
+2026-09-20T18:06:47.0028022Z ##[endgroup]
+2026-09-20T18:06:47.0830450Z 
+2026-09-20T18:06:47.0831314Z > mongoose@9.10.1 setup-test-encryption
+2026-09-20T18:06:47.0832282Z > node scripts/setup-encryption-tests.js
+2026-09-20T18:06:47.0832865Z 
+2026-09-20T18:07:11.7309617Z ##[group]Run npm run test-encryption:ci
+2026-09-20T18:07:11.7311041Z [36;1mnpm run test-encryption:ci[0m
+2026-09-20T18:07:11.7331606Z shell: /usr/bin/bash -e {0}
+2026-09-20T18:07:11.7332016Z env:
+2026-09-20T18:07:11.7332267Z   FORCE_COLOR: true
+2026-09-20T18:07:11.7332530Z ##[endgroup]
+2026-09-20T18:07:11.8075546Z 
+2026-09-20T18:07:11.8076372Z > mongoose@9.10.1 test-encryption:ci
+2026-09-20T18:07:11.8077048Z > npm run test-encryption -- --reporter min
+2026-09-20T18:07:11.8077311Z 
+2026-09-20T18:07:11.8808704Z 
+2026-09-20T18:07:11.8809573Z > mongoose@9.10.1 test-encryption
+2026-09-20T18:07:11.8810410Z > mocha --exit ./test/encryption/*.test.js --reporter min
+2026-09-20T18:07:11.8810920Z 
+2026-09-20T18:07:12.4540857Z Downloading MongoDB "8.2.6": 0% (0mb / 122.6mb)
+2026-09-20T18:07:12.8348022Z Downloading MongoDB "8.2.6": 100% (122.6mb / 122.6mb)
+2026-09-20T18:07:12.9190305Z Downloading MongoDB "8.2.6": 100% (0mb / 0mb)
+2026-09-20T18:07:30.1408140Z [2J[1;3H
+2026-09-20T18:07:30.1409245Z [92m [0m[32m 74 passing[0m[90m (15s)[0m
+2026-09-20T18:07:30.1409926Z [31m  1 failing[0m
+2026-09-20T18:07:30.1410165Z 
+2026-09-20T18:07:30.1412923Z [0m  1) encryption integration tests
+2026-09-20T18:07:30.1413682Z        Tests that fields of valid schema types can be declared as encrypted schemas
+2026-09-20T18:07:30.1414592Z          array encrypted fields
+2026-09-20T18:07:30.1415110Z            document array fields for CSFLE
+2026-09-20T18:07:30.1415661Z              encrypts and decrypts:
+2026-09-20T18:07:30.1417321Z [0m[31m     Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/runner/work/mongoose/mongoose/test/encryption/encryption.test.js)[0m[90m
+2026-09-20T18:07:30.1419091Z       at listOnTimeout (node:internal/timers:585:17)
+2026-09-20T18:07:30.1419926Z       at process.processTimers (node:internal/timers:521:7)
+2026-09-20T18:07:30.1420464Z [0m
+2026-09-20T18:07:30.1424931Z 
+2026-09-20T18:07:30.1424973Z 
+2026-09-20T18:07:30.3872685Z ##[error]Process completed with exit code 1.
+2026-09-20T18:07:30.3995885Z Post job cleanup.
+2026-09-20T18:07:30.4697957Z [command]/usr/bin/git version
+2026-09-20T18:07:30.4726701Z git version 2.55.0
+2026-09-20T18:07:30.4752008Z Temporarily overriding HOME='/home/runner/work/_temp/c361fc6a-30a4-47b4-bbb7-ff7db094b497' before making global git config changes
+2026-09-20T18:07:30.4753990Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-20T18:07:30.4756907Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mongoose/mongoose
+2026-09-20T18:07:30.4779324Z Removing SSH command configuration
+2026-09-20T18:07:30.4784383Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-20T18:07:30.4811574Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-20T18:07:30.4972451Z Removing HTTP extra header
+2026-09-20T18:07:30.4976563Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-20T18:07:30.5000899Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-20T18:07:30.5157992Z Removing includeIf entries pointing to credentials config files
+2026-09-20T18:07:30.5163513Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-20T18:07:30.5183866Z includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path
+2026-09-20T18:07:30.5184813Z includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path
+2026-09-20T18:07:30.5185593Z includeif.gitdir:/github/workspace/.git.path
+2026-09-20T18:07:30.5186175Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-20T18:07:30.5190893Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path
+2026-09-20T18:07:30.5206863Z /home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:07:30.5214223Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mongoose/mongoose/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0f904afd\-5ae0\-42c0\-aee9\-3f69fb11e336\.config
+2026-09-20T18:07:30.5240924Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path
+2026-09-20T18:07:30.5257278Z /home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:07:30.5264483Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mongoose/mongoose/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0f904afd\-5ae0\-42c0\-aee9\-3f69fb11e336\.config
+2026-09-20T18:07:30.5287389Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-20T18:07:30.5303728Z /github/runner_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:07:30.5308734Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0f904afd\-5ae0\-42c0\-aee9\-3f69fb11e336\.config
+2026-09-20T18:07:30.5330555Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-20T18:07:30.5347712Z /github/runner_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config
+2026-09-20T18:07:30.5353532Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0f904afd\-5ae0\-42c0\-aee9\-3f69fb11e336\.config
+2026-09-20T18:07:30.5376333Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-20T18:07:30.5529495Z Removing credentials config '/home/runner/work/_temp/git-credentials-0f904afd-5ae0-42c0-aee9-3f69fb11e336.config'
+2026-09-20T18:07:30.5645930Z Cleaning up orphan processes
+2026-09-20T18:07:30.6164391Z Terminate orphan process: pid (2206) (mongod)
+2026-09-20T18:07:30.6351718Z Terminate orphan process: pid (2207) (mongod)
+2026-09-20T18:07:30.6520425Z Terminate orphan process: pid (2208) (mongod)
+2026-09-20T18:07:30.6685766Z Terminate orphan process: pid (2209) (mongod)
+2026-09-20T18:07:30.6850392Z Terminate orphan process: pid (2210) (mongod)
+2026-09-20T18:07:30.6997447Z Terminate orphan process: pid (2211) (mongod)
+2026-09-20T18:07:30.7151440Z Terminate orphan process: pid (2212) (mongod)
+2026-09-20T18:07:30.7325281Z Terminate orphan process: pid (2213) (mongod)
+2026-09-20T18:07:30.7473342Z Terminate orphan process: pid (2215) (mongod)
+2026-09-20T18:07:30.7632587Z Terminate orphan process: pid (2222) (mongod)
+2026-09-20T18:07:30.7930333Z Terminate orphan process: pid (2235) (mongod)
+2026-09-20T18:07:30.8068816Z Terminate orphan process: pid (2250) (mongod)
+2026-09-20T18:07:30.8209488Z Terminate orphan process: pid (3684) (mongos)

@@ -1,0 +1,23 @@
+{
+  "framework": "vitest",
+  "repo": "vitest-dev/vitest",
+  "job_id": 120184157286,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "none",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 1640,
+    "failed": 0,
+    "skipped": 88,
+    "total": 1729,
+    "todo": 1,
+    "files_failed": 0
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Passing; skipped files and one todo."
+}

@@ -1,0 +1,21 @@
+{
+  "framework": "mocha",
+  "repo": "sequelize/sequelize",
+  "job_id": 111571454489,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 2,
+  "summary": {
+    "passed": 1726,
+    "failed": 0,
+    "skipped": 15,
+    "total": 1741
+  },
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Trimmed. Passing; two mocha epilogues (1717 passing + 15 pending, then 9 passing)."
+}

@@ -46,3 +46,14 @@ class Settings:
     # DEFAULT: key management is protected by one admin token until GitHub sign-in exists
     # (P3.1). Unset means /api-keys is disabled (503), never open.
     admin_token: str = field(default_factory=lambda: os.environ.get("API_ADMIN_TOKEN", "").strip())
+    # GitHub App (P3.1). Values come from .env; the secret and key path are never logged.
+    # DEFAULT: empty webhook secret means /webhooks/github answers 503 (never accepts unsigned).
+    github_webhook_secret: str = field(
+        default_factory=lambda: os.environ.get("GITHUB_WEBHOOK_SECRET", "").strip()
+    )
+    github_app_id: str = field(default_factory=lambda: os.environ.get("GITHUB_APP_ID", "").strip())
+    github_app_key_path: str = field(
+        default_factory=lambda: os.environ.get("GITHUB_APP_PRIVATE_KEY_PATH", "").strip()
+    )
+    # DEFAULT: logs fetched by the webhook handler go under ./data like the collector's (DATA_DIR).
+    data_dir: str = field(default_factory=lambda: os.environ.get("DATA_DIR", "").strip())

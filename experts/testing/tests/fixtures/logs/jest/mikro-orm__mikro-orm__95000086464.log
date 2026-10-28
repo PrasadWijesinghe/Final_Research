@@ -1,0 +1,809 @@
+﻿2026-08-15T10:39:04.9090745Z Current runner version: '2.336.0'
+2026-08-15T10:39:04.9123936Z ##[group]Runner Image Provisioner
+2026-08-15T10:39:04.9125058Z Hosted Compute Agent
+2026-08-15T10:39:04.9125810Z Version: 20260729.566
+2026-08-15T10:39:04.9126491Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-15T10:39:04.9127604Z Build Date: 2026-07-29T19:17:02Z
+2026-08-15T10:39:04.9128352Z Worker ID: {8eb0bab1-6b8a-4fee-a549-6e5dc456c220}
+2026-08-15T10:39:04.9129090Z Azure Region: northcentralus
+2026-08-15T10:39:04.9129748Z ##[endgroup]
+2026-08-15T10:39:04.9131505Z ##[group]Operating System
+2026-08-15T10:39:04.9132144Z Ubuntu
+2026-08-15T10:39:04.9132759Z 24.04.4
+2026-08-15T10:39:04.9133273Z LTS
+2026-08-15T10:39:04.9133818Z ##[endgroup]
+2026-08-15T10:39:04.9134421Z ##[group]Runner Image
+2026-08-15T10:39:04.9135315Z Image: ubuntu-24.04
+2026-08-15T10:39:04.9135948Z Version: 20260810.271.1
+2026-08-15T10:39:04.9137198Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-15T10:39:04.9138841Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+2026-08-15T10:39:04.9139858Z ##[endgroup]
+2026-08-15T10:39:04.9142989Z ##[group]GITHUB_TOKEN Permissions
+2026-08-15T10:39:04.9145661Z Actions: write
+2026-08-15T10:39:04.9146427Z ArtifactMetadata: write
+2026-08-15T10:39:04.9147071Z Attestations: write
+2026-08-15T10:39:04.9147678Z Checks: write
+2026-08-15T10:39:04.9148284Z CodeQuality: write
+2026-08-15T10:39:04.9148846Z Contents: write
+2026-08-15T10:39:04.9149475Z CopilotRequests: write
+2026-08-15T10:39:04.9150127Z Deployments: write
+2026-08-15T10:39:04.9150667Z Discussions: write
+2026-08-15T10:39:04.9151295Z Drives: write
+2026-08-15T10:39:04.9151826Z Issues: write
+2026-08-15T10:39:04.9152412Z Metadata: read
+2026-08-15T10:39:04.9153097Z Models: read
+2026-08-15T10:39:04.9153614Z Packages: write
+2026-08-15T10:39:04.9154224Z Pages: write
+2026-08-15T10:39:04.9155026Z PullRequests: write
+2026-08-15T10:39:04.9155726Z RepositoryProjects: write
+2026-08-15T10:39:04.9156367Z SecurityEvents: write
+2026-08-15T10:39:04.9156940Z Statuses: write
+2026-08-15T10:39:04.9156940Z [fixture trimmed: 1502 lines omitted]
+2026-08-15T10:42:08.5527658Z ##[group]Run yarn coverage --max-workers 4
+2026-08-15T10:42:08.5528034Z [36;1myarn coverage --max-workers 4[0m
+2026-08-15T10:42:08.5528316Z [36;1mgit status && git diff[0m
+2026-08-15T10:42:08.5564906Z shell: /usr/bin/bash -e {0}
+2026-08-15T10:42:08.5565202Z env:
+2026-08-15T10:42:08.5565389Z   RETRY_TESTS: 1
+2026-08-15T10:42:08.5565609Z ##[endgroup]
+2026-08-15T10:42:11.0360996Z Downloading MongoDB "8.2.1": 0% (0mb / 122mb)
+2026-08-15T10:42:11.5436097Z Downloading MongoDB "8.2.1": 100% (122mb / 122mb)
+2026-08-15T10:42:11.6117169Z Downloading MongoDB "8.2.1": 100% (0mb / 0mb)
+2026-08-15T10:42:16.0357582Z [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+2026-08-15T10:42:16.1022411Z [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+2026-08-15T10:42:16.1022411Z [fixture trimmed: 43 lines omitted]
+2026-08-15T10:43:04.7956591Z PASS tests/features/transactions/transaction-propagation.mongo.test.ts
+2026-08-15T10:43:06.2256890Z PASS tests/defineEntity.test.ts
+2026-08-15T10:43:10.0870982Z FAIL tests/EntityManager.sqlite2.test.ts
+2026-08-15T10:43:10.0893176Z   ● Test suite failed to run
+2026-08-15T10:43:10.0905241Z 
+2026-08-15T10:43:10.0936588Z     A jest worker process (pid=4875) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:43:10.0938380Z 
+2026-08-15T10:43:10.0939420Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:43:10.0940468Z 
+2026-08-15T10:43:10.5639277Z PASS tests/Utils.test.ts
+2026-08-15T10:43:10.8716892Z PASS tests/features/transactions/transaction-propagation.test.ts (10.064 s)
+2026-08-15T10:43:11.5005290Z PASS tests/types.test.ts
+2026-08-15T10:43:14.4430608Z PASS tests/features/cli/CLIHelper.test.ts
+2026-08-15T10:43:15.1860727Z PASS tests/features/joined-strategy.postgre.test.ts
+2026-08-15T10:43:16.6886302Z PASS tests/EntityManager.sqlite.test.ts (5.279 s)
+2026-08-15T10:43:16.8474978Z PASS tests/issues/GH1175.test.ts
+2026-08-15T10:43:17.3516307Z PASS tests/EntityManager.mysql.test.ts (61.17 s)
+2026-08-15T10:43:19.0315461Z 
+2026-08-15T10:43:19.0332794Z   #  /opt/hostedtoolcache/node/24.19.0/x64/bin/node[4888]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+2026-08-15T10:43:19.0343665Z   #  Assertion failed: (env) != nullptr
+2026-08-15T10:43:19.0344266Z 
+2026-08-15T10:43:19.0345265Z ----- Native stack trace -----
+2026-08-15T10:43:19.0347517Z 
+2026-08-15T10:43:19.0348534Z  1: 0x921e57 node::Assert(node::AssertionInfo const&) [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:19.0350254Z  2: 0x80969b node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:19.0352240Z  3: 0x7fc2e802ad39 Statement::~Statement() [/home/runner/work/mikro-orm/mikro-orm/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+2026-08-15T10:43:19.0355239Z  4: 0x7fc2e802ae75 Statement::~Statement() [/home/runner/work/mikro-orm/mikro-orm/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+2026-08-15T10:43:19.0357324Z  5: 0xe53ccd  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:19.0357324Z [fixture trimmed: 9 lines omitted]
+2026-08-15T10:43:28.4396646Z PASS tests/features/embeddables/embedded-entities.postgres.test.ts
+2026-08-15T10:43:28.7656221Z PASS tests/features/partial-loading/partial-loading.mysql.test.ts (8.181 s)
+2026-08-15T10:43:29.5951917Z FAIL tests/features/upsert/upsert.test.ts
+2026-08-15T10:43:29.5973959Z   ● Test suite failed to run
+2026-08-15T10:43:29.5974702Z 
+2026-08-15T10:43:29.5977072Z     A jest worker process (pid=4888) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:43:29.5987572Z 
+2026-08-15T10:43:29.5988521Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:43:29.5989625Z 
+2026-08-15T10:43:30.6012947Z PASS tests/features/migrations/Migrator.test.ts (8.984 s)
+2026-08-15T10:43:31.1203634Z 
+2026-08-15T10:43:31.1248492Z   #  /opt/hostedtoolcache/node/24.19.0/x64/bin/node[4876]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+2026-08-15T10:43:31.1250484Z   #  Assertion failed: (env) != nullptr
+2026-08-15T10:43:31.1251153Z 
+2026-08-15T10:43:31.1251629Z ----- Native stack trace -----
+2026-08-15T10:43:31.1252172Z 
+2026-08-15T10:43:31.1253118Z  1: 0x921e57 node::Assert(node::AssertionInfo const&) [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1255341Z  2: 0x80969b node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1257492Z  3: 0x7f6b940cad39 Statement::~Statement() [/home/runner/work/mikro-orm/mikro-orm/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+2026-08-15T10:43:31.1259696Z  4: 0x7f6b940cae75 Statement::~Statement() [/home/runner/work/mikro-orm/mikro-orm/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+2026-08-15T10:43:31.1267110Z  5: 0xe53ccd  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1268680Z  6: 0xf065f4  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1269599Z  7: 0xf075e9  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1270511Z  8: 0xf0ba60  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.1279838Z  9: 0x199e0d1  [/opt/hostedtoolcache/node/24.19.0/x64/bin/node]
+2026-08-15T10:43:31.5527004Z PASS tests/features/migrations/Migrator.sqlite.test.ts
+2026-08-15T10:43:32.7287925Z PASS tests/features/embeddables/entities-in-embeddables.postgres.test.ts
+2026-08-15T10:43:34.1456544Z PASS tests/features/transactions/transaction-propagation.sqlite.test.ts
+2026-08-15T10:43:34.1456544Z [fixture trimmed: 10 lines omitted]
+2026-08-15T10:43:34.1469438Z       at Logger._log (node_modules/knex/lib/logger.js:42:13)
+2026-08-15T10:43:34.1469780Z 
+2026-08-15T10:43:38.9349144Z FAIL tests/features/cursor-based-pagination/simple-cursor.test.ts
+2026-08-15T10:43:38.9378853Z   ● Test suite failed to run
+2026-08-15T10:43:38.9405318Z 
+2026-08-15T10:43:38.9430447Z     A jest worker process (pid=4876) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:43:38.9465183Z 
+2026-08-15T10:43:38.9486382Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:43:38.9495373Z 
+2026-08-15T10:43:41.8809234Z PASS tests/features/composite-keys/composite-keys.sqlite.test.ts
+2026-08-15T10:43:43.8288682Z PASS tests/features/upsert/upsert.mssql.test.ts (9.015 s)
+2026-08-15T10:43:45.5996116Z PASS tests/features/multiple-schemas/multiple-schemas.mssql.test.ts (13.181 s)
+2026-08-15T10:43:46.1170869Z PASS tests/features/partial-loading/partial-loading-exclude.mysql.test.ts
+2026-08-15T10:43:46.2886411Z PASS tests/features/migrations/Migrator.mssql.test.ts (15.347 s)
+2026-08-15T10:43:47.2450353Z PASS tests/features/multiple-schemas/multiple-schemas.postgres.test.ts
+2026-08-15T10:43:47.3803183Z PASS tests/MetadataValidator.test.ts
+2026-08-15T10:43:47.8986210Z PASS tests/features/optimistic-lock/mongodb-optimistic-lock.test.ts
+2026-08-15T10:43:48.8507339Z PASS tests/features/embeddables/embedded-entities.mongo.test.ts
+2026-08-15T10:43:49.4446732Z PASS tests/features/embeddables/embedded-entities.mongo2.test.ts
+2026-08-15T10:43:50.4503045Z PASS tests/features/cursor-based-pagination/bidirectional-cursor.test.ts
+2026-08-15T10:43:51.7060805Z PASS tests/features/composite-keys/composite-keys.mysql.test.ts (5.111 s)
+2026-08-15T10:43:52.7536880Z PASS tests/EntityManager.mongo2.test.ts
+2026-08-15T10:43:55.1796365Z PASS tests/features/virtual-entities/virtual-entities.sqlite.test.ts
+2026-08-15T10:43:57.7850333Z PASS tests/features/virtual-entities/virtual-entities.postgres.test.ts
+2026-08-15T10:43:59.3223720Z FAIL tests/features/collection/collection-operators.test.ts
+2026-08-15T10:43:59.3251584Z   ● Test suite failed to run
+2026-08-15T10:43:59.3275060Z 
+2026-08-15T10:43:59.3293307Z     A jest worker process (pid=5660) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:43:59.3294476Z 
+2026-08-15T10:43:59.3295425Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:43:59.3296593Z 
+2026-08-15T10:44:00.7485111Z PASS tests/features/auto-refreshing.postgre.test.ts
+2026-08-15T10:44:04.9770953Z PASS tests/features/read-replicas.test.ts (11.893 s)
+2026-08-15T10:44:06.6452417Z PASS tests/EntityManager.mariadb.test.ts (5.819 s)
+2026-08-15T10:44:07.2313538Z PASS tests/features/schema-generator/SchemaGenerator.postgres.test.ts (5.333 s)
+2026-08-15T10:44:07.4129559Z PASS tests/EntityFactory.test.ts
+2026-08-15T10:44:10.5056186Z PASS tests/features/entity-assigner/EntityAssigner.mongo.test.ts
+2026-08-15T10:44:10.7526433Z PASS tests/features/serialization/explicit-serialization.test.ts
+2026-08-15T10:44:13.5765940Z PASS tests/MikroORM.test.ts
+2026-08-15T10:44:14.1446143Z PASS tests/features/embeddables/polymorphic-embedded-entities.sqlite.test.ts (5.944 s)
+2026-08-15T10:44:14.6054316Z PASS tests/features/migrations/Migrator.mongo.test.ts
+2026-08-15T10:44:15.7030413Z PASS tests/features/pivot-table-upsert.test.ts
+2026-08-15T10:44:17.9637919Z PASS tests/EntityHelper.mongo.test.ts
+2026-08-15T10:44:20.5441481Z PASS tests/features/events/events.mysql.test.ts (5.03 s)
+2026-08-15T10:44:22.5555499Z PASS tests/features/filters/filters.mysql.test.ts
+2026-08-15T10:44:25.9443945Z PASS tests/features/lazy-scalar-properties/lazy-scalar-properties.mysql.test.ts
+2026-08-15T10:44:27.8932769Z PASS tests/features/entity-generator/MetadataHooks.mysql.test.ts (36.243 s)
+2026-08-15T10:44:28.6229666Z PASS tests/features/paginate-flag.postgres.test.ts
+2026-08-15T10:44:30.3286446Z PASS tests/features/schema-generator/SchemaGenerator.mysql.test.ts (15.139 s)
+2026-08-15T10:44:30.5744346Z PASS tests/features/paginate-flag.mariadb.test.ts
+2026-08-15T10:44:30.5744346Z [fixture trimmed: 148 lines omitted]
+2026-08-15T10:45:54.7126358Z PASS tests/features/unit-of-work/GH4879.test.ts
+2026-08-15T10:45:55.2226081Z PASS tests/issues/GH2273.test.ts
+2026-08-15T10:45:55.4621683Z FAIL tests/features/entity-assigner/GH4428.test.ts
+2026-08-15T10:45:55.4646405Z   ● Test suite failed to run
+2026-08-15T10:45:55.4669367Z 
+2026-08-15T10:45:55.4671370Z     A jest worker process (pid=6588) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:45:55.4673011Z 
+2026-08-15T10:45:55.4706046Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:45:55.4707057Z 
+2026-08-15T10:45:55.8253052Z PASS tests/features/refresh/refresh-custom-type.postgres.test.ts
+2026-08-15T10:45:56.0266283Z PASS tests/features/custom-types/GH725.test.ts
+2026-08-15T10:45:56.6958870Z PASS tests/issues/GH1231.test.ts
+2026-08-15T10:45:57.0941877Z PASS tests/features/single-table-inheritance/GH997.test.ts
+2026-08-15T10:45:57.4143100Z PASS tests/features/generated-columns/generated-columns.postgres.test.ts
+2026-08-15T10:45:58.0797673Z PASS tests/features/multiple-schemas/GH3177.test.ts
+2026-08-15T10:45:58.3005971Z PASS tests/DatabaseDriver.test.ts
+2026-08-15T10:45:58.4116408Z PASS tests/features/composite-keys/GH1079.test.ts
+2026-08-15T10:45:58.9071409Z PASS tests/features/schema-generator/changing-column-type.postgres.test.ts
+2026-08-15T10:45:59.3495883Z PASS tests/features/embeddables/GH6510.test.ts
+2026-08-15T10:46:00.1191291Z PASS tests/issues/GH4678.test.ts
+2026-08-15T10:46:00.3725828Z PASS tests/issues/GH3242.test.ts
+2026-08-15T10:46:00.6162546Z PASS tests/features/composite-keys/unsetting-shared-column.test.ts
+2026-08-15T10:46:00.8216361Z PASS tests/features/schema-generator/enum-diffing.postgres.test.ts
+2026-08-15T10:46:01.8136502Z PASS tests/features/multiple-schemas/schema-propagation.postgres.test.ts
+2026-08-15T10:46:02.4576142Z PASS tests/features/composite-keys/GH5774.test.ts
+2026-08-15T10:46:02.5655936Z PASS tests/features/filters/GH6784.test.ts
+2026-08-15T10:46:03.0782381Z PASS tests/features/cursor-based-pagination/GH7148.test.ts
+2026-08-15T10:46:03.2721352Z PASS tests/issues/GH3271.test.ts
+2026-08-15T10:46:03.2721352Z [fixture trimmed: 71 lines omitted]
+2026-08-15T10:46:35.0708771Z PASS tests/features/entity-generator/GeneratedColumns.mysql.test.ts
+2026-08-15T10:46:35.5949189Z PASS tests/features/entity-generator/index-expressions.mysql.test.ts
+2026-08-15T10:46:35.9116187Z FAIL tests/features/embeddables/GH6105.test.ts
+2026-08-15T10:46:35.9135725Z   ● Test suite failed to run
+2026-08-15T10:46:35.9185163Z 
+2026-08-15T10:46:35.9201787Z     A jest worker process (pid=8332) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:46:35.9205262Z 
+2026-08-15T10:46:35.9206036Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:46:35.9206795Z 
+2026-08-15T10:46:36.4456405Z PASS tests/features/schema-generator/changing-column-type.mysql.test.ts
+2026-08-15T10:46:36.5976527Z PASS tests/issues/GH1395.test.ts
+2026-08-15T10:46:37.4599598Z PASS tests/issues/GH4339.test.ts
+2026-08-15T10:46:38.0100626Z PASS tests/features/schema-generator/check-constraint.mariadb.test.ts
+2026-08-15T10:46:38.7195956Z PASS tests/features/serialization/to-pojo.test.ts
+2026-08-15T10:46:39.4377371Z FAIL tests/issues/GH3301.test.ts
+2026-08-15T10:46:39.4465995Z   ● Test suite failed to run
+2026-08-15T10:46:39.4495432Z 
+2026-08-15T10:46:39.4557031Z     A jest worker process (pid=17096) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:46:39.4605505Z 
+2026-08-15T10:46:39.4716588Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:46:39.4778636Z 
+2026-08-15T10:46:39.5980968Z PASS tests/features/optimistic-lock/GH3440.test.ts
+2026-08-15T10:46:39.8366109Z PASS tests/issues/GH2679.test.ts
+2026-08-15T10:46:41.3410364Z PASS tests/features/cli/FreshSchemaCommand.test.ts
+2026-08-15T10:46:41.7303144Z PASS tests/features/cursor-based-pagination/GH5155.test.ts
+2026-08-15T10:46:41.9086471Z PASS tests/features/unit-of-work/GH4129.test.ts
+2026-08-15T10:46:43.2796221Z PASS tests/features/filters/GH6943.test.ts
+2026-08-15T10:46:43.4596169Z PASS tests/issues/GH1626.test.ts
+2026-08-15T10:46:43.6616444Z PASS tests/features/schema-generator/adding-composite-fk.postgres.test.ts
+2026-08-15T10:46:44.8256194Z PASS tests/issues/GH4977.test.ts
+2026-08-15T10:46:45.0776819Z PASS tests/features/custom-types/GH5176.test.ts
+2026-08-15T10:46:45.7195815Z PASS tests/issues/GHx12.test.ts
+2026-08-15T10:46:46.3818758Z PASS tests/features/single-table-inheritance/GH5224.test.ts
+2026-08-15T10:46:46.5815843Z PASS tests/issues/GH5559.test.ts
+2026-08-15T10:46:47.1947789Z PASS tests/features/schema-generator/GH2930.test.ts
+2026-08-15T10:46:47.9890248Z PASS tests/issues/GH3543.test.ts
+2026-08-15T10:46:48.1181318Z PASS tests/issues/GHx39.test.ts
+2026-08-15T10:46:48.3842144Z PASS tests/issues/GH3354.test.ts
+2026-08-15T10:46:49.3690135Z PASS tests/issues/GH5003.test.ts
+2026-08-15T10:46:49.5326311Z PASS tests/features/cli/DropSchemaCommand.test.ts
+2026-08-15T10:46:49.5326311Z [fixture trimmed: 1 lines omitted]
+2026-08-15T10:46:50.6184009Z PASS tests/issues/GH811.test.ts
+2026-08-15T10:46:50.7976094Z PASS tests/features/custom-types/GH6166.test.ts
+2026-08-15T10:46:51.0111630Z FAIL tests/issues/GH3737.test.ts
+2026-08-15T10:46:51.0176060Z   ● Test suite failed to run
+2026-08-15T10:46:51.0268852Z 
+2026-08-15T10:46:51.0315336Z     A jest worker process (pid=17673) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:46:51.0535460Z 
+2026-08-15T10:46:51.0536631Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:46:51.0537705Z 
+2026-08-15T10:46:52.0484273Z PASS tests/features/entity-generator/GeneratedColumns.postgresql.test.ts
+2026-08-15T10:46:52.1946093Z PASS tests/issues/GHx45.test.ts
+2026-08-15T10:46:52.8166100Z PASS tests/features/cli/MigrateUpCommand.test.ts
+2026-08-15T10:46:53.2366046Z PASS tests/issues/GH6509.test.ts
+2026-08-15T10:46:53.4065281Z PASS tests/issues/GH7080.test.ts
+2026-08-15T10:46:54.1566056Z PASS tests/issues/GH7434.test.ts
+2026-08-15T10:46:54.5076328Z PASS tests/features/filters/filter-on-to-many-relation.test.ts
+2026-08-15T10:46:54.6455092Z PASS tests/features/sharing-column-in-composite-fk/sharing-column-in-composite-pk-fk-2.test.ts
+2026-08-15T10:46:55.0281513Z PASS tests/features/native-postgres-enums/GH6101.test.ts
+2026-08-15T10:46:55.4646475Z PASS tests/features/single-table-inheritance/GH5303.test.ts
+2026-08-15T10:46:55.6816087Z PASS tests/features/upsert/upsert-managed.test.ts
+2026-08-15T10:46:56.2175012Z PASS tests/features/native-postgres-enums/native-enum-diffing.postgres.test.ts
+2026-08-15T10:46:56.3306051Z PASS tests/issues/GHx46.test.ts
+2026-08-15T10:46:56.6628840Z PASS tests/issues/GH3540.test.ts
+2026-08-15T10:46:56.9385881Z PASS tests/features/filters/GH6760.test.ts
+2026-08-15T10:46:57.4421987Z PASS tests/features/entity-assigner/assign-collection-items.test.ts
+2026-08-15T10:46:57.7655625Z PASS tests/features/entity-generator/index-expressions.sqlite.test.ts
+2026-08-15T10:46:58.2539954Z PASS tests/features/custom-types/json-hydration.postgres.test.ts
+2026-08-15T10:46:58.5966030Z PASS tests/issues/GH1664.test.ts
+2026-08-15T10:46:58.5966030Z [fixture trimmed: 41 lines omitted]
+2026-08-15T10:47:15.2646179Z PASS tests/features/serialization/GH5968.test.ts
+2026-08-15T10:47:15.6546685Z PASS tests/issues/GH1226.test.ts
+2026-08-15T10:47:16.0773775Z FAIL tests/features/embeddables/GH3327.test.ts
+2026-08-15T10:47:16.0855947Z   ● Test suite failed to run
+2026-08-15T10:47:16.0885101Z 
+2026-08-15T10:47:16.0976744Z     A jest worker process (pid=17701) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:47:16.1005117Z 
+2026-08-15T10:47:16.1076565Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:47:16.1165654Z 
+2026-08-15T10:47:16.8515855Z PASS tests/Connection.test.ts
+2026-08-15T10:47:16.9658727Z PASS tests/features/dataloader/GH6764.test.ts
+2026-08-15T10:47:17.2466003Z PASS tests/issues/GH5955.test.ts
+2026-08-15T10:47:18.1295152Z PASS tests/features/filters/GH7084.test.ts
+2026-08-15T10:47:18.2946362Z PASS tests/features/multiple-schemas/different-schema-from-config.postgres.test.ts
+2026-08-15T10:47:18.6726131Z PASS tests/features/schema-generator/GH6405.test.ts
+2026-08-15T10:47:19.6276004Z PASS tests/issues/GHx9.test.ts
+2026-08-15T10:47:19.7943844Z PASS tests/issues/GH4209.test.ts
+2026-08-15T10:47:20.6246195Z PASS tests/features/single-table-inheritance/GH4351.test.ts
+2026-08-15T10:47:21.0426080Z PASS tests/issues/GH5247.test.ts
+2026-08-15T10:47:21.2002388Z PASS tests/issues/GH4160.test.ts
+2026-08-15T10:47:21.9356084Z PASS tests/features/single-table-inheritance/GH923.test.ts
+2026-08-15T10:47:22.4304668Z PASS tests/features/fulltext/GH3457.test.ts
+2026-08-15T10:47:22.6186415Z PASS tests/features/composite-keys/custom-pivot-entity-complex.sqlite.test.ts
+2026-08-15T10:47:23.5526122Z PASS tests/issues/GH529.test.ts
+2026-08-15T10:47:24.3946302Z PASS tests/features/cli/GenerateEntitiesCommand.test.ts
+2026-08-15T10:47:24.5692797Z PASS tests/features/reflection/production-cache/production-cache.test.ts (7.387 s)
+2026-08-15T10:47:25.4727010Z PASS tests/features/composite-keys/tuple-comparison.mssql.test.ts
+2026-08-15T10:47:25.8793270Z PASS tests/issues/GH6357.test.ts
+2026-08-15T10:47:25.8793270Z [fixture trimmed: 33 lines omitted]
+2026-08-15T10:47:42.2669565Z PASS tests/features/createForeignKeyConstraint/createForeignKeyConstraint.mysql.test.ts
+2026-08-15T10:47:42.9056445Z PASS tests/features/schema-generator/GH6323.test.ts
+2026-08-15T10:47:43.1595967Z FAIL tests/issues/GH3287.test.ts
+2026-08-15T10:47:43.1616196Z   ● Test suite failed to run
+2026-08-15T10:47:43.1675273Z 
+2026-08-15T10:47:43.1706682Z     A jest worker process (pid=6475) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:47:43.1735257Z 
+2026-08-15T10:47:43.1769272Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:47:43.1770084Z 
+2026-08-15T10:47:43.5086095Z PASS tests/issues/GH1111.test.ts
+2026-08-15T10:47:43.6510495Z PASS tests/features/embeddables/query-builder-embeddable.test.ts
+2026-08-15T10:47:44.1611435Z PASS tests/features/composite-keys/GH4478.test.ts
+2026-08-15T10:47:44.7892821Z PASS tests/issues/GH3988.test.ts
+2026-08-15T10:47:44.9626340Z PASS tests/features/load-count-where.test.ts
+2026-08-15T10:47:45.5919650Z PASS tests/issues/GH222.test.ts
+2026-08-15T10:47:46.1379878Z PASS tests/features/multiple-schemas/GH2919.test.ts
+2026-08-15T10:47:46.3724677Z PASS tests/features/embeddables/GH5989.test.ts
+2026-08-15T10:47:47.1795230Z PASS tests/issues/GHx41.test.ts
+2026-08-15T10:47:47.2948157Z PASS tests/features/filters/GH6458.test.ts
+2026-08-15T10:47:47.9246705Z PASS tests/features/sharing-column-in-composite-fk/sharing-column-in-composite-pk-fk-3.test.ts
+2026-08-15T10:47:48.0496186Z PASS tests/features/embeddables/GH7463.test.ts
+2026-08-15T10:47:48.4116099Z PASS tests/issues/GH1721.test.ts
+2026-08-15T10:47:48.5313300Z PASS tests/features/cursor-based-pagination/GH5922.test.ts
+2026-08-15T10:47:48.9736248Z PASS tests/EntityAssigner.test.ts
+2026-08-15T10:47:49.2956564Z PASS tests/features/multiple-schemas/discovery-hooks.test.ts
+2026-08-15T10:47:49.6901401Z PASS tests/features/custom-types/GH6206.test.ts
+2026-08-15T10:47:50.4306089Z PASS tests/features/embeddables/GH5074.test.ts
+2026-08-15T10:47:50.5444187Z PASS tests/features/embeddables/extensions.test.ts
+2026-08-15T10:47:50.5444187Z [fixture trimmed: 77 lines omitted]
+2026-08-15T10:48:18.7445950Z PASS tests/issues/GH572.test.ts
+2026-08-15T10:48:19.5776040Z PASS tests/issues/GH6723.test.ts
+2026-08-15T10:48:19.6435893Z FAIL tests/issues/GH5702.test.ts
+2026-08-15T10:48:19.6465663Z   ● Test suite failed to run
+2026-08-15T10:48:19.6511090Z 
+2026-08-15T10:48:19.6515483Z     A jest worker process (pid=4882) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:48:19.6517032Z 
+2026-08-15T10:48:19.6518027Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:48:19.6523006Z 
+2026-08-15T10:48:20.0223259Z PASS tests/issues/GH2829.test.ts
+2026-08-15T10:48:20.1531723Z PASS tests/features/schema-generator/enum.postgres.test.ts
+2026-08-15T10:48:20.6945182Z PASS tests/issues/GHx26.test.ts
+2026-08-15T10:48:21.2849407Z PASS tests/features/single-table-inheritance/GH5586.test.ts
+2026-08-15T10:48:21.8126895Z PASS tests/features/cli/UpdateSchemaCommand.test.ts
+2026-08-15T10:48:22.1556090Z PASS tests/issues/GH3696.test.ts
+2026-08-15T10:48:22.6026095Z PASS tests/issues/GH2777.test.ts
+2026-08-15T10:48:22.7196274Z PASS tests/features/schema-generator/GH6899.test.ts
+2026-08-15T10:48:22.9748592Z PASS tests/issues/GH2406.test.ts
+2026-08-15T10:48:23.1142010Z PASS tests/EntitySchema.test.ts
+2026-08-15T10:48:23.9736253Z PASS tests/features/cursor-based-pagination/GH6308.test.ts
+2026-08-15T10:48:24.1567888Z PASS tests/issues/GH1968.test.ts
+2026-08-15T10:48:24.4231520Z PASS tests/issues/GH5842.test.ts
+2026-08-15T10:48:24.5554222Z PASS tests/issues/GH4720.test.ts
+2026-08-15T10:48:25.1888359Z PASS tests/features/unit-of-work/GH6855.test.ts
+2026-08-15T10:48:25.4308921Z PASS tests/features/custom-types/GH5188.test.ts
+2026-08-15T10:48:25.5676709Z PASS tests/features/schema-generator/AbstractSchemaGenerator.test.ts
+2026-08-15T10:48:25.7536007Z PASS tests/issues/GH3694.test.ts
+2026-08-15T10:48:26.4222154Z PASS tests/issues/GH1831.test.ts
+2026-08-15T10:48:26.4222154Z [fixture trimmed: 66 lines omitted]
+2026-08-15T10:48:59.1035879Z PASS tests/issues/GH4899.test.ts
+2026-08-15T10:49:00.1719045Z PASS tests/issues/GH3820.test.ts
+2026-08-15T10:49:14.6750275Z FAIL tests/features/embeddables/GH4145.test.ts
+2026-08-15T10:49:14.6793848Z   ● Test suite failed to run
+2026-08-15T10:49:14.6806645Z 
+2026-08-15T10:49:14.6808437Z     A jest worker process (pid=18676) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:14.6819016Z 
+2026-08-15T10:49:14.6829851Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:14.6833146Z 
+2026-08-15T10:49:16.9525006Z PASS tests/issues/GH5872.test.ts
+2026-08-15T10:49:17.8335863Z PASS tests/issues/GH5709.test.ts
+2026-08-15T10:49:18.8569489Z PASS tests/features/generated-columns/GH6103.test.ts
+2026-08-15T10:49:20.1062187Z PASS tests/issues/GH6470.test.ts
+2026-08-15T10:49:20.7777991Z PASS tests/issues/GH1038.test.ts
+2026-08-15T10:49:21.1963185Z FAIL tests/issues/GH3005.test.ts
+2026-08-15T10:49:21.1964347Z   ● Test suite failed to run
+2026-08-15T10:49:21.1965394Z 
+2026-08-15T10:49:21.1966980Z     A jest worker process (pid=17921) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:21.1968441Z 
+2026-08-15T10:49:21.1969406Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:21.1970341Z 
+2026-08-15T10:49:21.7102259Z PASS tests/issues/GH435.test.ts
+2026-08-15T10:49:22.3006031Z FAIL tests/issues/GH3360.test.ts
+2026-08-15T10:49:22.3058176Z   ● Test suite failed to run
+2026-08-15T10:49:22.3058644Z 
+2026-08-15T10:49:22.3060088Z     A jest worker process (pid=19042) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:22.3062663Z 
+2026-08-15T10:49:22.3063729Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:22.3065060Z 
+2026-08-15T10:49:23.1036844Z PASS tests/features/embeddables/GH5992.test.ts
+2026-08-15T10:49:24.3198822Z PASS tests/features/embeddables/expand-query-builder-select.test.ts
+2026-08-15T10:49:24.7477372Z PASS tests/issues/GH2489.test.ts
+2026-08-15T10:49:24.8217015Z FAIL tests/features/entity-generator/CustomBase.sqlite.test.ts
+2026-08-15T10:49:24.8246190Z   ● Test suite failed to run
+2026-08-15T10:49:24.8275424Z 
+2026-08-15T10:49:24.8306797Z     A jest worker process (pid=18341) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:24.8308291Z 
+2026-08-15T10:49:24.8336257Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:24.8357511Z 
+2026-08-15T10:49:25.8027392Z PASS tests/features/custom-types/reloading-entity-with-json-prop.test.ts
+2026-08-15T10:49:25.9430658Z PASS tests/features/embeddables/GH5715.test.ts
+2026-08-15T10:49:26.1237041Z PASS tests/issues/GHx40.test.ts
+2026-08-15T10:49:26.9660638Z PASS tests/issues/GH3603.test.ts
+2026-08-15T10:49:27.4166538Z PASS tests/issues/GH6097.test.ts
+2026-08-15T10:49:27.8371960Z PASS tests/UnderscoreNamingStrategy.test.ts
+2026-08-15T10:49:28.4715841Z PASS tests/issues/GHx19.test.ts
+2026-08-15T10:49:28.7966031Z PASS tests/issues/GH6568.test.ts
+2026-08-15T10:49:29.2276146Z PASS tests/issues/GH1150.test.ts
+2026-08-15T10:49:29.8374169Z PASS tests/features/filters/count-filter.test.ts
+2026-08-15T10:49:30.2378044Z PASS tests/features/entity-generator/GH5912.postgresql.test.ts
+2026-08-15T10:49:30.3665574Z PASS tests/features/cursor-based-pagination/GH5478.test.ts
+2026-08-15T10:49:30.5096923Z PASS tests/features/embeddables/GH3690.test.ts
+2026-08-15T10:49:31.2716205Z PASS tests/features/custom-types/BooleanType.test.ts
+2026-08-15T10:49:31.9017269Z PASS tests/issues/GHx3.test.ts
+2026-08-15T10:49:32.8851758Z PASS tests/issues/GH4061.test.ts
+2026-08-15T10:49:33.5418491Z PASS tests/issues/GH2583.test.ts
+2026-08-15T10:49:34.2007394Z PASS tests/issues/GH5490.test.ts
+2026-08-15T10:49:34.7325925Z PASS tests/issues/GH4755.test.ts
+2026-08-15T10:49:34.7325925Z [fixture trimmed: 26 lines omitted]
+2026-08-15T10:49:49.0687476Z PASS tests/issues/GH557.test.ts
+2026-08-15T10:49:50.6105848Z PASS tests/features/sharing-column-in-composite-fk/GH6373.test.ts
+2026-08-15T10:49:52.5787053Z FAIL tests/features/embeddables/GH2975.test.ts
+2026-08-15T10:49:52.5805983Z   ● Test suite failed to run
+2026-08-15T10:49:52.5828459Z 
+2026-08-15T10:49:52.5829947Z     A jest worker process (pid=19686) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:52.5831281Z 
+2026-08-15T10:49:52.5832070Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:52.5832956Z 
+2026-08-15T10:49:52.7168139Z PASS tests/issues/GH3429.test.ts
+2026-08-15T10:49:53.3996206Z FAIL tests/features/custom-types/GH6179.test.ts
+2026-08-15T10:49:53.3997718Z   ● Test suite failed to run
+2026-08-15T10:49:53.4037039Z 
+2026-08-15T10:49:53.4072325Z     A jest worker process (pid=19656) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:53.4095496Z 
+2026-08-15T10:49:53.4126018Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:53.4145361Z 
+2026-08-15T10:49:54.6126158Z PASS tests/features/collection/collection-order.test.ts
+2026-08-15T10:49:56.4411861Z PASS tests/issues/GH535.test.ts
+2026-08-15T10:49:57.1646045Z PASS tests/features/serialization/GH3788.test.ts
+2026-08-15T10:49:57.7463173Z PASS tests/features/custom-types/GH6432.test.ts
+2026-08-15T10:49:57.8292007Z FAIL tests/issues/GH5591.test.ts
+2026-08-15T10:49:57.8305829Z   ● Test suite failed to run
+2026-08-15T10:49:57.8349514Z 
+2026-08-15T10:49:57.8396743Z     A jest worker process (pid=19635) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:49:57.8451251Z 
+2026-08-15T10:49:57.8476204Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:49:57.8505212Z 
+2026-08-15T10:49:57.9796202Z PASS tests/features/custom-types/GH5540.mssql.test.ts
+2026-08-15T10:49:58.4025640Z PASS tests/platforms/identifier-quoting.test.ts
+2026-08-15T10:49:58.9435979Z PASS tests/features/custom-types/GH4133.test.ts
+2026-08-15T10:49:59.6134592Z PASS tests/features/embeddables/GH2165.test.ts
+2026-08-15T10:50:00.0519667Z PASS tests/issues/GHx28.test.ts
+2026-08-15T10:50:00.1887557Z PASS tests/features/upsert/GH6534.test.ts
+2026-08-15T10:50:01.0356320Z PASS tests/issues/GH3810.test.ts
+2026-08-15T10:50:01.3601913Z PASS tests/issues/GH5518.test.ts
+2026-08-15T10:50:01.6170771Z PASS tests/issues/GH4497.test.ts
+2026-08-15T10:50:01.7949444Z PASS tests/features/custom-types/GH5540.postgres.test.ts
+2026-08-15T10:50:02.3076327Z PASS tests/features/default-values/default-values.mysql.test.ts
+2026-08-15T10:50:02.8918163Z PASS tests/issues/GHx21.test.ts
+2026-08-15T10:50:03.6382213Z PASS tests/issues/GH3576.test.ts
+2026-08-15T10:50:04.2278440Z PASS tests/features/filters/GH6484.test.ts
+2026-08-15T10:50:04.3978163Z PASS tests/issues/GH5499.test.ts
+2026-08-15T10:50:05.0451954Z PASS tests/issues/GH3339.test.ts
+2026-08-15T10:50:05.6385899Z PASS tests/features/custom-types/GH6726.test.ts
+2026-08-15T10:50:06.0538393Z PASS tests/issues/GH1538.test.ts
+2026-08-15T10:50:06.2870332Z PASS tests/features/embeddables/GH3134.test.ts
+2026-08-15T10:50:06.2870332Z [fixture trimmed: 13 lines omitted]
+2026-08-15T10:50:12.7896600Z PASS tests/features/single-table-inheritance/single-table-inheritance.mongo.test.ts
+2026-08-15T10:50:13.6795952Z PASS tests/issues/GH5506.test.ts
+2026-08-15T10:50:13.7743589Z FAIL tests/features/embeddables/GH3772.test.ts
+2026-08-15T10:50:13.7786475Z   ● Test suite failed to run
+2026-08-15T10:50:13.7794253Z 
+2026-08-15T10:50:13.7796773Z     A jest worker process (pid=19547) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:50:13.7797982Z 
+2026-08-15T10:50:13.7798829Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:50:13.7799672Z 
+2026-08-15T10:50:13.8842145Z PASS tests/features/embeddables/GH2149.test.ts
+2026-08-15T10:50:13.9996257Z PASS tests/issues/GH1927.test.ts
+2026-08-15T10:50:14.8916008Z PASS tests/features/upsert/GH5668.test.ts
+2026-08-15T10:50:15.0657322Z PASS tests/issues/GH1429.test.ts
+2026-08-15T10:50:15.2222442Z PASS tests/issues/GH560.test.ts
+2026-08-15T10:50:16.5436209Z PASS tests/features/filters/GH6666.test.ts
+2026-08-15T10:50:16.8986174Z PASS tests/issues/GH1346.test.ts
+2026-08-15T10:50:17.4076597Z PASS tests/issues/GH6863.test.ts
+2026-08-15T10:50:17.7234328Z PASS tests/features/composite-keys/GH1157.test.ts
+2026-08-15T10:50:18.0792430Z PASS tests/features/cli/ClearCacheCommand.test.ts
+2026-08-15T10:50:18.8045854Z PASS tests/issues/GH6593.test.ts
+2026-08-15T10:50:18.9886520Z PASS tests/features/entity-generator/DeferMode.postgresql.test.ts
+2026-08-15T10:50:19.3946137Z PASS tests/issues/GH2781.test.ts
+2026-08-15T10:50:20.5311090Z PASS tests/features/embeddables/GH6198.test.ts
+2026-08-15T10:50:20.6676037Z PASS tests/issues/GH1592.test.ts
+2026-08-15T10:50:21.3936031Z PASS tests/issues/GH401.test.ts
+2026-08-15T10:50:21.9305946Z PASS tests/issues/GH4295.test.ts
+2026-08-15T10:50:22.0776188Z PASS tests/features/schema-generator/changing-fk-type.postgres.test.ts
+2026-08-15T10:50:22.4814095Z PASS tests/features/custom-types/GH4870.test.ts
+2026-08-15T10:50:22.4814095Z [fixture trimmed: 4 lines omitted]
+2026-08-15T10:50:24.7206273Z PASS tests/features/embeddables/GH3258.test.ts
+2026-08-15T10:50:25.3716111Z PASS tests/issues/GHx24.test.ts
+2026-08-15T10:50:25.4754177Z FAIL tests/features/schema-generator/adding-fk-column.sqlite.test.ts
+2026-08-15T10:50:25.4805927Z   ● Test suite failed to run
+2026-08-15T10:50:25.4806287Z 
+2026-08-15T10:50:25.4807580Z     A jest worker process (pid=20022) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:50:25.4808772Z 
+2026-08-15T10:50:25.4809474Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:50:25.4810229Z 
+2026-08-15T10:50:25.7574687Z PASS tests/features/single-table-inheritance/GH5807.test.ts
+2026-08-15T10:50:26.2441428Z PASS tests/features/schema-generator/schema-name-from-config.postgres.test.ts
+2026-08-15T10:50:26.4805970Z PASS tests/features/serialization/GH5203.test.ts
+2026-08-15T10:50:26.9010451Z PASS tests/features/embeddables/naming-strategy.mongo.test.ts
+2026-08-15T10:50:27.7876197Z PASS tests/issues/GH5725.test.ts
+2026-08-15T10:50:28.1796069Z PASS tests/features/schema-generator/GH6914.test.ts
+2026-08-15T10:50:28.8566033Z PASS tests/issues/GH6204.test.ts
+2026-08-15T10:50:29.0691982Z PASS tests/issues/GH5128.test.ts
+2026-08-15T10:50:29.2096243Z PASS tests/features/entity-generator/character-types.postgres.test.ts
+2026-08-15T10:50:29.4427450Z PASS tests/features/schema-generator/GH6042.test.ts
+2026-08-15T10:50:30.6628368Z PASS tests/issues/GH6032.test.ts
+2026-08-15T10:50:30.7498952Z PASS tests/features/truncate/truncate.postgresql.test.ts
+2026-08-15T10:50:30.8912030Z PASS tests/issues/GHx11.test.ts
+2026-08-15T10:50:31.9857744Z PASS tests/issues/GHx25.test.ts
+2026-08-15T10:50:32.0936223Z PASS tests/features/schema-generator/ensure-indexes.mongo.test.ts
+2026-08-15T10:50:32.3926181Z PASS tests/features/entity-generator/ScalarPropsForFks.mysql.test.ts
+2026-08-15T10:50:33.1886840Z PASS tests/features/upsert/GH4923.test.ts
+2026-08-15T10:50:33.3174165Z PASS tests/features/upsert/GH6755.test.ts
+2026-08-15T10:50:33.4053208Z PASS tests/features/single-table-inheritance/GH2723.test.ts
+2026-08-15T10:50:33.4053208Z [fixture trimmed: 56 lines omitted]
+2026-08-15T10:50:50.6783931Z PASS tests/issues/GH533.test.ts
+2026-08-15T10:50:50.9326322Z PASS tests/features/cli/CreateDatabaseCommand.test.ts
+2026-08-15T10:50:51.6987398Z FAIL tests/issues/GH7002.test.ts
+2026-08-15T10:50:51.7036016Z   ● Test suite failed to run
+2026-08-15T10:50:51.7065158Z 
+2026-08-15T10:50:51.7096755Z     A jest worker process (pid=20066) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:50:51.7136091Z 
+2026-08-15T10:50:51.7137238Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:50:51.7138328Z 
+2026-08-15T10:50:52.1148242Z PASS tests/features/embeddables/GH2361.test.ts
+2026-08-15T10:50:52.3486143Z PASS tests/issues/GH2974.test.ts
+2026-08-15T10:50:53.7409627Z PASS tests/issues/GH2803.test.ts
+2026-08-15T10:50:53.9464114Z PASS tests/issues/GH2238.test.ts
+2026-08-15T10:50:54.8956145Z PASS tests/perf/GH4807.test.ts
+2026-08-15T10:50:55.6074283Z PASS tests/issues/GH5510.test.ts
+2026-08-15T10:50:55.7353671Z PASS tests/features/embeddables/GH5894.test.ts
+2026-08-15T10:50:56.3988538Z PASS tests/features/dataloader/GH6031.test.ts
+2026-08-15T10:50:56.8175935Z PASS tests/issues/GH2293.test.ts
+2026-08-15T10:50:56.9506447Z PASS tests/features/entity-generator/BidirectionalSkippedReferencedTable.test.ts
+2026-08-15T10:50:57.6089314Z PASS tests/issues/GH4973.test.ts
+2026-08-15T10:50:58.0826111Z PASS tests/issues/GH1262.test.ts
+2026-08-15T10:50:58.4435692Z PASS tests/issues/GH2703.test.ts
+2026-08-15T10:50:59.8366166Z PASS tests/features/upsert/GH3667.test.ts
+2026-08-15T10:51:00.0402358Z PASS tests/features/multiple-schemas/GH6575.test.ts
+2026-08-15T10:51:01.5356240Z PASS tests/issues/GH459.test.ts
+2026-08-15T10:51:01.7426592Z PASS tests/issues/GH6072.test.ts
+2026-08-15T10:51:02.4487322Z PASS tests/features/reflection/GH5185.test.ts
+2026-08-15T10:51:03.0490627Z PASS tests/features/embeddables/GH3887.mysql.test.ts
+2026-08-15T10:51:03.0490627Z [fixture trimmed: 5 lines omitted]
+2026-08-15T10:51:07.3803059Z PASS tests/issues/GH4692.test.ts
+2026-08-15T10:51:08.2836029Z PASS tests/issues/GH4377.test.ts
+2026-08-15T10:51:08.6255572Z FAIL tests/issues/GH5627.test.ts
+2026-08-15T10:51:08.6366402Z   ● Test suite failed to run
+2026-08-15T10:51:08.6445467Z 
+2026-08-15T10:51:08.6516936Z     A jest worker process (pid=20001) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:51:08.6561741Z 
+2026-08-15T10:51:08.6594687Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:51:08.6635947Z 
+2026-08-15T10:51:08.9040598Z PASS tests/issues/GHx43.test.ts
+2026-08-15T10:51:09.8536142Z PASS tests/features/truncate/truncate.mysql.test.ts
+2026-08-15T10:51:11.4136152Z PASS tests/issues/GH6879.test.ts
+2026-08-15T10:51:12.4120882Z PASS tests/features/entity-generator/character-types.mssql.test.ts
+2026-08-15T10:51:12.5561760Z PASS tests/features/embeddables/GH5935.test.ts
+2026-08-15T10:51:12.6654184Z PASS tests/issues/GH5530.test.ts
+2026-08-15T10:51:13.7155982Z PASS tests/issues/GH893.test.ts
+2026-08-15T10:51:13.9314218Z PASS tests/issues/GH2806.test.ts
+2026-08-15T10:51:14.0646662Z PASS tests/issues/GH2663.test.ts
+2026-08-15T10:51:14.7741759Z PASS tests/issues/GH6874.test.ts (12.446 s)
+2026-08-15T10:51:14.9071517Z PASS tests/features/unit-of-work/GH4254.test.ts
+2026-08-15T10:51:15.0861918Z PASS tests/features/custom-types/GH5563.test.ts
+2026-08-15T10:51:15.5051524Z PASS tests/features/schema-generator/enum-foreign-key.postgres.test.ts
+2026-08-15T10:51:16.0295957Z PASS tests/issues/GH5996.test.ts
+2026-08-15T10:51:16.1416063Z PASS tests/features/embeddables/GH6966.test.ts
+2026-08-15T10:51:16.2816224Z PASS tests/issues/GH4796.test.ts
+2026-08-15T10:51:16.6382603Z PASS tests/issues/GH5850.test.ts
+2026-08-15T10:51:17.2005522Z PASS tests/features/upsert/GH3787.test.ts
+2026-08-15T10:51:17.3626139Z PASS tests/features/schema-generator/GH3230.test.ts
+2026-08-15T10:51:17.3626139Z [fixture trimmed: 54 lines omitted]
+2026-08-15T10:51:42.2470537Z PASS tests/features/entity-generator/EntityGenerator.mssql.test.ts (11.122 s)
+2026-08-15T10:51:42.5626333Z PASS tests/features/entity-generator/smalldatetime.mssql.test.ts
+2026-08-15T10:51:42.8827713Z FAIL tests/features/embeddables/GH3906.test.ts
+2026-08-15T10:51:42.8878922Z   ● Test suite failed to run
+2026-08-15T10:51:42.8932359Z 
+2026-08-15T10:51:42.8966714Z     A jest worker process (pid=21090) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:51:42.8968452Z 
+2026-08-15T10:51:42.8990246Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:51:42.8991219Z 
+2026-08-15T10:51:43.0965921Z PASS tests/issues/GH1990.test.ts
+2026-08-15T10:51:43.7696149Z PASS tests/issues/GH1124.test.ts
+2026-08-15T10:51:43.9106316Z PASS tests/features/single-table-inheritance/GH3745.test.ts
+2026-08-15T10:51:44.3662043Z PASS tests/issues/GH5656.test.ts
+2026-08-15T10:51:45.0531519Z PASS tests/features/generated-columns/GH6693.test.ts
+2026-08-15T10:51:45.3046461Z PASS tests/features/reusing-mongo-client.test.ts
+2026-08-15T10:51:45.8524321Z PASS tests/issues/GH5706.test.ts
+2026-08-15T10:51:46.6666413Z PASS tests/features/native-postgres-enums/GH6557.test.ts
+2026-08-15T10:51:46.8005917Z PASS tests/issues/GH6083.test.ts
+2026-08-15T10:51:46.9256054Z PASS tests/features/schema-generator/GH491.test.ts
+2026-08-15T10:51:47.1896375Z PASS tests/issues/GH1616.test.ts
+2026-08-15T10:51:47.9932633Z PASS tests/issues/GH2760.test.ts
+2026-08-15T10:51:48.2146326Z PASS tests/features/custom-types/GH5150.test.ts
+2026-08-15T10:51:49.0336180Z PASS tests/features/unit-of-work/GH4412.test.ts
+2026-08-15T10:51:49.2196006Z PASS tests/features/schema-generator/GH6978.test.ts
+2026-08-15T10:51:49.4026085Z PASS tests/platforms/GH5811.test.ts
+2026-08-15T10:51:50.2606200Z PASS tests/issues/GHx2.test.ts
+2026-08-15T10:51:50.3972881Z PASS tests/issues/GH6861.test.ts
+2026-08-15T10:51:50.5444591Z PASS tests/features/entity-generator/UnknownType.mssql.test.ts
+2026-08-15T10:51:50.5444591Z [fixture trimmed: 59 lines omitted]
+2026-08-15T10:52:14.7955916Z PASS tests/issues/__snapshots__/GHx26.test.ts
+2026-08-15T10:52:14.9716113Z PASS tests/issues/GH6095.test.ts
+2026-08-15T10:52:15.0450781Z FAIL tests/issues/GH2973.test.ts
+2026-08-15T10:52:15.0466190Z   ● Test suite failed to run
+2026-08-15T10:52:15.0491858Z 
+2026-08-15T10:52:15.0516718Z     A jest worker process (pid=20269) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:15.0545276Z 
+2026-08-15T10:52:15.0576113Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:15.0577239Z 
+2026-08-15T10:52:15.8125997Z PASS tests/issues/GH3054.test.ts
+2026-08-15T10:52:15.9676030Z PASS tests/issues/GH4057.test.ts
+2026-08-15T10:52:16.8155549Z PASS tests/features/cache-adapters/MemoryCacheAdapter.test.ts
+2026-08-15T10:52:17.2366299Z PASS tests/features/cache-adapters/GeneratedCacheAdapter.test.ts
+2026-08-15T10:52:17.9056013Z PASS tests/issues/GH6553.test.ts
+2026-08-15T10:52:18.5636671Z PASS tests/issues/GH6853.test.ts
+2026-08-15T10:52:18.6970474Z PASS tests/issues/GH4526.test.ts
+2026-08-15T10:52:19.1706999Z PASS tests/features/validation/validate-entity-target-in-prop.test.ts
+2026-08-15T10:52:19.7716091Z PASS tests/features/schema-generator/GH2959.test.ts
+2026-08-15T10:52:20.1239218Z PASS tests/features/validation/validate-abstract-target.test.ts
+2026-08-15T10:52:20.2185954Z PASS tests/features/cache-adapters/NullCacheAdapter.test.ts
+2026-08-15T10:52:20.6253016Z PASS tests/issues/GH6960.test.ts
+2026-08-15T10:52:23.0216866Z ------------------------------------|---------|----------|---------|---------|----------------------------------------------------
+2026-08-15T10:52:23.0218537Z File                                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                  
+2026-08-15T10:52:23.0220061Z ------------------------------------|---------|----------|---------|---------|----------------------------------------------------
+2026-08-15T10:52:23.0235764Z All files                           |   99.18 |    97.17 |   99.17 |   99.18 |                                                    
+2026-08-15T10:52:23.0236645Z  better-sqlite/src                  |     100 |      100 |     100 |     100 |                                                    
+2026-08-15T10:52:23.0238919Z   BetterSqliteConnection.ts         |     100 |      100 |     100 |     100 |                                                    
+2026-08-15T10:52:23.0241667Z   BetterSqliteDriver.ts             |     100 |      100 |     100 |     100 |                                                    
+2026-08-15T10:52:23.0241667Z [fixture trimmed: 309 lines omitted]
+2026-08-15T10:52:23.0508939Z   SqliteSchemaHelper.ts             |     100 |      100 |     100 |     100 |                                                    
+2026-08-15T10:52:23.0509696Z ------------------------------------|---------|----------|---------|---------|----------------------------------------------------
+2026-08-15T10:52:23.3507820Z 
+2026-08-15T10:52:23.3509110Z Summary of all failing tests
+2026-08-15T10:52:23.3512611Z FAIL tests/EntityManager.sqlite2.test.ts
+2026-08-15T10:52:23.3513753Z   ● Test suite failed to run
+2026-08-15T10:52:23.3514070Z 
+2026-08-15T10:52:23.3524005Z     A jest worker process (pid=4875) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3525507Z 
+2026-08-15T10:52:23.3526213Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3526946Z 
+2026-08-15T10:52:23.3527954Z FAIL tests/features/upsert/upsert.test.ts
+2026-08-15T10:52:23.3528660Z   ● Test suite failed to run
+2026-08-15T10:52:23.3528969Z 
+2026-08-15T10:52:23.3533551Z     A jest worker process (pid=4888) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3534984Z 
+2026-08-15T10:52:23.3536118Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3536911Z 
+2026-08-15T10:52:23.3545871Z FAIL tests/features/cursor-based-pagination/simple-cursor.test.ts
+2026-08-15T10:52:23.3548234Z   ● Test suite failed to run
+2026-08-15T10:52:23.3548540Z 
+2026-08-15T10:52:23.3549878Z     A jest worker process (pid=4876) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3551042Z 
+2026-08-15T10:52:23.3551732Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3552463Z 
+2026-08-15T10:52:23.3552904Z FAIL tests/features/collection/collection-operators.test.ts
+2026-08-15T10:52:23.3553632Z   ● Test suite failed to run
+2026-08-15T10:52:23.3553920Z 
+2026-08-15T10:52:23.3555639Z     A jest worker process (pid=5660) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3556804Z 
+2026-08-15T10:52:23.3557488Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3558246Z 
+2026-08-15T10:52:23.3558579Z FAIL tests/features/entity-assigner/GH4428.test.ts
+2026-08-15T10:52:23.3559222Z   ● Test suite failed to run
+2026-08-15T10:52:23.3559493Z 
+2026-08-15T10:52:23.3562835Z     A jest worker process (pid=6588) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3564001Z 
+2026-08-15T10:52:23.3564680Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3565638Z 
+2026-08-15T10:52:23.3565965Z FAIL tests/features/embeddables/GH6105.test.ts
+2026-08-15T10:52:23.3566615Z   ● Test suite failed to run
+2026-08-15T10:52:23.3566886Z 
+2026-08-15T10:52:23.3568037Z     A jest worker process (pid=8332) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3569156Z 
+2026-08-15T10:52:23.3570104Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3570849Z 
+2026-08-15T10:52:23.3571099Z FAIL tests/issues/GH3301.test.ts
+2026-08-15T10:52:23.3571642Z   ● Test suite failed to run
+2026-08-15T10:52:23.3571915Z 
+2026-08-15T10:52:23.3576331Z     A jest worker process (pid=17096) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3577481Z 
+2026-08-15T10:52:23.3580282Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3581024Z 
+2026-08-15T10:52:23.3581279Z FAIL tests/issues/GH3737.test.ts
+2026-08-15T10:52:23.3581859Z   ● Test suite failed to run
+2026-08-15T10:52:23.3582138Z 
+2026-08-15T10:52:23.3586499Z     A jest worker process (pid=17673) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3587654Z 
+2026-08-15T10:52:23.3588501Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3589233Z 
+2026-08-15T10:52:23.3589726Z FAIL tests/features/embeddables/GH3327.test.ts
+2026-08-15T10:52:23.3590550Z   ● Test suite failed to run
+2026-08-15T10:52:23.3590834Z 
+2026-08-15T10:52:23.3596783Z     A jest worker process (pid=17701) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3597915Z 
+2026-08-15T10:52:23.3600141Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3600966Z 
+2026-08-15T10:52:23.3601239Z FAIL tests/issues/GH3287.test.ts
+2026-08-15T10:52:23.3601854Z   ● Test suite failed to run
+2026-08-15T10:52:23.3602153Z 
+2026-08-15T10:52:23.3603486Z     A jest worker process (pid=6475) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3605050Z 
+2026-08-15T10:52:23.3606203Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3607107Z 
+2026-08-15T10:52:23.3607377Z FAIL tests/issues/GH5702.test.ts
+2026-08-15T10:52:23.3607959Z   ● Test suite failed to run
+2026-08-15T10:52:23.3608258Z 
+2026-08-15T10:52:23.3611134Z     A jest worker process (pid=4882) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3612617Z 
+2026-08-15T10:52:23.3614481Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3615478Z 
+2026-08-15T10:52:23.3616754Z FAIL tests/features/embeddables/GH4145.test.ts
+2026-08-15T10:52:23.3617771Z   ● Test suite failed to run
+2026-08-15T10:52:23.3618095Z 
+2026-08-15T10:52:23.3625932Z     A jest worker process (pid=18676) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3627202Z 
+2026-08-15T10:52:23.3628133Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3628925Z 
+2026-08-15T10:52:23.3629179Z FAIL tests/issues/GH3005.test.ts
+2026-08-15T10:52:23.3629778Z   ● Test suite failed to run
+2026-08-15T10:52:23.3630065Z 
+2026-08-15T10:52:23.3634358Z     A jest worker process (pid=17921) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3635841Z 
+2026-08-15T10:52:23.3636547Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3637301Z 
+2026-08-15T10:52:23.3637557Z FAIL tests/issues/GH3360.test.ts
+2026-08-15T10:52:23.3638417Z   ● Test suite failed to run
+2026-08-15T10:52:23.3638714Z 
+2026-08-15T10:52:23.3641637Z     A jest worker process (pid=19042) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3642678Z 
+2026-08-15T10:52:23.3643479Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3644049Z 
+2026-08-15T10:52:23.3644664Z FAIL tests/features/entity-generator/CustomBase.sqlite.test.ts
+2026-08-15T10:52:23.3645655Z   ● Test suite failed to run
+2026-08-15T10:52:23.3645951Z 
+2026-08-15T10:52:23.3647250Z     A jest worker process (pid=18341) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3648314Z 
+2026-08-15T10:52:23.3649094Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3649663Z 
+2026-08-15T10:52:23.3650227Z FAIL tests/features/embeddables/GH2975.test.ts
+2026-08-15T10:52:23.3650908Z   ● Test suite failed to run
+2026-08-15T10:52:23.3651221Z 
+2026-08-15T10:52:23.3652940Z     A jest worker process (pid=19686) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3653973Z 
+2026-08-15T10:52:23.3654897Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3655722Z 
+2026-08-15T10:52:23.3656077Z FAIL tests/features/custom-types/GH6179.test.ts
+2026-08-15T10:52:23.3656740Z   ● Test suite failed to run
+2026-08-15T10:52:23.3657028Z 
+2026-08-15T10:52:23.3659746Z     A jest worker process (pid=19656) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3660986Z 
+2026-08-15T10:52:23.3661786Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3662566Z 
+2026-08-15T10:52:23.3662830Z FAIL tests/issues/GH5591.test.ts
+2026-08-15T10:52:23.3663430Z   ● Test suite failed to run
+2026-08-15T10:52:23.3663741Z 
+2026-08-15T10:52:23.3668513Z     A jest worker process (pid=19635) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3669709Z 
+2026-08-15T10:52:23.3670419Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3671415Z 
+2026-08-15T10:52:23.3671753Z FAIL tests/features/embeddables/GH3772.test.ts
+2026-08-15T10:52:23.3672427Z   ● Test suite failed to run
+2026-08-15T10:52:23.3672717Z 
+2026-08-15T10:52:23.3675994Z     A jest worker process (pid=19547) was terminated by another process: signal=SIGABRT, exitCode=null. Operating system logs may contain more information on why this occurred.
+2026-08-15T10:52:23.3677230Z 
+2026-08-15T10:52:23.3677230Z [fixture trimmed: 35 lines omitted]
+2026-08-15T10:52:23.3722952Z       at ChildProcessWorker._onExit (node_modules/jest-worker/build/workers/ChildProcessWorker.js:370:23)
+2026-08-15T10:52:23.3723694Z 
+2026-08-15T10:52:23.3723721Z 
+2026-08-15T10:52:23.3728927Z Test Suites: 24 failed, 972 passed, 996 total
+2026-08-15T10:52:23.3729558Z Tests:       3666 passed, 3666 total
+2026-08-15T10:52:23.3730109Z Snapshots:   876 passed, 876 total
+2026-08-15T10:52:23.3730594Z Time:        608.398 s
+2026-08-15T10:52:23.3730993Z Ran all test suites.
+2026-08-15T10:52:24.6247084Z ##[error]Process completed with exit code 1.
+2026-08-15T10:52:24.6492610Z Post job cleanup.
+2026-08-15T10:52:24.9395382Z [command]/usr/bin/git version
+2026-08-15T10:52:24.9472340Z git version 2.54.0
+2026-08-15T10:52:24.9558973Z Temporarily overriding HOME='/home/runner/work/_temp/69f26476-154e-49fd-8f05-2b50a1e65ac2' before making global git config changes
+2026-08-15T10:52:24.9562970Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-15T10:52:24.9564503Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mikro-orm/mikro-orm
+2026-08-15T10:52:24.9618994Z Removing SSH command configuration
+2026-08-15T10:52:24.9620267Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-15T10:52:24.9671899Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-15T10:52:25.0160174Z Removing HTTP extra header
+2026-08-15T10:52:25.0180801Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-15T10:52:25.0247342Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-15T10:52:25.0636043Z Removing includeIf entries pointing to credentials config files
+2026-08-15T10:52:25.0637556Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-15T10:52:25.0665799Z includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path
+2026-08-15T10:52:25.0676117Z includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-08-15T10:52:25.0680123Z includeif.gitdir:/github/workspace/.git.path
+2026-08-15T10:52:25.0681176Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-15T10:52:25.0683337Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path
+2026-08-15T10:52:25.0712730Z /home/runner/work/_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0731654Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git.path /home/runner/work/_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0794276Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path
+2026-08-15T10:52:25.0831478Z /home/runner/work/_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0849213Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/mikro-orm/mikro-orm/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0909632Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-15T10:52:25.0939431Z /github/runner_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0948886Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.0988110Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-15T10:52:25.1016150Z /github/runner_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.1025311Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config
+2026-08-15T10:52:25.1066142Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-15T10:52:25.1310562Z Removing credentials config '/home/runner/work/_temp/git-credentials-fca6b7d4-5f77-4aa8-be40-bedc5d2d4a4c.config'
+2026-08-15T10:52:25.1509371Z Cleaning up orphan processes
+2026-08-15T10:52:25.2399004Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: SimenB/github-actions-cpu-cores@v2. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

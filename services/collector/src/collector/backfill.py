@@ -9,26 +9,39 @@ resumed and a second run changes nothing.
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import logging
 import os
+import zipfile
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from collector.file_tags import FileTagger
 from collector.job_keys import map_job_key
-from collector.policy import date_windows, gzip_bytes, should_fetch_log
+from collector.log_archive import match_entries, top_level_entries
+from collector.policy import (
+    FAILED_CONCLUSIONS,
+    PASSING_ALL,
+    PASSING_FAILED_RUNS,
+    PassingMode,
+    date_windows,
+    gzip_bytes,
+    should_fetch_log,
+)
 from collector.repo_config import RepoEntry
 from collector.store import (
     CommitFileRecord,
     CommitRecord,
     JobRecord,
     LogRecord,
+    PendingLog,
     RepoRecord,
     RunRecord,
+    SkippedRunRecord,
     SnapshotRecord,
     StepRecord,
     Store,
@@ -36,7 +49,7 @@ from collector.store import (
     WorkflowRecord,
 )
 from collector.workflow_detection import DetectionRules, detect_relevant_workflow
-from shared.github import GitHubClient, GitHubError, GitHubNotFoundError
+from shared.github import GitHubClient, GitHubError, GitHubNotFoundError, GitHubTooLargeError
 from shared.sanitise import SanitiseResult, hash_identity, sanitise
 
 logger = logging.getLogger(__name__)
@@ -44,6 +57,25 @@ logger = logging.getLogger(__name__)
 # DEFAULT: 7-day windows; the client halves any window that hits the 1,000-result cap.
 DEFAULT_WINDOW_DAYS = 7
 DEFAULT_DAYS = 90
+# DEFAULT: after 5 runs in a row skipped for 5xx errors, GitHub itself looks unhealthy: stop the
+# repo instead of skipping everything (a re-run resumes).
+MAX_CONSECUTIVE_SKIPS = 5
+
+# DEFAULT: `fill-logs` fetches the logs of one run attempt as a single zip (D41) only when the
+# attempt has at least 2 pending jobs; one pending job costs one request either way, so it is
+# fetched on its own (no name matching involved).
+ARCHIVE_MIN_JOBS = 2
+# DEFAULT: an archive over 150 MiB is not read into memory (checked while streaming, and against
+# Content-Length when GitHub sends it); the attempt's jobs are fetched one by one instead.
+ARCHIVE_MAX_BYTES = 150 * 1024 * 1024
+# DEFAULT: after 5 archive downloads in a row failed with a 5xx or a network error, GitHub (or the
+# network) looks unhealthy: stop the repo instead of burning quota on retries; a re-run resumes.
+MAX_CONSECUTIVE_ARCHIVE_FAILURES = 5
+
+# `--logs all` fetches every log the policy asks for; `--logs failed` leaves logs of passing jobs
+# for a later `fill-logs` pass (collection order only; the end state is the same, D11 and D18).
+LOGS_ALL = "all"
+LOGS_FAILED = "failed"
 
 # DEFAULT: personal data and bulky objects are dropped from the stored `raw` run JSON: logins and
 # emails must only appear hashed (DATA 8), and the repository blobs repeat on every run.
@@ -107,6 +139,14 @@ class RepoSummary:
     logs_ok: int = 0
     logs_expired: int = 0
     logs_missing: int = 0
+    logs_deferred: int = 0  # passing-job logs left for `fill-logs` (--logs failed)
+    logs_failed: int = 0  # logs GitHub answered 5xx for; left pending for a later `fill-logs`
+    archives_fetched: int = 0  # `fill-logs`: run-attempt log archives downloaded and opened
+    logs_from_archive: int = 0  # logs saved from those archives (the rest used their own request)
+    archive_fallbacks: int = 0  # attempts whose archive could not be used (404, too big, bad zip)
+    archives_failed: int = 0  # archives that failed with a 5xx or a network error (own requests)
+    runs_skipped_failing: int = 0  # runs skipped this time after persistent 5xx (kept for retry)
+    skipped_cleared: int = 0  # previously skipped runs that were collected now
     windows_done: int = 0
     windows_total: int = 0
 
@@ -125,6 +165,7 @@ class Backfiller:
         rules: DetectionRules,
         days: int = DEFAULT_DAYS,
         window_days: int = DEFAULT_WINDOW_DAYS,
+        logs: str = LOGS_ALL,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         hash_fn: Callable[[str], str] = hash_identity,
         sanitise_fn: Callable[[str], SanitiseResult] = sanitise,
@@ -137,9 +178,22 @@ class Backfiller:
         self.rules = rules
         self.days = days
         self.window_days = window_days
+        if logs not in (LOGS_ALL, LOGS_FAILED):
+            raise ValueError(f"logs must be '{LOGS_ALL}' or '{LOGS_FAILED}', not {logs!r}")
+        self.logs = logs
         self._clock = clock
         self._hash = hash_fn
         self._sanitise = sanitise_fn
+        # Per repo call: ids stored as skipped, and ids that failed during this call (not re-tried).
+        self._skipped: set[int] = set()
+        self._failed_runs: set[int] = set()
+        self._cleared: list[int] = []  # skipped runs removed in the open transaction
+        self._streak = 0  # runs skipped in a row during the walk (reset by any success)
+        self._retrying = False  # the retry pass does not count towards the streak
+        self.max_consecutive_skips = MAX_CONSECUTIVE_SKIPS
+        self.archive_max_bytes = ARCHIVE_MAX_BYTES
+        self.max_archive_failures = MAX_CONSECUTIVE_ARCHIVE_FAILURES
+        self._archive_failures = 0  # archive downloads in a row that failed (reset by a success)
 
     # ---- per repo ---------------------------------------------------------------------------
 
@@ -150,6 +204,7 @@ class Backfiller:
         repo_id, default_branch, state = self._register_repo(entry)
         started_at, done = self._resume_point(state.backfill_cursor if state else None)
         relevant = self._sync_workflows(entry, repo_id, default_branch)
+        self._retry_skipped(entry, repo_id, relevant, summary)
 
         windows = date_windows(started_at, self.days, self.window_days)
         summary.windows_total = len(windows)
@@ -278,15 +333,145 @@ class Backfiller:
     ) -> None:
         summary.runs_seen += 1
         path = workflow_path_of(run)
+        run_id = int(run["id"])
         if not relevant.get(path, False):
             summary.runs_skipped_workflow += 1
+            self._forget_skipped(repo_id, run_id)
+            self._flush_cleared(summary)
             return
+        if run_id in self._failed_runs:
+            return  # already failed in this call (the retry pass); do not spend retries again
+        before = replace(summary)
+        try:
+            self._collect_run(entry, repo_id, run, path, summary)
+        except GitHubError as exc:
+            self._cleared.clear()  # the transaction was rolled back
+            if not exc.is_server_error:
+                raise  # network, auth and rate-limit failures stop the repo; a re-run resumes
+            for f in fields(summary):  # the run was rolled back: its counters must not count
+                setattr(summary, f.name, getattr(before, f.name))
+            self._skip_run(entry, repo_id, run, exc, summary)
+        else:
+            self._streak = 0
+            self._flush_cleared(summary)  # the transaction is committed now
+
+    def _forget_skipped(self, repo_id: int, run_id: int) -> None:
+        """Delete a run's skipped row (in the caller's transaction or its own)."""
+        if run_id in self._skipped:
+            with self.store.transaction():
+                self.store.clear_skipped_run(repo_id, run_id)
+            self._cleared.append(run_id)
+
+    def _flush_cleared(self, summary: RepoSummary) -> None:
+        """Update the in-memory skipped set once the deletes are committed."""
+        for run_id in self._cleared:
+            self._skipped.discard(run_id)
+            summary.skipped_cleared += 1
+        self._cleared.clear()
+
+    def _skip_run(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        run: dict[str, Any],
+        exc: GitHubError,
+        summary: RepoSummary,
+    ) -> None:
+        """Record a run GitHub keeps failing on, so the repo can finish; it is retried later."""
+        run_id = int(run["id"])
+        attempt = int(run.get("run_attempt") or 1)
+        logger.warning(
+            "run skipped after persistent GitHub server errors; will be retried on later runs",
+            extra={
+                "repo": entry.full_name,
+                "run_id": run_id,
+                "attempt": attempt,
+                "status": exc.status_code,
+                "error": str(exc),
+            },
+        )
+        with self.store.transaction():
+            self.store.add_skipped_run(
+                SkippedRunRecord(repo_id, run_id, attempt, str(exc)[:200], self._clock())
+            )
+        self._skipped.add(run_id)
+        self._failed_runs.add(run_id)
+        summary.runs_skipped_failing += 1
+        if not self._retrying:
+            self._streak += 1
+            if self._streak >= self.max_consecutive_skips:
+                raise GitHubError(
+                    f"GitHub looks unhealthy: {self._streak} runs in a row failed with server "
+                    "errors; re-run to resume",
+                    exc.status_code,
+                )
+
+    def _retry_skipped(
+        self, entry: RepoEntry, repo_id: int, relevant: dict[str, bool], summary: RepoSummary
+    ) -> None:
+        """Try every previously skipped run of the repo again, before the normal walk."""
+        self._failed_runs = set()
+        self._streak = 0
+        self._cleared.clear()
+        with self.store.transaction():
+            records = self.store.skipped_runs(repo_id)
+        self._skipped = {r.run_id for r in records}
+        self._retrying = True
+        try:
+            self._retry_records(entry, repo_id, relevant, summary, records)
+        finally:
+            self._retrying = False
+
+    def _retry_records(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        relevant: dict[str, bool],
+        summary: RepoSummary,
+        records: list[SkippedRunRecord],
+    ) -> None:
+        fn = entry.full_name
+        for record in records:
+            try:
+                run = self.client.get_json(f"/repos/{fn}/actions/runs/{record.run_id}")
+            except GitHubNotFoundError:
+                logger.warning(
+                    "skipped run no longer exists; dropped from the skipped set",
+                    extra={"repo": fn, "run_id": record.run_id},
+                )
+                self._forget_skipped(repo_id, record.run_id)
+                self._flush_cleared(summary)
+                continue
+            except GitHubError as exc:
+                if not exc.is_server_error:
+                    raise
+                self._skip_run(
+                    entry,
+                    repo_id,
+                    {"id": record.run_id, "run_attempt": record.attempt},
+                    exc,
+                    summary,
+                )
+                continue
+            logger.info("retrying skipped run", extra={"repo": fn, "run_id": record.run_id})
+            self._process_run(entry, repo_id, run, relevant, summary)
+
+    def _collect_run(
+        self,
+        entry: RepoEntry,
+        repo_id: int,
+        run: dict[str, Any],
+        path: str,
+        summary: RepoSummary,
+    ) -> None:
+        """Collect one run in one transaction; any exception rolls the whole run back."""
         fn = entry.full_name
         run_id = int(run["id"])
         latest = int(run.get("run_attempt") or 1)
         with self.store.transaction():
             if self.store.attempt_done(repo_id, run_id, latest):
                 summary.runs_already_done += 1
+                self._forget_skipped(repo_id, run_id)
                 return
             attempts: dict[int, dict[str, Any]] = {latest: run}
             for k in range(1, latest):
@@ -299,12 +484,8 @@ class Backfiller:
                         "attempt metadata not found; attempt skipped",
                         extra={"repo": fn, "run_id": run_id, "attempt": k},
                     )
-            jobs = list(
-                self.client.paginate(
-                    f"/repos/{fn}/actions/runs/{run_id}/jobs",
-                    {"filter": "all"},
-                    items_key="jobs",
-                )
+            jobs = self.client.list_shrinking(
+                f"/repos/{fn}/actions/runs/{run_id}/jobs", {"filter": "all"}, items_key="jobs"
             )
             by_attempt: dict[int, list[dict[str, Any]]] = {}
             for job in jobs:
@@ -313,6 +494,7 @@ class Backfiller:
                 self._process_attempt(
                     entry, repo_id, k, attempts[k], by_attempt.get(k, []), path, summary
                 )
+            self._forget_skipped(repo_id, run_id)
             summary.runs_processed += 1
 
     def _process_attempt(
@@ -411,24 +593,249 @@ class Backfiller:
         # Every run reaching this point belongs to a relevant workflow (see _process_run).
         if should_fetch_log(job.get("status"), job.get("conclusion"), True):
             if not self.store.has_log(job_id):
+                if self.logs == LOGS_FAILED and job.get("conclusion") not in FAILED_CONCLUSIONS:
+                    # No logs row on purpose: `fill-logs` finds the job by the missing row.
+                    summary.logs_deferred += 1
+                    return
                 self._store_log(entry, run_id, attempt, job_id, summary)
+
+    def fill_logs_repo(
+        self,
+        entry: RepoEntry,
+        limit: int | None = None,
+        *,
+        passing: PassingMode = PASSING_ALL,
+        archive: bool = True,
+    ) -> RepoSummary:
+        """Pass 2: fetch logs the policy wants but the database lacks, newest runs first.
+
+        Each log is committed on its own, so stopping at any point loses nothing, and a second
+        call only sees what is still missing. Expired or unreadable logs get a status row exactly
+        as in the backfill.
+
+        `passing="failed-runs"` fetches a passing job's log only when its run (any attempt) has a
+        failed job; the other passing jobs stay pending (D40).
+
+        With `archive` (the default) the jobs are grouped by run attempt, and an attempt with two
+        or more pending jobs is fetched as one zip instead of one request per job (D41). Jobs the
+        zip cannot match with certainty still get their own request. `archive=False` makes one
+        request per job, as before. `limit` counts logs stored, so it never overshoots.
+        """
+        if passing not in (PASSING_ALL, PASSING_FAILED_RUNS):
+            raise ValueError(
+                f"passing must be '{PASSING_ALL}' or '{PASSING_FAILED_RUNS}', not {passing!r}"
+            )
+        summary = RepoSummary()
+        with self.store.transaction():
+            repo = next(
+                (r for r in self.store.list_repos(self.member) if r.full_name == entry.full_name),
+                None,
+            )
+            # DEFAULT: the whole pending list is read even with a limit: logs that fail with a
+            # 5xx stay pending and must not use up the limit (or they would block the rest).
+            pending = (
+                self.store.pending_logs(
+                    repo.id, None, failed_runs_only=passing == PASSING_FAILED_RUNS
+                )
+                if repo
+                else []
+            )
+        # Run attempts in the order their first pending job appears: newest first, as listed.
+        attempts: dict[tuple[int, int], list[PendingLog]] = {}
+        for job in pending:
+            attempts.setdefault((job.run_id, job.attempt), []).append(job)
+        for jobs in attempts.values():
+            stored = summary.logs_ok + summary.logs_expired + summary.logs_missing
+            if limit is not None and stored >= limit:
+                break
+            budget = None if limit is None else limit - stored
+            # DEFAULT: with fewer than two logs left under --limit the archive cannot beat the
+            # per-job request, and the rest of a downloaded zip would be thrown away.
+            if archive and len(jobs) >= ARCHIVE_MIN_JOBS and (budget is None or budget >= 2):
+                self._fill_attempt_archive(entry, jobs, budget, summary)
+            else:
+                self._fill_per_job(entry, jobs, budget, summary)
+        return summary
+
+    def _fill_per_job(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """One request per job, each in its own transaction; at most `budget` logs stored."""
+        stored = 0
+        for job in jobs:
+            if budget is not None and stored >= budget:
+                break
+            failed_before = summary.logs_failed
+            with self.store.transaction():
+                self._store_log(entry, job.run_id, job.attempt, job.job_id, summary)
+            if summary.logs_failed == failed_before:
+                stored += 1
+
+    def _fill_attempt_archive(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """Fetch the pending jobs of one run attempt from its log archive (D41).
+
+        Outcomes: 200 stores each certainly-matched job from the zip and gives every other job its
+        own request; 410 is checked with one normal request for the attempt's first job, and only
+        if that is a 410 too are the other pending jobs marked `expired` (up to the `--limit`
+        budget), otherwise they use their own requests; 404, an archive over `archive_max_bytes`,
+        an unreadable zip, a 5xx or a network error and any other 4xx send all jobs to their own
+        request (a 5xx or network error also counts toward the stop-after-N-in-a-row guard, which
+        carries over to the next repo of the same command); 401, 403 and 429 stop the repo.
+        """
+        fn = entry.full_name
+        run_id, attempt = jobs[0].run_id, jobs[0].attempt
+        where = {"repo": fn, "run_id": run_id, "attempt": attempt}
+        try:
+            body = self.client.get_bytes(
+                f"/repos/{fn}/actions/runs/{run_id}/attempts/{attempt}/logs",
+                max_bytes=self.archive_max_bytes,
+            )
+        except GitHubTooLargeError:
+            logger.warning("log archive too large; fetching its logs one by one", extra=where)
+            self._archive_failures = 0
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        except GitHubError as exc:
+            code = exc.status_code
+            if code == 410:  # probably the whole attempt's logs expired: confirm with one job
+                self._archive_failures = 0
+                self._after_archive_gone(entry, jobs, budget, summary)
+                return
+            if code is None or exc.is_server_error:
+                # GitHub (or the network) failed on the archive: its jobs use their own requests,
+                # where a 5xx keeps the D39 rule (left pending). But when archives keep failing
+                # (an outage) the repo stops, so retries do not burn the quota.
+                logger.warning(
+                    "log archive download failed; fetching its logs one by one",
+                    extra={**where, "status": code, "error": str(exc)},
+                )
+                summary.archives_failed += 1
+                self._archive_failures += 1
+                if self._archive_failures >= self.max_archive_failures:
+                    raise GitHubError(
+                        f"GitHub looks unhealthy: {self._archive_failures} log archives in a row "
+                        "failed; re-run to resume",
+                        code,
+                    ) from exc
+                self._fill_per_job(entry, jobs, budget, summary)
+                return
+            if code in (401, 403, 429):
+                raise  # a dead token, a refusal or a rate limit that never clears stops the repo
+            body = None  # any other 4xx: let each job's own request decide and record it
+            logger.warning("log archive not available; fetching its logs one by one", extra=where)
+        self._archive_failures = 0
+        if body is None:  # 404, or the 4xx above
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        try:
+            archive = zipfile.ZipFile(io.BytesIO(body))
+        except Exception as exc:  # untrusted bytes: whatever zipfile raises, per-job is safe
+            logger.warning(
+                "log archive cannot be opened; fetching its logs one by one",
+                extra={**where, "error": type(exc).__name__},
+            )
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, jobs, budget, summary)
+            return
+        summary.archives_fetched += 1
+        with archive:
+            with self.store.transaction():
+                attempt_jobs = self.store.job_names(run_id, attempt)
+            matched = match_entries(
+                [j.job_id for j in jobs], attempt_jobs, top_level_entries(archive.namelist())
+            )
+            stored = 0
+            for job in jobs:
+                if budget is not None and stored >= budget:
+                    break
+                data = self._read_entry(archive, matched.get(job.job_id))
+                if data is None:  # no certain match: this job gets its own request
+                    failed_before = summary.logs_failed
+                    with self.store.transaction():
+                        self._store_log(entry, run_id, attempt, job.job_id, summary)
+                    if summary.logs_failed == failed_before:
+                        stored += 1
+                    continue
+                with self.store.transaction():
+                    self._save_log(entry, run_id, attempt, job.job_id, data, summary)
+                summary.logs_from_archive += 1
+                stored += 1
+
+    def _read_entry(self, archive: zipfile.ZipFile, name: str | None) -> bytes | None:
+        """The bytes of one archive file, or None if there is none or it cannot be read."""
+        if name is None:
+            return None
+        try:
+            return archive.read(name)
+        except Exception as exc:  # untrusted bytes (bad CRC, encrypted, bzip2/lzma errors, ...)
+            logger.warning(
+                "log archive entry unreadable; fetching that log on its own",
+                extra={"entry": name, "error": type(exc).__name__},
+            )
+            return None
+
+    def _after_archive_gone(
+        self, entry: RepoEntry, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """The archive answered 410: check it with one normal request before trusting it.
+
+        The first pending job of the attempt gets its own request. If that is a 410 too (stored as
+        `expired` by the normal path), the attempt's logs expired and the other pending jobs are
+        marked `expired` without more requests, up to the `--limit` budget. Otherwise the archive's
+        410 is not believed: that job is handled as usual and so are the rest, one request each.
+        """
+        first, rest = jobs[0], jobs[1:]
+        expired_before, failed_before = summary.logs_expired, summary.logs_failed
+        with self.store.transaction():
+            self._store_log(entry, first.run_id, first.attempt, first.job_id, summary)
+        stored = 1 if summary.logs_failed == failed_before else 0
+        left = None if budget is None else budget - stored
+        if summary.logs_expired > expired_before:
+            self._expire_attempt(rest, left, summary)
+        else:
+            logger.warning(
+                "log archive said 410 but the job's own log did not; fetching the rest one by one",
+                extra={"repo": entry.full_name, "run_id": first.run_id, "attempt": first.attempt},
+            )
+            summary.archive_fallbacks += 1
+            self._fill_per_job(entry, rest, left, summary)
+
+    def _expire_attempt(
+        self, jobs: list[PendingLog], budget: int | None, summary: RepoSummary
+    ) -> None:
+        """Record pending jobs of an attempt as expired, up to `budget` of them."""
+        for job in jobs if budget is None else jobs[: max(budget, 0)]:
+            with self.store.transaction():
+                self._save_unavailable(job.job_id, "expired", summary)
 
     def _store_log(
         self, entry: RepoEntry, run_id: int, attempt: int, job_id: int, summary: RepoSummary
     ) -> None:
         fn = entry.full_name
-        now = self._clock()
         try:
             body = self.client.get_bytes(f"/repos/{fn}/actions/jobs/{job_id}/logs")
         except GitHubError as exc:
             code = exc.status_code
+            if exc.is_server_error:
+                # GitHub keeps failing on this log: leave it pending (no row) so `fill-logs` and
+                # later runs try again, and carry on. Network and rate-limit errors still raise.
+                logger.warning(
+                    "log download failed with a server error; left pending",
+                    extra={"repo": fn, "run_id": run_id, "job_id": job_id, "status": code},
+                )
+                summary.logs_failed += 1
+                return
             gave_up = str(exc).startswith("gave up after retries")  # rate limit never cleared
             if code != 410 and (
-                gave_up or code == 429 or not (code is not None and 400 <= code < 500)
+                gave_up or code in (401, 429) or not (code is not None and 400 <= code < 500)
             ):
-                raise  # 5xx, network and rate-limit failures stop the repo; a re-run resumes
-            body = None
-            status = "expired" if code == 410 else "missing"
+                # Network and rate-limit failures, and a 401 (a dead token would otherwise mark
+                # every log `missing` for good), stop the repo; a re-run resumes.
+                raise
             if code != 410:
                 # DEFAULT: a non-retryable 4xx (e.g. 403) on a log is recorded as 'missing' so one
                 # unreadable log does not abort the repo.
@@ -436,15 +843,32 @@ class Backfiller:
                     "log not available; recorded as missing",
                     extra={"repo": fn, "job_id": job_id, "status": code},
                 )
-        else:
-            status = "ok" if body is not None else "missing"
-        if body is None:
-            self.store.upsert_log(LogRecord(job_id, None, None, None, None, status, now))
-            if status == "expired":
-                summary.logs_expired += 1
-            else:
-                summary.logs_missing += 1
+            self._save_unavailable(job_id, "expired" if code == 410 else "missing", summary)
             return
+        if body is None:
+            self._save_unavailable(job_id, "missing", summary)
+            return
+        self._save_log(entry, run_id, attempt, job_id, body, summary)
+
+    def _save_unavailable(self, job_id: int, status: str, summary: RepoSummary) -> None:
+        """Store a log row without a file: the log expired (410) or is missing."""
+        self.store.upsert_log(LogRecord(job_id, None, None, None, None, status, self._clock()))
+        if status == "expired":
+            summary.logs_expired += 1
+        else:
+            summary.logs_missing += 1
+
+    def _save_log(
+        self,
+        entry: RepoEntry,
+        run_id: int,
+        attempt: int,
+        job_id: int,
+        body: bytes,
+        summary: RepoSummary,
+    ) -> None:
+        """Clean, gzip and write one log, then store its row. Same for every way a log arrives."""
+        now = self._clock()
         result = self._sanitise(body.decode("utf-8", errors="replace"))
         data = gzip_bytes(result.text.encode("utf-8"))
         rel = f"logs/{entry.owner}/{entry.name}/{run_id}/{attempt}/{job_id}.log.gz"
@@ -468,7 +892,9 @@ class Backfiller:
         if target.is_file() and target.read_bytes() == data:
             return
         target.parent.mkdir(parents=True, exist_ok=True)
-        tmp = target.with_name(target.name + ".tmp")
+        # The temp name carries the process id: lanes running side by side may write the same
+        # content-addressed blob at the same moment.
+        tmp = target.with_name(f"{target.name}.{os.getpid()}.tmp")
         tmp.write_bytes(data)
         os.replace(tmp, target)
 

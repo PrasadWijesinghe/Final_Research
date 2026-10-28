@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "typescript-eslint/typescript-eslint",
+  "job_id": 120917755484,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 416,
+    "failed": 1,
+    "skipped": 0,
+    "total": 417,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "parseAndGenerateServices with projectService in single-run mode > prefers a nearer jsconfig.json over a farther tsconfig.json"
+  ],
+  "failed_files": [
+    "tests/lib/parse.projectService-singleRun.test.ts"
+  ],
+  "first_error_type": "AssertionError",
+  "first_project_path": "tests/lib/parse.projectService-singleRun.test.ts",
+  "note": "Windows. Verbose reporter: nested `✓ describe (N)` lines, so granularity is test."
+}

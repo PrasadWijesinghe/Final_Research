@@ -1,0 +1,491 @@
+﻿2026-08-18T07:53:04.4248430Z Current runner version: '2.336.0'
+2026-08-18T07:53:04.4275696Z ##[group]Runner Image Provisioner
+2026-08-18T07:53:04.4276470Z Hosted Compute Agent
+2026-08-18T07:53:04.4277005Z Version: 20260729.566
+2026-08-18T07:53:04.4277613Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-18T07:53:04.4278290Z Build Date: 2026-07-29T19:17:02Z
+2026-08-18T07:53:04.4278964Z Worker ID: {3bcbf65d-0f0e-4d17-86df-c7a400bd79b7}
+2026-08-18T07:53:04.4279765Z Azure Region: eastus2
+2026-08-18T07:53:04.4280297Z ##[endgroup]
+2026-08-18T07:53:04.4281592Z ##[group]Operating System
+2026-08-18T07:53:04.4282180Z Microsoft Windows Server 2025
+2026-08-18T07:53:04.4282743Z 10.0.26100
+2026-08-18T07:53:04.4283268Z Datacenter
+2026-08-18T07:53:04.4283771Z ##[endgroup]
+2026-08-18T07:53:04.4284259Z ##[group]Runner Image
+2026-08-18T07:53:04.4285025Z Image: windows-2025-vs2026
+2026-08-18T07:53:04.4285703Z Version: 20260810.198.2
+2026-08-18T07:53:04.4287209Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260810.198/images/windows/Windows2025-VS2026-Readme.md
+2026-08-18T07:53:04.4289134Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260810.198
+2026-08-18T07:53:04.4290184Z ##[endgroup]
+2026-08-18T07:53:04.4291198Z ##[group]GITHUB_TOKEN Permissions
+2026-08-18T07:53:04.4293310Z Contents: read
+2026-08-18T07:53:04.4293893Z Metadata: read
+2026-08-18T07:53:04.4294434Z ##[endgroup]
+2026-08-18T07:53:04.4296562Z Secret source: None
+2026-08-18T07:53:04.4297765Z Prepare workflow directory
+2026-08-18T07:53:04.4658771Z Prepare all required actions
+2026-08-18T07:53:04.4707928Z Getting action download info
+2026-08-18T07:53:04.6287141Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-18T07:53:04.7584885Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-18T07:53:04.9200326Z Download action repository 'SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403' (SHA:97330871fe1b7d3529392ea000e3d2c4b357e403)
+2026-08-18T07:53:05.1093816Z Download action repository 'nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60' (SHA:ad984534de44a9489a53aefd81eb77f87c70dc60)
+2026-08-18T07:53:05.3787689Z Uses: jestjs/jest/.github/workflows/test.yml@refs/pull/16359/merge (e7ed485eff5c3d99fdde1f713a0fdd9825ab73d1)
+2026-08-18T07:53:05.3793526Z ##[group] Inputs
+2026-08-18T07:53:05.3794203Z   os: windows-latest
+2026-08-18T07:53:05.3794864Z   shard: 3/4
+2026-08-18T07:53:05.3795293Z ##[endgroup]
+2026-08-18T07:53:05.3795818Z Complete job name: Windows with shard 3/4 / Node v25.x
+2026-08-18T07:53:05.5236071Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-18T07:53:05.5237419Z with:
+2026-08-18T07:53:05.5237868Z   persist-credentials: false
+2026-08-18T07:53:05.5238381Z   repository: jestjs/jest
+2026-08-18T07:53:05.5242912Z   token: ***
+2026-08-18T07:53:05.5243372Z   ssh-strict: true
+2026-08-18T07:53:05.5243799Z   ssh-user: git
+2026-08-18T07:53:05.5244222Z   clean: true
+2026-08-18T07:53:05.5244644Z   sparse-checkout-cone-mode: true
+2026-08-18T07:53:05.5245174Z   fetch-depth: 1
+2026-08-18T07:53:05.5245586Z   fetch-tags: false
+2026-08-18T07:53:05.5246018Z   show-progress: true
+2026-08-18T07:53:05.5246445Z   lfs: false
+2026-08-18T07:53:05.5246831Z   submodules: false
+2026-08-18T07:53:05.5247260Z   set-safe-directory: true
+2026-08-18T07:53:05.5247762Z   allow-unsafe-pr-checkout: false
+2026-08-18T07:53:05.5248485Z ##[endgroup]
+2026-08-18T07:53:05.6750871Z Syncing repository: jestjs/jest
+2026-08-18T07:53:05.6752667Z ##[group]Getting Git version info
+2026-08-18T07:53:05.6753217Z Working directory is 'D:\a\jest\jest'
+2026-08-18T07:53:05.7490551Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-18T07:53:06.0870544Z git version 2.55.0.windows.3
+2026-08-18T07:53:06.0912388Z ##[endgroup]
+2026-08-18T07:53:06.0927884Z Temporarily overriding HOME='D:\a\_temp\02bc99fa-3c7b-4c48-9f11-2efad4302047' before making global git config changes
+2026-08-18T07:53:06.0931998Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-18T07:53:06.0938282Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\jest\jest
+2026-08-18T07:53:06.1545760Z Deleting the contents of 'D:\a\jest\jest'
+2026-08-18T07:53:06.1550930Z ##[group]Determining repository object format
+2026-08-18T07:53:06.1553233Z ##[endgroup]
+2026-08-18T07:53:06.1554862Z ##[group]Initializing the repository
+2026-08-18T07:53:06.1561151Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\jest\jest
+2026-08-18T07:53:06.2394637Z Initialized empty Git repository in D:/a/jest/jest/.git/
+2026-08-18T07:53:06.2439202Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/jestjs/jest
+2026-08-18T07:53:06.2982102Z ##[endgroup]
+2026-08-18T07:53:06.2983704Z ##[group]Disabling automatic garbage collection
+2026-08-18T07:53:06.2995499Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-08-18T07:53:06.3327770Z ##[endgroup]
+2026-08-18T07:53:06.3329672Z ##[group]Setting up auth
+2026-08-18T07:53:06.3330957Z Removing SSH command configuration
+2026-08-18T07:53:06.3344777Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T07:53:06.3656808Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-18T07:53:07.8237419Z Removing HTTP extra header
+2026-08-18T07:53:07.8247171Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T07:53:07.8537594Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-18T07:53:08.3726475Z Removing includeIf entries pointing to credentials config files
+2026-08-18T07:53:08.3741463Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T07:53:08.4031586Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-18T07:53:08.9240706Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-08-18T07:53:08.9531331Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/jest/jest/.git.path D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:08.9824679Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/jest/jest/.git/worktrees/*.path D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:09.0160274Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:09.0451321Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:09.0733426Z ##[endgroup]
+2026-08-18T07:53:09.0733827Z ##[group]Fetching the repository
+2026-08-18T07:53:09.0749273Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e7ed485eff5c3d99fdde1f713a0fdd9825ab73d1:refs/remotes/pull/16359/merge
+2026-08-18T07:53:10.7865146Z From https://github.com/jestjs/jest
+2026-08-18T07:53:10.7866175Z  * [new ref]         e7ed485eff5c3d99fdde1f713a0fdd9825ab73d1 -> pull/16359/merge
+2026-08-18T07:53:10.7904544Z ##[endgroup]
+2026-08-18T07:53:10.7905088Z ##[group]Determining the checkout info
+2026-08-18T07:53:10.7906017Z ##[endgroup]
+2026-08-18T07:53:10.7916491Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-08-18T07:53:10.8422248Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-08-18T07:53:10.8727559Z ##[group]Checking out the ref
+2026-08-18T07:53:10.8738649Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/16359/merge
+2026-08-18T07:53:11.8239700Z Note: switching to 'refs/remotes/pull/16359/merge'.
+2026-08-18T07:53:11.8240263Z 
+2026-08-18T07:53:11.8240601Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-18T07:53:11.8241257Z changes and commit them, and you can discard any commits you make in this
+2026-08-18T07:53:11.8241909Z state without impacting any branches by switching back to a branch.
+2026-08-18T07:53:11.8242346Z 
+2026-08-18T07:53:11.8242647Z If you want to create a new branch to retain commits you create, you may
+2026-08-18T07:53:11.8243321Z do so (now or later) by using -c with the switch command. Example:
+2026-08-18T07:53:11.8243701Z 
+2026-08-18T07:53:11.8243852Z   git switch -c <new-branch-name>
+2026-08-18T07:53:11.8244169Z 
+2026-08-18T07:53:11.8244298Z Or undo this operation with:
+2026-08-18T07:53:11.8244535Z 
+2026-08-18T07:53:11.8244647Z   git switch -
+2026-08-18T07:53:11.8244825Z 
+2026-08-18T07:53:11.8245148Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-18T07:53:11.8245630Z 
+2026-08-18T07:53:11.8246470Z HEAD is now at e7ed485 Merge 1b9f02a84aa7874039ab7b397e667e9d09309eb5 into 47a097e69c758d42b393d8dbed9dc00a89e74250
+2026-08-18T07:53:11.8342385Z ##[endgroup]
+2026-08-18T07:53:11.9139130Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-08-18T07:53:11.9455665Z e7ed485eff5c3d99fdde1f713a0fdd9825ab73d1
+2026-08-18T07:53:11.9496036Z ##[group]Removing auth
+2026-08-18T07:53:11.9496988Z Removing SSH command configuration
+2026-08-18T07:53:11.9507049Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T07:53:11.9818591Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-18T07:53:12.5053981Z Removing HTTP extra header
+2026-08-18T07:53:12.5066078Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T07:53:12.5385266Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-18T07:53:13.0655061Z Removing includeIf entries pointing to credentials config files
+2026-08-18T07:53:13.0664998Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T07:53:13.0929826Z includeif.gitdir:D:/a/jest/jest/.git.path
+2026-08-18T07:53:13.0930471Z includeif.gitdir:D:/a/jest/jest/.git/worktrees/*.path
+2026-08-18T07:53:13.0930936Z includeif.gitdir:/github/workspace/.git.path
+2026-08-18T07:53:13.0931443Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-18T07:53:13.0970869Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/jest/jest/.git.path
+2026-08-18T07:53:13.1226093Z D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:13.1265387Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/jest/jest/.git.path D\:\\a\\_temp\\git\-credentials\-34a27fbd\-45e1\-4022\-9763\-6810d708f3cd\.config
+2026-08-18T07:53:13.1554850Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/jest/jest/.git/worktrees/*.path
+2026-08-18T07:53:13.1808202Z D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:13.1848144Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/jest/jest/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-34a27fbd\-45e1\-4022\-9763\-6810d708f3cd\.config
+2026-08-18T07:53:13.2154158Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-18T07:53:13.2399794Z /github/runner_temp/git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:13.2442692Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-34a27fbd\-45e1\-4022\-9763\-6810d708f3cd\.config
+2026-08-18T07:53:13.2728952Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-18T07:53:13.2976331Z /github/runner_temp/git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config
+2026-08-18T07:53:13.3024846Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-34a27fbd\-45e1\-4022\-9763\-6810d708f3cd\.config
+2026-08-18T07:53:13.3332495Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-18T07:53:13.8552036Z Removing credentials config 'D:\a\_temp\git-credentials-34a27fbd-45e1-4022-9763-6810d708f3cd.config'
+2026-08-18T07:53:13.8564030Z ##[endgroup]
+2026-08-18T07:53:13.8980454Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-18T07:53:13.8980893Z with:
+2026-08-18T07:53:13.8981088Z   node-version: 25.x
+2026-08-18T07:53:13.8981293Z   cache: yarn
+2026-08-18T07:53:13.8981507Z   check-latest: false
+2026-08-18T07:53:13.8984171Z   token: ***
+2026-08-18T07:53:13.8984380Z   package-manager-cache: true
+2026-08-18T07:53:13.8984618Z ##[endgroup]
+2026-08-18T07:53:14.0690619Z Attempting to download 25.x...
+2026-08-18T07:53:14.5620053Z Not found in manifest. Falling back to download directly from Node
+2026-08-18T07:53:14.6211458Z Acquiring 25.9.0 - x64 from https://nodejs.org/dist/v25.9.0/node-v25.9.0-win-x64.7z
+2026-08-18T07:53:14.8661893Z Extracting ...
+2026-08-18T07:53:17.2783588Z Adding to the cache ...
+2026-08-18T07:53:20.3250363Z Done
+2026-08-18T07:53:20.3257484Z ##[group]Environment details
+2026-08-18T07:53:21.6924911Z node: v25.9.0
+2026-08-18T07:53:21.6925233Z npm: 11.12.1
+2026-08-18T07:53:21.6925525Z yarn: 4.18.0
+2026-08-18T07:53:21.6926038Z ##[endgroup]
+2026-08-18T07:53:21.7440312Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\npm\prefix\yarn.cmd --version"
+2026-08-18T07:53:22.1936369Z 4.18.0
+2026-08-18T07:53:22.2774428Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\npm\prefix\yarn.cmd config get cacheFolder"
+2026-08-18T07:53:22.7346311Z C:\Users\runneradmin\AppData\Local\Yarn\Berry\cache
+2026-08-18T07:53:22.8310904Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\npm\prefix\yarn.cmd config get enableGlobalCache"
+2026-08-18T07:53:23.2935654Z [33mtrue[39m
+2026-08-18T07:53:23.5097946Z Cache hit for: node-cache-Windows-x64-yarn-9332dd55c208fac88cc0ab85ad2850d857d712fe70f4b9b3009ee28b03785707
+2026-08-18T07:53:24.3895709Z Received 154406708 of 154406708 (100.0%), 179.4 MBs/sec
+2026-08-18T07:53:24.3898098Z Cache Size: ~147 MB (154406708 B)
+2026-08-18T07:53:24.3976580Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/61862ca1-00cf-48e7-86c7-f75eb2e7de5a/cache.tzst -P -C D:/a/jest/jest --force-local --use-compress-program "zstd -d"
+2026-08-18T07:53:29.1426092Z Cache restored successfully
+2026-08-18T07:53:29.1521580Z Cache restored from key: node-cache-Windows-x64-yarn-9332dd55c208fac88cc0ab85ad2850d857d712fe70f4b9b3009ee28b03785707
+2026-08-18T07:53:29.1842951Z ##[group]Run yarn --immutable
+2026-08-18T07:53:29.1843294Z [36;1myarn --immutable[0m
+2026-08-18T07:53:29.2394490Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-18T07:53:29.2394867Z ##[endgroup]
+2026-08-18T07:53:30.7321511Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-08-18T07:53:30.7323295Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-08-18T07:53:30.7323933Z 
+2026-08-18T07:53:30.7324155Z [94m➤[39m YN0000: · Yarn 4.18.0
+2026-08-18T07:53:30.7425707Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-08-18T07:53:30.7427046Z ##[group]Resolution step
+2026-08-18T07:53:43.5691305Z ##[endgroup]
+2026-08-18T07:53:43.5697620Z [94m➤[39m [90mYN0000[39m: └ Completed in 12s 825ms
+2026-08-18T07:53:43.5714221Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-08-18T07:53:43.5715399Z ##[group]Post-resolution validation
+2026-08-18T07:53:43.5718829Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m7.29.7[39m ([38;5;111mpf247de[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mpreset-react[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-18T07:53:43.5723199Z [93m➤[39m YN0060: │ [38;5;173mgraphql[39m is listed by your project with version [38;5;111m17.0.2[39m ([38;5;111mp1ae269[39m), which doesn't satisfy what [38;5;173mgraphql-request[39m and other dependencies request ([38;5;37m^14.0.0 || ^15.0.0 || ^16.0.0[39m).
+2026-08-18T07:53:43.5726711Z [93m➤[39m YN0060: │ [38;5;173mreact[39m is listed by your project with version [38;5;111m19.2.8[39m ([38;5;111mpbfd061[39m), which doesn't satisfy what [38;5;173mreact-test-renderer[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-18T07:53:43.5730261Z [93m➤[39m YN0002: │ [38;5;166m@jest/[39m[38;5;173mdiff-sequences[39m[38;5;111m@[39m[38;5;111mworkspace:packages/diff-sequences[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp03fd70[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-18T07:53:43.5733749Z [93m➤[39m YN0002: │ [38;5;173mbabel-preset-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-preset-jest[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa5adb7[39m), requested by [38;5;173mbabel-preset-current-node-syntax[39m.
+2026-08-18T07:53:43.5737229Z [93m➤[39m YN0002: │ [38;5;173mcreate-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/create-jest[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp9c2ade[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T07:53:43.5740630Z [93m➤[39m YN0002: │ [38;5;173mexample-react-native[39m[38;5;111m@[39m[38;5;111mworkspace:examples/react-native[39m doesn't provide [38;5;166m@types/[39m[38;5;173mreact[39m ([38;5;111mp0285ab[39m), requested by [38;5;166m@react-native/[39m[38;5;173mjest-preset[39m and other dependencies.
+2026-08-18T07:53:43.5744097Z [93m➤[39m YN0002: │ [38;5;173mexpect[39m[38;5;111m@[39m[38;5;111mworkspace:packages/expect[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp9fb730[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-18T07:53:43.5747085Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [023ef][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdec1f7[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T07:53:43.5753833Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [73877][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp6688de[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T07:53:43.5758095Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdd7483[39m), requested by [38;5;173mjest-config[39m.
+2026-08-18T07:53:43.5761464Z [93m➤[39m YN0002: │ [38;5;173mjest-config[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-config[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp4a73ba[39m), requested by [38;5;173mts-node[39m.
+2026-08-18T07:53:43.5764536Z [93m➤[39m YN0002: │ [38;5;173mjest-website[39m[38;5;111m@[39m[38;5;111mworkspace:website[39m doesn't provide [38;5;166m@mdx-js/[39m[38;5;173mreact[39m ([38;5;111mp1a83d4[39m), requested by [38;5;166m@docusaurus/[39m[38;5;173mcore[39m.
+2026-08-18T07:53:43.5767766Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-08-18T07:53:43.5770195Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-08-18T07:53:43.6644823Z ##[endgroup]
+2026-08-18T07:53:43.6645864Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-08-18T07:53:43.6646551Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-08-18T07:53:43.6647457Z ##[group]Fetch step
+2026-08-18T07:53:44.6510505Z ##[endgroup]
+2026-08-18T07:53:44.6511353Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 986ms
+2026-08-18T07:53:44.7380561Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-08-18T07:53:44.7381188Z ##[group]Link step
+2026-08-18T07:54:13.0848019Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.50.0[39m lists build scripts, but all build scripts have been disabled.
+2026-08-18T07:54:13.2910955Z [94m➤[39m YN0007: │ [38;5;173munrs-resolver[39m[38;5;111m@[39m[38;5;111mnpm:1.12.2[39m must be built because it never has been before or the last one failed
+2026-08-18T07:54:13.2926222Z [94m➤[39m YN0007: │ [38;5;166m@parcel/[39m[38;5;173mwatcher[39m[38;5;111m@[39m[38;5;111mnpm:2.6.0[39m must be built because it never has been before or the last one failed
+2026-08-18T07:54:13.2928674Z [94m➤[39m YN0007: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.2[39m must be built because it never has been before or the last one failed
+2026-08-18T07:54:13.5734107Z ##[endgroup]
+2026-08-18T07:54:13.5735310Z [94m➤[39m [90mYN0000[39m: └ Completed in 28s 834ms
+2026-08-18T07:54:13.7670070Z [93m➤[39m YN0000: · Done with warnings in 43s 34ms
+2026-08-18T07:54:14.0593047Z ##[group]Run yarn build:js
+2026-08-18T07:54:14.0593383Z [36;1myarn build:js[0m
+2026-08-18T07:54:14.0663292Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-18T07:54:14.0663729Z ##[endgroup]
+2026-08-18T07:54:15.3708206Z  Bundling packages 
+2026-08-18T07:54:21.7777314Z  DONE 
+2026-08-18T07:54:21.9339059Z ##[group]Run SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403
+2026-08-18T07:54:21.9339577Z ##[endgroup]
+2026-08-18T07:54:22.0558480Z ##[group]Run yarn workspace jest-environment-node test
+2026-08-18T07:54:22.0558939Z [36;1myarn workspace jest-environment-node test[0m
+2026-08-18T07:54:22.0625046Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-18T07:54:22.0625398Z ##[endgroup]
+2026-08-18T07:54:24.5317218Z GLOBALS_CLEANUP=off
+2026-08-18T07:54:27.0857755Z PASS packages/jest-environment-node/src/__tests__/node_environment.test.ts
+2026-08-18T07:54:27.0959303Z   ● Console
+2026-08-18T07:54:27.0959487Z 
+2026-08-18T07:54:27.0959653Z     console.warn
+2026-08-18T07:54:27.0960293Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:27.0960868Z         Current: 'off'
+2026-08-18T07:54:27.0961226Z         Given: 'on'
+2026-08-18T07:54:27.0961724Z 
+2026-08-18T07:54:27.0961973Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:27.0962275Z 
+2026-08-18T07:54:27.0962389Z     console.warn
+2026-08-18T07:54:27.0963037Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:27.0963573Z         Current: 'off'
+2026-08-18T07:54:27.0963905Z         Given: 'soft'
+2026-08-18T07:54:27.0964064Z 
+2026-08-18T07:54:27.0964296Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:27.0964566Z 
+2026-08-18T07:54:27.1416511Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_2.test.ts
+2026-08-18T07:54:27.1825771Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_1.test.ts
+2026-08-18T07:54:27.2159805Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_3.test.ts
+2026-08-18T07:54:27.2191984Z 
+2026-08-18T07:54:27.2202137Z Test Suites: 4 passed, 4 total
+2026-08-18T07:54:27.2202760Z Tests:       18 passed, 18 total
+2026-08-18T07:54:27.2203204Z Snapshots:   0 total
+2026-08-18T07:54:27.2203528Z Time:        1.244 s
+2026-08-18T07:54:27.2204061Z Ran all test suites matching packages/jest-environment-node/src/__tests__.
+2026-08-18T07:54:28.5517930Z GLOBALS_CLEANUP=soft
+2026-08-18T07:54:30.9507202Z PASS packages/jest-environment-node/src/__tests__/node_environment.test.ts
+2026-08-18T07:54:30.9607909Z   ● Console
+2026-08-18T07:54:30.9608194Z 
+2026-08-18T07:54:30.9608346Z     console.warn
+2026-08-18T07:54:30.9609184Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:30.9610180Z         Current: 'soft'
+2026-08-18T07:54:30.9610606Z         Given: 'on'
+2026-08-18T07:54:30.9610864Z 
+2026-08-18T07:54:30.9611128Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:30.9611553Z 
+2026-08-18T07:54:30.9611709Z     console.warn
+2026-08-18T07:54:30.9612606Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:30.9613458Z         Current: 'soft'
+2026-08-18T07:54:30.9613887Z         Given: 'off'
+2026-08-18T07:54:30.9614179Z 
+2026-08-18T07:54:30.9614483Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:30.9614910Z 
+2026-08-18T07:54:31.0101158Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_2.test.ts
+2026-08-18T07:54:31.0521034Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_1.test.ts
+2026-08-18T07:54:31.0888032Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_3.test.ts
+2026-08-18T07:54:31.0924609Z 
+2026-08-18T07:54:31.0934936Z Test Suites: 4 passed, 4 total
+2026-08-18T07:54:31.0935687Z Tests:       18 passed, 18 total
+2026-08-18T07:54:31.0936175Z Snapshots:   0 total
+2026-08-18T07:54:31.0936687Z Time:        1.257 s
+2026-08-18T07:54:31.0937441Z Ran all test suites matching packages/jest-environment-node/src/__tests__.
+2026-08-18T07:54:32.4577695Z GLOBALS_CLEANUP=on
+2026-08-18T07:54:34.8763016Z PASS packages/jest-environment-node/src/__tests__/node_environment.test.ts
+2026-08-18T07:54:34.8863320Z   ● Console
+2026-08-18T07:54:34.8863638Z 
+2026-08-18T07:54:34.8863849Z     console.warn
+2026-08-18T07:54:34.8866947Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:34.8867635Z         Current: 'on'
+2026-08-18T07:54:34.8867956Z         Given: 'soft'
+2026-08-18T07:54:34.8868141Z 
+2026-08-18T07:54:34.8868410Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:34.8868669Z 
+2026-08-18T07:54:34.8868817Z     console.warn
+2026-08-18T07:54:34.8869278Z       [jest-util] garbage collection deletion mode already initialized, ignoring new mode
+2026-08-18T07:54:34.8869810Z         Current: 'on'
+2026-08-18T07:54:34.8870141Z         Given: 'off'
+2026-08-18T07:54:34.8870274Z 
+2026-08-18T07:54:34.8870532Z       at warn (packages/jest-util/build/index.js:433:15)
+2026-08-18T07:54:34.8870820Z 
+2026-08-18T07:54:34.9446701Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_2.test.ts
+2026-08-18T07:54:34.9914745Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_1.test.ts
+2026-08-18T07:54:35.0257769Z PASS packages/jest-environment-node/src/__tests__/globals_cleanup_3.test.ts
+2026-08-18T07:54:35.0288801Z 
+2026-08-18T07:54:35.0298625Z Test Suites: 4 passed, 4 total
+2026-08-18T07:54:35.0299682Z Tests:       18 passed, 18 total
+2026-08-18T07:54:35.0300227Z Snapshots:   0 total
+2026-08-18T07:54:35.0300692Z Time:        1.282 s
+2026-08-18T07:54:35.0301513Z Ran all test suites matching packages/jest-environment-node/src/__tests__.
+2026-08-18T07:54:35.2108276Z ##[group]Run nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60
+2026-08-18T07:54:35.2108728Z with:
+2026-08-18T07:54:35.2108926Z   timeout_minutes: 10
+2026-08-18T07:54:35.2109135Z   max_attempts: 3
+2026-08-18T07:54:35.2109323Z   retry_on: error
+2026-08-18T07:54:35.2109623Z   command: yarn test-ci-partial:parallel --max-workers 4 --shard=3/4
+2026-08-18T07:54:35.2110009Z   retry_wait_seconds: 10
+2026-08-18T07:54:35.2110233Z   polling_interval_seconds: 1
+2026-08-18T07:54:35.2110452Z   warning_on_retry: true
+2026-08-18T07:54:35.2110655Z   continue_on_error: false
+2026-08-18T07:54:35.2110872Z ##[endgroup]
+2026-08-18T07:54:35.2999864Z ##[group]Attempt 1
+2026-08-18T07:54:45.3927624Z ........
+2026-08-18T07:54:45.4044746Z ##[error]ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+    at Binding.<anonymous> (node_modules/mock-fs/lib/binding.js:407:15)
+2026-08-18T07:54:45.4055297Z .
+2026-08-18T07:54:45.4056085Z D:\a\jest\jest\packages\jest-reporters\src\__tests__\CoverageReporter.test.js
+2026-08-18T07:54:45.4056645Z 
+2026-08-18T07:54:45.4057733Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T07:54:45.4092808Z 
+2026-08-18T07:54:45.4093800Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T07:54:45.4094383Z 
+2026-08-18T07:54:45.4095361Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T07:54:45.4095969Z 
+2026-08-18T07:55:42.5143520Z ...............................[SKIP] Does not work on Windows
+2026-08-18T07:55:42.5147965Z [SKIP] Requires watchman to be installed
+2026-08-18T07:56:03.1712303Z ..............[33m[1mfoo[22m:[39m
+2026-08-18T07:56:03.1810312Z [33m[39m
+2026-08-18T07:56:03.1867016Z [33mDeprecation message[39m
+2026-08-18T07:56:03.1876110Z [33m[39m
+2026-08-18T07:56:03.1902125Z [33m  [1mCLI Options Documentation:[22m[39m
+2026-08-18T07:56:03.1913462Z [33m  https://jestjs.io/docs/cli[39m
+2026-08-18T07:56:03.1916200Z [33m[39m
+2026-08-18T07:56:31.8652583Z ..........................................[SKIP] Does not work on jest-circus
+2026-08-18T07:56:53.2333403Z ......................................[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T07:56:53.2334726Z [33m  Current: 'on'[39m
+2026-08-18T07:56:53.2648596Z [33m  Given: 'soft'[39m
+2026-08-18T07:56:53.2744094Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T07:56:53.2745567Z [33m  Current: 'on'[39m
+2026-08-18T07:56:53.2749849Z [33m  Given: 'off'[39m
+2026-08-18T07:56:55.3158290Z ..
+2026-08-18T07:56:55.3158459Z 
+2026-08-18T07:56:55.3158475Z 
+2026-08-18T07:56:55.3160524Z [1mSummary of all failing tests[22m
+2026-08-18T07:56:55.3174929Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-reporters/src/__tests__/[22m[1mCoverageReporter.test.js[22m
+2026-08-18T07:56:55.3181924Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T07:56:55.3182965Z 
+2026-08-18T07:56:55.3186631Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T07:56:55.3191734Z 
+2026-08-18T07:56:55.3193382Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T07:56:55.3194037Z 
+2026-08-18T07:56:55.3194046Z 
+2026-08-18T07:56:55.3205043Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m134 passed[39m[22m, 135 of 136 total
+2026-08-18T07:56:55.3206664Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m24 skipped[39m[22m, [1m[32m2064 passed[39m[22m, 2089 total
+2026-08-18T07:56:55.3207603Z [1mSnapshots:   [22m[1m[32m1024 passed[39m[22m, 1024 total
+2026-08-18T07:56:55.3210429Z [1mTime:[22m        [1m[33m135.592 s[39m[22m
+2026-08-18T07:56:55.3211083Z [2mRan all test suites[22m[2m in [22m8[2m projects[22m[2m.[22m
+2026-08-18T07:57:06.1479114Z ##[warning]Attempt 1 failed. Reason: Child_process exited with error code 1
+2026-08-18T07:57:06.1481166Z ##[endgroup]
+2026-08-18T07:57:06.1481843Z ##[group]Attempt 2
+2026-08-18T07:57:10.9008134Z .
+2026-08-18T07:57:10.9020417Z ##[error]ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+    at Binding.<anonymous> (node_modules/mock-fs/lib/binding.js:407:15)
+2026-08-18T07:57:10.9046887Z .
+2026-08-18T07:57:10.9148881Z D:\a\jest\jest\packages\jest-reporters\src\__tests__\CoverageReporter.test.js
+2026-08-18T07:57:10.9187942Z 
+2026-08-18T07:57:10.9217568Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T07:57:10.9224068Z 
+2026-08-18T07:57:10.9276561Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T07:57:10.9436812Z 
+2026-08-18T07:57:10.9522040Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T07:57:10.9550910Z 
+2026-08-18T07:58:47.3184112Z .......................................................................................................[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T07:58:47.3185896Z [33m  Current: 'on'[39m
+2026-08-18T07:58:47.3211555Z [33m  Given: 'soft'[39m
+2026-08-18T07:58:47.3214519Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T07:58:47.3229027Z [33m  Current: 'on'[39m
+2026-08-18T07:58:47.3344027Z [33m  Given: 'off'[39m
+2026-08-18T07:58:47.6132608Z ..........[33m[1mfoo[22m:[39m
+2026-08-18T07:58:47.6165026Z [33m[39m
+2026-08-18T07:58:47.6226724Z [33mDeprecation message[39m
+2026-08-18T07:58:47.6374635Z [33m[39m
+2026-08-18T07:58:47.6427014Z [33m  [1mCLI Options Documentation:[22m[39m
+2026-08-18T07:58:47.6487506Z [33m  https://jestjs.io/docs/cli[39m
+2026-08-18T07:58:47.6521447Z [33m[39m
+2026-08-18T07:58:47.8179907Z ........[SKIP] Does not work on Windows
+2026-08-18T07:58:47.8240658Z [SKIP] Requires watchman to be installed
+2026-08-18T07:58:47.9908015Z ...........[SKIP] Does not work on jest-circus
+2026-08-18T07:58:48.1715069Z ..
+2026-08-18T07:58:48.1715333Z 
+2026-08-18T07:58:48.1715340Z 
+2026-08-18T07:58:48.1716041Z [1mSummary of all failing tests[22m
+2026-08-18T07:58:48.1733023Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-reporters/src/__tests__/[22m[1mCoverageReporter.test.js[22m
+2026-08-18T07:58:48.1739809Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T07:58:48.1742757Z 
+2026-08-18T07:58:48.1744804Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T07:58:48.1745366Z 
+2026-08-18T07:58:48.1754908Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T07:58:48.1755871Z 
+2026-08-18T07:58:48.1756068Z 
+2026-08-18T07:58:48.1768535Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m134 passed[39m[22m, 135 of 136 total
+2026-08-18T07:58:48.1771826Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m24 skipped[39m[22m, [1m[32m2064 passed[39m[22m, 2089 total
+2026-08-18T07:58:48.1772927Z [1mSnapshots:   [22m[1m[32m1024 passed[39m[22m, 1024 total
+2026-08-18T07:58:48.1773754Z [1mTime:[22m        99.513 s, estimated 131 s
+2026-08-18T07:58:48.1774618Z [2mRan all test suites[22m[2m in [22m8[2m projects[22m[2m.[22m
+2026-08-18T07:58:58.8450002Z ##[warning]Attempt 2 failed. Reason: Child_process exited with error code 1
+2026-08-18T07:58:58.8452324Z ##[endgroup]
+2026-08-18T07:58:58.8452949Z ##[group]Attempt 3
+2026-08-18T07:59:03.6683369Z .
+2026-08-18T07:59:03.6701147Z ##[error]ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+    at Binding.<anonymous> (node_modules/mock-fs/lib/binding.js:407:15)
+2026-08-18T07:59:03.6800367Z .
+2026-08-18T07:59:03.6881711Z D:\a\jest\jest\packages\jest-reporters\src\__tests__\CoverageReporter.test.js
+2026-08-18T07:59:03.6962671Z 
+2026-08-18T07:59:03.6992266Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T07:59:03.7011599Z 
+2026-08-18T07:59:03.7063948Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T07:59:03.7138970Z 
+2026-08-18T07:59:03.7233623Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T07:59:03.7374390Z 
+2026-08-18T08:00:53.6701344Z ....................................................................................[33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T08:00:53.6801657Z [33m  Current: 'on'[39m
+2026-08-18T08:00:53.6807230Z [33m  Given: 'soft'[39m
+2026-08-18T08:00:53.6876874Z [33m[jest-util] garbage collection deletion mode already initialized, ignoring new mode[39m
+2026-08-18T08:00:53.6994138Z [33m  Current: 'on'[39m
+2026-08-18T08:00:53.7127571Z [33m  Given: 'off'[39m
+2026-08-18T08:00:53.7456770Z .[33m[1mfoo[22m:[39m
+2026-08-18T08:00:53.7475536Z [33m[39m
+2026-08-18T08:00:53.7480594Z [33mDeprecation message[39m
+2026-08-18T08:00:53.7509548Z [33m[39m
+2026-08-18T08:00:53.7589914Z [33m  [1mCLI Options Documentation:[22m[39m
+2026-08-18T08:00:53.7597515Z [33m  https://jestjs.io/docs/cli[39m
+2026-08-18T08:00:53.7746430Z [33m[39m
+2026-08-18T08:00:54.6799472Z ..........................[SKIP] Does not work on Windows
+2026-08-18T08:00:54.6856531Z [SKIP] Requires watchman to be installed
+2026-08-18T08:00:54.7343969Z ...[SKIP] Does not work on jest-circus
+2026-08-18T08:00:55.6344890Z ....................[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+2026-08-18T08:00:55.6648138Z 
+2026-08-18T08:00:55.6648201Z 
+2026-08-18T08:00:55.6649135Z 
+2026-08-18T08:00:55.6651962Z [1mSummary of all failing tests[22m
+2026-08-18T08:00:55.6675871Z [0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mpackages/jest-reporters/src/__tests__/[22m[1mCoverageReporter.test.js[22m
+2026-08-18T08:00:55.6682063Z [1m[31m  [1m● [22m[1monRunComplete › collects untested files from project-level collectCoverageFrom[39m[22m
+2026-08-18T08:00:55.6685118Z 
+2026-08-18T08:00:55.6688889Z     ENOENT, no such file or directory 'D:\a\jest\jest\node_modules\merge-stream\index.js'
+2026-08-18T08:00:55.6689732Z 
+2026-08-18T08:00:55.6702414Z [2m      [2mat Binding.<anonymous> ([22m[2mnode_modules/mock-fs/lib/binding.js[2m:407:15)[22m[2m[22m
+2026-08-18T08:00:55.6703099Z 
+2026-08-18T08:00:55.6703120Z 
+2026-08-18T08:00:55.6715370Z [1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[33m1 skipped[39m[22m, [1m[32m134 passed[39m[22m, 135 of 136 total
+2026-08-18T08:00:55.6716731Z [1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[33m24 skipped[39m[22m, [1m[32m2064 passed[39m[22m, 2089 total
+2026-08-18T08:00:55.6718273Z [1mSnapshots:   [22m[1m[32m1024 passed[39m[22m, 1024 total
+2026-08-18T08:00:55.6719092Z [1mTime:[22m        [1m[33m114.265 s[39m[22m
+2026-08-18T08:00:55.6719910Z [2mRan all test suites[22m[2m in [22m8[2m projects[22m[2m.[22m
+2026-08-18T08:01:06.7927704Z ##[endgroup]
+2026-08-18T08:01:06.7930752Z ##[error]Final attempt failed. Child_process exited with error code 1
+2026-08-18T08:01:06.8298303Z Post job cleanup.
+2026-08-18T08:01:07.0257236Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-18T08:01:07.0593601Z git version 2.55.0.windows.3
+2026-08-18T08:01:07.0662908Z Temporarily overriding HOME='D:\a\_temp\f1b91368-ff9b-4b78-9269-9b2310b40593' before making global git config changes
+2026-08-18T08:01:07.0664327Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-18T08:01:07.0674518Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\jest\jest
+2026-08-18T08:01:07.0988293Z Removing SSH command configuration
+2026-08-18T08:01:07.1004093Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-18T08:01:07.1320174Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-18T08:01:07.6696045Z Removing HTTP extra header
+2026-08-18T08:01:07.6706283Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-18T08:01:07.7002042Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-18T08:01:08.2487222Z Removing includeIf entries pointing to credentials config files
+2026-08-18T08:01:08.2498309Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-18T08:01:08.2789802Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-18T08:01:08.8355409Z Cleaning up orphan processes

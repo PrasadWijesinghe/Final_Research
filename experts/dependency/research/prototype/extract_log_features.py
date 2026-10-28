@@ -223,8 +223,14 @@ def extract_training_log_features(
             has_all_current_features = prior is not None and all(
                 column in prior and prior[column] != "" for column in LOG_FEATURE_COLUMNS
             )
-            can_reuse = not refresh and prior is not None and has_all_current_features and (
-                prior.get("log_evidence_complete") == "1" or "request_error" not in prior_statuses
+            can_reuse = (
+                not refresh
+                and prior is not None
+                and has_all_current_features
+                and (
+                    prior.get("log_evidence_complete") == "1"
+                    or "request_error" not in prior_statuses
+                )
             )
             if (
                 can_reuse
@@ -275,9 +281,7 @@ def extract_training_log_features(
                 and prior.get("verified_label") == row["verified_label"]
             ):
                 for column in LOG_FEATURE_COLUMNS:
-                    current[column] = int(
-                        bool(int(prior.get(column, 0))) or bool(current[column])
-                    )
+                    current[column] = int(bool(int(prior.get(column, 0))) or bool(current[column]))
             features.append(current)
 
             # Keep a valid checkpoint after every run so an interrupted scan can be resumed

@@ -1,0 +1,27 @@
+{
+  "framework": "jest",
+  "repo": "babel/babel",
+  "job_id": 119197725638,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 15,
+  "summary": {
+    "passed": 173706,
+    "failed": 1,
+    "skipped": 54,
+    "total": 173761,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "babel-plugin-transform-block-scoping/tdz > for head closure"
+  ],
+  "failed_files": [
+    "packages/babel-plugin-transform-block-scoping/test/index.js"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "packages/babel-helper-transform-fixture-test-runner/lib/index.js",
+  "note": "Trimmed. 14 small child jest runs print their own summaries before the main run's (15 in all, added together). Babel's reporter prints `a > b > c` under `FAIL file` with no `●`. Verbose ticks give test granularity."
+}

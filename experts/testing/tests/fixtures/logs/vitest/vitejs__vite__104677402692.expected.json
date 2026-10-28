@@ -1,0 +1,26 @@
+{
+  "framework": "vitest",
+  "repo": "vitejs/vite",
+  "job_id": 104677402692,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 997,
+    "failed": 1,
+    "skipped": 3,
+    "total": 1001,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "dev server watch.ignoredFromGitignore > emits no events for gitignored files, but keeps HMR working"
+  ],
+  "failed_files": [
+    "packages/vite/src/node/__tests__/watch.spec.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "packages/vite/src/node/__tests__/watch.spec.ts"
+}

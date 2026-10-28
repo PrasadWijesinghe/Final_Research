@@ -1,4 +1,4 @@
-"""Command line entry point (`uv run collector ...`): `backfill`, `daily` and `status`."""
+"""Command line entry point (`uv run collector ...`): backfill, fill-logs, daily, status, more."""
 
 from __future__ import annotations
 
@@ -10,11 +10,20 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 
-from collector.backfill import DEFAULT_DAYS, DEFAULT_WINDOW_DAYS, Backfiller
+from collector.backfill import (
+    DEFAULT_DAYS,
+    DEFAULT_WINDOW_DAYS,
+    LOGS_ALL,
+    LOGS_FAILED,
+    Backfiller,
+    RepoSummary,
+)
 from collector.daily import DailySummary, DailySyncer, NotBackfilledError
 from collector.export_import import TransferError, export_data, import_data, resolve_target
 from collector.file_tags import load_file_tagger
+from collector.policy import PASSING_ALL, PASSING_FAILED_RUNS
 from collector.repo_config import DEFAULT_CONFIG_DIR, MEMBERS, ConfigError, load_member_config
+from collector.report import collect_report, render_report
 from collector.status import collect_status, fetch_rate_limit, render_status
 from collector.store import SqlStore
 from collector.workflow_detection import load_detection_rules
@@ -46,6 +55,35 @@ def _build_parser() -> argparse.ArgumentParser:
     bf.add_argument(
         "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
     )
+    bf.add_argument(
+        "--logs",
+        choices=(LOGS_ALL, LOGS_FAILED),
+        default=LOGS_ALL,
+        help="'failed' skips logs of passing jobs (fetch them later with `fill-logs`); "
+        "default 'all'",
+    )
+    fill = sub.add_parser(
+        "fill-logs", help="fetch logs the policy wants but the database lacks, newest first"
+    )
+    fill.add_argument("--member", required=True, choices=MEMBERS)
+    fill.add_argument("--repo", help="only this owner/name (must be in the member's list)")
+    fill.add_argument("--limit", type=int, help="store at most this many logs in this run")
+    fill.add_argument(
+        "--no-archive",
+        action="store_true",
+        help="one request per job log, as before; by default the logs of a run attempt with "
+        "two or more pending jobs come from one zip (far fewer requests)",
+    )
+    fill.add_argument(
+        "--passing",
+        choices=(PASSING_ALL, PASSING_FAILED_RUNS),
+        default=PASSING_ALL,
+        help="'failed-runs' fetches logs of passing jobs only in runs that have a failed job "
+        "(any attempt); default 'all'",
+    )
+    fill.add_argument(
+        "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
+    )
     daily = sub.add_parser(
         "daily", help="top up: new runs since the last sync plus a 14-day re-scan"
     )
@@ -56,6 +94,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     status = sub.add_parser("status", help="show what is collected, gaps and the rate limit")
     status.add_argument("--member", required=True, choices=MEMBERS)
+    rep = sub.add_parser(
+        "report", help="data-quality report per repo (runs, jobs, logs, redactions); read-only"
+    )
+    rep.add_argument("--member", required=True, choices=MEMBERS)
+    rep.add_argument("--out", type=Path, help="write the report to this file instead of stdout")
     exp = sub.add_parser("export", help="bundle the database, logs and a manifest into a tar.gz")
     exp.add_argument("--member", required=True, choices=MEMBERS)
     exp.add_argument("--database", help="database name (default: the one in DATABASE_URL)")
@@ -112,6 +155,7 @@ def run_backfill(args: argparse.Namespace) -> int:
             rules=rules,
             days=args.days,
             window_days=args.window_days,
+            logs=args.logs,
         )
         for entry in repos:
             try:
@@ -128,6 +172,71 @@ def run_backfill(args: argparse.Namespace) -> int:
     return EXIT_FAILED if failed else EXIT_OK
 
 
+def _fill_line(s: RepoSummary) -> str:
+    line = f"logs ok {s.logs_ok}, expired {s.logs_expired}, missing {s.logs_missing}"
+    if s.archives_fetched or s.archive_fallbacks or s.archives_failed:
+        line += (
+            f"; archives fetched {s.archives_fetched} ({s.logs_from_archive} logs), "
+            f"fell back to one request per job {s.archive_fallbacks}, "
+            f"archive failures {s.archives_failed}"
+        )
+    return line
+
+
+def run_fill_logs(args: argparse.Namespace) -> int:
+    """Run `collector fill-logs` (pass 2 of the backfill); returns the process exit code."""
+    missing = _missing_env(("GITHUB_TOKEN", "DATABASE_URL"))
+    if missing:
+        _err(
+            f"{', '.join(missing)} not set. Put them in .env (see .env.example) and run with "
+            "`uv run --env-file .env collector fill-logs ...`."
+        )
+        return EXIT_USAGE
+    if args.limit is not None and args.limit < 1:
+        _err("--limit must be at least 1")
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+        tagger = load_file_tagger()
+        rules = load_detection_rules()
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    repos = config.enabled_repos()
+    if args.repo:
+        repos = [r for r in config.repos if r.full_name == args.repo]
+        if not repos:
+            _err(f"{args.repo} is not in config/repos/{args.member}.yaml")
+            return EXIT_USAGE
+    data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
+    failed = 0
+    remaining: int | None = args.limit  # DEFAULT: --limit is a total over all repos of this run
+    store = SqlStore(get_engine())
+    with GitHubClient() as client:
+        filler = Backfiller(
+            client, store, member=args.member, data_dir=data_dir, tagger=tagger, rules=rules
+        )
+        for entry in repos:
+            if remaining is not None and remaining <= 0:
+                break
+            try:
+                summary = filler.fill_logs_repo(
+                    entry, remaining, passing=args.passing, archive=not args.no_archive
+                )
+            except GitHubError as exc:
+                failed += 1
+                logger.error(
+                    "fill-logs failed for repo; re-run to resume",
+                    extra={"repo": entry.full_name, "error": str(exc), "status": exc.status_code},
+                )
+                _err(f"{entry.full_name}: failed ({exc}); re-run to resume")
+                continue
+            if remaining is not None:
+                remaining -= summary.logs_ok + summary.logs_expired + summary.logs_missing
+            sys.stdout.write(f"{entry.full_name}: {_fill_line(summary)}\n")
+    return EXIT_FAILED if failed else EXIT_OK
+
+
 def _daily_line(full_name: str, s: DailySummary) -> str:
     window = f"{s.window_start:%Y-%m-%d %H:%M}..{s.window_end:%Y-%m-%d %H:%M} UTC"
     line = (
@@ -135,6 +244,8 @@ def _daily_line(full_name: str, s: DailySummary) -> str:
         f"{s.runs_processed}, already stored {s.runs_already_done}, attempts {s.attempts}, "
         f"jobs {s.jobs}, logs ok {s.logs_ok}"
     )
+    if s.runs_skipped_failing or s.skipped_cleared:
+        line += f"; skipped runs: {s.runs_skipped_failing} still failing, {s.skipped_cleared} fixed"
     if s.data_lost:
         line += (
             f"; WARNING: {s.gap_days} days since the last sync, runs older than 90 days are lost"
@@ -226,6 +337,33 @@ def run_status(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def run_report(args: argparse.Namespace) -> int:
+    """Run `collector report`: read-only, needs only DATABASE_URL (no token, no network)."""
+    missing = _missing_env(("DATABASE_URL",))
+    if missing:
+        _err("DATABASE_URL not set. Put it in .env and run with `uv run --env-file .env ...`.")
+        return EXIT_USAGE
+    try:
+        config = load_member_config(args.member)
+    except ConfigError as exc:
+        _err(str(exc))
+        return EXIT_USAGE
+    repos = collect_report(SqlStore(get_engine()), args.member, config.repos)
+    text = render_report(args.member, repos, datetime.now(UTC))
+    if args.out is None:
+        sys.stdout.write(text)
+        return EXIT_OK
+    try:
+        # DEFAULT: `--out` creates missing parent folders and overwrites an existing file.
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(text, encoding="utf-8")
+    except OSError as exc:
+        _err(f"cannot write {args.out}: {exc.strerror or type(exc).__name__}")
+        return EXIT_FAILED
+    sys.stdout.write(f"wrote {args.out}\n")
+    return EXIT_OK
+
+
 def run_export(args: argparse.Namespace) -> int:
     """Run `collector export`; returns the process exit code."""
     data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or DEFAULT_DATA_DIR)
@@ -272,10 +410,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "backfill":
         return run_backfill(args)
+    if args.command == "fill-logs":
+        return run_fill_logs(args)
     if args.command == "daily":
         return run_daily(args)
     if args.command == "status":
         return run_status(args)
+    if args.command == "report":
+        return run_report(args)
     if args.command == "export":
         return run_export(args)
     if args.command == "import":

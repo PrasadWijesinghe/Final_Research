@@ -30,8 +30,7 @@ from xgboost import XGBClassifier
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_CSV = (
-    REPOSITORY_ROOT
-    / "data/datasets/dependency/master_training_table_with_log_features.csv"
+    REPOSITORY_ROOT / "data/datasets/dependency/master_training_table_with_log_features.csv"
 )
 DEFAULT_REPORT = REPOSITORY_ROOT / "data/datasets/dependency/evaluation_report_verified.json"
 DEFAULT_MISCLASSIFIED = (
@@ -152,9 +151,7 @@ def evaluate_verified_dataset(
         raise ValueError("master CSV must contain at least one record")
     incomplete_mask = pd.to_numeric(frame["log_evidence_complete"], errors="raise") != 1
     incomplete_records = int(incomplete_mask.sum())
-    master_label_counts = {
-        label: int((frame["verified_label"] == label).sum()) for label in LABELS
-    }
+    master_label_counts = {label: int((frame["verified_label"] == label).sum()) for label in LABELS}
     frame = frame.loc[~incomplete_mask].copy()
     if frame.empty:
         raise ValueError("no records have complete failed-job log evidence")
@@ -263,10 +260,7 @@ def evaluate_verified_dataset(
                 "fold": best_result["prediction_folds"][index],
                 "verified_label": label_names[int(actual)],
                 "predicted_label": label_names[int(predicted)],
-                **{
-                    column: int(source_row[column])
-                    for column in FEATURE_COLUMNS
-                },
+                **{column: int(source_row[column]) for column in FEATURE_COLUMNS},
             }
         )
 
@@ -338,9 +332,7 @@ def evaluate_verified_dataset(
             "models": {
                 name: {
                     "with_cache_miss_feature": model_results_with_cache_miss[name]["metrics"],
-                    "without_cache_miss_feature": model_results_without_cache_miss[name][
-                        "metrics"
-                    ],
+                    "without_cache_miss_feature": model_results_without_cache_miss[name]["metrics"],
                 }
                 for name in models
             },

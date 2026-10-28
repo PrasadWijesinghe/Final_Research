@@ -1,0 +1,328 @@
+﻿2026-10-05T22:18:06.0234762Z Current runner version: '2.337.0'
+2026-10-05T22:18:06.0254813Z ##[group]Runner Image Provisioner
+2026-10-05T22:18:06.0255549Z Hosted Compute Agent
+2026-10-05T22:18:06.0255960Z Version: 20260901.588
+2026-10-05T22:18:06.0256419Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-05T22:18:06.0257046Z Build Date: 2026-09-01T19:56:44Z
+2026-10-05T22:18:06.0257534Z Worker ID: {b0853822-539b-4165-a27f-514254d1886a}
+2026-10-05T22:18:06.0258045Z Azure Region: centralus
+2026-10-05T22:18:06.0258450Z ##[endgroup]
+2026-10-05T22:18:06.0259369Z ##[group]Operating System
+2026-10-05T22:18:06.0259820Z Ubuntu
+2026-10-05T22:18:06.0260205Z 24.04.5
+2026-10-05T22:18:06.0260575Z LTS
+2026-10-05T22:18:06.0260950Z ##[endgroup]
+2026-10-05T22:18:06.0261334Z ##[group]Runner Image
+2026-10-05T22:18:06.0262119Z Image: ubuntu-24.04
+2026-10-05T22:18:06.0262543Z Version: 20260927.320.1
+2026-10-05T22:18:06.0263463Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-05T22:18:06.0264508Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-05T22:18:06.0265207Z ##[endgroup]
+2026-10-05T22:18:06.0265962Z ##[group]GITHUB_TOKEN Permissions
+2026-10-05T22:18:06.0267706Z Contents: read
+2026-10-05T22:18:06.0268118Z Metadata: read
+2026-10-05T22:18:06.0268528Z ##[endgroup]
+2026-10-05T22:18:06.0270102Z Secret source: None
+2026-10-05T22:18:06.0270749Z Cache mode: write
+2026-10-05T22:18:06.0271245Z Prepare workflow directory
+2026-10-05T22:18:06.1007655Z Prepare all required actions
+2026-10-05T22:18:06.1045831Z Getting action download info
+2026-10-05T22:18:06.3883645Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-05T22:18:06.9967224Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-10-05T22:18:07.8128173Z Download action repository 'actions/download-artifact@v8' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-10-05T22:18:08.2816375Z Complete job name: Test @babel/eslint-* with ESLint (9)
+2026-10-05T22:18:08.3408707Z ##[group]Run actions/checkout@v6
+2026-10-05T22:18:08.3409741Z with:
+2026-10-05T22:18:08.3410372Z   repository: babel/babel
+2026-10-05T22:18:08.3416671Z   token: ***
+2026-10-05T22:18:08.3417364Z   ssh-strict: true
+2026-10-05T22:18:08.3418028Z   ssh-user: git
+2026-10-05T22:18:08.3418742Z   persist-credentials: true
+2026-10-05T22:18:08.3419469Z   clean: true
+2026-10-05T22:18:08.3420126Z   sparse-checkout-cone-mode: true
+2026-10-05T22:18:08.3420916Z   fetch-depth: 1
+2026-10-05T22:18:08.3421688Z   fetch-tags: false
+2026-10-05T22:18:08.3422390Z   show-progress: true
+2026-10-05T22:18:08.3423077Z   lfs: false
+2026-10-05T22:18:08.3423734Z   submodules: false
+2026-10-05T22:18:08.3424421Z   set-safe-directory: true
+2026-10-05T22:18:08.3425254Z   allow-unsafe-pr-checkout: false
+2026-10-05T22:18:08.3426241Z ##[endgroup]
+2026-10-05T22:18:08.4217661Z Syncing repository: babel/babel
+2026-10-05T22:18:08.4219872Z ##[group]Getting Git version info
+2026-10-05T22:18:08.4221009Z Working directory is '/home/runner/work/babel/babel'
+2026-10-05T22:18:08.4222670Z [command]/usr/bin/git version
+2026-10-05T22:18:08.4268234Z git version 2.55.0
+2026-10-05T22:18:08.4283054Z ##[endgroup]
+2026-10-05T22:18:08.4293858Z Temporarily overriding HOME='/home/runner/work/_temp/da0188cc-cc53-432c-b48f-36a072f22ecb' before making global git config changes
+2026-10-05T22:18:08.4295916Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T22:18:08.4297829Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-05T22:18:08.4339434Z Deleting the contents of '/home/runner/work/babel/babel'
+2026-10-05T22:18:08.4343464Z ##[group]Determining repository object format
+2026-10-05T22:18:08.4345085Z ##[endgroup]
+2026-10-05T22:18:08.4346326Z ##[group]Initializing the repository
+2026-10-05T22:18:08.4347579Z [command]/usr/bin/git init /home/runner/work/babel/babel
+2026-10-05T22:18:08.4434193Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-05T22:18:08.4436174Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-05T22:18:08.4437567Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-05T22:18:08.4438687Z hint: call:
+2026-10-05T22:18:08.4439315Z hint:
+2026-10-05T22:18:08.4440122Z hint: 	git config --global init.defaultBranch <name>
+2026-10-05T22:18:08.4441053Z hint:
+2026-10-05T22:18:08.4442291Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-05T22:18:08.4443661Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-05T22:18:08.4444780Z hint:
+2026-10-05T22:18:08.4445436Z hint: 	git branch -m <name>
+2026-10-05T22:18:08.4446117Z hint:
+2026-10-05T22:18:08.4447066Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-05T22:18:08.4451762Z Initialized empty Git repository in /home/runner/work/babel/babel/.git/
+2026-10-05T22:18:08.4459410Z [command]/usr/bin/git remote add origin https://github.com/babel/babel
+2026-10-05T22:18:08.4501900Z ##[endgroup]
+2026-10-05T22:18:08.4503617Z ##[group]Disabling automatic garbage collection
+2026-10-05T22:18:08.4505047Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-05T22:18:08.4528288Z ##[endgroup]
+2026-10-05T22:18:08.4529809Z ##[group]Setting up auth
+2026-10-05T22:18:08.4530871Z Removing SSH command configuration
+2026-10-05T22:18:08.4533160Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T22:18:08.4557077Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T22:18:08.4835506Z Removing HTTP extra header
+2026-10-05T22:18:08.4839858Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T22:18:08.4863252Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T22:18:08.5012287Z Removing includeIf entries pointing to credentials config files
+2026-10-05T22:18:08.5016942Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T22:18:08.5044690Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T22:18:08.5198320Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-05T22:18:08.5228050Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:08.5253914Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:08.5286134Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:08.5310492Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:08.5330116Z ##[endgroup]
+2026-10-05T22:18:08.5331911Z ##[group]Fetching the repository
+2026-10-05T22:18:08.5337888Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +54131e0af1866d8676ded8d9920d24b3148da6e6:refs/remotes/pull/18294/merge
+2026-10-05T22:18:09.4981100Z From https://github.com/babel/babel
+2026-10-05T22:18:09.4982636Z  * [new ref]           54131e0af1866d8676ded8d9920d24b3148da6e6 -> pull/18294/merge
+2026-10-05T22:18:09.4986794Z ##[endgroup]
+2026-10-05T22:18:09.4987497Z ##[group]Determining the checkout info
+2026-10-05T22:18:09.4988061Z ##[endgroup]
+2026-10-05T22:18:09.4996083Z [command]/usr/bin/git sparse-checkout disable
+2026-10-05T22:18:09.5050791Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-05T22:18:09.5080186Z ##[group]Checking out the ref
+2026-10-05T22:18:09.5084157Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/18294/merge
+2026-10-05T22:18:10.2669597Z Note: switching to 'refs/remotes/pull/18294/merge'.
+2026-10-05T22:18:10.2670477Z 
+2026-10-05T22:18:10.2670920Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-05T22:18:10.2671820Z changes and commit them, and you can discard any commits you make in this
+2026-10-05T22:18:10.2672512Z state without impacting any branches by switching back to a branch.
+2026-10-05T22:18:10.2672845Z 
+2026-10-05T22:18:10.2673037Z If you want to create a new branch to retain commits you create, you may
+2026-10-05T22:18:10.2673485Z do so (now or later) by using -c with the switch command. Example:
+2026-10-05T22:18:10.2673695Z 
+2026-10-05T22:18:10.2673833Z   git switch -c <new-branch-name>
+2026-10-05T22:18:10.2673979Z 
+2026-10-05T22:18:10.2674132Z Or undo this operation with:
+2026-10-05T22:18:10.2674300Z 
+2026-10-05T22:18:10.2674426Z   git switch -
+2026-10-05T22:18:10.2674629Z 
+2026-10-05T22:18:10.2674835Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-05T22:18:10.2675096Z 
+2026-10-05T22:18:10.2675381Z HEAD is now at 54131e0a Merge 6c4da45934552ea5f252568713de9664a1ae0af1 into 913a4f03483e0c2ff8b5e637a1b4795f27054246
+2026-10-05T22:18:10.2682848Z ##[endgroup]
+2026-10-05T22:18:10.2718757Z [command]/usr/bin/git log -1 --format=%H
+2026-10-05T22:18:10.2736499Z 54131e0af1866d8676ded8d9920d24b3148da6e6
+2026-10-05T22:18:10.2955926Z ##[group]Run actions/setup-node@v6
+2026-10-05T22:18:10.2956233Z with:
+2026-10-05T22:18:10.2956488Z   node-version: latest
+2026-10-05T22:18:10.2956722Z   cache: yarn
+2026-10-05T22:18:10.2956962Z   check-latest: false
+2026-10-05T22:18:10.2958780Z   token: ***
+2026-10-05T22:18:10.2959034Z   package-manager-cache: true
+2026-10-05T22:18:10.2959299Z ##[endgroup]
+2026-10-05T22:18:10.5440569Z getting latest node version...
+2026-10-05T22:18:10.5440982Z getting latest node version...
+2026-10-05T22:18:10.5451085Z Attempting to download v26.10.0...
+2026-10-05T22:18:11.3793914Z Acquiring 26.10.0 - x64 from https://github.com/actions/node-versions/releases/download/26.10.0-35737674515/node-26.10.0-linux-x64.tar.gz
+2026-10-05T22:18:11.8761664Z Extracting ...
+2026-10-05T22:18:11.8844519Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/0849743b-1ed7-47a6-bb75-21354e513e4c -f /home/runner/work/_temp/41b76304-94eb-4cfa-a31f-c6298ae459b8
+2026-10-05T22:18:13.4027746Z Adding to the cache ...
+2026-10-05T22:18:15.5383342Z ##[group]Environment details
+2026-10-05T22:18:15.9216611Z node: v26.10.0
+2026-10-05T22:18:15.9217575Z npm: 11.19.1
+2026-10-05T22:18:15.9217881Z yarn: 4.17.0
+2026-10-05T22:18:15.9218668Z ##[endgroup]
+2026-10-05T22:18:15.9236055Z [command]/usr/local/bin/yarn --version
+2026-10-05T22:18:16.2082080Z 4.17.0
+2026-10-05T22:18:16.2236832Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-10-05T22:18:16.5177102Z /home/runner/.yarn/berry/cache
+2026-10-05T22:18:16.5388776Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-10-05T22:18:16.8287224Z [33mtrue[39m
+2026-10-05T22:18:16.9675182Z Cache hit for: node-cache-Linux-x64-yarn-df3e86a99c8b1cb4a9f7c6b2fc88046ee7b6d4d1ab0973fb100ed93849c8bc8f
+2026-10-05T22:18:17.9380875Z Received 69762180 of 69762180 (100.0%), 81.9 MBs/sec
+2026-10-05T22:18:17.9381917Z Cache Size: ~67 MB (69762180 B)
+2026-10-05T22:18:17.9490893Z [command]/usr/bin/tar -xf /home/runner/work/_temp/50d2bae3-cff9-4bcc-89f7-0f25e0bd9958/cache.tzst -P -C /home/runner/work/babel/babel --use-compress-program unzstd
+2026-10-05T22:18:18.0395586Z Cache restored successfully
+2026-10-05T22:18:18.0425134Z Cache restored from key: node-cache-Linux-x64-yarn-df3e86a99c8b1cb4a9f7c6b2fc88046ee7b6d4d1ab0973fb100ed93849c8bc8f
+2026-10-05T22:18:18.0553981Z ##[group]Run yarn install
+2026-10-05T22:18:18.0554301Z [36;1myarn install[0m
+2026-10-05T22:18:18.0725877Z shell: /usr/bin/bash -e {0}
+2026-10-05T22:18:18.0726309Z ##[endgroup]
+2026-10-05T22:18:18.4841193Z [94m➤[39m YN0000: · Yarn 4.17.0
+2026-10-05T22:18:18.4921217Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-10-05T22:18:18.4922084Z ##[group]Resolution step
+2026-10-05T22:18:18.7138966Z ##[endgroup]
+2026-10-05T22:18:18.7140268Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 222ms
+2026-10-05T22:18:18.7161575Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-10-05T22:18:18.7162422Z ##[group]Post-resolution validation
+2026-10-05T22:18:18.7164053Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.1[39m ([38;5;111mp5fada6[39m), which doesn't satisfy what [38;5;166m@rollup/[39m[38;5;173mplugin-babel[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:18.7166268Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp07b993[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mcli[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:18.7168226Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp33ae7d[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mplugin-proposal-record-and-tuple[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:18.7170180Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp7fb75e[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mplugin-proposal-record-and-tuple[39m (via [38;5;166m@babel/[39m[38;5;173mplugin-proposal-pipeline-operator[39m) and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:18.7171977Z [93m➤[39m YN0060: │ [38;5;173meslint[39m is listed by your project with version [38;5;111m10.3.0[39m ([38;5;111mp10c3b6[39m), which doesn't satisfy what [38;5;173meslint-plugin-import[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:18.7173385Z [93m➤[39m YN0060: │ [38;5;173meslint[39m is listed by your project with version [38;5;111m10.3.0[39m ([38;5;111mp92cce6[39m), which doesn't satisfy what [38;5;173meslint-plugin-import[39m and other dependencies request ([38;5;37m^9.0.0[39m).
+2026-10-05T22:18:18.7174876Z [93m➤[39m YN0060: │ [38;5;173meslint[39m is listed by your project with version [38;5;111m10.3.0[39m ([38;5;111mpf4378a[39m), which doesn't satisfy what [38;5;173meslint-plugin-import[39m and other dependencies request ([38;5;37m^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.2.0 || ^8.0.0 || ^9.0.0[39m).
+2026-10-05T22:18:18.7176350Z [93m➤[39m YN0060: │ [38;5;173mtypescript[39m is listed by your project with version [38;5;111m6.0.2[39m ([38;5;111mpa9c555[39m), which doesn't satisfy what [38;5;173mrollup-plugin-dts[39m and other dependencies request ([38;5;37m^5.4.0[39m).
+2026-10-05T22:18:18.7177653Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp7ceb2b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T22:18:18.7179212Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mp53120b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T22:18:18.7181030Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [2c186][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpc924fa[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:18.7189988Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [9548c][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpd92711[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:18.7191664Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpe26c8b[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:18.7193040Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-10-05T22:18:18.7194248Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-10-05T22:18:18.7697742Z ##[endgroup]
+2026-10-05T22:18:18.7699351Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-10-05T22:18:18.7700323Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-10-05T22:18:18.7701170Z ##[group]Fetch step
+2026-10-05T22:18:19.0090074Z ##[endgroup]
+2026-10-05T22:18:19.0091655Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 239ms
+2026-10-05T22:18:19.0488899Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-10-05T22:18:19.0489886Z ##[group]Link step
+2026-10-05T22:18:28.3876475Z [93m➤[39m YN0004: │ [38;5;173mcore-js-pure[39m[38;5;111m@[39m[38;5;111mnpm:3.49.0[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.3877762Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.49.0[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.3879108Z [93m➤[39m YN0004: │ [38;5;173mes5-ext[39m[38;5;111m@[39m[38;5;111mnpm:0.10.64[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.3880376Z [93m➤[39m YN0004: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.1[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.3881771Z [93m➤[39m YN0004: │ [38;5;173muglifyjs-webpack-plugin[39m[38;5;111m@[39m[38;5;111mnpm:0.4.6 [2c0fc][39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.3882965Z [93m➤[39m YN0004: │ [38;5;173munrs-resolver[39m[38;5;111m@[39m[38;5;111mnpm:1.11.1[39m lists build scripts, but all build scripts have been disabled.
+2026-10-05T22:18:28.5083269Z [94m➤[39m YN0007: │ [38;5;173mbabel[39m[38;5;111m@[39m[38;5;111mworkspace:.[39m must be built because it never has been before or the last one failed
+2026-10-05T22:18:28.5976713Z ##[endgroup]
+2026-10-05T22:18:28.5977670Z [94m➤[39m [90mYN0000[39m: └ Completed in 9s 549ms
+2026-10-05T22:18:28.7633286Z [93m➤[39m YN0000: · Done with warnings in 10s 280ms
+2026-10-05T22:18:28.8229518Z ##[group]Run actions/download-artifact@v8
+2026-10-05T22:18:28.8229845Z with:
+2026-10-05T22:18:28.8230113Z   name: babel-artifact
+2026-10-05T22:18:28.8230365Z   merge-multiple: false
+2026-10-05T22:18:28.8230655Z   repository: babel/babel
+2026-10-05T22:18:28.8230958Z   run-id: 37367064116
+2026-10-05T22:18:28.8231249Z   skip-decompress: false
+2026-10-05T22:18:28.8231720Z   digest-mismatch: error
+2026-10-05T22:18:28.8231995Z ##[endgroup]
+2026-10-05T22:18:28.9292171Z Downloading single artifact
+2026-10-05T22:18:29.1252489Z Preparing to download the following artifacts:
+2026-10-05T22:18:29.1253598Z - babel-artifact (ID: 11375585047, Size: 1582776, Expected Digest: sha256:0006aea90ea038fe121a309e40779254729a917804ca810b2f5330983905ed4d)
+2026-10-05T22:18:29.4472188Z Redirecting to blob download url: https://productionresultssa18.blob.core.windows.net/actions-results/825f3cac-4b6d-8ca8-9711-72a1fd832ea2/workflow-job-run-e9b8d3e7-24ce-50d8-adb0-e6206f6afd3d/artifacts/e031d2663034ddebc456332fe0f0773cb16c520c00ceb18ca950c19164a70064.zip
+2026-10-05T22:18:29.4473261Z Starting download of artifact to: /home/runner/work/babel/babel
+2026-10-05T22:18:29.6612947Z (node:2227) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-05T22:18:29.6614644Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-05T22:18:30.0782898Z SHA256 digest of downloaded artifact is 0006aea90ea038fe121a309e40779254729a917804ca810b2f5330983905ed4d
+2026-10-05T22:18:30.0783670Z Artifact download completed successfully.
+2026-10-05T22:18:30.0784100Z Total of 1 artifact(s) downloaded
+2026-10-05T22:18:30.0786432Z Download artifact has finished successfully
+2026-10-05T22:18:30.0923148Z ##[group]Run yarn up eslint@catalog:babel-eslint--9 eslint-plugin-import@catalog:babel-eslint--9
+2026-10-05T22:18:30.0923913Z [36;1myarn up eslint@catalog:babel-eslint--9 eslint-plugin-import@catalog:babel-eslint--9[0m
+2026-10-05T22:18:30.0961748Z shell: /usr/bin/bash -e {0}
+2026-10-05T22:18:30.0962130Z ##[endgroup]
+2026-10-05T22:18:30.5745726Z [94m➤[39m YN0000: · Yarn 4.17.0
+2026-10-05T22:18:30.5814008Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-10-05T22:18:30.5814763Z ##[group]Resolution step
+2026-10-05T22:18:31.1300492Z [94m➤[39m YN0085: │ [38;5;70m+[39m [38;5;173meslint[39m[38;5;111m@[39m[38;5;111mnpm:9.0.0[39m, [38;5;166m@eslint/[39m[38;5;173meslintrc[39m[38;5;111m@[39m[38;5;111mnpm:3.3.7[39m, [38;5;166m@eslint/[39m[38;5;173mjs[39m[38;5;111m@[39m[38;5;111mnpm:9.0.0[39m, [38;5;166m@humanwhocodes/[39m[38;5;173mconfig-array[39m[38;5;111m@[39m[38;5;111mnpm:0.12.3[39m, [38;5;166m@humanwhocodes/[39m[38;5;173mobject-schema[39m[38;5;111m@[39m[38;5;111mnpm:2.0.3[39m, and [38;5;220m13[39m more.
+2026-10-05T22:18:31.1304824Z [94m➤[39m YN0085: │ [38;5;160m-[39m [38;5;166m@eslint/[39m[38;5;173mconfig-array[39m[38;5;111m@[39m[38;5;111mnpm:0.23.5[39m, [38;5;166m@eslint/[39m[38;5;173mconfig-helpers[39m[38;5;111m@[39m[38;5;111mnpm:0.5.5[39m, [38;5;166m@eslint/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mnpm:1.2.1[39m, [38;5;166m@eslint/[39m[38;5;173mobject-schema[39m[38;5;111m@[39m[38;5;111mnpm:3.0.5[39m, [38;5;166m@eslint/[39m[38;5;173mplugin-kit[39m[38;5;111m@[39m[38;5;111mnpm:0.7.1[39m, and [38;5;220m6[39m more.
+2026-10-05T22:18:31.1766717Z ##[endgroup]
+2026-10-05T22:18:31.1767792Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 595ms
+2026-10-05T22:18:31.1780199Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-10-05T22:18:31.1780994Z ##[group]Post-resolution validation
+2026-10-05T22:18:31.1782739Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.1[39m ([38;5;111mp5fada6[39m), which doesn't satisfy what [38;5;166m@rollup/[39m[38;5;173mplugin-babel[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:31.1784956Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp07b993[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mcli[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:31.1786651Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp33ae7d[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mplugin-proposal-record-and-tuple[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:31.1788952Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m8.0.6[39m ([38;5;111mp7fb75e[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mplugin-proposal-record-and-tuple[39m (via [38;5;166m@babel/[39m[38;5;173mplugin-proposal-pipeline-operator[39m) and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:31.1791546Z [93m➤[39m YN0060: │ [38;5;173meslint[39m is listed by your project with version [38;5;111m9.0.0[39m ([38;5;111mp10c3b6[39m), which doesn't satisfy what [38;5;166m@eslint/[39m[38;5;173mjs[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-10-05T22:18:31.1793202Z [93m➤[39m YN0060: │ [38;5;173mtypescript[39m is listed by your project with version [38;5;111m6.0.2[39m ([38;5;111mpa9c555[39m), which doesn't satisfy what [38;5;173mrollup-plugin-dts[39m and other dependencies request ([38;5;37m^5.4.0[39m).
+2026-10-05T22:18:31.1795324Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp7ceb2b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T22:18:31.1797128Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173mcore[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-core[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mp53120b[39m), requested by [38;5;173mts-node[39m.
+2026-10-05T22:18:31.1799097Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [2c186][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpc924fa[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:31.1801234Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser [9548c][39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpd92711[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:31.1803454Z [93m➤[39m YN0002: │ [38;5;166m@babel/[39m[38;5;173meslint-parser[39m[38;5;111m@[39m[38;5;111mworkspace:eslint/babel-eslint-parser[39m doesn't provide [38;5;173mtypescript[39m ([38;5;111mpe26c8b[39m), requested by [38;5;173mtypescript-eslint[39m.
+2026-10-05T22:18:31.1805196Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-10-05T22:18:31.1806719Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-10-05T22:18:31.1807641Z ##[endgroup]
+2026-10-05T22:18:31.1808067Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-10-05T22:18:31.1809195Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-10-05T22:18:31.1809865Z ##[group]Fetch step
+2026-10-05T22:18:31.5871127Z [94m➤[39m YN0013: │ [38;5;220m18[39m packages were added to the project ([38;5;160m+ 1.38 MiB[39m).
+2026-10-05T22:18:31.5872236Z ##[endgroup]
+2026-10-05T22:18:31.5872641Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 408ms
+2026-10-05T22:18:31.6398103Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-10-05T22:18:31.6399020Z ##[group]Link step
+2026-10-05T22:18:33.4380030Z [94m➤[39m YN0008: │ [38;5;173mbabel[39m[38;5;111m@[39m[38;5;111mworkspace:.[39m must be rebuilt because its dependency tree changed
+2026-10-05T22:18:33.5300363Z ##[endgroup]
+2026-10-05T22:18:33.5301200Z [94m➤[39m [90mYN0000[39m: └ Completed in 1s 890ms
+2026-10-05T22:18:33.7002219Z [93m➤[39m YN0000: · Done with warnings in 3s 126ms
+2026-10-05T22:18:33.7438695Z ##[group]Run node ./node_modules/.bin/jest eslint
+2026-10-05T22:18:33.7439181Z [36;1mnode ./node_modules/.bin/jest eslint[0m
+2026-10-05T22:18:33.7479139Z shell: /usr/bin/bash -e {0}
+2026-10-05T22:18:33.7479443Z ##[endgroup]
+2026-10-05T22:18:35.4623880Z PASS eslint/babel-eslint-parser/test/index.js
+2026-10-05T22:18:35.6174311Z PASS eslint/babel-eslint-plugin-development/test/rules/no-deprecated-clone.js
+2026-10-05T22:18:35.6410434Z PASS eslint/babel-eslint-tests/test/integration/eslint/rules/strict.js
+2026-10-05T22:18:35.6900361Z PASS eslint/babel-eslint-tests/test/integration/eslint/verify.js
+2026-10-05T22:18:35.6937265Z PASS eslint/babel-eslint-plugin-development/test/rules/no-undefined-identifier.js
+2026-10-05T22:18:35.7297653Z PASS eslint/babel-eslint-plugin-development/test/rules/plugin-name.js
+2026-10-05T22:18:35.7774905Z PASS eslint/babel-eslint-tests/test/integration/config-files.js
+2026-10-05T22:18:35.8030854Z PASS eslint/babel-eslint-tests/test/integration/duplicated-babel-parser.js
+2026-10-05T22:18:35.8153630Z PASS eslint/babel-eslint-tests/test/integration/eslint/config.js
+2026-10-05T22:18:35.8303445Z PASS eslint/babel-eslint-plugin-development-internal/test/rules/report-error-message-formtat.js
+2026-10-05T22:18:35.8352354Z PASS eslint/babel-eslint-plugin/test/rules/no-unused-expressions.js
+2026-10-05T22:18:35.8445470Z PASS eslint/babel-eslint-tests/test/integration/parser-override.js
+2026-10-05T22:18:35.8567470Z PASS eslint/babel-eslint-plugin/test/rules/no-undef.js
+2026-10-05T22:18:35.8812950Z PASS eslint/babel-eslint-tests/test/integration/babel-eslint-plugin.js
+2026-10-05T22:18:35.8833221Z PASS eslint/babel-eslint-plugin/test/rules/new-cap.js
+2026-10-05T22:18:36.0446314Z PASS eslint/babel-eslint-tests/test/integration/eslint-plugin-import.js
+2026-10-05T22:18:36.7167681Z PASS eslint/babel-eslint-parser/test/typescript-estree.test.js
+2026-10-05T22:18:36.7287778Z 
+2026-10-05T22:18:36.7291580Z Test Suites: 17 passed, 17 total
+2026-10-05T22:18:36.7292434Z Tests:       897 passed, 897 total
+2026-10-05T22:18:36.7292838Z Snapshots:   0 total
+2026-10-05T22:18:36.7293163Z Time:        2.513 s
+2026-10-05T22:18:36.7293543Z Ran all test suites matching eslint.
+2026-10-05T22:18:36.8670220Z Post job cleanup.
+2026-10-05T22:18:36.9587609Z Cache hit occurred on the primary key node-cache-Linux-x64-yarn-df3e86a99c8b1cb4a9f7c6b2fc88046ee7b6d4d1ab0973fb100ed93849c8bc8f, not saving cache.
+2026-10-05T22:18:36.9686217Z Post job cleanup.
+2026-10-05T22:18:37.0351545Z [command]/usr/bin/git version
+2026-10-05T22:18:37.0379426Z git version 2.55.0
+2026-10-05T22:18:37.0404891Z Temporarily overriding HOME='/home/runner/work/_temp/0a309370-bfb1-4f40-a658-d95fc65b532f' before making global git config changes
+2026-10-05T22:18:37.0405779Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-05T22:18:37.0408383Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/babel/babel
+2026-10-05T22:18:37.0432102Z Removing SSH command configuration
+2026-10-05T22:18:37.0437533Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-05T22:18:37.0462546Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-05T22:18:37.0669648Z Removing HTTP extra header
+2026-10-05T22:18:37.0673636Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-05T22:18:37.0697326Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-05T22:18:37.0888023Z Removing includeIf entries pointing to credentials config files
+2026-10-05T22:18:37.0893591Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-05T22:18:37.0915331Z includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-05T22:18:37.0915971Z includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-05T22:18:37.0916595Z includeif.gitdir:/github/workspace/.git.path
+2026-10-05T22:18:37.0917094Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T22:18:37.0921781Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git.path
+2026-10-05T22:18:37.0938510Z /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.0945541Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git.path /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1135058Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path
+2026-10-05T22:18:37.1152781Z /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1158868Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/babel/babel/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1333056Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-05T22:18:37.1351650Z /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1357244Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1428276Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-05T22:18:37.1445010Z /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1451071Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config
+2026-10-05T22:18:37.1535665Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-05T22:18:37.1747450Z Removing credentials config '/home/runner/work/_temp/git-credentials-57785ca5-8374-4a16-a266-7eb3f9615c9e.config'
+2026-10-05T22:18:37.1880828Z Cleaning up orphan processes

@@ -1,0 +1,598 @@
+﻿2026-08-06T12:07:41.7609817Z Current runner version: '2.336.0'
+2026-08-06T12:07:41.7642153Z ##[group]Runner Image Provisioner
+2026-08-06T12:07:41.7643032Z Hosted Compute Agent
+2026-08-06T12:07:41.7643654Z Version: 20260729.566
+2026-08-06T12:07:41.7644265Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-06T12:07:41.7644964Z Build Date: 2026-07-29T19:17:02Z
+2026-08-06T12:07:41.7645630Z Worker ID: {f812a376-4c8a-460d-a86a-26b417777787}
+2026-08-06T12:07:41.7646308Z Azure Region: eastus
+2026-08-06T12:07:41.7647291Z ##[endgroup]
+2026-08-06T12:07:41.7649282Z ##[group]Operating System
+2026-08-06T12:07:41.7649906Z Microsoft Windows Server 2025
+2026-08-06T12:07:41.7650639Z 10.0.26100
+2026-08-06T12:07:41.7651137Z Datacenter
+2026-08-06T12:07:41.7651625Z ##[endgroup]
+2026-08-06T12:07:41.7652142Z ##[group]Runner Image
+2026-08-06T12:07:41.7652688Z Image: windows-2025-vs2026
+2026-08-06T12:07:41.7653266Z Version: 20260803.193.1
+2026-08-06T12:07:41.7654863Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260803.193/images/windows/Windows2025-VS2026-Readme.md
+2026-08-06T12:07:41.7656494Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260803.193
+2026-08-06T12:07:41.7657458Z ##[endgroup]
+2026-08-06T12:07:41.7658840Z ##[group]GITHUB_TOKEN Permissions
+2026-08-06T12:07:41.7661298Z Contents: read
+2026-08-06T12:07:41.7661897Z Metadata: read
+2026-08-06T12:07:41.7662476Z ##[endgroup]
+2026-08-06T12:07:41.7664969Z Secret source: Actions
+2026-08-06T12:07:41.7666834Z Prepare workflow directory
+2026-08-06T12:07:41.8030708Z Prepare all required actions
+2026-08-06T12:07:41.8083485Z Getting action download info
+2026-08-06T12:07:41.9824297Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-06T12:07:42.1172641Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-06T12:07:42.3802597Z Download action repository 'google/wireit@9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5' (SHA:9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5)
+2026-08-06T12:07:42.6124608Z Complete job name: npm installation on windows-latest
+2026-08-06T12:07:42.7711458Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-06T12:07:42.7712813Z with:
+2026-08-06T12:07:42.7713240Z   repository: puppeteer/puppeteer
+2026-08-06T12:07:42.7717826Z   token: ***
+2026-08-06T12:07:42.7718226Z   ssh-strict: true
+2026-08-06T12:07:42.7718627Z   ssh-user: git
+2026-08-06T12:07:42.7719028Z   persist-credentials: true
+2026-08-06T12:07:42.7719481Z   clean: true
+2026-08-06T12:07:42.7719882Z   sparse-checkout-cone-mode: true
+2026-08-06T12:07:42.7720358Z   fetch-depth: 1
+2026-08-06T12:07:42.7720751Z   fetch-tags: false
+2026-08-06T12:07:42.7721149Z   show-progress: true
+2026-08-06T12:07:42.7721551Z   lfs: false
+2026-08-06T12:07:42.7721911Z   submodules: false
+2026-08-06T12:07:42.7722316Z   set-safe-directory: true
+2026-08-06T12:07:42.7722916Z   allow-unsafe-pr-checkout: false
+2026-08-06T12:07:42.7723752Z ##[endgroup]
+2026-08-06T12:07:42.9405487Z Syncing repository: puppeteer/puppeteer
+2026-08-06T12:07:42.9407345Z ##[group]Getting Git version info
+2026-08-06T12:07:42.9407959Z Working directory is 'D:\a\puppeteer\puppeteer'
+2026-08-06T12:07:43.0181216Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-06T12:07:43.3758455Z git version 2.55.0.windows.3
+2026-08-06T12:07:43.3811626Z ##[endgroup]
+2026-08-06T12:07:43.3829360Z Temporarily overriding HOME='D:\a\_temp\be9d61f0-20d0-4444-a3ea-0dd41e300694' before making global git config changes
+2026-08-06T12:07:43.3831167Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-06T12:07:43.3839527Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\puppeteer\puppeteer
+2026-08-06T12:07:43.4456555Z Deleting the contents of 'D:\a\puppeteer\puppeteer'
+2026-08-06T12:07:43.4462846Z ##[group]Determining repository object format
+2026-08-06T12:07:43.4468962Z ##[endgroup]
+2026-08-06T12:07:43.4470845Z ##[group]Initializing the repository
+2026-08-06T12:07:43.4477631Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\puppeteer\puppeteer
+2026-08-06T12:07:43.5434178Z Initialized empty Git repository in D:/a/puppeteer/puppeteer/.git/
+2026-08-06T12:07:43.5491696Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/puppeteer/puppeteer
+2026-08-06T12:07:43.6231095Z ##[endgroup]
+2026-08-06T12:07:43.6232721Z ##[group]Disabling automatic garbage collection
+2026-08-06T12:07:43.6246731Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-08-06T12:07:43.6648421Z ##[endgroup]
+2026-08-06T12:07:43.6650598Z ##[group]Setting up auth
+2026-08-06T12:07:43.6653837Z Removing SSH command configuration
+2026-08-06T12:07:43.6664617Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-06T12:07:43.7031117Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-06T12:07:45.2369208Z Removing HTTP extra header
+2026-08-06T12:07:45.2381803Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-06T12:07:45.2740340Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-06T12:07:45.8437015Z Removing includeIf entries pointing to credentials config files
+2026-08-06T12:07:45.8449482Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-06T12:07:45.8823867Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-06T12:07:46.4663657Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-08-06T12:07:46.5006130Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/puppeteer/puppeteer/.git.path D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:07:46.5342204Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:07:46.5720846Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:07:46.6051691Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:07:46.6391340Z ##[endgroup]
+2026-08-06T12:07:46.6392094Z ##[group]Fetching the repository
+2026-08-06T12:07:46.6406747Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e29c4e7cf30fe0d0170d35ff8947163d06bc9276:refs/remotes/origin/main
+2026-08-06T12:07:48.5849376Z From https://github.com/puppeteer/puppeteer
+2026-08-06T12:07:48.5851638Z  * [new ref]         e29c4e7cf30fe0d0170d35ff8947163d06bc9276 -> origin/main
+2026-08-06T12:07:48.5921496Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/main
+2026-08-06T12:07:48.6280226Z   origin/main
+2026-08-06T12:07:48.6334366Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/main
+2026-08-06T12:07:48.6704159Z e29c4e7cf30fe0d0170d35ff8947163d06bc9276
+2026-08-06T12:07:48.6746447Z ##[endgroup]
+2026-08-06T12:07:48.6746847Z ##[group]Determining the checkout info
+2026-08-06T12:07:48.6747832Z ##[endgroup]
+2026-08-06T12:07:48.6757993Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-08-06T12:07:48.7181130Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-08-06T12:07:48.7511922Z ##[group]Checking out the ref
+2026-08-06T12:07:48.7526984Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+2026-08-06T12:07:49.3184648Z Switched to a new branch 'main'
+2026-08-06T12:07:49.3243872Z branch 'main' set up to track 'origin/main'.
+2026-08-06T12:07:49.3306055Z ##[endgroup]
+2026-08-06T12:07:49.3802047Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-08-06T12:07:49.4112071Z e29c4e7cf30fe0d0170d35ff8947163d06bc9276
+2026-08-06T12:07:49.4628713Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-06T12:07:49.4629229Z with:
+2026-08-06T12:07:49.4629422Z   cache: npm
+2026-08-06T12:07:49.4629625Z   node-version-file: .nvmrc
+2026-08-06T12:07:49.4629845Z   check-latest: false
+2026-08-06T12:07:49.4632391Z   token: ***
+2026-08-06T12:07:49.4632592Z   package-manager-cache: true
+2026-08-06T12:07:49.4632838Z ##[endgroup]
+2026-08-06T12:07:49.6412860Z Node version file is not JSON file
+2026-08-06T12:07:49.6415318Z Resolved .nvmrc as 24.15.0
+2026-08-06T12:07:49.6431696Z Attempting to download 24.15.0...
+2026-08-06T12:07:50.1495460Z Acquiring 24.15.0 - x64 from https://github.com/actions/node-versions/releases/download/24.15.0-24511264946/node-24.15.0-win32-x64.7z
+2026-08-06T12:07:50.4709109Z Extracting ...
+2026-08-06T12:07:52.6999618Z Adding to the cache ...
+2026-08-06T12:07:56.1738533Z ##[group]Environment details
+2026-08-06T12:07:59.5234844Z node: v24.15.0
+2026-08-06T12:07:59.5235359Z npm: 11.12.1
+2026-08-06T12:07:59.5235624Z yarn: 1.22.22
+2026-08-06T12:07:59.5236246Z ##[endgroup]
+2026-08-06T12:07:59.5862087Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\24.15.0\x64\npm.cmd config get cache"
+2026-08-06T12:07:59.9425437Z npm warn Unknown project config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:07:59.9463657Z C:\npm\cache
+2026-08-06T12:08:00.1672068Z Cache hit for: node-cache-Windows-x64-npm-0de874bee04df497fb5d2ff6b352504335a88577b02261403bf7ad2adc3cb95d
+2026-08-06T12:08:00.7519303Z Received 78904362 of 78904362 (100.0%), 144.4 MBs/sec
+2026-08-06T12:08:00.7521688Z Cache Size: ~75 MB (78904362 B)
+2026-08-06T12:08:00.7642932Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/83733b4a-e721-4a0f-ad4d-0d534b45d520/cache.tzst -P -C D:/a/puppeteer/puppeteer --force-local --use-compress-program "zstd -d"
+2026-08-06T12:08:08.9375747Z Cache restored successfully
+2026-08-06T12:08:08.9442290Z Cache restored from key: node-cache-Windows-x64-npm-0de874bee04df497fb5d2ff6b352504335a88577b02261403bf7ad2adc3cb95d
+2026-08-06T12:08:08.9816567Z ##[group]Run npm ci
+2026-08-06T12:08:08.9816966Z [36;1mnpm ci[0m
+2026-08-06T12:08:09.0472886Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-06T12:08:09.0473269Z env:
+2026-08-06T12:08:09.0473489Z   PUPPETEER_SKIP_DOWNLOAD: true
+2026-08-06T12:08:09.0473742Z ##[endgroup]
+2026-08-06T12:08:10.4644603Z npm warn Unknown project config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:08:21.8976717Z npm warn deprecated readdir-scoped-modules@1.1.0: This functionality has been moved to @npmcli/fs
+2026-08-06T12:08:21.9000278Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-08-06T12:08:21.9008287Z npm warn deprecated debuglog@1.0.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-08-06T12:08:21.9016093Z npm warn deprecated osenv@0.1.5: This package is no longer supported.
+2026-08-06T12:08:22.4999449Z npm warn deprecated read-package-json@2.1.2: This package is no longer supported. Please use @npmcli/package-json instead.
+2026-08-06T12:08:23.2700334Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-08-06T12:08:29.1688620Z npm warn deprecated read-installed@4.0.3: This package is no longer supported.
+2026-08-06T12:08:32.6395659Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting user@example.invalid
+2026-08-06T12:08:57.3168230Z 
+2026-08-06T12:08:57.3168943Z > postinstall
+2026-08-06T12:08:57.3169547Z > npm run postinstall --workspaces --if-present
+2026-08-06T12:08:57.3169914Z 
+2026-08-06T12:08:57.5954695Z npm warn Unknown env config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:08:57.5956542Z npm warn Unknown project config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:08:57.6598808Z 
+2026-08-06T12:08:57.6599809Z > puppeteer@25.5.0 postinstall
+2026-08-06T12:08:57.6600352Z > node install.mjs
+2026-08-06T12:08:57.6600553Z 
+2026-08-06T12:08:57.7328229Z Skipping browser installation because the Puppeteer build is not available. Run `npm install` again after you have re-built Puppeteer.
+2026-08-06T12:08:57.8263308Z 
+2026-08-06T12:08:57.8264309Z > prepare
+2026-08-06T12:08:57.8264839Z > npm run prepare --workspaces --if-present
+2026-08-06T12:08:57.8265198Z 
+2026-08-06T12:08:58.1039053Z npm warn Unknown env config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:08:58.1041264Z npm warn Unknown project config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:08:58.1612268Z 
+2026-08-06T12:08:58.1613015Z > @puppeteer/eslint@0.1.0 prepare
+2026-08-06T12:08:58.1613374Z > wireit
+2026-08-06T12:08:58.1613496Z 
+2026-08-06T12:08:58.3297161Z Analyzing
+2026-08-06T12:08:58.3845551Z ✅ Ran 0 scripts and skipped 1 in 0.1s.
+2026-08-06T12:08:58.5100028Z 
+2026-08-06T12:08:58.5101073Z added 3024 packages, and audited 3036 packages in 49s
+2026-08-06T12:08:58.5101395Z 
+2026-08-06T12:08:58.5101971Z 282 packages are looking for funding
+2026-08-06T12:08:58.5103689Z   run `npm fund` for details
+2026-08-06T12:08:58.5794139Z 
+2026-08-06T12:08:58.5795014Z 20 vulnerabilities (2 low, 12 moderate, 6 high)
+2026-08-06T12:08:58.5795457Z 
+2026-08-06T12:08:58.5795682Z To address issues that do not require attention, run:
+2026-08-06T12:08:58.5796012Z   npm audit fix
+2026-08-06T12:08:58.5796147Z 
+2026-08-06T12:08:58.5796686Z To address all issues (including breaking changes), run:
+2026-08-06T12:08:58.5797159Z   npm audit fix --force
+2026-08-06T12:08:58.5797377Z 
+2026-08-06T12:08:58.5797546Z Run `npm audit` for details.
+2026-08-06T12:08:59.9539723Z ##[group]Run google/wireit@9d7c2e5346f8ef1b1ab6014c4e96c74e234f7ed5
+2026-08-06T12:08:59.9540197Z ##[endgroup]
+2026-08-06T12:09:00.0162151Z [main] Launching background custodian service
+2026-08-06T12:09:00.0175265Z [main] Writing logs to C:\Users\RUNNER~1\AppData\Local\Temp\wireit_custodian_logs_qolfZI
+2026-08-06T12:09:00.0232530Z (node:8432) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-08-06T12:09:00.0233970Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-08-06T12:09:00.5482809Z 
+2026-08-06T12:09:00.5484202Z [custodian] Trying port 54223
+2026-08-06T12:09:00.5485195Z [custodian] Listening on port 54223
+2026-08-06T12:09:00.5485590Z 
+2026-08-06T12:09:00.5485775Z [main] Custodian server ready
+2026-08-06T12:09:00.5760382Z ##[group]Run npm run build -w @puppeteer-test/installation
+2026-08-06T12:09:00.5760936Z [36;1mnpm run build -w @puppeteer-test/installation[0m
+2026-08-06T12:09:00.5837942Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-06T12:09:00.5838332Z env:
+2026-08-06T12:09:00.5838523Z   WIREIT_CACHE: github
+2026-08-06T12:09:00.5838767Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 54223
+2026-08-06T12:09:00.5839044Z   PKG_MANAGER: npm
+2026-08-06T12:09:00.5839252Z ##[endgroup]
+2026-08-06T12:09:01.2857503Z npm warn Unknown project config "min-release-age-exclude". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+2026-08-06T12:09:01.3436209Z 
+2026-08-06T12:09:01.3436817Z > @puppeteer-test/installation@latest build
+2026-08-06T12:09:01.3437343Z > wireit
+2026-08-06T12:09:01.3437462Z 
+2026-08-06T12:09:01.5769953Z Analyzing
+2026-08-06T12:09:02.5778090Z  22% [2 / 9] [0 running]
+2026-08-06T12:09:03.5828283Z  33% [3 / 9] [1 running] ../..\packages\puppeteer-core:build:types
+2026-08-06T12:09:46.7725145Z  44% [4 / 9] [0 running]
+2026-08-06T12:09:47.7734216Z  78% [7 / 9] [1 running] build:packages
+2026-08-06T12:09:50.7957006Z  89% [8 / 9] [0 running]
+2026-08-06T12:09:51.7965001Z  89% [8 / 9] [1 running] build
+2026-08-06T12:09:52.2892155Z ✅ Ran 3 scripts and skipped 6 in 50.8s.
+2026-08-06T12:09:52.3538159Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-06T12:09:52.3562563Z with:
+2026-08-06T12:09:52.3562775Z   cache: npm
+2026-08-06T12:09:52.3562997Z   node-version: 22.12
+2026-08-06T12:09:52.3563221Z   check-latest: false
+2026-08-06T12:09:52.3565893Z   token: ***
+2026-08-06T12:09:52.3566108Z   package-manager-cache: true
+2026-08-06T12:09:52.3566346Z env:
+2026-08-06T12:09:52.3566519Z   WIREIT_CACHE: github
+2026-08-06T12:09:52.3566747Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 54223
+2026-08-06T12:09:52.3567015Z ##[endgroup]
+2026-08-06T12:09:52.5857536Z Attempting to download 22.12...
+2026-08-06T12:09:53.0800030Z Acquiring 22.12.0 - x64 from https://github.com/actions/node-versions/releases/download/22.12.0-12152383658/node-22.12.0-win32-x64.7z
+2026-08-06T12:09:53.3705259Z Extracting ...
+2026-08-06T12:09:55.9165107Z Adding to the cache ...
+2026-08-06T12:09:59.8562928Z ##[group]Environment details
+2026-08-06T12:10:00.4118713Z node: v22.12.0
+2026-08-06T12:10:00.4119330Z npm: 10.9.0
+2026-08-06T12:10:00.4119619Z yarn: 1.22.22
+2026-08-06T12:10:00.4120442Z ##[endgroup]
+2026-08-06T12:10:00.4756745Z [command]C:\Windows\system32\cmd.exe /D /S /C "C:\hostedtoolcache\windows\node\22.12.0\x64\npm.cmd config get cache"
+2026-08-06T12:10:00.7873671Z C:\npm\cache
+2026-08-06T12:10:00.9175259Z Cache hit for: node-cache-Windows-x64-npm-0de874bee04df497fb5d2ff6b352504335a88577b02261403bf7ad2adc3cb95d
+2026-08-06T12:10:01.4920485Z Received 78904362 of 78904362 (100.0%), 147.5 MBs/sec
+2026-08-06T12:10:01.4923609Z Cache Size: ~75 MB (78904362 B)
+2026-08-06T12:10:01.5024733Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/6c3ce394-e0a5-4128-a0bd-575ba765eb3d/cache.tzst -P -C D:/a/puppeteer/puppeteer --force-local --use-compress-program "zstd -d"
+2026-08-06T12:10:06.1935752Z Cache restored successfully
+2026-08-06T12:10:06.2022715Z Cache restored from key: node-cache-Windows-x64-npm-0de874bee04df497fb5d2ff6b352504335a88577b02261403bf7ad2adc3cb95d
+2026-08-06T12:10:06.2393274Z ##[group]Run npm run test-ci -w @puppeteer-test/installation
+2026-08-06T12:10:06.2393892Z [36;1mnpm run test-ci -w @puppeteer-test/installation[0m
+2026-08-06T12:10:06.2465796Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-06T12:10:06.2466196Z env:
+2026-08-06T12:10:06.2466457Z   WIREIT_CACHE: github
+2026-08-06T12:10:06.2466761Z   WIREIT_CACHE_GITHUB_CUSTODIAN_PORT: 54223
+2026-08-06T12:10:06.2467132Z   PKG_MANAGER: npm
+2026-08-06T12:10:06.2467349Z ##[endgroup]
+2026-08-06T12:10:06.8858089Z 
+2026-08-06T12:10:06.8858887Z > @puppeteer-test/installation@latest test-ci
+2026-08-06T12:10:06.8859352Z > mocha
+2026-08-06T12:10:06.8859460Z 
+2026-08-06T12:10:07.2159397Z (node:1044) ExperimentalWarning: globSync is an experimental feature and might change at any time
+2026-08-06T12:10:07.2160123Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-08-06T12:10:07.2195266Z 
+2026-08-06T12:10:07.2206696Z 
+2026-08-06T12:10:07.2221164Z   `@puppeteer/browsers`
+2026-08-06T12:10:07.2278401Z npm [
+2026-08-06T12:10:07.2278797Z   'install',
+2026-08-06T12:10:07.2279459Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz'
+2026-08-06T12:10:07.2280174Z ]
+2026-08-06T12:10:11.7238752Z stdout 
+2026-08-06T12:10:11.7239052Z added 19 packages in 4s
+2026-08-06T12:10:11.7239226Z 
+2026-08-06T12:10:11.7239381Z 7 packages are looking for funding
+2026-08-06T12:10:11.7239672Z   run `npm fund` for details
+2026-08-06T12:10:11.7239839Z 
+2026-08-06T12:10:11.7239917Z stderr 
+2026-08-06T12:10:11.7241005Z before: 4.505s
+2026-08-06T12:10:12.7204933Z     ✔ can launch CLI (996ms)
+2026-08-06T12:10:12.7661691Z after: 44.929ms
+2026-08-06T12:10:12.7662944Z 
+2026-08-06T12:10:12.7665196Z   Puppeteer CLI
+2026-08-06T12:10:12.7681410Z npm [
+2026-08-06T12:10:12.7681723Z   'install',
+2026-08-06T12:10:12.7682393Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:10:12.7683417Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:10:12.7684281Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:10:12.7684898Z ]
+2026-08-06T12:10:53.5234464Z stdout 
+2026-08-06T12:10:53.5234791Z added 34 packages in 41s
+2026-08-06T12:10:53.5235319Z 
+2026-08-06T12:10:53.5235582Z 9 packages are looking for funding
+2026-08-06T12:10:53.5236002Z   run `npm fund` for details
+2026-08-06T12:10:53.5236242Z 
+2026-08-06T12:10:53.5236358Z stderr 
+2026-08-06T12:10:53.5236916Z before: 40.757s
+2026-08-06T12:10:54.7197950Z     ✔ can launch (1196ms)
+2026-08-06T12:10:55.5534516Z after: 833.357ms
+2026-08-06T12:10:55.5551054Z npm [
+2026-08-06T12:10:55.5551378Z   'install',
+2026-08-06T12:10:55.5552000Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:10:55.5552862Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:10:55.5553781Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:10:55.5554313Z ]
+2026-08-06T12:11:36.0806503Z stdout 
+2026-08-06T12:11:36.0806938Z added 34 packages in 40s
+2026-08-06T12:11:36.0807276Z 
+2026-08-06T12:11:36.0807420Z 9 packages are looking for funding
+2026-08-06T12:11:36.0807722Z   run `npm fund` for details
+2026-08-06T12:11:36.0807884Z 
+2026-08-06T12:11:36.0807974Z stderr 
+2026-08-06T12:11:36.0808190Z before: 40.527s
+2026-08-06T12:11:41.9023139Z     ✔ can download a browser (5821ms)
+2026-08-06T12:11:42.9172326Z after: 1.015s
+2026-08-06T12:11:42.9189213Z npm [
+2026-08-06T12:11:42.9189455Z   'install',
+2026-08-06T12:11:42.9189919Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:11:42.9190507Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:11:42.9191039Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:11:42.9191402Z ]
+2026-08-06T12:12:23.6746030Z stdout 
+2026-08-06T12:12:23.6746436Z added 34 packages in 41s
+2026-08-06T12:12:23.6746632Z 
+2026-08-06T12:12:23.6746780Z 9 packages are looking for funding
+2026-08-06T12:12:23.6747080Z   run `npm fund` for details
+2026-08-06T12:12:23.6747439Z 
+2026-08-06T12:12:23.6747525Z stderr 
+2026-08-06T12:12:23.6747732Z before: 40.758s
+2026-08-06T12:12:30.5632835Z     ✔ can download all browser (6888ms)
+2026-08-06T12:12:31.7013649Z after: 1.138s
+2026-08-06T12:12:31.7014945Z 
+2026-08-06T12:12:31.7016288Z   `puppeteer` with configuration
+2026-08-06T12:12:31.7017111Z     cjs
+2026-08-06T12:12:31.7052253Z npm [
+2026-08-06T12:12:31.7055998Z   'install',
+2026-08-06T12:12:31.7056629Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:12:31.7057594Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:12:31.7058484Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:12:31.7059086Z ]
+2026-08-06T12:13:25.5635858Z stdout 
+2026-08-06T12:13:25.5636258Z added 34 packages in 54s
+2026-08-06T12:13:25.5636509Z 
+2026-08-06T12:13:25.5636732Z 9 packages are looking for funding
+2026-08-06T12:13:25.5637793Z   run `npm fund` for details
+2026-08-06T12:13:25.5638084Z 
+2026-08-06T12:13:25.5638296Z stderr 
+2026-08-06T12:13:25.5638674Z before: 53.862s
+2026-08-06T12:13:25.5662786Z node [
+2026-08-06T12:13:25.5663507Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-1UU6pg\\script-eeb9dff0-a056-4bc7-9c44-6da2779f0efc.mjs'
+2026-08-06T12:13:25.5664139Z ]
+2026-08-06T12:13:33.2553812Z stdout 
+2026-08-06T12:13:33.2554126Z stderr 
+2026-08-06T12:13:33.2555301Z       ✔ evaluates (7691ms)
+2026-08-06T12:13:33.8603127Z after: 604.313ms
+2026-08-06T12:13:33.8603962Z     ts
+2026-08-06T12:13:33.8629834Z npm [
+2026-08-06T12:13:33.8630146Z   'install',
+2026-08-06T12:13:33.8630685Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:13:33.8631386Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:13:33.8631977Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz',
+2026-08-06T12:13:33.8632443Z   'typescript'
+2026-08-06T12:13:33.8632738Z ]
+2026-08-06T12:14:31.2608060Z stdout 
+2026-08-06T12:14:31.2608623Z added 36 packages in 57s
+2026-08-06T12:14:31.2608923Z 
+2026-08-06T12:14:31.2609205Z 9 packages are looking for funding
+2026-08-06T12:14:31.2609731Z   run `npm fund` for details
+2026-08-06T12:14:31.2610038Z 
+2026-08-06T12:14:31.2610218Z stderr 
+2026-08-06T12:14:31.2610689Z before: 57.401s
+2026-08-06T12:14:31.2630758Z node [
+2026-08-06T12:14:31.2631746Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-QAy4DH\\script-1cac559b-b960-42d4-931e-00df00305707.mjs'
+2026-08-06T12:14:31.2632531Z ]
+2026-08-06T12:14:34.4985364Z stdout 
+2026-08-06T12:14:34.4985712Z stderr 
+2026-08-06T12:14:34.4986272Z       ✔ evaluates (3237ms)
+2026-08-06T12:14:35.1728010Z after: 673.732ms
+2026-08-06T12:14:35.1729197Z     CLI
+2026-08-06T12:14:35.1758057Z npm [
+2026-08-06T12:14:35.1758464Z   'install',
+2026-08-06T12:14:35.1758971Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:14:35.1759656Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:14:35.1760255Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:14:35.1760673Z ]
+2026-08-06T12:15:16.1177520Z stdout 
+2026-08-06T12:15:16.1178099Z added 34 packages in 41s
+2026-08-06T12:15:16.1178362Z 
+2026-08-06T12:15:16.1178566Z 9 packages are looking for funding
+2026-08-06T12:15:16.1178922Z   run `npm fund` for details
+2026-08-06T12:15:16.1179131Z 
+2026-08-06T12:15:16.1179239Z stderr 
+2026-08-06T12:15:16.1179619Z before: 40.945s
+2026-08-06T12:15:20.4531478Z       ✔ installs the browser version from the configuration (4334ms)
+2026-08-06T12:15:20.9575066Z after: 504.121ms
+2026-08-06T12:15:20.9576179Z 
+2026-08-06T12:15:20.9578421Z   `puppeteer-core`
+2026-08-06T12:15:20.9591821Z npm [
+2026-08-06T12:15:20.9592202Z   'install',
+2026-08-06T12:15:20.9592750Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:15:20.9593687Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz'
+2026-08-06T12:15:20.9594136Z ]
+2026-08-06T12:15:51.3899300Z stdout 
+2026-08-06T12:15:51.3899838Z added 27 packages in 30s
+2026-08-06T12:15:51.3900169Z 
+2026-08-06T12:15:51.3900440Z 8 packages are looking for funding
+2026-08-06T12:15:51.3900920Z   run `npm fund` for details
+2026-08-06T12:15:51.3901154Z 
+2026-08-06T12:15:51.3901906Z stderr 
+2026-08-06T12:15:51.3902333Z before: 30.432s
+2026-08-06T12:15:51.3916385Z node [
+2026-08-06T12:15:51.3917098Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-HkIFDC\\script-552f1a5d-a53a-40ee-8633-da50cda29b65.cjs'
+2026-08-06T12:15:51.3917716Z ]
+2026-08-06T12:15:51.6939204Z stdout 
+2026-08-06T12:15:51.6941934Z stderr (node:6720) ExperimentalWarning: CommonJS module C:\Users\RUNNER~1\AppData\Local\Temp\puppeteer-HkIFDC\script-552f1a5d-a53a-40ee-8633-da50cda29b65.cjs is loading ES Module C:\Users\RUNNER~1\AppData\Local\Temp\puppeteer-HkIFDC\node_modules\puppeteer-core\lib\puppeteer\puppeteer-core.js using require().
+2026-08-06T12:15:51.6945548Z Support for loading ES Module in require() is an experimental feature and might change at any time
+2026-08-06T12:15:51.6946513Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-08-06T12:15:51.6946951Z 
+2026-08-06T12:15:51.6947517Z     ✔ evaluates CommonJS (304ms)
+2026-08-06T12:15:51.6958387Z node [
+2026-08-06T12:15:51.6959392Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-HkIFDC\\script-98102eb0-80e6-4dfd-bfee-f59ed5982dc7.mjs'
+2026-08-06T12:15:51.6960138Z ]
+2026-08-06T12:15:51.9920670Z stdout 
+2026-08-06T12:15:51.9920999Z stderr 
+2026-08-06T12:15:51.9922541Z     ✔ evaluates ES modules (298ms)
+2026-08-06T12:15:51.9938487Z node [
+2026-08-06T12:15:51.9939379Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-HkIFDC\\script-74a3da4d-4343-4001-a612-15a3c380b342.mjs'
+2026-08-06T12:15:51.9940162Z ]
+2026-08-06T12:15:52.2798362Z stdout 
+2026-08-06T12:15:52.2799057Z stderr 
+2026-08-06T12:15:52.2800129Z     ✔ `launch` for `firefox` with a bad `executablePath` (287ms)
+2026-08-06T12:15:52.2814775Z node [
+2026-08-06T12:15:52.2815482Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-HkIFDC\\script-979c4d2c-55fe-461b-b9fb-eed716b5da25.mjs'
+2026-08-06T12:15:52.2816083Z ]
+2026-08-06T12:15:52.5673563Z stdout 
+2026-08-06T12:15:52.5673970Z stderr 
+2026-08-06T12:15:52.5674750Z     ✔ `launch` for `chrome` with a bad `executablePath` (287ms)
+2026-08-06T12:15:52.9095998Z after: 341.748ms
+2026-08-06T12:15:52.9096301Z 
+2026-08-06T12:15:52.9097700Z   Firefox download
+2026-08-06T12:15:52.9113821Z npm [
+2026-08-06T12:15:52.9114212Z   'install',
+2026-08-06T12:15:52.9114718Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:15:52.9115443Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:15:52.9116024Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:15:52.9116466Z ]
+2026-08-06T12:16:45.4422428Z stdout 
+2026-08-06T12:16:45.4423493Z added 34 packages in 52s
+2026-08-06T12:16:45.4423843Z 
+2026-08-06T12:16:45.4424095Z 9 packages are looking for funding
+2026-08-06T12:16:45.4424606Z   run `npm fund` for details
+2026-08-06T12:16:45.4424838Z 
+2026-08-06T12:16:45.4425018Z stderr 
+2026-08-06T12:16:45.4425526Z before: 52.533s
+2026-08-06T12:16:55.4112255Z     ✔ can download Firefox stable (9968ms)
+2026-08-06T12:16:59.9885338Z after: 4.577s
+2026-08-06T12:16:59.9885666Z 
+2026-08-06T12:16:59.9886968Z   `puppeteer` with TypeScript
+2026-08-06T12:16:59.9889955Z     - should work with ESM
+2026-08-06T12:16:59.9890822Z     - should work with CJS
+2026-08-06T12:16:59.9893070Z 
+2026-08-06T12:16:59.9894175Z   `puppeteer` with WebDriverBiDi
+2026-08-06T12:16:59.9895325Z     - evaluates CommonJS
+2026-08-06T12:16:59.9895845Z     - evaluates ES modules
+2026-08-06T12:16:59.9896210Z 
+2026-08-06T12:16:59.9897361Z   `puppeteer` with Webpack
+2026-08-06T12:16:59.9912260Z npm [
+2026-08-06T12:16:59.9912584Z   'install',
+2026-08-06T12:16:59.9913097Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:16:59.9913758Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:16:59.9914376Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:16:59.9914984Z ]
+2026-08-06T12:20:52.5340034Z stdout 
+2026-08-06T12:20:52.5340430Z added 34 packages in 4m
+2026-08-06T12:20:52.5340680Z 
+2026-08-06T12:20:52.5340868Z 9 packages are looking for funding
+2026-08-06T12:20:52.5341230Z   run `npm fund` for details
+2026-08-06T12:20:52.5341460Z 
+2026-08-06T12:20:52.5341652Z stderr 
+2026-08-06T12:20:52.5342535Z npm [ 'install', '-D', 'webpack', 'webpack-cli' ]
+2026-08-06T12:20:59.9966097Z     1) "before all" hook for "evaluates WebPack Bundles"
+2026-08-06T12:21:00.0032056Z     2) "after all" hook for "evaluates WebPack Bundles"
+2026-08-06T12:21:00.0032712Z 
+2026-08-06T12:21:00.0032909Z   `puppeteer`
+2026-08-06T12:21:00.0037260Z (node:1044) Warning: Label 'before' already exists for console.time()
+2026-08-06T12:21:00.0302033Z npm [
+2026-08-06T12:21:00.0302481Z   'install',
+2026-08-06T12:21:00.0303204Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-browsers-3.1.0.tgz',
+2026-08-06T12:21:00.0304193Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-core-25.5.0.tgz',
+2026-08-06T12:21:00.0305018Z   'D:\\a\\puppeteer\\puppeteer\\test\\installation\\puppeteer-25.5.0.tgz'
+2026-08-06T12:21:00.0305720Z ]
+2026-08-06T12:21:39.0953086Z stdout 
+2026-08-06T12:21:39.0953823Z added 117 packages, and audited 152 packages in 46s
+2026-08-06T12:21:39.0954293Z 
+2026-08-06T12:21:39.0954566Z 26 packages are looking for funding
+2026-08-06T12:21:39.0955099Z   run `npm fund` for details
+2026-08-06T12:21:39.0955391Z 
+2026-08-06T12:21:39.0955578Z found 0 vulnerabilities
+2026-08-06T12:21:39.0955771Z 
+2026-08-06T12:21:39.0955917Z stderr 
+2026-08-06T12:21:39.0956296Z before: 4:39.109 (m:ss.mmm)
+2026-08-06T12:22:22.7697387Z stdout 
+2026-08-06T12:22:22.7697757Z added 34 packages in 1m
+2026-08-06T12:22:22.7697981Z 
+2026-08-06T12:22:22.7698145Z 9 packages are looking for funding
+2026-08-06T12:22:22.7698539Z   run `npm fund` for details
+2026-08-06T12:22:22.7698721Z 
+2026-08-06T12:22:22.7698862Z stderr 
+2026-08-06T12:22:22.7700181Z (node:1044) Warning: No such label 'before' for console.timeEnd()
+2026-08-06T12:22:22.7719898Z node [
+2026-08-06T12:22:22.7720538Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-F0E0oe\\script-b9871237-88e1-413b-a155-6fbdbf1e67e5.cjs'
+2026-08-06T12:22:22.7721166Z ]
+2026-08-06T12:22:23.0667643Z stdout 
+2026-08-06T12:22:23.0669824Z stderr (node:8804) ExperimentalWarning: CommonJS module C:\Users\RUNNER~1\AppData\Local\Temp\puppeteer-F0E0oe\script-b9871237-88e1-413b-a155-6fbdbf1e67e5.cjs is loading ES Module C:\Users\RUNNER~1\AppData\Local\Temp\puppeteer-F0E0oe\node_modules\puppeteer-core\lib\puppeteer\puppeteer-core.js using require().
+2026-08-06T12:22:23.0671591Z Support for loading ES Module in require() is an experimental feature and might change at any time
+2026-08-06T12:22:23.0672311Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-08-06T12:22:23.0672626Z 
+2026-08-06T12:22:23.0674022Z     ✔ evaluates CommonJS (296ms)
+2026-08-06T12:22:23.0688177Z node [
+2026-08-06T12:22:23.0688881Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-F0E0oe\\script-4a41af20-80e4-45a2-bdf1-20f3a443f1a0.mjs'
+2026-08-06T12:22:23.0689467Z ]
+2026-08-06T12:22:23.3642411Z stdout 
+2026-08-06T12:22:23.3642740Z stderr 
+2026-08-06T12:22:23.3643562Z     ✔ evaluates ES modules (298ms)
+2026-08-06T12:22:34.7007166Z node [
+2026-08-06T12:22:34.7008247Z   'C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\puppeteer-F0E0oe\\script-55284066-9981-4680-8481-404a5f800632.mjs',
+2026-08-06T12:22:34.7008899Z   '62551'
+2026-08-06T12:22:34.7009172Z ]
+2026-08-06T12:22:39.4550640Z stdout 
+2026-08-06T12:22:39.4552064Z stderr 
+2026-08-06T12:22:39.4564375Z     ✔ runs in the browser (16092ms)
+2026-08-06T12:22:39.4567089Z     - runs in the extension
+2026-08-06T12:22:39.4572248Z (node:1044) Warning: Label 'after' already exists for console.time()
+2026-08-06T12:22:40.1459742Z after: 1:40.150 (m:ss.mmm)
+2026-08-06T12:22:40.1460363Z 
+2026-08-06T12:22:40.1461077Z   `puppeteer` clears cache
+2026-08-06T12:22:40.1461764Z     - evaluates
+2026-08-06T12:22:40.1462468Z 
+2026-08-06T12:22:40.1465664Z 
+2026-08-06T12:22:40.1467382Z   15 passing (13m)
+2026-08-06T12:22:40.1468070Z   6 pending
+2026-08-06T12:22:40.1468806Z   2 failing
+2026-08-06T12:22:40.1469049Z 
+2026-08-06T12:22:40.1473130Z   1) `puppeteer` with Webpack
+2026-08-06T12:22:40.1473585Z        "before all" hook for "evaluates WebPack Bundles":
+2026-08-06T12:22:40.1475798Z      Error: Timeout of 240000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (D:\a\puppeteer\puppeteer\test\installation\build\puppeteer-webpack.test.js)
+2026-08-06T12:22:40.1477399Z       at listOnTimeout (node:internal/timers:594:17)
+2026-08-06T12:22:40.1478428Z       at processTimers (node:internal/timers:529:7)
+2026-08-06T12:22:40.1478878Z 
+2026-08-06T12:22:40.1479121Z   2) `puppeteer` with Webpack
+2026-08-06T12:22:40.1486558Z        "after all" hook for "evaluates WebPack Bundles":
+2026-08-06T12:22:40.1489274Z      TypeError: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+2026-08-06T12:22:40.1490706Z       at rm (node:internal/fs/promises:806:10)
+2026-08-06T12:22:40.1491803Z       at Context.<anonymous> (file:///D:/a/puppeteer/puppeteer/test/installation/src/sandbox.ts:152:13)
+2026-08-06T12:22:40.1492460Z       at processImmediate (node:internal/timers:491:21)
+2026-08-06T12:22:40.1492771Z 
+2026-08-06T12:22:40.1492779Z 
+2026-08-06T12:22:40.1492784Z 
+2026-08-06T12:22:40.1672645Z npm error Lifecycle script `test-ci` failed with error:
+2026-08-06T12:22:40.1673307Z npm error code 2
+2026-08-06T12:22:40.1673860Z npm error path D:\a\puppeteer\puppeteer\test\installation
+2026-08-06T12:22:40.1674962Z npm error workspace @puppeteer-test/installation@latest
+2026-08-06T12:22:40.1675514Z npm error location D:\a\puppeteer\puppeteer\test\installation
+2026-08-06T12:22:40.1675935Z npm error command failed
+2026-08-06T12:22:40.1676877Z npm error command C:\Windows\system32\cmd.exe /d /s /c mocha
+2026-08-06T12:22:40.2112589Z ##[error]Process completed with exit code 1.
+2026-08-06T12:22:40.2413994Z Post job cleanup.
+2026-08-06T12:22:40.4246110Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-06T12:22:40.4584299Z git version 2.55.0.windows.3
+2026-08-06T12:22:40.4660018Z Temporarily overriding HOME='D:\a\_temp\b74aa1a5-71aa-4bfc-8f4e-64ab2d3e9219' before making global git config changes
+2026-08-06T12:22:40.4661498Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-06T12:22:40.4672686Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\puppeteer\puppeteer
+2026-08-06T12:22:40.5002162Z Removing SSH command configuration
+2026-08-06T12:22:40.5013923Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-06T12:22:40.5424139Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-06T12:22:41.3930846Z Removing HTTP extra header
+2026-08-06T12:22:41.3942737Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-06T12:22:41.4310970Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-06T12:22:42.0053565Z Removing includeIf entries pointing to credentials config files
+2026-08-06T12:22:42.0065300Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-06T12:22:42.0353872Z includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path
+2026-08-06T12:22:42.0354847Z includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path
+2026-08-06T12:22:42.0356152Z includeif.gitdir:/github/workspace/.git.path
+2026-08-06T12:22:42.0356893Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-06T12:22:42.0399996Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path
+2026-08-06T12:22:42.0682734Z D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:22:42.0732684Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/puppeteer/puppeteer/.git.path D\:\\a\\_temp\\git\-credentials\-417ca589\-1edd\-4fd6\-8726\-0bf7ae1ca258\.config
+2026-08-06T12:22:42.1119311Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path
+2026-08-06T12:22:42.1403209Z D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:22:42.1450988Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/puppeteer/puppeteer/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-417ca589\-1edd\-4fd6\-8726\-0bf7ae1ca258\.config
+2026-08-06T12:22:42.1779171Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-06T12:22:42.2052902Z /github/runner_temp/git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:22:42.2098661Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-417ca589\-1edd\-4fd6\-8726\-0bf7ae1ca258\.config
+2026-08-06T12:22:42.2422863Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-06T12:22:42.2701286Z /github/runner_temp/git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config
+2026-08-06T12:22:42.2747943Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-417ca589\-1edd\-4fd6\-8726\-0bf7ae1ca258\.config
+2026-08-06T12:22:42.3082651Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-06T12:22:42.8720622Z Removing credentials config 'D:\a\_temp\git-credentials-417ca589-1edd-4fd6-8726-0bf7ae1ca258.config'
+2026-08-06T12:22:42.8946996Z Cleaning up orphan processes
+2026-08-06T12:22:42.9525103Z Terminate orphan process: pid (4596) (cmd)
+2026-08-06T12:22:42.9634238Z Terminate orphan process: pid (4420) (conhost)
+2026-08-06T12:22:42.9872483Z Terminate orphan process: pid (5220) (node)

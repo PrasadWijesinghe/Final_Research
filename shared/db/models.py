@@ -65,6 +65,21 @@ class SyncState(Base):
     last_daily_sync_at: Mapped[datetime | None] = mapped_column(TZ)
 
 
+# DEFAULT: a small table keyed by (repo, run) rather than a column in sync_state: one row per
+# skipped run, deleted when the run is collected.
+class SkippedRun(Base):
+    """A run the collector gave up on because GitHub kept answering 5xx; retried on later runs."""
+
+    __tablename__ = "skipped_runs"
+    __table_args__ = {"schema": "raw"}
+
+    repo_id: Mapped[int] = mapped_column(ForeignKey("raw.repos.id"), primary_key=True)
+    run_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=False)
+    attempt: Mapped[int] = mapped_column(Integer)  # latest attempt seen when it was skipped
+    reason: Mapped[str] = mapped_column(Text)
+    skipped_at: Mapped[datetime] = mapped_column(TZ)
+
+
 class Workflow(Base):
     """A workflow file in a repo."""
 

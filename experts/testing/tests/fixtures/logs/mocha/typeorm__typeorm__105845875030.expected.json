@@ -1,0 +1,25 @@
+{
+  "framework": "mocha",
+  "repo": "typeorm/typeorm",
+  "job_id": 105845875030,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "skipped": 0,
+    "total": 6
+  },
+  "failed_test_names": [
+    "column kinds > create date column > \"before all\" hook for \"create date column should automatically be set by a database\""
+  ],
+  "failed_files": [
+    "test/core/column-kinds/create-date-column/create-date-column.test.ts"
+  ],
+  "first_error_type": "TypeError",
+  "first_project_path": "src/util/DirectoryExportedClassesLoader.ts",
+  "note": "A before-all hook failure. The failure's file is the test file in the stack (`*.test.ts`), not the first project frame (a src file)."
+}

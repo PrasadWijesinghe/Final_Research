@@ -60,7 +60,17 @@ class FakeGitHub:
         # run id -> newest attempt GitHub "has so far"; later attempts are hidden. Lets a test
         # backfill first and then lift the cap, as if someone had re-run an old run meanwhile.
         self.attempt_cap: dict[int, int] = {}
+        self.jobs_status: dict[int, int] = {}  # run id -> HTTP status for its jobs listing
+        self.jobs_max_per_page: int | None = None  # answer 502 when per_page is larger than this
+        self.jobs_connect_error: set[int] = set()  # run ids whose jobs listing cannot connect
+        self.log_connect_error: set[int] = set()  # job ids whose log download cannot connect
         self.fail_runs_listing = False  # answer 500 to the runs listing (a failing repo)
+        # Job logs and run-attempt log archives (D41) that tests set up themselves; any job or
+        # attempt not listed here answers like before (fixture file or 404).
+        self.job_logs: dict[int, bytes] = {}  # job id -> body of its per-job log request
+        self.archives: dict[tuple[int, int], bytes] = {}  # (run id, attempt) -> zip bytes
+        self.archive_status: dict[tuple[int, int], int] = {}  # (run, attempt) -> HTTP status
+        self.archive_connect_error: set[tuple[int, int]] = set()  # archive requests that fail
         self._api = f"/repos/{REPO}"
 
     # ---- plumbing ---------------------------------------------------------------------------
@@ -94,6 +104,8 @@ class FakeGitHub:
         if url.host == "raw.githubusercontent.com":
             return self._raw(path)
         if url.host == "pipelines.actions.githubusercontent.com":
+            if archive := re.fullmatch(r"/archive/(\d+)/(\d+)", path):
+                return httpx.Response(200, content=self.archives[int(archive[1]), int(archive[2])])
             job = re.fullmatch(r"/log/(\d+)", path)
             return self._log_file(int(job.group(1))) if job else self._not_found()
         if url.host != "api.github.com":
@@ -131,11 +143,16 @@ class FakeGitHub:
             if self.hide_attempts:
                 return self._not_found()
             return self._fixture(f"attempts/{m.group(1)}_{m.group(2)}.json")
+        if m := re.fullmatch(rf"{api}/actions/runs/(\d+)", path):
+            found = [r for r in load_json("runs.json")["workflow_runs"] if r["id"] == int(m[1])]
+            return self._json(found[0]) if found else self._not_found()
         if m := re.fullmatch(rf"{api}/actions/runs/(\d+)/jobs", path):
             assert params.get("filter") == "all", "jobs must be requested with filter=all"
-            return self._jobs(int(m.group(1)))
+            return self._jobs(int(m.group(1)), params)
         if m := re.fullmatch(rf"{api}/actions/jobs/(\d+)/logs", path):
             return self._job_log(int(m.group(1)))
+        if m := re.fullmatch(rf"{api}/actions/runs/(\d+)/attempts/(\d+)/logs", path):
+            return self._archive(int(m.group(1)), int(m.group(2)))
         if m := re.fullmatch(rf"{api}/commits/([0-9a-f]{{40}})", path):
             return self._commit(m.group(1))
         raise AssertionError(f"unexpected API request {path}")
@@ -145,7 +162,14 @@ class FakeGitHub:
             return self._not_found()
         return self._json(load_json(rel))
 
-    def _jobs(self, run_id: int) -> httpx.Response:
+    def _jobs(self, run_id: int, params: dict[str, str]) -> httpx.Response:
+        if run_id in self.jobs_connect_error:
+            raise httpx.ConnectError("network is down")
+        if run_id in self.jobs_status:
+            return self._json({"message": "Server Error"}, status=self.jobs_status[run_id])
+        per_page = int(params.get("per_page", "30"))
+        if self.jobs_max_per_page is not None and per_page > self.jobs_max_per_page:
+            return self._json({"message": "Server Error"}, status=502)
         rel = f"jobs/{run_id}.json"
         if not (FIXTURES / rel).is_file():
             return self._not_found()
@@ -154,7 +178,15 @@ class FakeGitHub:
         if cap is not None:
             body["jobs"] = [j for j in body["jobs"] if int(j["run_attempt"]) <= cap]
             body["total_count"] = len(body["jobs"])
-        return self._json(body)
+        page = int(params.get("page", "1"))
+        total = len(body["jobs"])
+        body["jobs"] = body["jobs"][(page - 1) * per_page : page * per_page]
+        headers: dict[str, str] = {}
+        if page * per_page < total:
+            query = f"filter=all&per_page={per_page}&page={page + 1}"
+            url = f"https://api.github.com{self._api}/actions/runs/{run_id}/jobs?{query}"
+            headers["link"] = f'<{url}>; rel="next"'
+        return self._json(body, headers={**_RATE, **headers})
 
     def _runs(self, params: dict[str, str]) -> httpx.Response:
         if self.fail_runs_listing:
@@ -173,12 +205,28 @@ class FakeGitHub:
                 runs[i] = load_json(f"attempts/{r['id']}_{cap}.json")  # the older state of the run
         return self._json({"total_count": len(runs), "workflow_runs": runs})
 
+    def _archive(self, run_id: int, attempt: int) -> httpx.Response:
+        """The log archive of a run attempt: 302 to blob storage like GitHub, else the status."""
+        key = (run_id, attempt)
+        if key in self.archive_connect_error:
+            raise httpx.ConnectError("network is down")
+        if key in self.archive_status:
+            return self._json({"message": "Archive"}, status=self.archive_status[key])
+        if key not in self.archives:
+            return self._not_found()
+        location = f"https://pipelines.actions.githubusercontent.com/archive/{run_id}/{attempt}"
+        return httpx.Response(302, headers={**_RATE, "location": location})
+
     def _job_log(self, job_id: int) -> httpx.Response:
         if job_id in self.crash_on_log:
             self.crash_on_log.discard(job_id)
             raise SimulatedCrash(f"simulated crash while fetching the log of job {job_id}")
+        if job_id in self.log_connect_error:
+            raise httpx.ConnectError("network is down")
         if job_id in self.log_status:
             return self._json({"message": "Forbidden"}, status=self.log_status[job_id])
+        if job_id in self.job_logs:
+            return httpx.Response(200, content=self.job_logs[job_id])
         if job_id == 5004:
             return self._json({"message": "Logs expired"}, status=410)
         if job_id == 5001:  # real GitHub answers with a redirect to blob storage
