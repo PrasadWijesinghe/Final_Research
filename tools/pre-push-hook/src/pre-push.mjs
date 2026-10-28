@@ -68,8 +68,8 @@ export function blockMessage(body) {
   return [
     "PipelineIQ: PUSH BLOCKED.",
     `Risk found: ${summarize(body)}`,
-    "The push was blocked because block_when_no_tty is on in ~/.pipelineiq and no terminal is available to confirm it.",
-    "To push anyway: run `git push --no-verify` (or `PIPELINEIQ_SKIP=1 git push`), or set block_when_no_tty=false in ~/.pipelineiq.",
+    "The push was blocked because block_when_no_tty is on in ~/.pipelineiq/config and no terminal is available to confirm it.",
+    "To push anyway: run `git push --no-verify` (or `PIPELINEIQ_SKIP=1 git push`), or set block_when_no_tty=false in ~/.pipelineiq/config.",
     "To fix the cause: review the risks listed above, then push again.",
   ];
 }
@@ -105,7 +105,7 @@ export async function run({
     if (env.PIPELINEIQ_SKIP === "1") return 0;
     const { apiKey, apiUrl, dashboardUrl, blockWhenNoTty } = await loadConfig(env, home);
     if (!apiKey) {
-      err("PipelineIQ: no API key (set PIPELINEIQ_API_KEY or put api_key=... in ~/.pipelineiq); skipping check.");
+      err("PipelineIQ: no API key (set PIPELINEIQ_API_KEY or put api_key=... in ~/.pipelineiq/config); skipping check.");
       return 0;
     }
     const [remote = "origin", remoteUrl = ""] = args;

@@ -58,6 +58,7 @@ On the App's settings page:
 3. Under **Client secrets**, click **Generate a new client secret** and copy it. GitHub shows it only once.
 4. Under **Private keys**, click **Generate a private key**. A `.pem` file downloads.
    Move it outside the repo, for example `~/.pipelineiq/github-app.pem`, and run `chmod 600` on it.
+   The same folder also holds `config` for the pre-push hook (see `tools/pre-push-hook/README.md`).
 
 ## 4. Put them in `.env`, never in git
 

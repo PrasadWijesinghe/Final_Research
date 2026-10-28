@@ -15,7 +15,7 @@ The app uses hash routes (the part after `#` in the URL), so no server setup is 
 | `#/commits/<sha>?repo=owner/name` | Every prediction for one commit (the pre-push hook links here) |
 | `#/failures` | Failed jobs with their diagnoses and review state |
 | `#/failures/<id>` | The routed failure, each expert diagnosis (cause, evidence, confidence, fix), past reviews and the review form |
-| `#/settings` | Create, list and revoke your API keys; how to use one in `~/.pipelineiq` |
+| `#/settings` | Create, list and revoke your API keys; how to use one in `~/.pipelineiq/config` |
 | `#/signin` | "Sign in with GitHub" |
 | `#/infra` | The original Infra demo (works without signing in) |
 
