@@ -9,13 +9,17 @@ from pathlib import Path
 import pytest
 from sqlalchemy import create_engine, text
 from testing_expert.extract import (
+    REASON_ALL,
     REASON_SEED,
     REASON_SIBLING,
+    Extracted,
     JobRef,
+    Row,
     build_rows,
     extract_one,
     is_test_job,
     make_test_id,
+    prune_passing,
     run_stage,
 )
 from testing_expert.parsing.models import CaseResult, FailedTest, ParsedLog
@@ -168,5 +172,59 @@ def test_write_is_idempotent_and_replaces_rows(tmp_path: Path) -> None:
             )
             conn.execute(
                 text("delete from testing.log_parses where job_id between 987000001 and 987000002")
+            )
+            conn.execute(text("delete from testing.test_ids where repo = 'o/r'"))
+
+
+def _extracted(reason: str, rows: tuple[Row, ...]) -> Extracted:
+    return Extracted(_ref("x", reason), "mocha", "test", True, True, 1.0, None, rows)
+
+
+def test_prune_passing_keeps_failures_file_rows_and_known_flaky_tests() -> None:
+    rows = (
+        Row("a", "f.js", "never fails", "passed", None, "test"),
+        Row("b", "f.js", "known", "passed", None, "test"),
+        Row("c", "f.js", "now", "failed", None, "test"),
+        Row("d", "f.js", "", "passed", None, "file"),
+        Row("e", "f.js", "skip", "skipped", None, "test"),
+    )
+    out = prune_passing(_extracted(REASON_ALL, rows), frozenset({"b"}))
+    assert [r.test_id for r in out.rows] == ["b", "c", "d"]
+    # earlier (v1) modes and a missing keep-set never prune
+    assert prune_passing(_extracted(REASON_SEED, rows), frozenset()).rows == rows
+    assert prune_passing(_extracted(REASON_ALL, rows), None).rows == rows
+
+
+@pytest.mark.integration
+def test_full_scope_batches_are_idempotent_and_resumable(tmp_path: Path) -> None:
+    engine = create_engine(os.environ["DATABASE_URL"])
+    (tmp_path / "logs").mkdir()
+    for i in range(5):
+        (tmp_path / "logs" / f"j{i}.log.gz").write_bytes(gzip.compress(JEST_FAIL.encode()))
+    base = 987_100_000
+    refs = [_ref(f"logs/j{i}.log.gz", REASON_ALL, base + i) for i in range(5)]
+    try:
+        # batches of 2 force several transactions; a second pass rewrites the same rows
+        for _ in range(2):
+            assert run_stage(engine, refs, tmp_path, workers=1, batch_size=2) == 5
+        with engine.connect() as conn:
+            n = conn.execute(
+                text("select count(*) from testing.test_results where job_id between :a and :b"),
+                {"a": base, "b": base + 4},
+            ).scalar_one()
+            parses = conn.execute(
+                text("select count(*) from testing.log_parses where job_id between :a and :b"),
+                {"a": base, "b": base + 4},
+            ).scalar_one()
+        assert n == 10 and parses == 5
+    finally:
+        with engine.begin() as conn:
+            conn.execute(
+                text(
+                    "delete from testing.test_results where job_id between 987100000 and 987100004"
+                )
+            )
+            conn.execute(
+                text("delete from testing.log_parses where job_id between 987100000 and 987100004")
             )
             conn.execute(text("delete from testing.test_ids where repo = 'o/r'"))
