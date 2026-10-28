@@ -34,15 +34,17 @@ from .features.history import EMPTY_SERIES
 from .features.repo import EMPTY_DURATIONS, EMPTY_TIMELINE
 from .features.settings import get_settings
 from .model.data import CLASSES, Encoder
-from .model.metrics import apply_calibrator, p_fail
-from .model.models import TwoStageBooster
+from .model.metrics import apply_binary_calibrator, apply_calibrator, combine_any, p_fail
+from .model.models import SEPARATE_KIND, SeparateBooster, TwoStageBooster
 from .predict import is_test_job
 
 logger = logging.getLogger(__name__)
 
 BUNDLE_ENV = "TESTING_MODEL_BUNDLE"
 _VERSION_DIR = re.compile(r"^v(\d+)$")
-_REQUIRED = ("features.json", "threshold.json", "calibrator.joblib", "model.txt")
+_REQUIRED = ("features.json", "threshold.json", "calibrator.joblib")
+# v1-v3 bundles hold model.txt; v4 (separate genuine and flaky models) holds model_genuine.txt.
+_MODEL_FILES = ("model.txt", "model_genuine.txt")
 # DEFAULT: the interim reasons show at most the 5 allowed by the contract.
 MAX_FACTORS = 5
 # DEFAULT: a score is shown in factors only when its contribution is at least this (non-zero).
@@ -56,13 +58,17 @@ class Bundle:
     version: str
     threshold: float
     encoder: Encoder
-    booster: lgb.Booster | TwoStageBooster
+    booster: lgb.Booster | TwoStageBooster | SeparateBooster
     calibrator: dict[str, Any]
     path: Path
 
 
 def _is_bundle(path: Path) -> bool:
-    return path.is_dir() and all((path / name).is_file() for name in _REQUIRED)
+    return (
+        path.is_dir()
+        and all((path / name).is_file() for name in _REQUIRED)
+        and any((path / name).is_file() for name in _MODEL_FILES)
+    )
 
 
 def resolve_bundle_path(raw: str | None = None) -> Path | None:
@@ -98,7 +104,7 @@ def resolve_bundle_path(raw: str | None = None) -> Path | None:
 def load_bundle(path: Path) -> Bundle:
     """Read a LightGBM bundle; raises on anything unexpected (the caller falls back to the stub)."""
     meta = json.loads((path / "features.json").read_text())
-    if meta.get("kind") != "lightgbm":
+    if meta.get("kind") not in ("lightgbm", SEPARATE_KIND):
         # DEFAULT: only LightGBM bundles are served (cheap per-feature contributions for reasons).
         raise ValueError(f"unsupported model kind {meta.get('kind')!r}")
     if list(meta.get("classes", [])) != list(CLASSES):
@@ -109,7 +115,10 @@ def load_bundle(path: Path) -> Bundle:
         threshold=threshold,
         encoder=Encoder(numeric=list(meta["numeric"]), categorical=dict(meta["categorical"])),
         # v3+ bundles are two-stage (fail-vs-pass booster + genuine-vs-flaky booster)
-        booster=TwoStageBooster.load(path)
+        # v4 is two separate binary models (genuine vs rest, flaky vs rest)
+        booster=SeparateBooster.load(path)
+        if meta["kind"] == SEPARATE_KIND
+        else TwoStageBooster.load(path)
         if (path / "split_model.txt").exists()
         else lgb.Booster(model_file=str(path / "model.txt")),
         calibrator=joblib.load(path / "calibrator.joblib"),
@@ -348,9 +357,17 @@ def predict_with_model(
     targets: list[WorkflowJob | None] = list(jobs) or [None]
     rows, db_failed = build_features(context, targets)
     frame = _frame(bundle, rows)
-    proba = np.asarray(bundle.booster.predict(frame))
-    calibrated = apply_calibrator(bundle.calibrator, proba)
-    scores = p_fail(calibrated)
+    if isinstance(bundle.booster, SeparateBooster):
+        # v4: each class has its own calibrator; P(fail) = 1 - (1 - pg)(1 - pf)
+        raw_g, raw_f = bundle.booster.predict_each(frame)
+        pg = apply_binary_calibrator(bundle.calibrator["gen"], raw_g)
+        pf = apply_binary_calibrator(bundle.calibrator["flaky"], raw_f)
+        calibrated = np.column_stack([1 - combine_any(pg, pf), pg, pf])
+        scores = combine_any(pg, pf)
+    else:
+        proba = np.asarray(bundle.booster.predict(frame))
+        calibrated = apply_calibrator(bundle.calibrator, proba)
+        scores = p_fail(calibrated)
     latency_ms = int((time.perf_counter() - started) * 1000)
     outputs = []
     for i, job in enumerate(targets):
