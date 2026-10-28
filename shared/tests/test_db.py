@@ -35,7 +35,7 @@ def test_missing_database_url_gives_clear_error(monkeypatch: pytest.MonkeyPatch)
 def test_every_model_table_is_in_raw_or_platform() -> None:
     schemas = {t.schema for t in m.Base.metadata.sorted_tables}
     assert schemas == {"raw", "platform"}
-    assert len(m.Base.metadata.sorted_tables) == 19
+    assert len(m.Base.metadata.sorted_tables) == 20
 
 
 @pytest.fixture(scope="session")

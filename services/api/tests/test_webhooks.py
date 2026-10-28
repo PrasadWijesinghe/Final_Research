@@ -164,9 +164,10 @@ async def test_push_builds_context_and_runs_predict(rig: Rig) -> None:
     commit_route = mock_github_commit(rig.mock)
     seen: list[httpx.Request] = []
     mock_experts(rig.mock, seen=seen)
+    rig.mock.post(f"{GH}/repos/acme/widgets/check-runs").respond(201, json={"id": 1})
     r = await rig.send("push", push_payload())
     assert r.status_code == 202 and r.json()["event"] == "push"
-    assert rig.tokens.asked == [4242]
+    assert rig.tokens.asked == [4242, 4242]  # one token for the commit data, one for the check
     assert commit_route.calls[0].request.headers["Authorization"] == "Bearer ghs_faketoken"
     ctx = next(iter(rig.store.contexts.values()))
     assert ctx.event == "push" and ctx.head_sha == SHA and ctx.branch == "feature/x"

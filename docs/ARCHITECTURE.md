@@ -60,7 +60,7 @@ sequenceDiagram
 1. The GitHub App sends a `push` or `pull_request` webhook to `POST /webhooks/github`.
 2. The backend builds a `CommitContext` (event `push` or `pull_request`) through the GitHub API using the App's installation token.
 3. It calls all four experts' `POST /predict` in parallel, with a **2-minute budget**.
-4. It saves each `RiskOutput` and posts a GitHub **check run** (or PR comment) with the alerts. Results that arrive late update the same check.
+4. It saves each `RiskOutput` and posts a GitHub **check run** (or PR comment) with the alerts. Results that arrive late update the same check (the API re-asks the experts that were not ready a few times, then finishes the check; the check is never `failure`).
 
 ### 3.3 Failure diagnosis
 

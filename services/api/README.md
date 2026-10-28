@@ -215,7 +215,7 @@ real work afterwards (GitHub gives up after 10 seconds).
 3. **Per event:**
    - `push` (a branch, not a delete or tag) and `pull_request` (opened, synchronize, reopened,
      ready_for_review): builds the `CommitContext` with the live builder, saves it, asks the four
-     experts with the 2 minute budget and saves their predictions. The PR check run comes in P3.3.
+     experts with the 2 minute budget and saves their predictions, then posts or updates the PipelineIQ check run (see "PR check run" below).
    - `workflow_run` and `workflow_job`: stored in `raw.workflow_runs`, `raw.jobs` and `raw.steps`
      with `source="app"`. Like the collector, the actor is hashed, `actor`/`head_commit`/repository
      blocks are dropped from the stored JSON, and the run title is passed through the sanitiser.
@@ -237,6 +237,44 @@ real work afterwards (GitHub gives up after 10 seconds).
 respx. `tests/test_backend_sql.py::test_sql_raw_store_writes_app_rows` checks `source="app"` on a
 real database. `shared/tests/test_github_app_auth.py` covers the JWT, the token cache and the
 signature check. To try it for real, see `docs/ONBOARDING.md` step 10.
+
+## PR check run (P3.3)
+
+### What it does
+
+After a push or pull request, the API shows the result on GitHub as a check run named
+**PipelineIQ**. The summary lists every expert's score, whether it is an alert, up to three plain
+reasons, and which experts have not answered yet. It also links to the dashboard commit page
+(`DASHBOARD_URL/#/commits/<sha>`). The check never blocks a merge.
+
+### How it works
+
+1. After the experts answer, the API builds the check text (`api/checks.py`).
+2. If nothing is ready yet, the check is created as `in_progress`. Otherwise it is created
+   `completed`: `neutral` when there is an alert or an expert is still missing, `success` when all
+   four answered and none alerts. It is never `failure`.
+3. GitHub's check id is saved per repo and commit in `platform.check_runs`
+   (migration 0004). A later push of the same commit updates the same check.
+4. Late experts: the API asks the experts that were not ready again after 30 s, 90 s, 5 min and
+   15 min (`CHECK_RETRY_DELAYS_SECONDS`). Each new answer is saved and updates the same check
+   (a PATCH, not a new check). The last round finishes the check even if experts are still silent,
+   so it never stays `in_progress` forever.
+5. A GitHub error is logged (the error type only, never the body or the token) and ignored. The
+   predictions are kept either way. Check calls are not retried, so a hiccup cannot create two
+   checks.
+6. Replay and the pre-push hook never reach this code. A test checks that `api.replay` does not
+   load it.
+
+The GitHub App needs **Checks: Read and write** (see `docs/GITHUB_APP.md`).
+
+### Limits
+
+- Late results come from asking `/predict` again, because experts have no way to call us back yet.
+  If the API restarts during the 15 minute window, the check stays as it was.
+- Only the first 12 predictions per expert are listed (test jobs can be many), highest first.
+- A pull request check is attached to the head commit, so it shows on the PR and on the push.
+
+Tests: `tests/test_checks.py` (GitHub mocked by respx).
 
 ## Router (P2.7)
 
@@ -497,6 +535,8 @@ The test expects these results:
 | `API_ADMIN_TOKEN` | `.env` | Empty | Protects `/api-keys`. Empty means key management is off (503) |
 | `GITHUB_WEBHOOK_SECRET` | `.env` | Empty | Secret that signs GitHub webhooks. Empty means `/webhooks/github` answers 503 |
 | `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY_PATH` | `.env` | Empty | The App id and the path of its `.pem`. Needed to get installation tokens |
+| `CHECK_RETRY_DELAYS_SECONDS` | `.env` | `30,90,300,900` | When to ask late experts again for the PR check. Empty list means never |
+| `DASHBOARD_URL` | `.env` | `http://localhost:5173` | Base of the link in the check's details |
 | `DATA_DIR` | `.env` | `./data` | Where logs fetched by webhooks are written (same as the collector) |
 | `API_PORT` | `.env.example` only | `8000` | Documents the port. No code reads it; the port comes from the uvicorn command |
 

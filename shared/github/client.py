@@ -331,6 +331,22 @@ class GitHubClient:
         self._check(response)
         return response
 
+    def write_json(self, method: str, path: str, body: dict[str, Any]) -> Any:
+        """POST or PATCH a JSON body once and return the decoded reply (raises GitHubError).
+
+        # DEFAULT: writes are not retried (a retried POST could create a duplicate check run);
+        # the caller decides what a failure means. Rate-limit headers are still recorded.
+        """
+        self._wait_for_quota()
+        self.api_calls += 1
+        try:
+            response = self._http.request(method, self._url(path), json=body)
+        except httpx.TransportError as exc:
+            raise GitHubError(f"transport error: {type(exc).__name__}") from exc
+        self._record_rate_limit(response)
+        self._check(response)
+        return response.json()
+
     def get_json(self, path: str, params: dict[str, Any] | None = None) -> Any:
         """GET a REST path and return the decoded JSON body."""
         return self.get(path, params).json()
