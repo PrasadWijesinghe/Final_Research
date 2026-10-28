@@ -26,12 +26,15 @@ only in the `Authorization` header and is never printed or logged.
 
 You need Node 22 or newer and a personal API key (create one in the dashboard settings).
 
-1. Save the key, for example in `~/.pipelineiq`:
+1. Save the key in `~/.pipelineiq/config` (`~/.pipelineiq` is a folder for all local PipelineIQ files):
 
    ```
    api_key=piq_...
    api_url=http://127.0.0.1:8000
    ```
+
+   Because the file holds your key, run `chmod 600 ~/.pipelineiq/config`. An older single file
+   `~/.pipelineiq` (not a folder) is still read.
 
    Or use the environment variables `PIPELINEIQ_API_KEY` and `PIPELINEIQ_API_URL`
    (the environment wins). `api_url` defaults to `http://127.0.0.1:8000`.
@@ -79,7 +82,7 @@ When the hook cannot open a terminal, after it gets the risk answer it:
    top reason) and a link to the commit in the dashboard, `<dashboard_url>/#/commits/<sha>`.
    macOS uses `osascript`, Linux uses `notify-send`. On any other system, or if that program is
    missing, it quietly does nothing. A failed notification never stops or delays the push.
-2. **Optionally blocks the push.** Off by default. Turn it on in `~/.pipelineiq`:
+2. **Optionally blocks the push.** Off by default. Turn it on in `~/.pipelineiq/config`:
 
    ```
    block_when_no_tty=true

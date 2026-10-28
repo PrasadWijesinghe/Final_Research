@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, before, describe, it } from "node:test";
@@ -56,7 +56,10 @@ describe("hook without a terminal", () => {
     const lines = [];
     const notes = [];
     const home = mkdtempSync(join(tmpdir(), "piq-home-"));
-    if (conf) writeFileSync(join(home, ".pipelineiq"), conf);
+    if (conf) {
+      mkdirSync(join(home, ".pipelineiq"));
+      writeFileSync(join(home, ".pipelineiq", "config"), conf);
+    }
     return {
       lines,
       notes,
@@ -90,7 +93,7 @@ describe("hook without a terminal", () => {
     assert.ok(t.notes[0][1].endsWith(`http://localhost:5173/#/commits/${repo.head}`));
   });
 
-  it("uses dashboard_url from ~/.pipelineiq", async () => {
+  it("uses dashboard_url from ~/.pipelineiq/config", async () => {
     const api = await fakeApi(() => [200, cleanResponse]);
     const t = setup(api, { conf: "dashboard_url=https://dash.example.com/\n" });
     assert.equal(await run(t.opts), 0);

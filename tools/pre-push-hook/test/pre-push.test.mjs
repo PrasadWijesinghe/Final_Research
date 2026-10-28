@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, before, describe, it } from "node:test";
@@ -136,14 +136,37 @@ describe("pre-push hook", () => {
     assert.match(t.lines.join("\n"), /no API key/);
   });
 
-  it("reads key and url from ~/.pipelineiq", async () => {
+  it("reads key and url from ~/.pipelineiq/config", async () => {
     const api = await fakeApi(() => [200, cleanResponse]);
     const t = setup(api);
-    writeFileSync(join(t.opts.home, ".pipelineiq"), `# comment\napi_key=${KEY}\napi_url=${api.url}\n`);
+    mkdirSync(join(t.opts.home, ".pipelineiq"));
+    writeFileSync(join(t.opts.home, ".pipelineiq", "config"), `# comment\napi_key=${KEY}\napi_url=${api.url}\n`);
     t.opts.env = { HOME: t.opts.home };
     assert.equal(await run(t.opts), 0);
     await api.close();
     assert.equal(api.seen[0].headers.authorization, `Bearer ${KEY}`);
+  });
+
+  it("still reads a legacy ~/.pipelineiq regular file", async () => {
+    const api = await fakeApi(() => [200, cleanResponse]);
+    const t = setup(api);
+    writeFileSync(join(t.opts.home, ".pipelineiq"), `api_key=${KEY}\napi_url=${api.url}\n`);
+    t.opts.env = { HOME: t.opts.home };
+    assert.equal(await run(t.opts), 0);
+    await api.close();
+    assert.equal(api.seen[0].headers.authorization, `Bearer ${KEY}`);
+  });
+
+  it("~/.pipelineiq folder without config: no key, allowed, no crash", async () => {
+    const api = await fakeApi(() => [200, cleanResponse]);
+    const t = setup(api);
+    mkdirSync(join(t.opts.home, ".pipelineiq"));
+    writeFileSync(join(t.opts.home, ".pipelineiq", "github-app.pem"), "x");
+    t.opts.env = { HOME: t.opts.home };
+    assert.equal(await run(t.opts), 0);
+    await api.close();
+    assert.equal(api.seen.length, 0);
+    assert.match(t.lines.join("\n"), /no API key/);
   });
 
   it("git failure (bad sha): allowed", async () => {

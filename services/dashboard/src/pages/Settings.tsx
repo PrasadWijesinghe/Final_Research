@@ -86,7 +86,7 @@ export default function Settings() {
         <h3>Use a key in the pre-push hook</h3>
         <ol>
           <li>Create a key above and copy it.</li>
-          <li>Put it in the file <code>~/.pipelineiq</code> in your home folder:</li>
+          <li>Put it in the file <code>config</code> inside the folder <code>~/.pipelineiq</code> in your home folder, then run <code>chmod 600 ~/.pipelineiq/config</code>:</li>
         </ol>
         <pre className="pq-pre">{`api_key=<paste your key here>\ndashboard_url=${dashUrl}`}</pre>
         <p className="pq-dim pq-small">
