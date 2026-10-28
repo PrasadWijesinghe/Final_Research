@@ -5,6 +5,7 @@ description = "Shared contracts and helpers (DB, GitHub client, sanitiser, embed
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.20.0",
+    "cryptography>=43",
     "detect-secrets>=1.5.0",
     "httpx>=0.28.1",
     "psycopg[binary]>=3.3.6",
