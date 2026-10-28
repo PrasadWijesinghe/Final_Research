@@ -222,7 +222,7 @@ function Toggle({
   );
 }
 
-function App() {
+function InfraDemo() {
   const [form, setForm] = useState(initialForm);
   const [result, setResult] = useState<RiskOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -254,8 +254,8 @@ function App() {
       inFlight = true;
       try {
         const responses = await Promise.all([
-          fetch("/api/monitor/status", { cache: "no-store", signal: AbortSignal.timeout(5000) }),
-          fetch("/api/monitor/history", { cache: "no-store", signal: AbortSignal.timeout(5000) }),
+          fetch("/infra-api/monitor/status", { cache: "no-store", signal: AbortSignal.timeout(5000) }),
+          fetch("/infra-api/monitor/history", { cache: "no-store", signal: AbortSignal.timeout(5000) }),
         ]);
         if (responses.some((response) => !response.ok)) throw new Error("Monitor unavailable");
         const status = (await responses[0].json()) as MonitorStatus;
@@ -295,7 +295,7 @@ function App() {
     setConnecting(true);
     setConnectionError(null);
     try {
-      const response = await fetch(`/api/monitor/${disconnect ? "disconnect" : "connect"}`, {
+      const response = await fetch(`/infra-api/monitor/${disconnect ? "disconnect" : "connect"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         ...(disconnect ? {} : { body: JSON.stringify({ repository: repositoryUrl, branch: monitorBranch }) }),
@@ -323,7 +323,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/predict", {
+      const response = await fetch("/infra-api/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(buildContext(form)),
@@ -529,4 +529,4 @@ function App() {
   );
 }
 
-export default App;
+export default InfraDemo;
