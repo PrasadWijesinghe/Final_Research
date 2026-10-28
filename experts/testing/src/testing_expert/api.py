@@ -10,6 +10,7 @@ from shared.contracts import CommitContext, ReviewDecision, RiskOutput
 
 from .config import EXPERT, MODEL_VERSION
 from .predict import predict
+from .serving import get_bundle, serve
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,8 @@ def post_predict(
     context: CommitContext,
     x_deadline_ms: Annotated[str | None, Header()] = None,
 ) -> list[RiskOutput]:
-    """Risk outputs for a commit. The stub answers instantly, so the deadline is only logged."""
-    return predict(context, deadline_ms=_parse_deadline(x_deadline_ms))
+    """Risk outputs from the trained model; the stub answers when no model bundle is loaded."""
+    return serve(context) or predict(context, deadline_ms=_parse_deadline(x_deadline_ms))
 
 
 @app.post("/review", status_code=204)
@@ -58,4 +59,7 @@ def post_review(decision: ReviewDecision) -> Response:
 @app.get("/health")
 def get_health() -> Health:
     """Liveness plus model version and knowledge-base size (kb_cases is 0 until a KB exists)."""
-    return Health(status="ok", model_version=MODEL_VERSION, kb_cases=0)
+    bundle = get_bundle()
+    return Health(
+        status="ok", model_version=bundle.version if bundle else MODEL_VERSION, kb_cases=0
+    )
