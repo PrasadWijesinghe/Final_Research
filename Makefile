@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: setup up up-experts e2e down check migrate schemas export-data import-data
+.PHONY: setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -48,6 +48,11 @@ check:
 # DEFAULT: alembic config lives with the migrations in shared/db; the URL is read from DATABASE_URL.
 migrate:
 	uv run alembic -c shared/db/alembic.ini upgrade head
+	$(MAKE) migrate-testing
+
+# DEFAULT (P4.2): the Test expert's testing schema has its own Alembic config and version table.
+migrate-testing:
+	uv run alembic -c experts/testing/alembic.ini upgrade head
 
 # DEFAULT: schemas are generated on demand and not committed (see .gitignore)
 schemas:

@@ -54,6 +54,32 @@ uv run pytest experts/testing/tests
 
 **Expected:** all tests pass. To start the stub in Docker, run `make up-experts`. That was not run in P2.1.
 
+## Test results extraction (P4.2, v1)
+
+What it does: reads job logs from `data/logs/`, runs the log parsers, and stores which tests ran
+and how they ended in `testing.test_results` (with a stable id per test in `testing.test_ids`).
+
+Which logs (the v1 cut): failed job attempts, plus every other attempt or run of the same job
+(same repo, same commit, same job name) that has a log. A failed job only counts as a test job when
+the parsers recognise Jest, Mocha or Vitest in its log. Passing logs in general come in v2.
+
+Rows are `test` granularity (one test) or `file` granularity (the reporter only printed files, or
+a whole file failed to run). Each row says which. A Jest log usually gives both: file rows from the
+reporter and test rows from the failure details.
+
+Run it (database and logs must be present; safe to run again, it skips jobs already done):
+
+```
+make migrate-testing    # creates the testing tables (also part of `make migrate`)
+uv run --env-file .env python -m testing_expert.extract --member test
+```
+
+`testing.log_parses` has one row per log read, with the framework, whether parsing worked, and a
+short failure reason, so you can see what was tried and what went wrong.
+
+First run on the real data (2026-10-28, 2.5 minutes): 15,553 failed jobs plus 1,213 same-commit
+sibling jobs read, 10,856 of them test jobs, no parse failures, 2.79M test rows and 223k file rows.
+
 ## Limitations and known issues
 
 - Stub only. See `experts/_template/README.md` for the limits that all four experts share.
