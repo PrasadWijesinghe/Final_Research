@@ -151,7 +151,10 @@ def apply_calibrator(cal: dict[str, Any], proba: np.ndarray) -> np.ndarray:
 
 
 def ece(y: np.ndarray, score: np.ndarray, bins: int = 10) -> float:
-    """Expected calibration error of P(fail): equal-count bins, weighted |mean score - rate|."""
+    """Expected calibration error of P(fail): equal-count bins, weighted |mean score - rate|.
+
+    `y` is a class index (any value > 0 counts as a failure) or already 0/1.
+    """
     yf = (y > 0).astype(float)
     order = np.argsort(score, kind="stable")
     total = 0.0
@@ -212,3 +215,61 @@ def threshold_metrics(y: np.ndarray, score: np.ndarray, threshold: float) -> dic
         "recall": tp / yf.sum() if yf.sum() else NAN,
         "flagged_share": float(pred.mean()) if len(pred) else NAN,
     }
+
+
+# --- binary calibration of one event (P4.7 v4) -------------------------------------------------
+# The v3 calibrators work on 3 class columns and renormalise. v4 calibrates one yes/no event at a
+# time (any fail, genuine fail, flaky fail), optionally with recency weights.
+
+
+def recency_weights(age_days: np.ndarray, half_life_days: float | None) -> np.ndarray | None:
+    """Weight 0.5 ** (age / half_life): a row `half_life` days older than the newest counts half."""
+    if half_life_days is None:
+        return None
+    return np.power(0.5, np.maximum(age_days, 0.0) / half_life_days)
+
+
+def _with_extra(p: np.ndarray, kind: str, extra: np.ndarray | None) -> np.ndarray:
+    x = _logit_features(p, kind)
+    return x if extra is None else np.column_stack([x, extra])
+
+
+def fit_binary_calibrator(
+    y: np.ndarray,
+    p: np.ndarray,
+    kind: str = "beta",
+    sample_weight: np.ndarray | None = None,
+    extra: np.ndarray | None = None,
+) -> dict[str, Any]:
+    """Beta (or Platt) map for one event; `sample_weight` lets recent rows count more.
+
+    `extra` (n, k) adds side columns to the map (e.g. a failure-streak flag), so a group the raw
+    score under-separates can be shifted without touching the ranking inside the group.
+    """
+    if kind not in ("sigmoid", "beta"):
+        raise ValueError(f"unknown binary calibrator {kind!r}")
+    yi = np.asarray(y).astype(int)
+    if yi.min() == yi.max():
+        return {"kind": kind, "model": None, "const": float(yi.mean())}
+    # DEFAULT: C=1e4 (almost unregularised), same as the v3 calibrators.
+    lr = LogisticRegression(C=1e4, max_iter=1000)
+    lr.fit(_with_extra(p, kind, extra), yi, sample_weight=sample_weight)
+    return {"kind": kind, "model": lr, "n_extra": 0 if extra is None else extra.shape[1]}
+
+
+def apply_binary_calibrator(
+    cal: dict[str, Any], p: np.ndarray, extra: np.ndarray | None = None
+) -> np.ndarray:
+    """Calibrated probability of the event, never below MIN_PROB."""
+    if cal["model"] is None:
+        return np.full(len(p), max(cal["const"], MIN_PROB))
+    out = cal["model"].predict_proba(_with_extra(p, cal["kind"], extra))[:, 1]
+    return np.clip(out, MIN_PROB, 1.0)
+
+
+def combine_any(*probs: np.ndarray) -> np.ndarray:
+    """P(at least one event) assuming independence: 1 - prod(1 - p)."""
+    out = np.ones_like(probs[0], dtype=float)
+    for p in probs:
+        out = out * (1.0 - p)
+    return 1.0 - out
