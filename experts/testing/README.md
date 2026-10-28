@@ -202,6 +202,16 @@ The package `testing_expert.parsing` reads the log of a failed job. For Jest, Mo
 - Rebuild the fixtures from the local database (read-only): `uv run --env-file .env python -m testing_expert.parsing.make_fixtures [--suggest]`
 - Check the parsers on about 2,000 real failed-job logs (read-only, not part of `make check`): `uv run --env-file .env python -m testing_expert.parsing.survey`
 
+## Baselines and model training (P4.6 and P4.7, v1)
+
+The package `testing_expert.model` trains the pre-run model on `data/datasets/testing/v1/` and compares it with three simple baselines: always "pass", "same as the series' previous run", and a re-run heuristic ("flaky when 20% or more of the last 30 days' runs were re-runs"). Models are logistic regression and LightGBM, both with class weights. Probabilities are calibrated with isotonic regression on a calibration slice. A P(fail) threshold is chosen for precision 0.8 with the most recall.
+
+- Run everything (about 8 minutes on the full data): `uv run --env-file .env python -m testing_expert.model train --dataset v1` (`--no-loro`, `--variants all`, `--no-mlflow` make it faster).
+- Splits: temporal (earliest 70% train, 10% calibration, last 20% test) and leave-one-repo-out (repos with at least 20 non-pass rows). Variants: all, high (no low-confidence labels), strict (genuine only if failed 2 or more times on the SHA).
+- Outputs: `models/testing/v1/` (model, calibrator, features, threshold, card), `data/reports/testing_model_v1.md`, MLflow runs in `mlruns/mlflow.db` (view with `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db`). All are git-ignored.
+- On macOS LightGBM needs `brew install libomp`.
+- Known weakness: the threshold is picked on the calibration slice, where the isotonic fit is in-sample, so it comes out very high and flags almost nothing. Read the test-slice precision and recall in the report.
+
 ## Related
 
 - `experts/_template/README.md`: the template this copy came from.
