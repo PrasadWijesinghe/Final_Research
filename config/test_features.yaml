@@ -1,0 +1,63 @@
+# Test expert pre-run features (docs/experts/test.md section 4). Read by testing_expert.features.
+# Every value is a DEFAULT chosen for v1; change here, not in code.
+
+history:
+  windows_days: [7, 30, 90]       # fail-rate windows, counted back from history_cutoff
+  rerun_window_days: 30           # "recent re-runs" window (job attempts with run_attempt > 1)
+  flip_window: 30                 # last N outcomes of the job key used for the weighted flip rate
+  flip_decay: 0.9                 # weight of a flip = decay ** (outcomes since it happened)
+  max_consecutive_scan: 200       # cap for the consecutive-failure count
+
+repo:
+  test_job_window_days: 90        # average test-job duration looks back this far
+  max_job_minutes: 360            # durations above this are treated as runner glitches and ignored
+  # A job counts as a "test job" for repo-level stats when its key or name matches (case-insensitive).
+  # Works as Python and as Postgres regex. Proxy only: the real test-job check needs the workflow file.
+  test_job_regex: "(test|spec|jest|mocha|vitest|e2e|unit)"
+  # First match wins, checked against dependency names of the newest package.json snapshot before the cutoff.
+  frameworks: [vitest, jest, mocha, playwright, ava, tap]
+
+dependencies:
+  # fnmatch patterns over dependency names in package.json
+  test_libs:
+    - "jest"
+    - "jest-*"
+    - "ts-jest"
+    - "babel-jest"
+    - "@jest/*"
+    - "@types/jest"
+    - "vitest"
+    - "@vitest/*"
+    - "mocha"
+    - "@types/mocha"
+    - "chai"
+    - "chai-*"
+    - "@types/chai"
+    - "sinon"
+    - "sinon-*"
+    - "@types/sinon"
+    - "supertest"
+    - "ava"
+    - "tap"
+    - "playwright"
+    - "@playwright/test"
+    - "cypress"
+    - "nock"
+    - "msw"
+    - "jsdom"
+    - "happy-dom"
+    - "@testing-library/*"
+    - "nyc"
+    - "c8"
+
+# File tags that count as "config" in the change-size split.
+config_tags:
+  - test_config
+  - build_config
+  - lint_config
+  - bundler_config
+  - package_manifest
+  - lockfile
+  - workflow
+  - dockerfile
+  - deploy_config
