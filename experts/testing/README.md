@@ -238,7 +238,7 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 4. An unknown repository, or no database, means "cold start": history is missing and the model handles that. If `DATABASE_URL` is set but the database fails, the output is marked `degraded`.
 5. The answer is a normal `RiskOutput`: calibrated probability of failing, the bundle's threshold, the alert flag and `model_version` (for example `lightgbm-v2`). Each test job gets its own output; the highest one is the commit's headline risk.
 
-**Picking a bundle.** Set `TESTING_MODEL_BUNDLE` to a bundle folder, or to a folder of versions (`models/testing`), in which case the newest `v<N>` is used. If it is not set, the newest bundle under `models/testing/` is used. If nothing can be loaded, the service logs a warning and answers with the stub (`model_version` "stub"). It never crashes because of the model. Only LightGBM bundles are served. Docker mounts `models/` and `config/` read-only into `testing-api`, so restart the container to pick up a new version.
+**Picking a bundle.** Set `TESTING_MODEL_BUNDLE` to a bundle folder, or to a folder of versions (`models/testing`), in which case the newest `v<N>` is used. If it is not set, the newest bundle under `models/testing/` is used. If nothing can be loaded, the service logs a warning and answers with the stub (`model_version` "stub"). It never crashes because of the model. Only LightGBM bundles are served (v1 to v3, and the v4 two-model kind). Docker mounts `models/` and `config/` read-only into `testing-api`, so restart the container to pick up a new version.
 
 **Interim reasons.** Until SHAP reasons exist (P4.8), the "top factors" are the LightGBM per-feature contributions to the fail score, largest first (at most 5, never zero), worded with `features/descriptions.yaml`. For `tw_*` factors the file and line of the first matching added line are attached when the diff shows one.
 
@@ -272,6 +272,30 @@ guarantee but no clear accuracy gain; the label fix gives more training signal. 
 (the model says about 2% where 13% fail, and "same as last outcome" beats it on those rows), because the calibration
 slice contains streak rows that rarely failed. Read the report before trusting v3 over v2. Tests: `tests/test_model_v3.py`,
 streak cases in `tests/test_labels.py`.
+
+## Model v4: recent-history calibration, separate genuine and flaky models (P4.7 v4)
+
+Same dataset (v3) and the same time splits as v3. Measured in `reports/v4_vs_v3.md` (run:
+`uv run python -m testing_expert.model.compare_v4 --export`, about 5 minutes; it also writes the bundle
+`models/testing/v4/`). v1 to v3 bundles stay as they are and still load.
+
+1. **Calibration over more history.** v3 fitted the calibrator on the 10% calibration slice only. v4 also uses
+   out-of-fold scores over the train period (each block is scored by a model trained only on earlier blocks), weights
+   rows by recency (half-life 30 days) and fits a beta map per event (`fit_binary_calibrator` in `model/metrics.py`).
+   Overall calibration improves (test ECE 0.0127 to 0.0071 on the same booster). It does not fix streak rows by itself:
+   their failure rate swings from 2% to 15% between periods, so no pre-test choice can match the test period.
+2. **Two separate models.** `model/models.py` trains genuine-vs-rest and flaky-vs-rest as independent boosters
+   (`SeparateBooster`, kind `lightgbm_sep`), each with its own monotone constraints (`GENUINE_MONOTONE`,
+   `FLAKY_MONOTONE`, each `# DEFAULT:`), balanced class weights, calibrator and threshold. P(fail) = 1 - (1 - pg)(1 - pf);
+   `sub_risks` carries both class probabilities. The `RiskOutput` contract says `alert == probability >= threshold`, so
+   the alert uses the combined score against one threshold; the per-class thresholds are in `threshold.json`.
+3. **Serving.** `serving.py` also loads `kind: lightgbm_sep` bundles (`model_genuine.txt`, `model_flaky.txt`, a
+   calibrator file with one map per class). That is the only serving change.
+
+Result in short: v4 is better calibrated (ECE 0.0118 to 0.0066) and ranks genuine failures a little better (PR-AUC +0.012,
+a real but small gain); the any-fail gain (+0.006) is within the noise; leave-one-repo-out is mixed. **Streaks are still
+under-scored** (mean P about 3% where 13% fail) and "same as last outcome" still beats the model on those rows. Tests:
+`tests/test_calibration_v4.py`, `tests/test_model_v4.py`.
 
 ## Limitations and known issues
 
