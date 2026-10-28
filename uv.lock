@@ -998,23 +998,38 @@ dependencies = [
     { name = "httpx" },
     { name = "pipelineiq-shared" },
     { name = "pydantic" },
+    { name = "pyyaml" },
     { name = "redis" },
     { name = "rq" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
 
+[package.optional-dependencies]
+prototype = [
+    { name = "pandas" },
+    { name = "scikit-learn" },
+    { name = "shap" },
+    { name = "xgboost" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "pandas", marker = "extra == 'prototype'", specifier = ">=2.2" },
     { name = "pipelineiq-shared", editable = "shared" },
     { name = "pydantic", specifier = ">=2.7" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "redis", specifier = ">=5" },
     { name = "rq", specifier = ">=2.0" },
+    { name = "scikit-learn", marker = "extra == 'prototype'", specifier = ">=1.5" },
+    { name = "shap", marker = "extra == 'prototype'", specifier = ">=0.46" },
     { name = "sqlalchemy", specifier = ">=2.1.4" },
     { name = "uvicorn", specifier = ">=0.30" },
+    { name = "xgboost", marker = "extra == 'prototype'", specifier = ">=2.1" },
 ]
+provides-extras = ["prototype"]
 
 [[package]]
 name = "pipelineiq-expert-infra"
