@@ -28,7 +28,10 @@ def test_queue_name_comes_from_the_expert_enum() -> None:
 
 def test_job_returns_valid_diagnosis_when_no_backend(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("BACKEND_URL", raising=False)
-    diagnosis = process_failure(_failure_json())
+    # The fixture's own log is an npm ERESOLVE error, which P4.11 sends back as misrouted (see
+    # test_diagnosis_p411.py); this stub-shape test uses a log no pattern recognises.
+    payload = {**_failure_json(), "log_excerpt": "step output\nsomething unexpected happened\n"}
+    diagnosis = process_failure(payload)
     assert isinstance(diagnosis, Diagnosis)
     assert str(diagnosis.failure_id) == "22222222-2222-4222-8222-222222222222"
     assert diagnosis.expert == EXPERT
@@ -36,7 +39,7 @@ def test_job_returns_valid_diagnosis_when_no_backend(monkeypatch: pytest.MonkeyP
     assert diagnosis.retrieved_cases == []
     assert len(diagnosis.evidence) == 1
     assert diagnosis.evidence[0].source == "log"
-    assert diagnosis.evidence[0].text == "npm ERR! Found: react@18.2.0"
+    assert diagnosis.evidence[0].text == "something unexpected happened"
     assert diagnosis.details is not None
     assert diagnosis.details.expert == EXPERT.value == "test"
     assert isinstance(diagnosis.details, BehaviourDetails)

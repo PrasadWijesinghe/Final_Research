@@ -27,3 +27,9 @@ def _no_live_knowledge_base(monkeypatch: pytest.MonkeyPatch) -> None:
     from testing_expert import diagnose
 
     monkeypatch.setattr(diagnose, "retrieve_for_failure", lambda failure, log: [])
+
+
+@pytest.fixture(autouse=True)
+def _no_llm_gateway(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No test reaches a real LLM gateway; tests that want one set LLM_GATEWAY_URL themselves."""
+    monkeypatch.delenv("LLM_GATEWAY_URL", raising=False)

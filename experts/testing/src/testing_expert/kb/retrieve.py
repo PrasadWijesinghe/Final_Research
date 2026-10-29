@@ -230,6 +230,25 @@ def count_cases() -> int:
     return n
 
 
+def dedupe_by_fix_commit(hits: Sequence[Hit], max_per_commit: int, limit: int) -> list[Hit]:
+    """Keep the best-ranked hits, at most `max_per_commit` per fix commit, up to `limit` in all.
+
+    One fix often closes many failing tests, which become many near-identical cases. Showing five
+    of them says the same thing five times. A case without a fix commit is its own group.
+    """
+    seen: dict[tuple[str, str], int] = {}
+    out: list[Hit] = []
+    for h in hits:
+        key = (h.repo, str(h.case.get("fix_commit_sha") or h.case_id))
+        if seen.get(key, 0) >= max_per_commit:
+            continue
+        seen[key] = seen.get(key, 0) + 1
+        out.append(h)
+        if len(out) >= limit:
+            break
+    return out
+
+
 def failure_cutoff(conn: psycopg.Connection[Any], failure: RoutedFailure) -> datetime:
     """When the failed job finished (from `raw.jobs`), else when the router saw it."""
     try:
@@ -250,9 +269,27 @@ def retrieve_for_failure(
     *,
     permissive_only: bool = False,
     cfg: KbSettings | None = None,
+    diverse: bool = True,
 ) -> list[Hit]:
-    """Top cases for a live failure; an empty list when the knowledge base cannot answer."""
+    """Top cases for a live failure; an empty list when the knowledge base cannot answer.
+
+    With `diverse` (the default, P4.11) at most `max_per_fix_commit` cases per fix commit are kept.
+    """
     cfg = cfg or load_settings()
+    if not diverse:
+        return _retrieve(failure, log_evidence, permissive_only, cfg, None)
+    pool = _retrieve(failure, log_evidence, permissive_only, cfg, max(cfg.diverse_pool, cfg.top_k))
+    return dedupe_by_fix_commit(pool, cfg.max_per_fix_commit, cfg.top_k)
+
+
+def _retrieve(
+    failure: RoutedFailure,
+    log_evidence: LogEvidence,
+    permissive_only: bool,
+    cfg: KbSettings,
+    k: int | None,
+) -> list[Hit]:
+    """One retrieval run (`k` None means the configured top_k)."""
     conn = None
     try:
         conn = _connect()
@@ -275,13 +312,13 @@ def retrieve_for_failure(
         global _vector_off_until
         if time.monotonic() >= _vector_off_until:
             try:
-                return search(conn, q, permissive_only=permissive_only, cfg=cfg)
+                return search(conn, q, k=k, permissive_only=permissive_only, cfg=cfg)
             except Exception:
                 # Most likely the embedding model is missing or cannot load: use the words only.
                 _vector_off_until = time.monotonic() + VECTOR_RETRY_SECONDS
                 log.warning("vector search unavailable, using full text only", exc_info=True)
                 conn.rollback()
-        return search(conn, q, mode="fts", permissive_only=permissive_only, cfg=cfg)
+        return search(conn, q, k=k, mode="fts", permissive_only=permissive_only, cfg=cfg)
     except Exception:
         log.warning("knowledge base unavailable, no cases retrieved", exc_info=True)
         return []
