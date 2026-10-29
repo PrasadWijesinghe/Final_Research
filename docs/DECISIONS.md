@@ -155,6 +155,26 @@ entry that references it rather than editing history.
 **D43 — Phase 4 before Phase 3.** Date: 2026-10-27. The user agreed (HANDOVER, 2026-10-25) to build the Test expert (Phase 4) before the user-facing Phase 3, so a working model exists first. D04 already puts the shared services first and then the Test expert, with stubs for the other three experts, and it does not mention Phase 3 (the user-facing work). The HANDOVER brief read it as a conflict, so this entry records the order explicitly: Phase 4 next, Phase 3 later.
 *Why:* the project needs a trained model soon. More repos will be added later, and the model will be retrained when they are.
 
+## Build expert (added 26 October 2026, Member 2; proposed, needs team review)
+
+Numbered D40 to D43 on the `build/dataset-pipeline` branch; renumbered D44 to D47 when it was merged into `main` (29 October 2026), because `main` had already used D40 to D43.
+
+**D44 — Build labels and unit.** One row per commit (first attempts of build-relevant runs, cut-off = earliest run's `created_at`), as D02. Failed jobs are labelled by named rules on the failed step's log (`docs/experts/build.md` §3); the rules only claim `build`, with sub-labels `tsc`, `eslint`, `format`, `bundler`, `build_other` and a confidence. A re-run pass on the same SHA lowers the confidence instead of removing the label.
+*Why:* build failures are mostly deterministic and their tool output is distinctive, so rules on the log are precise; confidence keeps doubtful cases out of the strict target (`y_build_confident`).
+*Status:* proposed.
+
+**D45 — Log-derived warning counts replace local static analysis.** The proposal (C2 §3.3) runs ESLint and tsc locally on each commit. With no clones (D08) that is impossible for history, so `last_lint_warnings` and `last_type_errors` read the counts printed by the latest earlier run on the same branch.
+*Why:* keeps the "how close is the code to failing lint" signal without cloning; uses data the collector already stores.
+*Status:* proposed. Supervisor to confirm the change from the proposal.
+
+**D46 — `daily --logs failed`, and the Build member collects failed logs first everywhere.** `daily` gets the same `--logs all|failed` option as `backfill` (default `all`, so nobody else changes). The Build member runs `backfill --logs failed` and `daily --logs failed`, and fetches passing logs with `fill-logs` (D38) when there is time.
+*Why:* nearly every CI workflow is build-relevant, so Build's passing logs are almost every log of 20 busy repos; at about 2.3 s per log they would take most of each day. Build needs failed logs for labels; passing logs only add the "last warnings" history features.
+*Status:* proposed (shared change: needs one approval). Amends "`daily` always fetches all logs" in D38 and D40: that stays true for the default, `--logs all`.
+
+**D47 — The Build dataset builder imports the features library directly.** `build-dataset` calls `features.replay.build_replay_context` in-process to rebuild each commit. Serving still receives `CommitContext` through the contract.
+*Why:* datasets are offline tooling; going through the replay CLI and the API would add a running stack for no benefit. No expert imports another expert.
+*Status:* proposed.
+
 ## Open items (don't block the build)
 
 | # | Item | Owner |

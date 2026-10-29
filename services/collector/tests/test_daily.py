@@ -193,7 +193,7 @@ def test_daily_syncer_is_a_backfiller_and_summary_is_typed() -> None:
 def test_daily_with_failed_logs_only_leaves_passing_logs_pending(
     fake_github: FakeGitHub, tmp_path: Path
 ) -> None:
-    # `daily --logs failed` (D42): the re-run's passing jobs get no log, so `fill-logs` finds them.
+    # `daily --logs failed` (D46): the re-run's passing jobs get no log, so `fill-logs` finds them.
     store, data = MemoryStore(), tmp_path / "data"
     _backfill_with_old_attempt_only(fake_github, store, data)
     fake_github.attempt_cap = {}

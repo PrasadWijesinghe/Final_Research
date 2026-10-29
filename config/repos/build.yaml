@@ -8,7 +8,7 @@
 #   builds = estimated failed runs with a build-type failure in 90 days ("≥" = at least),
 #   p1_hours = pass 1 time with one token, log_hours = failed-log download time in one lane.
 # Re-run the screen before adding a reserve. Collect with `--logs failed` (backfill and daily)
-# and fetch passing logs later with `collector fill-logs` (D38, D42).
+# and fetch passing logs later with `collector fill-logs` (D38, D46).
 member: build
 
 repos:
