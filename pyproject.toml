@@ -67,7 +67,7 @@ files = ["shared", "services/collector/src", "services/collector/tests", "servic
 explicit_package_bases = true
 # DEFAULT: src-layout packages need their src/ folder on mypy_path so modules are named
 # `collector.x` (not `services.collector.src.collector.x`); append one entry per src-layout package.
-mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests", "$MYPY_CONFIG_FILE_DIR/services/features/src", "$MYPY_CONFIG_FILE_DIR/services/features/tests", "$MYPY_CONFIG_FILE_DIR/services/llm_gateway/src", "$MYPY_CONFIG_FILE_DIR/services/llm_gateway/tests", "$MYPY_CONFIG_FILE_DIR/services/api/src", "$MYPY_CONFIG_FILE_DIR/services/api/tests", "$MYPY_CONFIG_FILE_DIR/experts/_template/src", "$MYPY_CONFIG_FILE_DIR/experts/dependency/src", "$MYPY_CONFIG_FILE_DIR/experts/build/src", "$MYPY_CONFIG_FILE_DIR/experts/testing/src", "$MYPY_CONFIG_FILE_DIR/experts/infra/src"]
+mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/services/collector/src", "$MYPY_CONFIG_FILE_DIR/scripts", "$MYPY_CONFIG_FILE_DIR/services/collector/tests", "$MYPY_CONFIG_FILE_DIR/services/features/src", "$MYPY_CONFIG_FILE_DIR/services/features/tests", "$MYPY_CONFIG_FILE_DIR/services/llm_gateway/src", "$MYPY_CONFIG_FILE_DIR/services/llm_gateway/tests", "$MYPY_CONFIG_FILE_DIR/services/api/src", "$MYPY_CONFIG_FILE_DIR/services/api/tests", "$MYPY_CONFIG_FILE_DIR/experts/_template/src", "$MYPY_CONFIG_FILE_DIR/experts/dependency/src", "$MYPY_CONFIG_FILE_DIR/experts/build/src", "$MYPY_CONFIG_FILE_DIR/experts/build/tests", "$MYPY_CONFIG_FILE_DIR/experts/testing/src", "$MYPY_CONFIG_FILE_DIR/experts/infra/src"]
 
 # DEFAULT: mypy does not allow `strict` inside a per-module override, so the strict flags are
 # spelled out for shared.* (this is what `--strict` enables).
@@ -114,6 +114,11 @@ disable_error_code = ["attr-defined"]
 # must not fail when it is absent.
 [[tool.mypy.overrides]]
 module = ["sentence_transformers", "sentence_transformers.*"]
+ignore_missing_imports = true
+
+# DEFAULT: pyarrow ships no type information; the Build expert's dataset writer uses it.
+[[tool.mypy.overrides]]
+module = ["pyarrow", "pyarrow.*"]
 ignore_missing_imports = true
 
 [tool.pydantic-mypy]
