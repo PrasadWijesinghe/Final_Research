@@ -108,7 +108,8 @@ Design: `docs/experts/build.md`.
   *Accept:* config loads; detection and daily tests pass; real build logs route to Build.
 - [x] **B2 Build screen:** `scripts/build_screen.py` (real 90-day failure counts, build share, backfill cost).
   *Accept:* tested on canned GitHub answers.
-- [ ] **B2b Run the build screen** with a real token and trim the repo list; then start the backfill.
+- [x] **B2b Run the build screen** with a real token and trim the repo list (27 Oct 2026: 11 repos kept, suggestion rule fixed).
+- [ ] **B2c Backfill** the 11 repos (`backfill --logs failed`), then `daily --logs failed` every day.
 - [x] **B3 Log parsers** for tsc, ESLint, Prettier and bundlers (Vite, webpack, esbuild, Rollup, Next.js) with real tool-output fixtures.
 - [x] **B4 Labelling** per §3, written as `FailureLabel`s (`platform.failure_labels`, `is_final=false`).
 - [ ] **B4b Manual label check:** sample per sub-label and per reason, second labeller, kappa.

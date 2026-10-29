@@ -1,67 +1,68 @@
 # Member 2 — Build & Code Quality expert (C2).
-# Selected 22 Oct 2026 from 80 Node.js candidates by a static screen (workflow files, scripts,
-# licence and git history read through git; see docs/experts/build.md section 2):
+# Candidates chosen 22 Oct 2026 from 80 Node.js repos by a static screen (workflow files,
+# scripts, licence and git history read through git; see docs/experts/build.md section 2):
 #   - TypeScript-heavy (ts_share = share of .ts/.tsx among JS/TS files)
 #   - at least one workflow the build detection rule keeps, triggered on pull requests
 #   - permissive licence (MIT, Apache-2.0, BSD); licence-risky repos are research-only
-#   - active: commits_90d = commits on the default branch since 24 Jul 2026 (rough evidence of
-#     CI volume; PR runs come on top)
-# Nobody has confirmed failure counts yet. Run `uv run --env-file .env python
-# scripts/build_screen.py` with your token first: it counts real 90-day build/lint failures and
-# estimates the backfill time per repo. Drop or reserve repos it shows as too quiet or too
-# expensive. Licences are best-known values; the screen checks them against GitHub.
-# Collect with `--logs failed` (backfill and daily) and fetch passing logs later with
-# `collector fill-logs` (D38, D42; docs/experts/build.md section 2.3).
+# Trimmed 27 Oct 2026 with the build screen (scripts/build_screen.py, real 90-day counts):
+#   builds = estimated failed runs with a build-type failure in 90 days ("≥" = at least),
+#   p1_hours = pass 1 time with one token, log_hours = failed-log download time in one lane.
+# Re-run the screen before adding a reserve. Collect with `--logs failed` (backfill and daily)
+# and fetch passing logs later with `collector fill-logs` (D38, D42).
 member: build
 
 repos:
-  # --- Libraries and frameworks: type-check and lint heavy (10)
-  - {full_name: vercel/ai,                         licence: Apache-2.0,   group: library, ts_share: 0.97, commits_90d: 1540, note: "turbo monorepo, tsup bundles"}
-  - {full_name: TanStack/query,                    licence: MIT,          group: library, ts_share: 0.87, commits_90d: 884,  note: "also on the Test list"}
-  - {full_name: TanStack/router,                   licence: MIT,          group: library, ts_share: 0.97, commits_90d: 284,  note: "nx, many tsconfig and bundler configs"}
-  - {full_name: typescript-eslint/typescript-eslint, licence: MIT,        group: library, ts_share: 0.97, commits_90d: 240,  note: "lint-config heavy; also on the Test list"}
-  - {full_name: vitest-dev/vitest,                 licence: MIT,          group: library, ts_share: 0.89, commits_90d: 379,  note: "lint + typecheck + build jobs; also on the Test list"}
-  - {full_name: microsoft/playwright,              licence: Apache-2.0,   group: library, ts_share: 0.88, commits_90d: 671,  note: "npm run lint / build"}
-  - {full_name: prisma/prisma,                     licence: Apache-2.0,   group: library, ts_share: 0.98, commits_90d: 495,  note: "many lint:* scripts"}
-  - {full_name: nrwl/nx,                           licence: MIT,          group: library, ts_share: 0.96, commits_90d: 594,  note: "nx affected lint/build/format"}
-  - {full_name: langchain-ai/langchainjs,          licence: MIT,          group: library, ts_share: 0.98, commits_90d: 208,  note: "13 build workflows; many outside contributors"}
-  - {full_name: open-telemetry/opentelemetry-js,   licence: Apache-2.0,   group: library, ts_share: 0.87, commits_90d: 179,  note: "npm run compile / lint"}
+  # --- Libraries and frameworks (4)
+  - {full_name: prisma/prisma,                     licence: Apache-2.0,   group: library, builds: 742,   p1_hours: 2.2, log_hours: 1.5, note: "many lint:* scripts"}
+  - {full_name: nrwl/nx,                           licence: MIT,          group: library, builds: ">=3857", p1_hours: 2.0, log_hours: 2.7, note: "nx affected lint/build/format"}
+  - {full_name: langchain-ai/langchainjs,          licence: MIT,          group: library, builds: ">=1257", p1_hours: 4.7, log_hours: 2.4, note: "13 build workflows; many outside contributors"}
+  - {full_name: open-telemetry/opentelemetry-js,   licence: Apache-2.0,   group: library, builds: 67,    p1_hours: 2.1, log_hours: 1.0, note: "npm run compile / lint"}
 
-  # --- Applications and monorepos: tsc, lint and bundling together (7)
-  - {full_name: supabase/supabase,                 licence: Apache-2.0,   group: app,     ts_share: 0.98, commits_90d: 1712, note: "Next.js apps (studio, docs)"}
-  - {full_name: backstage/backstage,               licence: Apache-2.0,   group: app,     ts_share: 0.94, commits_90d: 1445, note: "262 lint configs; yarn lint/build"}
-  - {full_name: freeCodeCamp/freeCodeCamp,         licence: BSD-3-Clause, group: app,     ts_share: 0.83, commits_90d: 1029, note: "many first-time contributors; lint + prettier --check"}
-  - {full_name: payloadcms/payload,                licence: MIT,          group: app,     ts_share: 0.97, commits_90d: 512,  note: "format:check, lint, build:all"}
-  - {full_name: triggerdotdev/trigger.dev,         licence: Apache-2.0,   group: app,     ts_share: 0.99, commits_90d: 792,  note: "turbo + oxlint"}
-  - {full_name: bluesky-social/social-app,         licence: MIT,          group: app,     ts_share: 0.96, commits_90d: 621,  note: "React Native + web; lint, prettier, typecheck"}
-  - {full_name: shadcn-ui/ui,                      licence: MIT,          group: app,     ts_share: 0.97, commits_90d: 265,  note: "many outside PRs; format:check, lint, typecheck"}
+  # --- Applications and monorepos (5)
+  - {full_name: backstage/backstage,               licence: Apache-2.0,   group: app,     builds: ">=1187", p1_hours: 1.6, log_hours: 2.3, note: "262 lint configs; yarn lint/build"}
+  - {full_name: freeCodeCamp/freeCodeCamp,         licence: BSD-3-Clause, group: app,     builds: 901,   p1_hours: 1.6, log_hours: 1.1, note: "many first-time contributors; lint + prettier --check"}
+  - {full_name: payloadcms/payload,                licence: MIT,          group: app,     builds: ">=1777", p1_hours: 1.2, log_hours: 4.0, note: "format:check, lint, build:all"}
+  - {full_name: bluesky-social/social-app,         licence: MIT,          group: app,     builds: ">=600", p1_hours: 0.2, log_hours: 0.4, note: "busy repo, but only ~2% of runs are build workflows; lint, prettier, typecheck"}
+  - {full_name: shadcn-ui/ui,                      licence: MIT,          group: app,     builds: 915,   p1_hours: 1.3, log_hours: 7.0, note: "many outside PRs; format:check, lint, typecheck"}
 
-  # --- Bundler and build-tool heavy (3)
-  - {full_name: vitejs/vite,                       licence: MIT,          group: bundler, ts_share: 0.38, commits_90d: 319,  note: "the bundler itself; also on the Test list"}
-  - {full_name: withastro/astro,                   licence: MIT,          group: bundler, ts_share: 0.75, commits_90d: 547,  note: "biome ci + build"}
-  - {full_name: facebook/docusaurus,               licence: MIT,          group: bundler, ts_share: 0.88, commits_90d: 245,  note: "webpack/rspack site builds; typecheck"}
+  # --- Bundler and build-tool heavy (2)
+  - {full_name: vitejs/vite,                       licence: MIT,          group: bundler, builds: 365,   p1_hours: 1.7, log_hours: 0.8, note: "the bundler itself; also on the Test list"}
+  - {full_name: facebook/docusaurus,               licence: MIT,          group: bundler, builds: ">=343", p1_hours: 2.8, log_hours: 1.0, note: "webpack/rspack site builds; typecheck"}
 
-  # --- Reserves (enable if a selected repo is too quiet or too expensive in the screen)
-  # pnpm and nuxt: about 28k-32k runs each in 90 days in the Test member's real collection
-  # (handover, 25 Oct 2026), so pass 1 alone would take about 10 hours each with one token.
-  - {full_name: pnpm/pnpm,                         licence: MIT,          group: library, ts_share: 0.85, commits_90d: 2317, enabled: false, note: "very busy CI (~30k runs/90d)"}
-  - {full_name: nuxt/nuxt,                         licence: MIT,          group: bundler, ts_share: 0.98, commits_90d: 593,  enabled: false, note: "very busy CI (~30k runs/90d)"}
-  - {full_name: unjs/nitro,                        licence: MIT,          group: bundler, ts_share: 0.98, commits_90d: 288,  enabled: false}
-  - {full_name: mermaid-js/mermaid,                licence: MIT,          group: library, ts_share: 0.87, commits_90d: 733,  enabled: false}
-  - {full_name: honojs/hono,                       licence: MIT,          group: library, ts_share: 1.0,  commits_90d: 171,  enabled: false}
-  - {full_name: element-plus/element-plus,         licence: MIT,          group: library, ts_share: 1.0,  commits_90d: 177,  enabled: false, note: "vue-tsc"}
-  - {full_name: sveltejs/kit,                      licence: MIT,          group: bundler, ts_share: 0.16, commits_90d: 527,  enabled: false, note: "type-checked JavaScript (JSDoc)"}
-  - {full_name: microsoft/TypeScript,              licence: Apache-2.0,   group: library, ts_share: 0.5,  commits_90d: 430,  enabled: false, note: "custom hereby build"}
-  - {full_name: expo/expo,                         licence: MIT,          group: app,     ts_share: 0.88, commits_90d: 2174, enabled: false, note: "very large CI"}
-  - {full_name: vercel/next.js,                    licence: MIT,          group: bundler, ts_share: 0.54, commits_90d: 1504, enabled: false, note: "very large CI"}
+  # --- Reserves: valuable but slow (add after the first backfill finishes)
+  - {full_name: vercel/ai,                         licence: Apache-2.0,   group: library, builds: ">=2582", p1_hours: 2.6, log_hours: 20.5, enabled: false, note: "most build failures of all, but >20 h of failed logs (many jobs per run); GitHub reports NOASSERTION, LICENSE file is Apache-2.0"}
+
+  # --- Reserves: the screen found no build-type failed steps in 12 recent failures. Repos that
+  # run lint, types and tests in one nx/turbo step can hide them; check by hand before enabling.
+  - {full_name: TanStack/query,                    licence: MIT,          group: library, builds: 0, enabled: false, note: "nx: lint/types/build/tests in one step; also on the Test list"}
+  - {full_name: TanStack/router,                   licence: MIT,          group: library, builds: 0, enabled: false, note: "nx, many tsconfig and bundler configs"}
+  - {full_name: typescript-eslint/typescript-eslint, licence: MIT,        group: library, builds: 0, enabled: false, note: "also on the Test list"}
+  - {full_name: vitest-dev/vitest,                 licence: MIT,          group: library, builds: 0, enabled: false, note: "failures are mostly tests; also on the Test list"}
+  - {full_name: microsoft/playwright,              licence: Apache-2.0,   group: library, builds: 0, enabled: false, note: "failures are mostly tests"}
+  - {full_name: supabase/supabase,                 licence: Apache-2.0,   group: app,     builds: 0, enabled: false, note: "busy; only ~12% of runs are build workflows"}
+  - {full_name: triggerdotdev/trigger.dev,         licence: Apache-2.0,   group: app,     builds: 0, enabled: false, note: "~1% of runs are build workflows"}
+  - {full_name: withastro/astro,                   licence: MIT,          group: bundler, builds: 0, enabled: false, note: "GitHub reports NOASSERTION"}
+
+  # --- Reserves from the static screen (not screened yet)
+  # pnpm and nuxt: about 28k-32k runs each in 90 days in the Test member's real collection.
+  - {full_name: pnpm/pnpm,                         licence: MIT,          group: library, enabled: false, note: "very busy CI (~30k runs/90d)"}
+  - {full_name: nuxt/nuxt,                         licence: MIT,          group: bundler, enabled: false, note: "very busy CI (~30k runs/90d)"}
+  - {full_name: unjs/nitro,                        licence: MIT,          group: bundler, enabled: false}
+  - {full_name: mermaid-js/mermaid,                licence: MIT,          group: library, enabled: false}
+  - {full_name: honojs/hono,                       licence: MIT,          group: library, enabled: false}
+  - {full_name: element-plus/element-plus,         licence: MIT,          group: library, enabled: false, note: "vue-tsc"}
+  - {full_name: sveltejs/kit,                      licence: MIT,          group: bundler, enabled: false, note: "type-checked JavaScript (JSDoc)"}
+  - {full_name: microsoft/TypeScript,              licence: Apache-2.0,   group: library, enabled: false, note: "custom hereby build"}
+  - {full_name: expo/expo,                         licence: MIT,          group: app,     enabled: false, note: "very large CI"}
+  - {full_name: vercel/next.js,                    licence: MIT,          group: bundler, enabled: false, note: "very large CI"}
 
   # --- Licence-risky: research only, never in a commercial knowledge base
-  - {full_name: twentyhq/twenty,                   licence: AGPL-3.0,     group: app, ts_share: 1.0,  commits_90d: 3345, enabled: false, commercial_kb: false}
-  - {full_name: immich-app/immich,                 licence: AGPL-3.0,     group: app, ts_share: 0.98, commits_90d: 716,  enabled: false, commercial_kb: false}
-  - {full_name: RocketChat/Rocket.Chat,            licence: MIT-and-EE,   group: app, ts_share: 0.99, commits_90d: 639,  enabled: false, commercial_kb: false}
-  - {full_name: novuhq/novu,                       licence: MIT-and-EE,   group: app, ts_share: 0.99, commits_90d: 582,  enabled: false, commercial_kb: false}
+  - {full_name: twentyhq/twenty,                   licence: AGPL-3.0,     group: app, enabled: false, commercial_kb: false}
+  - {full_name: immich-app/immich,                 licence: AGPL-3.0,     group: app, enabled: false, commercial_kb: false}
+  - {full_name: RocketChat/Rocket.Chat,            licence: MIT-and-EE,   group: app, enabled: false, commercial_kb: false}
+  - {full_name: novuhq/novu,                       licence: MIT-and-EE,   group: app, enabled: false, commercial_kb: false}
 
 # Excluded: ant-design/ant-design, mui/material-ui, colinhacks/zod, ueberdosis/tiptap,
 # umami-software/umami, excalidraw/excalidraw, hoppscotch/hoppscotch, shikijs/shiki (no workflow
 # the build rule keeps: builds run in composite actions or outside GitHub Actions);
-# drizzle-team/drizzle-orm, refinedev/refine, calcom/cal.com (few default-branch commits in the screen).
+# drizzle-team/drizzle-orm, refinedev/refine, calcom/cal.com (few default-branch commits).

@@ -236,7 +236,7 @@ The Build repo list was chosen from workflow files and git history only (no acce
 4. Read the newest 300 runs (unfiltered lists, which GitHub answers reliably). From them: the share of runs in build workflows, and the failed runs in build workflows.
 5. Count all runs and all failed runs of the last 90 days in 13 seven-day windows, with the same hardened counting as the re-run check (`count_workflow_runs`). It never trusts one big filtered query, because GitHub sometimes answers those with a silent 0.
 6. Open the jobs of up to 12 recent failed build-workflow runs and look at the name of each failed step. A step that builds, lints, format-checks or type-checks counts as a build-type failure (the same test the Build labeller uses when no log is available).
-7. Estimate: build-workflow runs and failures in 90 days, build failures, pass 1 hours (`backfill --logs failed`, 1.6 REST calls per run as measured in the Test member's real backfill) and failed-log download hours (2.3 s per log in one lane). Suggest `keep` (50+ build failures and pass 1 under about 5 hours), `too quiet` or `expensive`. A repo where GitHub stopped counting at 2,500 in a week is always `expensive`.
+7. Estimate: build-workflow runs and failures in 90 days, build failures, pass 1 hours (`backfill --logs failed`, 1.6 REST calls per run as measured in the Test member's real backfill) and failed-log download hours (2.3 s per log in one lane). Suggest `keep` (50+ build failures, pass 1 under about 5 hours and failed-log downloads under 10 hours), `too quiet` or `expensive`. When GitHub stopped counting at 2,500 in a week the numbers are minimums; only the build workflows' runs are collected, so such a busy repo can still be cheap.
 8. Write `data/reports/build_screen-<date>.md` and `.csv`, with totals for the repos marked keep.
 
 ## How to run it
@@ -251,12 +251,12 @@ About 30 to 45 REST calls per repo (about 1,500 for `--all`). It prints the two 
 
 ## Limitations and known issues
 
-- The build share comes from failed **step names**, not logs, and from a small sample. It is a rough guide.
+- The build share comes from failed **step names**, not logs, and from a small sample. It is a rough guide. A repo that runs lint, types and tests in one step (for example `nx affected`) can show 0% although it has build failures.
 - The build-workflow share comes from the newest 300 runs only; busy weeks can differ from quiet ones.
 - The time estimates use averages measured on the Test member's repos; matrix-heavy repos cost more per run.
 - Workflows are read at the default branch today; older runs may have used different files.
 
-`# DEFAULT:` choices: `SAMPLE_PAGES = 3`, `SAMPLE_FAILED_RUNS = 12`, `MIN_BUILD_FAILURES = 50`, `MAX_PASS1_CALLS = 24_000`, `CALLS_PER_RUN = 1.6`, `SECONDS_PER_LOG = 2.3`, `CALLS_PER_HOUR = 4_800`.
+`# DEFAULT:` choices: `SAMPLE_PAGES = 3`, `SAMPLE_FAILED_RUNS = 12`, `MIN_BUILD_FAILURES = 50`, `MAX_PASS1_CALLS = 24_000`, `MAX_FAILED_LOG_HOURS = 10`, `CALLS_PER_RUN = 1.6`, `SECONDS_PER_LOG = 2.3`, `CALLS_PER_HOUR = 4_800`.
 
 ## Related
 

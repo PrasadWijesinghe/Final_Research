@@ -30,8 +30,8 @@ def test_all_four_real_files_load() -> None:
 
 def test_real_build_config_content() -> None:
     cfg = load_member_config("build", REAL_CONFIG)
-    assert len(cfg.repos) == 34  # 20 selected + 10 reserves + 4 licence-risky
-    assert len(cfg.enabled_repos()) == 20
+    assert len(cfg.repos) == 34  # 11 selected + 19 reserves + 4 licence-risky
+    assert len(cfg.enabled_repos()) == 11
     risky = [r for r in cfg.repos if r.extras.get("commercial_kb") is False]
     assert risky and all(not r.enabled for r in risky)
 
