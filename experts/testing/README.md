@@ -2,7 +2,7 @@
 
 **In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Model v5 is a candidate, not served. The diagnosis worker is still a stub · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.7 (partly)
+**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). The diagnosis worker is still a stub · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.7 (partly)
 
 > **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
@@ -297,7 +297,7 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 
 **Interim reasons.** Until SHAP reasons exist (P4.8), the "top factors" are the LightGBM per-feature contributions to the fail score, largest first (at most 5, never zero), worded with `features/descriptions.yaml`. For `tw_*` factors the file and line of the first matching added line are attached when the diff shows one.
 
-**Known limits.** Loading the per-test history (`ht_*`) for one job series takes about 5 seconds (it scans the repository's parsed results); a v4 bundle does not use `ht_*`, so that cost only matters once a bundle that does is shipped. A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
+**Known limits.** Loading the per-test history (`ht_*`) for one job series used to take up to about 4 seconds for big matrix jobs (it streams every stored result row), and serving paid that for every request even though v4 does not read `ht_*`. Now the history is loaded only if the bundle has an `ht_` column (`Bundle.history_mode`: `none`, `job` or `full`), and a bundle that needs only the job-level numbers uses `loader.load_job_test_history`, three small queries that take 0.8 to 1.8 s on the biggest series tested (same numbers as the full loader; see the v6 section). A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
 
 Code: `src/testing_expert/serving.py`. Tests: `tests/test_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
 
@@ -372,6 +372,23 @@ Postgres), `tests/test_model_v5.py`, `tests/test_extract.py` (batching, idempote
 **Where `--export` writes.** `compare_v5.py` writes its bundle to `models/testing_candidates/v5`, which the service
 never reads. To ship v5, move the folder to `models/testing/v5` and rebuild `testing-api`; the service serves the
 newest `v<N>` in `models/testing/`.
+
+## Model v6 candidate: the "still failing" rule, a calibrated threshold (P4.7 v6)
+
+**In one line: built and measured, not better than v4, so v4 is still served.** Report:
+`reports/v6_vs_v4.md` (run: `uv run --env-file .env python -m testing_expert.model.compare_v6 --export models/testing_candidates/v6 --json data/reports/v6_results.json`, about 20 minutes; add `--from-json FILE --notes NOTES.json` to re-render the report). The bundle is in `models/testing_candidates/v6/`.
+
+Three changes on top of v4, each decided without looking at the test slice:
+
+1. **The "still failing" rule** (`model/rule.py`, in plain words). If this job's previous run failed, the model is not allowed to say less than what usually happens next. "Previous run" means the same job on the same runner OS when it has run there before, otherwise the job's overall history. The rule looks up how often rows with the same number of failures in a row went on to fail (buckets: 1, 2, 3 to 9, 10 or more; counted on train and calibration rows only) and the final probability is the larger of the model's and the rule's. In serving it adds the first reason, for example "This job already failed 74 times in a row on Windows; the failure is likely not caused by this push.", and a `still_failing` entry in `sub_risks`. The contract is untouched. The numbers are in a `rule.json` file in the bundle; a bundle without that file behaves exactly like v4.
+2. **Threshold from the calibration slice.** The default is the point with the highest F1 on the 21,186 calibration rows. The curve, "precision at least 0.30" and "top 5% of pushes" are in the report. The test slice never chose a threshold.
+3. **Job-level `ht_` features: left out.** Decided on the calibration slice and on out-of-fold scores of the train period, where they do slightly worse (any-fail PR-AUC -0.009 and -0.005). They would fit the time budget (0.8 to 1.8 s with the new fast loader), but they do not earn their place.
+
+**What the measurement says.** The rule's probabilities are low (about 5 to 11% of such rows fail, 11.8% on the test slice), below the alert threshold 0.169, so it never raises an alert by itself at the default threshold; it also flattens the model's ordering inside the rows it touches, so any-fail PR-AUC falls from 0.189 to 0.170. Calibration gets slightly better (ECE 0.0066 to 0.0054). F1 at the default threshold is the same as v4 (0.108). Leave-one-repo-out is slightly positive for the rule (macro PR-AUC 0.198 to 0.208). The strong "same as last outcome" baseline (precision 0.56, recall 0.64 on streak rows) uses the previous run's *label*, which is only known later, so it cannot be reproduced from history available before a run; the deployable version ("previous run failed") is right only 13% of the time on those rows. The looser "top 5% of pushes" threshold (0.0769) gives test precision 0.157 and recall 0.306 (about twice the F1 of the default); choosing it is a product decision about how many alerts per 100 pushes the team accepts. On rows whose previous run passed, v4 and v6 are the same model: precision 0.72 and recall 0.06 at the default threshold.
+
+**To ship it later** (if the team decides): move `models/testing_candidates/v6` to `models/testing/v6` and rebuild with `docker compose --profile experts up -d --build testing-api`. `serving.py` already reads `rule.json`, so nothing else changes. Tests: `tests/test_model_v6.py` (rule, operating points, ht decision, serving with a rule), `tests/test_features_db.py` (fast loader gives the same numbers as the full one).
+
+**`# DEFAULT:` choices in v6.** Rule buckets 1, 2, 3 to 9, 10 or more and a minimum of 50 rows per bucket (`model/rule.py`); max-F1 on calibration as the default threshold, "precision >= 0.30" and "top 5%" as the other operating points, a 20-row support floor for threshold choice (`model/compare_v6.py`); the ht_ include rule (higher any-fail PR-AUC on the calibration slice and on out-of-fold train blocks, both); leave-one-repo-out uses the main run's calibrators; the job-level loader's 90-day window (`features/loader.py`).
 
 ## Limitations and known issues
 
