@@ -2,9 +2,9 @@
 
 **In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear, P4.9), attaches up to 5 similar past cases from a knowledge base (P4.10) and writes the root cause and remediation through the LLM gateway, or from a template when no real model is available (P4.11; only the mock gateway provider exists so far) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.11 (partly)
+**Status:** the expert is real end to end (P4.12): `/predict` serves the trained model v4 (`lightgbm-v4`), the worker triages, retrieves from the knowledge base and writes the diagnosis through the LLM gateway; the stub only answers when a bundle or the database is missing (see "Real and fallback" below). Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear, P4.9), attaches up to 5 similar past cases from a knowledge base (P4.10) and writes the root cause and remediation through the LLM gateway, or from a template when no real model is available (P4.11; only the mock gateway provider exists so far) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.12
 
-> **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
+> **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs, but only as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
 ## What it does
 
@@ -282,6 +282,47 @@ features, 83 in all; it is `"frozen": false` with a `kappa_note` (the human labe
 (v2 and v3 are built without `ht_`). Remaining cuts, listed in the
 manifest: no daily collector (one-off data, no newer runs), no new repos (same 16), P4.2 and P4.3 still at v1 scope.
 
+## Real and fallback (P4.12)
+
+The stub is no longer a mode you pick: it only answers when the real part cannot run. `GET /status` on the API (and the `test worker starting:` line in the worker log) says which parts are real:
+
+| Part | Real when | Fallback when it is missing |
+|---|---|---|
+| `/predict` model | a bundle loads from `TESTING_MODEL_BUNDLE` (v4 in Docker) | the stub risk (`model_version` "stub"); a database that fails only degrades the history features |
+| Triage (verdict, evidence) | the triage bundle `models/testing/triage/v<N>` loads | the stub diagnosis, except misrouted logs, which are still recognised |
+| Knowledge base | `DATABASE_URL` works and `testing.kb_cases` has rows | `retrieved_cases` is empty |
+| Retrieval kind | the image has torch and an embedding model: full text plus vector | full text only (the Docker image has no torch, on purpose; it keeps the image small) |
+| Narrative text | the gateway runs a real provider | the deterministic template (always the case with the mock provider) |
+| Full log | `DATA_DIR` is set and the log file exists | the router's 20,000-character excerpt |
+
+`status.mode` is `real` (model and triage loaded), `partial` or `stub`. `/health` keeps its documented body (`status`, `model_version`, `kb_cases`); the extra detail is in `/status`. The API process does not need the gateway or the logs, so its `/status` shows `llm_gateway: false` and `full_logs: false`; look at the worker banner for those.
+
+### The demo stack (Docker, mock LLM)
+
+```
+docker compose --profile experts up -d --build testing-api testing-worker llm-gateway
+curl -s localhost:8103/status        # mode real, lightgbm-v4, triage-v1, kb_cases 1233
+curl -s localhost:8200/health        # {"status":"ok","provider":"mock"}
+docker logs pipelineiq-testing-worker-1 | grep "worker starting"
+```
+
+(This starts only the three services plus Postgres and Redis; the other experts, the dashboard and the infra containers stay off.) What each piece is wired to in `docker-compose.yml`:
+- **LLM gateway:** `llm-gateway` (port 127.0.0.1:8200, mock provider, writes `platform.llm_calls` to the same Postgres). The worker reaches it at `http://llm-gateway:8200`; set `EXPERT_LLM_GATEWAY_URL` to use another one, or to an empty string for template text only.
+- **Backend:** the worker posts each diagnosis to `${EXPERT_BACKEND_URL}/diagnoses`. Unset, that is `http://host.docker.internal:8000`, the API running on your machine (`uv run --env-file .env uvicorn api.app:app --port 8000`; on Linux add `--host 0.0.0.0`). With the API as a Compose service (`make e2e`) the target sets `EXPERT_BACKEND_URL=http://api:8000`. An empty value posts nowhere.
+- **Logs:** `./data/logs` is mounted read-only at `/data/logs` with `DATA_DIR=/data`, so triage reads the full log named by `log_ref`.
+- **Config:** `config/` is mounted read-only; the parser and feature files are named by `TEST_LOG_PARSING_FILE` and `TEST_FEATURES_FILE` (without the parsing file the log cleaner silently stops cleaning).
+
+**Replay a real failure** (the demo): `scripts/demo_route_failure.py` reads a stored failed job, routes it, lets the worker diagnose it and prints the result.
+```
+PYTHONPATH=. uv run --env-file .env python scripts/demo_route_failure.py --list          # flaky jobs never routed
+PYTHONPATH=. uv run --env-file .env python scripts/demo_route_failure.py --job-id 120678085378
+```
+Then open the failure in the dashboard (`/failures/<id>`). `--no-wait` only enqueues; `--api-url` or `API_URL` points at a backend that is not on `127.0.0.1:8000`. The replay is marked `replay=true`, so nothing goes to GitHub. The `PYTHONPATH=.` part is only needed while the installed copy of `shared` in the virtualenv is older than the repository (`uv sync --all-packages` fixes that).
+
+**Plug in a real LLM later.** In `services/llm_gateway`: add a provider class in `providers.py` (and return it from `get_provider` for a new name), set `LLM_PROVIDER=<name>` and `LLM_API_KEY=<key>` in `.env` (never in git), and put the model's prices and caps in `config/llm.yaml`; then `docker compose --profile experts up -d --build llm-gateway`. The Compose file already passes `LLM_PROVIDER` and `LLM_API_KEY` through to the gateway container. Nothing in this expert changes: any model name that does not start with `mock` is treated as real and its text is shown.
+
+**One bug found while wiring this.** The RQ worker forks a child process for every job. A LightGBM model loaded in the parent before the fork makes the child wait forever (OpenMP threads do not survive a fork), so the worker's start-up banner only looks for the bundle folders and never loads a model (`status.readiness(load=False)`).
+
 ## Serving the trained model (P4.12, partial)
 
 `POST /predict` now scores with the trained model instead of the stub. The stub is still there as a fallback.
@@ -433,12 +474,13 @@ flowchart TD
 
 **Run it.**
 ```
-# gateway by hand (no compose service yet), mock provider:
+# the Docker demo stack is described in "Real and fallback (P4.12)". By hand, without Docker:
+# gateway, mock provider:
 LLM_PROVIDER=mock uv run --env-file .env uvicorn llm_gateway.api:app --port 8200
 # worker or one failure, pointing at it:
 LLM_GATEWAY_URL=http://127.0.0.1:8200 uv run --env-file .env python -m testing_expert.worker
 ```
-In Docker, set `EXPERT_LLM_GATEWAY_URL` (for example `http://host.docker.internal:8200`) before `make up-experts`; empty means template text only.
+In Docker the `llm-gateway` service is started with the worker and `EXPERT_LLM_GATEWAY_URL` defaults to it; empty means template text only.
 
 **Switching to a real model later.** Three things are missing, all outside this component: (1) a provider class in `services/llm_gateway/src/llm_gateway/providers.py` that calls the chosen vendor and is returned by `get_provider` for a new `LLM_PROVIDER` value; (2) set `LLM_PROVIDER` to that value; (3) put the key in `LLM_API_KEY` (`.env` only), plus real prices for the model in `config/llm.yaml`. Nothing in this expert changes: any model name that does not start with `mock` is treated as real. Until then the real-model path is tested only with a fake gateway, and the prompt has never been tried on a real model (wording, schema strictness and length are untested).
 
@@ -535,7 +577,7 @@ Three changes on top of v4, each decided without looking at the test slice:
 
 ## Limitations and known issues
 
-- The diagnosis worker triages real failures (P4.9) and writes the narrative through the LLM gateway (P4.11), which today is the mock provider, so the text comes from the template; with no triage bundle it is the full stub (misrouted logs are still recognised). Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
+- The diagnosis worker triages real failures (P4.9) and writes the narrative through the LLM gateway (P4.11), which today is the mock provider, so the text comes from the template; with no triage bundle it is the full stub (misrouted logs are still recognised). In Docker, knowledge-base retrieval is full text only (no torch in the image). The stack was exercised end to end on two replayed real failures, not on a broad sample, and no human has rated the diagnoses. Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
 - The test-job heuristic is simple on purpose. It can give false matches. A command like `npm install --save-dev jest` counts as a test job, because the bare word `jest` matches. It can also miss test runners it does not list. The real model replaces it.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: the heuristic above is the definition of a test job.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: every job in one commit gets the same stub probability.
@@ -570,3 +612,9 @@ The package `testing_expert.model` trains the pre-run model on `data/datasets/te
 - `docs/experts/test.md`: the Test expert's design doc.
 - `shared/contracts/README.md`: `RiskOutput`, `BehaviourDetails` and `WorkflowJob`.
 - `docs/PLAN.md`, task P2.1.
+
+## `# DEFAULT:` choices added in P4.12
+
+- `GET /status` is a separate endpoint, so `/health` keeps the body in `docs/experts/README.md` (and the stub tests keep passing unchanged).
+- Compose: `EXPERT_BACKEND_URL` defaults to `http://host.docker.internal:8000` (post to the host API); empty disables posting. `./data/logs` is mounted read-only. The gateway runs the mock provider and binds `127.0.0.1:8200`.
+- The Docker image stays without torch, so retrieval there is full text only.

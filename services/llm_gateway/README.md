@@ -2,7 +2,7 @@
 
 **In one sentence:** the one door to the language model. The four experts send a request here, and the gateway returns a checked JSON answer, while enforcing a monthly budget per expert and logging the cost of every call.
 
-**Status:** working, mock provider only · **Owner:** shared · **Plan tasks:** P2.4
+**Status:** working, mock provider only; runs as a Compose service (P4.12) · **Owner:** shared · **Plan tasks:** P2.4, P4.12
 
 ## What it does
 
@@ -42,7 +42,7 @@ flowchart TD
 
 ## How to run it
 
-The gateway has no Docker service yet, so it runs by hand. From the repository root:
+As a container (profiles `experts` and `e2e`): `docker compose --profile experts up -d --build llm-gateway` serves it on `127.0.0.1:8200` with the mock provider, the `platform.llm_calls` log in the Compose Postgres, the Compose Redis as cache and `config/` mounted read-only. `LLM_PROVIDER` and `LLM_API_KEY` come from `.env` (provider default `mock`, key empty). The Test worker is pointed at it by default. By hand, from the repository root:
 
 ```bash
 # start Postgres and Redis (optional for a first try, see Settings)
