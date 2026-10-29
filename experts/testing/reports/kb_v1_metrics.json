@@ -1,0 +1,347 @@
+{
+ "n_queries": 400,
+ "n_cases": 1233,
+ "sample": 400,
+ "seed": 0,
+ "k": 5,
+ "table": {
+  "fts": {
+   "same_repo": {
+    "n": 391,
+    "hit@5": 0.714,
+    "p@5": 0.569
+   },
+   "same_family": {
+    "n": 394,
+    "hit@5": 0.939,
+    "p@5": 0.783
+   },
+   "same_test": {
+    "n": 152,
+    "hit@5": 0.954,
+    "p@5": 0.713
+   },
+   "same_fix": {
+    "n": 141,
+    "hit@5": 0.433,
+    "p@5": 0.173
+   }
+  },
+  "vector": {
+   "same_repo": {
+    "n": 391,
+    "hit@5": 0.821,
+    "p@5": 0.69
+   },
+   "same_family": {
+    "n": 394,
+    "hit@5": 0.924,
+    "p@5": 0.804
+   },
+   "same_test": {
+    "n": 152,
+    "hit@5": 0.961,
+    "p@5": 0.725
+   },
+   "same_fix": {
+    "n": 141,
+    "hit@5": 0.291,
+    "p@5": 0.096
+   }
+  },
+  "hybrid": {
+   "same_repo": {
+    "n": 391,
+    "hit@5": 0.818,
+    "p@5": 0.663
+   },
+   "same_family": {
+    "n": 394,
+    "hit@5": 0.962,
+    "p@5": 0.841
+   },
+   "same_test": {
+    "n": 152,
+    "hit@5": 0.934,
+    "p@5": 0.725
+   },
+   "same_fix": {
+    "n": 141,
+    "hit@5": 0.397,
+    "p@5": 0.128
+   }
+  },
+  "random": {
+   "same_repo": {
+    "n": 391,
+    "hit@5": 0.493,
+    "p@5": 0.165
+   },
+   "same_family": {
+    "n": 394,
+    "hit@5": 0.634,
+    "p@5": 0.229
+   },
+   "same_test": {
+    "n": 152,
+    "hit@5": 0.14,
+    "p@5": 0.031
+   },
+   "same_fix": {
+    "n": 141,
+    "hit@5": 0.321,
+    "p@5": 0.08
+   }
+  }
+ },
+ "distribution": {
+  "by_repo_kind": [
+   [
+    "Automattic/mongoose",
+    "flaky",
+    36
+   ],
+   [
+    "Automattic/mongoose",
+    "genuine",
+    27
+   ],
+   [
+    "babel/babel",
+    "flaky",
+    6
+   ],
+   [
+    "babel/babel",
+    "genuine",
+    25
+   ],
+   [
+    "brianc/node-postgres",
+    "flaky",
+    1
+   ],
+   [
+    "brianc/node-postgres",
+    "genuine",
+    2
+   ],
+   [
+    "eslint/eslint",
+    "flaky",
+    5
+   ],
+   [
+    "eslint/eslint",
+    "genuine",
+    7
+   ],
+   [
+    "jestjs/jest",
+    "flaky",
+    4
+   ],
+   [
+    "jestjs/jest",
+    "genuine",
+    66
+   ],
+   [
+    "mikro-orm/mikro-orm",
+    "flaky",
+    15
+   ],
+   [
+    "mikro-orm/mikro-orm",
+    "genuine",
+    14
+   ],
+   [
+    "puppeteer/puppeteer",
+    "flaky",
+    168
+   ],
+   [
+    "puppeteer/puppeteer",
+    "genuine",
+    120
+   ],
+   [
+    "redis/node-redis",
+    "flaky",
+    22
+   ],
+   [
+    "redis/node-redis",
+    "genuine",
+    45
+   ],
+   [
+    "sequelize/sequelize",
+    "flaky",
+    8
+   ],
+   [
+    "sequelize/sequelize",
+    "genuine",
+    16
+   ],
+   [
+    "socketio/socket.io",
+    "flaky",
+    1
+   ],
+   [
+    "sveltejs/svelte",
+    "flaky",
+    10
+   ],
+   [
+    "sveltejs/svelte",
+    "genuine",
+    3
+   ],
+   [
+    "TanStack/query",
+    "flaky",
+    5
+   ],
+   [
+    "TanStack/query",
+    "genuine",
+    15
+   ],
+   [
+    "typeorm/typeorm",
+    "flaky",
+    1
+   ],
+   [
+    "typeorm/typeorm",
+    "genuine",
+    7
+   ],
+   [
+    "typescript-eslint/typescript-eslint",
+    "genuine",
+    7
+   ],
+   [
+    "vitejs/vite",
+    "flaky",
+    311
+   ],
+   [
+    "vitejs/vite",
+    "genuine",
+    143
+   ],
+   [
+    "vitest-dev/vitest",
+    "flaky",
+    38
+   ],
+   [
+    "vitest-dev/vitest",
+    "genuine",
+    105
+   ]
+  ],
+  "by_licence": [
+   [
+    "MIT",
+    945
+   ],
+   [
+    "Apache-2.0",
+    288
+   ]
+  ],
+  "by_rule": [
+   [
+    "flaky",
+    "rerun_pass_same_sha",
+    631
+   ],
+   [
+    "genuine",
+    "fix_commit_touches_file",
+    565
+   ],
+   [
+    "genuine",
+    "stack_file_fix",
+    37
+   ]
+  ],
+  "tags": {
+   "flaky": {
+    "fix:rerun": 631,
+    "kind:flaky": 631,
+    "fam:assertion": 391,
+    "rc:unspecified": 371,
+    "fam:timeout": 210,
+    "rc:timeout": 210,
+    "fam:code_error": 119,
+    "rc:resource_leak": 41,
+    "fam:fs_resource": 38,
+    "fam:snapshot": 24,
+    "rc:network": 13,
+    "fam:conn": 12,
+    "rc:platform": 12,
+    "rc:concurrency": 11,
+    "rc:async_wait": 5,
+    "fam:unhandled": 3,
+    "fam:killed": 1,
+    "fam:oom": 1,
+    "rc:time_date": 1
+   },
+   "genuine": {
+    "kind:genuine": 602,
+    "rc:unspecified": 382,
+    "fix:misc": 358,
+    "fam:assertion": 356,
+    "fix:test_only": 348,
+    "fix:source_change": 249,
+    "fam:snapshot": 138,
+    "fix:update_expected_value": 113,
+    "fam:code_error": 95,
+    "rc:timeout": 95,
+    "fam:timeout": 86,
+    "fix:change_condition": 76,
+    "rc:resource_leak": 68,
+    "fix:dependency_update": 48,
+    "fix:change_assertion": 42,
+    "fix:handle_exception": 38,
+    "rc:concurrency": 38,
+    "rc:platform": 32,
+    "fix:close_resource": 26,
+    "rc:randomness": 26,
+    "fam:fs_resource": 22,
+    "rc:async_wait": 19,
+    "fix:update_snapshot": 17,
+    "fix:mock_dependency": 14,
+    "fix:skip_test": 14,
+    "fix:add_wait": 13,
+    "fix:handle_timeout": 12,
+    "fam:conn": 8,
+    "rc:network": 8,
+    "fix:reset_variable": 7,
+    "rc:test_order_dependency": 7,
+    "rc:time_date": 7,
+    "fam:compile": 6,
+    "fam:module_missing": 5,
+    "fix:reorder_data": 4,
+    "fam:unhandled": 2,
+    "fam:oom": 1,
+    "fix:dynamic_port": 1
+   }
+  },
+  "totals": {
+   "cases": 1233,
+   "embedded": 1233,
+   "first": "2026-07-27 18:10:33+00:00",
+   "last": "2026-10-25 17:07:23+00:00"
+  }
+ }
+}

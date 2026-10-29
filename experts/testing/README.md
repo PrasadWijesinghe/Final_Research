@@ -2,7 +2,7 @@
 
 **In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear) with stub narrative text (P4.9) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.9 (partly)
+**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear) with stub narrative text (P4.9) and attaches the top 5 similar past cases from a knowledge base (P4.10) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.10 (partly)
 
 > **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
@@ -336,6 +336,54 @@ When a test job has failed, the worker decides whether the failure is a **real b
 2. `uv run --env-file .env python -m testing_expert.triage.train --out models/testing/triage/v1 --results experts/testing/reports/triage_v1.json` (about 5 minutes) runs the experiments and writes the bundle (`model.joblib`, `calibrator.joblib`, `features.json`, `floors.json`, `card.md`).
 
 **Limits.** Rule labels only (human kappa pending); the strongest signal is same-commit evidence, which is also how flaky labels are made, so part of its strength is agreement with the rules. Test history and pre-run risk added nothing. New repos need their own floor check. `EvidenceLine.source` has no value for history, same-commit or pre-run evidence (contract v1.1.0), so those lines use `log` with a prefix ("History: ", "Same commit: ", "Pre-run model: "); a proposal for the contract is in the report. Code: `src/testing_expert/triage/` (`evidence.py` plain-code evidence, `loader.py` database reads, `gather.py` shared by training and serving, `features.py`, `model.py`, `train.py`, `dataset.py`, `runtime.py`). Tests: `tests/test_triage_*.py`.
+
+## Knowledge base (P4.10)
+
+**What it is.** A table of past failures whose outcome we know, so the diagnosis can say "this looked like that one, and this is what fixed it". A **case** is one of two things: a *genuine* failure that a later commit fixed (a commit within 7 days touched the failing test file, or a file in its stack trace, and then the job passed), or a *flaky* failure (the same commit passed when run again; the "fix" is the re-run). Cases are stored as `VerifiedCase(origin="mined")` in `testing.kb_cases`. Nothing here uses an LLM.
+
+```mermaid
+flowchart LR
+    L[testing.labels + raw tables] --> M[mine: signature, fix summary, diff excerpt]
+    M --> T[tag: error family, root cause, fix category]
+    T --> D[(testing.kb_cases)]
+    D --> E[embed with granite, 384 numbers]
+    E --> D
+    F[failing job at diagnose time] --> Q[same text builder]
+    Q --> S[full-text rank + vector rank]
+    D --> S
+    S --> R[merge by RRF, top 5]
+    R --> G[Diagnosis.retrieved_cases]
+```
+
+**How a case is built** (`src/testing_expert/kb/`):
+1. `mine.py` picks labelled failures: genuine by `fix_commit_touches_file` (the fix commit is the one the label rule found), genuine streak rows by a second search for a commit touching a stack file (`stack_file_fix`), flaky by `rerun_pass_same_sha`. It reads the failing log, parses it (reusing the parsers and `signature()`), finds the passing run that proves the fix, and writes the case. The same failure in several matrix legs gives one case.
+2. The **fix summary** is extractive and deterministic: the commit's first paragraph (trailers and emails removed), the changed files, and a few changed lines. The **diff excerpt** keeps only changed lines of the failing test and stack files, at most 1,500 characters. Everything is sanitised with `shared.sanitise` before it is stored.
+3. `tags.py` adds tags from regexes in `config/test_kb.yaml`: `kind:`, `fam:` (error family, reused from `triage/evidence.py`), `rc:` (async_wait, concurrency, timeout, test_order_dependency, network, time_date, randomness, resource_leak, platform, or unspecified) and `fix:` (FlakyFix categories that make sense in JavaScript plus a few common JavaScript fixes; flaky cases get `fix:rerun`). Only small diffs (80 changed lines or fewer) are scanned for fix patterns.
+4. `store.py` writes the rows (a fixed id per case, so running again updates instead of duplicating) and embeds the ones that have no vector yet, 32 at a time, committing after each batch.
+
+**Retrieval** (`retrieve.py`). Two rankings, each the best 50: full text (`ts_rank` against an OR of the query's words) and vector (cosine distance). They are merged by reciprocal rank fusion and the top 5 are returned. Filters in SQL, always: a case must have been **known** (its fix or re-run passed) at the failure's finish time (no future leakage), and cases from the failure's own run or commit are left out (no self-retrieval). `permissive_only=True` also drops cases from non-permissive licences (list in `config/test_kb.yaml`), the switch for a commercial knowledge base (`docs/DATA.md` section 6); today every repo is MIT or Apache-2.0 so it removes nothing.
+
+**In the diagnosis.** `diagnose.py` calls `retrieve_for_failure` after triage and puts the top cases in `Diagnosis.retrieved_cases` (`similarity` is the fused score divided by its best possible value; `source_url` is the fix commit, or the passing run for a flaky case). The narrative text stays the stub until P4.11, so `remediation.cites_case_ids` is still empty. No database, an empty table or a missing embedding model never fails a diagnosis: it gets no cases, or full-text-only cases.
+
+**Run it** (database up, migrations applied with `make migrate-testing`, which now includes t0004):
+
+```
+uv sync --all-packages --extra embeddings                 # once: sentence-transformers and torch
+uv run --env-file .env python -m testing_expert.kb build  # mine + tag + embed, about 2.5 min; safe to repeat
+uv run --env-file .env python -m testing_expert.kb build --embed-only      # continue a stopped embedding
+uv run --env-file .env python -m testing_expert.kb search "TimeoutError: Exceeded timeout of 5000 ms"
+uv run --env-file .env python -m testing_expert.kb eval   # retrieval check, writes reports/kb_v1_metrics.json
+```
+
+**Expected:** `mined and stored 1233 cases`, `embedding: {"embedded": 1233, ...}`; a second run says `embedding 0 cases`. Results and the retrieval check are in `reports/kb_v1.md`.
+
+**The model.** `ibm-granite/granite-embedding-small-english-r2` (384 numbers), run locally. The first run downloads about 100 MB into the Hugging Face cache (`EMBEDDING_CACHE_DIR` moves it). If the download or load fails, `build` stops with the error; it never switches to the fake embedder (`EMBEDDING_PROVIDER=fake` is refused outside tests). Loading takes about 14 s once cached, one query about 14 ms.
+
+**Docker.** The worker image has no torch (it would add gigabytes), so inside Docker the worker finds cases by full text only; it logs a warning once and tries the model again after 5 minutes. For hybrid search in Docker, install the `embeddings` extra into the image and mount a cache folder, for example `./models/embeddings-cache:/home/expert/.cache/huggingface` with `EMBEDDING_CACHE_DIR` set; `models/` is already ignored by git. The worker also gets `config/` read-only (`TEST_KB_FILE`). `GET /health` on the API shows `kb_cases`, the number of cases in the table (0 when the database cannot be read).
+
+**Limits.** All labels and tags are rules, none checked by a human; about 60% of cases get `rc:unspecified`. The "fix" of a genuine case is the first commit that touched the failing test file, and may be unrelated to the failure. Retrieval finds the same failing test and error family well, but the failure text barely predicts the kind of fix (see the report), and the top 5 often come from one fix commit. `kb build` does not delete cases that stopped qualifying. Contract gaps (flaky cases have no `origin` value, no field for links) are listed in the report.
+
+`# DEFAULT:` choices are in `config/test_kb.yaml` (window, limits, licence list, retrieval sizes, tag patterns) and in `kb/*.py`: the primary-family precedence and the family-to-root-cause map in `tags.py`; the 5-minute vector retry in `retrieve.py`; the flaky-fix hint sentences in `mine.py`; the fixed case-id namespace in `mine.py`.
 
 ## Model v3: label fix, new calibration, monotone constraints (P4.7 v3)
 
