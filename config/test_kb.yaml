@@ -1,0 +1,119 @@
+# Settings for the Test expert's knowledge base (experts/testing/src/testing_expert/kb/, P4.10).
+# Override the location with TEST_KB_FILE. Every value is a team default (DEFAULT) that can change
+# without touching code. Regexes are case-insensitive and run on short, bounded text.
+
+# DEFAULT: SPDX ids treated as permissive. A case from any other licence (or an unknown one) is left
+# out when retrieval runs with `permissive_only` (docs/DATA.md section 6: non-permissive repos stay
+# out of a commercial knowledge base). The research prototype itself keeps every case.
+permissive_licences: [MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD, Unlicense, CC0-1.0, Zlib]
+
+mining:
+  # DEFAULT: 7 days, the window of docs/experts/test.md section 3 for "a later commit fixed it".
+  window_days: 7
+  # DEFAULT: at most 3 failing tests contribute to a case's signature.
+  max_signature_tests: 3
+  # DEFAULT: the fix diff excerpt keeps at most 1500 characters, from at most 3 files.
+  excerpt_chars: 1500
+  excerpt_files: 3
+  # DEFAULT: up to 4 changed lines go into the extractive fix summary, each cut at 110 characters.
+  summary_lines: 4
+  summary_line_chars: 110
+  # DEFAULT: the commit message is cut after its first paragraph and 240 characters.
+  message_chars: 240
+  # DEFAULT: a patch longer than this is not scanned (GitHub truncates large ones anyway).
+  max_patch_chars: 200000
+  # DEFAULT: the fix tags and the root-cause tags read from the diff only when the failing test and
+  # stack files changed by at most this many lines. A bigger diff is usually a new test or a
+  # feature, where `await` or `.close()` show up by chance, so only the scope tags are given.
+  tag_diff_max_lines: 80
+
+embedding:
+  # DEFAULT: the embedded text is cut at 1500 characters (about 400 tokens); the model accepts 8192
+  # tokens but a case's useful words come first, and CPU/MPS time grows with length.
+  max_chars: 1500
+  # DEFAULT: 32 texts per forward pass and per database commit (resume granularity).
+  batch_size: 32
+
+retrieval:
+  top_k: 5
+  # DEFAULT: each of the two searches keeps its best 50 candidates before fusion (as shared/embeddings).
+  candidates: 50
+  # DEFAULT: reciprocal rank fusion constant 60 (the original paper's value).
+  rrf_k: 60
+  # DEFAULT: at most 40 distinct words of the query go into the full-text search (long logs).
+  max_query_words: 40
+  # DEFAULT: the query text is cut at 1500 characters, like a case.
+  max_query_chars: 1500
+
+# --- Tagging rules (kb/tags.py). A tag is added when any pattern of the rule matches.
+# `log` patterns read the failure (messages, error types, test names, log tail). `diff` patterns read
+# the lines the fix commit ADDED or REMOVED in the failing test file and the stack files.
+# `diff_added` patterns read only added lines. The literature behind the root causes: Luo et al.
+# 2014 (async wait, concurrency, test order, network, time, randomness, resource leak, platform) and
+# FlakyFix (Fatima et al. 2024, 13 fix categories, built on Java; the ones that make sense for
+# JavaScript are mapped below, plus a few JavaScript fixes that are very common).
+tags:
+  root_cause:
+    # DEFAULT: names follow the task text; `rc:` prefix keeps tag families apart in one array.
+    async_wait:
+      log: ['cannot log after tests are done', 'did not exit|open handle', 'not awaited|unhandled ?(promise)? ?rejection', 'async callback was not invoked', 'timeout - async']
+      diff_added: ['waitFor\(', 'findBy\w+\(', 'flushPromises|nextTick|setImmediate', 'await new Promise', 'eventually\(', 'waitUntil']
+    concurrency:
+      log: ['\brace condition\b', '\bdeadlock\b', 'EADDRINUSE|address already in use', 'concurrent']
+      diff_added: ['Promise\.all', '\bmutex\b|\bsemaphore\b|\block\(', 'runInBand|maxWorkers|--serial|test\.serial|describe\.sequential|concurrency']
+    timeout:
+      log: ['exceeded timeout of \d+|timeout of \d+ ?ms exceeded', 'timed out', 'ETIMEDOUT|ESOCKETTIMEDOUT', 'TimeoutError']
+      diff: ['setTimeout\(\s*\d{3,}', 'jest\.setTimeout|this\.timeout\(|testTimeout|\btimeout\s*:\s*\d+', 'vi\.setConfig']
+    test_order_dependency:
+      log: ['order.dependen', 'leak(ed)? (state|between)', 'state (was )?(shared|polluted)']
+      diff_added: ['resetModules|clearAllMocks|resetAllMocks|restoreAllMocks|mockRestore|mockReset|mockClear', 'beforeEach\(|afterEach\(', 'isolateModules|jest\.isolate']
+    network:
+      log: ['ECONNRESET|ECONNREFUSED|ECONNABORTED|EPIPE', 'socket hang up', 'ENOTFOUND|EAI_AGAIN|getaddrinfo', 'fetch failed|ERR_NETWORK', 'bad gateway|service unavailable|gateway time-?out|rate limit|\b50[234]\b']
+      diff_added: ['\bnock\(|msw|setupServer|http\.createServer|mockServer|fetchMock|jest\.mock\([^)]*(axios|node-fetch|got|http)|vi\.mock\([^)]*(axios|node-fetch|got|http)']
+    time_date:
+      log: ['timezone|time zone|\bTZ\b', 'Invalid Date|\bDST\b|daylight']
+      diff: ['Date\.now|new Date\(|useFakeTimers|setSystemTime|advanceTimersByTime|toISOString|timezone|\bTZ\b|moment\(|dayjs\(|performance\.now']
+    randomness:
+      log: ['\brandom\b|\bseed\b|Math\.random']
+      diff: ['Math\.random|randomUUID|\buuid|crypto\.random|faker|\bseed\b|Random']
+    resource_leak:
+      log: ['heap out of memory|javascript heap|\bENOMEM\b|out of memory', '\bEMFILE\b|\bENFILE\b|\bEBUSY\b|\bENOSPC\b|\bENOTEMPTY\b', 'EADDRINUSE|address already in use', 'open handle|did not exit|leak']
+      diff_added: ['\.close\(\)|\.destroy\(\)|\.end\(\)|\.unref\(\)|\bdispose\(|\bkill\(', 'rmSync|rmdir|unlinkSync|rimraf|tmpdir|mkdtemp']
+    platform:
+      log: ['\bwin32\b|windows|\bmacos\b|darwin|\\r\\n|path separator|EOL', 'node(js)? (v|version) ?\d+', 'ERR_UNSUPPORTED_ESM|ERR_REQUIRE_ESM']
+      diff: ['process\.platform|os\.platform|path\.sep|os\.EOL|skipIf|runIf|win32|darwin|\bwindows\b|process\.version|semver']
+  fix:
+    # FlakyFix categories that map to JavaScript (names in snake_case, `fix:` prefix).
+    change_assertion:
+      note: "an assertion line was replaced by another assertion (matcher changed)"
+    change_condition:
+      diff: ['^\s*(\}\s*)?(else\s+)?if\s*\(']
+    reset_variable:
+      diff_added: ['resetModules|clearAllMocks|resetAllMocks|restoreAllMocks|mockRestore|mockReset|mockClear', 'afterEach\(|afterAll\(|beforeEach\(', '\.reset\(|\.clear\(\)|= (undefined|null);', 'delete process\.env']
+    reorder_data:
+      diff: ['\.sort\(|\.toSorted\(|arrayContaining|toContainEqual|sortBy|localeCompare']
+    handle_exception:
+      diff: ['\btry\s*\{|\bcatch\s*[\({]|\.catch\(|\.rejects\b|toThrow|assert\.throws|assert\.rejects']
+    handle_timeout:
+      diff: ['setTimeout\(\s*\d{3,}|jest\.setTimeout|this\.timeout\(|testTimeout|\btimeout\s*:\s*\d+|\bvi\.setConfig']
+    change_timezone:
+      diff: ['\bTZ\b|timeZone|timezone|setSystemTime']
+    # JavaScript fixes outside the 13 FlakyFix (Java) categories.
+    add_await:
+      note: "an existing statement gained `await` (found by pairing a removed line with an added line; kb/tags.py)"
+    add_wait:
+      diff_added: ['waitFor\(|findBy\w+\(|flushPromises|nextTick|setImmediate|await new Promise|waitUntil|eventually\(']
+    mock_dependency:
+      diff_added: ['jest\.mock|vi\.mock|jest\.spyOn|vi\.spyOn|sinon\.(stub|spy|fake)|\bnock\(|\bmsw\b|mockResolvedValue|mockReturnValue|mockImplementation|proxyquire']
+    fake_timers:
+      diff_added: ['useFakeTimers|advanceTimers|setSystemTime|runAllTimers|runOnlyPendingTimers|clock\.tick']
+    close_resource:
+      diff_added: ['\.close\(\)|\.destroy\(\)|\.end\(\)|\.unref\(\)|\bdispose\(|\bkill\(']
+    dynamic_port:
+      diff_added: ['listen\(\s*0|port:\s*0|getPort|get-port|findFreePort']
+    retry:
+      diff_added: ['retryTimes|\bretries\b|\bretry\b|this\.retries']
+    skip_test:
+      diff_added: ['\b(it|test|describe)\.(skip|todo|skipIf)\b|\bxit\(|\bxdescribe\(|\.skip\(']
+    update_snapshot:
+      diff: ['toMatchInlineSnapshot|toMatchSnapshot|\.snap\b|__snapshots__']

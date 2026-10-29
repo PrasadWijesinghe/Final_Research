@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from shared.contracts import CommitContext, ReviewDecision, RiskOutput
 
 from .config import EXPERT, MODEL_VERSION
+from .kb.retrieve import count_cases
 from .predict import predict
 from .serving import get_bundle, serve
 
@@ -58,8 +59,10 @@ def post_review(decision: ReviewDecision) -> Response:
 
 @app.get("/health")
 def get_health() -> Health:
-    """Liveness plus model version and knowledge-base size (kb_cases is 0 until a KB exists)."""
+    """Liveness plus model version and knowledge-base size (0 when the database cannot be read)."""
     bundle = get_bundle()
     return Health(
-        status="ok", model_version=bundle.version if bundle else MODEL_VERSION, kb_cases=0
+        status="ok",
+        model_version=bundle.version if bundle else MODEL_VERSION,
+        kb_cases=count_cases(),
     )
