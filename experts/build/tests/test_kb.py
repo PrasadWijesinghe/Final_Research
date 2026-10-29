@@ -113,3 +113,17 @@ def test_kb_load_search_and_count(engine: Engine) -> None:
     assert all("eslint" not in c.summary for c in tsc_only)
     lint = kb.search("eslint no-unused-vars 'helper' is defined but never used", k=3, kind="eslint")
     assert [c.summary.split(":")[0] for c in lint] == ["beta/ui"]
+
+
+def test_overlap_ignores_common_words() -> None:
+    from build_expert.rag.kb import overlap
+
+    assert overlap("tsc TS2307 Cannot find module", "tsc TS2307 cannot find module x") == 1.0
+    assert overlap("build_other failed error", "build_other failed error build") == 0.0
+    assert overlap("eslint no-unused-vars helper", "tsc TS2322 string number") == 0.0
+
+
+def test_only_the_fix_subject_line_is_kept() -> None:
+    row = {**FIXES[0], "fix_message": "fix types in api.ts\n\nlong review chatter"}
+    (case,) = cases_from_fix_candidates([row])
+    assert case.metadata["fix_message"] == "fix types in api.ts"

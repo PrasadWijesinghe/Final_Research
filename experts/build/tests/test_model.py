@@ -182,3 +182,27 @@ def test_cli_trains_and_writes_a_bundle(dataset: Path, tmp_path: Path) -> None:
     assert code == 0
     assert (tmp_path / "models" / "m1" / "y_build" / "model.txt").exists()
     assert train_main(["--dataset", str(tmp_path / "nope"), "--version", "m2"]) == 2
+
+
+def test_cv_folds_are_time_ordered_and_embargoed(dataset: Path) -> None:
+    from build_expert.model.train import cv_folds
+
+    data = load_dataset(dataset)
+    split = temporal_split(data.cutoff, data.completed, 0.7, 0.15)
+    folds = cv_folds(data, "y_build", split.train, TrainSettings())
+    assert len(folds) == 3
+    cut, done = data.cutoff[split.train], data.completed[split.train]
+    for fit_pos, val_pos in folds:
+        assert cut[fit_pos].max() <= cut[val_pos].min()
+        assert done[fit_pos].max() < cut[val_pos].min()  # labels known before validation starts
+    assert len(folds[0][0]) < len(folds[1][0]) < len(folds[2][0])  # expanding windows
+    assert cv_folds(data, "y_build", split.train, TrainSettings(cv_folds=1)) == []
+
+
+def test_seed_spread_and_rounds_source(trained) -> None:  # type: ignore[no-untyped-def]
+    _, result = trained
+    model = result.results["targets"]["y_build"]["model"]
+    assert model["rounds_from"] == "cv"
+    spread = model["seeds"]
+    assert spread["n"] == len(FAST.seeds) == 5
+    assert 0 <= spread["f1"]["sd"] < 0.2 and 0 < spread["f1"]["mean"] <= 1

@@ -126,6 +126,8 @@ _GITHUB_FOOTER = re.compile(
 # its end, when no line names a problem.
 SHORT_OUTPUT = 12
 FALLBACK_LINES = 3
+# Words inside paths ("src/errors/index.ts") are not problems.
+_PATHS = re.compile(r"\S*[/\\]\S*")
 
 
 def _fallback_evidence(failure: RoutedFailure, text: str) -> list[EvidenceLine]:
@@ -138,7 +140,7 @@ def _fallback_evidence(failure: RoutedFailure, text: str) -> list[EvidenceLine]:
     else:
         lines = [clean_line(ln).strip() for ln in (text or failure.log_excerpt).splitlines()]
     lines = [ln for ln in lines if ln and not _GITHUB_FOOTER.search(ln)]
-    problems = [ln for ln in lines if _PROBLEM.search(ln)]
+    problems = [ln for ln in lines if _PROBLEM.search(_PATHS.sub(" ", ln))]
     if problems:
         chosen = [problems[0]]
     elif lines:
@@ -257,9 +259,12 @@ def remediation(decision: LabelDecision, cases: list[RetrievedCase]) -> Remediat
     )
 
 
-def _query(decision: LabelDecision) -> str:
+def _query(decision: LabelDecision, evidence: list[EvidenceLine]) -> str:
+    """Kind, error codes and messages; without parsed errors, the cited log lines."""
     codes = " ".join(sorted({c for f in decision.findings for c in f.codes}))
     msgs = " ".join(loc.message for f in decision.findings for loc in f.locations[:5])
+    if not msgs:
+        msgs = " ".join(e.text for e in evidence)
     return f"{decision.sub_label or 'build'} {codes} {msgs}"[:2_000]
 
 
@@ -283,7 +288,7 @@ def diagnose(failure: RoutedFailure, kb: CaseSearch | None = None) -> Diagnosis:
     cases: list[RetrievedCase] = []
     if kb is not None:
         try:
-            cases = kb.search(_query(decision), CASES_K, kind=decision.sub_label)
+            cases = kb.search(_query(decision, evidence), CASES_K, kind=decision.sub_label)
         except Exception as exc:  # noqa: BLE001 - retrieval is optional; diagnose without it
             logger.warning("case retrieval failed", extra={"error": str(exc)})
     step = failure.failed_steps[0].name.removeprefix("Run ")

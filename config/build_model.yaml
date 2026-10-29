@@ -28,6 +28,16 @@ leave_one_repo_out:
 # H3 and the feature-group ablation: retrain without each group and compare on the test part.
 ablation_groups: [change, config, environment, history]
 
+rounds:
+  # The number of trees is chosen by time-ordered cross-validation inside the train part: expanding
+  # windows, each validated on the next slice. One small validation part alone made it noisy
+  # (11 trees on one run, 53 on another, from the same data).
+  cv_folds: 3
+
+# The main model is trained once per seed; the report gives each metric as mean +- sd over seeds,
+# so a lucky or unlucky run is visible. The first seed's model is the one exported.
+seeds: [1, 2, 3, 4, 5]
+
 # Below this many build failures in the train or validation part, a target is reported as too rare.
 min_positives: 5
 top_factors: 15
@@ -43,7 +53,6 @@ lightgbm:
   bagging_fraction: 0.8
   bagging_freq: 1
   lambda_l2: 1.0
-  seed: 42
   deterministic: true
   force_row_wise: true
   num_boost_round: 2000

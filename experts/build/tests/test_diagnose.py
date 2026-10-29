@@ -176,3 +176,18 @@ def test_unknown_tool_cites_the_scripts_own_message() -> None:
     assert len(texts) == 3 and texts[0].startswith("lint:framework-vocabulary: scope=")
     assert "1 new family/target-vocabulary line(s)" in texts[1]
     assert not any("ELIFECYCLE" in t or t.startswith(">") for t in texts)
+
+
+def test_words_inside_paths_are_not_problems() -> None:
+    from build_expert.diagnose import _fallback_evidence
+
+    text = (
+        "##[group]Run pnpm build\n##[endgroup]\n"
+        "entry: ./src/errors/index.ts, ./src/failures.ts\n"
+        "Cannot write output: disk quota\n"
+        "##[error]Process completed with exit code 1.\n"
+    )
+    failure = _failure("tsc_typecheck_fail.log", "Run pnpm build")
+    assert [e.text for e in _fallback_evidence(failure, text)] == [
+        "Cannot write output: disk quota"
+    ]

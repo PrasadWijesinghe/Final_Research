@@ -66,16 +66,31 @@ def _target_section(target: str, out: dict[str, Any], main: bool) -> list[str]:
     rows.append(
         _metric_row("**Model** (high-precision threshold, D03)", model["test"]["at_operating"])
     )
+    spread = model.get("seeds") or {}
+    several = spread.get("n", 0) > 1
+    if several:
+        cells = [
+            f"{spread[k]['mean']:.3f} ± {spread[k]['sd']:.3f}" if k in spread else "–"
+            for k in ("precision", "recall", "f1", "pr_auc", "roc_auc")
+        ]
+        rows.append([f"**Model**, mean ± sd over {spread['n']} seeds (best-F1)", *cells, "–"])
     lines += _table(METRIC_HEADER, rows)
     best_base = max((b["test"]["f1"] for b in out.get("baselines", {}).values()), default=0.0)
-    f1 = model["test"]["at_f1"]["f1"]
+    f1 = float(spread["f1"]["mean"]) if several and "f1" in spread else model["test"]["at_f1"]["f1"]
+    what = f"{f1:.3f} on average over {spread['n']} seeds" if several else f"{f1:.3f}"
     verdict = "higher than" if f1 > best_base else "not higher than"
     lines.append(
-        f"H1 check: the model's F1 ({f1:.3f}) is {verdict} the best baseline's ({best_base:.3f})."
+        f"H1 check: the model's F1 ({what}) is {verdict} the best baseline's ({best_base:.3f})."
+    )
+    how = (
+        "time-ordered cross-validation inside the train part"
+        if model.get("rounds_from") == "cv"
+        else "early stopping on the validation part"
     )
     lines.append(
-        f"The model uses {model['trees']} trees; thresholds (calibrated probability): best-F1 "
-        f"{model['threshold_f1']:.3f}, high-precision {model['threshold_operating']:.3f}."
+        f"The model uses {model['trees']} trees (chosen by {how}); thresholds (calibrated "
+        f"probability): best-F1 {model['threshold_f1']:.3f}, high-precision "
+        f"{model['threshold_operating']:.3f}."
     )
     lines.append("")
     if main and out.get("lead_time", {}).get("warnings"):
