@@ -62,9 +62,11 @@ def _target_section(target: str, out: dict[str, Any], main: bool) -> list[str]:
         lines += _table(METRIC_HEADER, rows)
         lines += [f"Model not trained: {model['skipped']}", ""]
         return lines
-    rows.append(_metric_row("**Model** (best-F1 threshold)", model["test"]["at_f1"]))
+    n_models = model.get("models", 1)
+    name = f"**Model**, average of {n_models} seeds" if n_models > 1 else "**Model**"
+    rows.append(_metric_row(f"{name} (best-F1 threshold)", model["test"]["at_f1"]))
     rows.append(
-        _metric_row("**Model** (high-precision threshold, D03)", model["test"]["at_operating"])
+        _metric_row(f"{name} (high-precision threshold, D03)", model["test"]["at_operating"])
     )
     spread = model.get("seeds") or {}
     several = spread.get("n", 0) > 1
@@ -73,23 +75,29 @@ def _target_section(target: str, out: dict[str, Any], main: bool) -> list[str]:
             f"{spread[k]['mean']:.3f} ± {spread[k]['sd']:.3f}" if k in spread else "–"
             for k in ("precision", "recall", "f1", "pr_auc", "roc_auc")
         ]
-        rows.append([f"**Model**, mean ± sd over {spread['n']} seeds (best-F1)", *cells, "–"])
+        rows.append([f"One model alone, mean ± sd over {spread['n']} seeds (best-F1)", *cells, "–"])
     lines += _table(METRIC_HEADER, rows)
     best_base = max((b["test"]["f1"] for b in out.get("baselines", {}).values()), default=0.0)
-    f1 = float(spread["f1"]["mean"]) if several and "f1" in spread else model["test"]["at_f1"]["f1"]
-    what = f"{f1:.3f} on average over {spread['n']} seeds" if several else f"{f1:.3f}"
+    f1 = model["test"]["at_f1"]["f1"]
     verdict = "higher than" if f1 > best_base else "not higher than"
+    alone = (
+        f" A single model scores {spread['f1']['mean']:.3f} ± {spread['f1']['sd']:.3f}."
+        if several and "f1" in spread
+        else ""
+    )
     lines.append(
-        f"H1 check: the model's F1 ({what}) is {verdict} the best baseline's ({best_base:.3f})."
+        f"H1 check: the model's F1 ({f1:.3f}) is {verdict} the best baseline's ({best_base:.3f})."
+        + alone
     )
     how = (
         "time-ordered cross-validation inside the train part"
         if model.get("rounds_from") == "cv"
         else "early stopping on the validation part"
     )
+    trees = model["trees"] if isinstance(model["trees"], list) else [model["trees"]]
     lines.append(
-        f"The model uses {model['trees']} trees (chosen by {how}); thresholds (calibrated "
-        f"probability): best-F1 {model['threshold_f1']:.3f}, high-precision "
+        f"Trees per model: {', '.join(str(t) for t in trees)} (chosen by {how}); thresholds "
+        f"(calibrated probability): best-F1 {model['threshold_f1']:.3f}, high-precision "
         f"{model['threshold_operating']:.3f}."
     )
     lines.append("")

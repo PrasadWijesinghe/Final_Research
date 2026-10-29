@@ -197,7 +197,7 @@ class BuildPredictor:
         x = self._vector(feats, self.main)
         probability = round(float(np.clip(self.main.probabilities(x)[0], 0.0, 1.0)), 4)
         threshold = round(self.threshold, 4)
-        contributions = np.asarray(self.main.booster.predict(x, pred_contrib=True))[0]
+        contributions = self.main.contributions(x)[0]
         alert = probability >= threshold
         factors = risk_factors(feats, self.main.features, contributions, need_one=alert)
         sub_risks = {

@@ -28,6 +28,7 @@ FAST = TrainSettings(
     num_boost_round=300,
     early_stopping_rounds=30,
     loro_min_positives=10,
+    seeds=(1, 2),
 )
 
 
@@ -180,7 +181,7 @@ def test_cli_trains_and_writes_a_bundle(dataset: Path, tmp_path: Path) -> None:
         ]
     )
     assert code == 0
-    assert (tmp_path / "models" / "m1" / "y_build" / "model.txt").exists()
+    assert (tmp_path / "models" / "m1" / "y_build" / "model_0.txt").exists()
     assert train_main(["--dataset", str(tmp_path / "nope"), "--version", "m2"]) == 2
 
 
@@ -204,5 +205,6 @@ def test_seed_spread_and_rounds_source(trained) -> None:  # type: ignore[no-unty
     model = result.results["targets"]["y_build"]["model"]
     assert model["rounds_from"] == "cv"
     spread = model["seeds"]
-    assert spread["n"] == len(FAST.seeds) == 5
+    assert spread["n"] == len(FAST.seeds) == 2
+    assert model["models"] == 2 and len(model["trees"]) == 2
     assert 0 <= spread["f1"]["sd"] < 0.2 and 0 < spread["f1"]["mean"] <= 1

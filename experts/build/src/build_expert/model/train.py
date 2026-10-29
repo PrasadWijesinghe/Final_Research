@@ -1,8 +1,11 @@
 """Gradient-boosted trees (LightGBM) for "will this commit's build fail?" (section 6).
 
-1. Train on the train part with class weights from the observed imbalance.
-2. Stop adding trees when PR-AUC on the validation part stops improving.
-3. Calibrate the scores on the validation part (isotonic regression), so 0.7 means about 70%.
+1. Train on the train part with class weights from the observed imbalance; the number of trees
+   comes from time-ordered cross-validation inside the train part.
+2. Do that once per seed and average the models' scores (an ensemble): one model alone moved
+   by +-0.06 F1 from seed to seed on the first real data.
+3. Calibrate the averaged scores on the validation part (isotonic regression), so 0.7 means about
+   70%.
 4. Choose two thresholds on the validation part: the best-F1 one (for comparing with the
    baselines, H1) and the high-precision operating one (D03).
 """
@@ -38,33 +41,44 @@ class TooFewPositives(ValueError):
 
 @dataclass
 class FittedModel:
-    """A trained booster with its calibration and thresholds."""
+    """One or more trained boosters (scores averaged) with calibration and thresholds."""
 
     target: str
-    booster: lgb.Booster
+    boosters: list[lgb.Booster]
+    trees: list[int]  # trees used per booster
     feature_names: tuple[str, ...]
     calibrator: IsotonicRegression
     threshold_f1: float  # on calibrated probabilities
     threshold_operating: float  # D03: high precision, on calibrated probabilities
     operating_reached_target: bool
-    best_iteration: int
     scale_pos_weight: float
     train_rows: int
     validation_rows: int
     rounds_from: str = "validation"  # "cv" (folds inside train) or "validation" (early stopping)
 
     def raw_scores(self, x: np.ndarray) -> np.ndarray:
-        """Uncalibrated scores (good for ranking: PR-AUC, ROC-AUC)."""
-        return np.asarray(self.booster.predict(x, num_iteration=self.best_iteration))
+        """Uncalibrated scores, averaged over the boosters (good for ranking: PR-AUC, ROC-AUC)."""
+        return np.mean(
+            [
+                np.asarray(b.predict(x, num_iteration=t))
+                for b, t in zip(self.boosters, self.trees, strict=True)
+            ],
+            axis=0,
+        )
 
     def probabilities(self, x: np.ndarray) -> np.ndarray:
         """Calibrated probability of a build failure."""
         return np.asarray(self.calibrator.predict(self.raw_scores(x)))
 
     def contributions(self, x: np.ndarray) -> np.ndarray:
-        """SHAP values per feature (log-odds units); the last column is the base value."""
-        return np.asarray(
-            self.booster.predict(x, num_iteration=self.best_iteration, pred_contrib=True)
+        """SHAP values per feature (log-odds units), averaged over the boosters; the last column
+        is the base value."""
+        return np.mean(
+            [
+                np.asarray(b.predict(x, num_iteration=t, pred_contrib=True))
+                for b, t in zip(self.boosters, self.trees, strict=True)
+            ],
+            axis=0,
         )
 
 
@@ -186,33 +200,97 @@ def fit_model(
         )
         best = int(booster.best_iteration or booster.current_iteration())
         rounds_from = "validation"
-    raw_val = np.asarray(booster.predict(x_val, num_iteration=best))
-    calibrator = IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0)
-    calibrator.fit(raw_val, y_val)
-    p_val = np.asarray(calibrator.predict(raw_val))
-    t_f1, _ = best_f1_threshold(y_val, p_val)
-    # DEFAULT: the operating threshold must catch at least `min_positives` validation failures.
-    t_op, reached = precision_threshold(
-        y_val, p_val, settings.target_precision, min_hits=settings.min_positives
-    )
     logger.info(
         "model fitted",
         extra={"target": target, "trees": best, "features": len(names), "train": len(train)},
     )
-    return FittedModel(
-        target=target,
-        booster=booster,
-        feature_names=tuple(names),
-        calibrator=calibrator,
-        threshold_f1=t_f1,
-        threshold_operating=t_op,
-        operating_reached_target=reached,
-        best_iteration=best,
+    return _calibrated(
+        target,
+        [booster],
+        [best],
+        tuple(names),
+        x_val,
+        y_val,
+        settings,
         scale_pos_weight=round(scale_pos_weight, 4),
         train_rows=len(train),
-        validation_rows=len(validation),
         rounds_from=rounds_from,
     )
+
+
+def _calibrated(
+    target: str,
+    boosters: list[lgb.Booster],
+    trees: list[int],
+    names: tuple[str, ...],
+    x_val: np.ndarray,
+    y_val: np.ndarray,
+    settings: TrainSettings,
+    *,
+    scale_pos_weight: float,
+    train_rows: int,
+    rounds_from: str,
+) -> FittedModel:
+    """Calibrate the (averaged) scores on validation and choose both thresholds there."""
+    model = FittedModel(
+        target=target,
+        boosters=boosters,
+        trees=trees,
+        feature_names=names,
+        calibrator=IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0),
+        threshold_f1=0.5,
+        threshold_operating=0.5,
+        operating_reached_target=False,
+        scale_pos_weight=scale_pos_weight,
+        train_rows=train_rows,
+        validation_rows=len(y_val),
+        rounds_from=rounds_from,
+    )
+    raw_val = model.raw_scores(x_val)
+    model.calibrator.fit(raw_val, y_val)
+    p_val = np.asarray(model.calibrator.predict(raw_val))
+    model.threshold_f1, _ = best_f1_threshold(y_val, p_val)
+    # DEFAULT: the operating threshold must catch at least `min_positives` validation failures.
+    model.threshold_operating, model.operating_reached_target = precision_threshold(
+        y_val, p_val, settings.target_precision, min_hits=settings.min_positives
+    )
+    return model
+
+
+def fit_ensemble(
+    data: TrainingData,
+    target: str,
+    train: np.ndarray,
+    validation: np.ndarray,
+    settings: TrainSettings,
+    *,
+    features: tuple[str, ...] | None = None,
+) -> tuple[FittedModel, list[FittedModel]]:
+    """One model per seed, then their average as one calibrated model.
+
+    Returns (the ensemble, the single models); the singles show how much one model varies.
+    """
+    singles = [
+        fit_model(data, target, train, validation, settings, features=features, seed=s)
+        for s in settings.seeds
+    ]
+    if len(singles) == 1:
+        return singles[0], singles
+    first = singles[0]
+    x_val = data.x[np.ix_(validation, data.feature_index(first.feature_names))]
+    ensemble = _calibrated(
+        target,
+        [b for m in singles for b in m.boosters],
+        [t for m in singles for t in m.trees],
+        first.feature_names,
+        x_val,
+        data.labels[target][validation],
+        settings,
+        scale_pos_weight=first.scale_pos_weight,
+        train_rows=first.train_rows,
+        rounds_from=first.rounds_from,
+    )
+    return ensemble, singles
 
 
 def matrix(data: TrainingData, rows: np.ndarray, model: FittedModel) -> np.ndarray:

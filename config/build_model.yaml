@@ -34,8 +34,8 @@ rounds:
   # (11 trees on one run, 53 on another, from the same data).
   cv_folds: 3
 
-# The main model is trained once per seed; the report gives each metric as mean +- sd over seeds,
-# so a lucky or unlucky run is visible. The first seed's model is the one exported.
+# Every model is trained once per seed and the seeds' scores are averaged (then calibrated). The
+# report also gives a single model's mean +- sd over the seeds, so the spread stays visible.
 seeds: [1, 2, 3, 4, 5]
 
 # Below this many build failures in the train or validation part, a target is reported as too rare.
