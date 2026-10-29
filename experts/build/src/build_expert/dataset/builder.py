@@ -356,6 +356,62 @@ JOB_SCHEMA = pa.schema(
         ("url", pa.string()),  # the job's page on GitHub
     ]
 )
+# The time-ordered outcomes behind the history features (group D), for serving: /predict loads
+# them so a new commit gets the same history features as in training (docs/experts/build.md 6).
+OUTCOME_SCHEMA = pa.schema(
+    [
+        ("repo", pa.string()),
+        ("sha", pa.string()),
+        ("branch", pa.string()),
+        ("author_hash", pa.string()),
+        ("completed_at", pa.timestamp("us", tz="UTC")),
+        ("is_default_branch", pa.bool_()),
+        ("build_failed", pa.bool_()),
+        ("sub_labels", pa.string()),  # comma-separated
+        ("any_failed", pa.bool_()),
+        ("dirs", pa.string()),  # JSON list
+        ("lint_warnings", pa.int64()),
+        ("type_errors", pa.int64()),
+    ]
+)
+
+
+def outcome_row(o: CommitOutcome) -> dict[str, Any]:
+    """One outcomes.parquet row."""
+    return {
+        "repo": o.repo,
+        "sha": o.sha,
+        "branch": o.branch,
+        "author_hash": o.author_hash,
+        "completed_at": o.completed_at,
+        "is_default_branch": o.is_default_branch,
+        "build_failed": o.build_failed,
+        "sub_labels": ",".join(sorted(o.sub_labels)),
+        "any_failed": o.any_failed,
+        "dirs": json.dumps(sorted(o.dirs)),
+        "lint_warnings": o.lint_warnings,
+        "type_errors": o.type_errors,
+    }
+
+
+def outcome_from_row(row: dict[str, Any]) -> CommitOutcome:
+    """Back from an outcomes.parquet row."""
+    return CommitOutcome(
+        repo=row["repo"],
+        sha=row["sha"],
+        branch=row["branch"],
+        author_hash=row["author_hash"],
+        completed_at=row["completed_at"],
+        is_default_branch=bool(row["is_default_branch"]),
+        build_failed=bool(row["build_failed"]),
+        sub_labels=frozenset(x for x in (row["sub_labels"] or "").split(",") if x),
+        any_failed=bool(row["any_failed"]),
+        dirs=frozenset(json.loads(row["dirs"] or "[]")),
+        lint_warnings=row["lint_warnings"],
+        type_errors=row["type_errors"],
+    )
+
+
 # DEFAULT: error locations and characters kept in `error_excerpt`.
 EXCERPT_LOCATIONS = 3
 EXCERPT_CHARS = 600
@@ -480,15 +536,21 @@ def build_dataset(
     out_dir.mkdir(parents=True, exist_ok=True)
     rows_path, fixes_path = out_dir / "rows.parquet", out_dir / "fix_candidates.parquet"
     jobs_path = out_dir / "job_decisions.parquet"
+    outcomes_path = out_dir / "outcomes.parquet"
     _write_parquet(rows, rows_schema(), rows_path)
     _write_parquet(fixes, FIX_SCHEMA, fixes_path)
     _write_parquet(decision_rows, JOB_SCHEMA, jobs_path)
+    _write_parquet(
+        [outcome_row(p.outcome) for p in pending if p.outcome is not None],
+        OUTCOME_SCHEMA,
+        outcomes_path,
+    )
     summary.rows, summary.fix_candidates = len(rows), len(fixes)
     summary.positives = sum(r["y_build"] for r in rows)
     manifest = _manifest(settings, summary, rows, all_labels, clock(), repo_root, repo_info)
     manifest["files"] = {
         p.name: {"sha256": _sha256(p), "bytes": p.stat().st_size}
-        for p in (rows_path, fixes_path, jobs_path)
+        for p in (rows_path, fixes_path, jobs_path, outcomes_path)
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     logger.info(
@@ -648,6 +710,7 @@ def _manifest(
             "rows": summary.rows_per_repo.get(name, 0),
             "y_build": sum(r["y_build"] for r in rows if r["repo"] == name),
             "licence": info.licence,
+            "default_branch": info.default_branch,
         }
         for name, info in sorted(repos.items())
     }

@@ -180,6 +180,7 @@ Datasets are frozen: an existing version folder is never overwritten.
 | `rows.parquet` | One row per commit: ids (repo, SHA, branch, event, PR, author hash, cut-off, run ids, licence), labels, and the 99 features |
 | `fix_candidates.parquet` | Mined fix cases for the knowledge base: a build failure followed on the same branch within 7 days by a fully green commit, with the error codes and locations, the fix commit's message and changed files, and which error files the fix touched |
 | `job_decisions.parquet` | One row per failed job the rules looked at (all attempts): job and failed step, the decision, rule, sub-label, confidence, up to three error locations, and the job's GitHub link. Input for the manual label check (`build-label-check`) |
+| `outcomes.parquet` | Each commit's known outcome (finish time, build failed, kinds, warning counts): the history `/predict` uses for group D |
 | `manifest.json` | Build time, git commit, window, cut-off range, rows per repo, label counts, job labels by rule, skipped commits by reason, rule and parser versions, the feature list by group, and the SHA-256 of each file |
 
 ### 5.4 Label columns
@@ -215,12 +216,21 @@ Not built yet: the code-embedding variant. The plan as written before:
   on `last_lint_warnings` / `last_type_errors`.
 - Export to `models/build/vN/` like the Test expert.
 
-## 7. Explanations (plan)
+## 7. Explanations
+
+Built: `/predict` takes LightGBM's own TreeSHAP values for the commit and turns the largest
+positive ones into `RiskFactor`s (`serving.py`); features with a zero, "no" or missing value are
+not shown. The report lists the top factors over the test part. The plan as written before:
 
 SHAP TreeExplainer on the tree model. Each top factor becomes a `RiskFactor` with the template
 from `features/descriptions.yaml`, phrased as a risk factor, never as a cause.
 
-## 8. Diagnosis (plan)
+## 8. Diagnosis
+
+Built (`diagnose.py`, `rag/`): full log from shared storage, same parsers and rules, `misrouted`
+with a suggested category for declined jobs, `BuildDetails` with locations, evidence lines,
+kind-matched hybrid retrieval over `build.kb_cases` (`build-kb`), written root cause and steps,
+optional LLM rewrite through the gateway (`BUILD_LLM=on`). The plan as written before:
 
 The worker receives a `RoutedFailure`, runs the same log parsers, and fills `BuildDetails`
 (`tool`, error `locations`). Retrieval runs over the `fix_candidates` (after review) and later

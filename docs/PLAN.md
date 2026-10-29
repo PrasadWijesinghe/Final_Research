@@ -118,10 +118,10 @@ Design: `docs/experts/build.md`.
   *Accept:* in-memory and Postgres builds give identical rows; no look-ahead test; frozen versions.
 - [x] **B7 Baselines** per §6 (last outcome; warning/error threshold rule).
 - [ ] **B8 Model training:** GBT and code-embedding variant, temporal and leave-one-repo-out validation, calibration, threshold, export. GBT part done (`build-train`, 28 Oct): splits, calibration, thresholds, ablation, SHAP summary, report, export; code-embedding variant pending.
-- [ ] **B9 SHAP explanations** into `RiskFactor`s.
-- [ ] **B10 Knowledge base** from reviewed fix candidates (`build.kb_cases`).
-- [ ] **B11 Diagnosis worker** with `BuildDetails`, citations and misrouted handling.
-- [ ] **B12 Swap the stub** for the real expert, keeping the stub tests green.
+- [x] **B9 SHAP explanations** into `RiskFactor`s (28 Oct).
+- [ ] **B10 Knowledge base** from reviewed fix candidates (`build.kb_cases`). Built and loaded from mined candidates (`build-kb`, 28 Oct); the human review of the cases is pending.
+- [x] **B11 Diagnosis worker** with `BuildDetails`, citations and misrouted handling (28 Oct; LLM rewrite optional, off until a provider is chosen).
+- [x] **B12 Swap the stub** for the real expert, keeping the stub tests green (28 Oct: the stub still answers when no model bundle is configured).
 
 ## Phase 5 — Evaluation
 
