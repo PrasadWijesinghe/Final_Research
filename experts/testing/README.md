@@ -2,7 +2,7 @@
 
 **In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear) with stub narrative text (P4.9) and attaches the top 5 similar past cases from a knowledge base (P4.10) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.10 (partly)
+**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear, P4.9), attaches up to 5 similar past cases from a knowledge base (P4.10) and writes the root cause and remediation through the LLM gateway, or from a template when no real model is available (P4.11; only the mock gateway provider exists so far) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.11 (partly)
 
 > **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
@@ -381,9 +381,68 @@ uv run --env-file .env python -m testing_expert.kb eval   # retrieval check, wri
 
 **Docker.** The worker image has no torch (it would add gigabytes), so inside Docker the worker finds cases by full text only; it logs a warning once and tries the model again after 5 minutes. For hybrid search in Docker, install the `embeddings` extra into the image and mount a cache folder, for example `./models/embeddings-cache:/home/expert/.cache/huggingface` with `EMBEDDING_CACHE_DIR` set; `models/` is already ignored by git. The worker also gets `config/` read-only (`TEST_KB_FILE`). `GET /health` on the API shows `kb_cases`, the number of cases in the table (0 when the database cannot be read).
 
-**Limits.** All labels and tags are rules, none checked by a human; about 60% of cases get `rc:unspecified`. The "fix" of a genuine case is the first commit that touched the failing test file, and may be unrelated to the failure. Retrieval finds the same failing test and error family well, but the failure text barely predicts the kind of fix (see the report), and the top 5 often come from one fix commit. `kb build` does not delete cases that stopped qualifying. Contract gaps (flaky cases have no `origin` value, no field for links) are listed in the report.
+**Limits.** All labels and tags are rules, none checked by a human; about 60% of cases get `rc:unspecified`. The "fix" of a genuine case is the first commit that touched the failing test file, and may be unrelated to the failure. Retrieval finds the same failing test and error family well, but the failure text barely predicts the kind of fix (see the report), and the plain top 5 often came from one fix commit (the diagnosis path now keeps one case per fix commit, P4.11). `kb build` does not delete cases that stopped qualifying. Contract gaps (flaky cases have no `origin` value, no field for links) are listed in the report.
 
 `# DEFAULT:` choices are in `config/test_kb.yaml` (window, limits, licence list, retrieval sizes, tag patterns) and in `kb/*.py`: the primary-family precedence and the family-to-root-cause map in `tags.py`; the 5-minute vector retry in `retrieve.py`; the flaky-fix hint sentences in `mine.py`; the fixed case-id namespace in `mine.py`.
+
+## Diagnosis (P4.11)
+
+**What it does.** After triage says whether a failure looks genuine or flaky, the worker writes the
+human part of the diagnosis: a root cause in plain words and a remediation (what to do next). It
+asks a language model through the shared LLM gateway, with a fixed prompt and a fixed JSON answer
+shape. If the model cannot be used for any reason, a small template writes the same fields from the
+triage result and the best past case, so a diagnosis always comes back. The verdict, confidence,
+evidence and `BehaviourDetails` always come from triage and never from the model.
+
+```mermaid
+flowchart TD
+    F[RoutedFailure] --> L{Jest, Mocha or Vitest failure in the log?}
+    L -- no --> P{matches dependency, build or infra patterns?}
+    P -- yes --> M[status misrouted + suggested category]
+    P -- no --> Q{model agrees it is not a test failure?}
+    Q -- yes --> M
+    Q -- no --> S[stub diagnosis]
+    L -- yes --> T[triage: verdict, evidence, overlap]
+    T --> K[knowledge base: best cases, one per fix commit]
+    K --> R[prompt rag/prompts/diagnose.md, cleaned and sanitised]
+    R --> G{gateway answers with a real model?}
+    G -- yes --> C[drop cited ids that were not retrieved]
+    G -- "no: down, 429, 502, timeout, unset, or mock" --> D[template text, llm_model empty or marked placeholder]
+    C --> X[Diagnosis]
+    D --> X
+```
+
+**Steps**
+1. `triage/` gives the verdict and evidence lines. `kb/retrieve.py` fetches the 25 best cases and keeps one per fix commit (before this, the top 5 were often five cases of the same fix), then the top 5.
+2. `rag/prompt.py` fills `rag/prompts/diagnose.md`: the cleaned excerpt of the failing tests (names, error message, assertion diff, project stack frames; at most 3,000 characters), the triage verdict, confidence and evidence lines, the stack-versus-diff overlap and the cases (id, failure summary, fix summary, tags). Everything that came from a log or a case is run through the shared secret sanitiser, stripped of control characters, cut to a fixed size and wrapped in `<data>` tags that the prompt says are data, not instructions. If the sanitiser cannot run, no prompt is sent.
+3. `rag/gateway.py` sends it to `${LLM_GATEWAY_URL}/complete` with a 20 second timeout and no retry. The reply must match the JSON schema (`rag/prompt.py`, `REPLY_SCHEMA`) or the gateway answers 502.
+4. `diagnose.py` maps the reply: `root_cause`, `remediation` (summary, steps, optional `suggested_patch`), `llm_model` (the model name the gateway reports), `prompt_version`, `latency_ms`. The remediation may cite only the retrieved case ids: any other id is removed, a warning is logged and a "Diagnosis note" evidence line says how many were removed. Citing nothing is allowed. The confidence is the lower of the triage confidence and the model's own.
+5. A log with no Jest, Mocha or Vitest failure is not a test failure. If it matches dependency, build or infra patterns (`config/test_diagnosis.yaml`) the answer is `status="misrouted"` with `suggested_category`, without asking the model. If it matches nothing, the model is asked and must say it is misrouted with a category; otherwise the old stub is returned. A test failure that also prints `npm ERR!` afterwards is never called misrouted.
+
+**Reply schema.** `root_cause` (text, at most 900), `remediation` {`summary` (at most 400), `steps` (at most 6), optional `suggested_patch`}, `cited_case_ids` (list of text), `misrouted` (true or false), optional `suggested_category` (`dependency`, `build`, `infra`, `other`, `unknown`), `confidence` (0 to 1).
+
+**When the model cannot be used.** The template (`rag/template.py`) writes the text and the diagnosis stays valid:
+- Gateway URL unset, gateway unreachable, timeout, HTTP 429 (monthly cap), 502 (invalid answer twice), any other error, or an answer that cannot be mapped: `llm_model` and `prompt_version` are empty.
+- Gateway running the **mock provider**: its answers are placeholders ("mock"), so they are never shown. The template text is used and `llm_model` reads `mock-1 (placeholder answers, text from template)`; `prompt_version` is still set because a prompt was sent.
+- In every case one evidence line starting `Diagnosis note:` says why (the contract has no notes field).
+- The template: a lead sentence for the verdict, the first failing test and its error family, up to two triage reasons that point the same way, and a remediation with steps. It quotes the fix of the best past case (a flaky case for a flaky verdict) only when the retrieval similarity is at least 0.6, and cites only that id.
+
+**prompt_version.** The git object hash of `rag/prompts/diagnose.md` (the value `git hash-object` prints), first 12 characters. It is computed in Python from the file bytes, so it is the same inside Docker, where there is no `.git` and no git program. It changes whenever the prompt text changes. If the file's exact bytes differ from the committed ones (for example edited and not committed), the version still follows the bytes on disk.
+
+**Example (mock gateway, typeorm failure).** Root cause: "Likely a real defect in this change, not flakiness. The failing test "query builder > soft-delete > ..." failed. This commit changed the failing test file ..."; remediation summary: "Read the failing assertion and the changed code it points to, then fix the code, or update the test if the new behaviour is intended."; one step quotes the closest past case and `cites_case_ids` holds its id; `llm_model` is `mock-1 (placeholder answers, text from template)`.
+
+**Run it.**
+```
+# gateway by hand (no compose service yet), mock provider:
+LLM_PROVIDER=mock uv run --env-file .env uvicorn llm_gateway.api:app --port 8200
+# worker or one failure, pointing at it:
+LLM_GATEWAY_URL=http://127.0.0.1:8200 uv run --env-file .env python -m testing_expert.worker
+```
+In Docker, set `EXPERT_LLM_GATEWAY_URL` (for example `http://host.docker.internal:8200`) before `make up-experts`; empty means template text only.
+
+**Switching to a real model later.** Three things are missing, all outside this component: (1) a provider class in `services/llm_gateway/src/llm_gateway/providers.py` that calls the chosen vendor and is returned by `get_provider` for a new `LLM_PROVIDER` value; (2) set `LLM_PROVIDER` to that value; (3) put the key in `LLM_API_KEY` (`.env` only), plus real prices for the model in `config/llm.yaml`. Nothing in this expert changes: any model name that does not start with `mock` is treated as real. Until then the real-model path is tested only with a fake gateway, and the prompt has never been tried on a real model (wording, schema strictness and length are untested).
+
+**Limits and `# DEFAULT:` choices.** `config/test_diagnosis.yaml` (all first guesses): timeout 20 s; excerpt 3,000 characters, 3 tests, 5 frames, 5 cases; template similarity floor 0.6; misroute patterns and minimum score 2.0. In code: pattern confidence for a misrouted answer is score / 6 capped at 0.9; model and triage confidence are combined with `min`; at most 12 evidence lines before the note; log scan limited to its last 200,000 characters. Known gaps: the model's `misrouted` flag is ignored when the log does contain a test failure; a failure with no triage bundle still gets the stub; the diagnosis note lives in evidence because the contract has no notes field; "closest past case" can still be a weak match (the KB report shows failure text barely predicts the fix kind); no human has rated the text.
 
 ## Model v3: label fix, new calibration, monotone constraints (P4.7 v3)
 
@@ -476,7 +535,7 @@ Three changes on top of v4, each decided without looking at the test slice:
 
 ## Limitations and known issues
 
-- The diagnosis worker triages real failures (P4.9) but its narrative text is still the stub (P4.11); with no triage bundle it is the full stub. Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
+- The diagnosis worker triages real failures (P4.9) and writes the narrative through the LLM gateway (P4.11), which today is the mock provider, so the text comes from the template; with no triage bundle it is the full stub (misrouted logs are still recognised). Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
 - The test-job heuristic is simple on purpose. It can give false matches. A command like `npm install --save-dev jest` counts as a test job, because the bare word `jest` matches. It can also miss test runners it does not list. The real model replaces it.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: the heuristic above is the definition of a test job.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: every job in one commit gets the same stub probability.
