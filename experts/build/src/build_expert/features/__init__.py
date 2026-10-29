@@ -31,6 +31,7 @@ __all__ = [
     "CommitOutcome",
     "HistoryIndex",
     "commit_features",
+    "full_features",
     "history_for",
     "module_dirs",
 ]
@@ -65,3 +66,23 @@ def history_for(
         dirs=dirs,
         default_branch=default_branch,
     )
+
+
+def full_features(
+    ctx: CommitContext, index: HistoryIndex, *, default_branch: str | None
+) -> dict[str, object]:
+    """All four groups for one commit, exactly as the dataset builder computes them; history
+    uses only outcomes finished before `ctx.history_cutoff`. Used by /predict."""
+    feats = commit_features(ctx, default_branch=default_branch)
+    hist = history_for(
+        index,
+        repo=ctx.repo.full_name,
+        cutoff=ctx.history_cutoff,
+        branch=ctx.branch,
+        author_hash=ctx.author_hash,
+        dirs=module_dirs(ctx.changed_files),
+        default_branch=default_branch,
+    )
+    for name, value in hist.items():
+        feats.setdefault(name, value)
+    return feats

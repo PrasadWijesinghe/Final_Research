@@ -195,7 +195,10 @@ def _leave_one_repo_out(data: TrainingData, target: str, settings: TrainSettings
     return {"repos": repos, "summary": summary}
 
 
-def _sub_targets(data: TrainingData, split: Split, settings: TrainSettings) -> dict[str, Any]:
+def _sub_targets(
+    data: TrainingData, split: Split, settings: TrainSettings, models: dict[str, FittedModel]
+) -> dict[str, Any]:
+    """Train each sub-risk model; fitted ones are added to `models` for export."""
     out: dict[str, Any] = {}
     for target in settings.sub_targets:
         try:
@@ -203,6 +206,7 @@ def _sub_targets(data: TrainingData, split: Split, settings: TrainSettings) -> d
         except TooFewPositives as exc:
             out[target] = {"skipped": str(exc)}
             continue
+        models[target] = model
         out[target] = {
             "trees": model.best_iteration,
             "test": _model_metrics(model, data, split.test, target)["at_f1"],
@@ -280,7 +284,7 @@ def run_training(
     if loro:
         results["leave_one_repo_out"] = _leave_one_repo_out(data, main, settings)
     if sub_targets and settings.sub_targets:
-        results["sub_targets"] = _sub_targets(data, split, settings)
+        results["sub_targets"] = _sub_targets(data, split, settings, result.models)
     cov = results["dataset"]["coverage"]
     if cov["last_lint_warnings"] < 0.2:
         results["notes"].append(

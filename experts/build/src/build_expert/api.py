@@ -8,8 +8,9 @@ from pydantic import BaseModel
 
 from shared.contracts import CommitContext, ReviewDecision, RiskOutput
 
-from .config import EXPERT, MODEL_VERSION
-from .predict import predict
+from .config import EXPERT
+from .predict import current_model_version, predict
+from .rag.kb import default_kb
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ def post_predict(
     context: CommitContext,
     x_deadline_ms: Annotated[str | None, Header()] = None,
 ) -> list[RiskOutput]:
-    """Risk outputs for a commit. The stub answers instantly, so the deadline is only logged."""
+    """Risk outputs for a commit. Scoring takes milliseconds, so the deadline is only logged."""
     return predict(context, deadline_ms=_parse_deadline(x_deadline_ms))
 
 
@@ -57,5 +58,8 @@ def post_review(decision: ReviewDecision) -> Response:
 
 @app.get("/health")
 def get_health() -> Health:
-    """Liveness plus model version and knowledge-base size (kb_cases is 0 until a KB exists)."""
-    return Health(status="ok", model_version=MODEL_VERSION, kb_cases=0)
+    """Liveness plus model version and knowledge-base size (0 when no KB is reachable)."""
+    kb = default_kb()
+    return Health(
+        status="ok", model_version=current_model_version(), kb_cases=kb.count() if kb else 0
+    )

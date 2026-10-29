@@ -138,6 +138,9 @@ def test_export_round_trip_and_frozen_versions(trained, tmp_path: Path) -> None:
         "report.md",
         "y_build",
         "y_build_confident",
+        "y_tsc",
+        "y_lint",
+        "y_bundler",
     }
     loaded = LoadedModel(out / "y_build")
     fitted = result.models["y_build"]
