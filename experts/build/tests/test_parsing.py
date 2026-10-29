@@ -23,6 +23,15 @@ def _log(name: str) -> str:
         ("eslint_fail.log", "pnpm run lint", "eslint", 4, 1, {"eqeqeq": 1, "no-console": 1}),
         ("eslint_max_warnings.log", "npm run lint:ci", "eslint", 0, 2, {"no-console": 2}),
         ("prettier_fail.log", "npm run format:check", "prettier", 2, 0, {"unformatted_file": 2}),
+        # Real CI log (langchainjs, 30 Sep 2026): oxfmt, the oxc formatter.
+        (
+            "oxfmt_check_fail.log",
+            "pnpm run format:check",
+            "prettier",
+            1,
+            0,
+            {"unformatted_file": 1},
+        ),
         ("vite_build_fail.log", "npm run build", "bundler", 1, 0, {"unresolved_import": 1}),
         ("webpack_build_fail.log", "npm run build:wp", "bundler", 1, 0, {"unresolved_import": 1}),
         ("esbuild_fail.log", "npx esbuild", "bundler", 1, 0, {"unresolved_import": 1}),
@@ -184,3 +193,17 @@ def test_huge_lint_output_keeps_counts_but_caps_locations() -> None:
     (f,) = parse_tools(lines)
     assert f.warnings == 500 and f.codes["no-console"] == 500
     assert len(f.locations) == MAX_LOCATIONS
+
+
+def test_oxfmt_file_is_located() -> None:
+    f = parse_job_log(_log("oxfmt_check_fail.log")).failed_steps[0].findings[0]
+    assert f.locations[0].path == (
+        "libs/providers/langchain-openai/src/converters/tests/responses.test.ts"
+    )
+
+
+def test_custom_lint_script_has_no_known_tool() -> None:
+    # Real CI log (prisma, 18 Sep 2026): a repo-specific lint script, not ESLint.
+    failed = parse_job_log(_log("custom_lint_script_fail.log")).failed_steps
+    assert failed[0].title == "pnpm lint:framework-vocabulary"
+    assert failed[0].findings == []

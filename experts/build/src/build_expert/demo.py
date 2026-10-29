@@ -179,6 +179,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     p.add_argument("--out", type=Path, help="folder for build_demo.md/json (default: the model)")
     args = p.parse_args(argv)
     data_dir = args.data_dir or Path(os.environ.get("DATA_DIR") or REPO_ROOT / "data")
+    os.environ["DATA_DIR"] = str(data_dir)  # the diagnosis reads full logs from here
     folder = Path(args.dataset)
     if not folder.is_dir():
         folder = data_dir / "datasets" / "build" / args.dataset

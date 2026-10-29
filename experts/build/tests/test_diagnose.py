@@ -61,6 +61,7 @@ def _no_llm(monkeypatch: pytest.MonkeyPatch) -> None:
         ("eslint_fail.log", "Run pnpm run lint", "eslint"),
         ("vite_build_fail.log", "Run pnpm run build", "bundler"),
         ("prettier_fail.log", "Run pnpm run format:check", "other"),
+        ("oxfmt_check_fail.log", "Run pnpm run format:check", "other"),
     ],
 )
 def test_build_failures_are_diagnosed(log: str, step: str, tool: str) -> None:
@@ -165,3 +166,13 @@ def test_llm_problems_keep_the_written_diagnosis(
         d = diagnose(_failure("tsc_typecheck_fail.log", "Run pnpm run typecheck"), kb=FakeKb())
     assert d.status == "diagnosed" and d.llm_model is None
     assert d.root_cause is not None and "TypeScript" in d.root_cause
+
+
+def test_unknown_tool_cites_the_scripts_own_message() -> None:
+    d = diagnose(_failure("custom_lint_script_fail.log", "Run pnpm lint:framework-vocabulary"))
+    assert d.status == "diagnosed"
+    assert d.root_cause is not None and "`pnpm lint:framework-vocabulary`" in d.root_cause
+    texts = [e.text for e in d.evidence]
+    assert len(texts) == 3 and texts[0].startswith("lint:framework-vocabulary: scope=")
+    assert "1 new family/target-vocabulary line(s)" in texts[1]
+    assert not any("ELIFECYCLE" in t or t.startswith(">") for t in texts)

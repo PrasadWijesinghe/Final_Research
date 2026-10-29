@@ -8,7 +8,7 @@ from .clean import split_sections
 from .tools import Finding, find_hints, parse_tools
 
 # DEFAULT: bump when parsing changes in a way that changes labels; datasets record it.
-PARSER_VERSION = "1"
+PARSER_VERSION = "2"  # 2: oxfmt output (28 Oct 2026)
 
 
 @dataclass

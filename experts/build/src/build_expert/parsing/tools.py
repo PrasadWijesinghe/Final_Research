@@ -56,6 +56,10 @@ _PRETTIER_FILE = re.compile(r"^\[warn\] (?P<path>\S.*)$")
 _PRETTIER_ERROR = re.compile(
     r"^\[error\] (?P<path>[^:\s][^:]*): (?P<msg>.*?)(?: \((?P<line>\d+):(?P<col>\d+)\))?$"
 )
+# oxfmt (the oxc formatter) prints each unformatted file with its time, then a summary
+# (real output: langchainjs, `oxfmt --check .`); counted as a format failure like Prettier.
+_OXFMT_SUMMARY = re.compile(r"^Format issues found in (?:the )?above (?P<n>\d+) files?\b")
+_OXFMT_FILE = re.compile(r"^(?P<path>[^\s\[>][^\s]*\.[A-Za-z0-9]+) \(\d+(?:\.\d+)?\s?m?s\)$")
 
 # --- Bundlers --------------------------------------------------------------------------------
 _VITE_FAILED = re.compile(r"^(?:error during build:|✗ Build failed in \S+)")
@@ -244,12 +248,20 @@ def _parse_eslint(lines: list[str]) -> Finding | None:
 
 
 def _parse_prettier(lines: list[str]) -> Finding | None:
-    started = any(_PRETTIER_START.match(x) or _PRETTIER_SUMMARY.match(x) for x in lines)
+    oxfmt = any(_OXFMT_SUMMARY.match(x) for x in lines)
+    started = oxfmt or any(_PRETTIER_START.match(x) or _PRETTIER_SUMMARY.match(x) for x in lines)
     if not started:
         return None
     finding: Finding | None = None
     for i, line in enumerate(lines):
-        if _PRETTIER_SUMMARY.match(line):
+        if oxfmt and (o := _OXFMT_FILE.match(line)):
+            finding = finding or Finding(tool="prettier", first_line=i)
+            finding.errors += 1
+            finding.codes["unformatted_file"] += 1
+            path = repo_relative(o.group("path"))
+            _keep(finding, Location(path, None, None, "unformatted_file", "not formatted"))
+            continue
+        if _PRETTIER_SUMMARY.match(line) or _OXFMT_SUMMARY.match(line):
             finding = finding or Finding(tool="prettier", first_line=i)
             continue
         e = _PRETTIER_ERROR.match(line)

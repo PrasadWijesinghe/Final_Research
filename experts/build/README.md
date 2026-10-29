@@ -128,7 +128,8 @@ A pull request adds `import { missingHelper } from './helpers'` to `src/api.ts` 
 
 ## Limitations and known issues
 
-- The log fixtures are real output of TypeScript 5, ESLint 9, Prettier 3, Vite 6, webpack 5, esbuild, Vitest 3 and npm, wrapped in GitHub Actions log framing by hand (see `tests/fixtures/logs/README.md`). Add sanitised logs from the first backfill.
+- The log fixtures are real output of TypeScript 5, ESLint 9, Prettier 3, Vite 6, webpack 5, esbuild, Vitest 3 and npm, wrapped in GitHub Actions log framing by hand, plus two real CI logs from the first backfill (oxfmt; a repo-specific lint script). See `tests/fixtures/logs/README.md`.
+- Repo-specific checks (for example prisma's `lint:framework-vocabulary`) match no known tool: they are labelled `build_other` (rule `build_step_no_signature`), and the diagnosis cites the script's own message lines.
 - Biome, oxlint, stylelint, Rollup CLI and Next.js have patterns but no real fixture yet. Failures from those tools that the parsers miss still get `build_step_no_signature` when the step is a build step.
 - History features only see commits inside the loaded data, so the first weeks of a collection have thin history.
 - Rebuilding each commit by replay runs a few Postgres queries per commit; a large repo takes minutes. History for 15,000 commits in one repo took about 25 s in a timing test.

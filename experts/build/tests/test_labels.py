@@ -43,6 +43,7 @@ def _signals(name: str):  # type: ignore[no-untyped-def]
         ("eslint_fail.log", "Run pnpm run lint", "eslint", "eslint"),
         ("eslint_max_warnings.log", "Run npm run lint:ci", "eslint", "eslint"),
         ("prettier_fail.log", "Run npm run format:check", "format", "other"),
+        ("oxfmt_check_fail.log", "Run pnpm run format:check", "format", "other"),
         ("vite_build_fail.log", "Run npm run build", "bundler", "bundler"),
         ("webpack_build_fail.log", "Run npm run build:wp", "bundler", "bundler"),
         ("esbuild_fail.log", "Run npx esbuild src/main.js --bundle", "bundler", "bundler"),
@@ -164,3 +165,13 @@ def test_failure_label_contract() -> None:
 )
 def test_is_build_command(text: str | None, expected: bool) -> None:
     assert is_build_command(text) is expected
+
+
+def test_custom_lint_script_is_a_build_failure_without_signature() -> None:
+    d = decide(_job("Run pnpm lint:framework-vocabulary"), _signals("custom_lint_script_fail.log"))
+    assert d.claimed
+    assert (d.rule_name, d.sub_label, d.confidence) == (
+        "build_step_no_signature",
+        "build_other",
+        "medium",
+    )
