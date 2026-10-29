@@ -52,6 +52,9 @@ SAMPLE_FAILED_RUNS = 12
 # about 2 days (GitHub deletes one day of history every day).
 MIN_BUILD_FAILURES = 50
 MAX_PASS1_CALLS = 24_000
+# DEFAULT: failed-job logs are downloaded inside pass 1, so a repo whose failed logs alone take
+# more than 10 hours in one lane holds up the whole backfill.
+MAX_FAILED_LOG_HOURS = 10.0
 # DEFAULT: measured in the Test member's real backfill (handover, 25 Oct 2026): pass 1 costs about
 # 1.6 REST calls per run, and one log download takes about 2.3 s in one lane. Log downloads did
 # not appear to count against the REST limit.
@@ -102,9 +105,13 @@ class ScreenReport:
         if self.failed_90d is None:
             return None
         if self.sample_failed:
-            return round(self.failed_90d * self.sample_build_failed / self.sample_failed)
-        share = self.build_run_share
-        return None if share is None else round(self.failed_90d * share)
+            failures = round(self.failed_90d * self.sample_build_failed / self.sample_failed)
+        elif self.build_run_share is not None:
+            failures = round(self.failed_90d * self.build_run_share)
+        else:
+            return None
+        runs = self.est_build_runs
+        return failures if runs is None else min(failures, runs)  # never more than the runs
 
     @property
     def build_share(self) -> float | None:
@@ -139,8 +146,16 @@ class ScreenReport:
         """keep / too quiet / expensive / check by hand."""
         if self.error:
             return "check by hand"
-        builds, calls = self.est_build_failures, self.est_pass1_calls
-        if self.counts_capped or (calls is not None and calls > MAX_PASS1_CALLS):
+        # Only the build workflows' runs are collected, so a busy repo can still be cheap. With
+        # capped counts the estimates are minimums: "expensive" stays right, "keep" is a guess.
+        builds, calls, logs = (
+            self.est_build_failures,
+            self.est_pass1_calls,
+            self.est_failed_log_hours,
+        )
+        if (calls is not None and calls > MAX_PASS1_CALLS) or (
+            logs is not None and logs > MAX_FAILED_LOG_HOURS
+        ):
             return "expensive"
         if builds is None or calls is None:
             return "check by hand"
@@ -278,7 +293,7 @@ def report_cells(r: ScreenReport) -> list[str]:
     if r.licence_github and r.licence_github != r.licence_config:
         notes.append(f"licence differs: GitHub says {r.licence_github}")
     if r.counts_capped:
-        notes.append("GitHub stopped counting at 2,500 in a week: very busy")
+        notes.append("GitHub stopped counting at 2,500 in a week: the numbers are minimums")
     if r.sample_runs and not r.sample_build_runs:
         notes.append("no recent runs in build workflows")
     if r.error:
@@ -314,8 +329,10 @@ def render_markdown(reports: Sequence[ScreenReport], today: date) -> str:
         "formats or type-checks. Pass 1 hours = `backfill --logs failed` with one token "
         f"({CALLS_PER_RUN} calls per run); failed-log hours = downloading the failed-job logs in "
         f"one lane ({SECONDS_PER_LOG} s per log).",
-        f"Suggestion: keep at {MIN_BUILD_FAILURES}+ estimated build failures and at most "
-        f"{MAX_PASS1_CALLS:,} calls ({MAX_PASS1_CALLS / CALLS_PER_HOUR:.1f} hours) for pass 1.",
+        f"Suggestion: keep at {MIN_BUILD_FAILURES}+ estimated build failures, at most "
+        f"{MAX_PASS1_CALLS:,} calls ({MAX_PASS1_CALLS / CALLS_PER_HOUR:.1f} hours) for pass 1 and "
+        f"at most {MAX_FAILED_LOG_HOURS:.0f} hours of failed-log downloads. Build share comes from "
+        "failed step names only: a repo that runs lint, types and tests in one step can show 0%.",
         "",
         "| " + " | ".join(COLUMNS) + " |",
         "|" + "|".join("---" for _ in COLUMNS) + "|",

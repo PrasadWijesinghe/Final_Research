@@ -32,9 +32,14 @@ files, `package.json` scripts, licence file and default-branch history were read
 | A mix of libraries, apps/monorepos and bundler-heavy repos | Each group fails in different ways (types and lint; everything at once; bundling) |
 
 The static screen could not see real CI runs: the session that built this list had no GitHub
-API access to other people's repos. **Before the first backfill, run the build screen**
-(2.4), which counts real failures and estimates cost, and trim the list. pnpm and nuxt are
-already reserves: the Test member's real collection found about 30,000 runs each in 90 days.
+API access to other people's repos, so the build screen (2.4) was run with a real token on
+27 Oct 2026 and the list trimmed to **11 repos** with about 12,000 estimated build failures in
+90 days (prisma, nx, langchainjs, opentelemetry-js, backstage, freeCodeCamp, payload,
+bluesky social-app, shadcn/ui, vite, docusaurus). Pass 1 for them takes about 21 hours of API
+time plus about 24 hours of failed-log downloads in one lane. vercel/ai has the most build
+failures but more than 20 hours of failed logs, so it waits until the first backfill is done;
+eight repos whose sampled failures were all tests are reserves; pnpm and nuxt are reserves
+because of their very busy CI. The numbers per repo are in `config/repos/build.yaml`.
 
 ### 2.2 Which workflows count (`config/workflow_detection.yaml`, member `build`)
 
@@ -75,7 +80,8 @@ For each repo it counts 90-day runs and failures in 7-day windows (the hardened 
 re-run check), works out from the newest 300 runs which share are build workflows, opens up to 12
 failed build-workflow runs to see which step failed, and estimates: build failures in 90 days,
 pass 1 hours and failed-log download hours. The suggestion column says `keep` (50+ estimated
-build failures and pass 1 under about 5 hours), `too quiet` or `expensive`. About 30 to 45 REST
+build failures, pass 1 under about 5 hours and failed logs under 10 hours), `too quiet` or
+`expensive`. About 30 to 45 REST
 calls per repo. Report: `data/reports/build_screen-<date>.md`.
 
 ## 3. Labels

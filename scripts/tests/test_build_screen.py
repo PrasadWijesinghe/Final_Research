@@ -147,7 +147,7 @@ def test_capped_counts_are_shown_as_at_least() -> None:
     cells = dict(zip(build_screen.COLUMNS, build_screen.report_cells(r), strict=True))
     assert r.counts_capped
     assert cells["runs 90d (all)"].startswith("≥")
-    assert "very busy" in cells["notes"]
+    assert "minimums" in cells["notes"]
 
 
 def test_missing_repo_is_recorded_not_raised() -> None:
@@ -188,3 +188,38 @@ def test_main_writes_markdown_and_csv(tmp_path: Path) -> None:
 def test_main_needs_a_token(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.delenv("GITHUB_TOKEN", raising=False)
     assert build_screen.main(["--out-dir", str(tmp_path)]) == 2
+
+
+def _report(**kw: Any) -> build_screen.ScreenReport:
+    base: dict[str, Any] = {
+        "full_name": "acme/web",
+        "enabled": True,
+        "licence_config": "MIT",
+        "runs_90d": 30_000,
+        "failed_90d": 3_000,
+        "counts_capped": True,
+        "sample_runs": 300,
+        "sample_build_runs": 6,
+        "sample_failed": 30,
+        "sample_build_failed": 20,
+        "opened_failed_runs": 6,
+        "opened_build_failures": 6,
+        "failed_jobs_per_failed_run": 1.0,
+    }
+    base.update(kw)
+    return build_screen.ScreenReport(**base)
+
+
+def test_busy_repo_with_few_build_runs_is_kept() -> None:
+    # 30,000+ runs, but only 2% are build-workflow runs: pass 1 is cheap (the bluesky case).
+    r = _report()
+    assert r.est_build_runs == 600
+    assert r.est_build_workflow_failures == 600  # 2,000 by the failure share, capped at the runs
+    assert r.suggestion == "keep"
+
+
+def test_long_failed_log_downloads_are_expensive() -> None:
+    # Few runs, but many failed jobs per failed run: the failed logs alone take > 10 hours.
+    r = _report(counts_capped=False, sample_build_runs=60, failed_jobs_per_failed_run=12.0)
+    assert r.est_failed_log_hours is not None and r.est_failed_log_hours > 10
+    assert r.suggestion == "expensive"
