@@ -166,3 +166,5 @@ entry that references it rather than editing history.
 | O5 | Choose and buy the LLM provider key | Team |
 | O6 | Update the proposal text: no VPS and budget, 30 s → 10 s, AI-use disclosure, F1 target mismatch, Haben et al. figures, 9- vs 12-month timeline, scrambled sentences in 1.1.2 | Member 3 |
 | O7 | Tune defaults once data exists: thresholds, router margin, triage confidence floor | Each owner |
+| O8 | Build: run `scripts/build_screen.py` with a real token, trim `config/repos/build.yaml`, then start the backfill | Member 2 |
+| O9 | Build: GHALogs (C2 proposal §3.2) as extra history, or not? The team design collects its own data | Member 2 + supervisor |

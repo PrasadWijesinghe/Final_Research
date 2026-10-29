@@ -1,0 +1,28 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - name: Type check
+        run: pnpm -r --parallel typecheck
+      - name: Lint
+        run: pnpm turbo run lint --filter=./packages/*
+      - run: npx prettier --check .
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          pnpm --filter @acme/web exec vite build
+          npx tsc -b tsconfig.build.json

@@ -62,7 +62,7 @@ def test_on_key_parsed_as_true_is_handled() -> None:
     assert detect_relevant_workflow(text, "test").relevant is True
 
 
-@pytest.mark.parametrize("member", ["dependency", "build", "infra"])
+@pytest.mark.parametrize("member", ["dependency", "infra"])
 def test_other_members_keep_all_workflows(member: str) -> None:
     result = detect("neg_release.yml", member)
     assert result.relevant is True

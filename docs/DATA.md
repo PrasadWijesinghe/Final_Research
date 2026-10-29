@@ -54,7 +54,7 @@ uv run collector status --member test        # what's collected, gaps, rate limi
 
 - **Every run attempt** in the member's selected workflows, **stored as its own row**. A re-run is a new row, not an update.
 - **Every job and step** of each attempt.
-- **Logs:** all **failed** jobs, plus **passing jobs in the member's category workflows** (for the Test expert, passing test jobs too, to get per-test history).
+- **Logs:** all **failed** jobs, plus **passing jobs in the member's category workflows** (for the Test expert, passing test jobs too, to get per-test history). The Build member collects with `--logs failed` for `backfill` and `daily` and fetches passing logs with `fill-logs` as time allows (D42).
 - **Commit diffs** for each distinct `head_sha`.
 - **Config file contents** at each `head_sha`, for the paths tagged in §5 (cached by sha + path).
 
