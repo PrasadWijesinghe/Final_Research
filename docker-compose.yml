@@ -151,6 +151,13 @@ services:
       # vector retrieval build the image with sentence-transformers and mount a model cache (see
       # experts/testing/README.md, "Knowledge base").
       TEST_KB_FILE: /app/config/test_kb.yaml
+      # DEFAULT (P4.11): the diagnosis step calls the LLM gateway only when EXPERT_LLM_GATEWAY_URL
+      # is set (the gateway has no compose service yet; on a Mac run it by hand and use
+      # http://host.docker.internal:8200). Empty means the no-LLM template text. The sanitiser
+      # needs its pattern file, or the prompt cannot be built (then the template is used).
+      LLM_GATEWAY_URL: "${EXPERT_LLM_GATEWAY_URL:-}"
+      TEST_DIAGNOSIS_FILE: /app/config/test_diagnosis.yaml
+      SANITISE_PATTERNS_FILE: /app/config/sanitise_patterns.yaml
     volumes:
       - ./models:/models:ro
       - ./config:/app/config:ro

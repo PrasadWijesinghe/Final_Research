@@ -400,7 +400,9 @@ def test_hits_become_retrieved_cases_on_the_diagnosis(
         d.retrieved_cases[0].fix_summary == "fix"
         and d.retrieved_cases[0].source_url == "https://x/1"
     )
-    assert d.remediation is not None and d.remediation.cites_case_ids == []  # narrative is P4.11
+    assert d.remediation is not None and d.remediation.cites_case_ids == [
+        "case-1"
+    ]  # template cites it (P4.11)
 
 
 def test_retrieval_errors_never_break_the_diagnosis(
@@ -489,3 +491,44 @@ def test_health_count_is_zero_without_a_database(monkeypatch: pytest.MonkeyPatch
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.setattr(retrieve, "_count_cache", (-1e9, 0))
     assert retrieve.count_cases() == 0
+
+
+# --- diverse retrieval (P4.11) --------------------------------------------------------------------
+
+
+def _hit_of(case_id: str, repo: str = "o/r", fix: str | None = None) -> Hit:
+    h = _hit()
+    from dataclasses import replace
+
+    return replace(h, case_id=case_id, repo=repo, case={"fix_commit_sha": fix} if fix else {})
+
+
+def test_dedupe_keeps_the_best_case_per_fix_commit() -> None:
+    from testing_expert.kb.retrieve import dedupe_by_fix_commit
+
+    hits = [
+        _hit_of("a1", fix="F1"), _hit_of("a2", fix="F1"), _hit_of("b1", fix="F2"),
+        _hit_of("a3", fix="F1"), _hit_of("c1"), _hit_of("c2"), _hit_of("d1", "o/other", fix="F1"),
+    ]  # fmt: skip
+    kept = [h.case_id for h in dedupe_by_fix_commit(hits, 1, 5)]
+    assert kept == ["a1", "b1", "c1", "c2", "d1"]  # no fix commit: its own group; repos apart
+    assert [h.case_id for h in dedupe_by_fix_commit(hits, 2, 3)] == ["a1", "a2", "b1"]
+
+
+def test_diagnose_retrieval_fetches_a_wider_pool_then_dedupes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from testing_expert.kb import retrieve as rt
+
+    seen: list[int | None] = []
+    pool = [_hit_of(f"x{i}", fix="SAME") for i in range(6)] + [_hit_of("y", fix="OTHER")]
+
+    def fake(*args: Any) -> list[Hit]:
+        seen.append(args[-1])
+        return pool if args[-1] else pool[:5]
+
+    monkeypatch.setattr(rt, "_retrieve", fake)
+    got = rt.retrieve_for_failure(None, None)  # type: ignore[arg-type]
+    assert [h.case_id for h in got] == ["x0", "y"] and seen == [25]
+    plain = rt.retrieve_for_failure(None, None, diverse=False)  # type: ignore[arg-type]
+    assert len(plain) == 5 and seen == [25, None]

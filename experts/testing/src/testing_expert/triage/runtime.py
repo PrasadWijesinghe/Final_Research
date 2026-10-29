@@ -111,7 +111,7 @@ def _connect() -> psycopg.Connection[Any] | None:
     return psycopg.connect(url.replace("+psycopg", ""), connect_timeout=3) if url else None
 
 
-def _log_text(failure: RoutedFailure) -> str:
+def log_text(failure: RoutedFailure) -> str:
     """The full sanitised log when it can be read from DATA_DIR, else the router's excerpt."""
     root = os.environ.get("DATA_DIR")
     if root:
@@ -147,7 +147,7 @@ limit 1""",
 def collect(failure: RoutedFailure, conn: loader.Conn | None) -> TriageEvidence | None:
     """Evidence for a live failure; None when the log shows no test-runner failure."""
     repo = f"{failure.repo.owner}/{failure.repo.name}"
-    log: LogEvidence = read_log(_log_text(failure), repo)
+    log: LogEvidence = read_log(log_text(failure), repo)
     if not log.is_test_failure:
         return None
     cutoff: datetime = failure.routed_at

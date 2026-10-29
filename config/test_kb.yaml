@@ -44,6 +44,10 @@ retrieval:
   max_query_words: 40
   # DEFAULT: the query text is cut at 1500 characters, like a case.
   max_query_chars: 1500
+  # DEFAULT (P4.11): the diagnosis path fetches the best 25 cases and keeps one per fix commit, then
+  # the top 5 of those, because the plain top 5 were often five cases of one fix commit.
+  diverse_pool: 25
+  max_per_fix_commit: 1
 
 # --- Tagging rules (kb/tags.py). A tag is added when any pattern of the rule matches.
 # `log` patterns read the failure (messages, error types, test names, log tail). `diff` patterns read

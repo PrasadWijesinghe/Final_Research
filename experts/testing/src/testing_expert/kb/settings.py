@@ -52,6 +52,8 @@ class KbSettings:
     embed_batch_size: int = 32
     top_k: int = 5
     candidates: int = 50
+    diverse_pool: int = 25
+    max_per_fix_commit: int = 1
     rrf_k: int = 60
     max_query_words: int = 40
     max_query_chars: int = 1500
@@ -102,6 +104,8 @@ def parse_config(raw: dict[str, Any]) -> KbSettings:
         embed_batch_size=int(e.get("batch_size", 32)),
         top_k=int(r.get("top_k", 5)),
         candidates=int(r.get("candidates", 50)),
+        diverse_pool=int(r.get("diverse_pool", 25)),
+        max_per_fix_commit=int(r.get("max_per_fix_commit", 1)),
         rrf_k=int(r.get("rrf_k", 60)),
         max_query_words=int(r.get("max_query_words", 40)),
         max_query_chars=int(r.get("max_query_chars", 1500)),

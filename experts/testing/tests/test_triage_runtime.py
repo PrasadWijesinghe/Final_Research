@@ -57,11 +57,13 @@ def test_no_bundle_means_the_stub_answers() -> None:
     assert d.root_cause == diag.STUB_ROOT_CAUSE and len(d.evidence) == 1
 
 
-def test_non_test_log_keeps_the_stub(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_non_test_log_with_no_known_pattern_keeps_the_stub(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     use_bundle(tiny_bundle(tmp_path / "v1", (0.9, 0.5)), monkeypatch)
-    d = diag.diagnose(failure("npm ERR! code ERESOLVE\nnpm ERR! Found: react@18.2.0\n"))
-    assert d.root_cause == diag.STUB_ROOT_CAUSE
-    assert d.evidence[0].text == "npm ERR! Found: react@18.2.0"
+    d = diag.diagnose(failure("something odd happened\nthe step stopped\n"))
+    assert d.status == "diagnosed" and d.root_cause == diag.STUB_ROOT_CAUSE
+    assert d.evidence[0].text == "the step stopped"
 
 
 def test_triaged_diagnosis_is_valid_and_carries_evidence(
@@ -76,8 +78,9 @@ def test_triaged_diagnosis_is_valid_and_carries_evidence(
     assert d.confidence == d.details.verdict_confidence
     assert len(d.evidence) >= 2 and all(e.text for e in d.evidence)
     assert any("assertion" in e.text.lower() for e in d.evidence)
-    assert d.root_cause is not None and diag.STUB_ROOT_CAUSE in d.root_cause  # narrative is a stub
-    assert d.remediation is not None and d.remediation.summary == diag.STUB_REMEDIATION
+    assert d.root_cause is not None and diag.STUB_ROOT_CAUSE not in d.root_cause  # P4.11 template
+    assert d.remediation is not None and d.remediation.summary != diag.STUB_REMEDIATION
+    assert d.llm_model is None and d.prompt_version is None  # no gateway in this test
 
 
 @pytest.mark.parametrize(
@@ -95,7 +98,8 @@ def test_rerun_is_suggested_only_for_a_flaky_verdict(
     d = diag.diagnose(failure())
     assert isinstance(d.details, BehaviourDetails)
     assert (d.details.verdict, d.details.suggest_rerun) == (verdict, rerun)
-    assert bool(d.remediation and d.remediation.steps) is rerun
+    assert d.remediation is not None
+    assert any("Re-run the failed job" in step for step in d.remediation.steps) is rerun
 
 
 def test_database_errors_degrade_to_log_only_triage(
@@ -124,8 +128,8 @@ def test_full_log_is_read_only_from_inside_data_dir(
     (tmp_path / "logs" / "a.log").write_text(LOG)
     monkeypatch.setenv("DATA_DIR", str(tmp_path))
     f = failure("short")
-    assert "FAIL" in runtime._log_text(f.model_copy(update={"log_ref": "logs/a.log"}))
-    assert runtime._log_text(f.model_copy(update={"log_ref": "../etc/passwd"})) == "short"
+    assert "FAIL" in runtime.log_text(f.model_copy(update={"log_ref": "logs/a.log"}))
+    assert runtime.log_text(f.model_copy(update={"log_ref": "../etc/passwd"})) == "short"
 
 
 # --- the two bundle families must not be confused ---------------------------------------------
