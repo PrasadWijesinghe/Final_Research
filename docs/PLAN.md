@@ -94,8 +94,8 @@ Design: `docs/experts/test.md`.
 - [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Datasets v2 to v4 built 2026-10-29; not frozen, awaiting kappa round.*
 - [ ] **P4.6 Baselines** per §5. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
 - [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Models v2 to v6 built 2026-10-29 (v4 served; v5 and v6 candidates, not better); awaiting kappa round.*
-- [ ] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`.
-- [ ] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor.
+- [x] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`. *Done 2026-10-29: `explain.py`; the v4 genuine and flaky boosters' contributions are weighted by their share of the combined risk.*
+- [x] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor. *Done 2026-10-29: `triage/`, bundle `models/testing/triage/v1`, `reports/triage_v1.md`, wired into the diagnose path (narrative text still the stub, P4.11). Same-SHA evidence is the strongest signal and is partly circular with the rule labels; human kappa round still pending; weak transfer to unseen repos (see the report).*
 - [ ] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`.
 - [ ] **P4.11 Diagnosis worker:** prompt file, gateway call, `BehaviourDetails`, citation rules, misrouted handling.
 - [ ] **P4.12 Swap the stub** for the real expert, keeping the stub tests green.

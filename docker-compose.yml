@@ -139,7 +139,15 @@ services:
     profiles: ["experts", "e2e"]
     # DEFAULT: BACKEND_URL stays empty (stub behaviour) unless EXPERT_BACKEND_URL is set; `make e2e`
     # sets it to http://api:8000 so the worker posts its diagnosis to the backend.
-    environment: { <<: *expert-env, BACKEND_URL: "${EXPERT_BACKEND_URL:-}" }
+    # DEFAULT (P4.9): the triage bundle (models/testing/triage/v<N>) is mounted read-only like the
+    # pre-push bundles; without it the worker answers with the stub. The full log folder is not
+    # mounted, so triage reads the router's log excerpt.
+    environment:
+      <<: *expert-env
+      BACKEND_URL: "${EXPERT_BACKEND_URL:-}"
+      TESTING_TRIAGE_BUNDLE: /models/testing/triage
+    volumes:
+      - ./models:/models:ro
     image: pipelineiq-expert-testing
     command: ["python", "-m", "testing_expert.worker"]
     depends_on: { redis: { condition: service_healthy }, testing-api: { condition: service_started } }
