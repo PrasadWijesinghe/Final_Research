@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "vitejs/vite",
+  "job_id": 94017927800,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 920,
+    "failed": 1,
+    "skipped": 3,
+    "total": 924,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "bundleConfigFile > resolves the inline sourcemap source to the absolute config path for a nested config"
+  ],
+  "failed_files": [
+    "packages/vite/src/node/__tests__/config-bundle-sourcemap.spec.ts"
+  ],
+  "first_error_type": "AssertionError",
+  "first_project_path": "packages/vite/src/node/__tests__/config-bundle-sourcemap.spec.ts",
+  "note": "Windows: the summary rows, the FAIL line and the error text are interleaved."
+}

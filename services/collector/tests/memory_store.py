@@ -9,7 +9,7 @@ from dataclasses import asdict
 from datetime import UTC, date, datetime
 from typing import Any
 
-from collector.policy import LOG_CONCLUSIONS
+from collector.policy import FAILED_CONCLUSIONS, LOG_CONCLUSIONS, PASSED_CONCLUSIONS
 from collector.store import (
     CommitFileRecord,
     CommitRecord,
@@ -17,6 +17,7 @@ from collector.store import (
     LogRecord,
     PendingLog,
     RepoCounts,
+    RepoQuality,
     RepoRecord,
     RunRecord,
     SkippedRunRecord,
@@ -152,8 +153,11 @@ class MemoryStore:
     def upsert_log(self, log: LogRecord) -> None:
         self._put("logs", log)
 
-    def _pending(self, repo_id: int) -> list[tuple[Any, JobRecord]]:
+    def _pending(self, repo_id: int, failed_runs_only: bool = False) -> list[tuple[Any, JobRecord]]:
         runs = {k: r for k, r in self.tables["workflow_runs"].items() if r.repo_id == repo_id}
+        failed_run_ids = {
+            j.run_id for j in self.tables["jobs"].values() if j.conclusion in FAILED_CONCLUSIONS
+        }
         out = []
         for job in self.tables["jobs"].values():
             run = runs.get((job.run_id, job.attempt))
@@ -162,13 +166,20 @@ class MemoryStore:
                 and job.status == "completed"
                 and job.conclusion in LOG_CONCLUSIONS
                 and (job.job_id,) not in self.tables["logs"]
+                and not (
+                    failed_runs_only
+                    and job.conclusion in PASSED_CONCLUSIONS
+                    and job.run_id not in failed_run_ids
+                )
             ):
                 out.append((run, job))
         return out
 
-    def pending_logs(self, repo_id: int, limit: int | None) -> list[PendingLog]:
+    def pending_logs(
+        self, repo_id: int, limit: int | None, *, failed_runs_only: bool = False
+    ) -> list[PendingLog]:
         found = sorted(
-            self._pending(repo_id),
+            self._pending(repo_id, failed_runs_only),
             key=lambda rj: (
                 rj[0].created_at is not None,
                 rj[0].created_at or datetime.min.replace(tzinfo=UTC),
@@ -180,6 +191,14 @@ class MemoryStore:
         )
         rows = [PendingLog(j.job_id, j.run_id, j.attempt) for _, j in found]
         return rows if limit is None else rows[:limit]
+
+    def job_names(self, run_id: int, attempt: int) -> list[tuple[int, str | None]]:
+        rows = [
+            (j.job_id, j.name)
+            for j in self.tables["jobs"].values()
+            if j.run_id == run_id and j.attempt == attempt
+        ]
+        return sorted(rows, key=lambda r: r[0])
 
     def add_skipped_run(self, skipped: SkippedRunRecord) -> None:
         self._put("skipped_runs", skipped)
@@ -230,4 +249,29 @@ class MemoryStore:
                 for r in self.tables["workflow_runs"].values()
                 if r.repo_id == repo_id and r.created_at is not None
             }
+        )
+
+    def repo_quality(self, repo_id: int) -> RepoQuality:
+        runs = [r for r in self.tables["workflow_runs"].values() if r.repo_id == repo_id]
+        keys = {(r.run_id, r.attempt) for r in runs}
+        jobs = [j for j in self.tables["jobs"].values() if (j.run_id, j.attempt) in keys]
+        by_conclusion: dict[str | None, int] = {}
+        for job in jobs:
+            by_conclusion[job.conclusion] = by_conclusion.get(job.conclusion, 0) + 1
+        job_ids = {j.job_id for j in jobs}
+        attempts: dict[int, int] = {}
+        for r in runs:
+            attempts[r.run_id] = attempts.get(r.run_id, 0) + 1
+        created = [r.created_at for r in runs if r.created_at is not None]
+        return RepoQuality(
+            jobs_by_conclusion=by_conclusion,
+            runs_with_failed_job=len(
+                {j.run_id for j in jobs if j.conclusion in FAILED_CONCLUSIONS}
+            ),
+            runs_with_reruns=sum(1 for n in attempts.values() if n > 1),
+            redactions=sum(
+                log.redactions or 0 for log in self.tables["logs"].values() if log.job_id in job_ids
+            ),
+            first_run_at=min(created) if created else None,
+            last_run_at=max(created) if created else None,
         )

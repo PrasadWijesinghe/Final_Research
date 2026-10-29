@@ -1,0 +1,50 @@
+{
+  "framework": "vitest",
+  "repo": "typescript-eslint/typescript-eslint",
+  "job_id": 118080087351,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 241,
+    "failed": 0,
+    "skipped": 0,
+    "total": 241,
+    "todo": 0,
+    "files_failed": 11
+  },
+  "failed_test_names": [
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run",
+    "Test suite failed to run"
+  ],
+  "failed_files": [
+    "tests/builtinSymbolLikes.test.ts",
+    "tests/containsAllTypesByName.test.ts",
+    "tests/discriminateAnyType.test.ts",
+    "tests/getConstrainedTypeAtLocation.test.ts",
+    "tests/getDeclaration.test.ts",
+    "tests/getTypeName.test.ts",
+    "tests/isSymbolFromDefaultLibrary.test.ts",
+    "tests/isTypeLiteralType.test.ts",
+    "tests/isUnsafeAssignment.test.ts",
+    "tests/requiresQuoting.test.ts",
+    "tests/typeFlagUtils.test.ts"
+  ],
+  "failure_kinds": {
+    "suite": 11
+  },
+  "first_error_type": "TypeError",
+  "first_project_path": null,
+  "note": "`Failed Suites 11`: every file failed to load (`Tests 241 passed`, `Test Files 11 failed`); one error is shared by all 11 FAIL lines. The only frames are `../scope-manager/src/...`: tests ran from a package folder, so a `../` path has no repo-relative form (kind unknown, path None)."
+}

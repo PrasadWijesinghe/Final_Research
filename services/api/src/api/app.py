@@ -4,22 +4,27 @@
 # locally defined auth helpers from the real annotation objects.
 
 import asyncio
+import json
 import logging
+import os
 import time
 import uuid
 from functools import lru_cache
-from typing import Annotated
+from typing import Annotated, Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request, Response
 from features.pre_push import PrePushPayload, build_pre_push_context
 from sqlalchemy import create_engine
 
 from shared.contracts import Diagnosis, ReviewDecision
 from shared.db.session import get_database_url
+from shared.github import InstallationTokenCache, verify_signature
 
 from .auth import generate_key, hash_key, parse_bearer, tokens_equal
 from .config import Settings
 from .experts import fan_out_predict, forward_review, probe_health
+from .raw_store import SqlRawStore
+from .router import FailedJob, route_failed_job
 from .schemas import (
     ApiKeyIssued,
     ApiKeyRequest,
@@ -31,6 +36,7 @@ from .schemas import (
     RunItem,
 )
 from .store import KeyRecord, SqlStore, Store
+from .webhooks import WebhookHandler
 
 logger = logging.getLogger(__name__)
 
@@ -41,10 +47,22 @@ def default_store() -> Store:
     return SqlStore(create_engine(get_database_url()))
 
 
-def create_app(settings: Settings | None = None, store: Store | None = None) -> FastAPI:
+def _route_to_queue(job: FailedJob) -> None:
+    """Route a failed job and queue it for the experts (Redis from REDIS_URL)."""
+    from .failure_queue import redis_from_env
+
+    route_failed_job(job, default_store(), redis_from_env())
+
+
+def create_app(
+    settings: Settings | None = None,
+    store: Store | None = None,
+    webhooks: WebhookHandler | None = None,
+) -> FastAPI:
     """Create the app; tests pass an in-memory store and settings pointing at respx routes."""
     app = FastAPI(title="PipelineIQ backend")
     cfg = settings or Settings()
+    handler = webhooks
 
     def get_store() -> Store:
         return store if store is not None else default_store()
@@ -164,16 +182,65 @@ def create_app(settings: Settings | None = None, store: Store | None = None) -> 
             raise HTTPException(404, "key not found")
         return Response(status_code=204)
 
-    # ----------------------------------------------------- GitHub App (Phase 3) stubs
+    # ------------------------------------------------------------- GitHub App (P3.1)
 
-    @app.post("/webhooks/github", status_code=501)
-    async def post_webhook(request: Request) -> dict[str, str]:
-        """Not built until P3.1."""
-        return {"detail": "GitHub webhooks are not implemented yet (Phase 3)"}
+    def get_handler() -> WebhookHandler:
+        nonlocal handler
+        if handler is None:
+            if not (cfg.github_app_id and cfg.github_app_key_path):
+                raise HTTPException(503, "GitHub App is not configured")
+            engine = create_engine(get_database_url())
+            handler = WebhookHandler(
+                cfg,
+                get_store(),
+                SqlRawStore(engine),
+                InstallationTokenCache(
+                    cfg.github_app_id, os.path.expanduser(cfg.github_app_key_path)
+                ),
+                _route_to_queue,
+            )
+        return handler
+
+    async def run_webhook(event: str, delivery: str, payload: dict[str, Any]) -> None:
+        """Background job: errors are logged (never raised, never with the payload)."""
+        try:
+            outcome = await get_handler().handle(event, payload)
+            logger.info(
+                "webhook handled", extra={"event": event, "delivery": delivery, "outcome": outcome}
+            )
+        except Exception:
+            logger.exception("webhook failed", extra={"event": event, "delivery": delivery})
+
+    @app.post("/webhooks/github", status_code=202)
+    async def post_webhook(
+        request: Request,
+        background: BackgroundTasks,
+        x_hub_signature_256: Annotated[str | None, Header()] = None,
+        x_github_event: Annotated[str | None, Header()] = None,
+        x_github_delivery: Annotated[str | None, Header()] = None,
+    ) -> dict[str, str]:
+        """Verify the signature, then handle the event in the background (GitHub waits 10 s)."""
+        if not cfg.github_webhook_secret:
+            raise HTTPException(503, "webhooks are disabled: GITHUB_WEBHOOK_SECRET is not set")
+        body = await request.body()
+        if not verify_signature(cfg.github_webhook_secret, body, x_hub_signature_256):
+            logger.warning("webhook signature mismatch", extra={"delivery": x_github_delivery})
+            raise HTTPException(401, "invalid signature")
+        event = x_github_event or ""
+        if event == "ping":
+            return {"status": "pong"}
+        try:
+            payload = json.loads(body)
+        except ValueError:
+            raise HTTPException(400, "body is not JSON") from None
+        if not isinstance(payload, dict):
+            raise HTTPException(400, "body is not a JSON object")
+        background.add_task(run_webhook, event, x_github_delivery or "", payload)
+        return {"status": "accepted", "event": event}
 
     @app.api_route("/auth/github/{rest:path}", methods=["GET", "POST"], status_code=501)
     async def auth_github(rest: str) -> dict[str, str]:
-        """Not built until P3.1."""
+        """Not built yet (OAuth sign-in is left to the dashboard task, P3.5)."""
         return {"detail": "GitHub sign-in is not implemented yet (Phase 3)"}
 
     # ------------------------------------------------------------------------ health

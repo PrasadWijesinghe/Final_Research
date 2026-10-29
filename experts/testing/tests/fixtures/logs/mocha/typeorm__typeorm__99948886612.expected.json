@@ -1,0 +1,25 @@
+{
+  "framework": "mocha",
+  "repo": "typeorm/typeorm",
+  "job_id": 99948886612,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 7,
+    "failed": 1,
+    "skipped": 0,
+    "total": 8
+  },
+  "failed_test_names": [
+    "column kinds > create date column > create date column should not be updated automatically on every change"
+  ],
+  "failed_files": [
+    "test/core/column-kinds/create-date-column/create-date-column.test.ts"
+  ],
+  "first_error_type": "QueryFailedError",
+  "first_project_path": "src/driver/better-sqlite3/BetterSqlite3QueryRunner.ts",
+  "note": "Windows: `src\\driver\\...` and `D:\\a\\typeorm\\typeorm\\test\\...` paths."
+}

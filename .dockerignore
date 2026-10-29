@@ -13,3 +13,6 @@ mlruns/
 **/node_modules
 services/dashboard
 docs
+experts/*/research/.venv
+experts/*/research/artifacts
+experts/*/research/data

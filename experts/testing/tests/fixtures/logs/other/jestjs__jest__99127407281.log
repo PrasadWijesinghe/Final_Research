@@ -1,0 +1,276 @@
+﻿2026-08-29T16:21:48.5555004Z Current runner version: '2.336.0'
+2026-08-29T16:21:48.5589355Z ##[group]Runner Image Provisioner
+2026-08-29T16:21:48.5590530Z Hosted Compute Agent
+2026-08-29T16:21:48.5591571Z Version: 20260819.586
+2026-08-29T16:21:48.5592536Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-08-29T16:21:48.5593931Z Build Date: 2026-08-18T23:20:18Z
+2026-08-29T16:21:48.5594981Z Worker ID: {b215c10f-cc6a-4e74-bded-31ff806b4850}
+2026-08-29T16:21:48.5596048Z Azure Region: eastus2
+2026-08-29T16:21:48.5597024Z ##[endgroup]
+2026-08-29T16:21:48.5599491Z ##[group]Operating System
+2026-08-29T16:21:48.5600560Z Ubuntu
+2026-08-29T16:21:48.5601336Z 24.04.4
+2026-08-29T16:21:48.5602081Z LTS
+2026-08-29T16:21:48.5602955Z ##[endgroup]
+2026-08-29T16:21:48.5603793Z ##[group]Runner Image
+2026-08-29T16:21:48.5604909Z Image: ubuntu-24.04
+2026-08-29T16:21:48.5605773Z Version: 20260823.283.1
+2026-08-29T16:21:48.5607835Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260823.283/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-29T16:21:48.5610638Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260823.283
+2026-08-29T16:21:48.5612274Z ##[endgroup]
+2026-08-29T16:21:48.5613926Z ##[group]GITHUB_TOKEN Permissions
+2026-08-29T16:21:48.5616643Z Contents: read
+2026-08-29T16:21:48.5617576Z Metadata: read
+2026-08-29T16:21:48.5618482Z ##[endgroup]
+2026-08-29T16:21:48.5621572Z Secret source: None
+2026-08-29T16:21:48.5623237Z Prepare workflow directory
+2026-08-29T16:21:48.6074866Z Prepare all required actions
+2026-08-29T16:21:48.6142138Z Getting action download info
+2026-08-29T16:21:48.7934434Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-29T16:21:48.9204805Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-08-29T16:21:49.1161999Z Complete job name: Static Checks (Lint, Typecheck, Yarn Validate)
+2026-08-29T16:21:49.1943290Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-29T16:21:49.1944307Z with:
+2026-08-29T16:21:49.1944750Z   persist-credentials: false
+2026-08-29T16:21:49.1945260Z   repository: jestjs/jest
+2026-08-29T16:21:49.1949656Z   token: ***
+2026-08-29T16:21:49.1950091Z   ssh-strict: true
+2026-08-29T16:21:49.1950521Z   ssh-user: git
+2026-08-29T16:21:49.1950937Z   clean: true
+2026-08-29T16:21:49.1951381Z   sparse-checkout-cone-mode: true
+2026-08-29T16:21:49.1951895Z   fetch-depth: 1
+2026-08-29T16:21:49.1952339Z   fetch-tags: false
+2026-08-29T16:21:49.1952777Z   show-progress: true
+2026-08-29T16:21:49.1953215Z   lfs: false
+2026-08-29T16:21:49.1953618Z   submodules: false
+2026-08-29T16:21:49.1954055Z   set-safe-directory: true
+2026-08-29T16:21:49.1954547Z   allow-unsafe-pr-checkout: false
+2026-08-29T16:21:49.1955270Z ##[endgroup]
+2026-08-29T16:21:49.2965296Z Syncing repository: jestjs/jest
+2026-08-29T16:21:49.2966989Z ##[group]Getting Git version info
+2026-08-29T16:21:49.2967770Z Working directory is '/home/runner/work/jest/jest'
+2026-08-29T16:21:49.2968941Z [command]/usr/bin/git version
+2026-08-29T16:21:49.3017292Z git version 2.55.0
+2026-08-29T16:21:49.3068156Z ##[endgroup]
+2026-08-29T16:21:49.3078560Z Temporarily overriding HOME='/home/runner/work/_temp/c5b01d1e-9f91-4975-aaa5-0feeb68d28d7' before making global git config changes
+2026-08-29T16:21:49.3080880Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-29T16:21:49.3083736Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-29T16:21:49.3126884Z Deleting the contents of '/home/runner/work/jest/jest'
+2026-08-29T16:21:49.3130687Z ##[group]Determining repository object format
+2026-08-29T16:21:49.3132366Z ##[endgroup]
+2026-08-29T16:21:49.3133084Z ##[group]Initializing the repository
+2026-08-29T16:21:49.3136563Z [command]/usr/bin/git init /home/runner/work/jest/jest
+2026-08-29T16:21:49.3209330Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-29T16:21:49.3213074Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-29T16:21:49.3214646Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-29T16:21:49.3215840Z hint: call:
+2026-08-29T16:21:49.3216492Z hint:
+2026-08-29T16:21:49.3217309Z hint: 	git config --global init.defaultBranch <name>
+2026-08-29T16:21:49.3218277Z hint:
+2026-08-29T16:21:49.3219426Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-29T16:21:49.3220889Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-29T16:21:49.3222092Z hint:
+2026-08-29T16:21:49.3222772Z hint: 	git branch -m <name>
+2026-08-29T16:21:49.3223508Z hint:
+2026-08-29T16:21:49.3224499Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-29T16:21:49.3226055Z Initialized empty Git repository in /home/runner/work/jest/jest/.git/
+2026-08-29T16:21:49.3228549Z [command]/usr/bin/git remote add origin https://github.com/jestjs/jest
+2026-08-29T16:21:49.3268934Z ##[endgroup]
+2026-08-29T16:21:49.3270141Z ##[group]Disabling automatic garbage collection
+2026-08-29T16:21:49.3273235Z [command]/usr/bin/git config --local gc.auto 0
+2026-08-29T16:21:49.3305256Z ##[endgroup]
+2026-08-29T16:21:49.3306746Z ##[group]Setting up auth
+2026-08-29T16:21:49.3307595Z Removing SSH command configuration
+2026-08-29T16:21:49.3312255Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-29T16:21:49.3345610Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-29T16:21:49.3658683Z Removing HTTP extra header
+2026-08-29T16:21:49.3665596Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-29T16:21:49.3698504Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-29T16:21:49.3923644Z Removing includeIf entries pointing to credentials config files
+2026-08-29T16:21:49.3929351Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-29T16:21:49.3970559Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-29T16:21:49.4204763Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-29T16:21:49.4242497Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git.path /home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:49.4274484Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:49.4307926Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:49.4339362Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:49.4367575Z ##[endgroup]
+2026-08-29T16:21:49.4368352Z ##[group]Fetching the repository
+2026-08-29T16:21:49.4374359Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cecf7441dd657d33231a495d1ee52cbe4b1aacb8:refs/remotes/pull/16406/merge
+2026-08-29T16:21:50.5072881Z From https://github.com/jestjs/jest
+2026-08-29T16:21:50.5079823Z  * [new ref]         cecf7441dd657d33231a495d1ee52cbe4b1aacb8 -> pull/16406/merge
+2026-08-29T16:21:50.5084025Z ##[endgroup]
+2026-08-29T16:21:50.5086008Z ##[group]Determining the checkout info
+2026-08-29T16:21:50.5087334Z ##[endgroup]
+2026-08-29T16:21:50.5088136Z [command]/usr/bin/git sparse-checkout disable
+2026-08-29T16:21:50.5135709Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-29T16:21:50.5166648Z ##[group]Checking out the ref
+2026-08-29T16:21:50.5169581Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/16406/merge
+2026-08-29T16:21:50.8237369Z Note: switching to 'refs/remotes/pull/16406/merge'.
+2026-08-29T16:21:50.8239424Z 
+2026-08-29T16:21:50.8239866Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-29T16:21:50.8240794Z changes and commit them, and you can discard any commits you make in this
+2026-08-29T16:21:50.8241690Z state without impacting any branches by switching back to a branch.
+2026-08-29T16:21:50.8242196Z 
+2026-08-29T16:21:50.8242637Z If you want to create a new branch to retain commits you create, you may
+2026-08-29T16:21:50.8243418Z do so (now or later) by using -c with the switch command. Example:
+2026-08-29T16:21:50.8243879Z 
+2026-08-29T16:21:50.8244085Z   git switch -c <new-branch-name>
+2026-08-29T16:21:50.8244410Z 
+2026-08-29T16:21:50.8244673Z Or undo this operation with:
+2026-08-29T16:21:50.8244977Z 
+2026-08-29T16:21:50.8245158Z   git switch -
+2026-08-29T16:21:50.8245396Z 
+2026-08-29T16:21:50.8245796Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-29T16:21:50.8246198Z 
+2026-08-29T16:21:50.8246590Z HEAD is now at cecf744 Merge 3b2e94ad4bd64e9ff268db04cf526892ab3511ca into be425a0b0e3bd60a74e4a7e350aa38c63a2d25ef
+2026-08-29T16:21:50.8250783Z ##[endgroup]
+2026-08-29T16:21:50.8295853Z [command]/usr/bin/git log -1 --format=%H
+2026-08-29T16:21:50.8322607Z cecf7441dd657d33231a495d1ee52cbe4b1aacb8
+2026-08-29T16:21:50.8419290Z ##[group]Removing auth
+2026-08-29T16:21:50.8420042Z Removing SSH command configuration
+2026-08-29T16:21:50.8421210Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-29T16:21:50.8423456Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-29T16:21:50.8614444Z Removing HTTP extra header
+2026-08-29T16:21:50.8618381Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-29T16:21:50.8653211Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-29T16:21:50.8891219Z Removing includeIf entries pointing to credentials config files
+2026-08-29T16:21:50.8895141Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-29T16:21:50.8921521Z includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-29T16:21:50.8922337Z includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-29T16:21:50.8922848Z includeif.gitdir:/github/workspace/.git.path
+2026-08-29T16:21:50.8923263Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-29T16:21:50.8931092Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git.path
+2026-08-29T16:21:50.8954389Z /home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:50.8964340Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-81a13e6f\-1741\-4d64\-89bc\-f4d976dde774\.config
+2026-08-29T16:21:50.8997427Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path
+2026-08-29T16:21:50.9020013Z /home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:50.9036209Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/jest/jest/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-81a13e6f\-1741\-4d64\-89bc\-f4d976dde774\.config
+2026-08-29T16:21:50.9069823Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-29T16:21:50.9093649Z /github/runner_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:50.9102993Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-81a13e6f\-1741\-4d64\-89bc\-f4d976dde774\.config
+2026-08-29T16:21:50.9147651Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-29T16:21:50.9171901Z /github/runner_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config
+2026-08-29T16:21:50.9221311Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-81a13e6f\-1741\-4d64\-89bc\-f4d976dde774\.config
+2026-08-29T16:21:50.9272367Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-29T16:21:50.9507343Z Removing credentials config '/home/runner/work/_temp/git-credentials-81a13e6f-1741-4d64-89bc-f4d976dde774.config'
+2026-08-29T16:21:50.9515689Z ##[endgroup]
+2026-08-29T16:21:50.9769013Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-08-29T16:21:50.9769479Z with:
+2026-08-29T16:21:50.9769737Z   node-version: lts/*
+2026-08-29T16:21:50.9770004Z   cache: yarn
+2026-08-29T16:21:50.9770260Z   check-latest: false
+2026-08-29T16:21:50.9772975Z   token: ***
+2026-08-29T16:21:50.9773251Z   package-manager-cache: true
+2026-08-29T16:21:50.9773554Z ##[endgroup]
+2026-08-29T16:21:51.0993817Z Attempt to resolve LTS alias from manifest...
+2026-08-29T16:21:51.7040061Z Found in cache @ /opt/hostedtoolcache/node/24.19.0/x64
+2026-08-29T16:21:51.7043575Z ##[group]Environment details
+2026-08-29T16:21:52.2878008Z node: v24.19.0
+2026-08-29T16:21:52.2878424Z npm: 11.17.0
+2026-08-29T16:21:52.2878736Z yarn: 4.18.0
+2026-08-29T16:21:52.2879701Z ##[endgroup]
+2026-08-29T16:21:52.2896322Z [command]/usr/local/bin/yarn --version
+2026-08-29T16:21:52.6612313Z 4.18.0
+2026-08-29T16:21:52.6883809Z [command]/usr/local/bin/yarn config get cacheFolder
+2026-08-29T16:21:53.0703648Z /home/runner/.yarn/berry/cache
+2026-08-29T16:21:53.1108906Z [command]/usr/local/bin/yarn config get enableGlobalCache
+2026-08-29T16:21:53.4975849Z [33mtrue[39m
+2026-08-29T16:21:53.5790082Z Cache hit for: node-cache-Linux-x64-yarn-1f202ab300a0096face4f20756cb69bd95e02ca4533992d953cab4602f47313f
+2026-08-29T16:21:54.3270191Z Received 157322190 of 157322190 (100.0%), 218.4 MBs/sec
+2026-08-29T16:21:54.3276099Z Cache Size: ~150 MB (157322190 B)
+2026-08-29T16:21:54.3320491Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e4cd7572-a8a5-4b40-bd94-046af558cddd/cache.tzst -P -C /home/runner/work/jest/jest --use-compress-program unzstd
+2026-08-29T16:21:54.6109999Z Cache restored successfully
+2026-08-29T16:21:54.6188716Z Cache restored from key: node-cache-Linux-x64-yarn-1f202ab300a0096face4f20756cb69bd95e02ca4533992d953cab4602f47313f
+2026-08-29T16:21:54.6393480Z ##[group]Run yarn --immutable
+2026-08-29T16:21:54.6393865Z [36;1myarn --immutable[0m
+2026-08-29T16:21:54.6444329Z shell: /usr/bin/bash -e {0}
+2026-08-29T16:21:54.6444625Z ##[endgroup]
+2026-08-29T16:21:55.2769192Z [93m➤[39m YN0000: Yarn detected that the current workflow is executed from a public pull request. For safety the hardened mode has been enabled.
+2026-08-29T16:21:55.2801303Z [93m➤[39m YN0000: It will prevent malicious lockfile manipulations, in exchange for a slower install time. You can opt-out if necessary; check our documentation for more details.
+2026-08-29T16:21:55.2821588Z 
+2026-08-29T16:21:55.2824789Z [94m➤[39m YN0000: · Yarn 4.18.0
+2026-08-29T16:21:55.3004187Z [94m➤[39m [90mYN0000[39m: ┌ Resolution step
+2026-08-29T16:21:55.3006573Z ##[group]Resolution step
+2026-08-29T16:22:06.1348535Z ##[endgroup]
+2026-08-29T16:22:06.1353256Z [94m➤[39m [90mYN0000[39m: └ Completed in 10s 834ms
+2026-08-29T16:22:06.1370856Z [94m➤[39m [90mYN0000[39m: ┌ Post-resolution validation
+2026-08-29T16:22:06.1371922Z ##[group]Post-resolution validation
+2026-08-29T16:22:06.1374894Z [93m➤[39m YN0060: │ [38;5;166m@babel/[39m[38;5;173mcore[39m is listed by your project with version [38;5;111m7.29.7[39m ([38;5;111mpf247de[39m), which doesn't satisfy what [38;5;166m@babel/[39m[38;5;173mpreset-react[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-29T16:22:06.1378996Z [93m➤[39m YN0060: │ [38;5;173mgraphql[39m is listed by your project with version [38;5;111m17.0.2[39m ([38;5;111mp1ae269[39m), which doesn't satisfy what [38;5;173mgraphql-request[39m and other dependencies request ([38;5;37m^14.0.0 || ^15.0.0 || ^16.0.0[39m).
+2026-08-29T16:22:06.1382761Z [93m➤[39m YN0060: │ [38;5;173mreact[39m is listed by your project with version [38;5;111m19.2.8[39m ([38;5;111mpbfd061[39m), which doesn't satisfy what [38;5;173mreact-test-renderer[39m and other dependencies request ([91mbut they have non-overlapping ranges![39m).
+2026-08-29T16:22:06.1386899Z [93m➤[39m YN0002: │ [38;5;166m@jest/[39m[38;5;173mdiff-sequences[39m[38;5;111m@[39m[38;5;111mworkspace:packages/diff-sequences[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp03fd70[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-29T16:22:06.1391172Z [93m➤[39m YN0002: │ [38;5;173mbabel-preset-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/babel-preset-jest[39m doesn't provide [38;5;166m@babel/[39m[38;5;173mcore[39m ([38;5;111mpa5adb7[39m), requested by [38;5;173mbabel-preset-current-node-syntax[39m.
+2026-08-29T16:22:06.1394851Z [93m➤[39m YN0002: │ [38;5;173mcreate-jest[39m[38;5;111m@[39m[38;5;111mworkspace:packages/create-jest[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp9c2ade[39m), requested by [38;5;173mjest-config[39m.
+2026-08-29T16:22:06.1399083Z [93m➤[39m YN0002: │ [38;5;173mexample-react-native[39m[38;5;111m@[39m[38;5;111mworkspace:examples/react-native[39m doesn't provide [38;5;166m@types/[39m[38;5;173mreact[39m ([38;5;111mp0285ab[39m), requested by [38;5;166m@react-native/[39m[38;5;173mjest-preset[39m and other dependencies.
+2026-08-29T16:22:06.1402897Z [93m➤[39m YN0002: │ [38;5;173mexpect[39m[38;5;111m@[39m[38;5;111mworkspace:packages/expect[39m doesn't provide [38;5;166m@jest/[39m[38;5;173mglobals[39m ([38;5;111mp9fb730[39m), requested by [38;5;166m@fast-check/[39m[38;5;173mjest[39m.
+2026-08-29T16:22:06.1406458Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [023ef][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdec1f7[39m), requested by [38;5;173mjest-config[39m.
+2026-08-29T16:22:06.1410568Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli [73877][39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp6688de[39m), requested by [38;5;173mjest-config[39m.
+2026-08-29T16:22:06.1413934Z [93m➤[39m YN0002: │ [38;5;173mjest-cli[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-cli[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mpdd7483[39m), requested by [38;5;173mjest-config[39m.
+2026-08-29T16:22:06.1417089Z [93m➤[39m YN0002: │ [38;5;173mjest-config[39m[38;5;111m@[39m[38;5;111mworkspace:packages/jest-config[39m doesn't provide [38;5;166m@types/[39m[38;5;173mnode[39m ([38;5;111mp4a73ba[39m), requested by [38;5;173mts-node[39m.
+2026-08-29T16:22:06.1420799Z [93m➤[39m YN0002: │ [38;5;173mjest-website[39m[38;5;111m@[39m[38;5;111mworkspace:website[39m doesn't provide [38;5;166m@mdx-js/[39m[38;5;173mreact[39m ([38;5;111mp1a83d4[39m), requested by [38;5;166m@docusaurus/[39m[38;5;173mcore[39m.
+2026-08-29T16:22:06.1424711Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by your project; run [38;5;111myarn explain peer-requirements <hash>[39m for details, where [38;5;111m<hash>[39m is the six-letter p-prefixed code.
+2026-08-29T16:22:06.1427423Z [93m➤[39m YN0086: │ Some peer dependencies are incorrectly met by dependencies; run [38;5;111myarn explain peer-requirements[39m for details.
+2026-08-29T16:22:06.2218936Z ##[endgroup]
+2026-08-29T16:22:06.2219862Z [94m➤[39m [90mYN0000[39m: └ Completed
+2026-08-29T16:22:06.2221208Z [94m➤[39m [90mYN0000[39m: ┌ Fetch step
+2026-08-29T16:22:06.2221953Z ##[group]Fetch step
+2026-08-29T16:22:06.9453151Z ##[endgroup]
+2026-08-29T16:22:06.9454077Z [94m➤[39m [90mYN0000[39m: └ Completed in 0s 724ms
+2026-08-29T16:22:07.0228507Z [94m➤[39m [90mYN0000[39m: ┌ Link step
+2026-08-29T16:22:07.0229638Z ##[group]Link step
+2026-08-29T16:22:24.0166442Z [93m➤[39m YN0004: │ [38;5;173mcore-js[39m[38;5;111m@[39m[38;5;111mnpm:3.50.0[39m lists build scripts, but all build scripts have been disabled.
+2026-08-29T16:22:24.3039248Z [94m➤[39m YN0007: │ [38;5;173munrs-resolver[39m[38;5;111m@[39m[38;5;111mnpm:1.12.2[39m must be built because it never has been before or the last one failed
+2026-08-29T16:22:24.3051856Z [94m➤[39m YN0007: │ [38;5;166m@parcel/[39m[38;5;173mwatcher[39m[38;5;111m@[39m[38;5;111mnpm:2.6.0[39m must be built because it never has been before or the last one failed
+2026-08-29T16:22:24.3054361Z [94m➤[39m YN0007: │ [38;5;173mesbuild[39m[38;5;111m@[39m[38;5;111mnpm:0.28.2[39m must be built because it never has been before or the last one failed
+2026-08-29T16:22:24.4639292Z ##[endgroup]
+2026-08-29T16:22:24.4640439Z [94m➤[39m [90mYN0000[39m: └ Completed in 17s 441ms
+2026-08-29T16:22:24.6536982Z [93m➤[39m YN0000: · Done with warnings in 29s 378ms
+2026-08-29T16:22:24.7889398Z ##[group]Run yarn build:ts
+2026-08-29T16:22:24.7889727Z [36;1myarn build:ts[0m
+2026-08-29T16:22:24.7931764Z shell: /usr/bin/bash -e {0}
+2026-08-29T16:22:24.7932071Z ##[endgroup]
+2026-08-29T16:22:26.1003068Z  Building TypeScript definition files 
+2026-08-29T16:23:13.9455887Z ##[error]packages/jest-config/src/readConfigFileAndSetRootDir.ts(231,63): error TS2307: Cannot find module 'tsx' or its corresponding type declarations.
+2026-08-29T16:23:41.6605410Z  Unable to build TypeScript definition files 
+2026-08-29T16:23:41.6611057Z /home/runner/work/jest/jest/node_modules/execa/lib/error.js:60
+2026-08-29T16:23:41.6611481Z 		error = new Error(message);
+2026-08-29T16:23:41.6611849Z 		        ^
+2026-08-29T16:23:41.6612023Z 
+2026-08-29T16:23:41.6630434Z Error: Command failed with exit code 2: yarn tsc -b /home/runner/work/jest/jest/packages/babel-jest /home/runner/work/jest/jest/packages/babel-plugin-jest-hoist /home/runner/work/jest/jest/packages/create-jest /home/runner/work/jest/jest/packages/diff-sequences /home/runner/work/jest/jest/packages/expect /home/runner/work/jest/jest/packages/expect-utils /home/runner/work/jest/jest/packages/jest /home/runner/work/jest/jest/packages/jest-changed-files /home/runner/work/jest/jest/packages/jest-circus /home/runner/work/jest/jest/packages/jest-cli /home/runner/work/jest/jest/packages/jest-config /home/runner/work/jest/jest/packages/jest-console /home/runner/work/jest/jest/packages/jest-core /home/runner/work/jest/jest/packages/jest-create-cache-key-function /home/runner/work/jest/jest/packages/jest-diff /home/runner/work/jest/jest/packages/jest-docblock /home/runner/work/jest/jest/packages/jest-each /home/runner/work/jest/jest/packages/jest-environment /home/runner/work/jest/jest/packages/jest-environment-jsdom /home/runner/work/jest/jest/packages/jest-environment-jsdom-abstract /home/runner/work/jest/jest/packages/jest-environment-node /home/runner/work/jest/jest/packages/jest-expect /home/runner/work/jest/jest/packages/jest-fake-timers /home/runner/work/jest/jest/packages/jest-get-type /home/runner/work/jest/jest/packages/jest-globals /home/runner/work/jest/jest/packages/jest-haste-map /home/runner/work/jest/jest/packages/jest-jasmine2 /home/runner/work/jest/jest/packages/jest-leak-detector /home/runner/work/jest/jest/packages/jest-matcher-utils /home/runner/work/jest/jest/packages/jest-message-util /home/runner/work/jest/jest/packages/jest-mock /home/runner/work/jest/jest/packages/jest-pattern /home/runner/work/jest/jest/packages/jest-phabricator /home/runner/work/jest/jest/packages/jest-regex-util /home/runner/work/jest/jest/packages/jest-reporters /home/runner/work/jest/jest/packages/jest-resolve /home/runner/work/jest/jest/packages/jest-resolve-dependencies /home/runner/work/jest/jest/packages/jest-runner /home/runner/work/jest/jest/packages/jest-runtime /home/runner/work/jest/jest/packages/jest-schemas /home/runner/work/jest/jest/packages/jest-snapshot /home/runner/work/jest/jest/packages/jest-snapshot-utils /home/runner/work/jest/jest/packages/jest-source-map /home/runner/work/jest/jest/packages/jest-test-result /home/runner/work/jest/jest/packages/jest-test-sequencer /home/runner/work/jest/jest/packages/jest-transform /home/runner/work/jest/jest/packages/jest-types /home/runner/work/jest/jest/packages/jest-util /home/runner/work/jest/jest/packages/jest-validate /home/runner/work/jest/jest/packages/jest-watcher /home/runner/work/jest/jest/packages/jest-worker /home/runner/work/jest/jest/packages/pretty-format /home/runner/work/jest/jest/packages/test-globals /home/runner/work/jest/jest/packages/test-utils
+2026-08-29T16:23:41.6641772Z     at makeError (/home/runner/work/jest/jest/node_modules/execa/lib/error.js:60:11)
+2026-08-29T16:23:41.6642413Z     at handlePromise (/home/runner/work/jest/jest/node_modules/execa/index.js:118:26)
+2026-08-29T16:23:41.6643060Z     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+2026-08-29T16:23:41.6643650Z     at async file:///home/runner/work/jest/jest/scripts/buildTs.mjs:165:3 {
+2026-08-29T16:23:41.6655808Z   shortMessage: 'Command failed with exit code 2: yarn tsc -b /home/runner/work/jest/jest/packages/babel-jest /home/runner/work/jest/jest/packages/babel-plugin-jest-hoist /home/runner/work/jest/jest/packages/create-jest /home/runner/work/jest/jest/packages/diff-sequences /home/runner/work/jest/jest/packages/expect /home/runner/work/jest/jest/packages/expect-utils /home/runner/work/jest/jest/packages/jest /home/runner/work/jest/jest/packages/jest-changed-files /home/runner/work/jest/jest/packages/jest-circus /home/runner/work/jest/jest/packages/jest-cli /home/runner/work/jest/jest/packages/jest-config /home/runner/work/jest/jest/packages/jest-console /home/runner/work/jest/jest/packages/jest-core /home/runner/work/jest/jest/packages/jest-create-cache-key-function /home/runner/work/jest/jest/packages/jest-diff /home/runner/work/jest/jest/packages/jest-docblock /home/runner/work/jest/jest/packages/jest-each /home/runner/work/jest/jest/packages/jest-environment /home/runner/work/jest/jest/packages/jest-environment-jsdom /home/runner/work/jest/jest/packages/jest-environment-jsdom-abstract /home/runner/work/jest/jest/packages/jest-environment-node /home/runner/work/jest/jest/packages/jest-expect /home/runner/work/jest/jest/packages/jest-fake-timers /home/runner/work/jest/jest/packages/jest-get-type /home/runner/work/jest/jest/packages/jest-globals /home/runner/work/jest/jest/packages/jest-haste-map /home/runner/work/jest/jest/packages/jest-jasmine2 /home/runner/work/jest/jest/packages/jest-leak-detector /home/runner/work/jest/jest/packages/jest-matcher-utils /home/runner/work/jest/jest/packages/jest-message-util /home/runner/work/jest/jest/packages/jest-mock /home/runner/work/jest/jest/packages/jest-pattern /home/runner/work/jest/jest/packages/jest-phabricator /home/runner/work/jest/jest/packages/jest-regex-util /home/runner/work/jest/jest/packages/jest-reporters /home/runner/work/jest/jest/packages/jest-resolve /home/runner/work/jest/jest/packages/jest-resolve-dependencies /home/runner/work/jest/jest/packages/jest-runner /home/runner/work/jest/jest/packages/jest-runtime /home/runner/work/jest/jest/packages/jest-schemas /home/runner/work/jest/jest/packages/jest-snapshot /home/runner/work/jest/jest/packages/jest-snapshot-utils /home/runner/work/jest/jest/packages/jest-source-map /home/runner/work/jest/jest/packages/jest-test-result /home/runner/work/jest/jest/packages/jest-test-sequencer /home/runner/work/jest/jest/packages/jest-transform /home/runner/work/jest/jest/packages/jest-types /home/runner/work/jest/jest/packages/jest-util /home/runner/work/jest/jest/packages/jest-validate /home/runner/work/jest/jest/packages/jest-watcher /home/runner/work/jest/jest/packages/jest-worker /home/runner/work/jest/jest/packages/pretty-format /home/runner/work/jest/jest/packages/test-globals /home/runner/work/jest/jest/packages/test-utils',
+2026-08-29T16:23:41.6687439Z   command: 'yarn tsc -b /home/runner/work/jest/jest/packages/babel-jest /home/runner/work/jest/jest/packages/babel-plugin-jest-hoist /home/runner/work/jest/jest/packages/create-jest /home/runner/work/jest/jest/packages/diff-sequences /home/runner/work/jest/jest/packages/expect /home/runner/work/jest/jest/packages/expect-utils /home/runner/work/jest/jest/packages/jest /home/runner/work/jest/jest/packages/jest-changed-files /home/runner/work/jest/jest/packages/jest-circus /home/runner/work/jest/jest/packages/jest-cli /home/runner/work/jest/jest/packages/jest-config /home/runner/work/jest/jest/packages/jest-console /home/runner/work/jest/jest/packages/jest-core /home/runner/work/jest/jest/packages/jest-create-cache-key-function /home/runner/work/jest/jest/packages/jest-diff /home/runner/work/jest/jest/packages/jest-docblock /home/runner/work/jest/jest/packages/jest-each /home/runner/work/jest/jest/packages/jest-environment /home/runner/work/jest/jest/packages/jest-environment-jsdom /home/runner/work/jest/jest/packages/jest-environment-jsdom-abstract /home/runner/work/jest/jest/packages/jest-environment-node /home/runner/work/jest/jest/packages/jest-expect /home/runner/work/jest/jest/packages/jest-fake-timers /home/runner/work/jest/jest/packages/jest-get-type /home/runner/work/jest/jest/packages/jest-globals /home/runner/work/jest/jest/packages/jest-haste-map /home/runner/work/jest/jest/packages/jest-jasmine2 /home/runner/work/jest/jest/packages/jest-leak-detector /home/runner/work/jest/jest/packages/jest-matcher-utils /home/runner/work/jest/jest/packages/jest-message-util /home/runner/work/jest/jest/packages/jest-mock /home/runner/work/jest/jest/packages/jest-pattern /home/runner/work/jest/jest/packages/jest-phabricator /home/runner/work/jest/jest/packages/jest-regex-util /home/runner/work/jest/jest/packages/jest-reporters /home/runner/work/jest/jest/packages/jest-resolve /home/runner/work/jest/jest/packages/jest-resolve-dependencies /home/runner/work/jest/jest/packages/jest-runner /home/runner/work/jest/jest/packages/jest-runtime /home/runner/work/jest/jest/packages/jest-schemas /home/runner/work/jest/jest/packages/jest-snapshot /home/runner/work/jest/jest/packages/jest-snapshot-utils /home/runner/work/jest/jest/packages/jest-source-map /home/runner/work/jest/jest/packages/jest-test-result /home/runner/work/jest/jest/packages/jest-test-sequencer /home/runner/work/jest/jest/packages/jest-transform /home/runner/work/jest/jest/packages/jest-types /home/runner/work/jest/jest/packages/jest-util /home/runner/work/jest/jest/packages/jest-validate /home/runner/work/jest/jest/packages/jest-watcher /home/runner/work/jest/jest/packages/jest-worker /home/runner/work/jest/jest/packages/pretty-format /home/runner/work/jest/jest/packages/test-globals /home/runner/work/jest/jest/packages/test-utils',
+2026-08-29T16:23:41.6726071Z   escapedCommand: 'yarn tsc -b "/home/runner/work/jest/jest/packages/babel-jest" "/home/runner/work/jest/jest/packages/babel-plugin-jest-hoist" "/home/runner/work/jest/jest/packages/create-jest" "/home/runner/work/jest/jest/packages/diff-sequences" "/home/runner/work/jest/jest/packages/expect" "/home/runner/work/jest/jest/packages/expect-utils" "/home/runner/work/jest/jest/packages/jest" "/home/runner/work/jest/jest/packages/jest-changed-files" "/home/runner/work/jest/jest/packages/jest-circus" "/home/runner/work/jest/jest/packages/jest-cli" "/home/runner/work/jest/jest/packages/jest-config" "/home/runner/work/jest/jest/packages/jest-console" "/home/runner/work/jest/jest/packages/jest-core" "/home/runner/work/jest/jest/packages/jest-create-cache-key-function" "/home/runner/work/jest/jest/packages/jest-diff" "/home/runner/work/jest/jest/packages/jest-docblock" "/home/runner/work/jest/jest/packages/jest-each" "/home/runner/work/jest/jest/packages/jest-environment" "/home/runner/work/jest/jest/packages/jest-environment-jsdom" "/home/runner/work/jest/jest/packages/jest-environment-jsdom-abstract" "/home/runner/work/jest/jest/packages/jest-environment-node" "/home/runner/work/jest/jest/packages/jest-expect" "/home/runner/work/jest/jest/packages/jest-fake-timers" "/home/runner/work/jest/jest/packages/jest-get-type" "/home/runner/work/jest/jest/packages/jest-globals" "/home/runner/work/jest/jest/packages/jest-haste-map" "/home/runner/work/jest/jest/packages/jest-jasmine2" "/home/runner/work/jest/jest/packages/jest-leak-detector" "/home/runner/work/jest/jest/packages/jest-matcher-utils" "/home/runner/work/jest/jest/packages/jest-message-util" "/home/runner/work/jest/jest/packages/jest-mock" "/home/runner/work/jest/jest/packages/jest-pattern" "/home/runner/work/jest/jest/packages/jest-phabricator" "/home/runner/work/jest/jest/packages/jest-regex-util" "/home/runner/work/jest/jest/packages/jest-reporters" "/home/runner/work/jest/jest/packages/jest-resolve" "/home/runner/work/jest/jest/packages/jest-resolve-dependencies" "/home/runner/work/jest/jest/packages/jest-runner" "/home/runner/work/jest/jest/packages/jest-runtime" "/home/runner/work/jest/jest/packages/jest-schemas" "/home/runner/work/jest/jest/packages/jest-snapshot" "/home/runner/work/jest/jest/packages/jest-snapshot-utils" "/home/runner/work/jest/jest/packages/jest-source-map" "/home/runner/work/jest/jest/packages/jest-test-result" "/home/runner/work/jest/jest/packages/jest-test-sequencer" "/home/runner/work/jest/jest/packages/jest-transform" "/home/runner/work/jest/jest/packages/jest-types" "/home/runner/work/jest/jest/packages/jest-util" "/home/runner/work/jest/jest/packages/jest-validate" "/home/runner/work/jest/jest/packages/jest-watcher" "/home/runner/work/jest/jest/packages/jest-worker" "/home/runner/work/jest/jest/packages/pretty-format" "/home/runner/work/jest/jest/packages/test-globals" "/home/runner/work/jest/jest/packages/test-utils"',
+2026-08-29T16:23:41.6744107Z   exitCode: 2,
+2026-08-29T16:23:41.6744482Z   signal: undefined,
+2026-08-29T16:23:41.6744922Z   signalDescription: undefined,
+2026-08-29T16:23:41.6745359Z   stdout: undefined,
+2026-08-29T16:23:41.6745913Z   stderr: undefined,
+2026-08-29T16:23:41.6746282Z   failed: true,
+2026-08-29T16:23:41.6746630Z   timedOut: false,
+2026-08-29T16:23:41.6747021Z   isCanceled: false,
+2026-08-29T16:23:41.6747350Z   killed: false
+2026-08-29T16:23:41.6747687Z }
+2026-08-29T16:23:41.6747886Z 
+2026-08-29T16:23:41.6748036Z Node.js v24.19.0
+2026-08-29T16:23:41.6970863Z ##[error]Process completed with exit code 1.
+2026-08-29T16:23:41.7162232Z Post job cleanup.
+2026-08-29T16:23:41.8004697Z [command]/usr/bin/git version
+2026-08-29T16:23:41.8050780Z git version 2.55.0
+2026-08-29T16:23:41.8084967Z Temporarily overriding HOME='/home/runner/work/_temp/e5d09281-ed99-48b7-9991-9adc2176a737' before making global git config changes
+2026-08-29T16:23:41.8086320Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-29T16:23:41.8089742Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/jest/jest
+2026-08-29T16:23:41.8121451Z Removing SSH command configuration
+2026-08-29T16:23:41.8127717Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-29T16:23:41.8161531Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-29T16:23:41.8400300Z Removing HTTP extra header
+2026-08-29T16:23:41.8405058Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-29T16:23:41.8437353Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-29T16:23:41.8666923Z Removing includeIf entries pointing to credentials config files
+2026-08-29T16:23:41.8672799Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-29T16:23:41.8704716Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-29T16:23:41.9109100Z Cleaning up orphan processes

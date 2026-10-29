@@ -1,0 +1,576 @@
+﻿2026-08-20T14:51:53.5233986Z Current runner version: '2.336.0'
+2026-08-20T14:51:53.5259386Z ##[group]Runner Image Provisioner
+2026-08-20T14:51:53.5260379Z Hosted Compute Agent
+2026-08-20T14:51:53.5261007Z Version: 20260729.566
+2026-08-20T14:51:53.5261670Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+2026-08-20T14:51:53.5262467Z Build Date: 2026-07-29T19:17:02Z
+2026-08-20T14:51:53.5263232Z Worker ID: {a0abdb59-07c8-4e23-b4ba-538bd5c18101}
+2026-08-20T14:51:53.5263993Z Azure Region: centralus
+2026-08-20T14:51:53.5264692Z ##[endgroup]
+2026-08-20T14:51:53.5266526Z ##[group]Operating System
+2026-08-20T14:51:53.5267311Z Ubuntu
+2026-08-20T14:51:53.5267848Z 24.04.4
+2026-08-20T14:51:53.5268401Z LTS
+2026-08-20T14:51:53.5269001Z ##[endgroup]
+2026-08-20T14:51:53.5269572Z ##[group]Runner Image
+2026-08-20T14:51:53.5270228Z Image: ubuntu-24.04
+2026-08-20T14:51:53.5270826Z Version: 20260816.277.1
+2026-08-20T14:51:53.5272175Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260816.277/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-20T14:51:53.5273734Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260816.277
+2026-08-20T14:51:53.5274793Z ##[endgroup]
+2026-08-20T14:51:53.5276460Z ##[group]GITHUB_TOKEN Permissions
+2026-08-20T14:51:53.5278469Z Contents: read
+2026-08-20T14:51:53.5279083Z Metadata: read
+2026-08-20T14:51:53.5279632Z PullRequests: read
+2026-08-20T14:51:53.5280260Z ##[endgroup]
+2026-08-20T14:51:53.5282479Z Secret source: None
+2026-08-20T14:51:53.5283676Z Prepare workflow directory
+2026-08-20T14:51:53.7779453Z Prepare all required actions
+2026-08-20T14:51:53.7825288Z Getting action download info
+2026-08-20T14:51:54.0452914Z Download action repository 'actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd' (SHA:de0fac2e4500dabe0009e67214ff5f5447ce83dd)
+2026-08-20T14:51:54.3042984Z Download action repository 'TanStack/config@e4b48f16568324f76f467aa4c2aac2f05db632c3' (SHA:e4b48f16568324f76f467aa4c2aac2f05db632c3)
+2026-08-20T14:51:54.6491997Z Download action repository 'nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1' (SHA:3e9ad7370203c1e93d109be57f3b72eb0eb511b1)
+2026-08-20T14:51:55.0806222Z Getting action download info
+2026-08-20T14:51:55.2406135Z Download action repository 'pnpm/action-setup@739bfe42ca9233c5e6aca07c1a25a9d34aca49b0' (SHA:739bfe42ca9233c5e6aca07c1a25a9d34aca49b0)
+2026-08-20T14:51:55.5811713Z Download action repository 'actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e' (SHA:48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e)
+2026-08-20T14:51:56.0450076Z Complete job name: Test
+2026-08-20T14:51:56.4817854Z ##[group]Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+2026-08-20T14:51:56.4819538Z with:
+2026-08-20T14:51:56.4820298Z   fetch-depth: 0
+2026-08-20T14:51:56.4821208Z   persist-credentials: false
+2026-08-20T14:51:56.4822247Z   repository: TanStack/query
+2026-08-20T14:51:56.4830708Z   token: ***
+2026-08-20T14:51:56.4831559Z   ssh-strict: true
+2026-08-20T14:51:56.4832425Z   ssh-user: git
+2026-08-20T14:51:56.4833266Z   clean: true
+2026-08-20T14:51:56.4834165Z   sparse-checkout-cone-mode: true
+2026-08-20T14:51:56.4835130Z   fetch-tags: false
+2026-08-20T14:51:56.4836078Z   show-progress: true
+2026-08-20T14:51:56.4836893Z   lfs: false
+2026-08-20T14:51:56.4837652Z   submodules: false
+2026-08-20T14:51:56.4838474Z   set-safe-directory: true
+2026-08-20T14:51:56.4839585Z env:
+2026-08-20T14:51:56.4840342Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-08-20T14:51:56.4841208Z ##[endgroup]
+2026-08-20T14:51:56.5913454Z Syncing repository: TanStack/query
+2026-08-20T14:51:56.5918486Z ##[group]Getting Git version info
+2026-08-20T14:51:56.5920690Z Working directory is '/home/runner/work/query/query'
+2026-08-20T14:51:56.5924194Z [command]/usr/bin/git version
+2026-08-20T14:51:56.6058873Z git version 2.55.0
+2026-08-20T14:51:56.6083947Z ##[endgroup]
+2026-08-20T14:51:56.6100326Z Temporarily overriding HOME='/home/runner/work/_temp/eddfab9c-e2d7-400b-a5bd-94fe1bd4ba8e' before making global git config changes
+2026-08-20T14:51:56.6115430Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-20T14:51:56.6121752Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/query/query
+2026-08-20T14:51:56.6177808Z Deleting the contents of '/home/runner/work/query/query'
+2026-08-20T14:51:56.6181778Z ##[group]Initializing the repository
+2026-08-20T14:51:56.6186463Z [command]/usr/bin/git init /home/runner/work/query/query
+2026-08-20T14:51:56.6295574Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-20T14:51:56.6298234Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-20T14:51:56.6300250Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-20T14:51:56.6302340Z hint: call:
+2026-08-20T14:51:56.6303457Z hint:
+2026-08-20T14:51:56.6304575Z hint: 	git config --global init.defaultBranch <name>
+2026-08-20T14:51:56.6306369Z hint:
+2026-08-20T14:51:56.6307642Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-20T14:51:56.6309625Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-20T14:51:56.6311202Z hint:
+2026-08-20T14:51:56.6312112Z hint: 	git branch -m <name>
+2026-08-20T14:51:56.6313365Z hint:
+2026-08-20T14:51:56.6314835Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-20T14:51:56.6317415Z Initialized empty Git repository in /home/runner/work/query/query/.git/
+2026-08-20T14:51:56.6321847Z [command]/usr/bin/git remote add origin https://github.com/TanStack/query
+2026-08-20T14:51:56.6371567Z ##[endgroup]
+2026-08-20T14:51:56.6374237Z ##[group]Disabling automatic garbage collection
+2026-08-20T14:51:56.6376773Z [command]/usr/bin/git config --local gc.auto 0
+2026-08-20T14:51:56.6418479Z ##[endgroup]
+2026-08-20T14:51:56.6420148Z ##[group]Setting up auth
+2026-08-20T14:51:56.6421317Z Removing SSH command configuration
+2026-08-20T14:51:56.6423180Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-20T14:51:56.6463095Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-20T14:51:56.6868634Z Removing HTTP extra header
+2026-08-20T14:51:56.6877278Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-20T14:51:56.6916299Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-08-20T14:51:56.7162402Z Removing includeIf entries pointing to credentials config files
+2026-08-20T14:51:56.7167828Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-20T14:51:56.7208997Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-20T14:51:56.7434992Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-db005518-3d4f-48e0-a464-9a830ad9d745.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-08-20T14:51:56.7474951Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/query/query/.git.path /home/runner/work/_temp/git-credentials-db005518-3d4f-48e0-a464-9a830ad9d745.config
+2026-08-20T14:51:56.7509743Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/query/query/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-db005518-3d4f-48e0-a464-9a830ad9d745.config
+2026-08-20T14:51:56.7548723Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-db005518-3d4f-48e0-a464-9a830ad9d745.config
+2026-08-20T14:51:56.7583139Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-db005518-3d4f-48e0-a464-9a830ad9d745.config
+2026-08-20T14:51:56.7613741Z ##[endgroup]
+2026-08-20T14:51:56.7616872Z ##[group]Fetching the repository
+2026-08-20T14:51:56.7623590Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +16695ef6a0ebef36f4bffb611d39285ed2d53740:refs/remotes/pull/11120/merge
+2026-08-20T14:52:02.3624453Z From https://github.com/TanStack/query
+2026-08-20T14:52:02.3627142Z  * [new branch]          align-on-ts-5.8.2           -> origin/align-on-ts-5.8.2
+2026-08-20T14:52:02.3628724Z  * [new branch]          bump-@vitejs/plugin-react-to-4.3.4 -> origin/bump-@vitejs/plugin-react-to-4.3.4
+2026-08-20T14:52:02.3630043Z  * [new branch]          bump-angular                -> origin/bump-angular
+2026-08-20T14:52:02.3631299Z  * [new branch]          changeset-release/main      -> origin/changeset-release/main
+2026-08-20T14:52:02.3632867Z  * [new branch]          chore/generate-docs-drop-preact -> origin/chore/generate-docs-drop-preact
+2026-08-20T14:52:02.3634383Z  * [new branch]          coderabbitai/docstrings/6c272bd -> origin/coderabbitai/docstrings/6c272bd
+2026-08-20T14:52:02.3636186Z  * [new branch]          docs/preact-reference-use-react-ref -> origin/docs/preact-reference-use-react-ref
+2026-08-20T14:52:02.3637905Z  * [new branch]          feat-eslint-type-checked-configuration -> origin/feat-eslint-type-checked-configuration
+2026-08-20T14:52:02.3639411Z  * [new branch]          feature/always-re-suspend   -> origin/feature/always-re-suspend
+2026-08-20T14:52:02.3640846Z  * [new branch]          feature/imperative-infinite-queries -> origin/feature/imperative-infinite-queries
+2026-08-20T14:52:02.3642298Z  * [new branch]          feature/isServer            -> origin/feature/isServer
+2026-08-20T14:52:02.3643498Z  * [new branch]          feature/query-key-return    -> origin/feature/query-key-return
+2026-08-20T14:52:02.3644775Z  * [new branch]          feature/select-error-boundary -> origin/feature/select-error-boundary
+2026-08-20T14:52:02.3646273Z  * [new branch]          feature/staleTime-on-query  -> origin/feature/staleTime-on-query
+2026-08-20T14:52:02.3647786Z  * [new branch]          feature/staleTime-on-query-attempt-2 -> origin/feature/staleTime-on-query-attempt-2
+2026-08-20T14:52:02.3649118Z  * [new branch]          feature/suspense-options    -> origin/feature/suspense-options
+2026-08-20T14:52:02.3650449Z  * [new branch]          feature/suspense-placeholder-data -> origin/feature/suspense-placeholder-data
+2026-08-20T14:52:02.3651976Z  * [new branch]          feature/transition-tests    -> origin/feature/transition-tests
+2026-08-20T14:52:02.3653182Z  * [new branch]          feature/tsconfig-paths      -> origin/feature/tsconfig-paths
+2026-08-20T14:52:02.3654587Z  * [new branch]          fix(query-devtools)--resolve-solid-js-as-dep -> origin/fix(query-devtools)--resolve-solid-js-as-dep
+2026-08-20T14:52:02.3656423Z  * [new branch]          fix/svelte-query-devtools-reactive-options -> origin/fix/svelte-query-devtools-reactive-options
+2026-08-20T14:52:02.3657793Z  * [new branch]          gh-pages                    -> origin/gh-pages
+2026-08-20T14:52:02.3658870Z  * [new branch]          hotfix-classic-eslint       -> origin/hotfix-classic-eslint
+2026-08-20T14:52:02.3660057Z  * [new branch]          julius/max-depth            -> origin/julius/max-depth
+2026-08-20T14:52:02.3661224Z  * [new branch]          main                        -> origin/main
+2026-08-20T14:52:02.3662218Z  * [new branch]          rebrand-2                   -> origin/rebrand-2
+2026-08-20T14:52:02.3663500Z  * [new branch]          renovate/npm-astro-vulnerability -> origin/renovate/npm-astro-vulnerability
+2026-08-20T14:52:02.3664991Z  * [new branch]          renovate/npm-astrojs-node-vulnerability -> origin/renovate/npm-astrojs-node-vulnerability
+2026-08-20T14:52:02.3667109Z  * [new branch]          renovate/npm-next-vulnerability -> origin/renovate/npm-next-vulnerability
+2026-08-20T14:52:02.3668840Z  * [new branch]          renovate/npm-vite-vulnerability -> origin/renovate/npm-vite-vulnerability
+2026-08-20T14:52:02.3671249Z  * [new branch]          set-options-before-checking-experimental_prefetchInRender -> origin/set-options-before-checking-experimental_prefetchInRender
+2026-08-20T14:52:02.3673272Z  * [new branch]          solid-query-ignore-error-data-undefined -> origin/solid-query-ignore-error-data-undefined
+2026-08-20T14:52:02.3674779Z  * [new branch]          solid-query-v6-pre          -> origin/solid-query-v6-pre
+2026-08-20T14:52:02.3676119Z  * [new branch]          taren/framework-adapter     -> origin/taren/framework-adapter
+2026-08-20T14:52:02.3677456Z  * [new branch]          taren/query-intent-skills   -> origin/taren/query-intent-skills
+2026-08-20T14:52:02.3679200Z  * [new branch]          test/query-core-replace-deprecated-vitest-aliases -> origin/test/query-core-replace-deprecated-vitest-aliases
+2026-08-20T14:52:02.3680703Z  * [new branch]          tkdodo/ref/use-over-throw   -> origin/tkdodo/ref/use-over-throw
+2026-08-20T14:52:02.3681819Z  * [new branch]          update-tanstack-vite-config -> origin/update-tanstack-vite-config
+2026-08-20T14:52:02.3682897Z  * [new branch]          use-query-state             -> origin/use-query-state
+2026-08-20T14:52:02.3683733Z  * [new branch]          v1                          -> origin/v1
+2026-08-20T14:52:02.3684478Z  * [new branch]          v2                          -> origin/v2
+2026-08-20T14:52:02.3685288Z  * [new branch]          v3                          -> origin/v3
+2026-08-20T14:52:02.3686264Z  * [new branch]          v4                          -> origin/v4
+2026-08-20T14:52:02.3687106Z  * [new branch]          v6/store-experiments        -> origin/v6/store-experiments
+2026-08-20T14:52:02.3688074Z  * [new branch]          wip-tsdown                  -> origin/wip-tsdown
+2026-08-20T14:52:02.3689050Z  * [new branch]          wip-typedoc                 -> origin/wip-typedoc
+2026-08-20T14:52:02.3689915Z  * [new tag]             5.8.2                       -> 5.8.2
+2026-08-20T14:52:02.3691121Z  * [new tag]             @tanstack/angular-query-experimental@5.100.0 -> @tanstack/angular-query-experimental@5.100.0
+2026-08-20T14:52:02.3692787Z  * [new tag]             @tanstack/angular-query-experimental@5.100.11 -> @tanstack/angular-query-experimental@5.100.11
+2026-08-20T14:52:02.3694357Z  * [new tag]             @tanstack/angular-query-experimental@5.100.12 -> @tanstack/angular-query-experimental@5.100.12
+2026-08-20T14:52:02.3695940Z  * [new tag]             @tanstack/angular-query-experimental@5.100.13 -> @tanstack/angular-query-experimental@5.100.13
+2026-08-20T14:52:02.3698954Z  * [new tag]             @tanstack/angular-query-experimental@5.100.14 -> @tanstack/angular-query-experimental@5.100.14
+2026-08-20T14:52:02.3701246Z  * [new tag]             @tanstack/angular-query-experimental@5.100.2 -> @tanstack/angular-query-experimental@5.100.2
+2026-08-20T14:52:02.3702847Z  * [new tag]             @tanstack/angular-query-experimental@5.100.3 -> @tanstack/angular-query-experimental@5.100.3
+2026-08-20T14:52:02.3704420Z  * [new tag]             @tanstack/angular-query-experimental@5.100.4 -> @tanstack/angular-query-experimental@5.100.4
+2026-08-20T14:52:02.3705465Z  * [new tag]             @tanstack/angular-query-experimental@5.100.5 -> @tanstack/angular-query-experimental@5.100.5
+2026-08-20T14:52:02.3707507Z  * [new tag]             @tanstack/angular-query-experimental@5.100.6 -> @tanstack/angular-query-experimental@5.100.6
+2026-08-20T14:52:02.3708505Z  * [new tag]             @tanstack/angular-query-experimental@5.100.7 -> @tanstack/angular-query-experimental@5.100.7
+2026-08-20T14:52:02.3709420Z  * [new tag]             @tanstack/angular-query-experimental@5.100.8 -> @tanstack/angular-query-experimental@5.100.8
+2026-08-20T14:52:02.3710308Z  * [new tag]             @tanstack/angular-query-experimental@5.100.9 -> @tanstack/angular-query-experimental@5.100.9
+2026-08-20T14:52:02.3711221Z  * [new tag]             @tanstack/angular-query-experimental@5.101.0 -> @tanstack/angular-query-experimental@5.101.0
+2026-08-20T14:52:02.3712115Z  * [new tag]             @tanstack/angular-query-experimental@5.101.1 -> @tanstack/angular-query-experimental@5.101.1
+2026-08-20T14:52:02.3713261Z  * [new tag]             @tanstack/angular-query-experimental@5.101.2 -> @tanstack/angular-query-experimental@5.101.2
+2026-08-20T14:52:02.3714151Z  * [new tag]             @tanstack/angular-query-experimental@5.101.3 -> @tanstack/angular-query-experimental@5.101.3
+2026-08-20T14:52:02.3715063Z  * [new tag]             @tanstack/angular-query-experimental@5.101.4 -> @tanstack/angular-query-experimental@5.101.4
+2026-08-20T14:52:02.3716285Z  * [new tag]             @tanstack/angular-query-experimental@5.90.10 -> @tanstack/angular-query-experimental@5.90.10
+2026-08-20T14:52:02.3717191Z  * [new tag]             @tanstack/angular-query-experimental@5.90.11 -> @tanstack/angular-query-experimental@5.90.11
+2026-08-20T14:52:02.3718280Z  * [new tag]             @tanstack/angular-query-experimental@5.90.12 -> @tanstack/angular-query-experimental@5.90.12
+2026-08-20T14:52:02.3719474Z  * [new tag]             @tanstack/angular-query-experimental@5.90.13 -> @tanstack/angular-query-experimental@5.90.13
+2026-08-20T14:52:02.3720356Z  * [new tag]             @tanstack/angular-query-experimental@5.90.14 -> @tanstack/angular-query-experimental@5.90.14
+2026-08-20T14:52:02.3721235Z  * [new tag]             @tanstack/angular-query-experimental@5.90.15 -> @tanstack/angular-query-experimental@5.90.15
+2026-08-20T14:52:02.3722111Z  * [new tag]             @tanstack/angular-query-experimental@5.90.16 -> @tanstack/angular-query-experimental@5.90.16
+2026-08-20T14:52:02.3723009Z  * [new tag]             @tanstack/angular-query-experimental@5.90.18 -> @tanstack/angular-query-experimental@5.90.18
+2026-08-20T14:52:02.3723907Z  * [new tag]             @tanstack/angular-query-experimental@5.90.19 -> @tanstack/angular-query-experimental@5.90.19
+2026-08-20T14:52:02.3724785Z  * [new tag]             @tanstack/angular-query-experimental@5.90.20 -> @tanstack/angular-query-experimental@5.90.20
+2026-08-20T14:52:02.3725656Z  * [new tag]             @tanstack/angular-query-experimental@5.90.21 -> @tanstack/angular-query-experimental@5.90.21
+2026-08-20T14:52:02.3729079Z  * [new tag]             @tanstack/angular-query-experimental@5.90.22 -> @tanstack/angular-query-experimental@5.90.22
+2026-08-20T14:52:02.3730058Z  * [new tag]             @tanstack/angular-query-experimental@5.90.23 -> @tanstack/angular-query-experimental@5.90.23
+2026-08-20T14:52:02.3731240Z  * [new tag]             @tanstack/angular-query-experimental@5.90.24 -> @tanstack/angular-query-experimental@5.90.24
+2026-08-20T14:52:02.3732598Z  * [new tag]             @tanstack/angular-query-experimental@5.90.25 -> @tanstack/angular-query-experimental@5.90.25
+2026-08-20T14:52:02.3733554Z  * [new tag]             @tanstack/angular-query-experimental@5.90.26 -> @tanstack/angular-query-experimental@5.90.26
+2026-08-20T14:52:02.3734470Z  * [new tag]             @tanstack/angular-query-experimental@5.90.28 -> @tanstack/angular-query-experimental@5.90.28
+2026-08-20T14:52:02.3735349Z  * [new tag]             @tanstack/angular-query-experimental@5.90.3 -> @tanstack/angular-query-experimental@5.90.3
+2026-08-20T14:52:02.3736473Z  * [new tag]             @tanstack/angular-query-experimental@5.90.4 -> @tanstack/angular-query-experimental@5.90.4
+2026-08-20T14:52:02.3737344Z  * [new tag]             @tanstack/angular-query-experimental@5.90.5 -> @tanstack/angular-query-experimental@5.90.5
+2026-08-20T14:52:02.3738222Z  * [new tag]             @tanstack/angular-query-experimental@5.90.6 -> @tanstack/angular-query-experimental@5.90.6
+2026-08-20T14:52:02.3739081Z  * [new tag]             @tanstack/angular-query-experimental@5.90.7 -> @tanstack/angular-query-experimental@5.90.7
+2026-08-20T14:52:02.3739940Z  * [new tag]             @tanstack/angular-query-experimental@5.90.8 -> @tanstack/angular-query-experimental@5.90.8
+2026-08-20T14:52:02.3740867Z  * [new tag]             @tanstack/angular-query-experimental@5.90.9 -> @tanstack/angular-query-experimental@5.90.9
+2026-08-20T14:52:02.3741845Z  * [new tag]             @tanstack/angular-query-experimental@5.94.5 -> @tanstack/angular-query-experimental@5.94.5
+2026-08-20T14:52:02.3742866Z  * [new tag]             @tanstack/angular-query-experimental@5.95.0 -> @tanstack/angular-query-experimental@5.95.0
+2026-08-20T14:52:02.3743721Z  * [new tag]             @tanstack/angular-query-experimental@5.95.1 -> @tanstack/angular-query-experimental@5.95.1
+2026-08-20T14:52:02.3744564Z  * [new tag]             @tanstack/angular-query-experimental@5.95.2 -> @tanstack/angular-query-experimental@5.95.2
+2026-08-20T14:52:02.3745349Z  * [new tag]             @tanstack/angular-query-experimental@5.96.0 -> @tanstack/angular-query-experimental@5.96.0
+2026-08-20T14:52:02.3746642Z  * [new tag]             @tanstack/angular-query-experimental@5.96.1 -> @tanstack/angular-query-experimental@5.96.1
+2026-08-20T14:52:02.3747616Z  * [new tag]             @tanstack/angular-query-experimental@5.96.2 -> @tanstack/angular-query-experimental@5.96.2
+2026-08-20T14:52:02.3747616Z [fixture trimmed: 2494 lines omitted]
+2026-08-20T14:52:30.6521950Z ##[group]Run pnpm install --frozen-lockfile
+2026-08-20T14:52:30.6522284Z [36;1mpnpm install --frozen-lockfile[0m
+2026-08-20T14:52:30.6559831Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-08-20T14:52:30.6560169Z env:
+2026-08-20T14:52:30.6560359Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-08-20T14:52:30.6560644Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-08-20T14:52:30.6561031Z   STORE_PATH: /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-08-20T14:52:30.6561361Z ##[endgroup]
+2026-08-20T14:52:31.1754652Z Scope: all 102 workspace projects
+2026-08-20T14:52:31.4269744Z ? Verifying lockfile against supply-chain policies (3136 entries)...
+2026-08-20T14:52:31.4545176Z Lockfile is up to date, resolution step is skipped
+2026-08-20T14:52:31.6799516Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-08-20T14:52:31.9163011Z Packages: +2955
+2026-08-20T14:52:31.9164002Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-08-20T14:52:32.6975185Z Progress: resolved 2955, reused 0, downloaded 0, added 0
+2026-08-20T14:52:34.4934062Z Progress: resolved 2955, reused 0, downloaded 1, added 0
+2026-08-20T14:52:35.4939073Z Progress: resolved 2955, reused 0, downloaded 143, added 8
+2026-08-20T14:52:36.5026842Z Progress: resolved 2955, reused 0, downloaded 380, added 36
+2026-08-20T14:52:37.5039398Z Progress: resolved 2955, reused 0, downloaded 497, added 48
+2026-08-20T14:52:38.5047771Z Progress: resolved 2955, reused 0, downloaded 679, added 61
+2026-08-20T14:52:39.5258367Z Progress: resolved 2955, reused 0, downloaded 822, added 78
+2026-08-20T14:52:40.5262740Z Progress: resolved 2955, reused 0, downloaded 874, added 83
+2026-08-20T14:52:41.7377076Z Progress: resolved 2955, reused 0, downloaded 992, added 94
+2026-08-20T14:52:42.7959576Z Progress: resolved 2955, reused 0, downloaded 1170, added 109
+2026-08-20T14:52:43.7961586Z Progress: resolved 2955, reused 0, downloaded 1289, added 119
+2026-08-20T14:52:44.8118841Z Progress: resolved 2955, reused 0, downloaded 1402, added 129
+2026-08-20T14:52:45.8255605Z Progress: resolved 2955, reused 0, downloaded 1480, added 137
+2026-08-20T14:52:46.8427519Z Progress: resolved 2955, reused 0, downloaded 1559, added 142
+2026-08-20T14:52:47.8442152Z Progress: resolved 2955, reused 0, downloaded 1627, added 149
+2026-08-20T14:52:48.8447657Z Progress: resolved 2955, reused 0, downloaded 1761, added 158
+2026-08-20T14:52:49.8489056Z Progress: resolved 2955, reused 0, downloaded 1901, added 170
+2026-08-20T14:52:50.8507312Z Progress: resolved 2955, reused 0, downloaded 2093, added 186
+2026-08-20T14:52:51.8528041Z Progress: resolved 2955, reused 0, downloaded 2307, added 207
+2026-08-20T14:52:52.8548297Z Progress: resolved 2955, reused 0, downloaded 2533, added 245
+2026-08-20T14:52:53.8561906Z Progress: resolved 2955, reused 0, downloaded 2676, added 273
+2026-08-20T14:52:55.0127126Z Progress: resolved 2955, reused 0, downloaded 2807, added 287
+2026-08-20T14:52:56.0337059Z Progress: resolved 2955, reused 0, downloaded 2817, added 291
+2026-08-20T14:52:57.0341074Z Progress: resolved 2955, reused 0, downloaded 2820, added 376
+2026-08-20T14:52:58.0364436Z Progress: resolved 2955, reused 0, downloaded 2820, added 625
+2026-08-20T14:52:59.1892338Z Progress: resolved 2955, reused 0, downloaded 2820, added 875
+2026-08-20T14:53:00.2001879Z Progress: resolved 2955, reused 0, downloaded 2820, added 1167
+2026-08-20T14:53:01.2030218Z Progress: resolved 2955, reused 0, downloaded 2820, added 1460
+2026-08-20T14:53:02.2137125Z Progress: resolved 2955, reused 0, downloaded 2820, added 1851
+2026-08-20T14:53:03.2212383Z Progress: resolved 2955, reused 0, downloaded 2820, added 2227
+2026-08-20T14:53:03.3455461Z [WARN] Request took 10609ms: https://registry.npmjs.org/@typescript-eslint%2Fparser
+2026-08-20T14:53:04.1048447Z [WARN] Request took 10977ms: https://registry.npmjs.org/@typescript-eslint%2Ftypescript-estree
+2026-08-20T14:53:04.2247236Z Progress: resolved 2955, reused 0, downloaded 2820, added 2591
+2026-08-20T14:53:05.0020312Z [WARN] Request took 10877ms: https://registry.npmjs.org/@typescript-eslint%2Feslint-plugin
+2026-08-20T14:53:05.1653830Z Progress: resolved 2955, reused 0, downloaded 2820, added 2955, done
+2026-08-20T14:53:08.6853775Z [WARN] Request took 10086ms: https://registry.npmjs.org/next
+2026-08-20T14:53:09.9587819Z ✓ Lockfile passes supply-chain policies (3136 entries in 38.5s)
+2026-08-20T14:53:09.9725032Z .../.pnpm/nx@22.1.3/node_modules/nx postinstall$ node ./bin/post-install || exit 0
+2026-08-20T14:53:09.9741333Z .../esbuild@0.27.4/node_modules/esbuild postinstall$ node install.js
+2026-08-20T14:53:10.0614495Z .../esbuild@0.27.4/node_modules/esbuild postinstall: Done
+2026-08-20T14:53:10.2909161Z .../.pnpm/nx@22.1.3/node_modules/nx postinstall: Done
+2026-08-20T14:53:10.8051380Z 
+2026-08-20T14:53:10.8052862Z devDependencies:
+2026-08-20T14:53:10.8053711Z + @arethetypeswrong/cli 0.15.4
+2026-08-20T14:53:10.8054303Z + @changesets/changelog-github 0.7.0
+2026-08-20T14:53:10.8054808Z + @changesets/cli 2.30.0
+2026-08-20T14:53:10.8055253Z + @cspell/eslint-plugin 9.7.0
+2026-08-20T14:53:10.8056027Z + @eslint-react/eslint-plugin 2.13.0
+2026-08-20T14:53:10.8056614Z + @size-limit/preset-small-lib 12.0.1
+2026-08-20T14:53:10.8057173Z + @tanstack/eslint-config 0.3.2
+2026-08-20T14:53:10.8057718Z + @tanstack/typedoc-config 0.3.1
+2026-08-20T14:53:10.8058193Z + @tanstack/vite-config 0.4.3
+2026-08-20T14:53:10.8058716Z + @testing-library/jest-dom 6.9.1
+2026-08-20T14:53:10.8059197Z + @types/node 22.19.15
+2026-08-20T14:53:10.8059600Z + @types/react 19.2.14
+2026-08-20T14:53:10.8060231Z + @types/react-dom 19.2.3
+2026-08-20T14:53:10.8060732Z + @vitest/coverage-istanbul 4.0.6
+2026-08-20T14:53:10.8061263Z + @vitest/eslint-plugin 1.6.14
+2026-08-20T14:53:10.8061723Z + eslint 9.39.4
+2026-08-20T14:53:10.8062191Z + eslint-plugin-react-hooks 6.1.1
+2026-08-20T14:53:10.8062654Z + jsdom 27.4.0
+2026-08-20T14:53:10.8063001Z + knip 6.1.1
+2026-08-20T14:53:10.8063440Z + markdown-link-extractor 4.0.3
+2026-08-20T14:53:10.8063871Z + nx 22.1.3
+2026-08-20T14:53:10.8064193Z + premove 4.0.0
+2026-08-20T14:53:10.8064527Z + prettier 3.8.1
+2026-08-20T14:53:10.8064961Z + prettier-plugin-svelte 3.5.1
+2026-08-20T14:53:10.8065405Z + publint 0.3.18
+2026-08-20T14:53:10.8067344Z + react 19.2.4
+2026-08-20T14:53:10.8067799Z + react-dom 19.2.4
+2026-08-20T14:53:10.8068172Z + sherif 1.11.1
+2026-08-20T14:53:10.8068552Z + size-limit 12.0.1
+2026-08-20T14:53:10.8068943Z + tinyglobby 0.2.15
+2026-08-20T14:53:10.8069294Z + tsdown 0.22.14
+2026-08-20T14:53:10.8069671Z + typescript 6.0.3
+2026-08-20T14:53:10.8070173Z + typescript56 <- typescript 5.6.3
+2026-08-20T14:53:10.8070727Z + typescript57 <- typescript 5.7.3
+2026-08-20T14:53:10.8071275Z + typescript58 <- typescript 5.8.3
+2026-08-20T14:53:10.8071818Z + typescript59 <- typescript 5.9.3
+2026-08-20T14:53:10.8072344Z + typescript70 <- typescript 7.0.2
+2026-08-20T14:53:10.8072763Z + vite 6.4.1
+2026-08-20T14:53:10.8073091Z + vitest 4.1.2
+2026-08-20T14:53:10.8073282Z 
+2026-08-20T14:53:11.1927791Z Done in 40.5s using pnpm v11.9.0
+2026-08-20T14:53:11.3476329Z ##[end-action id=__TanStack_config.__run_2;outcome=success;conclusion=success;duration_ms=40704]
+2026-08-20T14:53:11.4100044Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-08-20T14:53:11.4100044Z [fixture trimmed: 19 lines omitted]
+2026-08-20T14:53:11.5505240Z ##[group]Run pnpm run test:pr
+2026-08-20T14:53:11.5506365Z [36;1mpnpm run test:pr[0m
+2026-08-20T14:53:11.5560704Z shell: /usr/bin/bash -e {0}
+2026-08-20T14:53:11.5561111Z env:
+2026-08-20T14:53:11.5561439Z   NX_CLOUD_ACCESS_TOKEN: 
+2026-08-20T14:53:11.5561946Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-08-20T14:53:11.5562637Z   STORE_PATH: /home/runner/setup-pnpm/node_modules/.bin/store/v11
+2026-08-20T14:53:11.5563324Z   NX_BASE: 1ef42087c9a266c2137d2ef645cbcc662f60ac93
+2026-08-20T14:53:11.5563939Z   NX_HEAD: 16695ef6a0ebef36f4bffb611d39285ed2d53740
+2026-08-20T14:53:11.5564456Z ##[endgroup]
+2026-08-20T14:53:12.0469645Z $ nx affected --targets=test:sherif,test:knip,test:docs,test:eslint,test:lib,test:types,test:build,build
+2026-08-20T14:53:12.2983183Z 
+2026-08-20T14:53:12.2983183Z [fixture trimmed: 322 lines omitted]
+2026-08-20T14:56:58.2649116Z      [32m✓[39m should reconnect the observer to the current mutation on resubscribe[32m 3[2mms[22m[39m
+2026-08-20T14:56:58.2649824Z      [32m✓[39m unsubscribe should remove observer to trigger GC[32m 3[2mms[22m[39m
+2026-08-20T14:56:58.2650794Z [31m     [31m×[31m resubscribing should reattach the observer to the in-flight mutation[39m[32m 6[2mms[22m[39m
+2026-08-20T14:56:58.2651769Z      [32m✓[39m resubscribing should pick up a mutation that settled while unsubscribed[32m 2[2mms[22m[39m
+2026-08-20T14:56:58.2652750Z      [32m✓[39m reset should remove observer to trigger GC[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2653984Z      [32m✓[39m changing mutation keys should reset the observer[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2655428Z      [32m✓[39m changing mutation keys should not affect already existing mutations[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2657250Z      [32m✓[39m changing mutation meta should not affect successful mutations[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2658817Z      [32m✓[39m mutation cache should have different meta when updated between mutations[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2660297Z      [32m✓[39m changing mutation meta should not affect rejected mutations[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2661685Z      [32m✓[39m changing mutation meta should affect pending mutations[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2663513Z      [32m✓[39m mutation callbacks should be called in correct order with correct arguments for success case[32m 2[2mms[22m[39m
+2026-08-20T14:56:58.2665513Z      [32m✓[39m mutation callbacks should be called in correct order with correct arguments for error case[32m 2[2mms[22m[39m
+2026-08-20T14:56:58.2667750Z        [32m✓[39m onSuccess and onSettled is transferred to different execution context where it is reported[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2669012Z        [32m✓[39m onError and onSettled is transferred to different execution context where it is reported[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2669889Z      [32m✓[39m should not notify cache when setOptions is called with same options[32m 1[2mms[22m[39m
+2026-08-20T14:56:58.2670880Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/mutationCache.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+2026-08-20T14:56:58.2671955Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/queryCache.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+2026-08-20T14:56:58.2673056Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/infiniteQueryBehavior.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+2026-08-20T14:56:58.2674191Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/infiniteQueryObserver.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+2026-08-20T14:56:58.2675280Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/onlineManager.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+2026-08-20T14:56:58.2676513Z  [32m✓[39m [30m[42m @tanstack/query-core [49m[39m src/__tests__/focusManager.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-08-20T14:56:58.2677966Z [90mstderr[2m | src/__tests__/timeoutManager.test.tsx[2m > [22m[2mtimeoutManager[2m > [22m[2mTimeoutManager[2m > [22m[2msetTimeoutProvider[2m > [22m[2mwarns when switching providers after making call
+2026-08-20T14:56:58.2679298Z [22m[39m[timeoutManager]: Switching provider after calls to previous provider might result in unexpected behavior. {
+2026-08-20T14:56:58.2680053Z   previous: {
+2026-08-20T14:56:58.2680364Z     __TEST_ONLY__name: [32m'custom'[39m,
+2026-08-20T14:56:58.2680676Z     setTimeout: [Function: Mock] {
+2026-08-20T14:56:58.2681010Z       _isMockFunction: [33mtrue[39m,
+2026-08-20T14:56:58.2681010Z [fixture trimmed: 198 lines omitted]
+2026-08-20T14:56:58.2777019Z [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+2026-08-20T14:56:58.2777275Z 
+2026-08-20T14:56:58.2778277Z [41m[1m FAIL [22m[49m [30m[42m @tanstack/query-core [49m[39m src/__tests__/mutationObserver.test.tsx[2m > [22mmutationObserver[2m > [22mresubscribing should reattach the observer to the in-flight mutation
+2026-08-20T14:56:58.2779769Z [31m[1mAssertionError[22m: expected "vi.fn()" to be called 1 times, but got 2 times[39m
+2026-08-20T14:56:58.2781011Z [36m [2m❯[22m src/__tests__/mutationObserver.test.tsx:[2m116:33[22m[39m
+2026-08-20T14:56:58.2781576Z     [90m114|[39m       data[33m:[39m [32m'input'[39m[33m,[39m
+2026-08-20T14:56:58.2781932Z     [90m115|[39m     })
+2026-08-20T14:56:58.2782702Z     [90m116|[39m     [34mexpect[39m(subscriptionHandler)[33m.[39m[34mtoHaveBeenCalledTimes[39m([34m1[39m)
+2026-08-20T14:56:58.2783360Z     [90m   |[39m                                 [31m^[39m
+2026-08-20T14:56:58.2783679Z     [90m117|[39m   })
+2026-08-20T14:56:58.2783910Z     [90m118|[39m
+2026-08-20T14:56:58.2784031Z 
+2026-08-20T14:56:58.2784255Z [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2026-08-20T14:56:58.2784454Z 
+2026-08-20T14:56:58.2784750Z [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+2026-08-20T14:56:58.2785100Z [31m[1m
+2026-08-20T14:56:58.2785397Z Vitest caught 2 unhandled errors during the test run.
+2026-08-20T14:56:58.2786767Z This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+2026-08-20T14:56:58.2787466Z 
+2026-08-20T14:56:58.2787968Z [31m⎯⎯⎯[39m[1m[41m Unhandled Source Error [49m[22m[31m⎯⎯⎯[39m
+2026-08-20T14:56:58.2788749Z [31m[1mTypeCheckError[22m: Duplicate function implementation.[39m
+2026-08-20T14:56:58.2789306Z [36m [2m❯[22m src/mutationObserver.ts:[2m96:13[22m[39m
+2026-08-20T14:56:58.2789650Z     [90m 94|[39m   }
+2026-08-20T14:56:58.2789880Z     [90m 95|[39m
+2026-08-20T14:56:58.2790435Z     [90m 96|[39m   [35mprotected[39m [34monSubscribe[39m()[33m:[39m [35mvoid[39m {
+2026-08-20T14:56:58.2791172Z     [90m   |[39m             [31m^[39m
+2026-08-20T14:56:58.2792207Z     [90m 97|[39m     [35mif[39m ([35mthis[39m[33m.[39mlisteners[33m.[39msize [33m===[39m [34m1[39m [33m&&[39m [35mthis[39m[33m.[39m#currentMutation) {
+2026-08-20T14:56:58.2793125Z     [90m 98|[39m       [35mthis[39m[33m.[39m#currentMutation[33m.[39m[34maddObserver[39m([35mthis[39m)
+2026-08-20T14:56:58.2793715Z 
+2026-08-20T14:56:58.2793724Z 
+2026-08-20T14:56:58.2794274Z [31m⎯⎯⎯[39m[1m[41m Unhandled Source Error [49m[22m[31m⎯⎯⎯[39m
+2026-08-20T14:56:58.2794871Z [31m[1mTypeCheckError[22m: Duplicate function implementation.[39m
+2026-08-20T14:56:58.2795405Z [36m [2m❯[22m src/mutationObserver.ts:[2m110:13[22m[39m
+2026-08-20T14:56:58.2795890Z     [90m108|[39m   }
+2026-08-20T14:56:58.2796127Z     [90m109|[39m
+2026-08-20T14:56:58.2796580Z     [90m110|[39m   [35mprotected[39m [34monSubscribe[39m()[33m:[39m [35mvoid[39m {
+2026-08-20T14:56:58.2797049Z     [90m   |[39m             [31m^[39m
+2026-08-20T14:56:58.2797830Z     [90m111|[39m     [35mif[39m ([35mthis[39m[33m.[39mlisteners[33m.[39msize [33m===[39m [34m1[39m [33m&&[39m [35mthis[39m[33m.[39m#currentMutation) {
+2026-08-20T14:56:58.2798916Z     [90m112|[39m       [35mthis[39m[33m.[39m#currentMutation[33m.[39m[34maddObserver[39m([35mthis[39m)
+2026-08-20T14:56:58.2799650Z 
+2026-08-20T14:56:58.2799983Z [31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+2026-08-20T14:56:58.2800180Z 
+2026-08-20T14:56:58.2800185Z 
+2026-08-20T14:56:58.2800631Z [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+2026-08-20T14:56:58.2801403Z [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m621 passed[39m[22m[90m (622)[39m
+2026-08-20T14:56:58.2801912Z [2mType Errors [22m [2mno errors[22m
+2026-08-20T14:56:58.2802291Z [2m     Errors [22m [1m[31m2 errors[39m[22m
+2026-08-20T14:56:58.2802652Z [2m   Start at [22m 14:56:41
+2026-08-20T14:56:58.2803369Z [2m   Duration [22m 15.48s[2m (transform 5.56s, setup 0ms, import 7.91s, tests 1.33s, environment 15.64s, typecheck 674ms)[22m
+2026-08-20T14:56:58.2803815Z 
+2026-08-20T14:56:58.2804304Z [41m[31m[[39m[49m[41m[30mELIFECYCLE[39m[49m[41m[31m][39m[49m [31mCommand failed with exit code 1.[39m
+2026-08-20T14:56:58.2804687Z 
+2026-08-20T14:56:58.2804692Z 
+2026-08-20T14:56:58.2804698Z 
+2026-08-20T14:56:58.2804729Z 
+2026-08-20T14:56:58.2804882Z > nx run @tanstack/query-core:test:eslint 
+2026-08-20T14:56:58.2805074Z 
+2026-08-20T14:56:58.2805260Z [2m$ eslint --concurrency=auto ./src[22m
+2026-08-20T14:56:58.2805546Z [0m[0m
+2026-08-20T14:56:58.2806295Z [0m[4m/home/workflows/workspace/packages/query-core/src/__tests__/infiniteQueryBehavior.test.tsx[24m[0m
+2026-08-20T14:56:58.2807153Z [0m  [2m336:73[22m  [33mwarning[39m  Unknown word: "refetched"  [2mcspell/spellchecker[22m[0m
+2026-08-20T14:56:58.2807597Z [0m[0m
+2026-08-20T14:56:58.2807956Z [0m[33m[1m✖ 1 problem (0 errors, 1 warning)[22m[39m[0m
+2026-08-20T14:56:58.2808315Z [0m[33m[1m[22m[39m[0m
+2026-08-20T14:56:58.2808456Z 
+2026-08-20T14:56:58.2808461Z 
+2026-08-20T14:56:58.2808466Z 
+2026-08-20T14:56:58.2808471Z 
+2026-08-20T14:56:58.2808634Z > nx run @tanstack/query-core:test:types 
+2026-08-20T14:56:58.2808829Z 
+2026-08-20T14:56:58.2809039Z [2m$ npm-run-all --serial test:types:*[22m
+2026-08-20T14:56:58.2809607Z [2m$ node ../../node_modules/typescript56/lib/tsc.js --build tsconfig.legacy.json[22m
+2026-08-20T14:56:58.2810790Z ##[error]src/mutationObserver.ts(96,13): error TS2393: Duplicate function implementation.
+2026-08-20T14:56:58.2812285Z ##[error]src/mutationObserver.ts(110,13): error TS2393: Duplicate function implementation.
+2026-08-20T14:56:58.2813517Z [41m[31m[[39m[49m[41m[30mELIFECYCLE[39m[49m[41m[31m][39m[49m [31mCommand failed with exit code 1.[39m
+2026-08-20T14:56:58.2814053Z ERROR: "test:types:ts56" exited with 1.
+2026-08-20T14:56:58.2814698Z [41m[31m[[39m[49m[41m[30mELIFECYCLE[39m[49m[41m[31m][39m[49m [31mCommand failed with exit code 1.[39m
+2026-08-20T14:56:58.2815073Z 
+2026-08-20T14:56:58.2815078Z 
+2026-08-20T14:56:58.2815083Z 
+2026-08-20T14:56:58.3234884Z 
+2026-08-20T14:56:58.3235281Z > nx run root:test:knip 
+2026-08-20T14:56:58.3235538Z 
+2026-08-20T14:56:58.3236213Z [2m$ knip --treat-config-hints-as-errors[22m
+2026-08-20T14:56:58.3236471Z 
+2026-08-20T14:56:58.3236483Z 
+2026-08-20T14:56:58.3236488Z 
+2026-08-20T14:56:58.3421144Z 
+2026-08-20T14:56:58.3421608Z > nx run @tanstack/eslint-plugin-query:build 
+2026-08-20T14:56:58.3421994Z 
+2026-08-20T14:56:58.3422480Z [2m$ tsdown --tsconfig tsconfig.prod.json[22m
+2026-08-20T14:56:58.3423429Z [34mℹ[39m [34mtsdown v0.22.14[39m powered by [38;2;255;126;23mrolldown v1.2.4[39m
+2026-08-20T14:56:58.3424316Z [34mℹ[39m config file: [4m/home/runner/work/query/query/packages/eslint-plugin-query/tsdown.config.ts[24m 
+2026-08-20T14:56:58.3425037Z [34mℹ[39m entry: [34msrc/index.ts, src/rules.ts, src/types.ts[39m
+2026-08-20T14:56:58.3425670Z [34mℹ[39m targets: [34mchrome91, firefox90, edge91, safari15, ios15, opera77[39m
+2026-08-20T14:56:58.3426683Z [34mℹ[39m entry: [34msrc/index.ts, src/rules.ts, src/types.ts[39m
+2026-08-20T14:56:58.3427351Z [34mℹ[39m targets: [34mes2020, node16[39m
+2026-08-20T14:56:58.3427784Z [34mℹ[39m tsconfig: [34mtsconfig.prod.json[39m
+2026-08-20T14:56:58.3428403Z [34mℹ[39m tsconfig: [34mtsconfig.prod.json[39m
+2026-08-20T14:56:58.3428896Z [34mℹ[39m Build start
+2026-08-20T14:56:58.3429576Z [34mℹ[39m [33m[CJS][39m [2mbuild/legacy/[22m[1mindex.cjs[22m               [2m  1.52 kB[22m [2m│ gzip:  0.53 kB[22m
+2026-08-20T14:56:58.3430468Z [34mℹ[39m [33m[CJS][39m [2mbuild/legacy/[22m[1mrules.cjs[22m               [2m  0.17 kB[22m [2m│ gzip:  0.15 kB[22m
+2026-08-20T14:56:58.3431348Z [34mℹ[39m [33m[CJS][39m [2mbuild/legacy/[22m[1mtypes.cjs[22m               [2m  0.07 kB[22m [2m│ gzip:  0.09 kB[22m
+2026-08-20T14:56:58.3432243Z [34mℹ[39m [33m[CJS][39m [2mbuild/legacy/[22mrules-ChMfhjqW.cjs.map  [2m100.91 kB[22m [2m│ gzip: 21.87 kB[22m
+2026-08-20T14:56:58.3432243Z [fixture trimmed: 185 lines omitted]
+2026-08-20T14:56:58.5515227Z │  ✖ Dependencies failed    @tanstack/query-example-react-infinit…     N/A             N/A         │
+2026-08-20T14:56:58.5516140Z │  ✖ Dependencies failed    @tanstack/query-example-react-nextjs-…     N/A             N/A         │
+2026-08-20T14:56:58.5516940Z │  ✖ Dependencies failed    @tanstack/query-example-nextjs-suspen…     N/A             N/A         │
+2026-08-20T14:56:58.5517744Z │  ✖ Dependencies failed    @tanstack/query-example-react-load-mo…     N/A             N/A         │
+2026-08-20T14:56:58.5518542Z │  ✖ Dependencies failed    @tanstack/react-query-next-experiment…     N/A             N/A         │
+2026-08-20T14:56:58.5519335Z │  ✖ Dependencies failed    @tanstack/react-query-next-experiment…     N/A             N/A         │
+2026-08-20T14:56:58.5520137Z │  ✖ Dependencies failed    @tanstack/react-query-next-experiment…     N/A             N/A         │
+2026-08-20T14:56:58.5520928Z │  ✖ Dependencies failed    @tanstack/react-query-next-experiment…     N/A             N/A         │
+2026-08-20T14:56:58.5521737Z │  ✖ Dependencies failed    @tanstack/query-example-react-default…     N/A             N/A         │
+2026-08-20T14:56:58.5522531Z │  ✖ Dependencies failed    @tanstack/query-example-react-nextjs-…     N/A             N/A         │
+2026-08-20T14:56:58.5523325Z │  ✖ Dependencies failed    @tanstack/query-example-react-basic-g…     N/A             N/A         │
+2026-08-20T14:56:58.5524127Z │  ✖ Dependencies failed    @tanstack/query-example-eslint-plugin…     N/A             N/A         │
+2026-08-20T14:56:58.5524923Z │  ✖ Dependencies failed    @tanstack/query-example-react-auto-re…     N/A             N/A         │
+2026-08-20T14:56:58.5525830Z │  ✖ Dependencies failed    @tanstack/query-example-react-devtool…     N/A             N/A         │
+2026-08-20T14:56:58.5526768Z │  ✖ Dependencies failed    @tanstack/react-query-devtools:test:e…     N/A             N/A         │
+2026-08-20T14:56:58.5527572Z │  ✖ Dependencies failed    @tanstack/react-query-devtools:test:l…     N/A             N/A         │
+2026-08-20T14:56:58.5528529Z │  ✖ Dependencies failed    @tanstack/react-query-devtools:test:t…     N/A             N/A         │
+2026-08-20T14:56:58.5529315Z │  ✖ Dependencies failed    @tanstack/react-query-devtools:test:b…     N/A             N/A         │
+2026-08-20T14:56:58.5530100Z │  ✖ Dependencies failed    @tanstack/react-query-devtools:build       N/A             N/A         │
+2026-08-20T14:56:58.5530863Z │  ✖ Dependencies failed    react-webpack-4:build                      N/A             N/A         │
+2026-08-20T14:56:58.5531603Z │  ✖ Dependencies failed    react-webpack-5:build                      N/A             N/A         │
+2026-08-20T14:56:58.5532369Z │  ✖ Dependencies failed    @tanstack/query-example-react-router:…     N/A             N/A         │
+2026-08-20T14:56:58.5533176Z │  ✖ Dependencies failed    @tanstack/query-example-react-prefetc…     N/A             N/A         │
+2026-08-20T14:56:58.5533938Z │  ✖ Dependencies failed    react-next-14:build                        N/A             N/A         │
+2026-08-20T14:56:58.5534673Z │  ✖ Dependencies failed    react-next-15:build                        N/A             N/A         │
+2026-08-20T14:56:58.5535397Z │  ✖ Dependencies failed    react-next-16:build                        N/A             N/A         │
+2026-08-20T14:56:58.5536292Z │  ✖ Dependencies failed    @tanstack/query-example-react-paginat…     N/A             N/A         │
+2026-08-20T14:56:58.5537094Z │  ✖ Dependencies failed    @tanstack/query-example-react-playgro…     N/A             N/A         │
+2026-08-20T14:56:58.5537889Z │  ✖ Dependencies failed    @tanstack/query-example-react-rick-mo…     N/A             N/A         │
+2026-08-20T14:56:58.5538683Z │  ✖ Dependencies failed    @tanstack/query-example-react-shadow-…     N/A             N/A         │
+2026-08-20T14:56:58.5539482Z │  ✖ Dependencies failed    @tanstack/query-example-react-star-wa…     N/A             N/A         │
+2026-08-20T14:56:58.5540283Z │  ✖ Dependencies failed    @tanstack/query-example-react-batchin…     N/A             N/A         │
+2026-08-20T14:56:58.5541083Z │  ✖ Dependencies failed    @tanstack/query-example-react-batchin…     N/A             N/A         │
+2026-08-20T14:56:58.5541874Z │  ✖ Dependencies failed    @tanstack/query-example-react-suspens…     N/A             N/A         │
+2026-08-20T14:56:58.5542632Z │  ✖ Dependencies failed    react-vite:build                           N/A             N/A         │
+2026-08-20T14:56:58.5543395Z │  ✖ Dependencies failed    @tanstack/query-example-react-algolia…     N/A             N/A         │
+2026-08-20T14:56:58.5544188Z │  ✖ Dependencies failed    @tanstack/query-example-react-nextjs:…     N/A             N/A         │
+2026-08-20T14:56:58.5544984Z │  ✖ Dependencies failed    @tanstack/query-example-react-simple:…     N/A             N/A         │
+2026-08-20T14:56:58.5545878Z │  ✖ Dependencies failed    @tanstack/query-example-chat:build         N/A             N/A         │
+2026-08-20T14:56:58.5546661Z │  ✖ Dependencies failed    react-nodenext:test:types                  N/A             N/A         │
+2026-08-20T14:56:58.5547423Z │  ✖ Dependencies failed    @tanstack/query-devtools:test:eslint       N/A             N/A         │
+2026-08-20T14:56:58.5548192Z │  ✖ Dependencies failed    @tanstack/query-devtools:test:lib          N/A             N/A         │
+2026-08-20T14:56:58.5548964Z │  ✖ Dependencies failed    @tanstack/query-devtools:test:types        N/A             N/A         │
+2026-08-20T14:56:58.5549732Z │  ✖ Dependencies failed    @tanstack/query-devtools:test:build        N/A             N/A         │
+2026-08-20T14:56:58.5550499Z │  ✖ Dependencies failed    @tanstack/query-devtools:build             N/A             N/A         │
+2026-08-20T14:56:58.5551274Z │  ✖ Dependencies failed    @tanstack/svelte-query-devtools:test:…     N/A             N/A         │
+2026-08-20T14:56:58.5552193Z │  ✖ Dependencies failed    @tanstack/svelte-query-devtools:test:…     N/A             N/A         │
+2026-08-20T14:56:58.5553093Z │  ✖ Dependencies failed    @tanstack/svelte-query-devtools:test:…     N/A             N/A         │
+2026-08-20T14:56:58.5553877Z │  ✖ Dependencies failed    @tanstack/svelte-query-devtools:test:…     N/A             N/A         │
+2026-08-20T14:56:58.5554656Z │  ✖ Dependencies failed    @tanstack/svelte-query-devtools:build      N/A             N/A         │
+2026-08-20T14:56:58.5555446Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-load-m…     N/A             N/A         │
+2026-08-20T14:56:58.5556376Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-optimi…     N/A             N/A         │
+2026-08-20T14:56:58.5557178Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-auto-r…     N/A             N/A         │
+2026-08-20T14:56:58.5557975Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-playgr…     N/A             N/A         │
+2026-08-20T14:56:58.5558782Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-star-w…     N/A             N/A         │
+2026-08-20T14:56:58.5559553Z │  ✖ Dependencies failed    svelte-vite:build                          N/A             N/A         │
+2026-08-20T14:56:58.5560321Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-simple…     N/A             N/A         │
+2026-08-20T14:56:58.5561116Z │  ✖ Dependencies failed    @tanstack/query-example-svelte-ssr:bu…     N/A             N/A         │
+2026-08-20T14:56:58.5561902Z │  ✖ Dependencies failed    @tanstack/solid-query-devtools:test:e…     N/A             N/A         │
+2026-08-20T14:56:58.5562680Z │  ✖ Dependencies failed    @tanstack/solid-query-devtools:test:l…     N/A             N/A         │
+2026-08-20T14:56:58.5563469Z │  ✖ Dependencies failed    @tanstack/solid-query-devtools:test:t…     N/A             N/A         │
+2026-08-20T14:56:58.5564258Z │  ✖ Dependencies failed    @tanstack/solid-query-devtools:test:b…     N/A             N/A         │
+2026-08-20T14:56:58.5565039Z │  ✖ Dependencies failed    @tanstack/solid-query-devtools:build       N/A             N/A         │
+2026-08-20T14:56:58.5565945Z │  ✖ Dependencies failed    @tanstack/query-example-solid-default…     N/A             N/A         │
+2026-08-20T14:56:58.5566749Z │  ✖ Dependencies failed    @tanstack/query-example-solid-basic-g…     N/A             N/A         │
+2026-08-20T14:56:58.5567549Z │  ✖ Dependencies failed    @tanstack/query-example-solid-start-s…     N/A             N/A         │
+2026-08-20T14:56:58.5568343Z │  ✖ Dependencies failed    solid-vite:build                           N/A             N/A         │
+2026-08-20T14:56:58.5569096Z │  ✖ Dependencies failed    @tanstack/query-example-solid-simple:…     N/A             N/A         │
+2026-08-20T14:56:58.5569889Z │  ✖ Dependencies failed    @tanstack/query-example-solid-astro:b…     N/A             N/A         │
+2026-08-20T14:56:58.5570687Z │  ✖ Dependencies failed    @tanstack/query-example-solid-basic:b…     N/A             N/A         │
+2026-08-20T14:56:58.5571481Z │  ✖ Dependencies failed    @tanstack/vue-query-devtools:test:esl…     N/A             N/A         │
+2026-08-20T14:56:58.5572268Z │  ✖ Dependencies failed    @tanstack/vue-query-devtools:test:lib      N/A             N/A         │
+2026-08-20T14:56:58.5573048Z │  ✖ Dependencies failed    @tanstack/vue-query-devtools:test:typ…     N/A             N/A         │
+2026-08-20T14:56:58.5573829Z │  ✖ Dependencies failed    @tanstack/vue-query-devtools:test:bui…     N/A             N/A         │
+2026-08-20T14:56:58.5574601Z │  ✖ Dependencies failed    @tanstack/vue-query-devtools:build         N/A             N/A         │
+2026-08-20T14:56:58.5575387Z │  ✖ Dependencies failed    @tanstack/query-example-vue-simple:bu…     N/A             N/A         │
+2026-08-20T14:56:58.5576310Z │  ✖ Dependencies failed    @tanstack/query-example-vue-basic:bui…     N/A             N/A         │
+2026-08-20T14:56:58.5577243Z │  ✖ Dependencies failed    @tanstack/query-example-lit-paginatio…     N/A             N/A         │
+2026-08-20T14:56:58.5578048Z │  ✖ Dependencies failed    @tanstack/svelte-query:test:eslint         N/A             N/A         │
+2026-08-20T14:56:58.5578935Z │  ✖ Dependencies failed    @tanstack/svelte-query:test:lib            N/A             N/A         │
+2026-08-20T14:56:58.5579712Z │  ✖ Dependencies failed    @tanstack/svelte-query:test:types          N/A             N/A         │
+2026-08-20T14:56:58.5580479Z │  ✖ Dependencies failed    @tanstack/svelte-query:test:build          N/A             N/A         │
+2026-08-20T14:56:58.5581242Z │  ✖ Dependencies failed    @tanstack/svelte-query:build               N/A             N/A         │
+2026-08-20T14:56:58.5581971Z │  ✖ Dependencies failed    lit-vite:build                             N/A             N/A         │
+2026-08-20T14:56:58.5582706Z │  ✖ Dependencies failed    @tanstack/solid-query:test:eslint          N/A             N/A         │
+2026-08-20T14:56:58.5583487Z │  ✖ Dependencies failed    @tanstack/solid-query:test:lib             N/A             N/A         │
+2026-08-20T14:56:58.5584253Z │  ✖ Dependencies failed    @tanstack/solid-query:test:types           N/A             N/A         │
+2026-08-20T14:56:58.5585025Z │  ✖ Dependencies failed    @tanstack/solid-query:test:build           N/A             N/A         │
+2026-08-20T14:56:58.5585896Z │  ✖ Dependencies failed    @tanstack/solid-query:build                N/A             N/A         │
+2026-08-20T14:56:58.5586680Z │  ✖ Dependencies failed    @tanstack/lit-query:test:eslint            N/A             N/A         │
+2026-08-20T14:56:58.5587443Z │  ✖ Dependencies failed    @tanstack/lit-query:test:lib               N/A             N/A         │
+2026-08-20T14:56:58.5588196Z │  ✖ Dependencies failed    @tanstack/lit-query:test:types             N/A             N/A         │
+2026-08-20T14:56:58.5588950Z │  ✖ Dependencies failed    @tanstack/lit-query:test:build             N/A             N/A         │
+2026-08-20T14:56:58.5589711Z │  ✖ Dependencies failed    @tanstack/lit-query:build                  N/A             N/A         │
+2026-08-20T14:56:58.5590516Z │  ✖ Dependencies failed    @tanstack/query-example-lit-basic:bui…     N/A             N/A         │
+2026-08-20T14:56:58.5591313Z │  ✖ Dependencies failed    @tanstack/query-example-lit-ssr:build      N/A             N/A         │
+2026-08-20T14:56:58.5592086Z │  ✖ Dependencies failed    @tanstack/vue-query:test:eslint            N/A             N/A         │
+2026-08-20T14:56:58.5592846Z │  ✖ Dependencies failed    @tanstack/vue-query:test:lib               N/A             N/A         │
+2026-08-20T14:56:58.5593593Z │  ✖ Dependencies failed    @tanstack/vue-query:test:types             N/A             N/A         │
+2026-08-20T14:56:58.5594365Z │  ✖ Dependencies failed    @tanstack/vue-query:test:build             N/A             N/A         │
+2026-08-20T14:56:58.5595115Z │  ✖ Dependencies failed    @tanstack/vue-query:build                  N/A             N/A         │
+2026-08-20T14:56:58.5596128Z │  ✖ Dependencies failed    vue-declaration-emit:test:types            N/A             N/A         │
+2026-08-20T14:56:58.5597057Z │  ✖ Dependencies failed    @tanstack/query-example-vue-dependent…     N/A             N/A         │
+2026-08-20T14:56:58.5597818Z │  ✖ Dependencies failed    vue-vite:build                             N/A             N/A         │
+2026-08-20T14:56:58.5598537Z └──────────────────────────────────────────────────────────────────────────────────────────────────┘
+2026-08-20T14:56:58.5599192Z ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+2026-08-20T14:56:58.5599836Z │                               Distributed Execution Summary Report                               │
+2026-08-20T14:56:58.5600516Z ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+2026-08-20T14:56:58.5601171Z ├────────┬────────────────────────────────────────┬────────┬───────────────────────────────────────┤
+2026-08-20T14:56:58.5601840Z │ 5      │ Successful Tasks                       │ 29.41% │ Success Percentage                    │
+2026-08-20T14:56:58.5602517Z │ 12     │ Failed Tasks                           │ 70.59% │ Failure Percentage                    │
+2026-08-20T14:56:58.5603167Z │ 191    │ Not Executed Tasks                     │ 208    │ Total Tasks                           │
+2026-08-20T14:56:58.5603849Z ├────────┼────────────────────────────────────────┼────────┼───────────────────────────────────────┤
+2026-08-20T14:56:58.5604474Z │ 1      │ Cached Tasks                           │ 5.88%  │ Cache Hit Percentage                  │
+2026-08-20T14:56:58.5605122Z │ 17     │ Total Executed Tasks                   │ 5      │ Number of Agents                      │
+2026-08-20T14:56:58.5605918Z └────────┴────────────────────────────────────────┴────────┴───────────────────────────────────────┘
+2026-08-20T14:56:58.5606513Z  Not all tasks were executed. See more details at: https://cloud.nx.app/run-end/q2BmVxs3y8 
+2026-08-20T14:56:58.5606877Z 
+2026-08-20T14:56:58.6422553Z [ELIFECYCLE] Command failed with exit code 1.
+2026-08-20T14:56:58.6930676Z ##[error]Process completed with exit code 1.
+2026-08-20T14:56:58.6930676Z [fixture trimmed: 29 lines omitted]
+2026-08-20T14:57:00.1479876Z Removing includeIf entries pointing to credentials config files
+2026-08-20T14:57:00.1489393Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-20T14:57:00.1538667Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-20T14:57:00.2001070Z Cleaning up orphan processes
+2026-08-20T14:57:00.2327604Z Terminate orphan process: pid (2710) (MainThread)
+2026-08-20T14:57:00.2353865Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

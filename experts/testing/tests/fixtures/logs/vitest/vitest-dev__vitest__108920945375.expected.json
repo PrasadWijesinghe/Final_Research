@@ -1,0 +1,17 @@
+{
+  "framework": "vitest",
+  "repo": "vitest-dev/vitest",
+  "job_id": 108920945375,
+  "conclusion": "failure",
+  "parsed_framework": "other",
+  "parsed_ok": true,
+  "confidence": 0.0,
+  "granularity": "none",
+  "summaries_found": 0,
+  "summary": null,
+  "failed_test_names": [],
+  "failed_files": [],
+  "first_error_type": null,
+  "first_project_path": null,
+  "note": "Despite the folder: this job died in `pnpm install` (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH) before any test ran, so the detector says other."
+}

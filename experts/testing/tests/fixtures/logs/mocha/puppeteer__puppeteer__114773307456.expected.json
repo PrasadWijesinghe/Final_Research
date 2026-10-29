@@ -1,0 +1,37 @@
+{
+  "framework": "mocha",
+  "repo": "puppeteer/puppeteer",
+  "job_id": 114773307456,
+  "conclusion": "success",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "test",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 608,
+    "failed": 10,
+    "skipped": 8,
+    "total": 626
+  },
+  "failed_test_names": [
+    "Drag n' Drop > should drag and drop",
+    "Keyboard > ElementHandle.press should not support |text| option",
+    "Keyboard > should type into a textarea",
+    "Keyboard > should move with the arrow keys",
+    "Keyboard > should trigger commands of keyboard shortcuts",
+    "Keyboard > should send a character with ElementHandle.press",
+    "Keyboard > should send a character with sendCharacter",
+    "navigation > Page.goto > should work when navigating to a URL with a client redirect",
+    "request interception > Page.setRequestInterception > should work with keep alive redirects"
+  ],
+  "failed_files": [
+    "test/src/drag-and-drop.test.ts",
+    "test/src/keyboard.test.ts",
+    "test/src/navigation.test.ts",
+    "packages/puppeteer-core/src/common/util.ts"
+  ],
+  "first_error_type": "Error",
+  "first_project_path": "test/src/drag-and-drop.test.ts",
+  "repeated_failure_names": 1,
+  "note": "A SUCCESSFUL job that prints `10 failing` (expected failures). 10 numbered blocks, but #2 and #7 are the same test, so 9 unique names. The parser reports what the log says; the label comes from the job conclusion. Trimmed."
+}

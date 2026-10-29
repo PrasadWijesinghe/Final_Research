@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "mikro-orm/mikro-orm",
+  "job_id": 94992812438,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 1847,
+    "failed": 1,
+    "skipped": 0,
+    "total": 1848,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "EntityHelperMongo > should have string id getter and setter"
+  ],
+  "failed_files": [
+    "tests/EntityHelper.mongo.test.ts"
+  ],
+  "first_error_type": "AssertionError",
+  "first_project_path": null,
+  "note": "Trimmed. The same FAIL line is printed twice (retry x1); one failure. stdout/stderr are interleaved, so this failure's stack frames appear after the summary and are not attached (known limitation). retries is 1, read from the `(retry x1)` result line."
+}

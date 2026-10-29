@@ -1,0 +1,27 @@
+{
+  "framework": "vitest",
+  "repo": "mikro-orm/mikro-orm",
+  "job_id": 90666683133,
+  "conclusion": "failure",
+  "parsed_ok": true,
+  "confidence": 1.0,
+  "granularity": "file",
+  "summaries_found": 1,
+  "summary": {
+    "passed": 717,
+    "failed": 1,
+    "skipped": 1,
+    "total": 719,
+    "todo": 0,
+    "files_failed": 1
+  },
+  "failed_test_names": [
+    "composite keys in sqlite > batch updates with optimistic locking"
+  ],
+  "failed_files": [
+    "tests/features/composite-keys/composite-keys.sqlite.test.ts"
+  ],
+  "first_error_type": "AssertionError",
+  "first_project_path": "tests/features/composite-keys/composite-keys.sqlite.test.ts",
+  "note": "Windows; the summary rows are interleaved with the code frame. Project badge `legacy`. Default reporter: only the failing test is listed under its file line, so granularity is file."
+}
