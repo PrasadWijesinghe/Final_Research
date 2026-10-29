@@ -1,0 +1,63 @@
+2026-10-14T11:40:02.0110000Z Current runner version: '2.329.0'
+2026-10-14T11:40:02.0220000Z ##[group]Runner Image Provisioner
+2026-10-14T11:40:02.0330000Z Hosted Compute Agent
+2026-10-14T11:40:02.0440000Z ##[endgroup]
+2026-10-14T11:40:02.0550000Z ##[group]Operating System
+2026-10-14T11:40:02.0660000Z Ubuntu
+2026-10-14T11:40:02.0770000Z 24.04.3
+2026-10-14T11:40:02.0880000Z LTS
+2026-10-14T11:40:02.0990000Z ##[endgroup]
+2026-10-14T11:40:02.1100000Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T11:40:02.1210000Z Contents: read
+2026-10-14T11:40:02.1320000Z Metadata: read
+2026-10-14T11:40:02.1430000Z ##[endgroup]
+2026-10-14T11:40:02.1540000Z Secret source: Actions
+2026-10-14T11:40:02.1650000Z Prepare workflow directory
+2026-10-14T11:40:02.1760000Z Prepare all required actions
+2026-10-14T11:40:02.1870000Z Getting action download info
+2026-10-14T11:40:02.1980000Z Complete job name: quality
+2026-10-14T11:40:02.2350000Z ##[group]Run actions/checkout@v4
+2026-10-14T11:40:02.2720000Z with:
+2026-10-14T11:40:02.3090000Z   repository: acme/acme-web
+2026-10-14T11:40:02.3460000Z   token: ***
+2026-10-14T11:40:02.3830000Z ##[endgroup]
+2026-10-14T11:40:02.3860000Z Syncing repository: acme/acme-web
+2026-10-14T11:40:02.3890000Z [command]/usr/bin/git version
+2026-10-14T11:40:02.3920000Z git version 2.51.0
+2026-10-14T11:40:02.3950000Z HEAD is now at 3f1c2a9 feat: add retry backoff to webhook consumer
+2026-10-14T11:40:02.4320000Z ##[group]Run actions/setup-node@v4
+2026-10-14T11:40:02.4690000Z with:
+2026-10-14T11:40:02.5060000Z   node-version: 22
+2026-10-14T11:40:02.5430000Z   cache: npm
+2026-10-14T11:40:02.5800000Z ##[endgroup]
+2026-10-14T11:40:02.5830000Z Found in cache @ /opt/hostedtoolcache/node/22.21.0/x64
+2026-10-14T11:40:02.5860000Z Environment details
+2026-10-14T11:40:02.5890000Z   node: v22.21.0
+2026-10-14T11:40:02.5920000Z   npm: 10.9.4
+2026-10-14T11:40:02.6290000Z ##[group]Run npm ci
+2026-10-14T11:40:02.6660000Z npm ci
+2026-10-14T11:40:02.7030000Z shell: /usr/bin/bash -e {0}
+2026-10-14T11:40:02.7400000Z ##[endgroup]
+2026-10-14T11:40:02.7430000Z added 412 packages, and audited 413 packages in 9s
+2026-10-14T11:40:02.7460000Z found 0 vulnerabilities
+2026-10-14T11:40:02.7830000Z ##[group]Run npm run lint:ci
+2026-10-14T11:40:02.8200000Z npm run lint:ci
+2026-10-14T11:40:02.8570000Z shell: /usr/bin/bash -e {0}
+2026-10-14T11:40:02.8940000Z ##[endgroup]
+2026-10-14T11:40:02.8970000Z
+2026-10-14T11:40:02.9000000Z > acme-web@1.4.0 lint:ci
+2026-10-14T11:40:02.9030000Z > eslint --max-warnings 0 src/warn.ts
+2026-10-14T11:40:02.9060000Z
+2026-10-14T11:40:02.9090000Z
+2026-10-14T11:40:02.9120000Z /home/runner/work/acme-web/acme-web/src/warn.ts
+2026-10-14T11:40:02.9150000Z   2:3  warning  Unexpected console statement  no-console
+2026-10-14T11:40:02.9180000Z   3:3  warning  Unexpected console statement  no-console
+2026-10-14T11:40:02.9210000Z
+2026-10-14T11:40:02.9240000Z ✖ 2 problems (0 errors, 2 warnings)
+2026-10-14T11:40:02.9270000Z
+2026-10-14T11:40:02.9300000Z ESLint found too many warnings (maximum: 0).
+2026-10-14T11:40:03.0100000Z ##[error]Process completed with exit code 1.
+2026-10-14T11:40:03.4100000Z Post job cleanup.
+2026-10-14T11:40:03.4470000Z [command]/usr/bin/git version
+2026-10-14T11:40:03.4840000Z git version 2.51.0
+2026-10-14T11:40:03.5210000Z Cleaning up orphan processes

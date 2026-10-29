@@ -119,6 +119,29 @@ Design: `docs/experts/test.md`.
 - [x] **P4.21 Random non-matching failure control sample (Member 1).** Add a deterministic, bounded mode that selects failed runs not previously scanned/reviewed, fetches and sanitises their failed-job logs, and saves only runs with zero dependency-pattern matches as an unverified random control sample. Record all scanned repository/commit keys so future batches do not repeat work; never store raw logs or auto-label controls.
   *Accept:* tests cover deterministic bounded selection, exclusion of prior scan and reviewed histories, zero-pattern filtering, streamed oversized-log rejection before sanitisation, unavailable logs, sanitized candidate-only output, a 15-second/zero-retry control request policy, transport-error skip-and-continue, safe progress logs, and valid partial output after interruption or unexpected errors; document invocation and limitations; `make check` passes.
 
+## Phase 4B — Build expert (Member 2)
+
+Design: `docs/experts/build.md`.
+
+- [x] **B1 Repo list and collection rules:** `config/repos/build.yaml` (20 repos, reserves, licence-risky), Build rows of `config/workflow_detection.yaml`, `daily --logs failed` (D42), refined Build router patterns.
+  *Accept:* config loads; detection and daily tests pass; real build logs route to Build.
+- [x] **B2 Build screen:** `scripts/build_screen.py` (real 90-day failure counts, build share, backfill cost).
+  *Accept:* tested on canned GitHub answers.
+- [x] **B2b Run the build screen** with a real token and trim the repo list (27 Oct 2026: 11 repos kept, suggestion rule fixed).
+- [ ] **B2c Backfill** the 11 repos (`backfill --logs failed`), then `daily --logs failed` every day.
+- [x] **B3 Log parsers** for tsc, ESLint, Prettier and bundlers (Vite, webpack, esbuild, Rollup, Next.js) with real tool-output fixtures.
+- [x] **B4 Labelling** per §3, written as `FailureLabel`s (`platform.failure_labels`, `is_final=false`).
+- [ ] **B4b Manual label check:** sample per sub-label and per reason, second labeller, kappa. Tool ready (`build-label-check`, 28 Oct); the two people's check is pending.
+- [x] **B5 Feature pipeline** per §4: groups A–D, one module per group, `descriptions.yaml`.
+- [x] **B6 Dataset builder** (`build-dataset`) → `data/datasets/build/vN/` with `rows.parquet`, `fix_candidates.parquet` and manifest.
+  *Accept:* in-memory and Postgres builds give identical rows; no look-ahead test; frozen versions.
+- [x] **B7 Baselines** per §6 (last outcome; warning/error threshold rule).
+- [ ] **B8 Model training:** GBT and code-embedding variant, temporal and leave-one-repo-out validation, calibration, threshold, export. GBT part done (`build-train`, 28 Oct): splits, calibration, thresholds, ablation, SHAP summary, report, export; code-embedding variant pending.
+- [x] **B9 SHAP explanations** into `RiskFactor`s (28 Oct).
+- [ ] **B10 Knowledge base** from reviewed fix candidates (`build.kb_cases`). Built and loaded from mined candidates (`build-kb`, 28 Oct); the human review of the cases is pending.
+- [x] **B11 Diagnosis worker** with `BuildDetails`, citations and misrouted handling (28 Oct; LLM rewrite optional, off until a provider is chosen).
+- [x] **B12 Swap the stub** for the real expert, keeping the stub tests green (28 Oct: the stub still answers when no model bundle is configured).
+
 ## Phase 5 — Evaluation
 
 - [ ] **P5.1** Evaluation harness on replay, with the metrics from `docs/experts/test.md` §5.

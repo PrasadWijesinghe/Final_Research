@@ -1,0 +1,82 @@
+2026-09-18T16:54:38.4085277Z Current runner version: '2.337.0'
+2026-09-18T16:54:38.4115877Z ##[group]Runner Image Provisioner
+2026-09-18T16:54:38.4117327Z Hosted Compute Agent
+2026-09-18T16:54:38.4118221Z Version: 20260828.587
+2026-09-18T16:54:38.4119372Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-18T16:54:38.4120507Z Build Date: 2026-08-28T16:44:25Z
+2026-09-18T16:54:38.4121694Z Worker ID: {077d3c99-e436-4a2a-bd5e-c6367e35fffd}
+2026-09-18T16:54:38.4122938Z Azure Region: westcentralus
+2026-09-18T16:54:38.4123762Z ##[endgroup]
+2026-09-18T16:54:38.4125727Z ##[group]Operating System
+2026-09-18T16:54:38.4126895Z Ubuntu
+2026-09-18T16:54:38.4127636Z 24.04.5
+2026-09-18T16:54:38.4128460Z LTS
+2026-09-18T16:54:38.4129286Z ##[endgroup]
+2026-09-18T16:54:38.4130227Z ##[group]Runner Image
+2026-09-18T16:54:38.4131311Z Image: ubuntu-24.04
+2026-09-18T16:54:38.4132319Z Version: 20260907.300.1
+2026-09-18T16:54:38.4134365Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-18T16:54:38.4136744Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-18T16:54:38.4138502Z ##[endgroup]
+2026-09-18T16:54:38.4140152Z ##[group]GITHUB_TOKEN Permissions
+2026-09-18T16:54:38.4143353Z Contents: read
+2026-09-18T16:54:38.4143986Z Metadata: read
+2026-09-18T16:54:38.4145498Z ##[endgroup]
+2026-09-18T16:54:38.4147847Z Secret source: Actions
+2026-09-18T16:54:38.4149015Z Cache mode: write
+2026-09-18T16:54:38.4149772Z Prepare workflow directory
+2026-09-18T16:54:38.4538645Z Prepare all required actions
+2026-09-18T16:54:38.4586963Z Getting action download info
+2026-09-18T16:54:38.8073460Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-18T16:54:39.0044755Z Complete job name: Lint
+2026-09-18T17:03:05.5404059Z ##[group]Run pnpm lint:framework-vocabulary
+2026-09-18T17:03:05.5404455Z [36;1mpnpm lint:framework-vocabulary[0m
+2026-09-18T17:03:05.5443529Z shell: /usr/bin/bash -e {0}
+2026-09-18T17:03:05.5443809Z env:
+2026-09-18T17:03:05.5444036Z   MISE_LOG_LEVEL: info
+2026-09-18T17:03:05.5446818Z   MISE_GITHUB_TOKEN: ***
+2026-09-18T17:03:05.5447151Z   MISE_TRUSTED_CONFIG_PATHS: /home/runner/work/orm/orm
+2026-09-18T17:03:05.5447488Z   MISE_YES: 1
+2026-09-18T17:03:05.5448808Z   PATH: /home/runner/.local/share/mise/installs/node/24.16.0/bin:/home/runner/.local/share/mise/shims:/home/runner/.local/share/mise/bin:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2026-09-18T17:03:05.5450240Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-09-18T17:03:05.5450676Z   TURBO_CACHE_DIR: /home/runner/work/orm/orm/.turbo/cache
+2026-09-18T17:03:05.5451014Z ##[endgroup]
+2026-09-18T17:03:06.5997150Z
+2026-09-18T17:03:06.5997990Z > @internal/monorepo@8.0.0-rc.11 lint:framework-vocabulary /home/runner/work/orm/orm
+2026-09-18T17:03:06.5998543Z > node scripts/lint-framework-vocabulary.mjs
+2026-09-18T17:03:06.5998776Z
+2026-09-18T17:03:54.4942489Z lint:framework-vocabulary: scope=packages/1-framework count=277 threshold=276
+2026-09-18T17:03:54.4945472Z lint:framework-vocabulary: 1 new family/target-vocabulary line(s) in packages/1-framework.
+2026-09-18T17:03:54.4946924Z   The framework domain is family-blind — move the new SQL/Mongo/target concept out of it.
+2026-09-18T17:03:54.4947849Z   Find your additions: git diff origin/main -- packages/1-framework
+2026-09-18T17:03:54.4948715Z   List all current sites: node scripts/lint-framework-vocabulary.mjs --list
+2026-09-18T17:03:54.4949615Z   If a site is genuinely family-blind, suppress it at the line with
+2026-09-18T17:03:54.4950444Z   `// biome-ignore lint/plugin/no-family-vocabulary: <why>` and lower the threshold.
+2026-09-18T17:03:54.4951671Z   Otherwise raise "threshold" to 277 in scripts/lint-framework-vocabulary.config.json with justification in review.
+2026-09-18T17:03:54.5108780Z  ELIFECYCLE  Command failed with exit code 1.
+2026-09-18T17:03:54.5437861Z ##[error]Process completed with exit code 1.
+2026-09-18T17:03:54.5571917Z Post job cleanup.
+2026-09-18T17:03:54.5576783Z ##[start-action display=Cache Turbo;id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__actions_cache_2]
+2026-09-18T17:03:54.5580084Z ##[end-action id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__actions_cache_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-09-18T17:03:54.5582455Z ##[start-action display=Cache pnpm store;id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__actions_cache]
+2026-09-18T17:03:54.5584556Z ##[end-action id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__actions_cache;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-09-18T17:03:54.5586801Z ##[start-action display=Run pnpm/action-setup@91ab88e2619ed1f46221f0ba42d1492c02baf788;id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__pnpm_action-setup]
+2026-09-18T17:03:54.5619972Z Post job cleanup.
+2026-09-18T17:03:54.7126200Z Pruning is unnecessary.
+2026-09-18T17:03:54.7207780Z ##[end-action id=__8f7267b2-8aea-485c-b57b-8bab724bc66a.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=161]
+2026-09-18T17:03:54.7274357Z Post job cleanup.
+2026-09-18T17:03:54.8150511Z [command]/usr/bin/git version
+2026-09-18T17:03:54.8191254Z git version 2.55.0
+2026-09-18T17:03:54.8225680Z Temporarily overriding HOME='/home/runner/work/_temp/4ee1dd7d-eef3-4b1a-aeca-4b591ce0df41' before making global git config changes
+2026-09-18T17:03:54.8227040Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-18T17:03:54.8231105Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/orm/orm
+2026-09-18T17:03:54.8264095Z Removing SSH command configuration
+2026-09-18T17:03:54.8271166Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-18T17:03:54.8306581Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-18T17:03:54.8562428Z Removing HTTP extra header
+2026-09-18T17:03:54.8567507Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-18T17:03:54.8600187Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-18T17:03:54.8844508Z Removing includeIf entries pointing to credentials config files
+2026-09-18T17:03:54.8850173Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-18T17:03:54.8881042Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-18T17:03:54.9268836Z Cleaning up orphan processes

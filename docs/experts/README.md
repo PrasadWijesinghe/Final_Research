@@ -6,7 +6,7 @@ treats them identically.
 | Expert | Folder | Package | Port | Owner | Design doc |
 |---|---|---|---|---|---|
 | Dependency & Runtime | `experts/dependency` | `dependency_expert` | 8101 | Member 1 | `docs/experts/dependency.md` (owner writes) |
-| Build & Code Quality | `experts/build` | `build_expert` | 8102 | Member 2 | `docs/experts/build.md` (owner writes) |
+| Build & Code Quality | `experts/build` | `build_expert` | 8102 | Member 2 | `docs/experts/build.md` |
 | Test & App Behaviour | `experts/testing` | `testing_expert` | 8103 | Member 3 | `docs/experts/test.md` |
 | Infrastructure & Deployment | `experts/infra` | `infra_expert` | 8104 | Member 4 | `docs/experts/infra.md` (owner writes) |
 

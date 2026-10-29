@@ -1,7 +1,7 @@
 [project]
 name = "pipelineiq-expert-build"
 version = "0.1.0"
-description = "The build expert: /predict, /review, /health and a diagnose worker (stub behaviour)."
+description = "The build expert: /predict, /review, /health, a diagnose worker (stub behaviour) and the dataset builder."
 requires-python = ">=3.12"
 dependencies = [
     "pipelineiq-shared",
@@ -12,7 +12,20 @@ dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.7",
     "sqlalchemy>=2.1.4",
+    "pipelineiq-features",
+    "pyarrow>=17",
+    "pyyaml>=6",
+    "numpy>=2",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.6",
 ]
+
+[project.scripts]
+build-dataset = "build_expert.dataset.cli:main"
+build-train = "build_expert.model.cli:main"
+build-label-check = "build_expert.labels.check:main"
+build-kb = "build_expert.rag.cli:main"
+build-demo = "build_expert.demo:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -23,3 +36,4 @@ packages = ["src/build_expert"]
 
 [tool.uv.sources]
 pipelineiq-shared = { workspace = true }
+pipelineiq-features = { workspace = true }

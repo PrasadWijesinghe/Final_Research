@@ -1,0 +1,101 @@
+2026-10-14T12:44:31.0110000Z Current runner version: '2.329.0'
+2026-10-14T12:44:31.0220000Z ##[group]Runner Image Provisioner
+2026-10-14T12:44:31.0330000Z Hosted Compute Agent
+2026-10-14T12:44:31.0440000Z ##[endgroup]
+2026-10-14T12:44:31.0550000Z ##[group]Operating System
+2026-10-14T12:44:31.0660000Z Ubuntu
+2026-10-14T12:44:31.0770000Z 24.04.3
+2026-10-14T12:44:31.0880000Z LTS
+2026-10-14T12:44:31.0990000Z ##[endgroup]
+2026-10-14T12:44:31.1100000Z ##[group]GITHUB_TOKEN Permissions
+2026-10-14T12:44:31.1210000Z Contents: read
+2026-10-14T12:44:31.1320000Z Metadata: read
+2026-10-14T12:44:31.1430000Z ##[endgroup]
+2026-10-14T12:44:31.1540000Z Secret source: Actions
+2026-10-14T12:44:31.1650000Z Prepare workflow directory
+2026-10-14T12:44:31.1760000Z Prepare all required actions
+2026-10-14T12:44:31.1870000Z Getting action download info
+2026-10-14T12:44:31.1980000Z Complete job name: quality
+2026-10-14T12:44:31.2350000Z ##[group]Run actions/checkout@v4
+2026-10-14T12:44:31.2720000Z with:
+2026-10-14T12:44:31.3090000Z   repository: acme/acme-web
+2026-10-14T12:44:31.3460000Z   token: ***
+2026-10-14T12:44:31.3830000Z ##[endgroup]
+2026-10-14T12:44:31.3860000Z Syncing repository: acme/acme-web
+2026-10-14T12:44:31.3890000Z [command]/usr/bin/git version
+2026-10-14T12:44:31.3920000Z git version 2.51.0
+2026-10-14T12:44:31.3950000Z HEAD is now at 3f1c2a9 feat: add retry backoff to webhook consumer
+2026-10-14T12:44:31.4320000Z ##[group]Run actions/setup-node@v4
+2026-10-14T12:44:31.4690000Z with:
+2026-10-14T12:44:31.5060000Z   node-version: 22
+2026-10-14T12:44:31.5430000Z   cache: npm
+2026-10-14T12:44:31.5800000Z ##[endgroup]
+2026-10-14T12:44:31.5830000Z Found in cache @ /opt/hostedtoolcache/node/22.21.0/x64
+2026-10-14T12:44:31.5860000Z Environment details
+2026-10-14T12:44:31.5890000Z   node: v22.21.0
+2026-10-14T12:44:31.5920000Z   npm: 10.9.4
+2026-10-14T12:44:31.6290000Z ##[group]Run npm ci
+2026-10-14T12:44:31.6660000Z npm ci
+2026-10-14T12:44:31.7030000Z shell: /usr/bin/bash -e {0}
+2026-10-14T12:44:31.7400000Z ##[endgroup]
+2026-10-14T12:44:31.7430000Z added 412 packages, and audited 413 packages in 9s
+2026-10-14T12:44:31.7460000Z found 0 vulnerabilities
+2026-10-14T12:44:31.7830000Z ##[group]Run npm run build:wp
+2026-10-14T12:44:31.8200000Z npm run build:wp
+2026-10-14T12:44:31.8570000Z shell: /usr/bin/bash -e {0}
+2026-10-14T12:44:31.8940000Z ##[endgroup]
+2026-10-14T12:44:31.8970000Z
+2026-10-14T12:44:31.9000000Z > acme-web@1.4.0 build:wp
+2026-10-14T12:44:31.9030000Z > webpack --config webpack.config.cjs
+2026-10-14T12:44:31.9060000Z
+2026-10-14T12:44:31.9090000Z (node:4721) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+2026-10-14T12:44:31.9120000Z (Use `node --trace-warnings ...` to show where the warning was created)
+2026-10-14T12:44:31.9150000Z assets by status 274 bytes [cached] 1 asset
+2026-10-14T12:44:31.9180000Z orphan modules 60 bytes [orphan] 1 module
+2026-10-14T12:44:31.9210000Z ./src/main.js + 1 modules 172 bytes [built] [code generated]
+2026-10-14T12:44:31.9240000Z
+2026-10-14T12:44:31.9270000Z ERROR in ./src/main.js 2:0-45
+2026-10-14T12:44:31.9300000Z Module not found: Error: Can't resolve './does-not-exist.js' in '/home/runner/work/acme-web/acme-web/src'
+2026-10-14T12:44:31.9330000Z resolve './does-not-exist.js' in '/home/runner/work/acme-web/acme-web/src'
+2026-10-14T12:44:31.9360000Z   using description file: /home/runner/work/acme-web/acme-web/package.json (relative path: ./src)
+2026-10-14T12:44:31.9390000Z     Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9420000Z     aliased from extension alias with mapping '.js' to '.js'
+2026-10-14T12:44:31.9450000Z       using description file: /home/runner/work/acme-web/acme-web/package.json (relative path: ./src/does-not-exist.js)
+2026-10-14T12:44:31.9480000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9510000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js doesn't exist
+2026-10-14T12:44:31.9540000Z     Failed to alias from extension alias with mapping '.js' to '.js' for './does-not-exist.js': undefined
+2026-10-14T12:44:31.9570000Z     aliased from extension alias with mapping '.js' to '.ts'
+2026-10-14T12:44:31.9600000Z       using description file: /home/runner/work/acme-web/acme-web/package.json (relative path: ./src/does-not-exist.ts)
+2026-10-14T12:44:31.9630000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9660000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.ts doesn't exist
+2026-10-14T12:44:31.9690000Z     using description file: /home/runner/work/acme-web/acme-web/package.json (relative path: ./src/does-not-exist.js)
+2026-10-14T12:44:31.9720000Z       no extension
+2026-10-14T12:44:31.9750000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9780000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js doesn't exist
+2026-10-14T12:44:31.9810000Z       .ts
+2026-10-14T12:44:31.9840000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9870000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.ts doesn't exist
+2026-10-14T12:44:31.9900000Z       .js
+2026-10-14T12:44:31.9930000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:31.9960000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.js doesn't exist
+2026-10-14T12:44:31.9990000Z       .json
+2026-10-14T12:44:32.0020000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:32.0050000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.json doesn't exist
+2026-10-14T12:44:32.0080000Z       .wasm
+2026-10-14T12:44:32.0110000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:32.0140000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.wasm doesn't exist
+2026-10-14T12:44:32.0170000Z       .html
+2026-10-14T12:44:32.0200000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:32.0230000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.html doesn't exist
+2026-10-14T12:44:32.0260000Z       .css
+2026-10-14T12:44:32.0290000Z         Field 'browser' doesn't contain a valid alias configuration
+2026-10-14T12:44:32.0320000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js.css doesn't exist
+2026-10-14T12:44:32.0350000Z       as directory
+2026-10-14T12:44:32.0380000Z         /home/runner/work/acme-web/acme-web/src/does-not-exist.js doesn't exist
+2026-10-14T12:44:32.0410000Z
+2026-10-14T12:44:32.0440000Z webpack 5.112.0 compiled with 1 error in 455 ms
+2026-10-14T12:44:32.1240000Z ##[error]Process completed with exit code 1.
+2026-10-14T12:44:32.5240000Z Post job cleanup.
+2026-10-14T12:44:32.5610000Z [command]/usr/bin/git version
+2026-10-14T12:44:32.5980000Z git version 2.51.0
+2026-10-14T12:44:32.6350000Z Cleaning up orphan processes

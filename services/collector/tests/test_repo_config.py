@@ -25,7 +25,15 @@ def test_all_four_real_files_load() -> None:
     assert set(configs) == set(MEMBERS)
     for member, cfg in configs.items():
         assert cfg.member == member
-    assert configs["build"].repos == []
+    assert configs["dependency"].repos == []
+
+
+def test_real_build_config_content() -> None:
+    cfg = load_member_config("build", REAL_CONFIG)
+    assert len(cfg.repos) == 34  # 11 selected + 19 reserves + 4 licence-risky
+    assert len(cfg.enabled_repos()) == 11
+    risky = [r for r in cfg.repos if r.extras.get("commercial_kb") is False]
+    assert risky and all(not r.enabled for r in risky)
 
 
 def test_real_test_config_content_and_extras_preserved() -> None:

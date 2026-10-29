@@ -21,7 +21,9 @@ def _context_json() -> dict[str, Any]:
 
 
 @pytest.fixture()
-def client() -> TestClient:
+def client(monkeypatch: pytest.MonkeyPatch) -> TestClient:
+    # No database in these tests: no knowledge base, and no model bundle (the stub answers).
+    monkeypatch.setattr("build_expert.api.default_kb", lambda: None)
     return TestClient(app)
 
 
@@ -83,3 +85,12 @@ def test_health(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok", "model_version": "stub", "kb_cases": 0}
+
+
+def test_health_counts_the_knowledge_base(monkeypatch: pytest.MonkeyPatch) -> None:
+    class Kb:
+        def count(self) -> int:
+            return 42
+
+    monkeypatch.setattr("build_expert.api.default_kb", lambda: Kb())
+    assert TestClient(app).get("/health").json()["kb_cases"] == 42
