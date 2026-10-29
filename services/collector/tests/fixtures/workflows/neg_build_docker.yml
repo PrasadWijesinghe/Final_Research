@@ -1,0 +1,14 @@
+name: Images
+on:
+  push:
+    tags: ["v*"]
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t acme/web:latest .
+      - run: echo "remember to run eslint and tsc locally"
+      - run: npm install --save-dev typescript eslint
+      - run: go build ./... && cargo build --release
+      - run: cd packages/webpack && ls
