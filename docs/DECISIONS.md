@@ -121,6 +121,24 @@ entry that references it rather than editing history.
 
 **D39 — A run GitHub keeps failing on (5xx) is skipped and retried later; the repo still finishes.** Date: 2026-10-23. *Why:* in the real backfill the jobs listing of some big runs returned 502 on every retry, so the repo aborted and every re-run hit the same run (puppeteer, mongoose, prettier, babel). The jobs listing now falls back to 30 then 10 per page; if a run still fails with a 5xx it is recorded in `raw.skipped_runs` (migration 0003), warned about, and retried first by later `backfill` and `daily`. Network errors, 401/403 and rate limits still abort, so an outage never marks runs skipped. A log that fails with a 5xx stays pending for `fill-logs`.
 
+## Build expert (added 26 October 2026, Member 2; proposed, needs team review)
+
+**D40 — Build labels and unit.** One row per commit (first attempts of build-relevant runs, cut-off = earliest run's `created_at`), as D02. Failed jobs are labelled by named rules on the failed step's log (`docs/experts/build.md` §3); the rules only claim `build`, with sub-labels `tsc`, `eslint`, `format`, `bundler`, `build_other` and a confidence. A re-run pass on the same SHA lowers the confidence instead of removing the label.
+*Why:* build failures are mostly deterministic and their tool output is distinctive, so rules on the log are precise; confidence keeps doubtful cases out of the strict target (`y_build_confident`).
+*Status:* proposed.
+
+**D41 — Log-derived warning counts replace local static analysis.** The proposal (C2 §3.3) runs ESLint and tsc locally on each commit. With no clones (D08) that is impossible for history, so `last_lint_warnings` and `last_type_errors` read the counts printed by the latest earlier run on the same branch.
+*Why:* keeps the "how close is the code to failing lint" signal without cloning; uses data the collector already stores.
+*Status:* proposed. Supervisor to confirm the change from the proposal.
+
+**D42 — `daily --logs failed`, and the Build member collects failed logs first everywhere.** `daily` gets the same `--logs all|failed` option as `backfill` (default `all`, so nobody else changes). The Build member runs `backfill --logs failed` and `daily --logs failed`, and fetches passing logs with `fill-logs` (D38) when there is time.
+*Why:* nearly every CI workflow is build-relevant, so Build's passing logs are almost every log of 20 busy repos; at about 2.3 s per log they would take most of each day. Build needs failed logs for labels; passing logs only add the "last warnings" history features.
+*Status:* proposed (shared change: needs one approval). Amends D38's "daily always fetches all logs".
+
+**D43 — The Build dataset builder imports the features library directly.** `build-dataset` calls `features.replay.build_replay_context` in-process to rebuild each commit. Serving still receives `CommitContext` through the contract.
+*Why:* datasets are offline tooling; going through the replay CLI and the API would add a running stack for no benefit. No expert imports another expert.
+*Status:* proposed.
+
 ## Open items (don't block the build)
 
 | # | Item | Owner |
@@ -132,3 +150,5 @@ entry that references it rather than editing history.
 | O5 | Choose and buy the LLM provider key | Team |
 | O6 | Update the proposal text: no VPS and budget, 30 s → 10 s, AI-use disclosure, F1 target mismatch, Haben et al. figures, 9- vs 12-month timeline, scrambled sentences in 1.1.2 | Member 3 |
 | O7 | Tune defaults once data exists: thresholds, router margin, triage confidence floor | Each owner |
+| O8 | Build: run `scripts/build_screen.py` with a real token, trim `config/repos/build.yaml`, then start the backfill | Member 2 |
+| O9 | Build: GHALogs (C2 proposal §3.2) as extra history, or not? The team design collects its own data | Member 2 + supervisor |
