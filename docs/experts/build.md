@@ -53,12 +53,12 @@ count. Most CI workflows that run tests also build first, so they are kept too. 
 (section 3) decides which failures are build failures. Tests:
 `services/collector/tests/test_workflow_detection_build.py`.
 
-### 2.3 Which logs are fetched (two passes, D38 and D42)
+### 2.3 Which logs are fetched (two passes, D38 and D46)
 
 Most jobs pass, and each log takes about 2.3 s to download, so passing-job logs are what makes
 collection slow. The collector collects in two passes (D38): `--logs failed` stores everything
 except passing-job logs, and `fill-logs` fetches those later, newest first. Build uses
-`--logs failed` for both `backfill` and `daily` (D42), and runs `fill-logs` when there is time:
+`--logs failed` for both `backfill` and `daily` (D46), and runs `fill-logs` when there is time:
 
 | Command | Fetches | Needed for |
 |---|---|---|
@@ -145,7 +145,7 @@ not see that one's result. A test checks this case.
 **Change from the proposal (static signals).** Proposal section 3.3 runs the linter and the
 compiler locally on each commit. The team uses no repo clones (D08), so that is not possible
 for history. Instead, `last_lint_warnings` and `last_type_errors` read the counts printed by the
-most recent earlier run on the same branch (D41). They come from failed-job logs, plus passing
+most recent earlier run on the same branch (D45). They come from failed-job logs, plus passing
 logs once `fill-logs` has fetched them; when no log is there the value is empty.
 
 **Change from the proposal (AST).** The proposal derives change indicators from the syntax tree

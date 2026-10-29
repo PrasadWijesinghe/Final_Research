@@ -123,7 +123,7 @@ Design: `docs/experts/test.md`.
 
 Design: `docs/experts/build.md`.
 
-- [x] **B1 Repo list and collection rules:** `config/repos/build.yaml` (20 repos, reserves, licence-risky), Build rows of `config/workflow_detection.yaml`, `daily --logs failed` (D42), refined Build router patterns.
+- [x] **B1 Repo list and collection rules:** `config/repos/build.yaml` (20 repos, reserves, licence-risky), Build rows of `config/workflow_detection.yaml`, `daily --logs failed` (D46), refined Build router patterns.
   *Accept:* config loads; detection and daily tests pass; real build logs route to Build.
 - [x] **B2 Build screen:** `scripts/build_screen.py` (real 90-day failure counts, build share, backfill cost).
   *Accept:* tested on canned GitHub answers.
