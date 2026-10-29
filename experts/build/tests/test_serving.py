@@ -29,6 +29,7 @@ FAST = TrainSettings(
     lightgbm={"num_leaves": 15, "seed": 1, "deterministic": True, "force_row_wise": True},
     num_boost_round=200,
     early_stopping_rounds=20,
+    seeds=(1, 2),
 )
 
 

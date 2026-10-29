@@ -3,7 +3,7 @@
 Layout:
   metrics.json            every result of `run_training`
   report.md               the same, as tables for people
-  <target>/model.txt      LightGBM booster (best iteration only)
+  <target>/model_<i>.txt  LightGBM boosters, one per seed (scores are averaged)
   <target>/calibrator.json  isotonic calibration points
   <target>/model.json     features, categorical codes, thresholds, dataset and settings
 """
@@ -45,7 +45,11 @@ def _write_model(
     folder: Path, model: FittedModel, data: TrainingData, meta: dict[str, Any]
 ) -> None:
     folder.mkdir(parents=True)
-    model.booster.save_model(str(folder / "model.txt"), num_iteration=model.best_iteration)
+    files = []
+    for i, (booster, trees) in enumerate(zip(model.boosters, model.trees, strict=True)):
+        name = f"model_{i}.txt"
+        booster.save_model(str(folder / name), num_iteration=trees)
+        files.append(name)
     cal = model.calibrator
     (folder / "calibrator.json").write_text(
         json.dumps({"x": cal.X_thresholds_.tolist(), "y": cal.y_thresholds_.tolist()}),
@@ -59,7 +63,8 @@ def _write_model(
         "threshold_f1": model.threshold_f1,
         "threshold_operating": model.threshold_operating,
         "operating_reached_target": model.operating_reached_target,
-        "trees": model.best_iteration,
+        "boosters": files,
+        "trees": model.trees,
         "scale_pos_weight": model.scale_pos_weight,
         "train_rows": model.train_rows,
         "validation_rows": model.validation_rows,
@@ -105,7 +110,9 @@ class LoadedModel:
 
     def __init__(self, folder: Path) -> None:
         self.info: dict[str, Any] = json.loads((folder / "model.json").read_text(encoding="utf-8"))
-        self.booster = lgb.Booster(model_file=str(folder / "model.txt"))
+        self.boosters = [
+            lgb.Booster(model_file=str(folder / name)) for name in self.info["boosters"]
+        ]
         cal = json.loads((folder / "calibrator.json").read_text(encoding="utf-8"))
         self._cal_x = np.asarray(cal["x"], dtype=float)
         self._cal_y = np.asarray(cal["y"], dtype=float)
@@ -115,7 +122,14 @@ class LoadedModel:
         """Feature names in column order."""
         return list(self.info["features"])
 
+    def raw_scores(self, x: np.ndarray) -> np.ndarray:
+        """Uncalibrated scores averaged over the boosters."""
+        return np.mean([np.asarray(b.predict(x)) for b in self.boosters], axis=0)
+
     def probabilities(self, x: np.ndarray) -> np.ndarray:
         """Calibrated failure probabilities for a matrix in `features` order."""
-        raw = np.asarray(self.booster.predict(x))
-        return np.interp(raw, self._cal_x, self._cal_y)
+        return np.interp(self.raw_scores(x), self._cal_x, self._cal_y)
+
+    def contributions(self, x: np.ndarray) -> np.ndarray:
+        """SHAP values per feature averaged over the boosters; the last column is the base."""
+        return np.mean([np.asarray(b.predict(x, pred_contrib=True)) for b in self.boosters], axis=0)

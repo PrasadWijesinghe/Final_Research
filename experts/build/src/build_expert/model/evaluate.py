@@ -23,7 +23,7 @@ from .explain import importance
 from .metrics import binary_metrics
 from .settings import TrainSettings
 from .splits import Split, temporal_split, train_validation_split
-from .train import FittedModel, TooFewPositives, fit_model, matrix
+from .train import FittedModel, TooFewPositives, fit_ensemble, matrix
 
 logger = logging.getLogger(__name__)
 
@@ -108,12 +108,13 @@ def _main_target(
             "test": binary_metrics(y_test, b.predict(data, split.test), b.scores(data, split.test)),
         }
     try:
-        model = fit_model(data, target, split.train, split.validation, settings)
+        model, singles = fit_ensemble(data, target, split.train, split.validation, settings)
     except TooFewPositives as exc:
         out["model"] = {"skipped": str(exc)}
         return out, None
     out["model"] = {
-        "trees": model.best_iteration,
+        "models": len(model.boosters),
+        "trees": model.trees,
         "rounds_from": model.rounds_from,
         "scale_pos_weight": model.scale_pos_weight,
         "threshold_f1": round(model.threshold_f1, 4),
@@ -122,7 +123,7 @@ def _main_target(
         "validation": _model_metrics(model, data, split.validation, target),
         "test": _model_metrics(model, data, split.test, target),
     }
-    out["model"]["seeds"] = _seed_spread(data, split, target, settings, model)
+    out["model"]["seeds"] = _seed_spread(data, split, target, settings, singles)
     out["per_repo_test"] = _per_repo(model, data, split.test, target)
     out["lead_time"] = _lead_time(model, data, split.test, target)
     return out, model
@@ -132,13 +133,14 @@ SPREAD_METRICS = ("precision", "recall", "f1", "pr_auc", "roc_auc")
 
 
 def _seed_spread(
-    data: TrainingData, split: Split, target: str, settings: TrainSettings, first: FittedModel
+    data: TrainingData,
+    split: Split,
+    target: str,
+    settings: TrainSettings,
+    singles: list[FittedModel],
 ) -> dict[str, Any]:
-    """Test metrics (best-F1 threshold) for every seed: mean and standard deviation."""
-    runs = [_model_metrics(first, data, split.test, target)["at_f1"]]
-    for seed in settings.seeds[1:]:
-        m = fit_model(data, target, split.train, split.validation, settings, seed=seed)
-        runs.append(_model_metrics(m, data, split.test, target)["at_f1"])
+    """Each single model's test metrics (best-F1 threshold): mean and standard deviation."""
+    runs = [_model_metrics(m, data, split.test, target)["at_f1"] for m in singles]
     out: dict[str, Any] = {"n": len(runs), "seeds": list(settings.seeds)}
     for k in SPREAD_METRICS:
         vals = [r[k] for r in runs if r[k] is not None]
@@ -155,7 +157,9 @@ def _ablation(
     for group in settings.ablation_groups:
         keep = tuple(n for n in data.feature_names if n not in FEATURE_GROUPS[group])
         try:
-            model = fit_model(data, target, split.train, split.validation, settings, features=keep)
+            model, _ = fit_ensemble(
+                data, target, split.train, split.validation, settings, features=keep
+            )
         except TooFewPositives as exc:
             out[f"without {group}"] = {"skipped": str(exc)}
             continue
@@ -189,7 +193,7 @@ def _leave_one_repo_out(data: TrainingData, target: str, settings: TrainSettings
             embargo=settings.embargo,
         )
         try:
-            model = fit_model(data, target, inner.train, inner.validation, settings)
+            model, _ = fit_ensemble(data, target, inner.train, inner.validation, settings)
         except TooFewPositives as exc:
             repos[repo] = {"skipped": str(exc)}
             continue
@@ -226,13 +230,13 @@ def _sub_targets(
     out: dict[str, Any] = {}
     for target in settings.sub_targets:
         try:
-            model = fit_model(data, target, split.train, split.validation, settings)
+            model, _ = fit_ensemble(data, target, split.train, split.validation, settings)
         except TooFewPositives as exc:
             out[target] = {"skipped": str(exc)}
             continue
         models[target] = model
         out[target] = {
-            "trees": model.best_iteration,
+            "trees": model.trees,
             "test": _model_metrics(model, data, split.test, target)["at_f1"],
         }
     return out

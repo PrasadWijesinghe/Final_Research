@@ -200,8 +200,8 @@ Built (`build-train`, settings in `config/build_model.yaml`, details in `experts
 LightGBM on groups A to D; temporal 70/15/15 split with an embargo (a commit whose CI finished
 after the next part began is dropped); class weight negatives/positives; the tree count chosen
 by time-ordered cross-validation inside the train part (3 expanding windows; the first real run
-showed one small validation part alone is noisy); the main model trained with 5 seeds and
-reported as mean ± sd; isotonic calibration on validation; a best-F1 threshold (H1 comparison) and a
+showed one small validation part alone is noisy); 5 seeds averaged into one calibrated model,
+with a single model's mean ± sd beside it; isotonic calibration on validation; a best-F1 threshold (H1 comparison) and a
 high-precision operating threshold (D03, target 0.80, at least 5 validation hits); both
 baselines; per-repo results; lead time of correct warnings (H2); SHAP top factors (LightGBM's
 TreeSHAP); retraining without each feature group (H3); leave-one-repo-out; sub-risk models.
