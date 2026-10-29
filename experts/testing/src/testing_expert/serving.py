@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import json
 import logging
-import math
 import os
 import re
 import time
@@ -25,10 +24,10 @@ import pandas as pd
 import psycopg
 
 from shared.contracts import CommitContext, RiskOutput, WorkflowJob
-from shared.contracts.risk_output import RiskFactor
 
 from .config import EXPERT
-from .features import compute, describe, loader, test_changes
+from .explain import MAX_FACTORS, model_score_factor, still_failing_factor, top_factors
+from .features import compute, loader, test_changes
 from .features._types import ChangedTestFile, FeatureDict, FileChange, JobTarget
 from .features.history import EMPTY_SERIES
 from .features.history_tests import EMPTY_TEST_HISTORY
@@ -47,10 +46,6 @@ _VERSION_DIR = re.compile(r"^v(\d+)$")
 _REQUIRED = ("features.json", "threshold.json", "calibrator.joblib")
 # v1-v3 bundles hold model.txt; v4 (separate genuine and flaky models) holds model_genuine.txt.
 _MODEL_FILES = ("model.txt", "model_genuine.txt")
-# DEFAULT: the interim reasons show at most the 5 allowed by the contract.
-MAX_FACTORS = 5
-# DEFAULT: a score is shown in factors only when its contribution is at least this (non-zero).
-MIN_CONTRIB = 1e-6
 
 
 @dataclass
@@ -298,99 +293,10 @@ def build_features(
 
 # --- scoring and reasons ---------------------------------------------------------------------
 
-# Where a tw_ feature points: the first added line that matches (path:line evidence).
-_TW_LINE = {
-    "tw_set_timeout": re.compile(r"\bset(Timeout|Interval)\s*\("),
-    "tw_math_random": re.compile(r"\bMath\.random\s*\("),
-    "tw_date_now": re.compile(r"\bDate\.now\s*\(|\bnew Date\s*\("),
-    "tw_unmocked_network": re.compile(r"\bfetch\s*\(|\baxios\b|\bgot\s*\(|https?\.(get|request)\("),
-    "tw_only_added": re.compile(r"\.only\s*\(|\bf(it|describe)\s*\("),
-    "tw_skip_added": re.compile(r"\.skip\s*\(|\bx(it|describe|test)\s*\("),
-    "tw_real_timers": re.compile(r"useRealTimers"),
-}
-_HUNK_START = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)")
-
-
-def _evidence(feature: str, context: CommitContext) -> tuple[str | None, int | None]:
-    """File and line of the first added line behind a tw_ feature (path only when no line)."""
-    files = _test_files(context)
-    pattern = _TW_LINE.get(feature)
-    for f in files:
-        if f.patch is None or pattern is None:
-            continue
-        line_no = 0
-        for raw in f.patch.split("\n"):
-            m = _HUNK_START.match(raw)
-            if m:
-                line_no = int(m.group(1)) - 1
-            elif raw.startswith("+"):
-                line_no += 1
-                if pattern.search(raw):
-                    return f.path, line_no
-            elif raw.startswith(" "):
-                line_no += 1
-    if feature.startswith("tw_") and files:
-        return files[0].path, None
-    return None, None
-
 
 def _frame(bundle: Bundle, rows: list[FeatureDict]) -> pd.DataFrame:
     df = pd.DataFrame(rows).reindex(columns=bundle.encoder.columns)
     return bundle.encoder.lgbm_frame(df)
-
-
-_OS_LABEL = {"linux": "Linux", "windows": "Windows", "macos": "macOS"}
-
-
-def still_failing_reason(count: int, os_name: str | None) -> str:
-    """The plain-language reason of the "still failing" rule (at most 200 characters)."""
-    times = "1 time" if count == 1 else f"{count} times"
-    where = f" on {_OS_LABEL[os_name]}" if os_name in _OS_LABEL else ""
-    return (
-        f"This job already failed {times} in a row{where}; "
-        "the failure is likely not caused by this push."
-    )
-
-
-def _factors(
-    bundle: Bundle,
-    frame: pd.DataFrame,
-    i: int,
-    row: FeatureDict,
-    context: CommitContext,
-    limit: int = MAX_FACTORS,
-) -> list[RiskFactor]:
-    # DEFAULT: interim reasons until P4.8 SHAP: LightGBM's per-feature contributions to the
-    # genuine-fail and flaky-fail scores (pred_contrib), summed, largest absolute value first.
-    contrib = np.asarray(bundle.booster.predict(frame.iloc[[i]], pred_contrib=True))[0]
-    n = len(bundle.encoder.columns)
-    contrib = contrib.reshape(len(CLASSES), n + 1)[:, :n]
-    fail = contrib[1] + contrib[2]
-    order = np.argsort(-np.abs(fail))
-    out: list[RiskFactor] = []
-    for idx in order:
-        value = float(fail[idx])
-        if abs(value) < MIN_CONTRIB:
-            break
-        name = bundle.encoder.columns[idx]
-        raw = row.get(name)
-        missing = raw is None or (isinstance(raw, float) and math.isnan(raw))
-        has_diff = name.startswith("tw_") and not missing
-        path, line = _evidence(name, context) if has_diff else (None, None)
-        out.append(
-            RiskFactor(
-                feature=name,
-                value="unknown" if missing else raw,  # type: ignore[arg-type]
-                shap_value=value,
-                direction="raises" if value >= 0 else "lowers",
-                reason=describe(name, None if missing else raw)[:200],
-                path=path,
-                line=line,
-            )
-        )
-        if len(out) == limit:
-            break
-    return out
 
 
 def predict_with_model(
@@ -401,6 +307,7 @@ def predict_with_model(
     targets: list[WorkflowJob | None] = list(jobs) or [None]
     rows, db_failed = build_features(context, targets, bundle.history_mode)
     frame = _frame(bundle, rows)
+    share_g = share_f = None  # v4: the two boosters' calibrated risks, weights for the reasons
     if isinstance(bundle.booster, SeparateBooster):
         # v4: each class has its own calibrator; P(fail) = 1 - (1 - pg)(1 - pf)
         raw_g, raw_f = bundle.booster.predict_each(frame)
@@ -408,6 +315,7 @@ def predict_with_model(
         pf = apply_binary_calibrator(bundle.calibrator["flaky"], raw_f)
         calibrated = np.column_stack([1 - combine_any(pg, pf), pg, pf])
         scores = combine_any(pg, pf)
+        share_g, share_f = pg, pf
     else:
         proba = np.asarray(bundle.booster.predict(frame))
         calibrated = apply_calibrator(bundle.calibrator, proba)
@@ -428,11 +336,22 @@ def predict_with_model(
             ]
         )
     latency_ms = int((time.perf_counter() - started) * 1000)
+    test_files = _test_files(context)
     outputs = []
     for i, job in enumerate(targets):
         prob = float(min(max(scores[i], 0.0), 1.0))
         rule_on = rule_p is not None and bool(rule_p["active"][i])
-        factors = _factors(bundle, frame, i, rows[i], context, MAX_FACTORS - int(rule_on))
+        factors = top_factors(
+            bundle.booster,
+            bundle.encoder,
+            frame,
+            i,
+            rows[i],
+            test_files,
+            MAX_FACTORS - int(rule_on),
+            pg=None if share_g is None else float(share_g[i]),
+            pf=None if share_f is None else float(share_f[i]),
+        )
         sub_risks = {
             "genuine_fail": float(min(calibrated[i][1], 1.0)),
             "flaky_fail": float(min(calibrated[i][2], 1.0)),
@@ -442,27 +361,10 @@ def predict_with_model(
             rule_value = float(min(rule_p["any"][i], 1.0))
             sub_risks["still_failing"] = rule_value
             os_name = _os_names(job)[1] if rule_p["same_os"][i] else None
-            factors.insert(
-                0,
-                RiskFactor(
-                    feature="still_failing_streak",
-                    value=count,
-                    shap_value=rule_value,
-                    direction="raises",
-                    reason=still_failing_reason(count, os_name),
-                ),
-            )
+            factors.insert(0, still_failing_factor(count, rule_value, os_name))
         alert = prob >= bundle.threshold
         if alert and not factors:
-            factors = [
-                RiskFactor(
-                    feature="model_score",
-                    value=round(prob, 4),
-                    shap_value=prob,
-                    direction="raises",
-                    reason="The overall model score is above the alert threshold",
-                )
-            ]
+            factors = [model_score_factor(prob)]
         outputs.append(
             RiskOutput(
                 context_id=context.context_id,

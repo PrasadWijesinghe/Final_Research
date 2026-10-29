@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
-from testing_expert import serving
+from testing_expert import explain, serving
 from testing_expert.api import app
 from testing_expert.features import feature_names
 from testing_expert.model.data import CLASSES, Encoder
@@ -120,9 +120,9 @@ def test_tw_features_from_context_diff(bundle_dir: Path) -> None:
 
 
 def test_evidence_points_at_added_line() -> None:
-    path, line = serving._evidence("tw_set_timeout", context())
+    path, line = explain.evidence_for("tw_set_timeout", serving._test_files(context()))
     assert path == "test/user.test.ts" and line == 4
-    path, line = serving._evidence("tw_math_random", context())
+    path, line = explain.evidence_for("tw_math_random", serving._test_files(context()))
     assert line == 5
 
 
