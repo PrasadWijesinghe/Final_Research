@@ -19,8 +19,8 @@ up-experts:
 	docker compose --profile experts up -d --build --wait
 
 # DEFAULT (P2.9): end-to-end test. Builds and starts postgres, redis, api and the Test expert
-# (profile "e2e"), migrates the database from the host, runs the `e2e` tests, then always
-# stops and removes only its own containers (api, testing-api, testing-worker; the postgres/redis
+# (profile "e2e"; the gateway runs the mock provider), migrates the database from the host, runs the `e2e` tests, then always
+# stops and removes only its own containers (api, testing-api, testing-worker, llm-gateway; the postgres/redis
 # dev stack stays up) and keeps the test's exit code. E2E_REQUIRED=1 turns "stack unreachable" from
 # a skip into a failure, so CI cannot pass without really running the test.
 # EXPERT_BACKEND_URL makes the Test worker post its diagnosis to the api container.
@@ -31,8 +31,8 @@ e2e:
 		&& E2E_REQUIRED=1 uv run pytest -m e2e services/api/tests/e2e \
 		|| status=$$?; \
 	if [ $$status -ne 0 ]; then docker compose --profile e2e logs --no-color; fi; \
-	docker compose --profile e2e stop api testing-api testing-worker; \
-	docker compose --profile e2e rm -f api testing-api testing-worker; \
+	docker compose --profile e2e stop api testing-api testing-worker llm-gateway; \
+	docker compose --profile e2e rm -f api testing-api testing-worker llm-gateway; \
 	exit $$status
 
 # DEFAULT: --profile experts so profile services are stopped too (a plain `down` skips them).

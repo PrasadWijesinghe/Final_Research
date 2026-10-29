@@ -121,14 +121,15 @@ services:
     profiles: ["experts", "e2e"]
     build: { context: ., dockerfile: experts/testing/Dockerfile }
     image: pipelineiq-expert-testing
-    # DEFAULT (P4.12 partial): the trained model and the feature config are mounted read-only, not
-    # baked into the image. TESTING_MODEL_BUNDLE names a folder of versions (newest v<N> is served);
-    # without a bundle the service answers with the stub.
+    # DEFAULT (P4.12): the trained model and the feature config are mounted read-only, not baked
+    # into the image. TESTING_MODEL_BUNDLE names a folder of versions (newest v<N> is served); the
+    # stub answers only when no bundle can be loaded. GET /status says which parts are real.
     environment:
       <<: *expert-env
       EXPERT_PORT: "8103"
       TESTING_MODEL_BUNDLE: /models/testing
       TEST_FEATURES_FILE: /app/config/test_features.yaml
+      TEST_LOG_PARSING_FILE: /app/config/test_log_parsing.yaml
     volumes:
       - ./models:/models:ro
       - ./config:/app/config:ro
@@ -137,33 +138,77 @@ services:
   testing-worker:
     <<: *expert-worker
     profiles: ["experts", "e2e"]
-    # DEFAULT: BACKEND_URL stays empty (stub behaviour) unless EXPERT_BACKEND_URL is set; `make e2e`
-    # sets it to http://api:8000 so the worker posts its diagnosis to the backend.
-    # DEFAULT (P4.9): the triage bundle (models/testing/triage/v<N>) is mounted read-only like the
-    # pre-push bundles; without it the worker answers with the stub. The full log folder is not
-    # mounted, so triage reads the router's log excerpt.
+    # P4.12: the worker is the real thing by default: triage + knowledge base + the LLM gateway.
+    # DEFAULT: BACKEND_URL is where the diagnosis is posted (the backend API is the one place the
+    # dashboard reads). EXPERT_BACKEND_URL unset means http://host.docker.internal:8000, the API
+    # running on the host (`uv run --env-file .env uvicorn api.app:app`, on Linux add `--host
+    # 0.0.0.0`); `make e2e` sets it to http://api:8000 (the api container). Set it to an empty
+    # string to post nowhere (the old stub behaviour). `-` not `:-` so empty stays empty.
     environment:
       <<: *expert-env
-      BACKEND_URL: "${EXPERT_BACKEND_URL:-}"
+      BACKEND_URL: "${EXPERT_BACKEND_URL-http://host.docker.internal:8000}"
       TESTING_TRIAGE_BUNDLE: /models/testing/triage
       # DEFAULT (P4.10): the knowledge base is read from the same database. The image has no torch,
-      # so retrieval here is full-text only (a missing embedding model is logged and skipped). For
-      # vector retrieval build the image with sentence-transformers and mount a model cache (see
-      # experts/testing/README.md, "Knowledge base").
+      # so retrieval here is full-text only (a missing embedding model is logged and skipped); this
+      # keeps the image small. For vector retrieval build the image with sentence-transformers and
+      # mount a model cache (see experts/testing/README.md, "Knowledge base").
       TEST_KB_FILE: /app/config/test_kb.yaml
-      # DEFAULT (P4.11): the diagnosis step calls the LLM gateway only when EXPERT_LLM_GATEWAY_URL
-      # is set (the gateway has no compose service yet; on a Mac run it by hand and use
-      # http://host.docker.internal:8200). Empty means the no-LLM template text. The sanitiser
-      # needs its pattern file, or the prompt cannot be built (then the template is used).
-      LLM_GATEWAY_URL: "${EXPERT_LLM_GATEWAY_URL:-}"
+      # Without these two files the parser and the feature code fall back (the log cleaner then
+      # warns "parsing config not loaded" and triage runs on uncleaned text).
+      TEST_LOG_PARSING_FILE: /app/config/test_log_parsing.yaml
+      TEST_FEATURES_FILE: /app/config/test_features.yaml
+      # P4.11/P4.12: the diagnosis step calls the LLM gateway service below (mock provider by
+      # default, so the text comes from the template). Set EXPERT_LLM_GATEWAY_URL to point at
+      # another gateway, or to an empty string for the template only. The sanitiser needs its
+      # pattern file, or the prompt cannot be built (then the template is used).
+      LLM_GATEWAY_URL: "${EXPERT_LLM_GATEWAY_URL-http://llm-gateway:8200}"
       TEST_DIAGNOSIS_FILE: /app/config/test_diagnosis.yaml
       SANITISE_PATTERNS_FILE: /app/config/sanitise_patterns.yaml
+      # DEFAULT: the stored logs (data/logs, read-only) let triage read the full sanitised log
+      # instead of the router's 20,000-character excerpt. log_ref is "logs/<owner>/<repo>/...".
+      DATA_DIR: /data
     volumes:
       - ./models:/models:ro
       - ./config:/app/config:ro
+      - ./data/logs:/data/logs:ro
+    # DEFAULT: makes host.docker.internal resolve on Linux too (Docker Desktop already does).
+    extra_hosts: ["host.docker.internal:host-gateway"]
     image: pipelineiq-expert-testing
     command: ["python", "-m", "testing_expert.worker"]
-    depends_on: { redis: { condition: service_healthy }, testing-api: { condition: service_started } }
+    depends_on:
+      redis: { condition: service_healthy }
+      testing-api: { condition: service_started }
+      llm-gateway: { condition: service_healthy }
+
+  # --- LLM gateway (P2.4, in compose since P4.12): the one door to the language model. ----------
+  # DEFAULT: mock provider (placeholder answers, nothing leaves the machine). For a real model add
+  # a provider class (services/llm_gateway/README.md), then set LLM_PROVIDER and LLM_API_KEY in
+  # .env. LLM_API_KEY is passed through empty and never logged.
+  llm-gateway:
+    profiles: ["experts", "e2e"]
+    build: { context: ., dockerfile: services/llm_gateway/Dockerfile }
+    image: pipelineiq-llm-gateway
+    environment:
+      LLM_PROVIDER: "${LLM_PROVIDER:-mock}"
+      LLM_API_KEY: "${LLM_API_KEY:-}"
+      LLM_CONFIG_FILE: /app/config/llm.yaml
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pipelineiq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-pipelineiq}
+    volumes:
+      - ./config:/app/config:ro
+    ports:
+      # DEFAULT: bound to 127.0.0.1; the gateway has no login and holds the model key.
+      - "127.0.0.1:${LLM_GATEWAY_PORT:-8200}:8200"
+    depends_on:
+      redis: { condition: service_healthy }
+      postgres: { condition: service_healthy }
+    healthcheck:
+      # DEFAULT: python (always in the image) instead of curl.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8200/health', timeout=4)"]
+      interval: 5s
+      timeout: 6s
+      retries: 12
+    restart: unless-stopped
 
   infra-api:
     <<: *expert-api
