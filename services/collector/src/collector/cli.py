@@ -76,6 +76,13 @@ def _build_parser() -> argparse.ArgumentParser:
     daily.add_argument(
         "--data-dir", type=Path, help="where logs are written (default: DATA_DIR or ./data)"
     )
+    daily.add_argument(
+        "--logs",
+        choices=(LOGS_ALL, LOGS_FAILED),
+        default=LOGS_ALL,
+        help="'failed' skips logs of passing jobs (they stay pending for `fill-logs`); "
+        "default 'all'",
+    )
     status = sub.add_parser("status", help="show what is collected, gaps and the rate limit")
     status.add_argument("--member", required=True, choices=MEMBERS)
     exp = sub.add_parser("export", help="bundle the database, logs and a manifest into a tar.gz")
@@ -264,7 +271,13 @@ def run_daily(args: argparse.Namespace) -> int:
     failed = 0
     with GitHubClient() as client:
         syncer = DailySyncer(
-            client, store, member=args.member, data_dir=data_dir, tagger=tagger, rules=rules
+            client,
+            store,
+            member=args.member,
+            data_dir=data_dir,
+            tagger=tagger,
+            rules=rules,
+            logs=args.logs,
         )
         for entry in repos:
             try:
