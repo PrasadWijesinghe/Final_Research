@@ -100,6 +100,28 @@ Design: `docs/experts/test.md`.
 - [ ] **P4.11 Diagnosis worker:** prompt file, gateway call, `BehaviourDetails`, citation rules, misrouted handling.
 - [ ] **P4.12 Swap the stub** for the real expert, keeping the stub tests green.
 
+## Phase 4B — Build expert (Member 2)
+
+Design: `docs/experts/build.md`.
+
+- [x] **B1 Repo list and collection rules:** `config/repos/build.yaml` (20 repos, reserves, licence-risky), Build rows of `config/workflow_detection.yaml`, `daily --logs failed` (D42), refined Build router patterns.
+  *Accept:* config loads; detection and daily tests pass; real build logs route to Build.
+- [x] **B2 Build screen:** `scripts/build_screen.py` (real 90-day failure counts, build share, backfill cost).
+  *Accept:* tested on canned GitHub answers.
+- [ ] **B2b Run the build screen** with a real token and trim the repo list; then start the backfill.
+- [x] **B3 Log parsers** for tsc, ESLint, Prettier and bundlers (Vite, webpack, esbuild, Rollup, Next.js) with real tool-output fixtures.
+- [x] **B4 Labelling** per §3, written as `FailureLabel`s (`platform.failure_labels`, `is_final=false`).
+- [ ] **B4b Manual label check:** sample per sub-label and per reason, second labeller, kappa.
+- [x] **B5 Feature pipeline** per §4: groups A–D, one module per group, `descriptions.yaml`.
+- [x] **B6 Dataset builder** (`build-dataset`) → `data/datasets/build/vN/` with `rows.parquet`, `fix_candidates.parquet` and manifest.
+  *Accept:* in-memory and Postgres builds give identical rows; no look-ahead test; frozen versions.
+- [ ] **B7 Baselines** per §6 (last outcome; warning/error threshold rule).
+- [ ] **B8 Model training:** GBT and code-embedding variant, temporal and leave-one-repo-out validation, calibration, threshold, export.
+- [ ] **B9 SHAP explanations** into `RiskFactor`s.
+- [ ] **B10 Knowledge base** from reviewed fix candidates (`build.kb_cases`).
+- [ ] **B11 Diagnosis worker** with `BuildDetails`, citations and misrouted handling.
+- [ ] **B12 Swap the stub** for the real expert, keeping the stub tests green.
+
 ## Phase 5 — Evaluation
 
 - [ ] **P5.1** Evaluation harness on replay, with the metrics from `docs/experts/test.md` §5.
