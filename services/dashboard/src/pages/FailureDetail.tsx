@@ -6,6 +6,26 @@ import { pct, shortSha, when } from "../lib/risk";
 import { Link } from "../lib/router";
 import { useAsync } from "../lib/useAsync";
 import type { Diagnosis, FailureView } from "../types/api";
+import type { BehaviourDetails } from "../types/contracts.gen";
+
+const VERDICT_BADGE: Record<BehaviourDetails["verdict"], string> = { genuine: "high", flaky: "medium", unclear: "low" };
+
+function TriagePanel({ t }: { t: BehaviourDetails }) {
+  return (
+    <div className="pq-triage">
+      <p>
+        <span className={`pq-badge pq-${VERDICT_BADGE[t.verdict]}`}>{t.verdict}</span>{" "}
+        <b>{pct(t.verdict_confidence)}</b> sure
+        {t.suggest_rerun && <> · <span className="pq-badge pq-low">re-run suggested</span></>}
+      </p>
+      <p className="pq-dim pq-small">
+        {t.framework} · changed code in stack: {t.stack_touches_changed_code ? "yes" : "no"}
+        {t.pre_run_flaky_risk != null && <> · pre-run flaky risk {pct(t.pre_run_flaky_risk)}</>}
+      </p>
+      <p className="pq-small">Failing tests: {t.failing_tests.slice(0, 5).map((n, i) => <code key={i}>{n}{i < Math.min(t.failing_tests.length, 5) - 1 ? ", " : ""}</code>)}{t.failing_tests.length > 5 && ` +${t.failing_tests.length - 5} more`}</p>
+    </div>
+  );
+}
 
 function DiagnosisCard({ d, view, onSaved }: { d: Diagnosis; view: FailureView; onSaved: () => void }) {
   const { auth } = useAuth();
@@ -20,6 +40,7 @@ function DiagnosisCard({ d, view, onSaved }: { d: Diagnosis; view: FailureView; 
       {d.status === "misrouted" && <p>This expert says the failure belongs to <b>{d.suggested_category}</b>.</p>}
       {d.status === "diagnosed" && (
         <>
+          {d.details?.expert === "test" && <TriagePanel t={d.details} />}
           <p className="pq-cause">{d.root_cause}</p>
           <p className="pq-dim pq-small">confidence {pct(d.confidence)} · {d.llm_model ?? "no model"} · {when(d.created_at)}</p>
           <h4>Evidence</h4>
