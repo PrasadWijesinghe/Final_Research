@@ -251,6 +251,90 @@ def load_test_history(
     return {k: TestHistory(rows.get(k, ()), empty.get(k, ())) for k in {*rows, *empty}}
 
 
+def load_job_test_history(
+    conn: psycopg.Connection[Any],
+    only: Sequence[tuple[int, str, str]],
+    before: float,
+) -> dict[SeriesKey, TestHistory]:
+    """Job-level `ht_*` history of a few series, fast (serving); touched-file numbers are not built.
+
+    Gives the same job-level numbers as `load_test_history` (`ht_test_level`, `ht_parsed_runs_*`,
+    `ht_last_run_failed_tests`, `ht_persistent_failing_tests`, `ht_failed_tests_*`,
+    `ht_flaky_tests_*`) but reads far less. The full loader streams every stored result row of the
+    series (hundreds of thousands for a big matrix job). Those numbers only need: (1) the list of
+    parsed runs (cheap), (2) the failed rows of runs in the last 90 days and of the last two runs,
+    (3) for each test that failed in the window, its newest passing event (to tell "flaky" from
+    "always failing"). So it runs three small queries. The per-file numbers (`ht_touched_*`)
+    need every row, so a bundle that uses them must call `load_test_history`.
+
+    # DEFAULT: window = 90 days, the longest `ht_` window (`history_tests.WINDOWS_DAYS`).
+    """
+    if not only:
+        return {}
+    window = 90 * 86_400.0
+    repos = [o[0] for o in only]
+    paths = [o[1] for o in only]
+    keys = [o[2] for o in only]
+    runs_sql = f"""
+        select w.repo_id, w.workflow_path || E'\\x1f' || {SERIES_KEY_SQL} as skey, j.job_id,
+               extract(epoch from j.completed_at), (p.granularity = 'test')::int
+        from unnest(%s::bigint[], %s::text[], %s::text[]) as k(repo_id, wp, key)
+        join raw.workflow_runs w on w.repo_id = k.repo_id and w.workflow_path = k.wp
+        join raw.jobs j on j.run_id = w.run_id and j.attempt = w.attempt
+        join testing.log_parses p on p.job_id = j.job_id
+        where p.is_test_job and j.completed_at is not null
+          and j.conclusion in ('success', 'failure') and j.completed_at < to_timestamp(%s)
+          and {SERIES_KEY_SQL} = k.key
+    """
+    runs: dict[SeriesKey, list[tuple[float, int, int]]] = defaultdict(list)
+    job_series: dict[int, SeriesKey] = {}
+    with conn.cursor() as cur:
+        cur.execute(runs_sql, [repos, paths, keys, before])
+        for repo_id, skey, job_id, ts, lvl in cur.fetchall():
+            runs[(repo_id, skey)].append((float(ts), job_id, lvl))
+            job_series[job_id] = (repo_id, skey)
+    needed: set[int] = set()
+    in_window: set[int] = set()
+    for rs in runs.values():
+        rs.sort(key=lambda r: (r[0], r[1]))
+        needed.update(r[1] for r in rs[-2:])
+        for ts, job_id, _lvl in rs:
+            if ts >= before - window:
+                needed.add(job_id)
+                in_window.add(job_id)
+    ts_of = {r[1]: r[0] for rs in runs.values() for r in rs}
+    lvl_of = {r[1]: r[2] for rs in runs.values() for r in rs}
+    rows: dict[SeriesKey, list[ResultRow]] = defaultdict(list)
+    failing: set[str] = set()
+    if needed:
+        with conn.cursor() as cur:
+            cur.execute(
+                "select job_id, test_id, file, granularity from testing.test_results "
+                "where job_id = any(%s) and outcome = 'failed'",
+                [sorted(needed)],
+            )
+            for job_id, tid, file, gran in cur.fetchall():
+                rows[job_series[job_id]].append(
+                    ResultRow(job_id, ts_of[job_id], tid, file, True, gran, lvl_of[job_id])
+                )
+                if job_id in in_window:
+                    failing.add(tid)
+    if failing and in_window:
+        with conn.cursor() as cur:
+            cur.execute(
+                "select distinct on (r.test_id) r.test_id, r.job_id from testing.test_results r "
+                "join raw.jobs j on j.job_id = r.job_id "
+                "where r.test_id = any(%s) and r.job_id = any(%s) and r.outcome <> 'failed' "
+                "order by r.test_id, j.completed_at desc",
+                [sorted(failing), sorted(in_window)],
+            )
+            for tid, job_id in cur.fetchall():
+                rows[job_series[job_id]].append(
+                    ResultRow(job_id, ts_of[job_id], tid, None, False, "test", lvl_of[job_id])
+                )
+    return {k: TestHistory(rows.get(k, ()), rs) for k, rs in runs.items()}
+
+
 def os_series_key_of(t: JobTarget) -> OsSeriesKey:
     """The dict key under which `load_series_by_os` stores this target's series."""
     return (t.repo_id, f"{t.workflow_path}\x1f{t.series_key}", t.os_name)

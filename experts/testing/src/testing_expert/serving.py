@@ -34,6 +34,7 @@ from .features.history import EMPTY_SERIES
 from .features.history_tests import EMPTY_TEST_HISTORY
 from .features.repo import EMPTY_DURATIONS, EMPTY_TIMELINE
 from .features.settings import get_settings
+from .model import rule as still_failing
 from .model.data import CLASSES, Encoder
 from .model.metrics import apply_binary_calibrator, apply_calibrator, combine_any, p_fail
 from .model.models import SEPARATE_KIND, SeparateBooster, TwoStageBooster
@@ -62,6 +63,16 @@ class Bundle:
     booster: lgb.Booster | TwoStageBooster | SeparateBooster
     calibrator: dict[str, Any]
     path: Path
+    # v6+: the "still failing" rule table (rule.json); None for older bundles
+    rule: dict[str, Any] | None = None
+
+    @property
+    def history_mode(self) -> str:
+        """Which per-test history the model reads: "none" (no ht_ column), "job" or "full"."""
+        cols = self.encoder.columns
+        if any(c.startswith("ht_touched_") for c in cols):
+            return "full"
+        return "job" if any(c.startswith("ht_") for c in cols) else "none"
 
 
 def _is_bundle(path: Path) -> bool:
@@ -124,6 +135,9 @@ def load_bundle(path: Path) -> Bundle:
         else lgb.Booster(model_file=str(path / "model.txt")),
         calibrator=joblib.load(path / "calibrator.joblib"),
         path=path,
+        rule=json.loads((path / "rule.json").read_text())
+        if (path / "rule.json").is_file()
+        else None,
     )
 
 
@@ -213,12 +227,15 @@ def _target(context: CommitContext, job: WorkflowJob | None, repo_id: int) -> Jo
 
 
 def build_features(
-    context: CommitContext, jobs: list[WorkflowJob | None]
+    context: CommitContext, jobs: list[WorkflowJob | None], history_mode: str = "full"
 ) -> tuple[list[FeatureDict], bool]:
     """One feature row per job; second value is True when the database was needed but failed.
 
     Change-size, config, run-setup and test-change groups come from the context itself. History
     comes from `raw` when DATABASE_URL works and the repo is known; otherwise it is cold start.
+    `history_mode` says which per-test history (`ht_*`) to load: "none" skips it (the bundle has no
+    `ht_` column, so the 5 s query is not needed), "job" loads only the job-level numbers (fast),
+    "full" loads everything including the touched-file numbers.
     """
     settings = get_settings()
     files = _file_changes(context)
@@ -251,7 +268,10 @@ def build_features(
                     os_series = loader.load_series_by_os(conn, [repo_id], cutoff, only)
                     durations = loader.load_durations(conn, [repo_id], cutoff, settings)
                     timelines = loader.load_frameworks(conn, [repo_id], settings)
-                    test_hist = loader.load_test_history(conn, [repo_id], cutoff, only)
+                    if history_mode == "job":
+                        test_hist = loader.load_job_test_history(conn, only, cutoff)
+                    elif history_mode == "full":
+                        test_hist = loader.load_test_history(conn, [repo_id], cutoff, only)
     except Exception:
         logger.warning("history unavailable, scoring with cold-start history", exc_info=True)
         db_failed = True
@@ -319,8 +339,26 @@ def _frame(bundle: Bundle, rows: list[FeatureDict]) -> pd.DataFrame:
     return bundle.encoder.lgbm_frame(df)
 
 
+_OS_LABEL = {"linux": "Linux", "windows": "Windows", "macos": "macOS"}
+
+
+def still_failing_reason(count: int, os_name: str | None) -> str:
+    """The plain-language reason of the "still failing" rule (at most 200 characters)."""
+    times = "1 time" if count == 1 else f"{count} times"
+    where = f" on {_OS_LABEL[os_name]}" if os_name in _OS_LABEL else ""
+    return (
+        f"This job already failed {times} in a row{where}; "
+        "the failure is likely not caused by this push."
+    )
+
+
 def _factors(
-    bundle: Bundle, frame: pd.DataFrame, i: int, row: FeatureDict, context: CommitContext
+    bundle: Bundle,
+    frame: pd.DataFrame,
+    i: int,
+    row: FeatureDict,
+    context: CommitContext,
+    limit: int = MAX_FACTORS,
 ) -> list[RiskFactor]:
     # DEFAULT: interim reasons until P4.8 SHAP: LightGBM's per-feature contributions to the
     # genuine-fail and flaky-fail scores (pred_contrib), summed, largest absolute value first.
@@ -350,7 +388,7 @@ def _factors(
                 line=line,
             )
         )
-        if len(out) == MAX_FACTORS:
+        if len(out) == limit:
             break
     return out
 
@@ -361,7 +399,7 @@ def predict_with_model(
     """One RiskOutput per test job (or one commit row when there is none): calibrated P(fail)."""
     started = time.perf_counter()
     targets: list[WorkflowJob | None] = list(jobs) or [None]
-    rows, db_failed = build_features(context, targets)
+    rows, db_failed = build_features(context, targets, bundle.history_mode)
     frame = _frame(bundle, rows)
     if isinstance(bundle.booster, SeparateBooster):
         # v4: each class has its own calibrator; P(fail) = 1 - (1 - pg)(1 - pf)
@@ -374,11 +412,46 @@ def predict_with_model(
         proba = np.asarray(bundle.booster.predict(frame))
         calibrated = apply_calibrator(bundle.calibrator, proba)
         scores = p_fail(calibrated)
+    # v6: a job whose previous run failed is scored at least at the rule's empirical fail rate
+    rule_p = (
+        still_failing.apply_rule(bundle.rule, pd.DataFrame(rows))
+        if bundle.rule is not None
+        else None
+    )
+    if rule_p is not None:
+        scores = still_failing.combine(scores, rule_p["any"])
+        calibrated = np.column_stack(
+            [
+                calibrated[:, 0],
+                still_failing.combine(calibrated[:, 1], rule_p["genuine"]),
+                still_failing.combine(calibrated[:, 2], rule_p["flaky"]),
+            ]
+        )
     latency_ms = int((time.perf_counter() - started) * 1000)
     outputs = []
     for i, job in enumerate(targets):
         prob = float(min(max(scores[i], 0.0), 1.0))
-        factors = _factors(bundle, frame, i, rows[i], context)
+        rule_on = rule_p is not None and bool(rule_p["active"][i])
+        factors = _factors(bundle, frame, i, rows[i], context, MAX_FACTORS - int(rule_on))
+        sub_risks = {
+            "genuine_fail": float(min(calibrated[i][1], 1.0)),
+            "flaky_fail": float(min(calibrated[i][2], 1.0)),
+        }
+        if rule_p is not None and rule_on:
+            count = int(rule_p["count"][i])
+            rule_value = float(min(rule_p["any"][i], 1.0))
+            sub_risks["still_failing"] = rule_value
+            os_name = _os_names(job)[1] if rule_p["same_os"][i] else None
+            factors.insert(
+                0,
+                RiskFactor(
+                    feature="still_failing_streak",
+                    value=count,
+                    shap_value=rule_value,
+                    direction="raises",
+                    reason=still_failing_reason(count, os_name),
+                ),
+            )
         alert = prob >= bundle.threshold
         if alert and not factors:
             factors = [
@@ -405,10 +478,7 @@ def predict_with_model(
                 probability=prob,
                 threshold=bundle.threshold,
                 alert=alert,
-                sub_risks={
-                    "genuine_fail": float(min(calibrated[i][1], 1.0)),
-                    "flaky_fail": float(min(calibrated[i][2], 1.0)),
-                },
+                sub_risks=sub_risks,
                 top_factors=factors,
                 latency_ms=latency_ms,
             )
