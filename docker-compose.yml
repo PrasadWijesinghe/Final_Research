@@ -146,8 +146,14 @@ services:
       <<: *expert-env
       BACKEND_URL: "${EXPERT_BACKEND_URL:-}"
       TESTING_TRIAGE_BUNDLE: /models/testing/triage
+      # DEFAULT (P4.10): the knowledge base is read from the same database. The image has no torch,
+      # so retrieval here is full-text only (a missing embedding model is logged and skipped). For
+      # vector retrieval build the image with sentence-transformers and mount a model cache (see
+      # experts/testing/README.md, "Knowledge base").
+      TEST_KB_FILE: /app/config/test_kb.yaml
     volumes:
       - ./models:/models:ro
+      - ./config:/app/config:ro
     image: pipelineiq-expert-testing
     command: ["python", "-m", "testing_expert.worker"]
     depends_on: { redis: { condition: service_healthy }, testing-api: { condition: service_started } }

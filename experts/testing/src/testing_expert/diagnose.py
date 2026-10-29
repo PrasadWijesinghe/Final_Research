@@ -3,8 +3,10 @@
 The verdict part is real (P4.9 triage): genuine, flaky or unclear, a confidence, `suggest_rerun`
 (only for a confident flaky verdict) and evidence lines from the log, the diff, the failing tests'
 history, same-commit jobs and the pre-run risk. The narrative (root cause and remediation text) is
-still the fixed stub text until the LLM step (P4.11). When triage cannot run (no triage bundle, or
-the log shows no Jest, Mocha or Vitest failure) the whole diagnosis is the stub, as before.
+still the fixed stub text until the LLM step (P4.11). The top 5 knowledge-base cases (P4.10) ride
+along in `retrieved_cases`; the remediation does not cite them yet (that is P4.11). When triage
+cannot run (no triage bundle, or the log shows no Jest, Mocha or Vitest failure) the whole
+diagnosis is the stub, as before.
 """
 
 import logging
@@ -15,10 +17,12 @@ from shared.contracts import (
     Diagnosis,
     EvidenceLine,
     Remediation,
+    RetrievedCase,
     RoutedFailure,
 )
 
 from .config import EXPERT, make_details
+from .kb.retrieve import retrieve_for_failure
 from .triage.features import Reason
 from .triage.runtime import TriageResult, triage
 
@@ -62,6 +66,25 @@ def _evidence_line(r: Reason) -> EvidenceLine:
     )
 
 
+def _retrieved(failure: RoutedFailure, t: TriageResult) -> list[RetrievedCase]:
+    """Top knowledge-base cases for this failure (P4.10); empty when the base cannot answer."""
+    try:
+        hits = retrieve_for_failure(failure, t.evidence.log)
+    except Exception:
+        logger.warning("knowledge-base retrieval failed, no cases attached", exc_info=True)
+        return []
+    return [
+        RetrievedCase(
+            case_id=h.case_id,
+            similarity=h.similarity,
+            summary=h.failure_summary[:1_000],
+            fix_summary=h.fix_summary,
+            source_url=h.source_url,
+        )
+        for h in hits
+    ]
+
+
 def _triaged(failure: RoutedFailure, t: TriageResult, started: float) -> Diagnosis:
     names = [f.full_name or (f.file or "") for f in t.evidence.log.failures]
     names = [n for n in names if n] or [failure.failed_steps[0].name]
@@ -87,7 +110,7 @@ def _triaged(failure: RoutedFailure, t: TriageResult, started: float) -> Diagnos
         root_cause=f"{_VERDICT_TEXT[t.verdict]} {STUB_ROOT_CAUSE}"[:1_000],
         confidence=t.confidence,
         evidence=[_evidence_line(r) for r in t.reasons[:MAX_EVIDENCE]],
-        retrieved_cases=[],
+        retrieved_cases=_retrieved(failure, t),
         remediation=Remediation(summary=STUB_REMEDIATION, steps=steps),
         details=details,
         latency_ms=int((time.perf_counter() - started) * 1000),

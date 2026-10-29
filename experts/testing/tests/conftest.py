@@ -19,3 +19,11 @@ def _stub_mode(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) 
     serving.get_bundle.cache_clear()
     yield
     serving.get_bundle.cache_clear()
+
+
+@pytest.fixture(autouse=True)
+def _no_live_knowledge_base(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Diagnose tests never touch the real knowledge base (and never load the embedding model)."""
+    from testing_expert import diagnose
+
+    monkeypatch.setattr(diagnose, "retrieve_for_failure", lambda failure, log: [])
