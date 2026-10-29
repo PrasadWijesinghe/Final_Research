@@ -153,7 +153,7 @@ def test_manifest(built: Any) -> None:
     assert m["label_counts"]["y_build"] == {"0": 5, "1": 4}
     assert m["repos"][sc.REPO]["rows"] == 9
     assert m["skipped_commits"] == {"run_not_completed": 1, "all_runs_cancelled": 1}
-    assert m["versions"] == {"label_rules": "1", "parser": "1"}
+    assert m["versions"] == {"label_rules": "1", "parser": "2"}
     assert sum(len(v) for v in m["features"].values()) == len(FEATURE_NAMES)
     for name, info in m["files"].items():
         assert hashlib.sha256((out / name).read_bytes()).hexdigest() == info["sha256"]

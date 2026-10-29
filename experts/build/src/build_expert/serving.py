@@ -58,6 +58,14 @@ def _shown(name: str, value: str | float | int | bool) -> str:
         return "yes" if value else "no"
     if isinstance(value, float) and ("rate" in name or "share" in name) and 0 <= value <= 1:
         return f"{value:.0%}"
+    if isinstance(value, float):
+        return (
+            f"{value:.0f}"
+            if abs(value) >= 10
+            else f"{value:.1f}"
+            if abs(value) >= 1
+            else f"{value:.2f}"
+        )
     return str(value)
 
 

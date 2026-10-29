@@ -83,8 +83,9 @@ def _target_section(target: str, out: dict[str, Any], main: bool) -> list[str]:
         lines += [
             "**Lead time (H2).** For the "
             f"{lt['warnings']} correct high-precision warnings, the warning comes at the commit's "
-            f"cut-off, a median of {lt['median_hours']:.1f} hours before its CI finished "
-            f"(middle half: {lt['p25_hours']:.1f} to {lt['p75_hours']:.1f} hours).",
+            f"cut-off, a median of {lt['median_minutes']:.0f} minutes before its CI finished "
+            f"(middle half: {lt['p25_minutes']:.0f} to {lt['p75_minutes']:.0f} minutes). A "
+            "pre-push prediction comes earlier still: before the commit is pushed.",
             "",
         ]
     return lines

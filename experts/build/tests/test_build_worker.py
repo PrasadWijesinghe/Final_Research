@@ -43,7 +43,7 @@ def test_job_returns_valid_diagnosis_when_no_backend(monkeypatch: pytest.MonkeyP
     assert diagnosis.suggested_category == FailureCategory.DEPENDENCY
     assert diagnosis.retrieved_cases == []
     assert diagnosis.evidence[0].source == "log"
-    assert diagnosis.evidence[0].text == "npm ERR! code ERESOLVE"  # the first problem line
+    assert diagnosis.evidence[0].text == "npm ERR! ERESOLVE could not resolve"  # not "code ..."
 
 
 def test_job_diagnoses_a_typescript_failure(monkeypatch: pytest.MonkeyPatch) -> None:

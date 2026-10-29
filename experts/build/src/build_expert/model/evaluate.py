@@ -76,6 +76,9 @@ def _lead_time(
         "median_hours": round(float(np.median(hours)), 2),
         "p25_hours": round(float(np.percentile(hours, 25)), 2),
         "p75_hours": round(float(np.percentile(hours, 75)), 2),
+        "median_minutes": round(float(np.median(hours)) * 60, 1),
+        "p25_minutes": round(float(np.percentile(hours, 25)) * 60, 1),
+        "p75_minutes": round(float(np.percentile(hours, 75)) * 60, 1),
     }
 
 

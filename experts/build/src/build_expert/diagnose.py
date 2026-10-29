@@ -65,7 +65,7 @@ ERROR_NOUN = {
 TOOL_NAMES = {
     "tsc": "TypeScript compilation",
     "eslint": "ESLint",
-    "format": "Prettier formatting check",
+    "format": "the formatting check",
     "bundler": "the bundler",
     "build_other": "the build step",
 }
@@ -93,10 +93,15 @@ STEPS = {
 }
 
 
+# DEFAULT: shared storage is DATA_DIR, else <checkout>/data (as for the collector and datasets).
+DEFAULT_DATA_DIR = Path(__file__).resolve().parents[4] / "data"
+
+
 def _read_log(failure: RoutedFailure) -> str:
-    """The full sanitised log when shared storage has it, else the excerpt."""
-    data_dir = os.environ.get("DATA_DIR")
-    if data_dir and failure.log_ref:
+    """The full sanitised log when shared storage has it, else the excerpt (the excerpt is only
+    the tail, so the failed step's start can be missing and the rules may decide differently)."""
+    data_dir = os.environ.get("DATA_DIR") or str(DEFAULT_DATA_DIR)
+    if failure.log_ref:
         path = Path(data_dir) / failure.log_ref
         try:
             raw = path.read_bytes()
@@ -110,12 +115,23 @@ def _read_log(failure: RoutedFailure) -> str:
 
 # A line that reports a problem; GitHub's own exit-code line says nothing about the cause.
 _PROBLEM = re.compile(r"error|ERR!|fail|✗|×|cannot|not found|denied|killed|timed? ?out", re.I)
-_GITHUB_FOOTER = re.compile(r"^##\[error\]Process completed with exit code|^Post job cleanup")
+# Lines that only say "the command failed" (the package manager's or GitHub's own), and the
+# script echo lines npm/pnpm print first: never evidence of the cause.
+_GITHUB_FOOTER = re.compile(
+    r"^##\[error\]Process completed with exit code|^Post job cleanup|ELIFECYCLE|"
+    r"Command failed with exit code|^npm (?:ERR!|error) (?:code|errno|path|command|"
+    r"A complete log|Lifecycle script)|^error Command failed|exited with (?:exit )?code|^> "
+)
+# DEFAULT: a short step output (up to this many lines) is cited from its start, a long one from
+# its end, when no line names a problem.
+SHORT_OUTPUT = 12
+FALLBACK_LINES = 3
 
 
-def _fallback_evidence(failure: RoutedFailure, text: str) -> EvidenceLine:
-    """The first line of the failed step that reports a problem (usually the cause; the last
-    lines are summaries), else the step's last line, else the step name."""
+def _fallback_evidence(failure: RoutedFailure, text: str) -> list[EvidenceLine]:
+    """Without parsed errors: the first line of the failed step that names a problem (usually
+    the cause; the last lines are summaries); else the step's own message (a short output from
+    its start, a long one from its end); else the step name."""
     failed = failed_sections(split_sections(text)) if text else []
     if failed:
         lines = [ln.strip() for ln in failed[0].lines]
@@ -124,12 +140,13 @@ def _fallback_evidence(failure: RoutedFailure, text: str) -> EvidenceLine:
     lines = [ln for ln in lines if ln and not _GITHUB_FOOTER.search(ln)]
     problems = [ln for ln in lines if _PROBLEM.search(ln)]
     if problems:
-        chosen = problems[0]
+        chosen = [problems[0]]
     elif lines:
-        chosen = lines[-1]
+        n = FALLBACK_LINES
+        chosen = lines[:n] if len(lines) <= SHORT_OUTPUT else lines[-n:]
     else:
-        chosen = f"failed step: {failure.failed_steps[0].name}"
-    return EvidenceLine(source="log", text=chosen[:_MAX_EVIDENCE_CHARS])
+        chosen = [f"failed step: {failure.failed_steps[0].name}"]
+    return [EvidenceLine(source="log", text=c[:_MAX_EVIDENCE_CHARS]) for c in chosen]
 
 
 def _facts(failure: RoutedFailure) -> JobFacts:
@@ -189,16 +206,18 @@ def _evidence(findings: tuple[Finding, ...]) -> list[EvidenceLine]:
     return out
 
 
-def root_cause(decision: LabelDecision) -> str:
+def root_cause(decision: LabelDecision, step: str | None = None) -> str:
     """One or two sentences from the parsed errors."""
     sub = decision.sub_label or "build_other"
     what = TOOL_NAMES.get(sub, "the build step")
     findings = decision.findings
     if not findings:
+        name = f"The step `{step}`" if step else "The build step"
         return (
-            f"The build step failed, but its log has no recognised tool output "
-            f"(rule {decision.rule_name}). Read the failed step's log from the first error line."
-        )
+            f"{name} failed, but its output matches no known tool (tsc, ESLint, Prettier, "
+            "bundlers), so it is likely a project-specific check. The cited lines are its own "
+            f"message (rule {decision.rule_name})."
+        )[:1_000]
     errors = sum(f.errors for f in findings)
     codes = Counter(c for f in findings for c in f.codes.elements())
     files = sorted({loc.path for f in findings for loc in f.locations if loc.path})
@@ -250,7 +269,7 @@ def diagnose(failure: RoutedFailure, kb: CaseSearch | None = None) -> Diagnosis:
     text = _read_log(failure)
     signals = parse_job_log(text) if text.strip() else None
     decision = decide(_facts(failure), signals)
-    evidence = _evidence(decision.findings) or [_fallback_evidence(failure, text)]
+    evidence = _evidence(decision.findings) or _fallback_evidence(failure, text)
     if not decision.claimed:
         return Diagnosis(
             failure_id=failure.failure_id,
@@ -267,7 +286,8 @@ def diagnose(failure: RoutedFailure, kb: CaseSearch | None = None) -> Diagnosis:
             cases = kb.search(_query(decision), CASES_K, kind=decision.sub_label)
         except Exception as exc:  # noqa: BLE001 - retrieval is optional; diagnose without it
             logger.warning("case retrieval failed", extra={"error": str(exc)})
-    cause, fix = root_cause(decision), remediation(decision, cases)
+    step = failure.failed_steps[0].name.removeprefix("Run ")
+    cause, fix = root_cause(decision, step), remediation(decision, cases)
     llm_model = prompt_version = None
     refined = refine_with_llm(failure, decision, cause, fix, cases, evidence)
     if refined is not None:

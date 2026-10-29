@@ -28,6 +28,9 @@ step, and clean-up lines at the end. The local checkout path was replaced by the
 | `heap_oom_build.log` | `npm run build` | Node heap out of memory (not a build failure) |
 | `vitest_test_fail.log` | `pnpm exec vitest run` | a failing Vitest test (not a build failure) |
 | `dependency_eresolve.log` | `npm install` | npm ERESOLVE (not a build failure) |
+| `oxfmt_check_fail.log` | `pnpm run format:check` | **Real CI log** (langchain-ai/langchainjs, 30 Sep 2026): `oxfmt --check .`, 1 file |
+| `custom_lint_script_fail.log` | `pnpm lint:framework-vocabulary` | **Real CI log** (prisma/prisma, 18 Sep 2026), trimmed to the preamble and the failing step: a repo-specific lint script, no known tool |
 
-Replace or extend these with sanitised logs from the first backfill (docs/experts/build.md,
-open point B-O4).
+The two real logs come from the first backfill, already sanitised by the collector. Both were
+failures the first dataset could not place: oxfmt output was not recognised (now it is), and the
+custom script is correctly a build failure with no known tool. Add more real logs as they turn up.
