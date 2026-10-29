@@ -207,3 +207,30 @@ def test_per_test_history_has_no_leakage(conn: psycopg.Connection[Any]) -> None:
     after = compute_features_batch(conn, keys)
     assert before == after
     assert compute_features(conn, *keys[5]) == before[keys[5]]  # single-job path agrees
+
+
+def test_job_level_loader_matches_full_loader(conn: psycopg.Connection[Any]) -> None:
+    """The fast serving loader gives the same job-level ht_ numbers as the full one."""
+    from testing_expert.features import loader
+    from testing_expert.features.history_tests import FEATURE_NAMES
+
+    keys = [add_run(conn, n, "failure" if n % 2 else "success") for n in range(1, 9)]
+    for k, n in zip(keys, range(1, 9), strict=True):
+        add_results(
+            conn,
+            k,
+            ["t1", "t5"] if n % 2 else ["t5"] if n == 6 else [],
+            ["t2"] + ([] if n % 2 else ["t1"]),
+        )
+    cutoff = (T0 + timedelta(days=9)).timestamp()
+    only = [(REPO, "ci.yml", "test")]
+    full = loader.load_test_history(conn, [REPO], cutoff, only)
+    fast = loader.load_job_test_history(conn, only, cutoff)
+    skey = (REPO, "ci.yml\x1ftest")
+    job_names = [n for n in FEATURE_NAMES if not n.startswith("ht_touched")]
+    a, b = full[skey].features(cutoff), fast[skey].features(cutoff)
+    assert {n: a[n] for n in job_names} == {n: b[n] for n in job_names}
+    runs, flaky = b["ht_parsed_runs_90d"], b["ht_flaky_tests_90d"]
+    assert runs == 8 and isinstance(flaky, int) and flaky >= 1
+    # nothing for an unknown series
+    assert loader.load_job_test_history(conn, [(REPO, "ci.yml", "nope")], cutoff) == {}
