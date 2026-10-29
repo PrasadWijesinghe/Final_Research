@@ -8,7 +8,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import pytest
-from testing_expert import serving
+from testing_expert import explain, serving
 from testing_expert.features import feature_names
 from testing_expert.model import rule
 from testing_expert.model.compare_v6 import (
@@ -305,7 +305,7 @@ def test_bundle_without_rule_json_behaves_like_v4(
 def test_reason_text_fits_the_contract() -> None:
     for n in (1, 2, 70):
         for os_name in ("linux", "windows", "macos", "unknown", None):
-            assert len(serving.still_failing_reason(n, os_name)) <= 200
+            assert len(explain.still_failing_reason(n, os_name)) <= 200
 
 
 def test_history_mode_follows_the_ht_columns() -> None:
