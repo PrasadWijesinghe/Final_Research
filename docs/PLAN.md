@@ -93,7 +93,7 @@ Design: `docs/experts/test.md`.
 - [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. v2 groups and per-test history built 2026-10-29; awaiting kappa round.*
 - [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Datasets v2 to v4 built 2026-10-29; not frozen, awaiting kappa round.*
 - [ ] **P4.6 Baselines** per §5. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
-- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Models v2 to v5 built 2026-10-29 (v4 served, v5 candidate); awaiting kappa round.*
+- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Models v2 to v6 built 2026-10-29 (v4 served; v5 and v6 candidates, not better); awaiting kappa round.*
 - [ ] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`.
 - [ ] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor.
 - [ ] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`.
