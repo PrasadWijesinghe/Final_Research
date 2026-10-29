@@ -2,7 +2,7 @@
 
 **In one sentence:** the Test and App Behaviour expert. It predicts how likely a test job is to fail, using a trained LightGBM model, and explains failures in test runs. Its prediction works per test job, not per commit.
 
-**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). The diagnosis worker is still a stub · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.7 (partly)
+**Status:** `/predict` serves the trained model v4 (`lightgbm-v4`) with a stub fallback. Log parsers, results extraction, features, labels, datasets and models are built. Models v5 and v6 are candidates, not served (v6 is not better than v4, see `reports/v6_vs_v4.md`). Reasons now come from SHAP-style contributions (P4.8). The diagnosis worker does real triage (genuine, flaky or unclear) with stub narrative text (P4.9) · **Owner:** Member 3 · **Plan tasks:** P2.1, P4.1 to P4.9 (partly)
 
 > **Read this first.** The "What it does" and "How the test-job logic works" sections describe the original P2.1 stub. The stub still runs as the fallback. The trained model is described in "Serving the trained model" and the sections after it.
 
@@ -295,11 +295,47 @@ manifest: no daily collector (one-off data, no newer runs), no new repos (same 1
 
 **Picking a bundle.** Set `TESTING_MODEL_BUNDLE` to a bundle folder, or to a folder of versions (`models/testing`), in which case the newest `v<N>` is used. If it is not set, the newest bundle under `models/testing/` is used. If nothing can be loaded, the service logs a warning and answers with the stub (`model_version` "stub"). It never crashes because of the model. Only LightGBM bundles are served (v1 to v3, and the v4 two-model kind). Docker mounts `models/` and `config/` read-only into `testing-api`, so restart the container to pick up a new version.
 
-**Interim reasons.** Until SHAP reasons exist (P4.8), the "top factors" are the LightGBM per-feature contributions to the fail score, largest first (at most 5, never zero), worded with `features/descriptions.yaml`. For `tw_*` factors the file and line of the first matching added line are attached when the diff shows one.
+**Reasons.** The "top factors" come from `src/testing_expert/explain.py` (see "Explanations (P4.8)" below).
 
 **Known limits.** Loading the per-test history (`ht_*`) for one job series used to take up to about 4 seconds for big matrix jobs (it streams every stored result row), and serving paid that for every request even though v4 does not read `ht_*`. Now the history is loaded only if the bundle has an `ht_` column (`Bundle.history_mode`: `none`, `job` or `full`), and a bundle that needs only the job-level numbers uses `loader.load_job_test_history`, three small queries that take 0.8 to 1.8 s on the biggest series tested (same numbers as the full loader; see the v6 section). A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
 
 Code: `src/testing_expert/serving.py`. Tests: `tests/test_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
+
+## Explanations (P4.8)
+
+Every prediction carries up to five reasons (`top_factors`, a list of `RiskFactor`). They answer "which facts about this commit pushed the risk up or down", never "what caused the failure".
+
+1. **Contributions.** For one job, LightGBM's `pred_contrib` says how much each feature moved the model's score (this is the exact TreeSHAP value for tree models, in log-odds).
+2. **Two models, one risk.** The served v4 bundle has two boosters, one for a genuine failure and one for a flaky one, and the risk is `1 - (1 - pg)(1 - pf)`. Each booster's contributions are weighted by that booster's share of the combined risk (`pg / (pg + pf)` and `pf / (pg + pf)`) and added. So a flaky-looking job is explained mostly by what the flaky booster saw. Older bundles (one booster, or two-stage) use their fail contributions directly. Both zero gives equal shares.
+3. **Top N.** Features are ranked by absolute combined contribution; at most 5 are kept, and anything under 1e-6 is dropped. A positive score is `raises`, a negative one `lowers`.
+4. **Plain words.** Each feature has a template in `features/descriptions.yaml` (for example "This job failed in 25% of its runs in the last 7 days"). When the value is not known the `missing` wording is used ("This job has no runs in the last 7 days") and the factor's value is `"unknown"`. Whole numbers such as a 1/0 flag print as `1`, not `1.0`. A reason is cut at 200 characters, the contract limit.
+5. **Where.** For features about changed test code (`tw_*`), the factor carries the file and line of the first added line that matches (for example the `setTimeout` call).
+
+The v6 "still failing" rule, when a bundle has one, adds its own first reason. Code: `explain.py` (one module, used by `serving.py`). Tests: `tests/test_explain.py`.
+
+## Triage of a failed test job (P4.9)
+
+When a test job has failed, the worker decides whether the failure is a **real bug in the change** (`genuine`), **flakiness** (`flaky`) or **unclear**, and says how sure it is. It suggests a re-run only for a confident `flaky` verdict. The result is in the `Diagnosis`: `details.verdict`, `details.verdict_confidence`, `details.suggest_rerun`, and one evidence line per piece of evidence. The root-cause and remediation text is still the stub text; the LLM narrative is P4.11.
+
+**What it looks at** (each becomes a sentence in the diagnosis):
+
+1. **Stack versus diff.** Did this commit change the failing test's file, or a file in its stack trace, or lines within 5 lines of a frame? A commit that touches the failing code points to a real bug.
+2. **Error type.** Which family the error belongs to: assertion or snapshot mismatch, code error (leaning genuine); timeout, connection reset, port in use, network, out of memory, killed (leaning flaky). The families are regexes documented in `triage/evidence.py`.
+3. **The failing tests' history.** How often they failed or flipped before, and on how many commits they both passed and failed.
+4. **Same-commit evidence.** Other jobs on this commit that had already finished when this one failed: the same job passed earlier, other matrix legs passed or failed, the attempt number.
+5. **Pre-run risk.** The pre-push model's flaky risk for this commit, read from the stored prediction when there is one.
+
+**No peeking at the future.** The labels come from later events (a re-run that passes, a fix commit), so every query is cut at the failed job's finish time. Test history uses jobs finished strictly before it; same-commit evidence uses jobs finished at or before it. `tests/test_triage_leakage.py` adds later data of every kind and checks nothing changes.
+
+**The classifier.** A small LightGBM on 45 numbers (unknown stays unknown, never zero) gives P(flaky), calibrated. Two floors turn it into a verdict: flaky at or above 0.917, genuine when P(genuine) is at least 0.502, otherwise unclear. The flaky floor was chosen on validation data to keep the false-flaky rate (real bugs called flaky) at or below 5%. Results, baselines, the ablation and the limits are in `reports/triage_v1.md`: on later failures it decides 83% of them, is right on 91% of those, and calls a real bug flaky for 4% of genuine failures. On repos it never saw, it ranks well but the floors are too strict, so re-check the floor on a new repo.
+
+**Where it runs.** `diagnose.py` calls `triage/runtime.py`. It loads the bundle (`TESTING_TRIAGE_BUNDLE`, else the newest `models/testing/triage/v<N>`; this folder is separate from the pre-push bundles and the pre-push search never looks inside it), reads the full log from `DATA_DIR` when it can (else the router's 20,000-character excerpt), looks up the commit's files, same-commit jobs and test history in the database (`DATABASE_URL`), and scores. If there is no bundle, or the log shows no Jest, Mocha or Vitest failure, or anything breaks, the diagnosis is the old stub. With no database it still triages from the log alone.
+
+**Build it again.**
+1. `uv run --env-file .env python -m testing_expert.triage.dataset` (about 3 minutes) writes `data/datasets/testing/triage_v1/`.
+2. `uv run --env-file .env python -m testing_expert.triage.train --out models/testing/triage/v1 --results experts/testing/reports/triage_v1.json` (about 5 minutes) runs the experiments and writes the bundle (`model.joblib`, `calibrator.joblib`, `features.json`, `floors.json`, `card.md`).
+
+**Limits.** Rule labels only (human kappa pending); the strongest signal is same-commit evidence, which is also how flaky labels are made, so part of its strength is agreement with the rules. Test history and pre-run risk added nothing. New repos need their own floor check. `EvidenceLine.source` has no value for history, same-commit or pre-run evidence (contract v1.1.0), so those lines use `log` with a prefix ("History: ", "Same commit: ", "Pre-run model: "); a proposal for the contract is in the report. Code: `src/testing_expert/triage/` (`evidence.py` plain-code evidence, `loader.py` database reads, `gather.py` shared by training and serving, `features.py`, `model.py`, `train.py`, `dataset.py`, `runtime.py`). Tests: `tests/test_triage_*.py`.
 
 ## Model v3: label fix, new calibration, monotone constraints (P4.7 v3)
 
@@ -392,7 +428,7 @@ Three changes on top of v4, each decided without looking at the test slice:
 
 ## Limitations and known issues
 
-- The diagnosis worker is still a stub. Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
+- The diagnosis worker triages real failures (P4.9) but its narrative text is still the stub (P4.11); with no triage bundle it is the full stub. Its `/predict` is trained (see "Serving the trained model"). See `experts/_template/README.md` for the limits that all four experts share.
 - The test-job heuristic is simple on purpose. It can give false matches. A command like `npm install --save-dev jest` counts as a test job, because the bare word `jest` matches. It can also miss test runners it does not list. The real model replaces it.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: the heuristic above is the definition of a test job.
 - `# DEFAULT:` in `src/testing_expert/predict.py`: every job in one commit gets the same stub probability.
