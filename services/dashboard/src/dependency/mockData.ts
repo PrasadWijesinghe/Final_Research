@@ -4,6 +4,54 @@ const signalSet = (detectedIds: string[]): DiagnosticSignal[] => {
   const detected = new Set(detectedIds);
   return [
     {
+      id: "install_error",
+      label: "Install / resolution error",
+      detected: detected.has("install_error"),
+      description: "A package-manager install or dependency-resolution step reported an error.",
+    },
+    {
+      id: "missing_module",
+      label: "Missing package / module",
+      detected: detected.has("missing_module"),
+      description: "A required package or module could not be found or imported.",
+    },
+    {
+      id: "test_failure",
+      label: "Test failure",
+      detected: detected.has("test_failure"),
+      description: "A test command reported one or more failing tests or assertions.",
+    },
+    {
+      id: "coverage_error",
+      label: "Coverage threshold error",
+      detected: detected.has("coverage_error"),
+      description: "The measured test coverage did not meet a configured threshold.",
+    },
+    {
+      id: "lint_type_error",
+      label: "Lint / type-check error",
+      detected: detected.has("lint_type_error"),
+      description: "A linter or type checker reported one or more errors.",
+    },
+    {
+      id: "test_coverage_lint_error",
+      label: "Test / coverage / lint (combined)",
+      detected: detected.has("test_coverage_lint_error"),
+      description: "At least one test, coverage, or lint/type-check indicator was detected.",
+    },
+    {
+      id: "ci_permission_error",
+      label: "CI permission error",
+      detected: detected.has("ci_permission_error"),
+      description: "The workflow or an action reported missing authorization or permissions.",
+    },
+    {
+      id: "external_network_error",
+      label: "External network error",
+      detected: detected.has("external_network_error"),
+      description: "A network, DNS, or connection failure was reported in the log.",
+    },
+    {
       id: "peer_dependency_conflict",
       label: "Peer dependency conflict",
       detected: detected.has("peer_dependency_conflict"),
@@ -34,10 +82,10 @@ const signalSet = (detectedIds: string[]): DiagnosticSignal[] => {
       description: "Downloaded package content did not match the expected integrity value.",
     },
     {
-      id: "test_failure",
-      label: "Test failure",
-      detected: detected.has("test_failure"),
-      description: "The test command ran and reported one or more failing assertions.",
+      id: "package_manager_cache_miss",
+      label: "Package-manager cache miss",
+      detected: detected.has("package_manager_cache_miss"),
+      description: "The log indicates that a package-manager cache or store was not found.",
     },
   ];
 };
@@ -50,7 +98,7 @@ export const dependencyMockCases: DependencyAnalysisResult[] = [
     runId: "run 4829137041",
     prediction: "DEPENDENCY_FAILURE",
     confidence: 0.885,
-    signals: signalSet(["peer_dependency_conflict", "build_lifecycle_error"]),
+    signals: signalSet(["install_error", "peer_dependency_conflict", "build_lifecycle_error"]),
     evidence: {
       title: "Dependency resolution stopped during install",
       fileName: "npm install - job log",
@@ -74,7 +122,7 @@ export const dependencyMockCases: DependencyAnalysisResult[] = [
     runId: "run 4829061187",
     prediction: "OTHER_FAILURE",
     confidence: 0.932,
-    signals: signalSet(["test_failure"]),
+    signals: signalSet(["test_failure", "test_coverage_lint_error"]),
     evidence: {
       title: "Unit tests ran; one assertion failed",
       fileName: "jest - job log",
