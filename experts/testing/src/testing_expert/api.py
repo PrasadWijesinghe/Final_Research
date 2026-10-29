@@ -1,4 +1,4 @@
-"""FastAPI app: POST /predict, POST /review, GET /health (interface in docs/experts/README.md)."""
+"""FastAPI app: POST /predict, POST /review, GET /health, GET /status (docs/experts/README.md)."""
 
 import logging
 from typing import Annotated
@@ -12,6 +12,7 @@ from .config import EXPERT, MODEL_VERSION
 from .kb.retrieve import count_cases
 from .predict import predict
 from .serving import get_bundle, serve
+from .status import readiness
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,17 @@ class Health(BaseModel):
     status: str
     model_version: str
     kb_cases: int
+
+
+class Status(BaseModel):
+    """Body of GET /status: what is real and what is a fallback in this process."""
+
+    mode: str  # real | partial | stub
+    model_version: str | None
+    triage_version: str | None
+    kb_cases: int
+    llm_gateway: bool
+    full_logs: bool
 
 
 def _parse_deadline(raw: str | None) -> int | None:
@@ -65,4 +77,21 @@ def get_health() -> Health:
         status="ok",
         model_version=bundle.version if bundle else MODEL_VERSION,
         kb_cases=count_cases(),
+    )
+
+
+@app.get("/status")
+def get_status() -> Status:
+    """Which parts are real (model, triage, knowledge base, gateway URL, full logs) vs the stub.
+
+    # DEFAULT: a separate endpoint, so /health keeps the exact body in docs/experts/README.md.
+    """
+    state = readiness()
+    return Status(
+        mode=state.mode,
+        model_version=state.model_version,
+        triage_version=state.triage_version,
+        kb_cases=state.kb_cases,
+        llm_gateway=state.llm_gateway,
+        full_logs=state.full_logs,
     )
