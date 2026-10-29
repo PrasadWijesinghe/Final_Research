@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any, Protocol
@@ -23,11 +24,33 @@ from shared.embeddings.embedder import Embedder
 logger = logging.getLogger(__name__)
 
 SCHEMA, NAME = "build", "kb_cases"
-# DEFAULT: the best RRF score a hit can get is 2/61 (rank 1 in both lists, k = 60); similarity is
-# the score as a share of that. Hits below MIN_SIMILARITY (not near the top of both lists) are
-# dropped, so an unrelated case is never cited just because the table is small.
-BEST_RRF = 2 / 61
-MIN_SIMILARITY = 0.5
+# DEFAULT: hybrid search (keyword + vector, merged by RRF) ranks the cases, but a rank says which
+# case is closest, not whether it is close at all: in a small table the top case is always
+# "closest". So a case is kept only when it shares at least this share of the distinctive words
+# of the shorter side (error codes, rule ids, identifiers in the messages), and that share is the
+# similarity reported. An unrelated case is never cited just because the table is small.
+MIN_OVERLAP = 0.3
+_WORD = re.compile(r"[A-Za-z][A-Za-z0-9_-]{2,}")
+# Words every case or query has (kinds, placeholders the log cleaner writes, glue words).
+_COMMON = frozenset(
+    "the and for not with from that this was are has have its into than then when which "
+    "tsc eslint format bundler build_other lint_other build error errors failed file files "
+    "path num hex ts id url".split()
+)
+
+
+def _words(text: str) -> set[str]:
+    return {w.lower() for w in _WORD.findall(text)} - _COMMON
+
+
+def overlap(query: str, content: str) -> float:
+    """Shared distinctive words as a share of the smaller word set (0 when either is empty)."""
+    q, c = _words(query), _words(content)
+    if not q or not c:
+        return 0.0
+    return len(q & c) / min(len(q), len(c))
+
+
 # DEFAULT: characters of the fix message and error text kept per case.
 MAX_FIX_MESSAGE = 300
 MAX_CASE_ERRORS = 8
@@ -89,7 +112,10 @@ def cases_from_fix_candidates(
                     "fix_sha": fix_sha,
                     "sub_labels": r.get("sub_labels"),
                     "error_codes": r.get("error_codes"),
-                    "fix_message": (r.get("fix_message") or "")[:MAX_FIX_MESSAGE],
+                    # The subject line only: the body is review chatter more often than not.
+                    "fix_message": ((r.get("fix_message") or "").strip().splitlines() or [""])[0][
+                        :MAX_FIX_MESSAGE
+                    ],
                     "fix_changed_paths": json.loads(r.get("fix_changed_paths") or "[]")[:20],
                     "overlap_paths": overlap[:20],
                     "hours_to_fix": r.get("hours_to_fix"),
@@ -135,12 +161,14 @@ class KnowledgeBase:
         a fixed lint error says little about a type error.
         """
         out: list[RetrievedCase] = []
-        for hit in self.collection.search(query, k=k * 4 if kind else k):
-            similarity = min(1.0, hit.score / BEST_RRF)
+        for hit in self.collection.search(query, k=k * 4):
             m = hit.metadata
-            if similarity < MIN_SIMILARITY or len(out) == k:
-                continue
+            if len(out) == k:
+                break
             if kind and kind not in str(m.get("sub_labels") or "").split(","):
+                continue
+            similarity = overlap(query, hit.content)
+            if similarity < MIN_OVERLAP:
                 continue
             first = m.get("first_error") or ""
             out.append(

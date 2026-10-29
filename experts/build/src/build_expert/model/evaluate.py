@@ -114,6 +114,7 @@ def _main_target(
         return out, None
     out["model"] = {
         "trees": model.best_iteration,
+        "rounds_from": model.rounds_from,
         "scale_pos_weight": model.scale_pos_weight,
         "threshold_f1": round(model.threshold_f1, 4),
         "threshold_operating": round(model.threshold_operating, 4),
@@ -121,9 +122,29 @@ def _main_target(
         "validation": _model_metrics(model, data, split.validation, target),
         "test": _model_metrics(model, data, split.test, target),
     }
+    out["model"]["seeds"] = _seed_spread(data, split, target, settings, model)
     out["per_repo_test"] = _per_repo(model, data, split.test, target)
     out["lead_time"] = _lead_time(model, data, split.test, target)
     return out, model
+
+
+SPREAD_METRICS = ("precision", "recall", "f1", "pr_auc", "roc_auc")
+
+
+def _seed_spread(
+    data: TrainingData, split: Split, target: str, settings: TrainSettings, first: FittedModel
+) -> dict[str, Any]:
+    """Test metrics (best-F1 threshold) for every seed: mean and standard deviation."""
+    runs = [_model_metrics(first, data, split.test, target)["at_f1"]]
+    for seed in settings.seeds[1:]:
+        m = fit_model(data, target, split.train, split.validation, settings, seed=seed)
+        runs.append(_model_metrics(m, data, split.test, target)["at_f1"])
+    out: dict[str, Any] = {"n": len(runs), "seeds": list(settings.seeds)}
+    for k in SPREAD_METRICS:
+        vals = [r[k] for r in runs if r[k] is not None]
+        if vals:
+            out[k] = {"mean": round(float(np.mean(vals)), 4), "sd": round(float(np.std(vals)), 4)}
+    return out
 
 
 def _ablation(

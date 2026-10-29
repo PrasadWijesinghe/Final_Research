@@ -32,6 +32,8 @@ class TrainSettings:
     lightgbm: dict[str, Any] = field(default_factory=dict)
     num_boost_round: int = 2000
     early_stopping_rounds: int = 100
+    cv_folds: int = 3
+    seeds: tuple[int, ...] = (1, 2, 3, 4, 5)
 
     def check(self) -> None:
         """Raise ValueError when a value cannot work."""
@@ -48,6 +50,8 @@ class TrainSettings:
                 raise ValueError(f"unknown target {t!r}; known: {', '.join(KNOWN_TARGETS)}")
         if not self.targets:
             raise ValueError("at least one target is needed")
+        if not self.seeds:
+            raise ValueError("at least one seed is needed")
         for g in self.ablation_groups:
             if g not in FEATURE_GROUPS:
                 raise ValueError(f"unknown feature group {g!r}; known: {', '.join(FEATURE_GROUPS)}")
@@ -75,6 +79,8 @@ def load_settings(path: Path) -> TrainSettings:
         min_positives=int(raw.get("min_positives", defaults.min_positives)),
         top_factors=int(raw.get("top_factors", defaults.top_factors)),
         drop_synthetic=bool(raw.get("drop_synthetic", defaults.drop_synthetic)),
+        cv_folds=int((raw.get("rounds") or {}).get("cv_folds", defaults.cv_folds)),
+        seeds=tuple(int(s) for s in (raw.get("seeds") or defaults.seeds)),
         num_boost_round=int(lgb.pop("num_boost_round", defaults.num_boost_round)),
         early_stopping_rounds=int(lgb.pop("early_stopping_rounds", defaults.early_stopping_rounds)),
         lightgbm=lgb,
