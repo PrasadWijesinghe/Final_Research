@@ -112,12 +112,12 @@ Design: `docs/experts/build.md`.
 - [ ] **B2c Backfill** the 11 repos (`backfill --logs failed`), then `daily --logs failed` every day.
 - [x] **B3 Log parsers** for tsc, ESLint, Prettier and bundlers (Vite, webpack, esbuild, Rollup, Next.js) with real tool-output fixtures.
 - [x] **B4 Labelling** per §3, written as `FailureLabel`s (`platform.failure_labels`, `is_final=false`).
-- [ ] **B4b Manual label check:** sample per sub-label and per reason, second labeller, kappa.
+- [ ] **B4b Manual label check:** sample per sub-label and per reason, second labeller, kappa. Tool ready (`build-label-check`, 28 Oct); the two people's check is pending.
 - [x] **B5 Feature pipeline** per §4: groups A–D, one module per group, `descriptions.yaml`.
 - [x] **B6 Dataset builder** (`build-dataset`) → `data/datasets/build/vN/` with `rows.parquet`, `fix_candidates.parquet` and manifest.
   *Accept:* in-memory and Postgres builds give identical rows; no look-ahead test; frozen versions.
-- [ ] **B7 Baselines** per §6 (last outcome; warning/error threshold rule).
-- [ ] **B8 Model training:** GBT and code-embedding variant, temporal and leave-one-repo-out validation, calibration, threshold, export.
+- [x] **B7 Baselines** per §6 (last outcome; warning/error threshold rule).
+- [ ] **B8 Model training:** GBT and code-embedding variant, temporal and leave-one-repo-out validation, calibration, threshold, export. GBT part done (`build-train`, 28 Oct): splits, calibration, thresholds, ablation, SHAP summary, report, export; code-embedding variant pending.
 - [ ] **B9 SHAP explanations** into `RiskFactor`s.
 - [ ] **B10 Knowledge base** from reviewed fix candidates (`build.kb_cases`).
 - [ ] **B11 Diagnosis worker** with `BuildDetails`, citations and misrouted handling.

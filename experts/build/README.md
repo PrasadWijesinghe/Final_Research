@@ -1,14 +1,16 @@
 # Build expert
 
-**In one sentence:** the Build and Code Quality expert. It turns stored CI history into a labelled dataset of commits that did or did not break the build (type errors, lint, formatting, bundling); its prediction API and diagnosis worker are still stubs.
+**In one sentence:** the Build and Code Quality expert. It turns stored CI history into a labelled dataset of commits that did or did not break the build (type errors, lint, formatting, bundling), and trains and evaluates a model that predicts that risk before CI runs; its prediction API and diagnosis worker are still stubs.
 
-**Status:** dataset pipeline working (labelling, features, dataset builder); `/predict` and the worker are stubs · **Owner:** Member 2 · **Plan tasks:** P2.1, B1–B6 (see `docs/PLAN.md`)
+**Status:** dataset pipeline, label-check helper, baselines and model training working; `/predict` and the worker are stubs · **Owner:** Member 2 · **Plan tasks:** P2.1, B1–B8 (see `docs/PLAN.md`)
 
 ## What it does
 
 GitHub Actions runs a project's compiler, linter, formatter and bundler on every push and pull request. When one of them fails, the build is red even though the tests never ran. This expert will predict that risk before the run and explain it, and diagnose such failures afterwards.
 
 To learn that, it needs examples. The dataset builder reads the CI runs the collector stored, decides for every failed job whether it was a build or code-quality failure (and which tool: `tsc`, ESLint, Prettier or a bundler), rebuilds what each commit changed, and writes one row per commit with 99 features and the labels. It also mines "fix candidates": a build failure followed by a green commit on the same branch, which will seed the knowledge base for diagnosis.
+
+Training (`build-train`) reads a frozen dataset and answers the proposal's questions: does a LightGBM model beat the two simple baselines (H1), how long before CI ends does a correct warning come (H2), and which feature groups matter (H3). It writes a model bundle and a report with all the tables. A small helper (`build-label-check`) lets two people check a sample of the labels by hand and measures their agreement.
 
 The design (labels, features, model plan) is in `docs/experts/build.md`.
 
@@ -34,7 +36,16 @@ flowchart LR
 4. **Group runs by commit**: one row per head SHA, using first attempts only. The cut-off is the earliest run's creation time.
 5. **Rebuild the commit** with the shared replay builder and compute feature groups A (code change), B (build-tool config) and C (CI environment).
 6. **Add history** (group D) from the outcomes of earlier commits, counting each only from the moment its runs finished.
-7. **Write** `rows.parquet`, `fix_candidates.parquet` and `manifest.json` (with checksums) to `data/datasets/build/<version>/`, and store the job labels.
+7. **Write** `rows.parquet`, `fix_candidates.parquet`, `job_decisions.parquet` (every failed job the rules looked at) and `manifest.json` (with checksums) to `data/datasets/build/<version>/`, and store the job labels.
+
+Training (`model/`), step by step:
+
+1. **Load** `rows.parquet` (`model/data.py`). Fault-injected rows are left out; missing values stay missing (LightGBM handles them).
+2. **Split by time** (`model/splits.py`): the oldest 70% of commits train, the next 15% validate, the newest 15% test. A commit whose CI finished after the next part began is dropped (its label was still unknown then).
+3. **Baselines** (`model/baselines.py`): "same as the last build on this branch", and "the last run printed a TypeScript error or at least *t* ESLint warnings" (*t* chosen on validation).
+4. **Model** (`model/train.py`): LightGBM with a class weight for the imbalance, stopped when validation PR-AUC stops improving, calibrated on validation (isotonic), with two thresholds: best F1 (for comparing with the baselines) and high precision (D03, the operating point).
+5. **Evaluate** (`model/evaluate.py`): test metrics per target and per repo, lead time of correct warnings, SHAP top factors, retraining without each feature group, and leave-one-repo-out.
+6. **Export** (`model/export.py`): `models/build/<version>/` with one folder per target (`model.txt`, `calibrator.json`, `model.json`), `metrics.json` and `report.md`. Versions are frozen.
 
 ## How to run it
 
@@ -50,6 +61,14 @@ uv run --env-file .env collector fill-logs --member build --limit 5000   # optio
 # 3. Build a frozen dataset from what is stored
 uv run --env-file .env build-dataset --version v1
 
+# 4. Train and evaluate (no database needed): writes models/build/m1/report.md
+uv run build-train --dataset v1 --version m1
+
+# 5. Manual label check: a blind sheet for two people, then the agreement
+uv run build-label-check sample --dataset v1
+uv run build-label-check score --key data/datasets/build/v1/label_check_key.csv \
+  --sheet personA.csv --sheet personB.csv
+
 # this expert's tests only
 uv run pytest experts/build/tests
 ```
@@ -64,7 +83,10 @@ uv run pytest experts/build/tests
 | In | Sanitised job logs | `DATA_DIR/logs/…/<job_id>.log.gz` |
 | Out | One row per commit: ids, labels, 99 features | `data/datasets/build/<version>/rows.parquet` |
 | Out | Mined fix cases | `…/fix_candidates.parquet` |
+| Out | Every failed job the rules looked at: decision, rule, sub-label, error excerpt, GitHub link | `…/job_decisions.parquet` |
 | Out | What was built, counts, versions, checksums | `…/manifest.json` |
+| Out | Model bundle, `metrics.json`, `report.md` | `models/build/<version>/` |
+| Out | Label check sheet and key | `…/label_check_sheet.csv`, `…/label_check_key.csv` |
 | Out | Job labels (`category="build"`, `is_final=false`) | `platform.failure_labels` |
 
 ## Settings
@@ -77,6 +99,8 @@ uv run pytest experts/build/tests
 | `--no-write-labels` | CLI | labels are written | Skip storing `FailureLabel`s |
 | `DATABASE_URL`, `DATA_DIR` | `.env` | `<checkout>/data` | Where raw data and logs are read |
 | Repo list | `config/repos/build.yaml` | | Which repos the collector covers |
+| Training settings | `config/build_model.yaml` | 70/15/15 split, embargo on, precision 0.80 | Split, targets, threshold, leave-one-repo-out minimum, ablation groups, LightGBM parameters |
+| `--no-loro`, `--no-ablation`, `--no-sub-targets` | `build-train` | all run | Skip parts of the evaluation (faster) |
 
 ## Example
 
@@ -91,6 +115,8 @@ A pull request adds `import { missingHelper } from './helpers'` to `src/api.ts` 
 - `last_lint_warnings` / `last_type_errors` depend on which logs were fetched: with `--logs failed`, they only exist where a build job failed until `fill-logs` has fetched the passing logs.
 - Line-level patch patterns stand in for a syntax tree (docs/experts/build.md section 4).
 - `/predict` and the diagnose worker are still the P2.1 stubs.
+- Training: the code-embedding variant (section 6) is not built yet. The exported model is the one trained on the train part only (not retrained on train + validation). With `--logs failed`, the warning-rule baseline is weak until `fill-logs` has run (the report says how many commits have warning counts).
+- Training `# DEFAULT:` choices: class weight = negatives / positives; the operating threshold must catch at least `min_positives` (5) validation failures; leave-one-repo-out validates on the newest 20% of the other repos; models under `<checkout>/models/build`; top-factor templates show `N` for the value; a TypeScript error in the last run outranks any lint count in the warning rule; the label check samples first attempts only, 8 per claiming rule and 30 declined jobs, with 3 error locations (600 characters) per job.
 - `# DEFAULT:` choices: `PARSER_VERSION = "1"`, `LABEL_RULES_VERSION = "1"` (bump when labels change); 7/30/90-day history windows; `MONOREPO_ROOTS` (folders whose second level is a package); 7-day fix window; 10 error locations per fix candidate; 90 days of history before `--from`; 5,000 ids per SQL batch; datasets under `<DATA_DIR>/datasets/build`.
 - The dataset builder imports the features library (`features.replay`) directly to rebuild commits. Serving still receives `CommitContext` through the contract (decision D43).
 - The stub defaults from P2.1 (port 8102, 0.5 threshold, 0.01–0.2 probabilities, Dockerfile versions) are listed in `experts/_template/README.md`.
@@ -105,7 +131,7 @@ A pull request adds `import { missingHelper } from './helpers'` to `src/api.ts` 
 | Detail model | `BuildDetails` (`tool`: tsc, eslint, bundler, other) |
 | Database schema | `build`. No tables yet (labels go to `platform.failure_labels`) |
 | `/predict` scope | Commit. One output per commit |
-| Command | `build-dataset` (`build_expert.dataset.cli:main`) |
+| Commands | `build-dataset` (`build_expert.dataset.cli:main`), `build-train` (`build_expert.model.cli:main`), `build-label-check` (`build_expert.labels.check:main`) |
 
 ## Related
 

@@ -336,6 +336,56 @@ FIX_SCHEMA = pa.schema(
     ]
 )
 
+# One row per failed job the rules looked at (every attempt): the input for the manual label
+# check (B4b, `build-label-check`) and for label statistics.
+JOB_SCHEMA = pa.schema(
+    [
+        ("repo", pa.string()),
+        ("run_id", pa.int64()),
+        ("attempt", pa.int64()),
+        ("job_id", pa.int64()),
+        ("job_name", pa.string()),
+        ("failed_step", pa.string()),
+        ("log_status", pa.string()),
+        ("claimed", pa.bool_()),
+        ("rule_name", pa.string()),
+        ("sub_label", pa.string()),
+        ("confidence", pa.string()),
+        ("notes", pa.string()),
+        ("error_excerpt", pa.string()),  # up to 3 error locations from the parsed log
+        ("url", pa.string()),  # the job's page on GitHub
+    ]
+)
+# DEFAULT: error locations and characters kept in `error_excerpt`.
+EXCERPT_LOCATIONS = 3
+EXCERPT_CHARS = 600
+
+
+def _decision_row(repo: str, job: JobInfo, d: LabelDecision) -> dict[str, Any]:
+    """One job_decisions.parquet row."""
+    lines = [
+        f"{loc.path or '?'}:{loc.line or '?'} {loc.code or ''} {loc.message}".strip()
+        for f in d.findings
+        for loc in f.locations[:EXCERPT_LOCATIONS]
+    ][:EXCERPT_LOCATIONS]
+    failed_step = next((s.name for s in job.steps if s.conclusion == "failure"), None)
+    return {
+        "repo": repo,
+        "run_id": job.run_id,
+        "attempt": job.attempt,
+        "job_id": job.job_id,
+        "job_name": job.name,
+        "failed_step": failed_step,
+        "log_status": job.log_status,
+        "claimed": d.claimed,
+        "rule_name": d.rule_name,
+        "sub_label": d.sub_label,
+        "confidence": d.confidence if d.claimed else None,
+        "notes": d.notes,
+        "error_excerpt": "\n".join(lines)[:EXCERPT_CHARS] or None,
+        "url": f"https://github.com/{repo}/actions/runs/{job.run_id}/job/{job.job_id}",
+    }
+
 
 def _write_parquet(rows: list[dict[str, Any]], schema: pa.Schema, path: Path) -> None:
     table = pa.Table.from_pylist(rows, schema=schema)
@@ -361,6 +411,7 @@ def build_dataset(
     pending: list[_Pending] = []
     all_labels: list[FailureLabel] = []
     considered_jobs: list[int] = []
+    decision_rows: list[dict[str, Any]] = []
     repo_info: dict[str, RepoInfo] = {}
 
     load_from = settings.start - HISTORY_LOOKBACK if settings.start else None
@@ -374,6 +425,7 @@ def build_dataset(
         cache = _SignalCache(source)
         decisions = _label_jobs(repo, jobs_by_attempt, cache)
         considered_jobs.extend(decisions)
+        decision_rows.extend(_decision_row(repo.full_name, job, d) for job, d in decisions.values())
         for job, decision in decisions.values():
             if decision.claimed:
                 facts = JobFacts(
@@ -427,13 +479,16 @@ def build_dataset(
 
     out_dir.mkdir(parents=True, exist_ok=True)
     rows_path, fixes_path = out_dir / "rows.parquet", out_dir / "fix_candidates.parquet"
+    jobs_path = out_dir / "job_decisions.parquet"
     _write_parquet(rows, rows_schema(), rows_path)
     _write_parquet(fixes, FIX_SCHEMA, fixes_path)
+    _write_parquet(decision_rows, JOB_SCHEMA, jobs_path)
     summary.rows, summary.fix_candidates = len(rows), len(fixes)
     summary.positives = sum(r["y_build"] for r in rows)
     manifest = _manifest(settings, summary, rows, all_labels, clock(), repo_root, repo_info)
     manifest["files"] = {
-        p.name: {"sha256": _sha256(p), "bytes": p.stat().st_size} for p in (rows_path, fixes_path)
+        p.name: {"sha256": _sha256(p), "bytes": p.stat().st_size}
+        for p in (rows_path, fixes_path, jobs_path)
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     logger.info(

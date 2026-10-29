@@ -179,6 +179,7 @@ Datasets are frozen: an existing version folder is never overwritten.
 |---|---|
 | `rows.parquet` | One row per commit: ids (repo, SHA, branch, event, PR, author hash, cut-off, run ids, licence), labels, and the 99 features |
 | `fix_candidates.parquet` | Mined fix cases for the knowledge base: a build failure followed on the same branch within 7 days by a fully green commit, with the error codes and locations, the fix commit's message and changed files, and which error files the fix touched |
+| `job_decisions.parquet` | One row per failed job the rules looked at (all attempts): job and failed step, the decision, rule, sub-label, confidence, up to three error locations, and the job's GitHub link. Input for the manual label check (`build-label-check`) |
 | `manifest.json` | Build time, git commit, window, cut-off range, rows per repo, label counts, job labels by rule, skipped commits by reason, rule and parser versions, the feature list by group, and the SHA-256 of each file |
 
 ### 5.4 Label columns
@@ -192,7 +193,16 @@ Datasets are frozen: an existing version folder is never overwritten.
 | `label_confidence`, `label_rules`, `top_error_codes` | Best confidence, rules that fired, most common error codes |
 | `label_status` | `missing_log` when a failed job could not be checked because its log is gone |
 
-## 6. Model (plan)
+## 6. Model
+
+Built (`build-train`, settings in `config/build_model.yaml`, details in `experts/build/README.md`):
+LightGBM on groups A to D; temporal 70/15/15 split with an embargo (a commit whose CI finished
+after the next part began is dropped); class weight negatives/positives; early stopping on
+validation PR-AUC; isotonic calibration on validation; a best-F1 threshold (H1 comparison) and a
+high-precision operating threshold (D03, target 0.80, at least 5 validation hits); both
+baselines; per-repo results; lead time of correct warnings (H2); SHAP top factors (LightGBM's
+TreeSHAP); retraining without each feature group (H3); leave-one-repo-out; sub-risk models.
+Not built yet: the code-embedding variant. The plan as written before:
 
 - Target `y_build`, sub-risks from `y_tsc`, `y_lint`, `y_bundler`.
 - Candidates (proposal 3.4): gradient-boosted trees (LightGBM or XGBoost) on groups A to D, and a

@@ -1,0 +1,50 @@
+# Training settings for the Build expert's model (docs/experts/build.md section 6).
+# Read by `build-train`. Change values here, not in code.
+
+split:
+  # Temporal split on history_cutoff over all repos: the oldest 70% of commits train the model,
+  # the next 15% choose the stopping point, calibration and threshold, the newest 15% are the test.
+  train: 0.70
+  validation: 0.15
+  # Drop train (and validation) commits whose CI finished after the next part starts: their label
+  # was not known yet at that moment, so keeping them would leak the future.
+  embargo: true
+
+# Main target first. y_build_confident is trained and reported too (section 5.4).
+targets: [y_build, y_build_confident]
+# Sub-risks: one small model each, reported only (no threshold export yet).
+sub_targets: [y_tsc, y_lint, y_bundler]
+
+threshold:
+  # D03: warn only above a high-precision threshold, chosen on validation data.
+  target_precision: 0.80
+
+leave_one_repo_out:
+  # A held-out repo needs at least this many build failures to be scored.
+  min_positives: 20
+  # Inside the other repos, the newest 20% (by cut-off) is the validation part.
+  validation: 0.20
+
+# H3 and the feature-group ablation: retrain without each group and compare on the test part.
+ablation_groups: [change, config, environment, history]
+
+# Below this many build failures in the train or validation part, a target is reported as too rare.
+min_positives: 5
+top_factors: 15
+# Fault-injected commits (is_synthetic) are reported separately, never trained on (DATA.md).
+drop_synthetic: true
+
+lightgbm:
+  objective: binary
+  learning_rate: 0.05
+  num_leaves: 31
+  min_data_in_leaf: 20
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 1
+  lambda_l2: 1.0
+  seed: 42
+  deterministic: true
+  force_row_wise: true
+  num_boost_round: 2000
+  early_stopping_rounds: 100
