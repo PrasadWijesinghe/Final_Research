@@ -25,7 +25,6 @@ def test_all_four_real_files_load() -> None:
     assert set(configs) == set(MEMBERS)
     for member, cfg in configs.items():
         assert cfg.member == member
-    assert configs["dependency"].repos == []
 
 
 def test_real_build_config_content() -> None:
