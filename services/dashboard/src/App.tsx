@@ -3,6 +3,8 @@ import { Shell } from "./components/Shell";
 import { ErrorBox, Loading } from "./components/ui";
 import { AuthProvider, useAuth } from "./lib/auth";
 import { type Route, useRoute } from "./lib/router";
+import BuildExpertPage from "./build/BuildExpertPage";
+import DependencyDashboardPage from "./dependency/DependencyDashboardPage";
 import CommitPage from "./pages/CommitPage";
 import Dashboard from "./pages/Dashboard";
 import FailureDetail from "./pages/FailureDetail";
@@ -24,6 +26,10 @@ function Page({ route }: { route: Route }) {
   switch (route.name) {
     case "infra":
       return <InfraDemo />;
+    case "dependency":
+      return <DependencyDashboardPage />;
+    case "build":
+      return <BuildExpertPage />;
     case "signin":
       return <SignIn />;
     case "dashboard":

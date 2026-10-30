@@ -340,7 +340,7 @@ Then open the failure in the dashboard (`/failures/<id>`). `--no-wait` only enqu
 
 **Known limits.** Loading the per-test history (`ht_*`) for one job series used to take up to about 4 seconds for big matrix jobs (it streams every stored result row), and serving paid that for every request even though v4 does not read `ht_*`. Now the history is loaded only if the bundle has an `ht_` column (`Bundle.history_mode`: `none`, `job` or `full`), and a bundle that needs only the job-level numbers uses `loader.load_job_test_history`, three small queries that take 0.8 to 1.8 s on the biggest series tested (same numbers as the full loader; see the v6 section). A repository with no history scores low by design: the model leans on history, so a brand-new repo gets little signal beyond the diff. Per-job outputs instead of one max output follow the contract (one prediction per test job).
 
-Code: `src/testing_expert/serving.py`. Tests: `tests/test_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
+Code: `src/testing_expert/serving.py`. Tests: `tests/test_testing_serving.py` (tiny trained bundle in a temp folder; `tests/conftest.py` forces stub mode elsewhere).
 
 ## Explanations (P4.8)
 

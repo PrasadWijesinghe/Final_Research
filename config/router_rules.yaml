@@ -14,13 +14,19 @@ experts:
       - {pattern: "(?i)peer dep", weight: 1.5}
       - {pattern: "(?i)lockfile", weight: 1.5}
       - {pattern: "(?i)unsupported engine|engine \"node\" is incompatible", weight: 2.5}
-  build:                       # Member 2
-    step_name: [{pattern: "(?i)\\b(build|compile|tsc|lint|typecheck)\\b", weight: 2.0}]
+  build:                       # Member 2 (patterns checked against real tool output, docs/experts/build.md)
+    step_name:
+      - {pattern: "(?i)\\b(build|compile|tsc|lint|typecheck)\\b", weight: 2.0}
+      - {pattern: "(?i)\\b(type-check|check-types|eslint|prettier|format(:check)?|bundle)\\b", weight: 2.0}
     log:
       - {pattern: "error TS\\d{4}", weight: 3.0}
       - {pattern: "(?i)eslint", weight: 1.5}
       - {pattern: "(?i)\\d+ problems? \\(\\d+ errors?", weight: 2.5}
+      - {pattern: "ESLint found too many warnings", weight: 3.0}
+      - {pattern: "Code style issues found", weight: 2.5}                 # prettier --check
       - {pattern: "(?i)(webpack|vite|rollup|esbuild).*(error|failed)", weight: 2.0}
+      - {pattern: "error during build:|Build failed in \\d", weight: 2.5}   # Vite
+      - {pattern: "\\[ERROR\\] Could not resolve|Module not found: (Error: )?Can't resolve", weight: 2.5}
   test:                        # Member 3
     step_name: [{pattern: "(?i)\\btest", weight: 2.0}, {pattern: "(?i)\\b(jest|mocha|vitest)\\b", weight: 2.0}]
     log:

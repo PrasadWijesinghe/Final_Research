@@ -6,7 +6,7 @@ import pytest
 from testing_expert import serving
 
 # Only the API and serving tests run in stub mode; DB integration tests keep DATABASE_URL.
-_STUB_MODULES = {"test_testing_api", "test_serving"}
+_STUB_MODULES = {"test_testing_api", "test_testing_serving"}
 
 
 @pytest.fixture(autouse=True)

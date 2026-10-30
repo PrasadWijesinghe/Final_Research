@@ -188,3 +188,31 @@ def test_without_a_backfill_it_says_to_run_backfill_first(
 def test_daily_syncer_is_a_backfiller_and_summary_is_typed() -> None:
     assert issubclass(DailySyncer, Backfiller)
     assert DailySummary().runs_processed == 0
+
+
+def test_daily_with_failed_logs_only_leaves_passing_logs_pending(
+    fake_github: FakeGitHub, tmp_path: Path
+) -> None:
+    # `daily --logs failed` (D46): the re-run's passing jobs get no log, so `fill-logs` finds them.
+    store, data = MemoryStore(), tmp_path / "data"
+    _backfill_with_old_attempt_only(fake_github, store, data)
+    fake_github.attempt_cap = {}
+    fake_github.requests.clear()
+    syncer = DailySyncer(
+        make_client(),
+        store,
+        member="test",
+        data_dir=data,
+        tagger=load_file_tagger(),
+        rules=load_detection_rules(),
+        clock=lambda: LATER,
+        logs="failed",
+    )
+    summary = syncer.daily_repo(ENTRY)
+    assert summary.runs_processed == 1
+    assert summary.logs_deferred == 2  # 5003 and 5004 passed on attempt 2
+    assert fake_github.count("/jobs/5003/logs") == 0
+    assert fake_github.count("/jobs/5004/logs") == 0
+    logged = {row["job_id"] for row in store.dump()["logs"]}
+    assert not {5003, 5004} & logged
+    assert {p.job_id for p in store.pending_logs(REPO_ID, None)} >= {5003, 5004}

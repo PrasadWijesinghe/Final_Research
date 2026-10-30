@@ -22,4 +22,4 @@ For detailed setup steps including GitHub App configuration and scheduled collec
 - [COMPONENTS.md](docs/COMPONENTS.md) — what's built, with status
 - [DECISIONS.md](docs/DECISIONS.md) — architectural choices and reversals
 - [experts/README.md](docs/experts/README.md) — expert interface and template
-- [shared/contracts/README.md](shared/contracts/README.md) — message contracts
+- [shared/contracts/README.md](shared/contracts/README.md) — message contracts v
