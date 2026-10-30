@@ -1,0 +1,19 @@
+[project]
+name = "pipelineiq-dependency-api"
+version = "0.1.0"
+description = "Research API for the verified log-only Dependency Expert classifier."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "httpx>=0.28.1",
+    "joblib>=1.4",
+    "pandas>=2.2",
+    "pipelineiq-expert-dependency",
+    "pipelineiq-shared",
+    "uvicorn>=0.30",
+    "xgboost>=2.1",
+]
+
+[tool.uv.sources]
+pipelineiq-expert-dependency = { workspace = true }
+pipelineiq-shared = { workspace = true }
