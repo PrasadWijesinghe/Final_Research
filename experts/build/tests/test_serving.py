@@ -158,3 +158,20 @@ def test_api_serves_the_loaded_model(
     assert output.model_version == "build/m1" and output.status == "degraded"
     assert set(output.sub_risks) == {"tsc", "lint", "bundler"}
     assert client.get("/health").json()["model_version"] == "build/m1"
+
+
+def test_model_endpoint_reads_the_bundle_metrics(
+    bundle: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from build_expert.api import app
+    from fastapi.testclient import TestClient
+
+    out, data_dir = bundle
+    loaded = BuildPredictor.load(out, data_dir)
+    monkeypatch.setattr("build_expert.predict.predictor", lambda: loaded)
+    body = TestClient(app).get("/model").json()
+    assert body["model_version"] == "build/m1" and body["loaded"] is True
+    assert body["threshold"] == pytest.approx(loaded.threshold)
+    assert body["dataset_id"] == "build/v1"
+    assert 0 < body["test"]["f1"] <= 1 and body["test"]["commits"] > 0
+    assert body["best_baseline"]["f1"] is not None

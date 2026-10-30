@@ -131,6 +131,7 @@ class BuildPredictor:
     index: HistoryIndex
     default_branches: dict[str, str | None]
     repos_with_history: frozenset[str]
+    bundle_dir: Path | None = None  # where metrics.json is (GET /model)
 
     @classmethod
     def load(cls, bundle_dir: Path, data_dir: Path) -> BuildPredictor:
@@ -161,6 +162,7 @@ class BuildPredictor:
             index=HistoryIndex(outcomes),
             default_branches=branches,
             repos_with_history=frozenset(o.repo for o in outcomes),
+            bundle_dir=bundle_dir,
         )
 
     @property
