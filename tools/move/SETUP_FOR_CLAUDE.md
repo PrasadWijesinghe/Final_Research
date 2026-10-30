@@ -33,7 +33,7 @@ The person moved PipelineIQ here from another computer. This folder (`pipelineiq
    - `make up`, then
      `docker compose cp pipelineiq.dump postgres:/tmp/pipelineiq.dump` and
      `docker compose exec -T postgres sh -c 'pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --no-owner /tmp/pipelineiq.dump'`.
-   - `uv sync`, `npm install` in `services/dashboard`,
+   - `uv sync --all-packages` (not `--all-extras`: the embedding model is optional), `npm install` in `services/dashboard`,
      `docker compose --profile experts up -d --build testing-api testing-worker llm-gateway`.
 4. Start the API (`uv run --env-file .env uvicorn api.app:app --host 127.0.0.1 --port 8000`) and
    the dashboard (`npm run dev` in `services/dashboard`), each in its own terminal.

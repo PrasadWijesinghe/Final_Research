@@ -76,7 +76,7 @@ commit them to git.
 5. Install the packages:
 
    ```bash
-   uv sync
+   uv sync --all-packages
    cd services/dashboard && npm install && cd ../..
    ```
 

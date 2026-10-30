@@ -62,7 +62,7 @@ try {
     docker compose exec -T postgres rm -f /tmp/pipelineiq.dump
 
     Step "Installing packages"
-    uv sync
+    uv sync --all-packages  # no embedding model: the Docker worker does not use one
     Push-Location services\dashboard
     npm install
     Pop-Location
