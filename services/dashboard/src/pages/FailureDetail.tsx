@@ -87,6 +87,15 @@ function DiagnosisCard({ d, view, onSaved }: { d: Diagnosis; view: FailureView; 
   );
 }
 
+/** Diagnoses grouped per expert, newest first; a re-run adds a diagnosis instead of replacing one. */
+function byExpert(diagnoses: Diagnosis[]): Diagnosis[][] {
+  const groups = new Map<string, Diagnosis[]>();
+  for (const d of [...diagnoses].sort((a, b) => b.created_at.localeCompare(a.created_at))) {
+    groups.set(d.expert, [...(groups.get(d.expert) ?? []), d]);
+  }
+  return [...groups.values()];
+}
+
 export default function FailureDetail({ id }: { id: string }) {
   const [state, reload] = useAsync(() => api.failure(id), [id]);
   return (
@@ -108,7 +117,19 @@ export default function FailureDetail({ id }: { id: string }) {
             {v.diagnoses.length === 0 ? (
               <Empty title="No diagnosis yet" hint="The expert is still working, or has not answered." />
             ) : (
-              <div className="pq-cards">{v.diagnoses.map((d) => <DiagnosisCard key={d.diagnosis_id} d={d} view={v} onSaved={reload} />)}</div>
+              <div className="pq-cards">
+                {byExpert(v.diagnoses).map(([latest, ...older]) => (
+                  <div key={latest.diagnosis_id}>
+                    <DiagnosisCard d={latest} view={v} onSaved={reload} />
+                    {older.length > 0 && (
+                      <details className="pq-older">
+                        <summary className="pq-dim pq-small">Earlier diagnoses from the {latest.expert} expert ({older.length})</summary>
+                        {older.map((d) => <DiagnosisCard key={d.diagnosis_id} d={d} view={v} onSaved={reload} />)}
+                      </details>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
           </>
         )}
