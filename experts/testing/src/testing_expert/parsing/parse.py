@@ -18,7 +18,7 @@ import logging
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
-from testing_expert.parsing import jest, mocha, vitest
+from testing_expert.parsing import jest, mocha, nodetest, vitest
 from testing_expert.parsing._common import (
     PartialParse,
     Run,
@@ -45,6 +45,7 @@ _PARSERS: dict[str, Callable[[Sequence[str], ParsingConfig | None], PartialParse
     "jest": jest.parse,
     "mocha": mocha.parse,
     "vitest": vitest.parse,
+    "node-test": nodetest.parse,
 }
 _GRANULARITY_RANK: dict[Granularity, int] = {"none": 0, "file": 1, "test": 2}
 # The confidence values are the plan's: 1.0 match, 0.7 mismatch, 0.4 failures without a summary.

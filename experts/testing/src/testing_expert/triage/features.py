@@ -28,7 +28,11 @@ from .evidence import (
     failure_text,
 )
 
+# DEFAULT: the classifier's framework features stay the trained three (a new column would break
+# every saved bundle). A log from a runner the parser reads but the model never saw ("node-test")
+# is a test failure like any other and encodes as all zeros, the same as "other".
 FRAMEWORKS = ("jest", "mocha", "vitest")
+PARSED_FRAMEWORKS = (*FRAMEWORKS, "node-test")
 Leans = Literal["flaky", "genuine", "neutral"]
 ReasonSource = Literal["log", "stack_trace", "diff", "history", "same_sha", "pre_run"]
 
@@ -93,8 +97,8 @@ class LogEvidence:
 
     @property
     def is_test_failure(self) -> bool:
-        """True when a Jest, Mocha or Vitest failure was found in the log."""
-        return bool(self.failures) and self.framework in FRAMEWORKS
+        """True when a Jest, Mocha, Vitest or node:test failure was found in the log."""
+        return bool(self.failures) and self.framework in PARSED_FRAMEWORKS
 
 
 def read_log(text: str, repo: str) -> LogEvidence:

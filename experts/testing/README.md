@@ -67,7 +67,7 @@ Two scopes:
 
 - **v1 (default mode):** failed job attempts, plus every other attempt of the same job on the same commit.
 - **Full scope (`--all`):** EVERY stored job log, passing or failing, that is not yet in `log_parses`.
-  A log with no Jest, Mocha or Vitest run is recorded as "not a test job" and writes no rows.
+  A log with no Jest, Mocha, Vitest or node:test run is recorded as "not a test job" and writes no rows.
 
 Rows are `test` granularity (one test) or `file` granularity (the reporter printed only files, or a
 whole file failed to run). Each row says which. Mocha lists every test but not its file; Jest and
@@ -243,7 +243,7 @@ uv run python -m testing_expert.labels --kappa data/reports/test_labels_sample.c
 uv run python -m testing_expert.labels --kappa FILE --rater ai_prelabel               # same for the AI column
 ```
 
-Known limits: a failed job whose log shows no Jest, Mocha or Vitest (for example `node:test` or Playwright) is `not_test`, so
+Known limits: a failed job whose log shows no Jest, Mocha, Vitest or node:test run (for example Playwright) is `not_test`, so
 a broken job on an unparsed runner is still left out. Only the failing test file is used for the genuine rule, because P4.2 did not store stack frames.
 A single failure with no re-run counts as "kept failing". Commits that never ran this job are invisible to the
 7-day window. A test series found by the loose P4.2 heuristic can pull in non-test jobs.
@@ -370,7 +370,7 @@ When a test job has failed, the worker decides whether the failure is a **real b
 
 **The classifier.** A small LightGBM on 45 numbers (unknown stays unknown, never zero) gives P(flaky), calibrated. Two floors turn it into a verdict: flaky at or above 0.917, genuine when P(genuine) is at least 0.502, otherwise unclear. The flaky floor was chosen on validation data to keep the false-flaky rate (real bugs called flaky) at or below 5%. Results, baselines, the ablation and the limits are in `reports/triage_v1.md`: on later failures it decides 83% of them, is right on 91% of those, and calls a real bug flaky for 4% of genuine failures. On repos it never saw, it ranks well but the floors are too strict, so re-check the floor on a new repo.
 
-**Where it runs.** `diagnose.py` calls `triage/runtime.py`. It loads the bundle (`TESTING_TRIAGE_BUNDLE`, else the newest `models/testing/triage/v<N>`; this folder is separate from the pre-push bundles and the pre-push search never looks inside it), reads the full log from `DATA_DIR` when it can (else the router's 20,000-character excerpt), looks up the commit's files, same-commit jobs and test history in the database (`DATABASE_URL`), and scores. If there is no bundle, or the log shows no Jest, Mocha or Vitest failure, or anything breaks, the diagnosis is the old stub. With no database it still triages from the log alone.
+**Where it runs.** `diagnose.py` calls `triage/runtime.py`. It loads the bundle (`TESTING_TRIAGE_BUNDLE`, else the newest `models/testing/triage/v<N>`; this folder is separate from the pre-push bundles and the pre-push search never looks inside it), reads the full log from `DATA_DIR` when it can (else the router's 20,000-character excerpt), looks up the commit's files, same-commit jobs and test history in the database (`DATABASE_URL`), and scores. If there is no bundle, or the log shows no Jest, Mocha, Vitest or node:test failure, or anything breaks, the diagnosis is the old stub. With no database it still triages from the log alone.
 
 **Build it again.**
 1. `uv run --env-file .env python -m testing_expert.triage.dataset` (about 3 minutes) writes `data/datasets/testing/triage_v1/`.
@@ -437,7 +437,7 @@ evidence and `BehaviourDetails` always come from triage and never from the model
 
 ```mermaid
 flowchart TD
-    F[RoutedFailure] --> L{Jest, Mocha or Vitest failure in the log?}
+    F[RoutedFailure] --> L{Jest, Mocha, Vitest or node:test failure in the log?}
     L -- no --> P{matches dependency, build or infra patterns?}
     P -- yes --> M[status misrouted + suggested category]
     P -- no --> Q{model agrees it is not a test failure?}
@@ -458,7 +458,7 @@ flowchart TD
 2. `rag/prompt.py` fills `rag/prompts/diagnose.md`: the cleaned excerpt of the failing tests (names, error message, assertion diff, project stack frames; at most 3,000 characters), the triage verdict, confidence and evidence lines, the stack-versus-diff overlap and the cases (id, failure summary, fix summary, tags). Everything that came from a log or a case is run through the shared secret sanitiser, stripped of control characters, cut to a fixed size and wrapped in `<data>` tags that the prompt says are data, not instructions. If the sanitiser cannot run, no prompt is sent.
 3. `rag/gateway.py` sends it to `${LLM_GATEWAY_URL}/complete` with a 20 second timeout and no retry. The reply must match the JSON schema (`rag/prompt.py`, `REPLY_SCHEMA`) or the gateway answers 502.
 4. `diagnose.py` maps the reply: `root_cause`, `remediation` (summary, steps, optional `suggested_patch`), `llm_model` (the model name the gateway reports), `prompt_version`, `latency_ms`. The remediation may cite only the retrieved case ids: any other id is removed, a warning is logged and a "Diagnosis note" evidence line says how many were removed. Citing nothing is allowed. The confidence is the lower of the triage confidence and the model's own.
-5. A log with no Jest, Mocha or Vitest failure is not a test failure. If it matches dependency, build or infra patterns (`config/test_diagnosis.yaml`) the answer is `status="misrouted"` with `suggested_category`, without asking the model. If it matches nothing, the model is asked and must say it is misrouted with a category; otherwise the old stub is returned. A test failure that also prints `npm ERR!` afterwards is never called misrouted.
+5. A log with no Jest, Mocha, Vitest or node:test failure is not a test failure. If it matches dependency, build or infra patterns (`config/test_diagnosis.yaml`) the answer is `status="misrouted"` with `suggested_category`, without asking the model. If it matches nothing, the model is asked and must say it is misrouted with a category; otherwise the old stub is returned. A test failure that also prints `npm ERR!` afterwards is never called misrouted.
 
 **Reply schema.** `root_cause` (text, at most 900), `remediation` {`summary` (at most 400), `steps` (at most 6), optional `suggested_patch`}, `cited_case_ids` (list of text), `misrouted` (true or false), optional `suggested_category` (`dependency`, `build`, `infra`, `other`, `unknown`), `confidence` (0 to 1).
 
@@ -586,7 +586,7 @@ Three changes on top of v4, each decided without looking at the test slice:
 
 ## Log parsing
 
-The package `testing_expert.parsing` reads the log of a failed job. For Jest, Mocha and Vitest logs it returns the failing tests (full name, file, error, stack frames), the per-test results the reporter printed, and the runner's summary. Any other log, such as a build error or a `node:test`, TAP or Playwright run, gets framework `other`.
+The package `testing_expert.parsing` reads the log of a failed job. For Jest, Mocha, Vitest and Node's built-in runner (`node --test`, framework `node-test`, TAP and spec reporters) logs it returns the failing tests (full name, file, error, stack frames), the per-test results the reporter printed, and the runner's summary. Any other log, such as a build error or a generic TAP or Playwright run, gets framework `other`. The contract's `BehaviourDetails.framework` has no `node-test`, so a triaged diagnosis reports `other` there (contract proposal: add `node-test` to that Literal; not made, `shared/contracts/` is untouched). The triage model's framework columns stay jest, mocha and vitest: a `node-test` log encodes as all zeros, like `other`, and still counts as a test failure.
 
 - Full guide: `src/testing_expert/parsing/README.md`.
 - Fixtures: real, sanitised logs in `tests/fixtures/logs/`, one folder per framework, each with a hand-checked expected result.

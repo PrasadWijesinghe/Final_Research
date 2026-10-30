@@ -1,0 +1,32 @@
+2026-10-30T09:46:00.0000000Z > demo@1.0.0 test
+2026-10-30T09:46:00.0000001Z > node --test --test-reporter=spec
+2026-10-30T09:46:00.0000002Z
+2026-10-30T09:46:00.0000003Z ▶ cart
+2026-10-30T09:46:00.0000004Z   ✔ totals (0.9ms)
+2026-10-30T09:46:00.0000005Z   ✖ discounts (3.2ms)
+2026-10-30T09:46:00.0000006Z   ﹣ later (0.1ms) # SKIP
+2026-10-30T09:46:00.0000007Z ✖ cart (5.5ms)
+2026-10-30T09:46:00.0000008Z ✔ standalone (0.4ms)
+2026-10-30T09:46:00.0000009Z ℹ tests 4
+2026-10-30T09:46:01.0000000Z ℹ suites 1
+2026-10-30T09:46:01.0000001Z ℹ pass 2
+2026-10-30T09:46:01.0000002Z ℹ fail 1
+2026-10-30T09:46:01.0000003Z ℹ cancelled 0
+2026-10-30T09:46:01.0000004Z ℹ skipped 1
+2026-10-30T09:46:01.0000005Z ℹ todo 0
+2026-10-30T09:46:01.0000006Z ℹ duration_ms 41.2
+2026-10-30T09:46:01.0000007Z
+2026-10-30T09:46:01.0000008Z ✖ failing tests:
+2026-10-30T09:46:01.0000009Z
+2026-10-30T09:46:02.0000000Z test at /home/runner/work/demo/demo/test/cart.test.js:14:5
+2026-10-30T09:46:02.0000001Z ✖ discounts (3.2ms)
+2026-10-30T09:46:02.0000002Z   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+2026-10-30T09:46:02.0000003Z
+2026-10-30T09:46:02.0000004Z   90 !== 95
+2026-10-30T09:46:02.0000005Z
+2026-10-30T09:46:02.0000006Z       at TestContext.<anonymous> (/home/runner/work/demo/demo/test/cart.test.js:16:12)
+2026-10-30T09:46:02.0000007Z       at async Promise.all (index 0)
+2026-10-30T09:46:02.0000008Z
+2026-10-30T09:46:02.0000009Z test at /home/runner/work/demo/demo/test/cart.test.js:3:1
+2026-10-30T09:46:03.0000000Z ✖ cart (5.5ms)
+2026-10-30T09:46:03.0000001Z   1 subtest failed

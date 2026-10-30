@@ -5,8 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-# The framework names match BehaviourDetails.framework in shared/contracts/diagnosis.py.
-Framework = Literal["jest", "mocha", "vitest", "other"]
+# The first three and "other" match BehaviourDetails.framework in shared/contracts/diagnosis.py.
+# "node-test" (Node's built-in runner) is not in that contract: `TriageResult.framework` maps it
+# to "other" where the contract is filled in.
+Framework = Literal["jest", "mocha", "vitest", "node-test", "other"]
 # Where a stack frame points: the repo's own code, a third-party package, Node itself, or unknown.
 FrameKind = Literal["project", "dependency", "node_internal", "unknown"]
 Outcome = Literal["passed", "failed", "skipped", "todo"]
