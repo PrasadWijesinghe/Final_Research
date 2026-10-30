@@ -15,6 +15,9 @@ Labels (sub_label, rule_name, confidence):
                                             and the job passed on it
   genuine   fix_commit_touches_file   high  failed, never passed on the SHA; a commit within 7 days
                                             touching the failing test file made it pass
+  genuine   persistent_failure_streak low failed, never passed on the SHA, test log, and the
+                                            job had failed on >= 3 consecutive earlier attempts
+                                            spanning >= 2 other commits (P4.3 v3 rule)
   unclear   unclear, no_log           low   anything else
   not_test  cancelled, non_test_log   low   cancelled, or the log shows no test runner
 A passing attempt that follows a failure on the same SHA is a rerun pass and gets no label.
@@ -38,6 +41,16 @@ DOCS_ONLY_REGEX = (
 )
 # DEFAULT: 7 days is the window from test.md section 3.
 FIX_WINDOW_DAYS = 7
+# DEFAULT: v3 rule. test.md section 3 only lists "a later commit fixed it" as genuine, so a job
+# that fails for many commits in a row and is never fixed by a commit touching the failing file
+# (a broken job, the typical long failure streak) fell into `unclear` and left the training data.
+# Reading of "kept failing": a test job (parsers saw a test runner) that failed on this attempt and
+# on at least STREAK_MIN consecutive earlier finished attempts of the same job (no pass between,
+# and none of them known to be a non-test failure; a failure whose log is missing still counts),
+# spread over at least STREAK_MIN_OTHER_SHAS other commits, is genuine. Confidence is low (no
+# fix commit confirms it), so the `high` training variant drops these rows.
+STREAK_MIN = 3
+STREAK_MIN_OTHER_SHAS = 2
 SCHEMA_VERSION = "1.1.0"  # shared.contracts.SCHEMA_VERSION; copied into mirrored payloads
 
 LABELS = ("pass", "flaky", "genuine", "unclear", "not_test")
@@ -172,6 +185,41 @@ where exists (select 1 from lab_att x where x.repo_id = cf.repo_id and x.sha = c
 group by 1, 2, 3, 4
 """,
     ),
+    (
+        "streak",
+        # Failures of one job in a row before each failed attempt (cancelled attempts skipped, as
+        # the history features do). cum_ok numbers the stretches between passes; inside a stretch
+        # every earlier row is a failure, so counting them gives the streak before this attempt.
+        # blk flags the first row of each run of equal SHAs, so summing it counts distinct SHAs.
+        """
+create temp table lab_streak on commit drop as
+with o as (
+  select job_id, repo_id, wpath, jname, sha, concl, p_test, p_exists, run_created, attempt,
+         sum((concl = 'success')::int) over w_all as cum_ok,
+         (sha is distinct from lag(sha) over w_ord)::int as blk,
+         (lag(sha) over w_ord = sha) as same_as_prev
+  from lab_att where concl in ('success', 'failure')
+  window w_ord as (partition by repo_id, wpath, jname order by run_created, attempt, job_id),
+         w_all as (partition by repo_id, wpath, jname order by run_created, attempt, job_id
+                   rows between unbounded preceding and current row)
+), s as (
+  select job_id, repo_id, wpath, jname, sha, concl, p_test, p_exists, same_as_prev,
+         count(*) filter (where concl = 'failure') over w_prior as streak,
+         -- earlier failures not known to be non-test (a failure with no log counts)
+         count(*) filter (where concl = 'failure' and not (p_exists and not p_test))
+           over w_prior as streak_test,
+         sum(blk) over w_prior as blocks
+  from o
+  window w_prior as (partition by repo_id, wpath, jname, cum_ok
+                     order by run_created, attempt, job_id
+                     rows between unbounded preceding and 1 preceding)
+)
+select job_id, repo_id, wpath, jname, sha, streak, streak_test,
+       blocks - (case when same_as_prev then 1 else 0 end) as other_shas
+from s where concl = 'failure'
+""",
+    ),
+    ("idx_streak", "create index on lab_streak (job_id)"),
     ("idx_gen", "create index on lab_gen (repo_id, wpath, jname, sha)"),
     ("idx_sil", "create index on lab_silent (repo_id, wpath, jname, sha)"),
     (
@@ -187,6 +235,7 @@ select a.job_id, a.run_id, a.attempt, a.repo, a.sha, a.branch, a.wpath, a.jname,
     when g.n_ok > 0 then 'flaky'
     when si.next_sha is not null then 'flaky'
     when ge.fix_sha is not null then 'genuine'
+    when st.streak_test >= :streak_min and st.other_shas >= :streak_shas then 'genuine'
     else 'unclear' end as sub_label,
   case
     when a.concl = 'cancelled' then 'cancelled'
@@ -196,6 +245,8 @@ select a.job_id, a.run_id, a.attempt, a.repo, a.sha, a.branch, a.wpath, a.jname,
     when g.n_ok > 0 then 'rerun_pass_same_sha'
     when si.next_sha is not null then 'silent_docs_only_next'
     when ge.fix_sha is not null then 'fix_commit_touches_file'
+    when st.streak_test >= :streak_min and st.other_shas >= :streak_shas
+      then 'persistent_failure_streak'
     else 'unclear' end as rule_name,
   case
     when a.concl = 'success' then 'high'
@@ -206,7 +257,8 @@ select a.job_id, a.run_id, a.attempt, a.repo, a.sha, a.branch, a.wpath, a.jname,
   jsonb_strip_nulls(jsonb_build_object(
     'sha', a.sha, 'branch', a.branch, 'workflow_path', a.wpath, 'job_name', a.jname,
     'same_sha_outcomes', g.seq, 'next_commit', si.next_sha,
-    'fix_commit', ge.fix_sha, 'fix_file', ge.fix_file)) as evidence,
+    'fix_commit', ge.fix_sha, 'fix_file', ge.fix_file,
+    'failure_streak', st.streak, 'streak_other_shas', st.other_shas)) as evidence,
   a.storage_path
 from lab_att a
 join lab_grp g on g.repo_id = a.repo_id and g.wpath = a.wpath and g.jname = a.jname
@@ -217,6 +269,8 @@ left join (select repo_id, wpath, jname, sha, min(next_sha) as next_sha
       and si.sha = a.sha and a.concl = 'failure' and g.n_ok = 0
 left join lab_gen ge on ge.repo_id = a.repo_id and ge.wpath = a.wpath and ge.jname = a.jname
                     and ge.sha = a.sha and a.concl = 'failure' and g.n_ok = 0
+left join lab_streak st on st.job_id = a.job_id and a.concl = 'failure' and a.p_test
+                       and g.n_ok = 0
 -- a pass that follows a failure on the same SHA is a rerun pass: no label
 where not (a.concl = 'success' and (a.attempt <> 1 or g.n_fail > 0))
 """,
@@ -225,8 +279,8 @@ where not (a.concl = 'success' and (a.attempt <> 1 or g.n_fail > 0))
 
 
 _TEMP_TABLES = (
-    "lab_out", "lab_gen", "lab_silent", "lab_fg", "lab_cf", "lab_ff", "lab_grp", "lab_att",
-    "lab_series",
+    "lab_out", "lab_streak", "lab_gen", "lab_silent", "lab_fg", "lab_cf", "lab_ff", "lab_grp",
+    "lab_att", "lab_series",
 )  # fmt: skip
 
 
@@ -236,6 +290,8 @@ def run_rules(conn: Connection, member: str) -> dict[str, int]:
         "member": member,
         "docs_regex": DOCS_ONLY_REGEX,
         "window": FIX_WINDOW_DAYS,
+        "streak_min": STREAK_MIN,
+        "streak_shas": STREAK_MIN_OTHER_SHAS,
     }
     for table in _TEMP_TABLES:  # allow a second run inside one transaction (tests)
         conn.execute(text(f"drop table if exists {table}"))

@@ -1,4 +1,4 @@
-"""Dataset builder (P4.5 v1): one row per labelled test-job attempt -> rows.parquet + manifest.json.
+"""Dataset builder (P4.5): one row per labelled test-job attempt -> rows.parquet + manifest.json.
 
     uv run --env-file .env python -m testing_expert.dataset --version v1
 
@@ -31,7 +31,7 @@ from .features.loader import SERIES_KEY_SQL
 
 log = logging.getLogger(__name__)
 
-# DEFAULT: v1 cut, built directly from raw + testing.labels with history_cutoff = the run's
+# DEFAULT: built directly from raw + testing.labels with history_cutoff = the run's
 # created_at, not through the P2.8 replay CLI. compute_features_batch applies that same cutoff
 # per row, so the features equal what the replay path (expert over HTTP) would produce.
 LABEL_MAP = {"pass": "pass", "genuine": "genuine_fail", "flaky": "flaky_fail"}
@@ -44,6 +44,42 @@ V1_CUTS = [
     "built directly from raw + testing.labels, history_cutoff = run created_at (no replay)",
     "genuine_strict = genuine with >= 2 failing (run, attempt) pairs of the same job on the SHA",
 ]
+# DEFAULT: dataset versions are explicit. v1 keeps its original 41 features (so it stays
+# reproducible after new feature groups land); v2 adds the groups below.
+V2_ADDED_PREFIXES = ("tw_", "h_os_")
+# v4 adds the per-test / per-file history group (P4.4 v2) on top of the v3 rows and labels.
+V4_ADDED_PREFIXES = ("ht_",)
+V4_FEATURE_GROUPS_ADDED = [
+    "ht_*: per-test / per-file history from parsed test results (15 features; None = unknown)",
+]
+V4_CUTS = [
+    "ht_ history reads testing.test_results from ALL parsed test-job logs (P4.2 full scope); "
+    "passing test-level rows are stored only for tests that failed somewhere (see extract.py)",
+    "same rows and labels as v3 (rule labels; human kappa round not done, so not frozen)",
+    "ht_ is test level for Mocha (no file names), file level for Jest/Vitest",
+]
+V2_FEATURE_GROUPS_ADDED = [
+    "tw_*: tree-sitter test-change group (14 features; None = unknown, 0 = no test change)",
+    "h_os_*: job-history features per runner OS (13 features)",
+]
+V2_CUTS = [
+    "labels from rules only (P4.3 still v1 label scope); human kappa round not done yet",
+    "logs parsed as in v1 (P4.2 still v1 scope: failed test-job attempts and same-SHA siblings)",
+    "no daily collector: data is the one-off collection, no newer runs",
+    "no new repos: same 16 repos as v1",
+    "history at job-key granularity, not per test; no code vector",
+    "built directly from raw + testing.labels, history_cutoff = run created_at (no replay)",
+    "genuine_strict = genuine with >= 2 failing (run, attempt) pairs of the same job on the SHA",
+]
+V3_LABEL_CHANGES = [
+    "P4.3 v3 rule persistent_failure_streak: failed test job, never passed on its commit, "
+    "failing on "
+    ">= 3 consecutive earlier attempts over >= 2 other commits, is genuine (low confidence); "
+    "before, those attempts were `unclear` and left out",
+    "same 68 features and the same pass / flaky / fix-commit-genuine rows as v2; only the extra "
+    "genuine rows are new",
+]
+V2_FROZEN_NOTE = "labels pending the human kappa round (P4.3); not frozen until it completes"
 
 # One row per labelled attempt. genuine_strict counts distinct failing (run, attempt) pairs of the
 # same series on the same repo + head_sha + workflow (matrix legs of one attempt count once).
@@ -64,6 +100,29 @@ where l.labelled_by = 'rule' and l.sub_label in ('pass', 'flaky', 'genuine')
   and (%(repos)s::text[] is null or r.full_name = any(%(repos)s))
 order by w.created_at, j.job_id
 """
+
+
+def dataset_feature_names(version: str) -> list[str]:
+    """Feature columns of a dataset version: v1 = the original 41, later = all current ones."""
+    names = list(feature_names())
+    if version == "v1":
+        return [n for n in names if not n.startswith(V2_ADDED_PREFIXES + V4_ADDED_PREFIXES)]
+    if version in ("v2", "v3"):
+        return [n for n in names if not n.startswith(V4_ADDED_PREFIXES)]
+    return names
+
+
+def _git_dirty() -> bool:
+    try:
+        out = subprocess.run(
+            ["git", "status", "--porcelain", "--untracked-files=no"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return bool(out.stdout.strip())
+    except (OSError, subprocess.CalledProcessError):
+        return False
 
 
 def _git_commit() -> str:
@@ -91,12 +150,19 @@ def _column(values: list[Any]) -> pa.Array:
     return pa.array(values, type=pa.float64()) if pa.types.is_null(arr.type) else arr
 
 
-def build_table(conn: psycopg.Connection[Any], repos: Sequence[str] | None = None) -> pa.Table:
-    """Query labelled attempts (optionally only `repos`), compute features, return the table."""
+def build_table(
+    conn: psycopg.Connection[Any],
+    repos: Sequence[str] | None = None,
+    names: Sequence[str] | None = None,
+) -> pa.Table:
+    """Query labelled attempts (optionally only `repos`), compute features, return the table.
+
+    `names` picks the feature columns (default: all current ones, see dataset_feature_names).
+    """
     meta = conn.execute(_ROWS_SQL, {"repos": list(repos) if repos else None}).fetchall()  # type: ignore[call-overload]
     log.info("labelled attempts", extra={"rows": len(meta)})
     feats = compute_features_batch(conn, [(m[0], m[1], m[2]) for m in meta])
-    names = feature_names()
+    names = list(names) if names is not None else feature_names()
     cols: dict[str, list[Any]] = {c: [] for c in (*KEY_COLS, *TARGET_COLS, *names)}
     for run_id, attempt, job_id, repo, created, series, sub, conf, rule, n_fail in meta:
         f = feats[(run_id, attempt, job_id)]
@@ -155,12 +221,35 @@ def write_dataset(
         else None,
         "key_columns": list(KEY_COLS),
         "target_columns": list(TARGET_COLS),
-        "feature_names": feature_names(),
-        "v1_cuts": V1_CUTS,
+        "feature_names": [c for c in table.column_names if c not in (*KEY_COLS, *TARGET_COLS)],
         "files": {
             "rows.parquet": {"sha256": sha256_file(rows_path), "bytes": rows_path.stat().st_size}
         },
     }
+    if version == "v1":
+        manifest["v1_cuts"] = V1_CUTS
+    else:
+        manifest.update(
+            {
+                "frozen": False,
+                "frozen_note": V2_FROZEN_NOTE,
+                "git_dirty": _git_dirty(),
+                "feature_groups_added": V2_FEATURE_GROUPS_ADDED,
+                "cuts": V2_CUTS,
+            }
+        )
+        if version not in ("v2",):
+            manifest["label_changes"] = V3_LABEL_CHANGES
+        if version not in ("v2", "v3"):
+            manifest["feature_groups_added"] = [
+                *V2_FEATURE_GROUPS_ADDED,
+                *V4_FEATURE_GROUPS_ADDED,
+            ]
+            manifest["cuts"] = V4_CUTS
+            manifest["kappa_note"] = (
+                "labels are rule labels from the v3 labeller and were not rewritten; the human "
+                "kappa round (P4.3) is still pending, so this dataset is not frozen"
+            )
     (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, default=str) + "\n")
     return manifest
 
@@ -185,7 +274,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
     t0 = time.perf_counter()
     with psycopg.connect(os.environ["DATABASE_URL"].replace("+psycopg", "")) as conn:
-        table = build_table(conn)
+        table = build_table(conn, names=dataset_feature_names(args.version))
     m = write_dataset(table, out_dir, args.version, force=args.force)
     print(f"{m['n_rows']} rows in {time.perf_counter() - t0:.0f}s -> {out_dir}")
     print(

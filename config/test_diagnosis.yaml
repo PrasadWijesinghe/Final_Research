@@ -1,0 +1,48 @@
+# Test expert diagnosis settings (P4.11). Read by testing_expert/rag/settings.py; the same values
+# are the built-in defaults, so a worker without this file behaves the same.
+# DEFAULT: every number below is a first guess, tune it once real LLM answers can be compared.
+
+gateway:
+  timeout_seconds: 20        # one gateway call; slower than this and the template answer is used
+
+prompt:
+  max_excerpt_chars: 3000    # the failing-test excerpt sent to the model
+  max_tests: 3               # failing tests shown in the excerpt
+  max_frames: 5              # stack frames shown per failing test
+  max_message_chars: 700     # error message shown per failing test
+  max_diff_chars: 500        # assertion diff shown per failing test
+  max_cases: 5               # knowledge-base cases shown
+  case_text_chars: 400       # characters of summary and of fix summary shown per case
+  max_evidence_lines: 8      # triage evidence lines shown
+
+template:
+  # The no-LLM text only leans on a past case whose retrieval similarity (0..1) is at least this.
+  # Weakly related cases are still listed as retrieved cases, just not quoted as the fix.
+  min_similarity: 0.6
+
+misroute:
+  # A failure whose log shows no Jest, Mocha or Vitest failure is "not a test failure". It is sent
+  # back as misrouted when the log matches one category's patterns with at least `min_score`.
+  min_score: 2.0
+  patterns:
+    dependency:
+      - {pattern: "ERESOLVE", weight: 3.0}
+      - {pattern: "(?i)unable to resolve dependency tree", weight: 3.0}
+      - {pattern: "(?i)peer dep", weight: 1.5}
+      - {pattern: "(?i)lockfile|package-lock\\.json.{0,40}(out of sync|not in sync)", weight: 1.5}
+      - {pattern: "(?i)unsupported engine|engine \"node\" is incompatible", weight: 2.5}
+      - {pattern: "(?i)npm ERR! (code E404|404 Not Found)|ERR_PNPM_|yarn install v|error An unexpected error occurred", weight: 2.0}
+      - {pattern: "npm ERR!", weight: 1.0}
+    build:
+      - {pattern: "error TS\\d{4}", weight: 3.0}
+      - {pattern: "(?i)\\d+ problems? \\(\\d+ errors?", weight: 2.5}
+      - {pattern: "(?i)eslint", weight: 1.5}
+      - {pattern: "(?i)(webpack|vite|rollup|esbuild|tsc).{0,80}(error|failed)", weight: 2.0}
+      - {pattern: "(?i)Module build failed|Failed to compile|Build failed", weight: 2.5}
+    infra:
+      - {pattern: "(?i)Resource not accessible by integration", weight: 3.0}
+      - {pattern: "(?i)The runner has received a shutdown signal|lost communication with the server", weight: 3.0}
+      - {pattern: "(?i)No space left on device", weight: 2.5}
+      - {pattern: "(?i)docker: |failed to solve|pull access denied", weight: 2.5}
+      - {pattern: "(?i)permission denied", weight: 1.5}
+      - {pattern: "(?i)Process completed with exit code 137|##\\[error\\]The operation was canceled", weight: 2.0}

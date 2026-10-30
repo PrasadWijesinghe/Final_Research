@@ -12,7 +12,7 @@ Other callers use the same service. Expert workers post their finished diagnoses
 
 The backend has a second job, the router. When a CI job fails, the router decides which expert should diagnose it, saves that decision, and puts the failure on the expert's work queue. See the Router section below.
 
-The backend never changes user code and never blocks a push on its own. It only reports. The GitHub webhook and GitHub sign-in endpoints exist but return "501 Not Implemented" until Phase 3.
+The backend never changes user code and never blocks a push on its own. It only reports. The GitHub webhook (P3.1), GitHub sign-in (P3.5) and PR check runs (P3.3) are built. Sign-in needs its GitHub settings in `.env`; without them it answers 503.
 
 ## How it works
 
@@ -186,14 +186,17 @@ The host also needs `DATABASE_URL` and `REDIS_URL`. All three variables are list
 |---|---|---|---|
 | `POST /predict` | Pre-push hook | Bearer API key | Builds the context, asks four experts, saves, returns four results |
 | `POST /diagnoses` | Expert workers | None (see Limits) | Saves a finished `Diagnosis` |
-| `POST /reviews` | Dashboard | None (see Limits) | Saves a `ReviewDecision` and forwards it to the diagnosing expert |
+| `POST /reviews` | Dashboard | Session cookie (P3.5) | Saves a `ReviewDecision` and forwards it to the diagnosing expert |
 | `GET /commits/{sha}/risks` | Dashboard | None (see Limits) | Stored risks for a commit. Replay results only with `include_replay=true` |
 | `GET /runs` | Dashboard | None (see Limits) | History: predictions next to the run outcome. Newest first |
 | `GET /failures/{id}` | Dashboard | None (see Limits) | A routed failure with its diagnoses and reviews |
 | `POST /api-keys` | Admin | Admin token | Issues a key. The plain key is returned once |
 | `DELETE /api-keys/{id}` | Admin | Admin token | Revokes a key (204, or 404 if unknown) |
 | `POST /webhooks/github` | GitHub App | `X-Hub-Signature-256` | Checks the signature (401 if wrong, 503 if no secret is set), answers 202 and handles the event in the background. See "GitHub App webhooks (P3.1)" |
-| `GET` or `POST /auth/github/...` | Dashboard (later) | None | Returns 501 (GitHub sign-in is left for the dashboard task, P3.5) |
+| `GET /auth/github/login`, `GET /auth/github/callback` | Browser (dashboard sign-in) | None | Starts and finishes GitHub sign-in and sets the `piq_session` cookie (P3.5) |
+| `GET /auth/me`, `POST /auth/logout` | Dashboard | Session cookie | Who is signed in (or 401), and sign-out (204) |
+| `GET /me/api-keys`, `POST /me/api-keys`, `DELETE /me/api-keys/{id}` | Dashboard | Session cookie | A signed-in developer's own pre-push keys (P3.5) |
+| `GET /failures` | Dashboard | None (see Limits) | Routed failures, newest first, with diagnosis count and latest review |
 | `GET /health` | Anyone | None | Backend status plus each expert's health |
 
 ## GitHub App webhooks (P3.1)
@@ -215,7 +218,7 @@ real work afterwards (GitHub gives up after 10 seconds).
 3. **Per event:**
    - `push` (a branch, not a delete or tag) and `pull_request` (opened, synchronize, reopened,
      ready_for_review): builds the `CommitContext` with the live builder, saves it, asks the four
-     experts with the 2 minute budget and saves their predictions. The PR check run comes in P3.3.
+     experts with the 2 minute budget and saves their predictions, then posts or updates the PipelineIQ check run (see "PR check run" below).
    - `workflow_run` and `workflow_job`: stored in `raw.workflow_runs`, `raw.jobs` and `raw.steps`
      with `source="app"`. Like the collector, the actor is hashed, `actor`/`head_commit`/repository
      blocks are dropped from the stored JSON, and the run title is passed through the sanitiser.
@@ -229,7 +232,7 @@ real work afterwards (GitHub gives up after 10 seconds).
 
 - `job_key` is left empty for App-sourced jobs (the collector fills it from the workflow file).
 - Duplicate deliveries are not detected. A repeated push predicts again; stored rows are upserted.
-- Sign in with GitHub (`/auth/github/*`) still returns 501.
+- Sign-in and the dashboard are covered in "Dashboard sign-in, own keys and failure list (P3.5)" below.
 
 ### Tests
 
@@ -237,6 +240,44 @@ real work afterwards (GitHub gives up after 10 seconds).
 respx. `tests/test_backend_sql.py::test_sql_raw_store_writes_app_rows` checks `source="app"` on a
 real database. `shared/tests/test_github_app_auth.py` covers the JWT, the token cache and the
 signature check. To try it for real, see `docs/ONBOARDING.md` step 10.
+
+## PR check run (P3.3)
+
+### What it does
+
+After a push or pull request, the API shows the result on GitHub as a check run named
+**PipelineIQ**. The summary lists every expert's score, whether it is an alert, up to three plain
+reasons, and which experts have not answered yet. It also links to the dashboard commit page
+(`DASHBOARD_URL/#/commits/<sha>`). The check never blocks a merge.
+
+### How it works
+
+1. After the experts answer, the API builds the check text (`api/checks.py`).
+2. If nothing is ready yet, the check is created as `in_progress`. Otherwise it is created
+   `completed`: `neutral` when there is an alert or an expert is still missing, `success` when all
+   four answered and none alerts. It is never `failure`.
+3. GitHub's check id is saved per repo and commit in `platform.check_runs`
+   (migration 0004). A later push of the same commit updates the same check.
+4. Late experts: the API asks the experts that were not ready again after 30 s, 90 s, 5 min and
+   15 min (`CHECK_RETRY_DELAYS_SECONDS`). Each new answer is saved and updates the same check
+   (a PATCH, not a new check). The last round finishes the check even if experts are still silent,
+   so it never stays `in_progress` forever.
+5. A GitHub error is logged (the error type only, never the body or the token) and ignored. The
+   predictions are kept either way. Check calls are not retried, so a hiccup cannot create two
+   checks.
+6. Replay and the pre-push hook never reach this code. A test checks that `api.replay` does not
+   load it.
+
+The GitHub App needs **Checks: Read and write** (see `docs/GITHUB_APP.md`).
+
+### Limits
+
+- Late results come from asking `/predict` again, because experts have no way to call us back yet.
+  If the API restarts during the 15 minute window, the check stays as it was.
+- Only the first 12 predictions per expert are listed (test jobs can be many), highest first.
+- A pull request check is attached to the head commit, so it shows on the PR and on the push.
+
+Tests: `tests/test_checks.py` (GitHub mocked by respx).
 
 ## Router (P2.7)
 
@@ -497,6 +538,8 @@ The test expects these results:
 | `API_ADMIN_TOKEN` | `.env` | Empty | Protects `/api-keys`. Empty means key management is off (503) |
 | `GITHUB_WEBHOOK_SECRET` | `.env` | Empty | Secret that signs GitHub webhooks. Empty means `/webhooks/github` answers 503 |
 | `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY_PATH` | `.env` | Empty | The App id and the path of its `.pem`. Needed to get installation tokens |
+| `CHECK_RETRY_DELAYS_SECONDS` | `.env` | `30,90,300,900` | When to ask late experts again for the PR check. Empty list means never |
+| `DASHBOARD_URL` | `.env` | `http://localhost:5173` | Base of the link in the check's details |
 | `DATA_DIR` | `.env` | `./data` | Where logs fetched by webhooks are written (same as the collector) |
 | `API_PORT` | `.env.example` only | `8000` | Documents the port. No code reads it; the port comes from the uvicorn command |
 
@@ -518,11 +561,11 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 **Authentication gaps (on purpose, until Phase 3):**
 
-- `GET /runs`, `GET /commits/{sha}/risks`, `GET /failures/{id}` and `POST /reviews` have no authentication. Anyone who can reach the port can read them or post a review. They stay open until the GitHub sign-in (P3.1) and the dashboard (P3.5) add real checks.
+- `GET /runs`, `GET /commits/{sha}/risks`, and `GET /failures/{id}` have no authentication. Anyone who can reach the port can read them. (`POST /reviews` needs a sign-in session since P3.5.) They stay open until the GitHub sign-in (P3.1) and the dashboard (P3.5) add real checks.
 - `POST /diagnoses` has no authentication. It is meant for expert workers on the internal network, like the LLM gateway. Add a shared worker token before any public deployment.
-- The first API key is made by hand. Call `POST /api-keys` with `API_ADMIN_TOKEN` as the Bearer token and a `user_hash`. The `user_hash` must be 64 lowercase hex characters: the salted hash of the developer's GitHub login, made the same way the sanitiser hashes logins (see `shared/sanitise/README.md`). This stays until GitHub sign-in exists.
+- The first API key is made by hand. Call `POST /api-keys` with `API_ADMIN_TOKEN` as the Bearer token and a `user_hash`. The `user_hash` must be 64 lowercase hex characters: the salted hash of the developer's GitHub login, made the same way the sanitiser hashes logins (see `shared/sanitise/README.md`). Signed-in developers can make their own keys with `/me/api-keys` instead (P3.5).
 - A key is shown once, in the response to `POST /api-keys`. Only its SHA-256 hash is stored. A lost key cannot be recovered; issue a new one and revoke the old.
-- No rate limiting. No CORS settings either. The dashboard will need CORS when it is built (P3.5).
+- No rate limiting. No CORS settings either. The dashboard does not need CORS: it calls the API through its own `/api` proxy, so the cookies stay same-origin.
 
 **Router (P2.7):**
 
@@ -577,7 +620,6 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 
 **Not built yet:**
 
-- The webhook and GitHub sign-in endpoints return 501.
 - `PREDICT_BUDGET_PR_MS` (2 minutes for PR notes) is used by the replay CLI only. The webhook task (P3.1) will use it for PR notes.
 - The API has a Dockerfile and a Compose service in the `e2e` profile (P2.9). Neither has been built or run yet. `make up-experts` does not start the API. Only `make e2e` does.
 
@@ -612,6 +654,32 @@ The test fails if the whole call takes 3 seconds or more, which shows the slow e
 | `config/router_rules.yaml` line 6 | `min_score: 1.0` | Not marked `# DEFAULT:` in the file yet. Treat as a default until the team reviews it |
 | `.env.example` line 86 | `ROUTER_RULES_PATH` unset means `config/router_rules.yaml` | The rules file lives at the repo root |
 | `services/api/src/api/replay.py` (5 choices) | Listed in full in the "Replay CLI (P2.8)" section | Replay is the only caller of the router so far |
+
+## Dashboard sign-in, own keys and failure list (P3.5)
+
+People sign in with GitHub so the dashboard can show their data.
+
+1. `GET /auth/github/login` sends the browser to GitHub. It also sets a short-lived signed cookie holding a random `state`, so the callback can tell the request really started here.
+2. GitHub sends the browser back to `GET /auth/github/callback`. The API checks the `state`, trades the code for a GitHub token, reads the profile once (`GET https://api.github.com/user`) and throws the token away. It is never stored or logged.
+3. The API then sets the `piq_session` cookie: a signed (HMAC-SHA256 with `SESSION_SECRET`), HttpOnly, SameSite=Lax cookie that lasts 7 days and holds the GitHub id, login, avatar and `user_hash` (`sha256(IDENTITY_SALT + login)`, the same hash the rest of the platform uses). The browser goes on to `DASHBOARD_URL`.
+4. `GET /auth/me` returns `{login, avatar_url, user_hash}` or 401. `POST /auth/logout` returns 204 and clears the cookie.
+
+If `GITHUB_APP_CLIENT_ID`, `GITHUB_APP_CLIENT_SECRET` or `SESSION_SECRET` is empty, sign-in answers 503. It is never open.
+
+With a session, a developer manages their own pre-push keys: `GET /me/api-keys` (ids and dates only), `POST /me/api-keys` (201 with the plain key, shown once) and `DELETE /me/api-keys/{id}` (204; 404 for someone else's key). The admin `/api-keys` endpoints are unchanged.
+
+`GET /failures?repo=&limit=50` (max 200) lists routed failures, newest first (replay failures are left out): `failure_id`, `repo`, `head_sha`, `run_id`, `job_name`, `expert` (the first expert it was routed to), `created_at`, `diagnosis_count`, `latest_review` (`accept`, `reject`, `modify`, `request_revision` or `null`).
+
+`POST /reviews` needs the session cookie (401 without it). The saved `reviewer_hash` is always the session's `user_hash`; a `reviewer_hash` in the request body is ignored, so nobody can post a review as someone else.
+
+The dashboard calls the API through `/api/*` (the proxy removes the prefix), so the cookies are same-origin and no CORS setup is needed.
+
+`API_PUBLIC_URL` must be the base of the API as the browser sees it. With the Vite dev server use `http://localhost:8000` (cookies are shared across ports on `localhost`). Behind the Docker dashboard (nginx on port 3000, API under `/api/`) use `http://localhost:3000/api`. The GitHub App callback URL must equal `{API_PUBLIC_URL}/auth/github/callback`. For local dev put `SESSION_COOKIE_SECURE=false` and `IDENTITY_SALT` in `.env`.
+
+New settings: `SESSION_SECRET`, `API_PUBLIC_URL` (default `http://localhost:8000`), `DASHBOARD_URL` (default `http://localhost:5173`), `SESSION_COOKIE_SECURE` (default `true`; set `false` for plain-http localhost), `SESSION_TTL_SECONDS` (default 7 days).
+
+Choices not in the docs: stdlib HMAC cookie instead of a new dependency; the `state` cookie lasts 10 minutes; `/failures` hides replay failures. Tests: `services/api/tests/test_sign_in.py`.
+
 
 ## Related
 

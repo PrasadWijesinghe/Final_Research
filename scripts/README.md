@@ -2,7 +2,27 @@
 
 **In one sentence:** These scripts help choose dependency repositories and check whether configured repos are useful data sources.
 
-**Status:** Working · **Owner:** shared · **Plan tasks:** P1.3, P4.14
+**Status:** Working · **Owner:** shared · **Plan tasks:** P1.3, P4.14, P4.12
+
+## Replay a real failure for a demo
+
+`demo_route_failure.py` takes one stored failed job (by `raw.jobs` job id), builds a replay
+failure from the database and the stored log, routes it with the backend's router, and waits for
+the Test worker's diagnosis to appear in the backend API. It prints the failure id, verdict,
+confidence, number of retrieved cases and the text source. Nothing goes to GitHub.
+
+```bash
+PYTHONPATH=. uv run --env-file .env python scripts/demo_route_failure.py --list
+PYTHONPATH=. uv run --env-file .env python scripts/demo_route_failure.py --job-id 120678085378
+```
+
+`--list` shows the newest jobs labelled flaky (final label) that have a stored log and were never
+routed. Options: `--no-wait`, `--timeout`, `--api-url` (or `API_URL`). It needs `DATABASE_URL`,
+`REDIS_URL` and `DATA_DIR` (default `./data`) from `.env`, the stack from
+`experts/testing/README.md` ("The demo stack") and the backend API running. Exit codes: 2 job
+not found or no log, 3 not routed, 4 no diagnosis in time. The `PYTHONPATH=.` part is only
+needed while the virtualenv's copy of `shared` is stale. A routed failure stays in the database
+and the dashboard; the same job is never listed again.
 
 ## Load Dependency repository groups
 

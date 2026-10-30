@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: webhooks check-hook setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
+.PHONY: webhooks check-hook check-dashboard setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -19,8 +19,8 @@ up-experts:
 	docker compose --profile experts up -d --build --wait
 
 # DEFAULT (P2.9): end-to-end test. Builds and starts postgres, redis, api and the Test expert
-# (profile "e2e"), migrates the database from the host, runs the `e2e` tests, then always
-# stops and removes only its own containers (api, testing-api, testing-worker; the postgres/redis
+# (profile "e2e"; the gateway runs the mock provider), migrates the database from the host, runs the `e2e` tests, then always
+# stops and removes only its own containers (api, testing-api, testing-worker, llm-gateway; the postgres/redis
 # dev stack stays up) and keeps the test's exit code. E2E_REQUIRED=1 turns "stack unreachable" from
 # a skip into a failure, so CI cannot pass without really running the test.
 # EXPERT_BACKEND_URL makes the Test worker post its diagnosis to the api container.
@@ -31,8 +31,8 @@ e2e:
 		&& E2E_REQUIRED=1 uv run pytest -m e2e services/api/tests/e2e \
 		|| status=$$?; \
 	if [ $$status -ne 0 ]; then docker compose --profile e2e logs --no-color; fi; \
-	docker compose --profile e2e stop api testing-api testing-worker; \
-	docker compose --profile e2e rm -f api testing-api testing-worker; \
+	docker compose --profile e2e stop api testing-api testing-worker llm-gateway; \
+	docker compose --profile e2e rm -f api testing-api testing-worker llm-gateway; \
 	exit $$status
 
 # DEFAULT: --profile experts so profile services are stopped too (a plain `down` skips them).
@@ -45,6 +45,7 @@ check:
 	uv run mypy
 	uv run pytest
 	$(MAKE) check-hook
+	$(MAKE) check-dashboard
 
 # DEFAULT (P3.4): Node tests of the pre-push hook run with the built-in test runner (Node 22, no
 # dependencies). Skipped with a notice when node is missing locally; CI installs Node 22 and sets
@@ -53,6 +54,17 @@ check-hook:
 	@if command -v node >/dev/null 2>&1; then cd tools/pre-push-hook && node --test "test/*.test.mjs"; \
 	elif [ -n "$(REQUIRE_NODE)" ]; then echo "check-hook: node is required"; exit 1; \
 	else echo "check-hook: node not found, skipping hook tests"; fi
+
+# DEFAULT (P3.5): dashboard lint, tests and build. Skipped with a notice when node is missing or
+# dependencies are not installed (run `npm ci` in services/dashboard); with REQUIRE_NODE=1 (CI) it
+# installs them and cannot be skipped.
+check-dashboard:
+	@if ! command -v node >/dev/null 2>&1; then \
+		if [ -n "$(REQUIRE_NODE)" ]; then echo "check-dashboard: node is required"; exit 1; \
+		else echo "check-dashboard: node not found, skipping"; fi; \
+	elif [ -n "$(REQUIRE_NODE)" ] || [ -d services/dashboard/node_modules ]; then \
+		cd services/dashboard && { [ -d node_modules ] || npm ci; } && npm run lint && npm test && npm run build; \
+	else echo "check-dashboard: run npm ci in services/dashboard first, skipping"; fi
 
 # DEFAULT (P3.2): relay GitHub App webhooks from smee.io to the local API. Needs Node (npx); leave it
 # running in its own terminal next to the API. SMEE_URL comes from .env.

@@ -162,3 +162,40 @@ def test_mlflow_logs_to_local_store(root: Path) -> None:
     pytest.importorskip("mlflow")
     run_training("v1", root=root, variants=("all",), loro=False, use_mlflow=True)
     assert (root / "mlruns" / "mlflow.db").exists()
+
+
+def test_compare_helpers_and_ablation_columns() -> None:
+    from testing_expert.model.compare import (
+        bootstrap_diff,
+        config_columns,
+        importance_table,
+        verdict,
+    )
+
+    cols = ["cs_a", "tw_x", "h_runs_30d", "h_os_runs_30d", "tw_y"]
+    assert config_columns(cols, ("tw_",)) == ["cs_a", "h_runs_30d", "h_os_runs_30d"]
+    assert config_columns(cols, ("h_os_",)) == ["cs_a", "tw_x", "h_runs_30d", "tw_y"]
+    rng = np.random.default_rng(0)
+    y = (rng.random(600) < 0.1).astype(int)
+    good = y + rng.normal(0, 0.5, 600)
+    noise = rng.random(600)
+    point, lo, hi = bootstrap_diff(y, noise, good)
+    assert point > 0.1 and lo > 0 and lo <= point <= hi
+    assert "feature" in importance_table({"a": 3.0, "b": 1.0}) and "75.0%" in importance_table(
+        {"a": 3.0, "b": 1.0}
+    )
+    res = {(c, "all"): {"loro": {"lightgbm": {"r1": v}}} for c, v in (("v1", 0.2), ("v2", 0.3))}
+    assert "No clear gain" in verdict("v1", "v2", 0.1, 0.11, -0.01, 0.03, res)
+    assert "helps" in verdict("v1", "v2", 0.1, 0.2, 0.01, 0.05, res)
+
+
+def test_tw_prefix_is_a_feature_and_compare_task_runs(root: Path) -> None:
+    from testing_expert.model.compare import _task
+
+    df, _ = load_dataset("v1", root)
+    df["tw_new_tests"] = np.where(np.arange(len(df)) % 9 == 0, np.nan, 1.0)
+    assert "tw_new_tests" in feature_columns(df)
+    out = _task(("v1", "v1", "all", ("tw_",), "all", False, root))
+    assert out["n_features"] == len(feature_columns(df)) - 1  # the stored parquet has no tw_ column
+    assert set(out["scores"]) == {"logreg", "lightgbm"}
+    assert out["importance"] and len(out["y_test_fail"]) == out["sizes"]["test"]

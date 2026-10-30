@@ -1,0 +1,24 @@
+2026-10-30T09:46:00.0000000Z > demo@1.0.0 test
+2026-10-30T09:46:00.0000001Z > node --test
+2026-10-30T09:46:00.0000002Z
+2026-10-30T09:46:00.0000003Z ✔ parses input (1.2ms)
+2026-10-30T09:46:00.0000004Z ✖ saves the order (419.4896ms)
+2026-10-30T09:46:00.0000005Z ℹ tests 2
+2026-10-30T09:46:00.0000006Z ℹ suites 0
+2026-10-30T09:46:00.0000007Z ℹ pass 1
+2026-10-30T09:46:00.0000008Z ℹ fail 1
+2026-10-30T09:46:00.0000009Z ℹ cancelled 0
+2026-10-30T09:46:01.0000000Z ℹ skipped 0
+2026-10-30T09:46:01.0000001Z ℹ todo 0
+2026-10-30T09:46:01.0000002Z ℹ duration_ms 520.1
+2026-10-30T09:46:01.0000003Z
+2026-10-30T09:46:01.0000004Z ✖ failing tests:
+2026-10-30T09:46:01.0000005Z
+2026-10-30T09:46:01.0000006Z test at file:///D:/a/demo/demo/test/order.test.js:7:6
+2026-10-30T09:46:01.0000007Z ✖ saves the order (419.4896ms)
+2026-10-30T09:46:01.0000008Z   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+2026-10-30T09:46:01.0000009Z
+2026-10-30T09:46:02.0000000Z   1 !== 0
+2026-10-30T09:46:02.0000001Z
+2026-10-30T09:46:02.0000002Z       at TestContext.<anonymous> (file:///D:/a/demo/demo/test/order.test.js:13:10)
+2026-10-30T09:46:02.0000003Z       at process.processTicksAndRejections (node:internal/process/task_queues:103:5)

@@ -7,7 +7,11 @@ The workflow step's command (`yarn jest`, `vitest run`, `mocha`) only breaks tie
 config's framework is a weaker tie-break still: the config is wrong for some repos
 (brianc/node-postgres says vitest but runs mocha).
 
-Node's built-in runner, TAP and Playwright are recognised as "other": they are not parsed.
+Node's built-in runner (`node --test`) is `node-test`: its TAP reporter is told apart from other
+TAP (tape, mocha's tap reporter, test262) by `# Subtest:` lines, the `failureType:` and
+`duration_ms:` fields of its YAML blocks and the `# suites N` total; its spec reporter by the
+`ℹ tests N` summary and the `✖ failing tests:` section. Generic TAP and Playwright are
+recognised as "other": they are not parsed.
 """
 
 from __future__ import annotations
@@ -75,10 +79,18 @@ SIGNATURES: dict[Framework, tuple[Signature, ...]] = {
         _sig("FAIL test line", None, 2),
         _sig("file line", r"^ [✓❯×↓]\s+\S.*\(\d+ tests?", 1, 2),
     ),
+    "node-test": (
+        _sig("node:test summary", r"^ℹ tests \d+", 5),
+        _sig("failing tests section", r"^✖ failing tests:$", 4),
+        _sig("TAP Subtest", r"^ *# Subtest: \S", 3, 2),
+        _sig("TAP failureType", r"^ +failureType: '", 4),
+        _sig("TAP suites total", r"^# suites \d+$", 4),
+        _sig("TAP duration_ms", r"^ +duration_ms: \d", 2),
+        _sig("spec suite line", r"^ *▶ \S", 1, 2),
+    ),
     "other": (
         _sig("TAP version", r"^TAP version \d", 5),
         _sig("TAP plan", r"^# tests \d+", 5),
-        _sig("node:test summary", r"^ℹ tests \d+", 5),
         _sig("playwright summary", r"^\s+\d+ (?:passed|failed|flaky|skipped)\b.*\(\d", 3),
         _sig("TAP not ok", r"^not ok \d+", 2),
     ),
@@ -87,8 +99,11 @@ _COMMAND_WORDS: dict[Framework, re.Pattern[str]] = {
     "jest": re.compile(r"\bjest\b"),
     "mocha": re.compile(r"\bmocha\b"),
     "vitest": re.compile(r"\bvitest\b"),
+    "node-test": re.compile(r"(?:^|\s)--test\b|node:test"),
 }
-_ORDER: tuple[Framework, ...] = ("jest", "mocha", "vitest", "other")
+_ORDER: tuple[Framework, ...] = ("jest", "mocha", "vitest", "node-test", "other")
+# Markers any TAP producer prints; they say nothing about which runner it was.
+_GENERIC_TAP = frozenset({"TAP version", "TAP plan", "TAP not ok"})
 # One regex with a named group per signature: a single C-speed match per line, which keeps a
 # multi-million-line log fast. Signatures are tried in order, so the first one that matches wins.
 _BY_GROUP: dict[str, tuple[Framework, Signature]] = {}
@@ -165,5 +180,12 @@ def detect(
                 command_match=bool(word and word.search(text)),
             )
         )
+    # Node's runner prints plain TAP too: once its own markers reach the threshold, the generic TAP
+    # hits are its own and must not outrank it as "other".
+    min_score = (config or load_config()).parse.detect_min_score
+    if any(d.framework == "node-test" and d.score >= min_score for d in found):
+        found = [
+            d for d in found if not (d.framework == "other" and set(d.markers) <= _GENERIC_TAP)
+        ]
     found.sort(key=lambda d: (-d.score, not d.command_match, d.framework != hint))
     return found

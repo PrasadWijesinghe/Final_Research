@@ -1,14 +1,19 @@
-"""Test-results extraction (P4.2 v1): job logs on disk to testing.test_ids and test_results.
+"""Test-results extraction (P4.2): job logs on disk to testing.test_ids and test_results.
 
 Run from the repository root (needs the database in DATABASE_URL and the logs in `data/logs/`):
 
     uv run --env-file .env python -m testing_expert.extract --member test
     make extract-test-results
 
-Which logs are read (v1 cut): the logs of FAILED job attempts, plus every other attempt or run of
-the same job (same repo, same head_sha, same job name) that has a stored log. A failed job counts as
-a test job only when the parsers recognise a test runner in its log, and only then are its siblings
-read. Passing logs in general come in v2.
+Full scope (v2): `--all` reads EVERY stored job log that is not yet in `testing.log_parses`
+(passing and failing; a log with no test runner is recorded as not-a-test-job and writes no rows).
+Writes use COPY into temporary tables plus set-based inserts. `--sample N` reads a random N logs
+(a throughput trial; the rows it writes are real and the full run skips them).
+
+Which logs are read in the default (v1) mode: the logs of FAILED job attempts, plus every other
+attempt or run of the same job (same repo, same head_sha, same job name) that has a stored log.
+A failed job counts as a test job only when the parsers recognise a test runner in its log, and
+only then are its siblings read. `--all` replaces that cut.
 
 It is safe to run again: a job that already has a row in `testing.log_parses` is skipped, so an
 interrupted run resumes where it stopped, and writing a job replaces that job's earlier rows.
@@ -25,7 +30,7 @@ import os
 import sys
 import time
 from collections.abc import Iterable, Iterator, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +44,7 @@ log = logging.getLogger(__name__)
 
 REASON_SEED = "seed_failed"
 REASON_SIBLING = "sibling"
+REASON_ALL = "all"
 # DEFAULT: v1 cut, the failed job attempts are the seeds; their same-SHA siblings come second.
 DEFAULT_BATCH = 200  # DEFAULT: jobs written per transaction; small enough to lose little on a crash
 DEFAULT_LOG_EVERY = 1000  # DEFAULT: one progress line per 1000 jobs
@@ -69,6 +75,18 @@ join raw.logs l on l.job_id = j.job_id
 where s.reason = '{REASON_SEED}' and s.is_test_job and l.status = 'ok'
   and not exists (select 1 from testing.log_parses p where p.job_id = j.job_id)
 order by j.job_id
+"""
+
+
+_ALL_SQL = f"""
+select j.job_id, j.run_id, j.attempt, r.full_name, w.head_sha, {_JOB_NAME}, l.storage_path
+from raw.jobs j
+join raw.logs l on l.job_id = j.job_id
+join raw.workflow_runs w on w.run_id = j.run_id and w.attempt = j.attempt
+join raw.repos r on r.id = w.repo_id
+where r.member = :member and l.status = 'ok'
+  and not exists (select 1 from testing.log_parses p where p.job_id = j.job_id)
+order by {{order}}
 """
 
 
@@ -198,6 +216,64 @@ def extract_one(args: tuple[JobRef, str]) -> Extracted:
     )
 
 
+_RESULT_COLS = (
+    "job_id", "test_id", "attempt", "file", "full_name", "outcome", "duration_ms", "granularity"
+)  # fmt: skip
+_ID_COLS = ("test_id", "repo", "file", "full_name", "granularity")
+
+
+def _copy_rows(
+    conn: Connection, test_ids: dict[str, dict[str, Any]], results: list[dict[str, Any]]
+) -> None:
+    """Bulk-load ids and results: COPY into temp tables, then set-based inserts (idempotent)."""
+    raw = conn.connection.cursor()
+    raw.execute(
+        "create temp table _t_ids (test_id text, repo text, file text, full_name text, "
+        "granularity text) on commit drop"
+    )
+    raw.execute(
+        "create temp table _t_res (job_id bigint, test_id text, attempt int, file text, "
+        "full_name text, outcome text, duration_ms double precision, granularity text) "
+        "on commit drop"
+    )
+    with raw.copy(f"copy _t_ids ({', '.join(_ID_COLS)}) from stdin") as cp:
+        for t in test_ids.values():
+            cp.write_row([t[c] for c in _ID_COLS])
+    with raw.copy(f"copy _t_res ({', '.join(_RESULT_COLS)}) from stdin") as cp:
+        for r in results:
+            cp.write_row([r[c] for c in _RESULT_COLS])
+    raw.execute(
+        "insert into testing.test_ids (test_id, repo, file, full_name, granularity) "
+        "select test_id, repo, file, full_name, granularity from _t_ids "
+        "on conflict (test_id) do nothing"
+    )
+    raw.execute(
+        f"insert into testing.test_results ({', '.join(_RESULT_COLS)}) "
+        f"select {', '.join(_RESULT_COLS)} from _t_res on conflict (job_id, test_id) do update set "
+        "outcome = excluded.outcome, duration_ms = excluded.duration_ms, "
+        "granularity = excluded.granularity, attempt = excluded.attempt"
+    )
+    raw.close()
+
+
+def prune_passing(e: Extracted, keep_ids: frozenset[str] | None) -> Extracted:
+    """Drop test-level rows that carry no history signal from a full-scope (v2) read.
+
+    # DEFAULT: storing every passing test of every passing log would be ~130M rows (Mocha lists
+    # 1,000+ tests per run). A passing or skipped test-level row is kept only when that test has
+    # failed somewhere in the data (`keep_ids`); a test that never failed has a fail rate of 0
+    # whether or not its passes are stored. File-level rows and all failed rows are always kept.
+    """
+    if keep_ids is None or e.ref.reason != REASON_ALL:
+        return e
+    rows = tuple(
+        r
+        for r in e.rows
+        if r.granularity == "file" or r.outcome == "failed" or r.test_id in keep_ids
+    )
+    return replace(e, rows=rows)
+
+
 def write_batch(conn: Connection, batch: Sequence[Extracted]) -> None:
     """Replace the rows of each job in `batch` in one transaction (idempotent)."""
     ids = [e.ref.job_id for e in batch]
@@ -226,23 +302,7 @@ def write_batch(conn: Connection, batch: Sequence[Extracted]) -> None:
                 }
             )
     if test_ids:
-        conn.execute(
-            text(
-                "insert into testing.test_ids (test_id, repo, file, full_name, granularity) "
-                "values (:test_id, :repo, :file, :full_name, :granularity) "
-                "on conflict (test_id) do nothing"
-            ),
-            list(test_ids.values()),
-        )
-        conn.execute(
-            text(
-                "insert into testing.test_results "
-                "(job_id, test_id, attempt, file, full_name, outcome, duration_ms, granularity) "
-                "values (:job_id, :test_id, :attempt, :file, :full_name, :outcome, :duration_ms, "
-                ":granularity)"
-            ),
-            results,
-        )
+        _copy_rows(conn, test_ids, results)
     conn.execute(
         text(
             "insert into testing.log_parses (job_id, run_id, attempt, repo, head_sha, job_name, "
@@ -276,9 +336,18 @@ def write_batch(conn: Connection, batch: Sequence[Extracted]) -> None:
     )
 
 
-def select_jobs(conn: Connection, member: str, reason: str) -> list[JobRef]:
-    """Jobs still to read: failed attempts (seeds) or their same-SHA siblings."""
-    sql = _SEEDS_SQL if reason == REASON_SEED else _SIBLINGS_SQL
+def select_jobs(
+    conn: Connection, member: str, reason: str, sample: int | None = None
+) -> list[JobRef]:
+    """Jobs still to read: failed attempts (seeds), their same-SHA siblings, or all (v2).
+
+    `sample` (reason "all" only) picks a random subset instead of the whole backlog.
+    """
+    if reason == REASON_ALL:
+        order = "random()" if sample else "j.job_id"
+        sql = _ALL_SQL.format(order=order) + (f" limit {int(sample)}" if sample else "")
+    else:
+        sql = _SEEDS_SQL if reason == REASON_SEED else _SIBLINGS_SQL
     rows = conn.execute(text(sql), {"member": member}).all()
     return [JobRef(int(r[0]), int(r[1]), int(r[2]), r[3], r[4], r[5], r[6], reason) for r in rows]
 
@@ -301,6 +370,7 @@ def run_stage(
     workers: int,
     batch_size: int = DEFAULT_BATCH,
     log_every: int = DEFAULT_LOG_EVERY,
+    keep_ids: frozenset[str] | None = None,
 ) -> int:
     """Parse `refs` (in parallel when workers > 1) and write them. Returns jobs written."""
     if not refs:
@@ -315,7 +385,7 @@ def run_stage(
         )
         for batch in _chunks(results, batch_size):
             with engine.begin() as conn:
-                write_batch(conn, batch)
+                write_batch(conn, [prune_passing(e, keep_ids) for e in batch])
             before = done
             done += len(batch)
             if done // log_every != before // log_every or done == len(refs):
@@ -371,6 +441,15 @@ def report(engine: Any, member: str) -> dict[str, Any]:
         }
 
 
+def failed_test_ids(engine: Any) -> frozenset[str]:
+    """Every test id that has a failed row in the table (the keep-set for `prune_passing`)."""
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text("select distinct test_id from testing.test_results where outcome = 'failed'")
+        ).all()
+    return frozenset(str(r[0]) for r in rows)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Command line entry point."""
     parser = argparse.ArgumentParser(prog="testing_expert.extract", description=__doc__)
@@ -379,6 +458,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1), help="parser processes"
     )
     parser.add_argument("--data-dir", type=Path, default=None, help="folder holding logs/")
+    parser.add_argument("--all", action="store_true", help="read every unparsed log (v2 scope)")
+    parser.add_argument("--sample", type=int, default=None, help="with --all: random N logs only")
     parser.add_argument("--limit", type=int, default=None, help="read at most N seed jobs (trial)")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -387,6 +468,17 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     engine = get_engine()
     data_dir = args.data_dir or default_data_dir()
+    if args.all:
+        with engine.connect() as conn:
+            todo = select_jobs(conn, args.member, REASON_ALL, args.sample)
+        print(f"logs to read: {len(todo)}", flush=True)
+        t0 = time.monotonic()
+        run_stage(engine, todo, data_dir, args.workers, keep_ids=failed_test_ids(engine))
+        secs = time.monotonic() - t0
+        print(f"read {len(todo)} logs in {secs:.0f}s ({len(todo) / max(secs, 1e-9):.1f}/s)")
+        for key, value in report(engine, args.member).items():
+            print(f"{key}: {value}")
+        return 0
     with engine.connect() as conn:
         seeds = select_jobs(conn, args.member, REASON_SEED)
     if args.limit:
