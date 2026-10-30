@@ -1,12 +1,35 @@
-# LLM gateway settings (services/llm_gateway). All values are DEFAULT: placeholders until the
-# provider is chosen (decision O5); the mock prices exist so spending caps can be tested.
+# LLM gateway settings (services/llm_gateway). The mock prices and the caps are DEFAULT:
+# placeholders so spending caps can be tested; the DeepSeek prices are its published peak prices
+# (USD per 1M tokens, off-peak is half): deepseek-flash input 0.30 and output 1.20,
+# deepseek-v4-pro input 1.32 and output 3.96. Peak is used on purpose, to keep the caps safe.
+# Which model a call uses: env LLM_MODEL, else `provider_models` for LLM_PROVIDER, else
+# `default_model`. Whatever is chosen must be listed under `models`.
 default_model: mock-1
+
+# DEFAULT: the model used for each provider when LLM_MODEL is not set (deepseek-flash is the
+# cheap, fast one; decision D53).
+provider_models:
+  mock: mock-1
+  deepseek: deepseek-flash
 
 # USD per 1,000 tokens, by model name.
 models:
   mock-1:
     input_per_1k_usd: 0.001
     output_per_1k_usd: 0.002
+  deepseek-flash:
+    input_per_1k_usd: 0.0003
+    output_per_1k_usd: 0.0012
+  deepseek-v4-pro:
+    input_per_1k_usd: 0.00132
+    output_per_1k_usd: 0.00396
+
+# How a real provider is called. DEFAULT: 15 s is below the Test expert's 20 s diagnosis timeout
+# (config/test_diagnosis.yaml), so the gateway answers with an error before the expert gives up;
+# 2000 output tokens keeps the JSON answer from being cut off while capping the cost of a call.
+provider_request:
+  timeout_seconds: 15
+  max_tokens: 2000
 
 # Monthly spending cap per expert (calendar month, UTC). Calls from an expert whose spend this
 # month has reached its cap are refused with HTTP 429.

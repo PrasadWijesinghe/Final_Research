@@ -181,9 +181,9 @@ services:
       llm-gateway: { condition: service_healthy }
 
   # --- LLM gateway (P2.4, in compose since P4.12): the one door to the language model. ----------
-  # DEFAULT: mock provider (placeholder answers, nothing leaves the machine). For a real model add
-  # a provider class (services/llm_gateway/README.md), then set LLM_PROVIDER and LLM_API_KEY in
-  # .env. LLM_API_KEY is passed through empty and never logged.
+  # DEFAULT: mock provider (placeholder answers, nothing leaves the machine). For DeepSeek set
+  # LLM_PROVIDER=deepseek and LLM_API_KEY in .env (services/llm_gateway/README.md). LLM_API_KEY is
+  # passed through empty and never logged; LLM_BASE_URL empty means the provider's own address.
   llm-gateway:
     profiles: ["experts", "e2e"]
     build: { context: ., dockerfile: services/llm_gateway/Dockerfile }
@@ -191,6 +191,8 @@ services:
     environment:
       LLM_PROVIDER: "${LLM_PROVIDER:-mock}"
       LLM_API_KEY: "${LLM_API_KEY:-}"
+      LLM_BASE_URL: "${LLM_BASE_URL:-}"
+      LLM_MODEL: "${LLM_MODEL:-}"
       LLM_CONFIG_FILE: /app/config/llm.yaml
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pipelineiq}:${POSTGRES_PASSWORD:-change-me}@postgres:5432/${POSTGRES_DB:-pipelineiq}
