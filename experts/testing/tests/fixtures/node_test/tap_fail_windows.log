@@ -1,0 +1,61 @@
+2026-10-30T09:46:46.4902392Z > piq-demo@0.1.0 test
+2026-10-30T09:46:46.4902890Z > node --test --test-timeout=2000
+2026-10-30T09:46:46.4903106Z
+2026-10-30T09:46:46.8263776Z TAP version 13
+2026-10-30T09:46:46.8746533Z # Subtest: total adds price times quantity
+2026-10-30T09:46:46.8749008Z ok 1 - total adds price times quantity
+2026-10-30T09:46:46.8755579Z   ---
+2026-10-30T09:46:46.8757204Z   duration_ms: 1.2435
+2026-10-30T09:46:46.8761535Z   type: 'test'
+2026-10-30T09:46:46.8768463Z   ...
+2026-10-30T09:46:47.1941375Z # Subtest: checkout total after a delay
+2026-10-30T09:46:47.1942473Z ok 2 - checkout total after a delay
+2026-10-30T09:46:47.1947097Z   ---
+2026-10-30T09:46:47.1947661Z   duration_ms: 1.4428
+2026-10-30T09:46:47.1948904Z   type: 'test'
+2026-10-30T09:46:47.1949873Z   ...
+2026-10-30T09:46:47.1951809Z # Subtest: discount uses today's date
+2026-10-30T09:46:47.1958026Z ok 3 - discount uses today's date
+2026-10-30T09:46:47.1959121Z   ---
+2026-10-30T09:46:47.1959639Z   duration_ms: 0.9502
+2026-10-30T09:46:47.1960160Z   type: 'test'
+2026-10-30T09:46:47.1960496Z   ...
+2026-10-30T09:46:47.3087946Z # Subtest: prices come from the API
+2026-10-30T09:46:47.3090415Z ok 4 - prices come from the API
+2026-10-30T09:46:47.3091668Z   ---
+2026-10-30T09:46:47.3092068Z   duration_ms: 414.236
+2026-10-30T09:46:47.3092395Z   type: 'test'
+2026-10-30T09:46:47.3092692Z   ...
+2026-10-30T09:46:47.3331969Z # Subtest: order is saved before the timer fires
+2026-10-30T09:46:47.3336296Z not ok 5 - order is saved before the timer fires
+2026-10-30T09:46:47.3337195Z   ---
+2026-10-30T09:46:47.3337773Z   duration_ms: 419.4896
+2026-10-30T09:46:47.3338555Z   type: 'test'
+2026-10-30T09:46:47.3339465Z   location: 'D:\\a\\piq-demo\\piq-demo\\test\\flaky-order.test.js:7:6'
+2026-10-30T09:46:47.3340247Z   failureType: 'testCodeFailure'
+2026-10-30T09:46:47.3340667Z   error: |-
+2026-10-30T09:46:47.3341026Z     Expected values to be strictly equal:
+2026-10-30T09:46:47.3341441Z
+2026-10-30T09:46:47.3341700Z     1 !== 0
+2026-10-30T09:46:47.3341985Z
+2026-10-30T09:46:47.3342265Z   code: 'ERR_ASSERTION'
+2026-10-30T09:46:47.3342643Z   name: 'AssertionError'
+2026-10-30T09:46:47.3343007Z   expected: 0
+2026-10-30T09:46:47.3343303Z   actual: 1
+2026-10-30T09:46:47.3343609Z   operator: 'strictEqual'
+2026-10-30T09:46:47.3343958Z   stack: |-
+2026-10-30T09:46:47.3344687Z     TestContext.<anonymous> (file:///D:/a/piq-demo/piq-demo/test/flaky-order.test.js:13:10)
+2026-10-30T09:46:47.3345804Z     process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2026-10-30T09:46:47.3346762Z     async Test.run (node:internal/test_runner/test:1054:7)
+2026-10-30T09:46:47.3347674Z     async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+2026-10-30T09:46:47.3348375Z   ...
+2026-10-30T09:46:47.3348930Z # 'only' and 'runOnly' require the --test-only command-line option.
+2026-10-30T09:46:47.3349532Z 1..5
+2026-10-30T09:46:47.3349790Z # tests 5
+2026-10-30T09:46:47.3350056Z # suites 0
+2026-10-30T09:46:47.3350442Z # pass 4
+2026-10-30T09:46:47.3350746Z # fail 1
+2026-10-30T09:46:47.3351026Z # cancelled 0
+2026-10-30T09:46:47.3351314Z # skipped 0
+2026-10-30T09:46:47.3351598Z # todo 0
+2026-10-30T09:46:47.3351899Z # duration_ms 618.185

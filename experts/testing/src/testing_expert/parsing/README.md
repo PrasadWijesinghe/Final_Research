@@ -6,9 +6,9 @@
 
 ## What it does
 
-A job log from GitHub is noisy. Every line starts with a timestamp, most have colour codes, and the test runner's report sits in the middle of setup, installs and cleanup. The same facts also look different in Jest, Mocha and Vitest. This package reads the log once and returns a `ParsedLog`:
+A job log from GitHub is noisy. Every line starts with a timestamp, most have colour codes, and the test runner's report sits in the middle of setup, installs and cleanup. The same facts also look different in Jest, Mocha, Vitest and Node's built-in test runner (`node --test`). This package reads the log once and returns a `ParsedLog`:
 
-- `framework`: `jest`, `mocha`, `vitest` or `other` (a runner we do not parse, or no tests at all, such as a build error). The values match `BehaviourDetails.framework` in `shared/contracts/diagnosis.py`.
+- `framework`: `jest`, `mocha`, `vitest`, `node-test` or `other` (a runner we do not parse, or no tests at all, such as a build error). All but `node-test` match `BehaviourDetails.framework` in `shared/contracts/diagnosis.py`; that contract has no `node-test`, so the triage code reports it there as `other` (the real name still goes to the model prompt and the database).
 - `failures`: one entry per failing test, with its full name (`describe > nested > test`), the file, the error type and message, the assertion diff, the stack frames and, for hooks, which hook failed.
 - `results`: what the reporter printed per test or per file (passed, failed, skipped, todo) with durations.
 - `summary`: the totals the runner printed (passed, failed, skipped, todo, total, failed files).
@@ -21,17 +21,20 @@ It never raises. If anything goes wrong the result has `parsed_ok=False` and a w
 ```mermaid
 flowchart LR
     A[raw log<br/>.gz or text] --> B[clean.py<br/>strip timestamps, colours, markers<br/>split into steps]
-    B --> C[detect.py<br/>score jest / mocha / vitest / other]
+    B --> C[detect.py<br/>score jest / mocha / vitest / node-test / other]
     C --> D1[jest.py]
     C --> D2[mocha.py]
     C --> D3[vitest.py]
+    C --> D4[nodetest.py]
     D1 --> E[parse.py<br/>merge, check counts,<br/>set confidence]
     D2 --> E
     D3 --> E
+    D4 --> E
     E --> F[ParsedLog]
     S[stack.py] -.-> D1
     S -.-> D2
     S -.-> D3
+    S -.-> D4
 ```
 
 1. **Clean.** `clean.py` reads the log line by line, removes the timestamp, colour codes and `##[...]` markers, and splits it into workflow steps (each `Run <command>` group). Very long logs keep their head and tail. Lines stay up to 32 KB for storage; before the parsers look at a line it is cut at 2048 characters and stripped of trailing spaces (`parse.max_line_chars`), and every pattern is written to run in linear time, so a hostile line (minified code, a megabyte of spaces) cannot stall a worker.
@@ -40,7 +43,11 @@ flowchart LR
    - Jest: `  ● name › test` blocks (the `Summary of all failing tests` section when there is one), `PASS`/`FAIL` file lines, verbose `✓`/`✕` test lines, and the `Test Suites:` / `Tests:` summary.
    - Mocha: the `N passing / N failing` epilogue and its numbered failure blocks (the title is spread over several lines), plus spec-reporter test lines.
    - Vitest: the `Failed Tests` section (` FAIL  [project]  file > suite > test`, several lines can share one error), `Failed Suites`, `Unhandled Errors`, file and test lines, and the `Test Files` / `Tests` rows.
-   - All three use `stack.py` to turn a stack line into a path with the runner workspace prefix removed (Windows drive letters, `file:///`, `webpack://`, `async`/`new` keywords) and to tell project code from dependencies, Node internals and unusable locations (browser URLs, `../` paths).
+   - Node's test runner (`nodetest.py`): Node prints TAP when stdout is not a terminal (the CI case) and the spec reporter on a terminal; both are read.
+     - TAP: `# Subtest: name` lines (four columns of indent per level) give the describe names; each `ok` / `not ok N - name` is followed by a small YAML block with `location`, `failureType`, `error`, `code`, `name` (the error class) and `stack`; the `# tests / # pass / # fail / # cancelled` lines are the summary.
+     - Spec: `▶ suite`, `✔ name (12ms)`, `✖ name`, `﹣ name # SKIP` lines build the names from indentation, and the `✖ failing tests:` section gives each error with its `test at file:line:col` line.
+     - A parent suite that only says "1 subtest failed" is skipped, so a failing child is not counted twice. A test cancelled because its parent ended is skipped too, unless nothing else in that run failed. A timeout (`test timed out after 2000ms`) is a failure.
+   - All four use `stack.py` to turn a stack line into a path with the runner workspace prefix removed (Windows drive letters, `file:///`, `webpack://`, `async`/`new` keywords) and to tell project code from dependencies, Node internals and unusable locations (browser URLs, `../` paths).
    - A parser builds at most `parse.max_failures` failures (1000). When a log has more, it stops reading failures, adds a warning and the result is marked `truncated`.
 4. **Merge and check.** `parse.py` merges what the parsers found. A log can hold several runs (retries, one run per package); each run is checked against its own summary, so a retry that prints the same failure again still agrees. The confidence says how that went.
 
@@ -134,7 +141,12 @@ A Mocha log ends like this:
 - **Mocha results have no file.** Mocha prints no file names, so `CaseResult.file` is always `None` for Mocha; only a failure gets a file, taken from its stack (and it can be `None` too).
 - **The vitest dot reporter is tested on a synthetic log only.** No real fixture uses it (vite and svelte print file lines as well). The parser reads only the failure section and the summary for such a log and gives `granularity="none"`.
 - **Remaining misses.** About 1% of the sampled logs with failures get confidence 0.7 (a log with more than 1000 failure blocks, such as eslint's 11,249, is one of them: it is marked `truncated`): vitest-dev's own tests (nested vitest runs print their own summaries), babel (child jest processes interleave with the main run), and typescript-eslint rule tests whose generated test names are multi-line code. The failures found are still returned; only the confidence says they may be incomplete.
-- **Runners we do not parse.** `node:test`, TAP and Playwright are detected as `other` (no failures, confidence 0). The job's conclusion decides the label for those.
+- **Runners we do not parse.** Generic TAP (tape, mocha's tap reporter, test262) and Playwright are detected as `other` (no failures, confidence 0). The job's conclusion decides the label for those. `node:test` is parsed (`node-test`).
+- **node:test notes.**
+  - Detection looks for `# Subtest:` lines, the `failureType:` and `duration_ms:` fields, the `# suites N` total, `ℹ tests N` and `✖ failing tests:`. Plain TAP has none of these, so it stays `other`. Once those markers reach the threshold, the generic TAP hits (`TAP version`, `# tests`) are not allowed to outrank them.
+  - node-tap (the npm `tap` package) also prints `# Subtest:` and `duration_ms`, so a log from it can be read as `node-test`; it was not seen in the sampled logs.
+  - Passed tests in TAP output carry no location, so their `CaseResult.file` is `None`; a failure's file comes from its `location:` (else its first project stack frame).
+  - The two reporters were checked on one real TAP log (a failing run on Windows, Node 22) and one real passing spec log (puppeteer). The nested, timeout and spec-failure shapes come from hand-written fixtures that follow Node's documented output (`tests/fixtures/node_test/`), not from a real log.
 - **A passing job can print failures.** The puppeteer mocha runner prints `10 failing` for expected failures inside a successful job. The parser reports what the log says; the label comes from the job conclusion.
 - **Mocha prints no file names,** so a failure's file comes from its stack and can be `None`. Vitest's default reporter lists only failing and slow tests, so its `results` are partial and `granularity` is `file`; passing tests there have no describe names.
 - **Unique names.** A test that failed several times (retries) is one failure; two different tests with the same file and name also collapse into one (the counts then disagree and confidence drops to 0.7).
@@ -148,7 +160,8 @@ A Mocha log ends like this:
   - jest reads only `Summary of all failing tests` when a run has it; blocks in a run that reports no failures belong to another interleaved process; `● name` blocks under a `PASS` line are warnings;
   - a failing suite is named `Test suite failed to run` for both jest and vitest; an unhandled error is named `<section> > <first error line>`;
   - the detector weights, `parse.detect_min_score`, the vitest summary pairing window (300 lines) and the survey sample (2000 logs, seed 42, equal share per repo);
-  - `framework` for a log with no recognisable runner is `other`, whatever the repo config says.
+  - `framework` for a log with no recognisable runner is `other`, whatever the repo config says;
+  - node:test: the summary's `failed` is `# fail` plus `# cancelled` (Node counts a timed-out test as cancelled, but the run fails); a test cancelled by its parent is left out of `failures` when the run has another failure; a test's file for a TAP failure is read from `location:` with the YAML's doubled backslashes undone.
 
 ## Related
 

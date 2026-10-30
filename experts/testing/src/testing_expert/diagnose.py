@@ -188,7 +188,7 @@ def _narrative(
     try:
         inp = PromptInput(
             job_name=failure.job_name,
-            framework=t.framework,
+            framework=t.evidence.log.framework,  # the real runner name, not the contract one
             failures=t.evidence.log.failures,
             log_tail=failure.log_excerpt[-cfg.max_excerpt_chars :],
             verdict=t.verdict,
