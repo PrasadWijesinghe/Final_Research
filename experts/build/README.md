@@ -77,6 +77,10 @@ uv run --env-file .env build-demo --dataset v1 --model models/build/m1
 # 6. Serve the model
 BUILD_MODEL_DIR=models/build/m1 uv run --env-file .env uvicorn build_expert.api:app --port 8102
 
+# 6b. See it in the dashboard: with step 6 running, in services/dashboard run `npm run dev`,
+#     open http://127.0.0.1:5173 and choose "Build Expert". Set BUILD_EXAMPLES_DIR to a folder
+#     with commits/*.json (CommitContext) and failures/*.json (RoutedFailure) to list examples.
+
 # 7. Manual label check: a blind sheet for two people, then the agreement
 uv run build-label-check sample --dataset v1
 uv run build-label-check score --key data/datasets/build/v1/label_check_key.csv \
@@ -102,6 +106,7 @@ uv run pytest experts/build/tests
 | Out | Model bundle, `metrics.json`, `report.md` | `models/build/<version>/` |
 | Out | Label check sheet and key | `…/label_check_sheet.csv`, `…/label_check_key.csv` |
 | Out | `RiskOutput` per commit (`POST /predict`); `Diagnosis` per routed failure (worker) | HTTP JSON; posted to `${BACKEND_URL}/diagnoses` |
+| Out | For the dashboard's Build page: `POST /diagnose` (a `Diagnosis` for one `RoutedFailure`, same code as the worker), `GET /model` (version, threshold, test results from `metrics.json`), `GET /examples` and `GET /examples/{commits\|failures}/{name}` (demo files) | HTTP JSON |
 | Out | Knowledge base of past fixes | `build.kb_cases` (Postgres, pgvector) |
 | Out | Real examples for the evidence pack | `models/build/<version>/build_demo.md` and `.json` |
 | Out | Job labels (`category="build"`, `is_final=false`) | `platform.failure_labels` |
@@ -119,6 +124,7 @@ uv run pytest experts/build/tests
 | Training settings | `config/build_model.yaml` | 70/15/15 split, embargo on, precision 0.80 | Split, targets, threshold, leave-one-repo-out minimum, ablation groups, LightGBM parameters |
 | `--no-loro`, `--no-ablation`, `--no-sub-targets` | `build-train` | all run | Skip parts of the evaluation (faster) |
 | `BUILD_MODEL_DIR` | `.env` | unset (stub) | Model bundle served by `/predict` |
+| `BUILD_EXAMPLES_DIR` | env | unset (no examples) | Folder whose `commits/` and `failures/` JSON files the dashboard's Build page lists (the viva demo kit) |
 | `BUILD_LLM`, `LLM_GATEWAY_URL` | `.env` | off | LLM rewrite of diagnosis text through the gateway |
 | `EMBEDDING_PROVIDER` | `.env` | granite | `fake` uses the offline embedder for the knowledge base (no model download) |
 
