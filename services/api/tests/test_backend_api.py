@@ -11,7 +11,7 @@ import httpx
 import pytest
 import respx
 from api.app import create_app
-from api.auth import generate_key, hash_key, parse_bearer
+from api.auth import generate_key, hash_key, parse_bearer, sign_payload
 from api.store import InMemoryStore
 from api_helpers import (
     ADMIN_TOKEN,
@@ -51,7 +51,7 @@ def mock() -> Iterator[respx.MockRouter]:
 
 
 def make_client(store: InMemoryStore, **kw: Any) -> httpx.AsyncClient:
-    app = create_app(settings(**kw), store)
+    app = create_app(settings(**{"session_secret": SESSION_SECRET, **kw}), store)
     return httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://api.test")
 
 
@@ -59,6 +59,16 @@ def make_client(store: InMemoryStore, **kw: Any) -> httpx.AsyncClient:
 async def client(store: InMemoryStore, mock: respx.MockRouter) -> AsyncIterator[httpx.AsyncClient]:
     async with make_client(store) as c:
         yield c
+
+
+SESSION_SECRET = "fake-session-secret-for-tests"
+SESSION_HASH = "a" * 64
+
+
+def session_cookies(user_hash: str = SESSION_HASH) -> dict[str, str]:
+    """A signed sign-in session cookie (what /auth/github/callback would set)."""
+    payload = {"typ": "session", "login": "octo", "user_hash": user_hash, "exp": time.time() + 3600}
+    return {"piq_session": sign_payload(payload, SESSION_SECRET)}
 
 
 def issue_key(store: InMemoryStore) -> dict[str, str]:
@@ -262,7 +272,9 @@ async def test_review_is_saved_and_forwarded_to_the_diagnosing_expert(
         reviewer_hash=USER_HASH,
         cause_confirmed=True,
     )
-    r = await client.post("/reviews", json=decision.model_dump(mode="json"))
+    r = await client.post(
+        "/reviews", json=decision.model_dump(mode="json"), cookies=session_cookies()
+    )
     assert r.status_code == 201 and r.json()["forwarded"] is True
     assert route.called
     assert decision.decision_id in store.reviews
@@ -282,7 +294,9 @@ async def test_review_is_kept_when_expert_is_down(
         reviewer_hash=USER_HASH,
         cause_confirmed=False,
     )
-    r = await client.post("/reviews", json=decision.model_dump(mode="json"))
+    r = await client.post(
+        "/reviews", json=decision.model_dump(mode="json"), cookies=session_cookies()
+    )
     assert r.status_code == 201 and r.json()["forwarded"] is False
     assert decision.decision_id in store.reviews
 
@@ -291,7 +305,46 @@ async def test_review_of_unknown_diagnosis_is_404(client: httpx.AsyncClient) -> 
     decision = ReviewDecision(
         diagnosis_id=uuid4(), decision="accept", reviewer_hash=USER_HASH, cause_confirmed=True
     )
-    assert (await client.post("/reviews", json=decision.model_dump(mode="json"))).status_code == 404
+    assert (
+        await client.post(
+            "/reviews", json=decision.model_dump(mode="json"), cookies=session_cookies()
+        )
+    ).status_code == 404
+
+
+async def test_review_without_session_is_401(
+    client: httpx.AsyncClient, store: InMemoryStore
+) -> None:
+    diag = error_diagnosis(uuid4(), Expert.BUILD)
+    store.save_diagnosis(diag)
+    decision = ReviewDecision(
+        diagnosis_id=diag.diagnosis_id,
+        decision="accept",
+        reviewer_hash=USER_HASH,
+        cause_confirmed=True,
+    )
+    r = await client.post("/reviews", json=decision.model_dump(mode="json"))
+    assert r.status_code == 401
+    assert not store.reviews
+
+
+async def test_review_reviewer_hash_comes_from_the_session(
+    client: httpx.AsyncClient, store: InMemoryStore, mock: respx.MockRouter
+) -> None:
+    diag = error_diagnosis(uuid4(), Expert.BUILD)
+    store.save_diagnosis(diag)
+    mock.post(f"{URLS[Expert.BUILD]}/review").mock(return_value=httpx.Response(204))
+    decision = ReviewDecision(
+        diagnosis_id=diag.diagnosis_id,
+        decision="accept",
+        reviewer_hash=USER_HASH,
+        cause_confirmed=True,
+    )
+    r = await client.post(
+        "/reviews", json=decision.model_dump(mode="json"), cookies=session_cookies()
+    )
+    assert r.status_code == 201
+    assert store.reviews[decision.decision_id].reviewer_hash == SESSION_HASH != USER_HASH
 
 
 # ------------------------------------------------------------- risks, runs, health, 501s
@@ -345,14 +398,3 @@ async def test_health_reports_each_expert(
     assert body["status"] == "degraded"
     assert body["experts"]["infra"]["status"] == "unreachable"
     assert body["experts"]["test"]["detail"]["model_version"] == "stub"
-
-
-@pytest.mark.parametrize(
-    ("method", "path"),
-    [
-        ("GET", "/auth/github/login"),
-        ("GET", "/auth/github/callback"),
-    ],
-)
-async def test_github_sign_in_is_501(client: httpx.AsyncClient, method: str, path: str) -> None:
-    assert (await client.request(method, path)).status_code == 501

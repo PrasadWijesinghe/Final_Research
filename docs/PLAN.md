@@ -71,14 +71,14 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 
 ## Phase 3 — User-facing
 
-- [ ] **P3.1 GitHub App.** Registration guide in `docs/` (permissions: Actions read, Contents read, Checks write, Pull requests write, Metadata read; events: push, pull_request, workflow_run, workflow_job); webhook signature verification; installation tokens; storing App-sourced data in `raw` with `source="app"`.
+- [x] **P3.1 GitHub App.** Registration guide in `docs/` (permissions: Actions read, Contents read, Checks write, Pull requests write, Metadata read; events: push, pull_request, workflow_run, workflow_job); webhook signature verification; installation tokens; storing App-sourced data in `raw` with `source="app"`.
   *Accept:* recorded webhook payloads drive the live flows in tests.
-- [ ] **P3.2 Webhooks on a laptop.** smee.io client setup (and a Cloudflare Tunnel fallback) in `ONBOARDING.md`.
-- [ ] **P3.3 PR check.** Post a check run with alerts, and update it when late results arrive.
+- [x] **P3.2 Webhooks on a laptop.** smee.io client setup (and a Cloudflare Tunnel fallback) in `ONBOARDING.md`.
+- [x] **P3.3 PR check.** Post a check run with alerts, and update it when late results arrive.
   *Accept:* tested against recorded API calls; replay never posts.
-- [ ] **P3.4 Pre-push hook.** `tools/pre-push-hook`: Node 22 script plus installer (husky or direct `.git/hooks`). Sends the diff and the tagged config files, reads the API key from env or `~/.pipelineiq`, 10 s timeout, prints risks, asks "Push anyway?" only if interactive, and always allows the push on error.
+- [x] **P3.4 Pre-push hook.** `tools/pre-push-hook`: Node 22 script plus installer (husky or direct `.git/hooks`). Sends the diff and the tagged config files, reads the API key from env or `~/.pipelineiq`, 10 s timeout, prints risks, asks "Push anyway?" only if interactive, and always allows the push on error.
   *Accept:* tests for the risky, clean, timeout and backend-down cases.
-- [ ] **P3.5 Dashboard MVP.** React + Vite + TypeScript, styled to match the prototype (PipelineIQ): sign-in with GitHub, risk dashboard, pipeline history, diagnosis and review (accept / reject / modify / request revision, with a decision timer), settings (API keys). Types generated from the contract JSON Schemas.
+- [x] **P3.5 Dashboard MVP.** React + Vite + TypeScript, styled to match the prototype (PipelineIQ): sign-in with GitHub, risk dashboard, pipeline history, diagnosis and review (accept / reject / modify / request revision, with a decision timer), settings (API keys). Types generated from the contract JSON Schemas.
   *Accept:* every page works against the stub-backed backend.
 - [ ] **P3.6 Review loop.** `/reviews` → expert `/review` → `VerifiedCase` only after a confirmed cause and a later passing run.
   *Accept:* tested for both the pass and no-pass paths.
@@ -88,17 +88,17 @@ explains what was built in plain language** (see CONVENTIONS → Documentation),
 Design: `docs/experts/test.md`.
 
 - [x] **P4.1 Log parsers** for Jest, Mocha and Vitest, plus a stack-trace parser, with real sanitised fixtures (≥10 per framework).
-- [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity.
-- [ ] **P4.3 Labelling** per §3, written as `FailureLabel`s; a manual-review sample exporter; a kappa calculator.
-- [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving.
-- [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest.
-- [ ] **P4.6 Baselines** per §5.
-- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export.
-- [ ] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`.
-- [ ] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor.
-- [ ] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`.
-- [ ] **P4.11 Diagnosis worker:** prompt file, gateway call, `BehaviourDetails`, citation rules, misrouted handling.
-- [ ] **P4.12 Swap the stub** for the real expert, keeping the stub tests green.
+- [ ] **P4.2 Test results extraction** into `testing.test_results`, at test or file granularity. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Full log parse built 2026-10-29; awaiting kappa round.*
+- [ ] **P4.3 Labelling** per §3, written as `FailureLabel`s; a manual-review sample exporter; a kappa calculator. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
+- [ ] **P4.4 Feature pipeline** per §4, one module per group, used by both training and serving. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. v2 groups and per-test history built 2026-10-29; awaiting kappa round.*
+- [ ] **P4.5 Dataset builder** through replay → `data/datasets/testing/vN/` with manifest. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Datasets v2 to v4 built 2026-10-29; not frozen, awaiting kappa round.*
+- [ ] **P4.6 Baselines** per §5. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2.*
+- [ ] **P4.7 Model training:** candidates, temporal and leave-one-repo-out validation, calibration, threshold, MLflow tracking, model bundle export. *v1 done 2026-10-28 (cut scope, see `.claude/briefs/PHASE4_V1.md`); full scope in v2. Models v2 to v6 built 2026-10-29 (v4 served; v5 and v6 candidates, not better); awaiting kappa round.*
+- [x] **P4.8 SHAP explanations** into `RiskFactor`s using `features/descriptions.yaml`. *Done 2026-10-29: `explain.py`; the v4 genuine and flaky boosters' contributions are weighted by their share of the combined risk.*
+- [x] **P4.9 Triage:** stack-vs-diff overlap, error types, same-SHA evidence, and a classifier with a confidence floor. *Done 2026-10-29: `triage/`, bundle `models/testing/triage/v1`, `reports/triage_v1.md`, wired into the diagnose path (narrative text still the stub, P4.11). Same-SHA evidence is the strongest signal and is partly circular with the rule labels; human kappa round still pending; weak transfer to unseen repos (see the report).*
+- [x] **P4.10 Knowledge base:** mine cases per §9, tag them, embed them, and fill `testing.kb_cases`. *Done 2026-10-30: `kb/` (mine, tags, store, retrieve, evaluate, CLI), migration t0004, `config/test_kb.yaml`, 1,233 cases (602 genuine, 631 flaky) embedded with granite, hybrid retrieval wired into the diagnosis (`retrieved_cases`), `reports/kb_v1.md`. Labels, tags and fixes are rule-based and unchecked by a human; the failure text barely predicts the fix category.*
+- [x] **P4.11 Diagnosis worker:** prompt file, gateway call, `BehaviourDetails`, citation rules, misrouted handling. *Done 2026-10-30 with the mock gateway only: `rag/` (prompt file, gateway client, template, misroute rules), `config/test_diagnosis.yaml`, one KB case per fix commit in the diagnosis path. With the mock provider the text comes from the deterministic template (`llm_model` says placeholder); the real-model path is tested against a fake gateway only and the prompt has not been tried on a real model. A real provider (provider class, `LLM_PROVIDER`, `LLM_API_KEY`) is still pending (O5).*
+- [x] **P4.12 Swap the stub** for the real expert, keeping the stub tests green. *Done 2026-10-30: the model, triage, knowledge base and diagnosis were already real in code; this task made them the default in the running stack. New `llm-gateway` Compose service (mock provider), worker wired to it, to the host API (`EXPERT_BACKEND_URL`) and to `data/logs`; `GET /status` and a worker start banner show real vs fallback; fixed a worker deadlock (model loaded before the RQ fork) and a missing log-parsing config in Docker; `scripts/demo_route_failure.py` replays a real failure. Verified live with the mock LLM on two replayed failures; stub tests unchanged. A real LLM provider (O5) is still pending.*
 - [x] **P4.13 Dependency prototype packaging (Member 1).** Move the existing data extraction, feature engineering, model training, and local API prototype into the Dependency expert's project structure. Keep generated datasets and model artifacts under ignored `data/` and `models/` paths; document prototype limitations and do not replace the contract-based `/predict` stub until evaluation and integration tasks are complete.
   *Accept:* no prototype source remains at the repository root; scripts use explicit project-relative or CLI paths, contain no hard-coded secrets, and have focused tests; `make check` passes.
 - [x] **P4.14 Dependency repository group loader (Member 1).** Add `scripts/load_groups.py` to merge one selected candidate group (or all groups explicitly) from `config/dependency_repository_groups.yaml` into `config/repos/dependency.yaml`, preserving existing repo settings and marking new repos disabled until their licence and selection are reviewed.

@@ -37,7 +37,7 @@ def test_a_summary_line_scores_its_framework() -> None:
     assert detect(["Test Suites: 1 passed, 1 total"])[0].framework == "jest"
     assert detect(["  12 passing (1s)"])[0].framework == "mocha"
     assert detect([" Test Files  1 passed (1)"])[0].framework == "vitest"
-    assert detect(["ℹ tests 30"])[0].framework == "other"
+    assert detect(["ℹ tests 30"])[0].framework == "node-test"
     assert detect(["TAP version 13"])[0].framework == "other"
     assert detect(["nothing to see"]) == []
 

@@ -1,4 +1,4 @@
-"""Train, validate, calibrate and export the v1 pre-run model (P4.6 + P4.7 v1)."""
+"""Train, validate, calibrate and export the pre-run model (P4.6 + P4.7, v1 and v2)."""
 
 from __future__ import annotations
 
@@ -69,7 +69,11 @@ def _predict(
 
 
 def run_variant(
-    df: pd.DataFrame, variant: str, cols: list[str], loro: bool = True
+    df: pd.DataFrame,
+    variant: str,
+    cols: list[str],
+    loro: bool = True,
+    names: tuple[str, ...] = ALL_NAMES,
 ) -> VariantResult:
     """Temporal split + leave-one-repo-out for baselines and both models on one variant."""
     vdf = apply_variant(df, variant).reset_index(drop=True)
@@ -78,7 +82,7 @@ def run_variant(
     train, cal, test = temporal_split(vdf)
     res.sizes = {"train": len(train), "calibration": len(cal), "test": len(test), "total": len(vdf)}
     ytest = test["y"].to_numpy()
-    for name in ALL_NAMES:
+    for name in names:
         fitted = fit_model(name, train, cols) if name in MODELS else None
         if fitted is not None:
             res.fitted[name] = fitted
@@ -105,18 +109,20 @@ def run_variant(
         thr["test"] = threshold_metrics(ytest, p_fail(proba_c), float(thr["threshold"]))
         res.threshold[name] = thr
     if loro:
-        res.loro = run_loro(vdf, cols)
+        res.loro = run_loro(vdf, cols, names)
     return res
 
 
-def run_loro(vdf: pd.DataFrame, cols: list[str]) -> dict[str, dict[str, dict[str, float]]]:
+def run_loro(
+    vdf: pd.DataFrame, cols: list[str], names: tuple[str, ...] = ALL_NAMES
+) -> dict[str, dict[str, dict[str, float]]]:
     """Leave-one-repo-out: train without the repo, score it (raw probabilities)."""
-    out: dict[str, dict[str, dict[str, float]]] = {n: {} for n in ALL_NAMES}
+    out: dict[str, dict[str, dict[str, float]]] = {n: {} for n in names}
     for repo in eligible_repos(vdf):
         held = vdf[vdf["repo"] == repo]
         rest = vdf[vdf["repo"] != repo]
         y = held["y"].to_numpy()
-        for name in ALL_NAMES:
+        for name in names:
             fitted = fit_model(name, rest, cols) if name in MODELS else None
             proba, hard = _predict(name, rest, held, fitted)
             out[name][repo] = compute_metrics(y, proba, hard)

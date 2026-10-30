@@ -342,6 +342,18 @@ class ApiKey(Base):
     revoked_at: Mapped[datetime | None] = mapped_column(TZ, index=True)
 
 
+class CheckRunRow(Base):
+    """The GitHub check run PipelineIQ opened for one commit, so late results update it."""
+
+    __tablename__ = "check_runs"
+    __table_args__ = {"schema": "platform"}
+
+    repo: Mapped[str] = mapped_column(Text, primary_key=True)  # "owner/name"
+    head_sha: Mapped[str] = mapped_column(Text, primary_key=True)
+    check_run_id: Mapped[int] = mapped_column(BigInteger)
+    updated_at: Mapped[datetime] = mapped_column(TZ, server_default=func.now())
+
+
 class LlmCall(Base):
     """One LLM call, for cost and latency tracking."""
 

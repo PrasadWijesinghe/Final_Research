@@ -57,3 +57,45 @@ class Settings:
     )
     # DEFAULT: logs fetched by the webhook handler go under ./data like the collector's (DATA_DIR).
     data_dir: str = field(default_factory=lambda: os.environ.get("DATA_DIR", "").strip())
+
+    # GitHub sign-in for the dashboard (P3.5). Unset client id/secret/SESSION_SECRET => 503.
+    github_client_id: str = field(
+        default_factory=lambda: os.environ.get("GITHUB_APP_CLIENT_ID", "").strip()
+    )
+    github_client_secret: str = field(
+        default_factory=lambda: os.environ.get("GITHUB_APP_CLIENT_SECRET", "").strip()
+    )
+    session_secret: str = field(
+        default_factory=lambda: os.environ.get("SESSION_SECRET", "").strip()
+    )
+    # DEFAULT: local API port, used to build the OAuth redirect_uri.
+    api_public_url: str = field(
+        default_factory=lambda: (
+            os.environ.get("API_PUBLIC_URL", "").strip() or "http://localhost:8000"
+        ).rstrip("/")
+    )
+    # DEFAULT: Vite dev server, where the callback sends the browser after sign-in.
+    dashboard_url: str = field(
+        default_factory=lambda: (
+            os.environ.get("DASHBOARD_URL", "").strip() or "http://localhost:5173"
+        ).rstrip("/")
+    )
+    # DEFAULT: Secure cookie on unless SESSION_COOKIE_SECURE is false/0/no (localhost is http).
+    session_cookie_secure: bool = field(
+        default_factory=lambda: (
+            os.environ.get("SESSION_COOKIE_SECURE", "true").strip().lower()
+            not in ("false", "0", "no", "off")
+        )
+    )
+    # DEFAULT: sessions last 7 days.
+    session_ttl_s: int = field(default_factory=lambda: _int_env("SESSION_TTL_SECONDS", 7 * 86400))
+
+    # PR check (P3.3). Late experts are asked again after each of these delays (seconds), then the
+    # check is finished with whatever arrived. DEFAULT: 30 s, 90 s, 5 min, 15 min (empty = never).
+    check_retry_delays_s: tuple[float, ...] = field(
+        default_factory=lambda: tuple(
+            float(x)
+            for x in (os.environ.get("CHECK_RETRY_DELAYS_SECONDS") or "30,90,300,900").split(",")
+            if x.strip()
+        )
+    )

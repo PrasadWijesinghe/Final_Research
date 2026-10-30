@@ -60,7 +60,7 @@ sequenceDiagram
 1. The GitHub App sends a `push` or `pull_request` webhook to `POST /webhooks/github`.
 2. The backend builds a `CommitContext` (event `push` or `pull_request`) through the GitHub API using the App's installation token.
 3. It calls all four experts' `POST /predict` in parallel, with a **2-minute budget**.
-4. It saves each `RiskOutput` and posts a GitHub **check run** (or PR comment) with the alerts. Results that arrive late update the same check.
+4. It saves each `RiskOutput` and posts a GitHub **check run** (or PR comment) with the alerts. Results that arrive late update the same check (the API re-asks the experts that were not ready a few times, then finishes the check; the check is never `failure`).
 
 ### 3.3 Failure diagnosis
 
@@ -114,7 +114,10 @@ through the GitHub REST API. Details in `docs/DATA.md`.
 | `GET /runs` | Dashboard | History: predictions next to actual outcomes |
 | `GET /failures/{id}` | Dashboard | A failure and its diagnoses |
 | `POST /api-keys`, `DELETE /api-keys/{id}` | Dashboard settings | Issue / revoke a pre-push hook key |
-| `GET /auth/github/*` | Dashboard | "Sign in with GitHub" (OAuth through the GitHub App) |
+| `GET /auth/github/login`, `GET /auth/github/callback` | Dashboard | "Sign in with GitHub" (OAuth through the GitHub App); callback sets the `piq_session` cookie |
+| `GET /auth/me`, `POST /auth/logout` | Dashboard | Who is signed in (401 if nobody); clear the session |
+| `GET /me/api-keys`, `POST /me/api-keys`, `DELETE /me/api-keys/{id}` | Dashboard settings | The signed-in user's own hook keys (session cookie) |
+| `GET /failures?repo=&limit=` | Dashboard | Failure list with diagnosis count and latest review |
 | `GET /health` | Anyone | Status of the backend and each expert |
 
 ### Every expert (ports 8101 dependency, 8102 build, 8103 test, 8104 infra)

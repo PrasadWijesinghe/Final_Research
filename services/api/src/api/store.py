@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from shared.contracts import CommitContext, Diagnosis, ReviewDecision, RiskOutput, RoutedFailure
 from shared.db.models import (
     ApiKey,
+    CheckRunRow,
     CommitContextRow,
     DiagnosisRow,
     PredictionRow,
@@ -22,13 +23,30 @@ from shared.db.models import (
 )
 from shared.db.models import Repo as RepoRow
 
-from .schemas import RunItem
+from .schemas import FailureItem, RunItem
 
 
 def _json(model: Any) -> dict[str, Any]:
     """Contract to a JSON-safe dict (UUIDs and datetimes as strings)."""
     dumped: dict[str, Any] = model.model_dump(mode="json")
     return dumped
+
+
+def _failure_item(
+    failure: RoutedFailure, diagnosis_count: int, reviews: list[ReviewDecision]
+) -> FailureItem:
+    latest = max(reviews, key=lambda r: r.decided_at).decision if reviews else None
+    return FailureItem(
+        failure_id=failure.failure_id,
+        repo=failure.repo.full_name,
+        head_sha=failure.head_sha,
+        run_id=failure.run_id,
+        job_name=failure.job_name,
+        expert=failure.sent_to[0],
+        created_at=failure.routed_at,
+        diagnosis_count=diagnosis_count,
+        latest_review=latest,
+    )
 
 
 @dataclass(frozen=True)
@@ -55,6 +73,22 @@ class Store(Protocol):
 
     def revoke_key(self, key_id: uuid.UUID) -> bool:
         """Revoke a key; False when it does not exist."""
+        ...
+
+    def list_keys(self, user_hash: str) -> list[KeyRecord]:
+        """All keys (revoked too) of one user, newest first."""
+        ...
+
+    def list_failures(self, *, repo: str | None, limit: int) -> list[FailureItem]:
+        """Routed failures (not replay), newest first, with diagnosis count and latest review."""
+        ...
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        ...
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
         ...
 
     def save_context(self, context: CommitContext) -> None:
@@ -133,6 +167,76 @@ class SqlStore:
                     update(ApiKey).where(ApiKey.id == key_id).values(revoked_at=datetime.now(UTC))
                 )
             return True
+
+    def list_keys(self, user_hash: str) -> list[KeyRecord]:
+        """All keys (revoked too) of one user, newest first."""
+        with Session(self._engine) as s:
+            rows = s.execute(
+                select(ApiKey)
+                .where(ApiKey.user_hash == user_hash)
+                .order_by(ApiKey.created_at.desc())
+            ).scalars()
+            return [
+                KeyRecord(r.id, r.user_hash, r.key_hash, r.created_at, r.revoked_at) for r in rows
+            ]
+
+    def list_failures(self, *, repo: str | None, limit: int) -> list[FailureItem]:
+        """Routed failures (not replay), newest first, with diagnosis count and latest review."""
+        stmt = (
+            select(RoutedFailureRow.payload)
+            .where(RoutedFailureRow.replay.is_(False))
+            .order_by(RoutedFailureRow.payload["routed_at"].astext.desc())
+            .limit(limit)
+        )
+        if repo:
+            owner, _, name = repo.partition("/")
+            stmt = stmt.where(
+                RoutedFailureRow.payload["repo"]["owner"].astext == owner,
+                RoutedFailureRow.payload["repo"]["name"].astext == name,
+            )
+        items: list[FailureItem] = []
+        with Session(self._engine) as s:
+            failures = [RoutedFailure.model_validate(p) for p in s.execute(stmt).scalars()]
+            for f in failures:
+                dids = (
+                    s.execute(
+                        select(DiagnosisRow.diagnosis_id).where(
+                            DiagnosisRow.failure_id == f.failure_id
+                        )
+                    )
+                    .scalars()
+                    .all()
+                )
+                reviews = (
+                    [
+                        ReviewDecision.model_validate(p)
+                        for p in s.execute(
+                            select(ReviewRow.payload).where(ReviewRow.diagnosis_id.in_(dids))
+                        ).scalars()
+                    ]
+                    if dids
+                    else []
+                )
+                items.append(_failure_item(f, len(dids), reviews))
+        return items
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        with Session(self._engine) as s:
+            row = s.get(CheckRunRow, (repo, head_sha))
+            return int(row.check_run_id) if row else None
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
+        with Session(self._engine) as s, s.begin():
+            s.merge(
+                CheckRunRow(
+                    repo=repo,
+                    head_sha=head_sha,
+                    check_run_id=check_run_id,
+                    updated_at=datetime.now(UTC),
+                )
+            )
 
     def save_context(self, context: CommitContext) -> None:
         """Save a CommitContext."""
@@ -312,6 +416,7 @@ class InMemoryStore:
         self.diagnoses: dict[uuid.UUID, Diagnosis] = {}
         self.failures: dict[uuid.UUID, RoutedFailure] = {}
         self.reviews: dict[uuid.UUID, ReviewDecision] = {}
+        self.check_runs: dict[tuple[str, str], int] = {}
         # (repo, head_sha) -> (run_id, status, conclusion); tests fill it to fake raw.workflow_runs
         self.run_outcomes: dict[tuple[str, str], tuple[int, str | None, str | None]] = {}
 
@@ -338,6 +443,37 @@ class InMemoryStore:
                 rec.id, rec.user_hash, rec.key_hash, rec.created_at, datetime.now(UTC)
             )
         return True
+
+    def list_keys(self, user_hash: str) -> list[KeyRecord]:
+        """All keys (revoked too) of one user, newest first."""
+        recs = [k for k in self.keys.values() if k.user_hash == user_hash]
+        return sorted(recs, key=lambda k: k.created_at, reverse=True)
+
+    def list_failures(self, *, repo: str | None, limit: int) -> list[FailureItem]:
+        """Routed failures (not replay), newest first, with diagnosis count and latest review."""
+        found = sorted(
+            (
+                f
+                for f in self.failures.values()
+                if not f.replay and (repo is None or f.repo.full_name == repo)
+            ),
+            key=lambda f: f.routed_at,
+            reverse=True,
+        )[:limit]
+        items: list[FailureItem] = []
+        for f in found:
+            dids = {d.diagnosis_id for d in self.diagnoses.values() if d.failure_id == f.failure_id}
+            reviews = [r for r in self.reviews.values() if r.diagnosis_id in dids]
+            items.append(_failure_item(f, len(dids), reviews))
+        return items
+
+    def get_check_run(self, repo: str, head_sha: str) -> int | None:
+        """The GitHub check run id opened for this commit, if any."""
+        return self.check_runs.get((repo, head_sha))
+
+    def save_check_run(self, repo: str, head_sha: str, check_run_id: int) -> None:
+        """Remember the check run id for this commit."""
+        self.check_runs[(repo, head_sha)] = check_run_id
 
     def save_context(self, context: CommitContext) -> None:
         """Save a CommitContext."""

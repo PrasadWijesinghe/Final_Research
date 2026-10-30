@@ -35,7 +35,7 @@ def test_missing_database_url_gives_clear_error(monkeypatch: pytest.MonkeyPatch)
 def test_every_model_table_is_in_raw_or_platform() -> None:
     schemas = {t.schema for t in m.Base.metadata.sorted_tables}
     assert schemas == {"raw", "platform"}
-    assert len(m.Base.metadata.sorted_tables) == 19
+    assert len(m.Base.metadata.sorted_tables) == 20
 
 
 @pytest.fixture(scope="session")
@@ -183,6 +183,7 @@ def test_round_trip_one_row_per_table(engine: Engine) -> None:
                     is_final=True,
                     payload={},
                 ),
+                m.CheckRunRow(repo="o/n", head_sha="abc", check_run_id=1),
                 m.ApiKey(id=ids["key"], user_hash="u", key_hash="k" + ids["key"].hex),
                 m.LlmCall(
                     expert="test",
@@ -197,7 +198,7 @@ def test_round_trip_one_row_per_table(engine: Engine) -> None:
             for row in rows:
                 session.add(row)
                 session.flush()
-            assert len(rows) == 19
+            assert len(rows) == 20
             session.expire_all()
             run = session.get(m.WorkflowRun, (run_id, 1))
             assert run is not None and run.pr_numbers == [1, 2] and run.raw == {"k": "v"}

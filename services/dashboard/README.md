@@ -1,5 +1,81 @@
 # PipelineIQ dashboard
 
+A small web app (React + Vite + TypeScript) that shows PipelineIQ predictions and diagnoses and lets
+a developer review them. It talks only to the main API (`services/api`), never to an expert directly.
+The one exception is the older **Infra demo** page, which still talks to the Infra expert.
+
+## Pages
+
+The app uses hash routes (the part after `#` in the URL), so no server setup is needed.
+
+| Route | What it shows |
+|---|---|
+| `#/` | Risk dashboard: recent runs, one risk cell per expert, top alerts, summary tiles |
+| `#/history` | Table of runs: what was predicted vs what happened; repo filter |
+| `#/commits/<sha>?repo=owner/name` | Every prediction for one commit (the pre-push hook links here) |
+| `#/failures` | Failed jobs with their diagnoses and review state |
+| `#/failures/<id>` | The routed failure, each expert diagnosis (cause, evidence, confidence, fix), past reviews and the review form |
+| `#/settings` | Create, list and revoke your API keys; how to use one in `~/.pipelineiq/config` |
+| `#/signin` | "Sign in with GitHub" |
+| `#/infra` | The original Infra demo (works without signing in) |
+
+Every page shows a loading state, an empty state and a clear error message (for example when the API is down).
+If `/auth/me` answers 401 you see the sign-in page instead of the protected pages.
+
+**Review form.** Choose accept, reject, modify or request revision. A **decision timer** starts when the
+diagnosis is shown and runs on screen; its value is sent as `seconds_to_decide` in the `ReviewDecision`.
+"Reject" always sends `cause_confirmed: false` (the contract requires it). "Modify" needs a corrected
+remediation summary. "Request revision" needs a note. The reviewer is your `user_hash` from `/auth/me`.
+
+## Run locally
+
+```bash
+cd services/dashboard
+npm install
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. Vite forwards `/api/...` to the main API at `http://127.0.0.1:8000`
+(with the `/api` prefix removed) and `/infra-api/...` to the Infra expert at `http://127.0.0.1:8104`
+(Infra demo only). Requests carry the login cookie (`credentials: "include"`).
+
+In a container (nginx serves the build and does the same forwarding; hosts are `api:8000` and `infra-api:8104`):
+
+```bash
+docker compose --profile experts up --build dashboard
+```
+
+Then open `http://127.0.0.1:3000`. The `api` service is in the `e2e` profile of `docker-compose.yml`.
+
+## Checks
+
+```bash
+npm run lint
+npm test          # vitest: router, API client (401), review form + timer, API key shown once
+npm run build
+make check-dashboard   # the three above; also part of `make check`
+```
+
+## Generated contract types
+
+`src/types/contracts.gen.ts` is generated from the contract JSON Schemas in `shared/contracts/`.
+After a contract change, run `npm run gen:types` (it exports the schemas with `uv run python -m
+shared.contracts.export_schemas`, then runs `json-schema-to-typescript`) and commit the result.
+Never edit the file by hand. Shapes that only the API defines (runs, failure list items, API keys)
+are written by hand in `src/types/api.ts`.
+
+## Limitations and defaults
+
+- Risk level (`low` / `medium` / `high`): `high` means the expert raised an alert; `medium` means at least half
+  of the expert's threshold. This is a display choice only.
+- The review form is shown only for diagnoses with status `diagnosed`.
+- After sending a review the failure view reloads, so the new review shows under "Past reviews".
+- No pagination: lists ask for the newest 25 to 100 items.
+
+---
+
+# Infra demo (page `#/infra`)
+
 For **Connect repository**, branch monitoring and live prediction instructions, see
 [the Infra live prediction guide](../../experts/infra/LIVE_PREDICTION.md). One repository branch
 can be connected at a time. The local polling monitor reads Git revisions and calls the trained
@@ -20,7 +96,7 @@ npm install
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. Vite proxies `/api` to `http://127.0.0.1:8104`.
+Open `http://127.0.0.1:5173/#/infra`. Vite proxies `/infra-api` to `http://127.0.0.1:8104`.
 
 ### Build Expert
 

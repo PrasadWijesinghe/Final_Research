@@ -70,6 +70,81 @@ h_days_since_last_failure:
 h_last_failed:
   template: "The previous run of this job failed (flag {value}: 1 = yes)"
   missing: "This job has no previous run"
+h_os_runs_7d:
+  template: "On the same runner OS, this job ran {value} times in the last 7 days"
+h_os_fail_rate_7d:
+  template: "On the same runner OS, this job failed in {value:.0%} of its runs in the last 7 days"
+  missing: "On the same runner OS, this job has no runs in the last 7 days"
+h_os_runs_30d:
+  template: "On the same runner OS, this job ran {value} times in the last 30 days"
+h_os_fail_rate_30d:
+  template: "On the same runner OS, this job failed in {value:.0%} of its runs in the last 30 days"
+  missing: "On the same runner OS, this job has no runs in the last 30 days"
+h_os_runs_90d:
+  template: "On the same runner OS, this job ran {value} times in the last 90 days"
+h_os_fail_rate_90d:
+  template: "On the same runner OS, this job failed in {value:.0%} of its runs in the last 90 days"
+  missing: "On the same runner OS, this job has no runs in the last 90 days"
+h_os_n_prior:
+  template: "On the same runner OS, this job has {value} earlier runs on record"
+h_os_fail_rate_all:
+  template: "On the same runner OS, this job failed in {value:.0%} of all its earlier runs"
+  missing: "On the same runner OS, this job has no earlier runs"
+h_os_weighted_flip_rate:
+  template: "On the same runner OS, this job flips between pass and fail often (recency-weighted flip rate {value:.2f})"
+  missing: "On the same runner OS, this job has too little history to measure flipping"
+h_os_consecutive_failures:
+  template: "On the same runner OS, this job failed {value} times in a row just before this run"
+h_os_reruns_30d:
+  template: "{value} runs of this job on the same runner OS were re-runs in the last 30 days"
+h_os_days_since_last_failure:
+  template: "On the same runner OS, this job last failed {value:.1f} days ago"
+  missing: "On the same runner OS, this job has never failed in the recorded history"
+h_os_last_failed:
+  template: "The previous run of this job on the same runner OS failed (flag {value}: 1 = yes)"
+  missing: "On the same runner OS, this job has no previous run"
+tw_test_files_parsed:
+  template: "{value} changed test files had a readable diff"
+  missing: "The test-file diff for this commit is not available"
+tw_new_tests:
+  template: "The commit adds {value} new test cases"
+  missing: "The test-file diff for this commit is not available"
+tw_new_async_tests:
+  template: "The commit adds {value} new async test cases"
+  missing: "The test-file diff for this commit is not available"
+tw_unawaited_promises:
+  template: "The commit adds {value} promises in tests that are not awaited or returned"
+  missing: "The test-file diff for this commit is not available"
+tw_set_timeout:
+  template: "The commit adds {value} setTimeout or setInterval calls in test files"
+  missing: "The test-file diff for this commit is not available"
+tw_real_timers:
+  template: "The commit switches back to real timers {value} times in test files"
+  missing: "The test-file diff for this commit is not available"
+tw_date_now:
+  template: "The commit adds {value} reads of the current time (Date.now() or new Date()) in test files"
+  missing: "The test-file diff for this commit is not available"
+tw_math_random:
+  template: "The commit adds {value} Math.random() calls in test files"
+  missing: "The test-file diff for this commit is not available"
+tw_unmocked_network:
+  template: "The commit adds {value} network calls in test files with no mock in sight"
+  missing: "The test-file diff for this commit is not available"
+tw_timeout_changes:
+  template: "The commit adds or changes {value} test timeouts"
+  missing: "The test-file diff for this commit is not available"
+tw_only_added:
+  template: "The commit adds {value} .only markers (only some tests would run)"
+  missing: "The test-file diff for this commit is not available"
+tw_skip_added:
+  template: "The commit adds {value} skipped tests"
+  missing: "The test-file diff for this commit is not available"
+tw_file_level_state:
+  template: "The commit adds {value} file-level variables that tests can share and change"
+  missing: "The test-file diff for this commit is not available"
+tw_missing_cleanup:
+  template: "The commit adds {value} setups (timers, servers, spies, env changes) in test files with no after-hook cleanup"
+  missing: "The test-file diff for this commit is not available"
 rs_runner_os:
   template: "The job runs on {value}"
   missing: "The runner operating system is unknown"
@@ -95,3 +170,41 @@ rp_test_jobs_in_window:
 rp_framework:
   template: "The repository uses {value} for tests"
   missing: "The test framework is unknown"
+ht_test_level:
+  template: "This job's logs list individual tests (flag {value}: 1 = test level, 0 = file level)"
+  missing: "No earlier test results are known for this job"
+ht_parsed_runs_30d:
+  template: "{value} earlier runs of this job with readable test results in the last 30 days"
+ht_parsed_runs_90d:
+  template: "{value} earlier runs of this job with readable test results in the last 90 days"
+ht_last_run_failed_tests:
+  template: "{value} tests failed in the job's most recent earlier run"
+  missing: "No earlier test results are known for this job"
+ht_persistent_failing_tests:
+  template: "{value} tests failed in both of the job's last two runs"
+  missing: "No earlier test results are known for this job"
+ht_failed_tests_30d:
+  template: "{value} different tests failed in this job in the last 30 days"
+ht_failed_tests_90d:
+  template: "{value} different tests failed in this job in the last 90 days"
+ht_flaky_tests_30d:
+  template: "{value} tests both failed and passed in this job in the last 30 days"
+ht_flaky_tests_90d:
+  template: "{value} tests both failed and passed in this job in the last 90 days"
+ht_touched_test_files:
+  template: "The commit changes {value} test files"
+ht_touched_files_with_history:
+  template: "{value} of the changed test files have earlier results in this job"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_fail_rate:
+  template: "The changed test files failed in {value:.0%} of their earlier runs"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_max_flip_rate:
+  template: "A changed test file flipped between pass and fail in {value:.0%} of its recent runs"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_last_failed:
+  template: "The last earlier run of a changed test file failed (flag {value}: 1 = yes)"
+  missing: "The changed test files have no earlier results in this job"
+ht_touched_failures_90d:
+  template: "The changed test files failed {value} times in the last 90 days"
+  missing: "The changed test files have no earlier results in this job"

@@ -134,6 +134,20 @@ def _seed(conn: Connection) -> None:
     commit("F1", [], 22, ["src/f.js"])
     ids["non_test_log"] = job("F1", 9_308, 1, "failure", 22, False)
     ids["cancelled"] = job("F1", 9_309, 1, "cancelled", 22, None)
+    # failure streak on four different commits: the 4th and 5th fail after >= 3 test failures on
+    # >= 2 other commits (persistent_failure_streak); the first three do not have the history yet
+    for i in range(1, 6):
+        commit(f"G{i}", [], 29 + i, [f"src/g{i}.js"])
+        ids[f"streak{i}"] = job(
+            f"G{i}", 9_310 + i, 1, "failure", 29 + i, True, f"test/g{i}.test.js"
+        )
+    # a pass resets the streak; four failed attempts of ONE commit are reruns, not a streak
+    commit("H0", [], 40, ["src/h0.js"])
+    job("H0", 9_320, 1, "success", 40, None)
+    commit("H1", [], 41, ["src/h1.js"])
+    for att in range(1, 5):
+        ids[f"same_sha{att}"] = job("H1", 9_321, att, "failure", 41 + att / 100, True,
+                                    "test/h1.test.js")  # fmt: skip
     conn.info["ids"] = ids
 
 
@@ -163,6 +177,11 @@ def test_rules_and_sample_on_seeded_db(tmp_path: Path) -> None:
             assert got[ids["non_test_log"]][0] == "not_test"
             assert got[ids["cancelled"]][0] == "not_test"
             assert ids["rerun_pass"] not in got  # a rerun pass gets no label
+            for i in (1, 2, 3):
+                assert got[ids[f"streak{i}"]][0] == "unclear"
+            for i in (4, 5):
+                assert got[ids[f"streak{i}"]] == ("genuine", "persistent_failure_streak", "low")
+            assert got[ids["same_sha4"]][0] == "unclear"  # only same-commit reruns before it
             assert cover["series"] == 1
 
             # mirrored rows validate against the shared contract; pass / not_test are not mirrored
@@ -172,9 +191,9 @@ def test_rules_and_sample_on_seeded_db(tmp_path: Path) -> None:
                     "where job_id between 9300101 and 9300199"
                 )
             ).all()
-            assert {m[0] for m in mirrored} == {
-                ids["flaky"], ids["genuine"], ids["silent"], ids["unclear"]
-            }  # fmt: skip
+            failed = {ids["flaky"], ids["genuine"], ids["silent"], ids["unclear"]}
+            failed |= {v for k, v in ids.items() if k.startswith(("streak", "same_sha"))}
+            assert {m[0] for m in mirrored} == failed
             for _, payload, _ in mirrored:
                 assert FailureLabel.model_validate(payload).category.value == "test"
             final = {m[0]: m[2] for m in mirrored}
@@ -207,7 +226,7 @@ def test_rules_and_sample_on_seeded_db(tmp_path: Path) -> None:
             assert fin is False
 
             sp, kp, count = export_sample(conn, MEMBER, tmp_path, per_stratum=1, name="s")
-            assert count == 6  # pass, flaky/high, flaky/low, genuine, unclear, not_test/low
+            assert count == 7  # pass, flaky hi/lo, genuine hi/lo, unclear, not_test
             with sp.open(newline="") as fh:
                 rows = list(csv.DictReader(fh))
             assert all(r["human_label"] == "" and r["ai_prelabel"] == "" for r in rows)

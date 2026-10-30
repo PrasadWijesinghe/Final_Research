@@ -1,0 +1,72 @@
+2026-10-30T09:46:00.0000000Z > demo@1.0.0 test
+2026-10-30T09:46:00.0000001Z > node --test --test-timeout=2000
+2026-10-30T09:46:00.0000002Z
+2026-10-30T09:46:00.0000003Z TAP version 13
+2026-10-30T09:46:00.0000004Z # Subtest: cart
+2026-10-30T09:46:00.0000005Z     # Subtest: totals
+2026-10-30T09:46:00.0000006Z     ok 1 - totals
+2026-10-30T09:46:00.0000007Z       ---
+2026-10-30T09:46:00.0000008Z       duration_ms: 0.9
+2026-10-30T09:46:00.0000009Z       type: 'test'
+2026-10-30T09:46:01.0000000Z       ...
+2026-10-30T09:46:01.0000001Z     # Subtest: discounts
+2026-10-30T09:46:01.0000002Z     not ok 2 - discounts
+2026-10-30T09:46:01.0000003Z       ---
+2026-10-30T09:46:01.0000004Z       duration_ms: 3.2
+2026-10-30T09:46:01.0000005Z       type: 'test'
+2026-10-30T09:46:01.0000006Z       location: '/home/runner/work/demo/demo/test/cart.test.js:14:5'
+2026-10-30T09:46:01.0000007Z       failureType: 'testCodeFailure'
+2026-10-30T09:46:01.0000008Z       error: |-
+2026-10-30T09:46:01.0000009Z         Expected values to be strictly deep-equal:
+2026-10-30T09:46:02.0000000Z         + actual - expected
+2026-10-30T09:46:02.0000001Z
+2026-10-30T09:46:02.0000002Z         + 90
+2026-10-30T09:46:02.0000003Z         - 95
+2026-10-30T09:46:02.0000004Z       code: 'ERR_ASSERTION'
+2026-10-30T09:46:02.0000005Z       name: 'AssertionError'
+2026-10-30T09:46:02.0000006Z       expected: 95
+2026-10-30T09:46:02.0000007Z       actual: 90
+2026-10-30T09:46:02.0000008Z       operator: 'deepStrictEqual'
+2026-10-30T09:46:02.0000009Z       stack: |-
+2026-10-30T09:46:03.0000000Z         TestContext.<anonymous> (/home/runner/work/demo/demo/test/cart.test.js:16:12)
+2026-10-30T09:46:03.0000001Z         async Promise.all (index 0)
+2026-10-30T09:46:03.0000002Z       ...
+2026-10-30T09:46:03.0000003Z     # Subtest: slow checkout
+2026-10-30T09:46:03.0000004Z     not ok 3 - slow checkout
+2026-10-30T09:46:03.0000005Z       ---
+2026-10-30T09:46:03.0000006Z       duration_ms: 2002.1
+2026-10-30T09:46:03.0000007Z       type: 'test'
+2026-10-30T09:46:03.0000008Z       location: '/home/runner/work/demo/demo/test/cart.test.js:22:5'
+2026-10-30T09:46:03.0000009Z       failureType: 'testTimeoutFailure'
+2026-10-30T09:46:04.0000000Z       error: 'test timed out after 2000ms'
+2026-10-30T09:46:04.0000001Z       code: 'ERR_TEST_FAILURE'
+2026-10-30T09:46:04.0000002Z       ...
+2026-10-30T09:46:04.0000003Z     # Subtest: never reached
+2026-10-30T09:46:04.0000004Z     not ok 4 - never reached
+2026-10-30T09:46:04.0000005Z       ---
+2026-10-30T09:46:04.0000006Z       duration_ms: 0
+2026-10-30T09:46:04.0000007Z       type: 'test'
+2026-10-30T09:46:04.0000008Z       location: '/home/runner/work/demo/demo/test/cart.test.js:30:5'
+2026-10-30T09:46:04.0000009Z       failureType: 'cancelledByParent'
+2026-10-30T09:46:05.0000000Z       error: 'test did not finish before its parent and was cancelled'
+2026-10-30T09:46:05.0000001Z       code: 'ERR_TEST_FAILURE'
+2026-10-30T09:46:05.0000002Z       ...
+2026-10-30T09:46:05.0000003Z     1..4
+2026-10-30T09:46:05.0000004Z not ok 1 - cart
+2026-10-30T09:46:05.0000005Z   ---
+2026-10-30T09:46:05.0000006Z   duration_ms: 2010.5
+2026-10-30T09:46:05.0000007Z   type: 'suite'
+2026-10-30T09:46:05.0000008Z   location: '/home/runner/work/demo/demo/test/cart.test.js:3:1'
+2026-10-30T09:46:05.0000009Z   failureType: 'subtestsFailed'
+2026-10-30T09:46:06.0000000Z   error: '3 subtests failed'
+2026-10-30T09:46:06.0000001Z   code: 'ERR_TEST_FAILURE'
+2026-10-30T09:46:06.0000002Z   ...
+2026-10-30T09:46:06.0000003Z 1..1
+2026-10-30T09:46:06.0000004Z # tests 4
+2026-10-30T09:46:06.0000005Z # suites 1
+2026-10-30T09:46:06.0000006Z # pass 1
+2026-10-30T09:46:06.0000007Z # fail 1
+2026-10-30T09:46:06.0000008Z # cancelled 2
+2026-10-30T09:46:06.0000009Z # skipped 0
+2026-10-30T09:46:07.0000000Z # todo 0
+2026-10-30T09:46:07.0000001Z # duration_ms 2300.4

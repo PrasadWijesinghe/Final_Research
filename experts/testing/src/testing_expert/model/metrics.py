@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 from sklearn.isotonic import IsotonicRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     average_precision_score,
     precision_recall_curve,
@@ -76,32 +77,102 @@ def brier_fail(y: np.ndarray, proba: np.ndarray) -> float:
     return float(((p_fail(proba) - (y > 0)) ** 2).mean())
 
 
-def fit_calibrator(y: np.ndarray, proba: np.ndarray) -> dict[str, Any]:
-    """One isotonic regression per class (one-vs-rest); a one-outcome class stays raw."""
-    models: list[IsotonicRegression | None] = []
+CALIBRATORS = ("isotonic", "sigmoid", "beta", "isotonic_floor")
+# DEFAULT: no calibrated class probability goes below this, so a risk score is never a hard 0.0
+# (isotonic regression maps every low raw score to exactly 0 when the fit slice has no failure
+# there, which a user reads as "impossible").
+MIN_PROB = 1e-4
+_EPS = 1e-6
+
+
+def _logit_features(p: np.ndarray, kind: str) -> np.ndarray:
+    """Platt uses logit(p); beta calibration (Kull et al. 2017) uses ln p and -ln(1-p)."""
+    p = np.clip(p, _EPS, 1 - _EPS)
+    if kind == "sigmoid":
+        return np.log(p / (1 - p))[:, None]
+    return np.column_stack([np.log(p), -np.log(1 - p)])
+
+
+def fit_calibrator(y: np.ndarray, proba: np.ndarray, kind: str = "isotonic") -> dict[str, Any]:
+    """One calibration map per class (one-vs-rest); a one-outcome class stays raw.
+
+    kind: isotonic (step function), sigmoid (Platt), beta (3-parameter, can bend both tails) or
+    isotonic_floor (isotonic, but never below the class's own base rate times FLOOR_SHARE).
+    """
+    if kind not in CALIBRATORS:
+        raise ValueError(f"unknown calibrator {kind!r}")
+    models: list[Any] = []
     for i in range(len(CLASSES)):
         yi = (y == i).astype(float)
         if yi.min() == yi.max():
             models.append(None)
-            continue
-        iso = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
-        iso.fit(proba[:, i], yi)
-        models.append(iso)
-    return {"isotonic": models, "classes": list(CLASSES)}
+        elif kind in ("sigmoid", "beta"):
+            # DEFAULT: C=1e4, i.e. almost unregularised, so the map follows the data.
+            lr = LogisticRegression(C=1e4, max_iter=1000)
+            lr.fit(_logit_features(proba[:, i], kind), yi.astype(int))
+            models.append(lr)
+        else:
+            iso = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
+            iso.fit(proba[:, i], yi)
+            models.append(iso)
+    # DEFAULT: the isotonic floor is 20% of the class base rate in the fit slice.
+    floors = [FLOOR_SHARE * float((y == i).mean()) for i in range(len(CLASSES))]
+    return {"kind": kind, "models": models, "floors": floors, "classes": list(CLASSES)}
+
+
+FLOOR_SHARE = 0.2
 
 
 def apply_calibrator(cal: dict[str, Any], proba: np.ndarray) -> np.ndarray:
-    """Calibrate each class, then renormalise rows to sum to 1."""
+    """Calibrate each class, then renormalise rows to sum to 1.
+
+    Reads old bundles too (v1 / v2 stored {"isotonic": [...]} with no "kind").
+    """
+    kind = cal.get("kind", "isotonic")
+    models = cal["models"] if "models" in cal else cal["isotonic"]
     out = proba.copy()
-    for i, iso in enumerate(cal["isotonic"]):
-        if iso is not None:
-            out[:, i] = iso.predict(proba[:, i])
+    for i, m in enumerate(models):
+        if m is None:
+            continue
+        if kind in ("sigmoid", "beta"):
+            out[:, i] = m.predict_proba(_logit_features(proba[:, i], kind))[:, 1]
+        else:
+            out[:, i] = m.predict(proba[:, i])
+            if kind == "isotonic_floor":
+                out[:, i] = np.maximum(out[:, i], cal["floors"][i])
+    if kind != "isotonic":  # new calibrators never emit a hard zero; v1/v2 bundles keep old maths
+        out[:, 1:] = np.maximum(out[:, 1:], MIN_PROB)
     total = out.sum(axis=1, keepdims=True)
     # DEFAULT: a row where every isotonic output is 0 falls back to the uncalibrated row.
     bad = total[:, 0] <= 0
     out[bad] = proba[bad]
     total = out.sum(axis=1, keepdims=True)
     return out / total
+
+
+def ece(y: np.ndarray, score: np.ndarray, bins: int = 10) -> float:
+    """Expected calibration error of P(fail): equal-count bins, weighted |mean score - rate|.
+
+    `y` is a class index (any value > 0 counts as a failure) or already 0/1.
+    """
+    yf = (y > 0).astype(float)
+    order = np.argsort(score, kind="stable")
+    total = 0.0
+    for chunk in np.array_split(order, bins):
+        if len(chunk):
+            total += len(chunk) * abs(float(score[chunk].mean()) - float(yf[chunk].mean()))
+    return total / len(y)
+
+
+def reliability(y: np.ndarray, score: np.ndarray, bins: int = 10) -> list[dict[str, float]]:
+    """Per equal-count bin: n, mean predicted P(fail), observed fail rate (rare-event friendly)."""
+    yf = (y > 0).astype(float)
+    order = np.argsort(score, kind="stable")
+    return [
+        {"n": float(len(c)), "pred": float(score[c].mean()), "obs": float(yf[c].mean())}
+        for c in np.array_split(order, bins)
+        if len(c)
+    ]
 
 
 def pick_threshold(y: np.ndarray, score: np.ndarray) -> dict[str, Any]:
@@ -144,3 +215,61 @@ def threshold_metrics(y: np.ndarray, score: np.ndarray, threshold: float) -> dic
         "recall": tp / yf.sum() if yf.sum() else NAN,
         "flagged_share": float(pred.mean()) if len(pred) else NAN,
     }
+
+
+# --- binary calibration of one event (P4.7 v4) -------------------------------------------------
+# The v3 calibrators work on 3 class columns and renormalise. v4 calibrates one yes/no event at a
+# time (any fail, genuine fail, flaky fail), optionally with recency weights.
+
+
+def recency_weights(age_days: np.ndarray, half_life_days: float | None) -> np.ndarray | None:
+    """Weight 0.5 ** (age / half_life): a row `half_life` days older than the newest counts half."""
+    if half_life_days is None:
+        return None
+    return np.power(0.5, np.maximum(age_days, 0.0) / half_life_days)
+
+
+def _with_extra(p: np.ndarray, kind: str, extra: np.ndarray | None) -> np.ndarray:
+    x = _logit_features(p, kind)
+    return x if extra is None else np.column_stack([x, extra])
+
+
+def fit_binary_calibrator(
+    y: np.ndarray,
+    p: np.ndarray,
+    kind: str = "beta",
+    sample_weight: np.ndarray | None = None,
+    extra: np.ndarray | None = None,
+) -> dict[str, Any]:
+    """Beta (or Platt) map for one event; `sample_weight` lets recent rows count more.
+
+    `extra` (n, k) adds side columns to the map (e.g. a failure-streak flag), so a group the raw
+    score under-separates can be shifted without touching the ranking inside the group.
+    """
+    if kind not in ("sigmoid", "beta"):
+        raise ValueError(f"unknown binary calibrator {kind!r}")
+    yi = np.asarray(y).astype(int)
+    if yi.min() == yi.max():
+        return {"kind": kind, "model": None, "const": float(yi.mean())}
+    # DEFAULT: C=1e4 (almost unregularised), same as the v3 calibrators.
+    lr = LogisticRegression(C=1e4, max_iter=1000)
+    lr.fit(_with_extra(p, kind, extra), yi, sample_weight=sample_weight)
+    return {"kind": kind, "model": lr, "n_extra": 0 if extra is None else extra.shape[1]}
+
+
+def apply_binary_calibrator(
+    cal: dict[str, Any], p: np.ndarray, extra: np.ndarray | None = None
+) -> np.ndarray:
+    """Calibrated probability of the event, never below MIN_PROB."""
+    if cal["model"] is None:
+        return np.full(len(p), max(cal["const"], MIN_PROB))
+    out = cal["model"].predict_proba(_with_extra(p, cal["kind"], extra))[:, 1]
+    return np.clip(out, MIN_PROB, 1.0)
+
+
+def combine_any(*probs: np.ndarray) -> np.ndarray:
+    """P(at least one event) assuming independence: 1 - prod(1 - p)."""
+    out = np.ones_like(probs[0], dtype=float)
+    for p in probs:
+        out = out * (1.0 - p)
+    return 1.0 - out
