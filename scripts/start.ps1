@@ -61,6 +61,8 @@ if (-not $smee) { Note "SMEE_URL is not set in .env: the webhook relay will be s
 Step "2. Starting the containers"
 docker compose up -d --wait postgres redis *> (Join-Path $Run "compose.log")
 if ($LASTEXITCODE -eq 0) { Ok "Postgres and Redis" } else { Bad "Postgres or Redis did not start (see .run\compose.log)"; exit 1 }
+uv sync --all-packages *> (Join-Path $Run "uv-sync.log")
+if ($LASTEXITCODE -ne 0) { Bad "Installing the Python packages failed (see .run\uv-sync.log)"; exit 1 }
 uv run --env-file .env alembic -c shared/db/alembic.ini upgrade head *> (Join-Path $Run "migrate.log")
 $m1 = $LASTEXITCODE
 uv run --env-file .env alembic -c experts/testing/alembic.ini upgrade head *>> (Join-Path $Run "migrate.log")
