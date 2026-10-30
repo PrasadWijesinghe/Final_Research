@@ -12,6 +12,7 @@ from shared.contracts import Diagnosis, RoutedFailure
 
 from .config import QUEUE_NAME
 from .diagnose import diagnose
+from .rag.kb import default_kb
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ _DEFAULT_BACKEND_TIMEOUT_S = 10.0
 def process_failure(payload: dict[str, Any]) -> Diagnosis:
     """RQ job: validate the payload, diagnose, post to ${BACKEND_URL}/diagnoses if set."""
     failure = RoutedFailure.model_validate(payload)
-    diagnosis = diagnose(failure)
+    diagnosis = diagnose(failure, kb=default_kb())
     backend_url = os.environ.get("BACKEND_URL", "").rstrip("/")
     if backend_url:
         timeout = float(os.environ.get("BACKEND_TIMEOUT_SECONDS", _DEFAULT_BACKEND_TIMEOUT_S))

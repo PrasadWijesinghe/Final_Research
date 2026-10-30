@@ -8,6 +8,8 @@ export type Route =
   | { name: "failure"; id: string }
   | { name: "settings" }
   | { name: "infra" }
+  | { name: "dependency" }
+  | { name: "build" }
   | { name: "signin" }
   | { name: "notfound"; path: string };
 
@@ -22,6 +24,8 @@ export function parseHash(hash: string): Route {
     if (a === "failures") return { name: "failures" };
     if (a === "settings") return { name: "settings" };
     if (a === "infra") return { name: "infra" };
+    if (a === "dependency") return { name: "dependency" };
+    if (a === "build") return { name: "build" };
     if (a === "signin") return { name: "signin" };
   }
   if (parts.length === 2 && a === "commits") return { name: "commit", sha: b };

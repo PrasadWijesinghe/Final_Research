@@ -17,6 +17,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+      // Build expert page only: talks to the Build expert (experts/build) directly.
+      "/build-api": {
+        target: "http://127.0.0.1:8102",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/build-api/, ""),
+      },
       // Infra demo page only: talks to the Infra expert directly.
       "/infra-api": {
         target: "http://127.0.0.1:8104",

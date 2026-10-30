@@ -67,6 +67,7 @@ uv run --package pipelineiq-expert-dependency --extra prototype python experts/d
 uv run --env-file .env --package pipelineiq-expert-dependency python -m experts.dependency.research.prototype.extract_log_features
 # Evaluate reviewed dependency_failure vs other_failure labels, holding out whole repositories:
 uv run --package pipelineiq-expert-dependency --extra prototype python -m experts.dependency.research.prototype.evaluate_verified_model
+.venv/Scripts/python.exe experts/dependency/research/prototype/train_log_only_model.py
 # Audit sanitized log patterns behind XGBoost false negatives (prints snippets, saves no logs):
 uv run --env-file .env --package pipelineiq-expert-dependency python -m experts.dependency.research.prototype.analyze_false_negative_logs
 uv run --package pipelineiq-expert-dependency --extra prototype python experts/dependency/research/prototype/model_trainer.py

@@ -9,6 +9,8 @@ const NAV: { to: string; label: string; names: Route["name"][] }[] = [
   { to: "/history", label: "History", names: ["history"] },
   { to: "/failures", label: "Failures", names: ["failures", "failure"] },
   { to: "/settings", label: "Settings", names: ["settings"] },
+  { to: "/dependency", label: "Dependency", names: ["dependency"] },
+  { to: "/build", label: "Build", names: ["build"] },
   { to: "/infra", label: "Infra demo", names: ["infra"] },
 ];
 

@@ -17,3 +17,36 @@ members:
       - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:i|install|add|remove|rm|uninstall|ci)\b'
       # printing a message that mentions a runner
       - '^(?:echo|printf)\b'
+
+  # Member 2: Build & Code Quality. A workflow is kept if any job compiles, type-checks,
+  # lints, format-checks or bundles JavaScript/TypeScript. Most CI workflows that run tests
+  # also build first, so they are kept too; labelling (experts/build) decides which failures
+  # are build failures. See docs/experts/build.md section 2.
+  build:
+    run_patterns:
+      # package-manager scripts: npm run build, pnpm -r typecheck, yarn lint:ci,
+      # yarn workspace @x/y build, pnpm --filter ./pkg build, bun run check, npm run format:check
+      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:-{1,2}\w[\w-]*(?:[= ](?!(?:run|build|lint|typecheck|type-check|check-types|types|tsc|compile|check)\b)[^-\s]\S*)?\s+)*(?:workspaces?\s+(?:foreach\s+|\S+\s+)?(?:-\S+\s+)*)?(?:run(?:-script)?\s+(?:-{1,2}\w[\w-]*(?:[= ](?!(?:build|lint|typecheck|type-check|check-types|types|tsc|compile|check)\b)[^-\s]\S*)?\s+)*)?(?:(?:build|lint|typecheck|type-check|check-types|tsc|compile)(?::[\w-]+)*|types|check|check:(?:types?|ts|lint|format)|(?:format|fmt|prettier):check)(?![\w:-])'
+      # Node's own script runner: node --run build
+      - '(?<![\w./@-])node\s+--run\s+(?:build|lint|typecheck|type-check|check-types|check)(?![\w-])'
+      # compilers, type-checkers, linters and bundlers called directly (npx tsc, ./node_modules/.bin/eslint)
+      # (a "/" before the name is only allowed after node_modules/.bin/, not in paths like ./packages/webpack)
+      - '(?:(?<=\.bin/)|(?<![\w@./-]))(?:tsc|vue-tsc|svelte-check|eslint|oxlint|tsup|tsdown|webpack|rollup|rolldown|esbuild|rspack|unbuild)(?![\w.-])'
+      # framework CLIs that build or type-check
+      - '(?<![\w@.-])(?:vite|next|nuxi|nuxt|ng|astro|remix|react-scripts|vitepress|gatsby|svelte-kit)\s+(?:build|check|typecheck|lint)(?![\w-])'
+      # format checks and Biome
+      - '(?<![\w@.-])prettier\b.*\s(?:--check|-c|--list-different|-l)(?![\w-])'
+      - '(?<![\w@.-])biome\s+(?:check|ci|lint|format)(?![\w-])'
+      # monorepo task runners with a build-type target: turbo run build lint, nx run-many -t typecheck
+      - '(?<![\w./@-])(?:turbo|nx|lerna|wireit|moon|hereby|gulp|grunt)\b.*?(?<![\w=-])(?:build|lint|typecheck|type-check|check-types|tsc|compile)(?![\w-])'
+    exclude_patterns:
+      # installing, adding or publishing is not building
+      - '(?<![\w./@-])(?:npm|pnpm|yarn|bun)\s+(?:-\S+\s+)*(?:i|install|add|remove|rm|uninstall|ci|link|publish|pack|dlx|create)\b'
+      # shell built-ins that only mention a tool: echo "run eslint", cd packages/webpack
+      - '^(?:echo|printf|cd|ls|cat|rm|mkdir|cp|mv|test|\[)\b'
+      # container builds belong to the Infrastructure expert
+      - '(?<![\w./@-])docker(?:-compose)?\s'
+      # shell comments and quoted-string assignments that only mention a tool:
+      # "# webpack is configured elsewhere", MSG='Run pnpm lint to fix'
+      - '^#'
+      - '^\w+\+?=[''"]'

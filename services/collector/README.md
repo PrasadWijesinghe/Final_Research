@@ -55,7 +55,7 @@ flowchart TD
     F -- no --> N[Not relevant: no match]
 ```
 
-1. Find the member's rule in `config/workflow_detection.yaml`. If there is none, keep the workflow. This applies today to `dependency`, `build` and `infra`.
+1. Find the member's rule in `config/workflow_detection.yaml`. If there is none, keep the workflow. This applies today to `dependency` and `infra`.
 2. Parse the workflow file as YAML. If it is not valid, or its top level is not a mapping, mark it not relevant with reason "unparseable".
 3. Walk every job and collect each line of every `run:` step, together with the job's key. A `run:` step is a shell command in a workflow. Steps that only use another action (`uses:`) are skipped. Blank lines are dropped.
 4. Split each line into single commands. The splitting characters are `&&`, `&`, `||`, `;` and `|`. So `npm ci && npm test` becomes two commands, and each is judged on its own.
@@ -66,6 +66,8 @@ Today the Test member's rules are:
 
 - **Run patterns:** `npm`, `pnpm`, `yarn` or `bun` running `test` (including `npm run test:unit` and `pnpm -r test`); `turbo`, `nx` or `lerna` running a test target; and the runners `jest`, `mocha` or `vitest` themselves.
 - **Exclude patterns:** installing or removing packages (`npm install`, `yarn add`, `npm ci` and similar), and `echo` or `printf` lines that only mention a runner.
+
+The Build member's rules (see `docs/experts/build.md` section 2.2) keep a workflow when a job compiles, type-checks, lints, format-checks or bundles: `npm run build`, `pnpm -r typecheck`, `yarn lint:ci`, `npx tsc`, `eslint`, `vite build`, `prettier --check`, `turbo run build` and similar. They exclude installs, `echo` and `cd` lines, shell comments, quoted-string assignments, `docker build`, and folder paths such as `./packages/webpack`.
 
 Detection itself does not fetch anything. The backfill fetches the workflow file and then calls detection.
 
@@ -157,7 +159,7 @@ Logs of passing test jobs are by far the biggest part of a backfill: one run can
 
 **Only the failed runs (`--passing failed-runs`, D40).** The default, `--passing all`, fetches every pending log, as described above. `--passing failed-runs` is narrower. Failed jobs (`failure`, `timed_out` or `startup_failure`) always get their log. A passing job gets its log only when its run has at least one failed, timed-out or startup-failed job, in any attempt. So if attempt 1 of a run failed and attempt 2 passed, attempt 2's passing logs are still fetched, because the run had a failure in attempt 1. Passing jobs in runs with no failure are left out. Those jobs stay without a `raw.logs` row, so `status` still counts them as `logs pending`. Running `fill-logs` without the flag later fetches the rest.
 
-`daily` is unchanged and always fetches all logs, because new runs are few. Running `backfill --logs all` again after a `--logs failed` pass does **not** fill the gaps (runs already stored as complete are skipped); use `fill-logs`.
+`daily` also supports `--logs all|failed` (default `all`, D46). `daily --logs failed` skips passing logs the same way, so they stay pending for `fill-logs`. Running `backfill --logs all` again after a `--logs failed` pass does **not** fill the gaps (runs already stored as complete are skipped); use `fill-logs`.
 
 **Archive mode: one zip per run attempt (D41).** `fill-logs` now asks for the logs of a whole run attempt at once, unless you pass `--no-archive`. The reason is the quota. A token gets 5,000 requests an hour, and each job log costs one request. On the live database, 210,695 jobs were waiting for a log. Those jobs sit in only 7,002 run attempts, about 30 jobs each. One zip per attempt cuts pass 2 from about 210,000 requests to about 7,000.
 
@@ -626,7 +628,7 @@ The full check that must pass before a task is done is `make check`.
 | `--member` | Required. One of `dependency`, `build`, `test`, `infra` |
 | `--repo owner/name` | Only this repo. It must be in the member's list. The match is case-sensitive |
 | `--days N` | How far back to go. Default 90 |
-| `--logs all\|failed` | `backfill` only. `failed` skips logs of passing jobs for `fill-logs` to fetch later. Default `all` |
+| `--logs all\|failed` | `backfill` and `daily`. `failed` skips logs of passing jobs for `fill-logs` to fetch later. Default `all` |
 | `--limit N` | `fill-logs` only. Stop after N logs in total |
 | `--passing all\|failed-runs` | `fill-logs` only. `failed-runs` fetches passing-job logs only in runs with a failed job (any attempt). Failed-job logs are always fetched. Default `all` (D40) |
 | `--no-archive` | `fill-logs` only. One request per job log, with no zip per run attempt. Use it to get out of archive problems. Default: archive mode on (D41) |
@@ -703,7 +705,7 @@ Exit code 2 is also used by argparse (the option parser) when `--member` is not 
 | `licence` | Each repo entry | Required | Stored in `raw.repos`. Not checked against GitHub here |
 | `max_patch_bytes` | `config/file_tags.yaml`, `limits` | 1,048,576 (1 MB) | Patches larger than this are dropped |
 | `lockfiles_inline` | `config/file_tags.yaml`, `limits` | `false` | Whether lockfiles are stored as text in the database |
-| Run and exclude patterns | `config/workflow_detection.yaml`, per member | Test member has rules; others have none | Which commands make a workflow relevant |
+| Run and exclude patterns | `config/workflow_detection.yaml`, per member | Test and Build members have rules; others have none | Which commands make a workflow relevant |
 
 `.env.example` also lists `MEMBER`. The collector CLI does not read it: `collector` always takes the member from `--member`. `make export-data` does read it, when `MEMBER` is not given on the command line.
 
