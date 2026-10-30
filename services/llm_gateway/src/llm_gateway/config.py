@@ -1,4 +1,4 @@
-"""Gateway settings from `config/llm.yaml` (env: LLM_CONFIG_FILE, LLM_PROVIDER)."""
+"""Gateway settings from `config/llm.yaml` (env: LLM_CONFIG_FILE, LLM_PROVIDER, LLM_MODEL)."""
 
 from __future__ import annotations
 
@@ -20,10 +20,21 @@ class ModelPrice(BaseModel):
     output_per_1k_usd: Decimal
 
 
+class ProviderRequestSettings(BaseModel):
+    """How a real provider is called (the `provider_request` block of `config/llm.yaml`)."""
+
+    # DEFAULT: 15 s, under the Test expert's 20 s diagnosis timeout so the gateway fails first.
+    timeout_seconds: float = Field(default=15.0, gt=0)
+    # DEFAULT: 2000 output tokens; json_object mode needs a cap so the JSON is not cut off.
+    max_tokens: int = Field(default=2000, gt=0)
+
+
 class GatewayConfig(BaseModel):
     """Parsed `config/llm.yaml`."""
 
     default_model: str
+    provider_models: dict[str, str] = {}
+    provider_request: ProviderRequestSettings = ProviderRequestSettings()
     models: dict[str, ModelPrice]
     monthly_cap_usd: dict[str, Decimal]
     cache_ttl_seconds: int = Field(gt=0)
@@ -45,3 +56,15 @@ def load_config(path: Path | None = None) -> GatewayConfig:
 def provider_name() -> str:
     """The provider selected by LLM_PROVIDER (DEFAULT: mock, the safe choice)."""
     return os.environ.get("LLM_PROVIDER", "").strip() or "mock"
+
+
+def resolve_model(config: GatewayConfig, provider: str) -> str:
+    """Model for `provider`: LLM_MODEL, else `provider_models[provider]`, else `default_model`."""
+    model = (
+        os.environ.get("LLM_MODEL", "").strip()
+        or config.provider_models.get(provider)
+        or config.default_model
+    )
+    if model not in config.models:
+        raise ValueError(f"model {model!r} has no price in config/llm.yaml `models`")
+    return model

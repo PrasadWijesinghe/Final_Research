@@ -279,6 +279,7 @@ FALLBACKS = {
     "refused": (httpx.ConnectError("no route"), "unreachable"),
     "cap": (httpx.Response(429, json={"error": "monthly_cap_exceeded"}), "spending cap"),
     "invalid": (httpx.Response(502, json={"error": "invalid_model_output"}), "invalid answer"),
+    "provider": (httpx.Response(502, json={"error": "provider_error"}), "provider failed"),
     "bad request": (httpx.Response(400, json={"error": "x"}), "HTTP 400"),
     "server error": (httpx.Response(500, text="boom"), "HTTP 500"),
     "not json": (httpx.Response(200, text="<html>"), "not understood"),

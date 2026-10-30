@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 
 from shared.db.session import get_database_url
 
-from .config import load_config, provider_name
+from .config import load_config, provider_name, resolve_model
 from .providers import get_provider
 from .service import CompleteRequest, CompleteResponse, Gateway, GatewayError
 from .stores import CacheStore, CallLog, InMemoryCache, InMemoryCallLog, RedisCache, SqlCallLog
@@ -33,7 +33,15 @@ def default_gateway() -> Gateway:
     else:
         logger.warning("DATABASE_URL not set: llm_calls and spend are kept in memory only")
         call_log = InMemoryCallLog()
-    return Gateway(get_provider(provider_name()), load_config(), cache, call_log)
+    config = load_config()
+    provider = provider_name()
+    return Gateway(
+        get_provider(provider, config.provider_request),
+        config,
+        cache,
+        call_log,
+        model=resolve_model(config, provider),
+    )
 
 
 def create_app(gateway: Gateway | None = None) -> FastAPI:
