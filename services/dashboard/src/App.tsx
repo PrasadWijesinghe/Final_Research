@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import BuildExpertPage from "./build/BuildExpertPage";
 import DependencyDashboardPage from "./dependency/DependencyDashboardPage";
 
 type RiskOutput = {
@@ -531,7 +532,7 @@ function InfraExpertDashboard() {
 }
 
 function App() {
-  const [activeExpert, setActiveExpert] = useState<"dependency" | "infra">("dependency");
+  const [activeExpert, setActiveExpert] = useState<"dependency" | "build" | "infra">("dependency");
 
   return (
     <>
@@ -545,6 +546,14 @@ function App() {
             onClick={() => setActiveExpert("dependency")}
           >
             Dependency Expert
+          </button>
+          <button
+            type="button"
+            className={activeExpert === "build" ? "active" : ""}
+            aria-pressed={activeExpert === "build"}
+            onClick={() => setActiveExpert("build")}
+          >
+            Build Expert
           </button>
           <button
             type="button"
@@ -562,7 +571,13 @@ function App() {
           </span>
         ) : null}
       </nav>
-      {activeExpert === "dependency" ? <DependencyDashboardPage /> : <InfraExpertDashboard />}
+      {activeExpert === "dependency" ? (
+        <DependencyDashboardPage />
+      ) : activeExpert === "build" ? (
+        <BuildExpertPage />
+      ) : (
+        <InfraExpertDashboard />
+      )}
     </>
   );
 }

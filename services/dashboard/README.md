@@ -22,6 +22,24 @@ npm run dev
 
 Open `http://127.0.0.1:5173`. Vite proxies `/api` to `http://127.0.0.1:8104`.
 
+### Build Expert
+
+The **Build Expert** tab talks to the Build expert (`experts/build`) through the dev server's
+`/build-api` proxy (port 8102). Start the expert with a trained model first, for example with the
+demo kit (`uv run python demo-kit/run_api.py`), or with
+`BUILD_MODEL_DIR=models/build/m4 uv run uvicorn build_expert.api:app --port 8102`. The page:
+
+- **Before CI:** sends a real commit (`CommitContext`) to `POST /predict` and shows the chance of a
+  build failure against the model's alert threshold, the tsc / lint / bundler risks, and the SHAP
+  risk factors in plain words.
+- **After a failure:** sends a failed job (`RoutedFailure`) to `POST /diagnose` and shows the tool,
+  the error codes and file locations, evidence lines from the log, and the fix steps; a failure that
+  is not a build problem is shown as handed back with the suggested category.
+- Lists example commits and failed jobs when the expert runs with `BUILD_EXAMPLES_DIR` (the demo kit
+  sets it); any `CommitContext` or `RoutedFailure` JSON file can also be uploaded.
+- Reads the model's version, threshold and test results from `GET /model`, so no number is typed
+  into the page. If the expert is not running, the page says so and shows how to start it.
+
 ### Dependency Expert log classifier
 
 Train the verified log-only model once, then start its standalone API in a separate terminal. Text

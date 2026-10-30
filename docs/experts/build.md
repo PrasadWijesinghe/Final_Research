@@ -227,6 +227,10 @@ not shown. The report lists the top factors over the test part. The plan as writ
 SHAP TreeExplainer on the tree model. Each top factor becomes a `RiskFactor` with the template
 from `features/descriptions.yaml`, phrased as a risk factor, never as a cause.
 
+**Dashboard page.** The Build Expert tab of `services/dashboard` (`src/build/`) shows a
+prediction with its threshold, sub-risks and risk factors, and a diagnosis with its locations,
+evidence and fix steps, from the expert's own API (`/predict`, `/diagnose`, `/model`, `/examples`).
+
 ## 8. Diagnosis
 
 Built (`diagnose.py`, `rag/`): full log from shared storage, same parsers and rules, `misrouted`
