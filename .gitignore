@@ -33,3 +33,7 @@ shared/contracts/schemas/
 
 # Logs and PIDs from scripts/start.sh
 .run/
+
+# The move bundle from tools/move/pack.sh holds secrets; never commit it
+pipelineiq-move/
+pipelineiq-move*.zip
