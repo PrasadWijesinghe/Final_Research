@@ -30,3 +30,6 @@ shared/contracts/schemas/
 
 # Claude Code agent worktrees
 .claude/worktrees/
+
+# Logs and PIDs from scripts/start.sh
+.run/

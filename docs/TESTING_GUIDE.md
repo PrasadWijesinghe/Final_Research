@@ -13,6 +13,16 @@ otherwise. Never paste keys or secrets into chat or issues.
 
 ## 1. Start everything
 
+One command starts every part, including the webhook relay, and checks each one answers:
+
+```bash
+make start      # or scripts/start.sh; on Windows: powershell -ExecutionPolicy Bypass -File scripts\start.ps1
+make stop       # or scripts/stop.sh;  on Windows: scripts\stop.ps1 (data is kept)
+```
+
+Logs are in `.run/`. Add `--build` (Windows: `-Build`) after changing expert code. If you use
+`make start`, skip step 3.1 below: the relay is already running. By hand, the same thing is:
+
 ```bash
 make up                                                              # Postgres and Redis
 docker compose --profile experts up -d --build testing-api testing-worker llm-gateway
