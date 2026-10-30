@@ -199,7 +199,7 @@ function ClassificationResultCard({ result, source }: { result: DependencyAnalys
           <span>{source === "live" ? "Model confidence" : "Mock confidence"}</span>
         </div>
       </div>
-      <div className="dep-confidence-track" aria-label={`Mock confidence ${(result.confidence * 100).toFixed(1)} percent`}>
+      <div className="dep-confidence-track" aria-label={`${source === "live" ? "Model" : "Mock"} confidence ${(result.confidence * 100).toFixed(1)} percent`}>
         <span style={{ width: `${result.confidence * 100}%` }} />
       </div>
       <div className="dep-research-caveat"><AlertTriangle size={15} /><span>{source === "live" ? "Research estimate from the log-only model; exploratory performance is based on repository-held-out evaluation." : source === "offline" ? "Backend unavailable. This is a static mock result, not a prediction for the submitted log." : "Static sample preview. This is illustrative and is not a live model prediction."}</span></div>
@@ -222,11 +222,11 @@ function DiagnosticSignalsPanel({ signals }: { signals: DiagnosticSignal[] }) {
   return (
     <section className="dep-panel dep-signals-panel" aria-labelledby="dep-signals-title">
       <div className="dep-panel-heading compact">
-        <div><p className="dep-step">02 / Model indicators</p><h2 id="dep-signals-title">Diagnostic signals</h2></div>
+        <div><p className="dep-step">02 / Model indicators · 14 log flags</p><h2 id="dep-signals-title">Diagnostic signals</h2></div>
         <span className="dep-count-badge">{detectedCount} / {signals.length} detected</span>
       </div>
       <div className="dep-signals-list">{signals.map((signal) => <DiagnosticSignalChip key={signal.id} signal={signal} />)}</div>
-      <p className="dep-panel-footnote">Signals are log-derived indicators; they describe evidence found in the sample, not independent proof of cause.</p>
+      <p className="dep-panel-footnote">These are the 14 boolean log indicators used by the model. Detected signals describe log evidence, not independent proof of cause; the combined test / coverage / lint flag overlaps with its individual flags.</p>
     </section>
   );
 }
@@ -303,12 +303,14 @@ function DependencyDashboardPage() {
 
   const analyze = async (
     payload: AnalysisPayload,
-    fallback: DependencyAnalysisResult | null = dependencyMockCases.find((item) => item.id === selectedSampleId) ?? null,
+    fallback: DependencyAnalysisResult | null = null,
   ) => {
     const requestId = activeRequest.current + 1;
     activeRequest.current = requestId;
     setPreviewing(true);
     setRequestError(null);
+    setResult(null);
+    setResultSource("sample");
     try {
       const response = await fetch("http://127.0.0.1:8001/api/v1/predict/dependency", {
         method: "POST",
@@ -326,13 +328,13 @@ function DependencyDashboardPage() {
       setResultSource("live");
     } catch (error) {
       if (requestId !== activeRequest.current) return;
-      if (error instanceof ApiRequestError && error.status < 500) {
+      if (error instanceof ApiRequestError) {
         setRequestError(error.message);
       } else if (fallback) {
         setResult(fallback);
         setResultSource("offline");
       } else {
-        setRequestError("The prediction API is unavailable, and there is no sample fallback for this input.");
+        setRequestError("Could not connect to the prediction API. Check that the backend is running on port 8001, then retry.");
       }
     } finally {
       if (requestId === activeRequest.current) setPreviewing(false);
@@ -370,7 +372,7 @@ function DependencyDashboardPage() {
               <LogEvidenceViewer evidence={result.evidence} />
               <RemediationCard recommendation={result.recommendation} />
             </>
-          ) : (
+          ) : requestError ? null : (
             <div className="dep-empty-result"><FileText size={28} /><h2>Choose a sample to preview</h2><p>Select one of the mock logs to see its sample classification and evidence.</p></div>
           )}
         </div>
