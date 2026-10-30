@@ -42,6 +42,14 @@ def gateway_url() -> str | None:
     return os.environ.get(URL_ENV, "").strip().rstrip("/") or None
 
 
+def _error_code(response: httpx.Response) -> str:
+    """The gateway's `error` code from a refusal body, or an empty string."""
+    try:
+        return str(response.json().get("error", ""))
+    except (ValueError, AttributeError):
+        return ""
+
+
 def complete(
     messages: list[dict[str, str]],
     json_schema: dict[str, Any],
@@ -66,6 +74,8 @@ def complete(
         raise GatewayUnavailable(f"gateway unreachable ({type(exc).__name__})") from exc
     if response.status_code == 429:
         raise GatewayUnavailable("monthly LLM spending cap reached (HTTP 429)")
+    if response.status_code == 502 and _error_code(response) == "provider_error":
+        raise GatewayUnavailable("the model provider failed (HTTP 502)")
     if response.status_code == 502:
         raise GatewayUnavailable("the model returned an invalid answer twice (HTTP 502)")
     if response.status_code != 200:

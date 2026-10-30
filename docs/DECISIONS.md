@@ -190,6 +190,8 @@ Numbered D44 to D48 on `feat/dashboard`; renumbered D48 to D52 when it was merge
 
 **D52 — The demo stack runs the real Test expert; the stub is only a fallback (P4.12).** Date: 2026-10-30. Model, triage, knowledge base and diagnosis were already real in code, so "swap the stub" meant making them the default where they run: a `llm-gateway` Compose service (mock provider) in the `experts` and `e2e` profiles, the worker pointed at it, at the backend API on the host (`EXPERT_BACKEND_URL`, default `http://host.docker.internal:8000`, empty disables posting) and at `data/logs` (`DATA_DIR`) for full logs. Stub behaviour stays for a missing bundle or database, with `GET /status` and a start banner naming what is real; `/health` is unchanged. The Docker image keeps no torch, so retrieval there is full text only. The worker never loads a model before RQ forks (a loaded LightGBM model deadlocks the child). Reason: a demo must show the real pipeline without hidden flags, and the stub tests must keep passing untouched.
 
+**D53 — DeepSeek is the first real LLM provider: `deepseek-flash`, thinking off, JSON mode with the schema in the prompt (O5).** Date: 2026-10-30. The gateway has a `deepseek` provider (OpenAI-compatible API, `https://api.deepseek.com`, key from `LLM_API_KEY`, optional `LLM_BASE_URL`). The default model follows the provider through `provider_models` in `config/llm.yaml` (`deepseek-flash` for DeepSeek, `mock-1` for the mock); `LLM_MODEL` overrides it, and `deepseek-v4-pro` is configured but not default. Prices in the config are DeepSeek's peak prices, so the monthly caps are conservative. Thinking mode is switched off (`thinking: disabled`) for latency and cost. JSON mode (`response_format: json_object`) takes no schema, so the gateway adds a system message with the schema written compactly and still validates the answer itself, with its one retry. Blank content is retried once inside the provider. Provider failures (401, 402, 429, 5xx, timeout) become HTTP 502 `provider_error` with a key-free reason, so the Test expert falls back to its template as for any gateway failure. Timeout 15 s (under the expert's 20 s) and `max_tokens` 2000 are defaults in the config. *Why:* it is cheap (about $0.0012 for a typical diagnosis), OpenAI-compatible so a later provider is a small change, and it is the team's choice. The key is held by Member 3. Answer quality has not been rated yet.
+
 ## Open items (don't block the build)
 
 | # | Item | Owner |
@@ -198,7 +200,7 @@ Numbered D44 to D48 on `feat/dashboard`; renumbered D48 to D52 when it was merge
 | O2 | Ethics clearance for the developer study (time-to-diagnosis, think-aloud sessions) | Team |
 | O3 | Teammates confirm their contract sections, write their expert docs, fill their repo lists, tagging rows and router patterns | Members 1, 2, 4 |
 | O4 | Run the re-run check and finalise the repo list | Member 3 |
-| O5 | Choose and buy the LLM provider key | Team |
+| O5 | LLM provider chosen: DeepSeek (D53), key held by Member 3; answer quality still to be rated, other providers not ruled out | Member 3 |
 | O6 | Update the proposal text: no VPS and budget, 30 s → 10 s, AI-use disclosure, F1 target mismatch, Haben et al. figures, 9- vs 12-month timeline, scrambled sentences in 1.1.2 | Member 3 |
 | O7 | Tune defaults once data exists: thresholds, router margin, triage confidence floor | Each owner |
 | O8 | Build: run `scripts/build_screen.py` with a real token, trim `config/repos/build.yaml`, then start the backfill | Member 2 |

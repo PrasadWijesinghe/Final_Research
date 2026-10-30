@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator
 from pydantic import BaseModel
 
 from .config import GatewayConfig
-from .providers import Provider
+from .providers import Provider, ProviderError
 from .stores import CacheStore, CallLog, CallRecord
 
 logger = logging.getLogger(__name__)
@@ -91,15 +91,17 @@ class Gateway:
         cache: CacheStore,
         call_log: CallLog,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        model: str | None = None,
     ) -> None:
         self.provider = provider
         self.config = config
         self.cache = cache
         self.call_log = call_log
         self.clock = clock
+        self.model = model or config.default_model
 
     def complete(self, req: CompleteRequest) -> CompleteResponse:
-        """Answer a request or raise GatewayError (400 bad request, 429 over cap, 502 invalid)."""
+        """Answer a request or raise GatewayError (400 bad request, 429 over cap, 502 bad)."""
         cap = self.config.monthly_cap_usd.get(req.expert)
         if cap is None:
             raise GatewayError(
@@ -120,7 +122,7 @@ class Gateway:
 
         started = time.perf_counter()
         now = self.clock()
-        model = self.config.default_model
+        model = self.model
         key = cache_key(req, model)
 
         # DEFAULT: cache hits are served even over the cap, because they cost nothing.
@@ -150,7 +152,22 @@ class Gateway:
         value: Any = None
         reason: str | None = "no attempt"
         for _attempt in range(2):  # the first answer plus ONE retry
-            result = self.provider.complete(model, messages, req.json_schema)
+            try:
+                result = self.provider.complete(model, messages, req.json_schema)
+            except ProviderError as exc:
+                logger.warning(
+                    "llm provider failed", extra={"expert": req.expert, "reason": exc.reason}
+                )
+                if in_tokens or out_tokens:  # a first attempt was already paid for
+                    self._log(req, model, in_tokens, out_tokens, started, now, False)
+                raise GatewayError(
+                    502,
+                    {
+                        "error": "provider_error",
+                        "message": "the model provider gave no usable answer",
+                        "reason": exc.reason,
+                    },
+                ) from exc
             in_tokens += result.input_tokens
             out_tokens += result.output_tokens
             value, reason = _parse(result.text, validator)

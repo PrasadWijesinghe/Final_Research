@@ -1846,6 +1846,7 @@ version = "0.1.0"
 source = { editable = "services/llm_gateway" }
 dependencies = [
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "jsonschema" },
     { name = "pipelineiq-shared" },
     { name = "pydantic" },
@@ -1858,6 +1859,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.27" },
     { name = "jsonschema", specifier = ">=4.20" },
     { name = "pipelineiq-shared", editable = "shared" },
     { name = "pydantic", specifier = ">=2.7" },
