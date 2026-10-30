@@ -4,7 +4,7 @@
 -include .env
 export
 
-.PHONY: webhooks check-hook check-dashboard setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
+.PHONY: start stop webhooks check-hook check-dashboard setup up up-experts e2e down check migrate schemas export-data import-data migrate-testing
 
 setup:
 	uv sync --all-packages
@@ -94,3 +94,10 @@ export-data:
 import-data:
 	@test -n "$(FILE)" || { echo "import-data: usage: make import-data FILE=<archive.tar.gz> [FORCE=1]"; exit 1; }
 	uv run collector import "$(FILE)" $(if $(filter 1,$(FORCE)),--force)
+
+# Start everything (containers, API, dashboard, webhook relay) and check each part answers; stop it all again.
+start:
+	scripts/start.sh
+
+stop:
+	scripts/stop.sh
