@@ -60,4 +60,4 @@ For the Infra repository-monitoring demo, see [Live prediction setup](experts/in
 - [Data and datasets](docs/DATA.md)
 - [Development conventions](docs/CONVENTIONS.md)
 - [Project plan](docs/PLAN.md)
-- [Infra research](experts/infra/research/README.md)
+
